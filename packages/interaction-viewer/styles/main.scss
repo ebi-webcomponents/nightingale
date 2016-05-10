@@ -1,9 +1,13 @@
 .interaction-viewer {
   font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 12px;
 
   .interaction-background {
     fill: white;
+  }
+
+  .cell {
+    fill:#4A90E2;
   }
 
 }
