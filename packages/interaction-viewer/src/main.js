@@ -1,4 +1,5 @@
 const d3 = require('d3');
+const sparqlLoader = require('./sparqlLoader');
 const margin = {
     top: 80,
     right: 0,
@@ -17,7 +18,7 @@ const svg = d3.select("body").append("svg")
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json('data/interaction_v1.json', data => {
+sparqlLoader.loadData().then(data => {
   let nodes = data.nodes,
     links = data.links;
 
@@ -61,7 +62,9 @@ d3.json('data/interaction_v1.json', data => {
       .data(links.filter(d => d.source === row.accession))
       .enter().append("circle")
       .attr("class", "cell")
-      .attr("cx", d => x(d.target) + x.rangeBand()/2)
+      .attr("cx", d => {
+        return x(d.target) + x.rangeBand() / 2
+      })
       .attr("cy", d => x.rangeBand() / 2)
       .attr("r", x.rangeBand() / 4)
       .style("fill-opacity", d => intensity(d.experiments))

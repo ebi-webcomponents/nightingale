@@ -7,7 +7,7 @@
     "test": "npm run build",
     "compile": "babel src/main.js",
     "browsersync": "browser-sync start --server --files 'dist/*'",
-    "build": "mkdir dist && browserify src/main.js --debug --transform babelify --outfile dist/interaction-viewer.js",
+    "build": "rm -rf dist && mkdir dist && browserify src/main.js --debug --transform babelify --outfile dist/interaction-viewer.js",
     "sass:dist": "sass styles/main.scss > dist/style.min.css",
     "sass": "npm run sass:dist",
     "watch": "nodemon -w src -w styles/main.scss -x 'npm run build && npm run sass'"
