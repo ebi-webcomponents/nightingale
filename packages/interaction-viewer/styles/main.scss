@@ -2,12 +2,12 @@
   font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
   font-size: 12px;
 
-  .interaction-background {
-    fill: white;
-  }
-
   .cell {
     fill:#4A90E2;
+  }
+
+  .active {
+    fill:grey;
   }
 
 }
