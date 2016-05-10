@@ -4,7 +4,7 @@
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
   "main": "src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run build",
     "compile": "babel src/main.js",
     "browsersync": "browser-sync start --server --files 'dist/*'",
     "build": "browserify src/main.js --debug --transform babelify --outfile dist/interaction-viewer.js",
