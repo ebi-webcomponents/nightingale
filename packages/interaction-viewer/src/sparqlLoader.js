@@ -23,7 +23,13 @@ const sparqlLoader = {
           'target': element.target.value,
           'experiments': element.experiments.value
         };
+        var reverselink = {
+          'source': element.target.value,
+          'target': element.source.value,
+          'experiments': element.experiments.value
+        };
         json.links.push(link);
+        json.links.push(reverselink);
       };
 
       return json;

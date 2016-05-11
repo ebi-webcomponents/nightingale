@@ -1,13 +1,34 @@
+$primary-color: #4A90E2;
+$white: #FFFFFF;
+$orange: #CC6633;
+
 .interaction-viewer {
   font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
   font-size: 12px;
 
   .cell {
-    fill:#4A90E2;
+    fill: $primary-color;
+    &.active-cell {
+      r:.5em;
+      fill: $orange;
+      -webkit-transition: all .5s; /* Safari */
+      transition: all .25s;
+    }
+  }
+
+  .text-highlight {
+    fill:#FFF;
+    opacity: 0;
+    -webkit-transition: all .5s; /* Safari */
+    transition: all .25s;
   }
 
   .active {
-    fill:grey;
+    fill: $white;
+    .text-highlight {
+      fill: $primary-color;
+      opacity: 1;
+    }
   }
 
 }
