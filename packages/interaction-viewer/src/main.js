@@ -1,10 +1,10 @@
 const d3 = require('d3');
 const sparqlLoader = require('./sparqlLoader');
 const margin = {
-    top: 80,
+    top: 100,
     right: 0,
     bottom: 10,
-    left: 80
+    left: 100
   },
   width = height = 720;
 
