@@ -91,4 +91,12 @@ sparqlLoader.loadData().then(data => {
     d3.selectAll("circle").classed("active-cell", false);
   }
 
+  function order() {
+    
+  }
+
+  function filter() {
+
+  }
+
 });

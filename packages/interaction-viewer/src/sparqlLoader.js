@@ -18,6 +18,19 @@ const sparqlLoader = {
       };
 
       for(element of edgeData.results.bindings) {
+        // Currently required because of missing data
+        if(_.pluck( json.nodes, 'accession').indexOf(element.source.value) < 0) {
+          json.nodes.push({
+            'accession': element.source.value,
+            'entryName': element.source.value
+          });
+        } else if (_.pluck( json.nodes, 'accession').indexOf(element.target.value) < 0) {
+          json.nodes.push({
+            'accession': element.target.value,
+            'entryName': element.target.value
+          });
+        }
+        // end of Currently required
         var link = {
           'source': element.source.value,
           'target': element.target.value,
@@ -31,7 +44,6 @@ const sparqlLoader = {
         json.links.push(link);
         json.links.push(reverselink);
       };
-
       return json;
     },
     loadData: function() {
