@@ -1,6 +1,5 @@
 $primary-color: #4A90E2;
 $white: #FFFFFF;
-$orange: #CC6633;
 
 .interaction-viewer {
   font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
@@ -10,7 +9,6 @@ $orange: #CC6633;
     fill: $primary-color;
     &.active-cell {
       r:.5em;
-      fill: $orange;
       -webkit-transition: all .5s; /* Safari */
       transition: all .25s;
     }

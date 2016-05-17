@@ -1,26 +1,28 @@
 const d3 = require('d3');
 const sparqlLoader = require('./sparqlLoader');
-const margin = {
-    top: 100,
-    right: 0,
-    bottom: 10,
-    left: 100
-  },
-  width = height = 720;
 
-const x = d3.scale.ordinal().rangeBands([0, width]),
-  intensity = d3.scale.linear().range([0.2, 1]);
-
-const svg = d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .attr("class", "interaction-viewer")
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-sparqlLoader.loadData().then(data => {
+sparqlLoader.loadData('P05067').then(data => {
   let nodes = data.nodes,
     links = data.links;
+
+  const margin = {
+      top: 100,
+      right: 0,
+      bottom: 10,
+      left: 100
+    },
+    width = height = 15 * nodes.length;
+
+  const x = d3.scale.ordinal().rangeBands([0, width]),
+    intensity = d3.scale.linear().range([0.2, 1]);
+
+  const svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "interaction-viewer")
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
   x.domain(nodes.map(entry => entry.accession));
   intensity.domain([0, d3.max(links.map(link => link.experiments))]);
@@ -92,7 +94,7 @@ sparqlLoader.loadData().then(data => {
   }
 
   function order() {
-    
+
   }
 
   function filter() {
