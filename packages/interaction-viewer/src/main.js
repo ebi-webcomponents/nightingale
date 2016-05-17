@@ -1,7 +1,7 @@
 const d3 = require('d3');
 const sparqlLoader = require('./sparqlLoader');
 
-sparqlLoader.loadData('P05067').then(data => {
+sparqlLoader.loadData('P04637').then(data => {
   let nodes = data.nodes,
     links = data.links;
 
