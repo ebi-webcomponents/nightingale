@@ -1,0 +1,21 @@
+.interaction-viewer {
+  font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
+  font-size: 10px; }
+  .interaction-viewer .cell {
+    fill: #4A90E2; }
+    .interaction-viewer .cell.active-cell {
+      r: .5em;
+      -webkit-transition: all .5s;
+      /* Safari */
+      transition: all .25s; }
+  .interaction-viewer .text-highlight {
+    fill: #FFF;
+    opacity: 0;
+    -webkit-transition: all .5s;
+    /* Safari */
+    transition: all .25s; }
+  .interaction-viewer .active {
+    fill: #FFFFFF; }
+    .interaction-viewer .active .text-highlight {
+      fill: #4A90E2;
+      opacity: 1; }
