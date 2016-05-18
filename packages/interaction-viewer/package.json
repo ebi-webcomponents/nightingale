@@ -11,7 +11,7 @@
     "sass:dist": "sass styles/main.scss > dist/style.min.css",
     "sass": "npm run sass:dist",
     "watch": "nodemon -w src -w styles/main.scss -x 'npm run build && npm run sass'",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy": "git push origin `git subtree split --prefix dist master`:gh-pages --force"
   },
   "keywords": [
     "interaction",
