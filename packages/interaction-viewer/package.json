@@ -31,6 +31,7 @@
     "nodemon": "^1.9.2"
   },
   "dependencies": {
-    "d3": "^3.5.17"
+    "d3": "^3.5.17",
+    "webcomponents.js": "^0.7.22"
   }
 }

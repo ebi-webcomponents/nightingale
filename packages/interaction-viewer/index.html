@@ -10,8 +10,21 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
         <link rel="stylesheet" href="dist/style.min.css" media="screen" title="no title" charset="utf-8">
+        <script src="node_modules/webcomponents.js/CustomElements.js"></script>
     </head>
     <body>
+      <div class="">
+        <input type="text" name="name" value="">
+        <input type="button" name="name" value="Submit">
+      </div>
+
+      <interaction-viewer accession="P05067"></interaction-viewer>
+
       <script src="dist/interaction-viewer.js" charset="utf-8"></script>
+      <script type="text/javascript">
+        setTimeout(function(){
+          document.querySelector("interaction-viewer").setAttribute('accession','P35222');
+        }, 5000);
+      </script>
     </body>
 </html>
