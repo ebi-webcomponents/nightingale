@@ -21,7 +21,7 @@ module.exports.render = function({
         bottom: 10,
         left: 100
       },
-      width = height = 10 * nodes.length;
+      width = height = 16 * nodes.length;
 
     const x = d3.scale.ordinal().rangeBands([0, width]),
       intensity = d3.scale.linear().range([0.2, 1]);
