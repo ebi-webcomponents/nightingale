@@ -8,7 +8,7 @@
     "test": "npm run build",
     "browsersync": "browser-sync start --server 'dist' --files 'dist/*'",
     "build": "browserify src/main.js --outfile dist/interaction-viewer.js --debug --transform babelify && npm run sass:dist && cp node_modules/webcomponents.js/CustomElements.js dist/",
-    "sass:dist": "sass styles/main.scss > dist/style.min.css",
+    "sass:dist": "node-sass styles/main.scss > dist/style.min.css",
     "sass": "npm run sass:dist",
     "watch": "nodemon -w src -w styles/main.scss -x 'npm run build && npm run sass'",
     "deploy": "git push origin `git subtree split --prefix dist master`:gh-pages --force"
