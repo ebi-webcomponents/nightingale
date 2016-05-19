@@ -8,6 +8,12 @@ module.exports.render = function({
 }) {
   // clear all previous vis
   d3.select(el).select('svg').remove();
+  d3.select(el).select('.interaction-tooltip').remove();
+  d3.select('html').on('click', function(d){
+    d3.selectAll('.interaction-tooltip')
+      .style("opacity", 0)
+      .style("visibility", "hidden");
+  });
 
   sparqlLoader.loadData(accession).then(data => {
     let nodes = data.nodes,
@@ -15,13 +21,17 @@ module.exports.render = function({
 
     order(data);
 
+    var tooltip = d3.select(el).append("div")
+      .attr("class", "interaction-tooltip")
+      .style("opacity", 0);
+
     const margin = {
         top: 100,
         right: 0,
         bottom: 10,
         left: 100
       },
-      width = height = 16 * nodes.length;
+      width = height = 18 * nodes.length;
 
     const x = d3.scale.ordinal().rangeBands([0, width]),
       intensity = d3.scale.linear().range([0.2, 1]);
@@ -86,7 +96,7 @@ module.exports.render = function({
           return x(d.target) + x.rangeBand() / 2
         })
         .attr("cy", d => x.rangeBand() / 2)
-        .attr("r", x.rangeBand() / 4)
+        .attr("r", x.rangeBand() / 3)
         .style("fill-opacity", d => intensity(d.experiments))
         .on("mouseover", mouseover)
         .on("mouseout", mouseout);
@@ -96,6 +106,12 @@ module.exports.render = function({
       d3.select(this).classed("active-cell", true);
       d3.selectAll(".row").classed("active", d => d.accession === p.source);
       d3.selectAll(".column").classed("active", d => d.accession === p.target);
+      tooltip.html(`<a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/>
+      ${p.experiments} experiment(s)`);
+      tooltip.style("opacity", .9)
+              .style("visibility", "visible")
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY) + "px");
     }
 
     function mouseout() {

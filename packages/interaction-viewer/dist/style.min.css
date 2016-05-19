@@ -1,10 +1,22 @@
+.interaction-tooltip {
+  font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  position: absolute;
+  background: #FFFFFF;
+  padding: .5em 1em;
+  border: 1px #979797 solid;
+  box-shadow: 2px 2px 2px #333333;
+  -webkit-transition: all .5s;
+  /* Safari */
+  transition: all .25s; }
+
 .interaction-viewer {
-  font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
-  font-size: 10px; }
+  font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
+  font-size: 12px; }
   .interaction-viewer .cell {
     fill: #4A90E2; }
     .interaction-viewer .cell.active-cell {
-      r: .5em;
+      r: .8em;
       -webkit-transition: all .5s;
       /* Safari */
       transition: all .25s; }

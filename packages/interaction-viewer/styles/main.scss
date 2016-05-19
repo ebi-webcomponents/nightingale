@@ -1,14 +1,29 @@
+$font:'Helvetica neue', Helvetica, Arial, sans-serif;
+$font-size:12px;
 $primary-color: #4A90E2;
 $white: #FFFFFF;
+$grey: #979797;
+$darkgrey: #333333;
+
+.interaction-tooltip {
+  font-family: $font;
+  font-size: $font-size;
+  position: absolute;
+  background: $white;
+  padding: .5em 1em;
+  border: 1px $grey solid;
+  box-shadow: 2px 2px 2px $darkgrey;
+  -webkit-transition: all .5s; /* Safari */
+  transition: all .25s;
+}
 
 .interaction-viewer {
-  font-family: 'Helvetica neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
-
+  font-family: $font;
+  font-size: $font-size;
   .cell {
     fill: $primary-color;
     &.active-cell {
-      r:.5em;
+      r:.8em;
       -webkit-transition: all .5s; /* Safari */
       transition: all .25s;
     }
