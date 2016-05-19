@@ -114,3 +114,7 @@ module.exports.render = function({
 
   });
 }
+
+function required(name) {
+  throw Error(`missing option: ${name}`);
+}
