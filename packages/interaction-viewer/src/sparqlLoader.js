@@ -12,7 +12,9 @@ const sparqlLoader = {
       for(element of nodeData.results.bindings) {
         var node = {
           'accession': element.accession.value,
-          'entryName': element.entry_name.value
+          'entryName': element.entry_name.value,
+          'disease' : element.has_disease.value == 1,
+          'subcell' : element.has_subcell.value == 1
         };
         json.nodes.push(node);
       };
