@@ -1,47 +1,65 @@
-$font:'Helvetica neue', Helvetica, Arial, sans-serif;
-$font-size:12px;
+$font: 'Helvetica neue', Helvetica, Arial, sans-serif;
+$font-size: 12px;
 $primary-color: #4A90E2;
 $white: #FFFFFF;
 $grey: #979797;
 $darkgrey: #333333;
 
-.interaction-tooltip {
+interaction-viewer {
   font-family: $font;
   font-size: $font-size;
-  position: absolute;
-  background: $white;
-  padding: .5em 1em;
-  border: 1px $grey solid;
-  box-shadow: 2px 2px 2px $darkgrey;
-  -webkit-transition: all .5s; /* Safari */
-  transition: all .25s;
-}
 
-.interaction-viewer {
-  font-family: $font;
-  font-size: $font-size;
-  .cell {
-    fill: $primary-color;
-    &.active-cell {
-      r:.8em;
-      -webkit-transition: all .5s; /* Safari */
-      transition: all .25s;
+  .interaction-tooltip {
+    position: absolute;
+    background: $white;
+    padding: 0.5em 1em;
+    border: 1px $grey solid;
+    box-shadow: 2px 2px 2px $darkgrey;
+    -webkit-transition: all 0.5s;
+    /* Safari */
+    transition: all 0.25s;
+  }
+
+  .interaction-filter {
+    width:20em;
+    vertical-align: top;
+    display: inline-block;
+    margin: 100px 0 0 .5em;
+    h4 {
+      margin:0;
+    }
+    ul {
+      list-style:none;
+      padding: .2em;
+      margin: 0;
     }
   }
 
-  .text-highlight {
-    fill:#FFF;
-    opacity: 0;
-    -webkit-transition: all .5s; /* Safari */
-    transition: all .25s;
-  }
-
-  .active {
-    fill: $white;
-    .text-highlight {
+  .interaction-viewer {
+    display: inline-block;
+    .cell {
       fill: $primary-color;
-      opacity: 1;
+      &.active-cell {
+        r: 0.8em;
+        -webkit-transition: all 0.5s;
+        /* Safari */
+        transition: all 0.25s;
+      }
+    }
+
+    .text-highlight {
+      fill: #FFF;
+      opacity: 0;
+      -webkit-transition: all 0.5s;
+      /* Safari */
+      transition: all 0.25s;
+    }
+    .active {
+      fill: $white;
+      .text-highlight {
+        fill: $primary-color;
+        opacity: 1;
+      }
     }
   }
-
 }

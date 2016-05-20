@@ -1,34 +1,44 @@
-.interaction-tooltip {
-  font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  position: absolute;
-  background: #FFFFFF;
-  padding: .5em 1em;
-  border: 1px #979797 solid;
-  box-shadow: 2px 2px 2px #333333;
-  -webkit-transition: all .5s;
-  /* Safari */
-  transition: all .25s; }
-
-.interaction-viewer {
+interaction-viewer {
   font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
   font-size: 12px; }
-  .interaction-viewer .cell {
-    fill: #4A90E2; }
-    .interaction-viewer .cell.active-cell {
-      r: .8em;
-      -webkit-transition: all .5s;
-      /* Safari */
-      transition: all .25s; }
-  .interaction-viewer .text-highlight {
-    fill: #FFF;
-    opacity: 0;
-    -webkit-transition: all .5s;
+  interaction-viewer .interaction-tooltip {
+    position: absolute;
+    background: #FFFFFF;
+    padding: 0.5em 1em;
+    border: 1px #979797 solid;
+    box-shadow: 2px 2px 2px #333333;
+    -webkit-transition: all 0.5s;
     /* Safari */
-    transition: all .25s; }
-  .interaction-viewer .active {
-    fill: #FFFFFF; }
-    .interaction-viewer .active .text-highlight {
-      fill: #4A90E2;
-      opacity: 1; }
+    transition: all 0.25s; }
+  interaction-viewer .interaction-filter {
+    width: 20em;
+    vertical-align: top;
+    display: inline-block;
+    margin: 100px 0 0 .5em; }
+    interaction-viewer .interaction-filter h4 {
+      margin: 0; }
+    interaction-viewer .interaction-filter ul {
+      list-style: none;
+      padding: .2em;
+      margin: 0; }
+  interaction-viewer .interaction-viewer {
+    display: inline-block; }
+    interaction-viewer .interaction-viewer .cell {
+      fill: #4A90E2; }
+      interaction-viewer .interaction-viewer .cell.active-cell {
+        r: 0.8em;
+        -webkit-transition: all 0.5s;
+        /* Safari */
+        transition: all 0.25s; }
+    interaction-viewer .interaction-viewer .text-highlight {
+      fill: #FFF;
+      opacity: 0;
+      -webkit-transition: all 0.5s;
+      /* Safari */
+      transition: all 0.25s; }
+    interaction-viewer .interaction-viewer .active {
+      fill: #FFFFFF; }
+      interaction-viewer .interaction-viewer .active .text-highlight {
+        fill: #4A90E2;
+        opacity: 1; }
 

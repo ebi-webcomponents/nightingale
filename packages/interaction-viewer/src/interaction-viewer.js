@@ -25,8 +25,6 @@ module.exports.render = function({
       .style("visibility", "hidden");
   });
 
-  createFilter(el);
-
   sparqlLoader.loadData(accession).then(data => {
     let nodes = data.nodes,
       links = data.links;
@@ -139,6 +137,7 @@ module.exports.render = function({
       // Always place the query accession at the top
       data.nodes.splice(0, 0, data.nodes.splice(_.pluck(data.nodes, 'accession').lastIndexOf(accession), 1)[0]);
     }
+    createFilter(el);
 
   });
 }
@@ -174,7 +173,7 @@ function createFilter(el) {
   const container = d3.select(el).append("div")
     .attr("class", "interaction-filter");
 
-  container.append("h4").text('With annotation:');
+  container.append("h4").text('Filter annotation:');
 
   var listItem = container.append("ul")
     .selectAll('li')
