@@ -7,7 +7,7 @@
     "compile": "babel src/interaction-viewer.js",
     "test": "npm run build",
     "browsersync": "browser-sync start --server 'dist' --files 'dist/*'",
-    "build": "browserify src/main.js --outfile dist/interaction-viewer.js --debug --transform babelify && npm run sass:dist && cp node_modules/webcomponents.js/CustomElements.js dist/ && cp index.html dist/",
+    "build": "mkdir -p dist && browserify src/main.js --outfile dist/interaction-viewer.js --debug --transform babelify && npm run sass:dist && cp node_modules/webcomponents.js/CustomElements.js dist/ && cp index.html dist/",
     "sass:dist": "node-sass styles/main.scss > dist/style.min.css",
     "sass": "npm run sass:dist",
     "watch": "nodemon -w src -w styles/main.scss -w index.html -x 'npm run build && npm run sass'",
