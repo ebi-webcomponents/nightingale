@@ -4,6 +4,13 @@ const sparqlLoader = {
   processData: function(nodeData, edgeData) {
     var _ = require('underscore')
 
+    const edgeExists = function(list, edge) {
+      const found = _.find(list, function(e){
+        return (e.source === edge.source && e.target === edge.target);
+      });
+      return found;
+    }
+
     var json = {
       nodes: [],
       links: []
@@ -20,19 +27,6 @@ const sparqlLoader = {
     };
 
     for (element of edgeData.results.bindings) {
-      // Currently required because of missing data
-      // if(_.pluck( json.nodes, 'accession').indexOf(element.source.value) < 0) {
-      //   json.nodes.push({
-      //     'accession': element.source.value,
-      //     'entryName': element.source.value
-      //   });
-      // } else if (_.pluck( json.nodes, 'accession').indexOf(element.target.value) < 0) {
-      //   json.nodes.push({
-      //     'accession': element.target.value,
-      //     'entryName': element.target.value
-      //   });
-      // }
-      // end of Currently required
       if (_.contains(_.pluck(json.nodes,'accession'), element.source.value) &&
         _.contains(_.pluck(json.nodes,'accession'), element.target.value)) {
         var link = {
@@ -45,8 +39,12 @@ const sparqlLoader = {
           'target': element.source.value,
           'experiments': element.exp.value
         };
-        json.links.push(link);
-        json.links.push(reverselink);
+        if(!edgeExists(json.links, link)) {
+          json.links.push(link);
+        }
+        if(!edgeExists(json.links, reverselink)) {
+          json.links.push(reverselink);
+        }
       }
     };
     return json;
@@ -70,5 +68,4 @@ const sparqlLoader = {
   }
 
 }
-
 module.exports = sparqlLoader;
