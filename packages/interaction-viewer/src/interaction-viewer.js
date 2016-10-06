@@ -190,7 +190,7 @@ function createFilter(el) {
     .on('click', d => filter(d.value));
 
   listItem.append('label')
-    .text(d => d.name)
+    .text(d => `Has ${d.name.toLowerCase()}`)
     .attr('for', d => d.value);
 }
 
