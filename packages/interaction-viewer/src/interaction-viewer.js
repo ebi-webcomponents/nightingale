@@ -17,6 +17,7 @@ module.exports.render = function({
   accession = 'P05067'
 }) {
   // clear all previous vis
+  d3.select(el).select('.interaction-title').remove();
   d3.select(el).select('svg').remove();
   d3.select(el).select('.interaction-tooltip').remove();
 
@@ -25,6 +26,10 @@ module.exports.render = function({
       links = data.links;
 
     order(data);
+    
+    var title = d3.select(el).append("h3")
+      .attr("class","interaction-title")
+      .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
 
     var tooltip = d3.select(el).append("div")
       .attr("class", "interaction-tooltip")
