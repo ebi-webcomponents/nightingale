@@ -99,6 +99,11 @@ module.exports.render = function({
       .text((d, i) => nodes[i].entryName)
       .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession" : "");
 
+    var points = `${x(nodes[1].accession)} 0,${x(nodes[nodes.length-1].accession)} 0,${x(nodes[nodes.length-1].accession)} ${x(nodes[nodes.length-1].accession)},${x(nodes[1].accession)} 0`;
+    svg.append("polyline")
+      .attr("points", points)
+      .attr("class", "hidden-side");
+    
 
     function processRow(row) {
       const filtered = links.filter(d => d.source === row.accession);
@@ -115,6 +120,9 @@ module.exports.render = function({
         .attr("cy", d => x.rangeBand() / 2)
         .attr("r", x.rangeBand() / 3)
         .style("fill-opacity", d => intensity(d.experiments))
+        .style("display", d => {
+          return (x(d.target)-x(row.accession) > 0)? "none" : "";
+        })
         .on("click", mouseover);
         // .on("mouseout", mouseout);
 

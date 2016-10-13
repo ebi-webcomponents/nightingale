@@ -1,15 +1,8 @@
 const d3 = require('d3');
 
 const sparqlLoader = {
-  processData: function(nodeData, edgeData) {
+  processData: function(accession, nodeData, edgeData) {
     var _ = require('underscore')
-
-    const edgeExists = function(list, edge) {
-      const found = _.find(list, function(e){
-        return (e.source === edge.source && e.target === edge.target);
-      });
-      return found;
-    }
 
     var json = {
       nodes: [],
@@ -34,16 +27,16 @@ const sparqlLoader = {
           'target': element.target.value,
           'experiments': element.exp.value
         };
-        var reverselink = {
+        var inverseLink = {
           'source': element.target.value,
           'target': element.source.value,
           'experiments': element.exp.value
-        };
-        if(!edgeExists(json.links, link)) {
+        }
+        if(!_.contains(json.links, link)) {
           json.links.push(link);
         }
-        if(!edgeExists(json.links, reverselink)) {
-          json.links.push(reverselink);
+        if(!_.contains(json.links, inverseLink)) {
+          json.links.push(inverseLink);
         }
       }
     };
@@ -63,7 +56,7 @@ const sparqlLoader = {
       });
     });
     return Promise.all([promiseNodes, promiseEdges]).then(function(res) {
-      return sparqlLoader.processData(res[0], res[1]);
+      return sparqlLoader.processData(entry, res[0], res[1]);
     });
   }
 

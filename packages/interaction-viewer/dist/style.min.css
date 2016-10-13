@@ -34,6 +34,8 @@ interaction-viewer {
         -webkit-transition: all 0.5s;
         /* Safari */
         transition: all 0.25s; }
+    interaction-viewer .interaction-viewer .hidden-side {
+      opacity: 0.1; }
     interaction-viewer .interaction-viewer .main-accession {
       font-weight: bold; }
     interaction-viewer .interaction-viewer .text-highlight {
