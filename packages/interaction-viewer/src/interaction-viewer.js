@@ -57,10 +57,10 @@ module.exports.render = function({
     x.domain(nodes.map(entry => entry.accession));
     intensity.domain([0, d3.max(links.map(link => link.experiments))]);
 
-    const row = svg.selectAll(".row")
+    const row = svg.selectAll(".interaction-row")
       .data(nodes)
       .enter().append("g")
-      .attr("class", "row")
+      .attr("class", "interaction-row")
       .attr("transform", d => `translate(0,${x(d.accession)})`)
       .each(processRow);
 
@@ -131,7 +131,7 @@ module.exports.render = function({
 
     function mouseover(p) {
       d3.select(this).classed("active-cell", true);
-      d3.selectAll(".row").classed("active", d => d.accession === p.source);
+      d3.selectAll(".interaction-row").classed("active", d => d.accession === p.source);
       d3.selectAll(".column").classed("active", d => d.accession === p.target);
       tooltip.html(`<a href="#" class="close-interaction-tooltip">Close x</a><a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/>
       ${p.experiments} experiment(s)`);
