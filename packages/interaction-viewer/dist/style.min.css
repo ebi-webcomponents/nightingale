@@ -10,6 +10,10 @@ interaction-viewer {
     -webkit-transition: all 0.5s;
     /* Safari */
     transition: all 0.25s; }
+    interaction-viewer .interaction-tooltip .close-interaction-tooltip {
+      display: block;
+      text-align: right;
+      margin-bottom: .8em; }
   interaction-viewer .interaction-filter {
     width: 20em;
     vertical-align: top;
@@ -30,6 +34,8 @@ interaction-viewer {
         -webkit-transition: all 0.5s;
         /* Safari */
         transition: all 0.25s; }
+    interaction-viewer .interaction-viewer .main-accession {
+      font-weight: bold; }
     interaction-viewer .interaction-viewer .text-highlight {
       fill: #FFF;
       opacity: 0;

@@ -19,11 +19,6 @@ module.exports.render = function({
   // clear all previous vis
   d3.select(el).select('svg').remove();
   d3.select(el).select('.interaction-tooltip').remove();
-  d3.select('html').on('click', function(d) {
-    d3.selectAll('.interaction-tooltip')
-      .style("opacity", 0)
-      .style("visibility", "hidden");
-  });
 
   sparqlLoader.loadData(accession).then(data => {
     let nodes = data.nodes,
@@ -70,11 +65,13 @@ module.exports.render = function({
       .attr("height", x.rangeBand())
       .attr("class", "text-highlight");
 
+    // left axis text
     row.append("text")
       .attr("y", x.rangeBand() / 2)
       .attr("dy", ".32em")
       .attr("text-anchor", "end")
-      .text((d, i) => nodes[i].entryName);
+      .text((d, i) => nodes[i].entryName)
+      .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession" : "");
 
     const column = svg.selectAll(".column")
       .data(nodes)
@@ -88,12 +85,15 @@ module.exports.render = function({
       .attr("height", x.rangeBand())
       .attr("class", "text-highlight");
 
+    // top axis text
     column.append("text")
       .attr("x", 6)
       .attr("y", x.rangeBand() / 2)
       .attr("dy", ".32em")
       .attr("text-anchor", "start")
-      .text((d, i) => nodes[i].entryName);
+      .text((d, i) => nodes[i].entryName)
+      .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession" : "");
+
 
     function processRow(row) {
       const filtered = links.filter(d => d.source === row.accession);
@@ -110,8 +110,8 @@ module.exports.render = function({
         .attr("cy", d => x.rangeBand() / 2)
         .attr("r", x.rangeBand() / 3)
         .style("fill-opacity", d => intensity(d.experiments))
-        .on("mouseover", mouseover)
-        .on("mouseout", mouseout);
+        .on("click", mouseover);
+        // .on("mouseout", mouseout);
 
       cell.exit().remove();
     }
@@ -120,7 +120,7 @@ module.exports.render = function({
       d3.select(this).classed("active-cell", true);
       d3.selectAll(".row").classed("active", d => d.accession === p.source);
       d3.selectAll(".column").classed("active", d => d.accession === p.target);
-      tooltip.html(`<a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/>
+      tooltip.html(`<a href="#" class="close-interaction-tooltip">Close x</a><a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/>
       ${p.experiments} experiment(s)`);
       tooltip.style("opacity", .9)
         .style("visibility", "visible")
@@ -138,6 +138,13 @@ module.exports.render = function({
       data.nodes.splice(0, 0, data.nodes.splice(_.pluck(data.nodes, 'accession').lastIndexOf(accession), 1)[0]);
     }
     createFilter(el);
+
+    d3.selectAll('.close-interaction-tooltip').on("click", function(){
+      console.log('here');
+      d3.selectAll('.interaction-tooltip')
+        .style("opacity", 0)
+        .style("visibility", "hidden");
+    });
 
   });
 }

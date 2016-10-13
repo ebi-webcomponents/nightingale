@@ -18,6 +18,12 @@ interaction-viewer {
     -webkit-transition: all 0.5s;
     /* Safari */
     transition: all 0.25s;
+
+    .close-interaction-tooltip {
+      display: block;
+      text-align: right;
+      margin-bottom: .8em;
+    }
   }
 
   .interaction-filter {
@@ -45,6 +51,10 @@ interaction-viewer {
         /* Safari */
         transition: all 0.25s;
       }
+    }
+    
+    .main-accession {
+      font-weight: bold;
     }
 
     .text-highlight {
