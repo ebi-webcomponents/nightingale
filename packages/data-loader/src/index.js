@@ -1,6 +1,5 @@
 /* globals DEV:false */
-import InterproType from './components/interpro-type';
-import InterproDataLoader from './components/interpro-data-loader';
+import DataLoader from './components/data-loader';
 
 if (DEV) {
   const livereloadScript = document.createElement('script');
@@ -10,5 +9,4 @@ if (DEV) {
   document.head.appendChild(livereloadScript);
 }
 
-customElements.define('interpro-type', InterproType);
-customElements.define('interpro-data-loader', InterproDataLoader);
+customElements.define('data-loader', DataLoader);

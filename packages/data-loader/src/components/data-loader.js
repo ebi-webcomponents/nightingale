@@ -7,7 +7,7 @@ const getSourceUrls = ({children}) => [...children]
   .filter(child => child.tagName === 'SOURCE' && child.src)
   .map(source => source.src);
 
-class InterproDataLoader extends HTMLElement {
+class DataLoader extends HTMLElement {
   async _fetch () {
     const urls = getSourceUrls(this);
     if (!urls.length) return;
@@ -75,4 +75,4 @@ class InterproDataLoader extends HTMLElement {
   }
 }
 
-export default InterproDataLoader;
+export default DataLoader;

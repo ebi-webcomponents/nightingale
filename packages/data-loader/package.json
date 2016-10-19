@@ -3,15 +3,23 @@
   "version": "0.1.0",
   "description": "data-loader Custom Element to load data declaratively",
   "main": "dist/index.js",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aurel-l/data-loader.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l)",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore \"./**/*.js\"",
     "bundle": "rollup -c",
     "livereload": "livereload \"dist, test\"",
-    "build": "NODE_ENV=production rimraf dist && npm run bundle",
-    "start": "rimraf dist && npm run livereload & npm run bundle -- --watch"
+    "build": "NODE_ENV=production rimraf dist && npm run bundle -- --environment NODE_ENV:production",
+    "start": "rimraf dist && npm run livereload & npm run bundle -- --watch",
+    "test": "echo 'no test at the moment'",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
+    "babel-preset-babili": "^0.0.5",
     "babel-preset-es2017": "^6.16.0",
     "babel-preset-stage-3": "^6.17.0",
     "eslint": "^3.8.1",
