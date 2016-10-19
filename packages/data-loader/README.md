@@ -3,9 +3,11 @@ data-loader
 
 _in development_
 
-A Custom Element fetching data declaratively.
+A standard Custom Element fetching data declaratively.
 
-Will load the data at the url defined in the `src` attribute of a
+It follows the current v1 draft.
+
+Will load the data at the URL defined in the `src` property of a
 `source` element that it contains.
 
 ## Usage
@@ -19,6 +21,13 @@ Will load the data at the url defined in the `src` attribute of a
 ## API
 
 To be completed
+
+### Events
+
+|event name|information|
+|----------|-----------|
+|`error`|Fired when none of the URL defined in the `source` elements is reachable nor returns a valid response|
+|`load`|Fired when a URL returns a valid response|
 
 
 ## To-do
