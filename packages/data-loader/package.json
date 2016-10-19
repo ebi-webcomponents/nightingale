@@ -1,6 +1,6 @@
 {
   "name": "data-loader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "data-loader Custom Element to load data declaratively",
   "main": "dist/index.js",
   "repository": {
@@ -34,7 +34,5 @@
     "rollup-plugin-eslint": "^3.0.0",
     "rollup-watch": "^2.5.0"
   },
-  "dependencies": {
-    "lodash-es": "^4.16.4"
-  }
+  "dependencies": {}
 }
