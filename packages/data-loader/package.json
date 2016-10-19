@@ -1,0 +1,32 @@
+{
+  "name": "data-loader",
+  "version": "0.1.0",
+  "description": "data-loader Custom Element to load data declaratively",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore \"./**/*.js\"",
+    "bundle": "rollup -c",
+    "livereload": "livereload \"dist, test\"",
+    "build": "NODE_ENV=production rimraf dist && npm run bundle",
+    "start": "rimraf dist && npm run livereload & npm run bundle -- --watch"
+  },
+  "devDependencies": {
+    "babel-preset-es2017": "^6.16.0",
+    "babel-preset-stage-3": "^6.17.0",
+    "eslint": "^3.8.1",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "livereload": "^0.6.0",
+    "rimraf": "^2.5.4",
+    "rollup": "^0.36.3",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-watch": "^2.5.0"
+  },
+  "dependencies": {
+    "lodash-es": "^4.16.4"
+  }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test web components</title>
+  <script async defer src="/dist/index.js"></script>
+</head>
+<body>
+  <div>
+    Small, hardcoded:
+    <interpro-type type="family"></interpro-type>
+    <interpro-type type="domain"></interpro-type>
+    <interpro-type type="repeat"></interpro-type>
+    <interpro-type type="site"></interpro-type>
+    <interpro-type type="active site"></interpro-type>
+    <interpro-type type="binding site"></interpro-type>
+    <interpro-type type="conserved site"></interpro-type>
+    <interpro-type type="ptm"></interpro-type>
+    <interpro-type type="undefined"></interpro-type>
+  </div>
+  <div>
+    Expanded, hardcoded:
+    <interpro-type type="family" expanded></interpro-type>
+    <interpro-type type="domain" expanded></interpro-type>
+    <interpro-type type="repeat" expanded></interpro-type>
+    <interpro-type type="site" expanded></interpro-type>
+    <interpro-type type="active site" expanded></interpro-type>
+    <interpro-type type="binding site" expanded></interpro-type>
+    <interpro-type type="conserved site" expanded></interpro-type>
+    <interpro-type type="ptm" expanded></interpro-type>
+    <interpro-type type="undefined" expanded></interpro-type>
+  </div>
+  <div>
+    Small, from network:
+    <interpro-type>
+      <interpro-data-loader>
+        <source
+            src="http://ves-ebi-ac.ebi.ac.uk/interpro/api/entry/interpro/IPR011528"
+        >
+      </interpro-data-loader>
+    </interpro-type>
+  </div>
+  <div>
+    Expanded, from network:
+    <interpro-type expanded>
+      <interpro-data-loader>
+        <source
+            src="http://ves-ebi-ac.ebi.ac.uk/interpro/api/entry/interpro/IPR011528"
+        >
+      </interpro-data-loader>
+    </interpro-type>
+  </div>
+</body>
+</html>
