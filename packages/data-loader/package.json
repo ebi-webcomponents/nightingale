@@ -1,9 +1,11 @@
 {
   "name": "data-loader",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "data-loader Custom Element to load data declaratively",
-  "files": ["dist"],
+  "files": ["dist", "src"],
   "main": "dist/index.js",
+  "module": "src/components/data-loader.js",
+  "jsnext:main": "src/components/data-loader.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/aurel-l/data-loader.git"
