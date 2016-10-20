@@ -1,7 +1,8 @@
 {
   "name": "data-loader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "data-loader Custom Element to load data declaratively",
+  "files": ["dist"],
   "main": "dist/index.js",
   "repository": {
     "type": "git",
