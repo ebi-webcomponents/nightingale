@@ -1,6 +1,3 @@
-const observerFunction = mutations => {
-  console.log('something changed');
-};
 const observerConfig = {childList: true};
 
 const getSourceUrls = ({children}) => [...children]
@@ -11,7 +8,7 @@ class DataLoader extends HTMLElement {
   async _fetch () {
     const urls = getSourceUrls(this);
     if (!urls.length) return;
-    console.log('actual fetching');
+
     let detail = [];
     let failed = true;
     for (const url of urls) {
@@ -32,10 +29,9 @@ class DataLoader extends HTMLElement {
     this._data = failed ? null : detail;
   }
 
-  fetch () {
-    console.log('planning fetch');
+  _planFetch () {
     // If fetch is already planned, skip the rest
-    if (this._plannedFetch || !this.isConnected) return;
+    if (this._plannedFetch) return;
     this._plannedFetch = true;
     this._data = null;
     setTimeout(() => {
@@ -61,16 +57,17 @@ class DataLoader extends HTMLElement {
     super();
     this._src = null;
     this._data = null;
-    this._observer = new MutationObserver(observerFunction);
+    this._observer = new MutationObserver(() => this._planFetch());
     this._selector = this.querySelectorAll('source');
   }
 
   connectedCallback () {
     this._observer.observe(this, observerConfig);
-    this.fetch();
+    this._planFetch();
   }
 
   disconnectedCallback () {
+    this._plannedFetch = false;
     this._observer.disconnect(this);
   }
 }
