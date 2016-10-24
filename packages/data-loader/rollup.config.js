@@ -9,6 +9,7 @@ export default {
   format: 'iife',
   dest: 'dist/index.js',
   sourceMap: true,
+  moduleName: 'DataLoader',
   plugins: [
     eslint(),
     babel({
