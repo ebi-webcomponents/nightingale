@@ -27,7 +27,7 @@ down to the version you are planning on supporting.
 You might need to use a polyfill for browser not supporting Custom
 Elements.
 [webcomponents.js](https://github.com/webcomponents/webcomponentsjs) is
-recommended (`webcomponents-lite.js` is enough)
+recommended (`webcomponents-lite.js` is enough).
 
 ## API
 

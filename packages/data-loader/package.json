@@ -1,17 +1,18 @@
 {
   "name": "data-loader",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "data-loader Custom Element to load data declaratively",
   "files": ["dist", "src"],
   "main": "dist/index.js",
-  "module": "src/components/data-loader.js",
-  "jsnext:main": "src/components/data-loader.js",
+  "module": "src/data-loader.js",
+  "jsnext:main": "src/data-loader.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/aurel-l/data-loader.git"
   },
   "license": "Apache-2.0",
   "author": "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l)",
+  "keywords": ["webcomponents", "customelements", "data"],
   "scripts": {
     "lint": "eslint --ignore-path .gitignore \"./**/*.js\"",
     "bundle": "rollup -c",
