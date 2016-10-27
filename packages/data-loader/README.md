@@ -12,10 +12,31 @@ Will load the data at the URL defined in the `src` property of a
 
 ## Usage
 
+### Example
 ```html
 <data-loader>
   <source src="https://www.example.com/some/data">
 </data-loader>
+```
+
+### Use with custom namespace
+
+Only needed if the `data-loader` name clashes with an other existing
+Custom Element.
+
+```js
+import DataLoader from 'data-loader';
+
+// Register the Custom Elements
+customElements.define('namespaced-data-loader', DataLoader);
+```
+
+And then in the HTML, use like so:
+
+```html
+<namespaced-data-loader>
+  <source src="https://www.example.com/some/data">
+</namespaced-data-loader>
 ```
 
 ## Compatibility
@@ -24,10 +45,9 @@ This element assumes support for at least ES2016.
 To support older browsers you might need to transpile the code you use
 down to the version you are planning on supporting.
 
-You might need to use a polyfill for browser not supporting Custom
-Elements.
-[webcomponents.js](https://github.com/webcomponents/webcomponentsjs) is
-recommended (`webcomponents-lite.js` is enough).
+You might need to use a polyfill for browsers not supporting Custom
+Elements v1.
+See [webcomponents.js](https://github.com/webcomponents/webcomponentsjs).
 
 ## API
 
@@ -52,7 +72,6 @@ To be completed
 ## To-do
 
  - [ ] Finish writing README.md
-    - [ ] Document custom namespacing
  - [ ] Add tests
  - [ ] Add continuous integration
  - [ ] Add data transformation through a `selector` property
