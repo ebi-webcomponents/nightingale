@@ -105,10 +105,11 @@ module.exports.render = function({
       .text((d, i) => nodes[i].entryName)
       .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession" : "");
 
-    var points = `${x(nodes[1].accession)} 0,${x(nodes[nodes.length-1].accession)} 0,${x(nodes[nodes.length-1].accession)} ${x(nodes[nodes.length-1].accession)},${x(nodes[1].accession)} 0`;
+    var points = `${x(nodes[0].accession)} 0,${x(nodes[nodes.length-1].accession)} 0,${x(nodes[nodes.length-1].accession)} ${x(nodes[nodes.length-1].accession)},${x(nodes[0].accession)} 0`;
     svg.append("polyline")
       .attr("points", points)
-      .attr("class", "hidden-side");
+      .attr("class", "hidden-side")
+      .attr("transform", d => `translate(${x(nodes[1].accession)}, 0)`);
 
 
     function processRow(row) {
