@@ -187,7 +187,7 @@ function filter(_filter) {
 
   d3.selectAll('.cell')
     .attr('opacity', d => {
-      return (_.contains(hide, d.source) || _.contains(hide, d.target)) ? .1 :1;
+      return (_.contains(hide, d.source) && _.contains(hide, d.target)) ? .1 :1;
     })
 }
 
