@@ -26,14 +26,21 @@ module.exports.render = function({
       links = data.links;
 
     order(data);
-    
+
     var title = d3.select(el).append("h3")
       .attr("class","interaction-title")
       .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
 
     var tooltip = d3.select(el).append("div")
-      .attr("class", "interaction-tooltip")
-      .style("opacity", 0);
+        .attr("class", "interaction-tooltip")
+        .style("opacity", 0);
+    tooltip.append('a')
+        .attr('href','#')
+        .attr('class','close-interaction-tooltip')
+        .text('Close X')
+        .on('click',closeTooltip);
+    tooltip.append('div')
+        .attr('class','tooltip-content');
 
     const margin = {
         top: 100,
@@ -52,7 +59,6 @@ module.exports.render = function({
       .attr("class", "interaction-viewer")
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 
     x.domain(nodes.map(entry => entry.accession));
     intensity.domain([0, d3.max(links.map(link => link.experiments))]);
@@ -103,7 +109,7 @@ module.exports.render = function({
     svg.append("polyline")
       .attr("points", points)
       .attr("class", "hidden-side");
-    
+
 
     function processRow(row) {
       const filtered = links.filter(d => d.source === row.accession);
@@ -123,8 +129,9 @@ module.exports.render = function({
         .style("display", d => {
           return (x(d.target)-x(row.accession) > 0)? "none" : "";
         })
-        .on("click", mouseover);
-        // .on("mouseout", mouseout);
+        .on("click", mouseclick)
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout);
 
       cell.exit().remove();
     }
@@ -133,8 +140,10 @@ module.exports.render = function({
       d3.select(this).classed("active-cell", true);
       d3.selectAll(".interaction-row").classed("active", d => d.accession === p.source);
       d3.selectAll(".column").classed("active", d => d.accession === p.target);
-      tooltip.html(`<a href="#" class="close-interaction-tooltip">Close x</a><a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/>
-      ${p.experiments} experiment(s)`);
+    }
+
+    function mouseclick(p) {
+      d3.selectAll('.tooltip-content').html(`<a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/> ${p.experiments} experiment(s)`);
       tooltip.style("opacity", .9)
         .style("visibility", "visible")
         .style("left", (d3.event.pageX) + "px")
@@ -152,12 +161,11 @@ module.exports.render = function({
     }
     createFilter(el);
 
-    d3.selectAll('.close-interaction-tooltip').on("click", function(){
-      console.log('here');
+    function closeTooltip() {
       d3.selectAll('.interaction-tooltip')
         .style("opacity", 0)
         .style("visibility", "hidden");
-    });
+    };
 
   });
 }
