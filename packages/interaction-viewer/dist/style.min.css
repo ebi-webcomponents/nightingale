@@ -1,6 +1,8 @@
 interaction-viewer {
   font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
   font-size: 12px; }
+  interaction-viewer text {
+    fill: #101010; }
   interaction-viewer .interaction-tooltip {
     position: absolute;
     background: #FFFFFF;

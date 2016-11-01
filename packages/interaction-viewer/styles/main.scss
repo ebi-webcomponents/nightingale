@@ -9,6 +9,10 @@ interaction-viewer {
   font-family: $font;
   font-size: $font-size;
 
+  text {
+    fill:#101010;
+  }
+
   .interaction-tooltip {
     position: absolute;
     background: $white;
@@ -52,11 +56,11 @@ interaction-viewer {
         transition: all 0.25s;
       }
     }
-    
+
     .hidden-side {
       opacity: 0.1;
     }
-    
+
     .main-accession {
       font-weight: bold;
     }
