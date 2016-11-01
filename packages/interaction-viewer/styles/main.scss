@@ -10,7 +10,19 @@ interaction-viewer {
   font-size: $font-size;
 
   text {
-    fill:#101010;
+    fill:black;
+    opacity: .75;
+  }
+
+  .active {
+    text {
+      opacity: 1;
+    }
+  }
+
+  .active-row {
+    stroke: $primary-color;
+    opacity: .6;
   }
 
   .interaction-tooltip {
@@ -24,9 +36,13 @@ interaction-viewer {
     transition: all 0.25s;
 
     .close-interaction-tooltip {
-      display: block;
-      text-align: right;
+      cursor: pointer;
+      float: right;
       margin-bottom: .8em;
+    }
+
+    .tooltip-content {
+      clear: both;
     }
   }
 
@@ -58,7 +74,7 @@ interaction-viewer {
     }
 
     .hidden-side {
-      opacity: 0.1;
+      opacity: 0.05;
     }
 
     .main-accession {
@@ -71,13 +87,6 @@ interaction-viewer {
       -webkit-transition: all 0.5s;
       /* Safari */
       transition: all 0.25s;
-    }
-    .active {
-      fill: $white;
-      .text-highlight {
-        fill: $primary-color;
-        opacity: 1;
-      }
     }
   }
 }

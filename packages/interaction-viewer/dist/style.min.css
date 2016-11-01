@@ -2,7 +2,13 @@ interaction-viewer {
   font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
   font-size: 12px; }
   interaction-viewer text {
-    fill: #101010; }
+    fill: black;
+    opacity: .75; }
+  interaction-viewer .active text {
+    opacity: 1; }
+  interaction-viewer .active-row {
+    stroke: #4A90E2;
+    opacity: .6; }
   interaction-viewer .interaction-tooltip {
     position: absolute;
     background: #FFFFFF;
@@ -13,9 +19,11 @@ interaction-viewer {
     /* Safari */
     transition: all 0.25s; }
     interaction-viewer .interaction-tooltip .close-interaction-tooltip {
-      display: block;
-      text-align: right;
+      cursor: pointer;
+      float: right;
       margin-bottom: .8em; }
+    interaction-viewer .interaction-tooltip .tooltip-content {
+      clear: both; }
   interaction-viewer .interaction-filter {
     width: 20em;
     vertical-align: top;
@@ -37,7 +45,7 @@ interaction-viewer {
         /* Safari */
         transition: all 0.25s; }
     interaction-viewer .interaction-viewer .hidden-side {
-      opacity: 0.1; }
+      opacity: 0.05; }
     interaction-viewer .interaction-viewer .main-accession {
       font-weight: bold; }
     interaction-viewer .interaction-viewer .text-highlight {
@@ -46,9 +54,4 @@ interaction-viewer {
       -webkit-transition: all 0.5s;
       /* Safari */
       transition: all 0.25s; }
-    interaction-viewer .interaction-viewer .active {
-      fill: #FFFFFF; }
-      interaction-viewer .interaction-viewer .active .text-highlight {
-        fill: #4A90E2;
-        opacity: 1; }
 

@@ -27,15 +27,14 @@ module.exports.render = function({
 
     order(data);
 
-    var title = d3.select(el).append("h3")
+    var title = d3.select(el).append("strong")
       .attr("class","interaction-title")
       .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
 
     var tooltip = d3.select(el).append("div")
         .attr("class", "interaction-tooltip")
         .style("opacity", 0);
-    tooltip.append('a')
-        .attr('href','#')
+    tooltip.append('span')
         .attr('class','close-interaction-tooltip')
         .text('Close X')
         .on('click',closeTooltip);
@@ -58,6 +57,7 @@ module.exports.render = function({
       .attr("height", height + margin.top + margin.bottom)
       .attr("class", "interaction-viewer")
       .append("g")
+      .attr("class", "interaction-viewer-group")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     x.domain(nodes.map(entry => entry.accession));
@@ -141,6 +141,22 @@ module.exports.render = function({
       d3.select(this).classed("active-cell", true);
       d3.selectAll(".interaction-row").classed("active", d => d.accession === p.source);
       d3.selectAll(".column").classed("active", d => d.accession === p.target);
+
+      d3.selectAll('.interaction-viewer-group')
+            .append('line')
+            .attr('x1',0)
+            .attr('y1',x(p.source) + x.rangeBand() / 2)
+            .attr('x2',x(p.target))
+            .attr('y2',x(p.source)+ x.rangeBand() / 2)
+            .attr('class','active-row');
+
+      d3.selectAll('.interaction-viewer-group')
+            .append('line')
+            .attr('x1',x(p.target) + x.rangeBand() / 2)
+            .attr('y1',0)
+            .attr('x2',x(p.target) + x.rangeBand() / 2)
+            .attr('y2',x(p.source))
+            .attr('class','active-row');
     }
 
     function mouseclick(p) {
@@ -154,6 +170,7 @@ module.exports.render = function({
     function mouseout() {
       d3.selectAll("g").classed("active", false);
       d3.selectAll("circle").classed("active-cell", false);
+      d3.selectAll(".active-row").remove();
     }
 
     function order(data) {
