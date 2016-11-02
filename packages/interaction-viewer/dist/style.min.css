@@ -60,5 +60,6 @@ interaction-viewer {
     background-color: #E8E8E8;
     white-space: nowrap; }
   interaction-viewer .interaction-viewer-table .interaction-viewer-table_row-header {
-    font-weight: bold; }
+    font-weight: bold;
+    text-align: right; }
 
