@@ -27,12 +27,9 @@ module.exports.render = function({
 
     order(data);
 
-    var title = d3.select(el).append("strong")
-      .attr("class","interaction-title")
-      .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
-
     var tooltip = d3.select(el).append("div")
         .attr("class", "interaction-tooltip")
+        .attr("display", "none")
         .style("opacity", 0);
     tooltip.append('span')
         .attr('class','close-interaction-tooltip')
@@ -40,6 +37,12 @@ module.exports.render = function({
         .on('click',closeTooltip);
     tooltip.append('div')
         .attr('class','tooltip-content');
+
+    var title = d3.select(el).append("h3")
+      .attr("class","interaction-title")
+      .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
+
+    createFilter(el);
 
     const margin = {
         top: 100,
@@ -144,27 +147,33 @@ module.exports.render = function({
 
       d3.selectAll('.interaction-viewer-group')
             .append('line')
+            .attr('class','active-row')
+            .attr('style','opacity:0')
             .attr('x1',0)
             .attr('y1',x(p.source) + x.rangeBand() / 2)
             .attr('x2',x(p.target))
             .attr('y2',x(p.source)+ x.rangeBand() / 2)
-            .attr('class','active-row');
+            .transition(50)
+            .attr('style','opacity:.5');
 
       d3.selectAll('.interaction-viewer-group')
             .append('line')
+            .attr('class','active-row')
+            .attr('style','opacity:0')
             .attr('x1',x(p.target) + x.rangeBand() / 2)
             .attr('y1',0)
             .attr('x2',x(p.target) + x.rangeBand() / 2)
             .attr('y2',x(p.source))
-            .attr('class','active-row');
+            .transition(50)
+            .attr('style','opacity:.5');
     }
 
     function mouseclick(p) {
       d3.selectAll('.tooltip-content').html(`<a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/> ${p.experiments} experiment(s)`);
       tooltip.style("opacity", .9)
-        .style("visibility", "visible")
-        .style("left", (d3.event.pageX) + "px")
-        .style("top", (d3.event.pageY) + "px");
+        .style("display", "inline")
+        .style("left", (d3.mouse(el)[0] + 10) + "px")
+        .style("top", (d3.mouse(el)[1] - 15) + "px");
     }
 
     function mouseout() {
@@ -177,12 +186,11 @@ module.exports.render = function({
       // Always place the query accession at the top
       data.nodes.splice(0, 0, data.nodes.splice(_.pluck(data.nodes, 'accession').lastIndexOf(accession), 1)[0]);
     }
-    createFilter(el);
 
     function closeTooltip() {
       d3.selectAll('.interaction-tooltip')
         .style("opacity", 0)
-        .style("visibility", "hidden");
+        .style("display", "none");
     };
 
   });

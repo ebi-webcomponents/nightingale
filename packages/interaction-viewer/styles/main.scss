@@ -8,6 +8,7 @@ $darkgrey: #333333;
 interaction-viewer {
   font-family: $font;
   font-size: $font-size;
+  position: relative;
 
   text {
     fill:black;
@@ -22,10 +23,10 @@ interaction-viewer {
 
   .active-row {
     stroke: $primary-color;
-    opacity: .6;
   }
 
   .interaction-tooltip {
+    z-index: 99999;
     position: absolute;
     background: $white;
     padding: 0.5em 1em;
@@ -47,11 +48,9 @@ interaction-viewer {
   }
 
   .interaction-filter {
-    width:20em;
     vertical-align: top;
-    display: inline-block;
-    margin: 100px 0 0 .5em;
-    h4 {
+    margin-bottom: .5em;
+    h3 {
       margin:0;
     }
     ul {
@@ -62,14 +61,13 @@ interaction-viewer {
   }
 
   .interaction-viewer {
-    display: inline-block;
     .cell {
       fill: $primary-color;
       &.active-cell {
         r: 0.8em;
         -webkit-transition: all 0.5s;
         /* Safari */
-        transition: all 0.25s;
+        transition: all 0.5s;
       }
     }
 
@@ -86,7 +84,7 @@ interaction-viewer {
       opacity: 0;
       -webkit-transition: all 0.5s;
       /* Safari */
-      transition: all 0.25s;
+      transition: all 0.5s;
     }
   }
 }

@@ -1,15 +1,16 @@
 interaction-viewer {
   font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
-  font-size: 12px; }
+  font-size: 12px;
+  position: relative; }
   interaction-viewer text {
     fill: black;
     opacity: .75; }
   interaction-viewer .active text {
     opacity: 1; }
   interaction-viewer .active-row {
-    stroke: #4A90E2;
-    opacity: .6; }
+    stroke: #4A90E2; }
   interaction-viewer .interaction-tooltip {
+    z-index: 99999;
     position: absolute;
     background: #FFFFFF;
     padding: 0.5em 1em;
@@ -25,33 +26,29 @@ interaction-viewer {
     interaction-viewer .interaction-tooltip .tooltip-content {
       clear: both; }
   interaction-viewer .interaction-filter {
-    width: 20em;
     vertical-align: top;
-    display: inline-block;
-    margin: 100px 0 0 .5em; }
-    interaction-viewer .interaction-filter h4 {
+    margin-bottom: .5em; }
+    interaction-viewer .interaction-filter h3 {
       margin: 0; }
     interaction-viewer .interaction-filter ul {
       list-style: none;
       padding: .2em;
       margin: 0; }
-  interaction-viewer .interaction-viewer {
-    display: inline-block; }
-    interaction-viewer .interaction-viewer .cell {
-      fill: #4A90E2; }
-      interaction-viewer .interaction-viewer .cell.active-cell {
-        r: 0.8em;
-        -webkit-transition: all 0.5s;
-        /* Safari */
-        transition: all 0.25s; }
-    interaction-viewer .interaction-viewer .hidden-side {
-      opacity: 0.05; }
-    interaction-viewer .interaction-viewer .main-accession {
-      font-weight: bold; }
-    interaction-viewer .interaction-viewer .text-highlight {
-      fill: #FFF;
-      opacity: 0;
+  interaction-viewer .interaction-viewer .cell {
+    fill: #4A90E2; }
+    interaction-viewer .interaction-viewer .cell.active-cell {
+      r: 0.8em;
       -webkit-transition: all 0.5s;
       /* Safari */
-      transition: all 0.25s; }
+      transition: all 0.5s; }
+  interaction-viewer .interaction-viewer .hidden-side {
+    opacity: 0.05; }
+  interaction-viewer .interaction-viewer .main-accession {
+    font-weight: bold; }
+  interaction-viewer .interaction-viewer .text-highlight {
+    fill: #FFF;
+    opacity: 0;
+    -webkit-transition: all 0.5s;
+    /* Safari */
+    transition: all 0.5s; }
 
