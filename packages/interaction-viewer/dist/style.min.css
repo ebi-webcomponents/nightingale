@@ -42,7 +42,7 @@ interaction-viewer {
       /* Safari */
       transition: all 0.5s; }
   interaction-viewer .interaction-viewer .hidden-side {
-    opacity: 0.05; }
+    fill: #E8E8E8; }
   interaction-viewer .interaction-viewer .main-accession {
     font-weight: bold; }
   interaction-viewer .interaction-viewer .text-highlight {
@@ -51,4 +51,14 @@ interaction-viewer {
     -webkit-transition: all 0.5s;
     /* Safari */
     transition: all 0.5s; }
+  interaction-viewer .interaction-viewer-table tr:nth-child(even) {
+    background: #F2F2F2; }
+  interaction-viewer .interaction-viewer-table td, interaction-viewer .interaction-viewer-table th {
+    padding: .5em;
+    text-align: center; }
+  interaction-viewer .interaction-viewer-table th {
+    background-color: #E8E8E8;
+    white-space: nowrap; }
+  interaction-viewer .interaction-viewer-table .interaction-viewer-table_row-header {
+    font-weight: bold; }
 

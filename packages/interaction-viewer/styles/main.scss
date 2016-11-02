@@ -4,6 +4,8 @@ $primary-color: #4A90E2;
 $white: #FFFFFF;
 $grey: #979797;
 $darkgrey: #333333;
+$lightgrey: #E8E8E8;
+$verylightgrey: #F2F2F2;
 
 interaction-viewer {
   font-family: $font;
@@ -72,7 +74,7 @@ interaction-viewer {
     }
 
     .hidden-side {
-      opacity: 0.05;
+      fill:$lightgrey;
     }
 
     .main-accession {
@@ -85,6 +87,24 @@ interaction-viewer {
       -webkit-transition: all 0.5s;
       /* Safari */
       transition: all 0.5s;
+    }
+  }
+
+  .interaction-viewer-table {
+    tr:nth-child(even) {
+      background: $verylightgrey;
+    }
+
+    td, th {
+      padding: .5em;
+      text-align: center;
+    }
+    th {
+      background-color: $lightgrey;
+      white-space: nowrap;
+    }
+    .interaction-viewer-table_row-header {
+      font-weight: bold;
     }
   }
 }

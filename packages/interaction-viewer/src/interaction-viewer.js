@@ -169,11 +169,70 @@ module.exports.render = function({
     }
 
     function mouseclick(p) {
-      d3.selectAll('.tooltip-content').html(`<a href="//uniprot.org/uniprot/${p.source}">${p.source}</a> - <a href="//uniprot.org/uniprot/${p.target}">${p.target}</a><br/> ${p.experiments} experiment(s)`);
+      populateTooltip(d3.selectAll('.tooltip-content'), p);
       tooltip.style("opacity", .9)
         .style("display", "inline")
         .style("left", (d3.mouse(el)[0] + 10) + "px")
         .style("top", (d3.mouse(el)[1] - 15) + "px");
+    }
+
+    function populateTooltip(element, data) {
+      element.html('');
+
+      let source = _.find(nodes, d => d.accession === data.source);
+      let target = _.find(nodes, d => d.accession === data.target);
+
+      element.append('h3').text('Interaction')
+      element.append('p').text(`Confirmed by ${data.experiments} experiment(s)`);
+
+      var table = element.append('table').attr('class','interaction-viewer-table');
+      var headerRow = table.append('tr')
+      headerRow.append('th');
+      headerRow.append('th').text('Interactor 1');
+      headerRow.append('th').text('Interactor 2');
+
+      var nameRow = table.append('tr');
+      nameRow.append('td').text('Name').attr('class','interaction-viewer-table_row-header');
+      nameRow.append('td')
+          .text(`${source.entryName}`)
+      nameRow.append('td')
+          .text(`${target.entryName}`);
+
+      var uniprotRow = table.append('tr');
+      uniprotRow.append('td').text('UniProtKB').attr('class','interaction-viewer-table_row-header');
+      uniprotRow.append('td')
+          .append('a')
+          .attr('href',`//uniprot.org/uniprot/${data.source}`)
+          .text(`${data.source}`)
+      uniprotRow.append('td')
+          .append('a')
+          .attr('href',`//uniprot.org/uniprot/${data.target}`)
+          .text(`${data.target}`);
+
+      var diseaseRow = table.append('tr');
+      diseaseRow.append('td').text('Disease association').attr('class','interaction-viewer-table_row-header');
+      diseaseRow.append('td').text(source.disease ? 'Y' : 'N');
+      diseaseRow.append('td').text(target.disease ? 'Y' : 'N');
+
+      var subcellRow = table.append('tr');
+      subcellRow.append('td').text('Subcellular location').attr('class','interaction-viewer-table_row-header');
+      subcellRow.append('td').text(source.subcell ? 'Y' : 'N');
+      subcellRow.append('td').text(target.subcell ? 'Y' : 'N');
+
+      // var row4 = table.append('tr');
+      // row4.append('td').text('Intact').attr('class','interaction-viewer-table_row-header');
+      // row4.append('td').html(getIntactLinksAsHTML(source.intact));
+      // row4.append('td').html(getIntactLinksAsHTML(target.intact));
+
+    }
+
+    function getIntactLinksAsHTML(stringlinks) {
+      const links = stringlinks[0].split(', ');
+      let html = '';
+      for(link of links) {
+        html+=`<a href="//www.ebi.ac.uk/intact/interaction/${link}">${link}</a><br/>`
+      }
+      return html;
     }
 
     function mouseout() {
