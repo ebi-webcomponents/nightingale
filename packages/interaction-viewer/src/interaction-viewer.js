@@ -38,11 +38,9 @@ module.exports.render = function({
     tooltip.append('div')
         .attr('class','tooltip-content');
 
-    var title = d3.select(el).append("h3")
+    var title = d3.select(el).append("p")
       .attr("class","interaction-title")
       .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
-
-    createFilter(el);
 
     const margin = {
         top: 100,
@@ -114,6 +112,7 @@ module.exports.render = function({
       .attr("class", "hidden-side")
       .attr("transform", d => `translate(${x(nodes[1].accession)}, 0)`);
 
+    createFilter(el);
 
     function processRow(row) {
       const filtered = links.filter(d => d.source === row.accession);
@@ -286,7 +285,7 @@ function createFilter(el) {
   const container = d3.select(el).append("div")
     .attr("class", "interaction-filter");
 
-  container.append("h4").text('Filter annotation:');
+  container.append("label").text('Filter interactions with:');
 
   var listItem = container.append("ul")
     .selectAll('li')
@@ -303,7 +302,7 @@ function createFilter(el) {
     .on('click', d => filter(d.value));
 
   listItem.append('label')
-    .text(d => `Has ${d.name.toLowerCase()}`)
+    .text(d => `${d.name.toLowerCase()} annotation`)
     .attr('for', d => d.value);
 }
 

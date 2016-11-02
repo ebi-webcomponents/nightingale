@@ -28,8 +28,6 @@ interaction-viewer {
   interaction-viewer .interaction-filter {
     vertical-align: top;
     margin-bottom: .5em; }
-    interaction-viewer .interaction-filter h3 {
-      margin: 0; }
     interaction-viewer .interaction-filter ul {
       list-style: none;
       padding: .2em;
