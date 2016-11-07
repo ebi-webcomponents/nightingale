@@ -218,20 +218,27 @@ module.exports.render = function({
       subcellRow.append('td').text(source.subcell ? 'Y' : 'N');
       subcellRow.append('td').text(target.subcell ? 'Y' : 'N');
 
-      // var row4 = table.append('tr');
-      // row4.append('td').text('Intact').attr('class','interaction-viewer-table_row-header');
-      // row4.append('td').html(getIntactLinksAsHTML(source.intact));
-      // row4.append('td').html(getIntactLinksAsHTML(target.intact));
-
+       var intactRow = table.append('tr');
+       intactRow.append('td').text('Intact').attr('class','interaction-viewer-table_row-header');
+       intactRow.append('td')
+                  .attr('colspan',2)
+                .append('a')
+                .attr('href', getIntactLink(data.intact))
+                .text(data.intact);
     }
 
-    function getIntactLinksAsHTML(stringlinks) {
-      const links = stringlinks[0].split(', ');
-      let html = '';
-      for(link of links) {
-        html+=`<a href="//www.ebi.ac.uk/intact/interaction/${link}">${link}</a><br/>`
+    function getIntactLink(intactIds) {
+      let url = '//www.ebi.ac.uk/intact/query/';
+      var first = true;
+      for(id of intactIds) {
+        if(!first)
+          url+=` AND id:${id}`
+        else{
+          first = false;          
+          url+=`id:${id}`
+        }      
       }
-      return html;
+      return url;
     }
 
     function mouseout() {
