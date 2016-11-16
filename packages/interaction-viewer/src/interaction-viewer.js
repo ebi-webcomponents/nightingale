@@ -25,8 +25,6 @@ module.exports.render = function({
     let nodes = data.nodes,
       links = data.links;
 
-    order(data);
-
     var tooltip = d3.select(el).append("div")
         .attr("class", "interaction-tooltip")
         .attr("display", "none")
@@ -38,7 +36,7 @@ module.exports.render = function({
     tooltip.append('div')
         .attr('class','tooltip-content');
 
-    var title = d3.select(el).append("p")
+    d3.select(el).append("p")
       .attr("class","interaction-title")
       .text(`${accession} has binary interactions with ${nodes.length-1} proteins`);
 
@@ -124,7 +122,7 @@ module.exports.render = function({
 
       circle.attr("class", "cell")
         .attr("cx", d => {
-          return x(d.target) + x.rangeBand() / 2
+          return x(d.target) + x.rangeBand() / 2;
         })
         .attr("cy", d => x.rangeBand() / 2)
         .attr("r", x.rangeBand() / 3)
@@ -169,7 +167,7 @@ module.exports.render = function({
 
     function mouseclick(p) {
       populateTooltip(d3.selectAll('.tooltip-content'), p);
-      tooltip.style("opacity", .9)
+      tooltip.style("opacity", 0.9)
         .style("display", "inline")
         .style("left", (d3.mouse(el)[0] + 10) + "px")
         .style("top", (d3.mouse(el)[1] - 15) + "px");
@@ -181,11 +179,11 @@ module.exports.render = function({
       let source = _.find(nodes, d => d.accession === data.source);
       let target = _.find(nodes, d => d.accession === data.target);
 
-      element.append('h3').text('Interaction')
+      element.append('h3').text('Interaction');
       element.append('p').text(`Confirmed by ${data.experiments} experiment(s)`);
 
       var table = element.append('table').attr('class','interaction-viewer-table');
-      var headerRow = table.append('tr')
+      var headerRow = table.append('tr');
       headerRow.append('th');
       headerRow.append('th').text('Interactor 1');
       headerRow.append('th').text('Interactor 2');
@@ -193,7 +191,7 @@ module.exports.render = function({
       var nameRow = table.append('tr');
       nameRow.append('td').text('Name').attr('class','interaction-viewer-table_row-header');
       nameRow.append('td')
-          .text(`${source.entryName}`)
+          .text(`${source.entryName}`);
       nameRow.append('td')
           .text(`${target.entryName}`);
 
@@ -202,7 +200,7 @@ module.exports.render = function({
       uniprotRow.append('td')
           .append('a')
           .attr('href',`//uniprot.org/uniprot/${data.source}`)
-          .text(`${data.source}`)
+          .text(`${data.source}`);
       uniprotRow.append('td')
           .append('a')
           .attr('href',`//uniprot.org/uniprot/${data.target}`)
@@ -230,13 +228,14 @@ module.exports.render = function({
     function getIntactLink(intactIds) {
       let url = '//www.ebi.ac.uk/intact/query/';
       var first = true;
-      for(id of intactIds) {
-        if(!first)
-          url+=` AND id:${id}`
+      for(var id of intactIds) {
+        if(!first){
+          url+=` AND id:${id}`;
+        }
         else{
-          first = false;          
-          url+=`id:${id}`
-        }      
+          first = false;
+          url+=`id:${id}`;
+        }
       }
       return url;
     }
@@ -247,19 +246,14 @@ module.exports.render = function({
       d3.selectAll(".active-row").remove();
     }
 
-    function order(data) {
-      // Always place the query accession at the top
-      data.nodes.splice(0, 0, data.nodes.splice(_.pluck(data.nodes, 'accession').lastIndexOf(accession), 1)[0]);
-    }
-
     function closeTooltip() {
       d3.selectAll('.interaction-tooltip')
         .style("opacity", 0)
         .style("display", "none");
-    };
+    }
 
   });
-}
+};
 
 function filter(_filter) {
   toggle(_filter);
@@ -273,18 +267,18 @@ function filter(_filter) {
       if(!show) {
         hide.push(d.accession);
       }
-      return show ? 1 : .1;
+      return show ? 1 : 0.1;
     });
 
   d3.selectAll('.cell')
     .attr('opacity', d => {
-      return (_.contains(hide, d.source) && _.contains(hide, d.target)) ? .1 :1;
-    })
+      return (_.contains(hide, d.source) && _.contains(hide, d.target)) ? 0.1 :1;
+    });
 }
 
 function toggle(_filter) {
   var match = _.find(filters, d => _filter === d.value);
-  match.visible = match.visible ? false : true
+  match.visible = match.visible ? false : true;
 }
 
 function createFilter(el) {
