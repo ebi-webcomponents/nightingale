@@ -10,6 +10,14 @@ $verylightgrey: #F2F2F2;
 interaction-viewer {
   position: relative;
 
+  .interaction-spinner {
+    display: block;
+    width: 120px;
+    height:120px;
+    background-image: url('./spinner.svg');
+    background-size: 120px 120px;
+  }
+
   text {
     font-family: $font;
     fill:black;

@@ -1,5 +1,11 @@
 interaction-viewer {
   position: relative; }
+  interaction-viewer .interaction-spinner {
+    display: block;
+    width: 120px;
+    height: 120px;
+    background-image: url("./spinner.svg");
+    background-size: 120px 120px; }
   interaction-viewer text {
     font-family: "Open Sans", sans-serif;
     fill: black;
