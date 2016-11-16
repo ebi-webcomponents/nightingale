@@ -21,7 +21,12 @@ module.exports.render = function({
   d3.select(el).select('svg').remove();
   d3.select(el).select('.interaction-tooltip').remove();
 
+  // show spinner until data is loaded
+  d3.select(el).append('img').attr('src','spinner.svg').attr('class','interaction-spinner');
+
   sparqlLoader.loadData(accession).then(data => {
+    d3.select(el).select('.interaction-spinner').remove();
+
     let nodes = data.nodes,
       links = data.links;
 
