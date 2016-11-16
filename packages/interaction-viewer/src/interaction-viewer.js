@@ -286,7 +286,7 @@ function createFilter(el) {
   const container = d3.select(el).append("div")
     .attr("class", "interaction-filter");
 
-  container.append("label").text('Filter interactions with:');
+  container.append("label").text('Show only interactions where one or both interactors have:');
 
   var listItem = container.append("ul")
     .selectAll('li')

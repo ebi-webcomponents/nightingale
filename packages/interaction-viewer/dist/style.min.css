@@ -1,10 +1,10 @@
 interaction-viewer {
-  font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
   position: relative; }
   interaction-viewer text {
+    font-family: "Open Sans", sans-serif;
     fill: black;
-    opacity: .75; }
+    opacity: .75;
+    font-size: 12px; }
   interaction-viewer .active text {
     opacity: 1; }
   interaction-viewer .active-row {

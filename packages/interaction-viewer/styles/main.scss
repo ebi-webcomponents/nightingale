@@ -1,4 +1,4 @@
-$font: 'Helvetica neue', Helvetica, Arial, sans-serif;
+$font: 'Open Sans', sans-serif;
 $font-size: 12px;
 $primary-color: #4A90E2;
 $white: #FFFFFF;
@@ -8,13 +8,13 @@ $lightgrey: #E8E8E8;
 $verylightgrey: #F2F2F2;
 
 interaction-viewer {
-  font-family: $font;
-  font-size: $font-size;
   position: relative;
 
   text {
+    font-family: $font;
     fill:black;
     opacity: .75;
+    font-size: $font-size;
   }
 
   .active {
