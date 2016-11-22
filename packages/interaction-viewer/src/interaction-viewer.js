@@ -222,7 +222,7 @@ module.exports.render = function({
       subcellRow.append('td').text(target.subcell ? 'Y' : 'N');
 
        var intactRow = table.append('tr');
-       intactRow.append('td').text('Intact').attr('class','interaction-viewer-table_row-header');
+       intactRow.append('td').text('IntAct').attr('class','interaction-viewer-table_row-header');
        intactRow.append('td')
                   .attr('colspan',2)
                 .append('a')
