@@ -1,6 +1,6 @@
 {
   "name": "data-loader",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "data-loader Custom Element to load data declaratively",
   "files": [
     "dist",
@@ -30,19 +30,21 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
-    "babel-preset-babili": "^0.0.5",
+    "babel-plugin-transform-es2015-for-of": "^6.18.0",
+    "babel-preset-babili": "0.0.9",
+    "babel-preset-es2016": "^6.16.0",
     "babel-preset-es2017": "^6.16.0",
-    "eslint": "^3.8.1",
+    "eslint": "^3.10.2",
     "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "livereload": "^0.6.0",
     "rimraf": "^2.5.4",
     "rollup": "^0.36.3",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-eslint": "^3.0.0",
-    "rollup-watch": "^2.5.0"
-  },
-  "dependencies": {}
+    "rollup-watch": "^2.5.0",
+    "skatejs-web-components": "^5.0.0"
+  }
 }

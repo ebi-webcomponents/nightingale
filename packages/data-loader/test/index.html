@@ -3,8 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>Test web components</title>
-  <script async defer src="/dist/index.js"></script>
+  <script defer>
+    var livereloadScript = document.createElement('script');
+    livereloadScript.type = 'text/javascript';
+    livereloadScript.async = true;
+    livereloadScript.src = (
+      '//' + location.hostname + ':35729/livereload.js?snipver=1'
+    );
+    document.head.appendChild(livereloadScript);
+  </script>
+  <script defer src="/node_modules/skatejs-web-components/dist/index-with-deps.js"></script>
+  <script defer src="/dist/index.js"></script>
 </head>
 <body>
+  <data-loader>
+    <source src="https://jsonplaceholder.typicode.com/posts">
+  </data-loader>
+  Open the developer tools console to see the loaded data.
+  <script>
+    document.querySelector('data-loader')
+      .addEventListener('load', e => console.table(e.detail));
+  </script>
 </body>
 </html>

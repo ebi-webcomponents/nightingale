@@ -41,13 +41,14 @@ And then in the HTML, use like so:
 
 ## Compatibility
 
-This element assumes support for at least ES2016.
+This element assumes support for at least ES2015.
 To support older browsers you might need to transpile the code you use
 down to the version you are planning on supporting.
 
 You might need to use a polyfill for browsers not supporting Custom
-Elements v1.
-See [webcomponents.js](https://github.com/webcomponents/webcomponentsjs).
+Elements **v1** (not v0).
+See [webcomponents.js](https://github.com/webcomponents/webcomponentsjs) or
+[SkateJS Web Components](https://github.com/skatejs/web-components).
 
 ## API
 
