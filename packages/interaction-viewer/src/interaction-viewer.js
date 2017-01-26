@@ -86,7 +86,7 @@ module.exports.render = function({
       .attr("dy", ".32em")
       .attr("text-anchor", "end")
       .text((d, i) => nodes[i].entryName)
-      .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession" : "");
+      .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession interaction-accession" : "interaction-accession");
 
     const column = svg.selectAll(".column")
       .data(nodes)
@@ -107,7 +107,7 @@ module.exports.render = function({
       .attr("dy", ".32em")
       .attr("text-anchor", "start")
       .text((d, i) => nodes[i].entryName)
-      .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession" : "");
+      .attr('class', (d,i) => (nodes[i].accession === accession)? "main-accession interaction-accession" : "interaction-accession");
     var points = `${x(nodes[1].accession)} 0,${x(nodes[nodes.length-1].accession)} 0,${x(nodes[nodes.length-1].accession)} ${x(nodes[nodes.length-1].accession)},${x(nodes[0].accession)} 0`;
 
     svg.append("polyline")
@@ -264,7 +264,7 @@ function filter(_filter) {
   toggle(_filter);
   let visible = _.filter(filters, d => d.visible);
   const hide = [];
-  d3.selectAll('text')
+  d3.selectAll('.interaction-accession')
     .attr('opacity', d => {
       let show = _.every(visible, filter => {
         return d[filter.value];
