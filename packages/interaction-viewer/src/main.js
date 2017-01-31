@@ -46,7 +46,7 @@
   } else {
     // polyfill the platform!
     var e = document.createElement('script');
-    e.src = '/micro.js';
+    e.src = 'http://ebi-uniprot.github.io/interaction-viewer/micro.js';
     document.body.appendChild(e);
     document.addEventListener('WebComponentsReady', function() {
       loadComponent();
