@@ -67,15 +67,15 @@ WHERE
   }
     UNION
   { ?p  :interaction          ?i .
-    ?i  a                     :Non_Self_Interaction
-    { ?i   :participant  ?sp, ?tp .
+    ?i  a                     :Non_Self_Interaction ;
+        :participant ?sp .
+    { ?i   :participant  ?tp .
       ?sp  owl:sameAs    ?p .
-      ?tp  owl:sameAs    ?te
+      ?tp  owl:sameAs    ?te .
       FILTER ( ! sameTerm(?p, ?te) )
-      BIND(?p AS ?se)
     }
       UNION
-    { ?i   :participant  ?sp .
+    {
       ?sp  owl:sameAs    ?se .
       ?se  :interaction  ?i2 .
       FILTER ( ! sameTerm(?i, ?i2) )
@@ -85,8 +85,6 @@ WHERE
         ?tp  owl:sameAs            ?te .
         ?te  :interaction          ?oi .
         { ?oi :participant/owl:sameAs ?p } 
-           UNION 
-        { ?oi :participant/owl:sameAs ?iso . ?p :sequence ?iso }
         FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
       }
         UNION
@@ -118,7 +116,8 @@ ORDER BY ?entry_name`);
 SELECT
   (strafter(substr(str(?se), 32), "/") AS ?source) 
   (strafter(substr(str(?te), 32), "/") AS ?target) 
-  (?e AS ?exp) (substr(str(?sp), 32) AS ?source_intact) 
+  (?e AS ?exp)
+  (substr(str(?sp), 32) AS ?source_intact) 
   (substr(str(?tp), 32) AS ?target_intact)
 FROM <http://sparql.uniprot.org/uniprot>
 WHERE
@@ -160,8 +159,6 @@ WHERE
             ?tp  owl:sameAs            ?te .
             ?te ?ui ?oi . 
             { ?oi :participant/owl:sameAs ?p } 
-                 UNION 
-            { ?oi :participant/owl:sameAs ?iso . ?p :sequence ?iso }
             FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
         }
            UNION
