@@ -35,4 +35,4 @@ https://d3js.org/
 http://webcomponents.org/polyfills/
 
 # Contact
-For support contact xwatkins@ebi.ac.uk
+For support contact help@uniprot.org and please put interaction viewer in the subject line.
