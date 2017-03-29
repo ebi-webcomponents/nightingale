@@ -1,7 +1,6 @@
 const d3 = require('d3');
 const _ = require('underscore');
 const sparql_uniprot_org="http://sparql.uniprot.org/sparql/"
-
 const sparqlLoader = {
   order: function(accession, nodes) {
     // Always place the query accession at the top
@@ -59,19 +58,17 @@ SELECT
     ?entry_name 
     (MAX(?disease_type) AS ?has_disease) 
     (MAX(?subcell_type) AS ?has_subcell)
+FROM <http://sparql.uniprot.org/uniprot>
 WHERE
 { 
   BIND(uniprotkb:${entry} AS ?p)
-  BIND(:interaction AS ?ui)
   {
     BIND(uniprotkb:${entry} AS ?te)
   }
     UNION
-  { ?p  ?ui                   ?i .
+  { ?p  :interaction          ?i .
     ?i  a                     :Non_Self_Interaction
-    { ?i   :experiments  ?e ;
-           :participant  ?sp ;
-           :participant  ?tp .
+    { ?i   :participant  ?sp, ?tp .
       ?sp  owl:sameAs    ?p .
       ?tp  owl:sameAs    ?te
       FILTER ( ! sameTerm(?p, ?te) )
@@ -80,24 +77,22 @@ WHERE
       UNION
     { ?i   :participant  ?sp .
       ?sp  owl:sameAs    ?se .
-      ?se  ?ui           ?i2 .
+      ?se  :interaction  ?i2 .
       FILTER ( ! sameTerm(?i, ?i2) )
       {
         ?i2  a                     :Non_Self_Interaction ;
-             :participant          ?tp ;
-             :participant          ?sp .
+             :participant          ?tp , ?sp .
         ?tp  owl:sameAs            ?te .
-        ?te  ?ui                   ?oi .
+        ?te  :interaction          ?oi .
         { ?oi :participant/owl:sameAs ?p } 
-          UNION 
+           UNION 
         { ?oi :participant/owl:sameAs ?iso . ?p :sequence ?iso }
         FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
       }
         UNION
       { 
         ?i2  a                     :Self_Interaction ;
-             :participant          ?tp .
-        ?tp  owl:sameAs            ?se
+             :participant/owl:sameAs ?se .
         BIND(?se AS ?te)
       }
     }
@@ -125,6 +120,7 @@ SELECT
   (strafter(substr(str(?te), 32), "/") AS ?target) 
   (?e AS ?exp) (substr(str(?sp), 32) AS ?source_intact) 
   (substr(str(?tp), 32) AS ?target_intact)
+FROM <http://sparql.uniprot.org/uniprot>
 WHERE
 { 
   BIND(<http://purl.uniprot.org/uniprot/${entry}> AS ?p)
@@ -166,7 +162,7 @@ WHERE
             { ?oi :participant/owl:sameAs ?p } 
                  UNION 
             { ?oi :participant/owl:sameAs ?iso . ?p :sequence ?iso }
-               FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
+            FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
         }
            UNION
         {
