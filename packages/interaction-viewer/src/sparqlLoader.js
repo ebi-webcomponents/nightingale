@@ -1,5 +1,6 @@
 const d3 = require('d3');
 const _ = require('underscore');
+const sparql_uniprot_org="http://sparql.uniprot.org/sparql/"
 
 const sparqlLoader = {
   order: function(accession, nodes) {
@@ -44,15 +45,142 @@ const sparqlLoader = {
     }
     return json;
   },
+  convertQuery : function(query){
+      var q = query.replace(/\s+/g," ").replace(/\?/g,"%3F").replace(/</g,"%3C").replace(/>/g,"%3E").replace("#","%23").replace(/\&/g,"%26");
+      return q;
+  },
   loadData: function(entry) {
     var promiseNodes = new Promise(function(resolve) {
-      var url = `http://sparql.uniprot.org/sparql?query=%23uuw%0APREFIX++uniprotkb%3a+%3Chttp%3a%2f%2fpurl.uniprot.org%2funiprot%2f%3E%0d%0aPREFIX++%3a+++%3Chttp%3a%2f%2fpurl.uniprot.org%2fcore%2f%3E%0d%0a%0d%0aSELECT+DISTINCT++(substr(str(%3fte)%2c+33)+AS+%3faccession)+%3fentry_name+(MAX(%3fdisease_type)+AS+%3fhas_disease)+(MAX(%3fsubcell_type)+AS+%3fhas_subcell)%0d%0aWHERE%0d%0a++%7b+BIND(uniprotkb%3a${entry}+AS+%3fp)%0d%0a++++BIND(%3ainteraction+AS+%3fui)%0d%0a+++%7b%0d%0a+++++BIND(uniprotkb%3a${entry}+AS+%3fte)%0d%0a+++++%7d%0d%0a++++UNION%0d%0a++++++%7b+%3fp++%3fui+++++++++++++++++++%3fi+.%0d%0a++++++++%3fi++a+++++++++++++++++++++%3aNon_Self_Interaction%0d%0a++++++++++%7b+%3fi+++%3aexperiments++%3fe+%3b%0d%0a+++++++++++++++++%3aparticipant++%3fsp+%3b%0d%0a+++++++++++++++++%3aparticipant++%3ftp+.%0d%0a++++++++++++%3fsp++owl%3asameAs++++%3fp+.%0d%0a++++++++++++%3ftp++owl%3asameAs++++%3fte%0d%0a++++++++++++FILTER+(+!+sameTerm(%3fp%2c+%3fte)+)%0d%0a++++++++++++BIND(%3fp+AS+%3fse)%0d%0a++++++++++%7d%0d%0a++++++++UNION%0d%0a++++++++++%7b+%3fi+++%3aparticipant++%3fsp+.%0d%0a++++++++++++%3fsp++owl%3asameAs++++%3fse+.%0d%0a++++++++++++%3fse++%3fui+++++++++++%3fi2+.%0d%0a++++++++++++FILTER+(+!+sameTerm(%3fi%2c+%3fi2)+)%0d%0a++++++++++++++%7b+%3fi2++a+++++++++++++++++++++%3aNon_Self_Interaction+%3b%0d%0a+++++++++++++++++++++%3aparticipant++++++++++%3ftp+%3b%0d%0a+++++++++++++++++++++%3aparticipant++++++++++%3fsp+.%0d%0a++++++++++++++++%3ftp++owl%3asameAs++++++++++++%3fte+.%0d%0a+++++++++++++++%3fte+%3fui+%3foi+.+%0d%0a+++++++++++++++++++++%7b+%3foi+%3aparticipant%2fowl%3asameAs+%3fp+%7d+UNION+%0d%0a+++++++++++++++%7b+%3foi+%3aparticipant%2fowl%3asameAs+%3fiso+.+%3fp+%3asequence+%3fiso+%7d%0d%0a++++++++++++++++FILTER+(+(+(+!+sameTerm(%3fse%2c+%3fp)+)+%26%26+(+!+sameTerm(%3fse%2c+%3fte)+)+)+%26%26+(+!+sameTerm(%3fte%2c+%3fp)+)+)%0d%0a++++++++++++++%7d%0d%0a++++++++++++UNION%0d%0a++++++++++++++%7b+%3fi2++a+++++++++++++++++++++%3aSelf_Interaction+%3b%0d%0a+++++++++++++++++++++%3aparticipant++++++++++%3ftp+.%0d%0a++++++++++++++++%3ftp++owl%3asameAs++++++++++++%3fse%0d%0a++++++++++++++++BIND(%3fse+AS+%3fte)%0d%0a++++++++++++++%7d%0d%0a++++++++++%7d%0d%0a++++++%7d%0d%0a+++OPTIONAL+%7b%0d%0a+++%3fte%0d%0a++++++++++++++%3amnemonic++%3fentry_name+.%0d%0a+++++%7d+%0d%0a+++OPTIONAL+%7b%0d%0a++++%3fte+%3aannotation%2fa+%3ftype%0d%0a+++%7d%0d%0a+++BIND(if((+%3ftype+%3d+%3aDisease_Annotation+)%2c+1%2c+0)+AS+%3fdisease_type)%0d%0a++++BIND(if((+%3ftype+%3d+%3aSubcellular_Location_Annotation+)%2c+1%2c+0)+AS+%3fsubcell_type)%0d%0a++%7d%0d%0aGROUP+BY+%3fte+%3fentry_name%0d%0aORDER+BY+%3fentry_name&format=srj`;
+      var q=sparqlLoader.convertQuery(`PREFIX  uniprotkb: <http://purl.uniprot.org/uniprot/>
+PREFIX  :   <http://purl.uniprot.org/core/>
+SELECT 
+  DISTINCT  
+    (strafter(substr(str(?te), 32), "/") AS ?accession) 
+    ?entry_name 
+    (MAX(?disease_type) AS ?has_disease) 
+    (MAX(?subcell_type) AS ?has_subcell)
+WHERE
+{ 
+  BIND(uniprotkb:${entry} AS ?p)
+  BIND(:interaction AS ?ui)
+  {
+    BIND(uniprotkb:${entry} AS ?te)
+  }
+    UNION
+  { ?p  ?ui                   ?i .
+    ?i  a                     :Non_Self_Interaction
+    { ?i   :experiments  ?e ;
+           :participant  ?sp ;
+           :participant  ?tp .
+      ?sp  owl:sameAs    ?p .
+      ?tp  owl:sameAs    ?te
+      FILTER ( ! sameTerm(?p, ?te) )
+      BIND(?p AS ?se)
+    }
+      UNION
+    { ?i   :participant  ?sp .
+      ?sp  owl:sameAs    ?se .
+      ?se  ?ui           ?i2 .
+      FILTER ( ! sameTerm(?i, ?i2) )
+      {
+        ?i2  a                     :Non_Self_Interaction ;
+             :participant          ?tp ;
+             :participant          ?sp .
+        ?tp  owl:sameAs            ?te .
+        ?te  ?ui                   ?oi .
+        { ?oi :participant/owl:sameAs ?p } 
+          UNION 
+        { ?oi :participant/owl:sameAs ?iso . ?p :sequence ?iso }
+        FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
+      }
+        UNION
+      { 
+        ?i2  a                     :Self_Interaction ;
+             :participant          ?tp .
+        ?tp  owl:sameAs            ?se
+        BIND(?se AS ?te)
+      }
+    }
+  }
+  OPTIONAL {
+    ?te :mnemonic  ?entry_name .
+  } 
+  OPTIONAL {
+    ?te :annotation/a ?type
+  }
+  BIND(if(( ?type = :Disease_Annotation ), 1, 0) AS ?disease_type)
+  BIND(if(( ?type = :Subcellular_Location_Annotation ), 1, 0) AS ?subcell_type)
+}
+GROUP BY ?te ?entry_name
+ORDER BY ?entry_name`);
+      var url = sparql_uniprot_org + "?query=%23uuw%0A%0D"+q+"&format=srj";
       d3.json(url, data => {
         resolve(data);
       });
     });
     var promiseEdges = new Promise(function(resolve) {
-      var url = `http://sparql.uniprot.org/sparql?query=%23uuw%0APREFIX++%3a+++++%3Chttp%3a%2f%2fpurl.uniprot.org%2fcore%2f%3E%0d%0a%0d%0aSELECT++(strafter(substr(str(%3fse)%2c+32)%2c+%22%2f%22)+AS+%3fsource)+(strafter(substr(str(%3fte)%2c+32)%2c+%22%2f%22)+AS+%3ftarget)+(%3fe+AS+%3fexp)+(substr(str(%3fsp)%2c+32)+AS+%3fsource_intact)+(substr(str(%3ftp)%2c+32)+AS+%3ftarget_intact)%0d%0aWHERE%0d%0a++%7b+BIND(%3Chttp%3a%2f%2fpurl.uniprot.org%2funiprot%2f${entry}%3E+AS+%3fp)%0d%0a++++BIND(%3ainteraction+AS+%3fui)%0d%0a++++++%7b+%3fp++%3fui+++++++++++++++++++%3fi+.%0d%0a++++++++%3fi++a+++++++++++++++++++++%3aSelf_Interaction+%3b%0d%0a++++++++++++%3aexperiments++++++++++%3fe+%3b%0d%0a++++++++++++%3aparticipant++++++++++%3fsp+%3b%0d%0a++++++++++++%3aparticipant++++++++++%3ftp%0d%0a++++++++BIND(%3fp+AS+%3fse)%0d%0a++++++++BIND(%3fp+AS+%3fte)%0d%0a++++++%7d%0d%0a++++UNION%0d%0a++++++%7b+%3fp++%3fui+++++++++++++++++++%3fi+.%0d%0a++++++++%3fi++a+++++++++++++++++++++%3aNon_Self_Interaction%0d%0a++++++++++%7b+%3fi+++%3aexperiments++%3fe+%3b%0d%0a+++++++++++++++++%3aparticipant++%3fsp+%3b%0d%0a+++++++++++++++++%3aparticipant++%3ftp+.%0d%0a++++++++++++%3fsp++owl%3asameAs++++%3fp+.%0d%0a++++++++++++%3ftp++owl%3asameAs++++%3fte%0d%0a++++++++++++FILTER+(+!+sameTerm(%3fp%2c+%3fte)+)%0d%0a++++++++++++BIND(%3fp+AS+%3fse)%0d%0a++++++++++%7d%0d%0a++++++++UNION%0d%0a++++++++++%7b+%3fi+++%3aparticipant++%3fsp+.%0d%0a++++++++++++%3fsp++owl%3asameAs++++%3fse+.%0d%0a++++++++++++%3fse++%3fui+++++++++++%3fi2+.%0d%0a++++++++++++%3fi2++%3aexperiments++%3fe%0d%0a++++++++++++FILTER+(+!+sameTerm(%3fi%2c+%3fi2)+)%0d%0a++++++++++++++%7b+%3fi2++a+++++++++++++++++++++%3aNon_Self_Interaction+%3b%0d%0a+++++++++++++++++++++%3aparticipant++++++++++%3ftp+%3b%0d%0a+++++++++++++++++++++%3aparticipant++++++++++%3fsp+.%0d%0a++++++++++++++++%3ftp++owl%3asameAs++++++++++++%3fte+.%0d%0a++++++++++++++++%3fte+%3fui+%3foi+.+%0d%0a+++++++++++++++%7b+%3foi+%3aparticipant%2fowl%3asameAs+%3fp+%7d+UNION+%0d%0a+++++++++++++++%7b+%3foi+%3aparticipant%2fowl%3asameAs+%3fiso+.+%3fp+%3asequence+%3fiso+%7d%0d%0a++++++++++++++++FILTER+(+(+(+!+sameTerm(%3fse%2c+%3fp)+)+%26%26+(+!+sameTerm(%3fse%2c+%3fte)+)+)+%26%26+(+!+sameTerm(%3fte%2c+%3fp)+)+)%0d%0a++++++++++++++%7d%0d%0a++++++++++++UNION%0d%0a++++++++++++++%7b+%3fi2++a+++++++++++++++++++++%3aSelf_Interaction+%3b%0d%0a+++++++++++++++++++++%3aparticipant++++++++++%3ftp+.%0d%0a++++++++++++++++%3ftp++owl%3asameAs++++++++++++%3fse%0d%0a++++++++++++++++BIND(%3fse+AS+%3fte)%0d%0a++++++++++++++%7d%0d%0a++++++++++%7d%0d%0a++++++%7d%0d%0a++%7d%0d%0aGROUP+BY+%3fse+%3fte+%3fe+%3fsp+%3ftp%0d%0aORDER+BY+%3fse+%3fte+%3fe+%3fsp+%3ftp&format=srj`;
+      var q=sparqlLoader.convertQuery(`PREFIX :<http://purl.uniprot.org/core/>
+SELECT
+  (strafter(substr(str(?se), 32), "/") AS ?source) 
+  (strafter(substr(str(?te), 32), "/") AS ?target) 
+  (?e AS ?exp) (substr(str(?sp), 32) AS ?source_intact) 
+  (substr(str(?tp), 32) AS ?target_intact)
+WHERE
+{ 
+  BIND(<http://purl.uniprot.org/uniprot/${entry}> AS ?p)
+  BIND(:interaction AS ?ui)
+  { ?p  ?ui                   ?i .
+    ?i  a                     :Self_Interaction ;
+        :experiments          ?e ;
+        :participant          ?sp ;
+        :participant          ?tp
+        BIND(?p AS ?se)
+        BIND(?p AS ?te)
+  } 
+    UNION 
+  { 
+    ?p  ?ui                   ?i .
+    ?i  a                     :Non_Self_Interaction
+    { 
+        ?i   :experiments  ?e ;
+             :participant  ?sp ;
+             :participant  ?tp .
+        ?sp  owl:sameAs    ?p .
+        ?tp  owl:sameAs    ?te
+        FILTER ( ! sameTerm(?p, ?te) )
+        BIND(?p AS ?se)
+    }
+      UNION
+    { 
+        ?i   :participant  ?sp .
+        ?sp  owl:sameAs    ?se .
+        ?se  ?ui           ?i2 .
+        ?i2  :experiments  ?e
+        FILTER ( ! sameTerm(?i, ?i2) )
+        { 
+            ?i2  a                     :Non_Self_Interaction ;
+                 :participant          ?tp ;
+                 :participant          ?sp .
+            ?tp  owl:sameAs            ?te .
+            ?te ?ui ?oi . 
+            { ?oi :participant/owl:sameAs ?p } 
+                 UNION 
+            { ?oi :participant/owl:sameAs ?iso . ?p :sequence ?iso }
+               FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
+        }
+           UNION
+        {
+            ?i2  a                     :Self_Interaction ;
+                 :participant          ?tp .
+            ?tp  owl:sameAs            ?se
+            BIND(?se AS ?te)
+        }
+     }
+   }
+}
+GROUP BY ?se ?te ?e ?sp ?tp
+ORDER BY ?se ?te ?e ?sp ?tp`);
+      var url = sparql_uniprot_org + "?query=%23uuw%0A%0D"+q+"&format=srj";
       d3.json(url, data => {
         resolve(data);
       });
