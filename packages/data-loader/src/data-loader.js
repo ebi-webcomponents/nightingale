@@ -1,20 +1,29 @@
+import lodashGet from 'lodash-es/get';
+
 const observerConfig = {childList: true};
 
-const getSourceUrls = ({children}) => [...children]
-  .filter(child => child.tagName === 'SOURCE' && child.src)
-  .map(source => source.src);
+const getSourceData = ({children}) => [...children]
+  .filter(child => (
+    child.matches('source[src]') ||
+    child.matches('script[type="application/json"]')
+  ))
+  .map(({src, textContent}) => ({textContent, src}));
 
 class DataLoader extends HTMLElement {
   async _fetch () {
-    const urls = getSourceUrls(this);
-    if (!urls.length) return;
+    const sourceData = getSourceData(this);
+    if (!sourceData.length) return;
 
     let detail = [];
     let failed = true;
-    for (const url of urls) {
+    for (const sourceDatum of sourceData) {
       try {
-        const response = await fetch(url);
-        detail = await response.json();
+        if (sourceDatum.src) {
+          const response = await fetch(sourceDatum.src);
+          detail = await response.json();
+        } else {
+          detail = JSON.parse(sourceDatum.textContent);
+        }
         failed = false;
         break;
       } catch (error) {
@@ -22,11 +31,16 @@ class DataLoader extends HTMLElement {
       }
     }
 
-    this.dispatchEvent(new CustomEvent(
-      failed ? 'error' : 'load',
-      {detail, bubbles: true}
-    ));
-    this._data = failed ? null : detail;
+    if (failed) {
+      return this.dispatchEvent(
+        new CustomEvent('error', {detail, bubbles: true})
+      );
+    }
+
+    this._data = this._selectorFun(detail);
+    return this.dispatchEvent(
+      new CustomEvent('load', {detail: this._data, bubbles: true})
+    );
   }
 
   _planFetch () {
@@ -52,13 +66,23 @@ class DataLoader extends HTMLElement {
     return !!this.data;
   }
 
+  // loaded
+  get selector () {
+    return this._selector;
+  }
+
   // Custom element reactions
   constructor () {
     super();
     this._src = null;
     this._data = null;
     this._observer = new MutationObserver(() => this._planFetch());
-    this._selector = this.querySelectorAll('source');
+    this._selector = (this.getAttribute('selector') || '').trim();
+    if (this._selector) {
+      this._selectorFun = data => lodashGet(data, this._selector);
+    } else {
+      this._selectorFun = data => data;
+    }
   }
 
   connectedCallback () {

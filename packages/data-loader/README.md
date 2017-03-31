@@ -10,6 +10,9 @@ It follows the current v1 draft.
 Will load the data at the URL defined in the `src` property of a
 `source` element that it contains.
 
+It can also parse JSON from the content of a script tag of type
+`application/json`.
+
 ## Usage
 
 ### Example
@@ -61,6 +64,7 @@ To be completed
 |----|-------------|-----------|-------------|--------|
 |`data`|`null`|data loaded by the component (same than the data dispatched in the `load` event)|no|no|
 |`loaded`|`false`|flag informing if data is currently loaded|no|no|
+|`selector`|`null`|selector to extract data from the payload (see [lodash.get documentation](https://lodash.com/docs#get))|yes|no|
 
 ### Events
 
@@ -75,5 +79,4 @@ To be completed
  - [ ] Finish writing README.md
  - [ ] Add tests
  - [ ] Add continuous integration
- - [ ] Add data transformation through a `selector` property
  - [ ] Add bundle in `dist` folder for older browsers (but not before what is supported by the webcomponentjs polyfill)

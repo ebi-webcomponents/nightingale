@@ -12,17 +12,38 @@
     );
     document.head.appendChild(livereloadScript);
   </script>
-  <script defer src="/node_modules/skatejs-web-components/dist/index-with-deps.js"></script>
+  <!--<script defer src="/node_modules/skatejs-web-components/dist/index-with-deps.js"></script>-->
   <script defer src="/dist/index.js"></script>
 </head>
 <body>
   <data-loader>
     <source src="https://jsonplaceholder.typicode.com/posts">
   </data-loader>
+  <data-loader selector="root">
+    <script type="application/json">
+      {
+        "root": [
+          {
+            "userId": 1,
+            "id": 1,
+            "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+            "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+          }
+        ]
+      }
+    </script>
+  </data-loader>
   Open the developer tools console to see the loaded data.
   <script>
-    document.querySelector('data-loader')
-      .addEventListener('load', e => console.table(e.detail));
+    for (const dataLoaderElement of document.querySelectorAll('data-loader')) {
+      dataLoaderElement.addEventListener(
+        'load',
+        e => {
+          console.log(e.target);
+          console.table(e.detail);
+        }
+      );
+    }
   </script>
 </body>
 </html>
