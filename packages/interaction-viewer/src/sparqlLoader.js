@@ -1,6 +1,7 @@
 const d3 = require('d3');
 const _ = require('underscore');
-const sparql_uniprot_org="http://sparql.uniprot.org/sparql/"
+//const sparql_uniprot_org="http://sparql.uniprot.org/sparql/"
+const sparql_uniprot_org="http://sparql1.vital-it.ch:8090/sparql/"
 
 const sparqlLoader = {
   order: function(accession, nodes) {
@@ -70,21 +71,23 @@ FROM <http://sparql.uniprot.org/uniprot>
 WHERE
 { 
   BIND(<http://purl.uniprot.org/uniprot/${entry}> AS ?p)
-  { 
-    ?p  :interaction          ?i .
+  BIND(:interaction AS ?ui)
+  { ?p  ?ui                   ?i .
     ?i  a                     :Self_Interaction ;
         :experiments          ?e ;
-        :participant          ?sp , ?tp .
+        :participant          ?sp ;
+        :participant          ?tp
         BIND(?p AS ?se)
         BIND(?p AS ?te)
   } 
     UNION 
   { 
-    ?p  :interaction          ?i .
+    ?p  ?ui                   ?i .
     ?i  a                     :Non_Self_Interaction
     { 
         ?i   :experiments  ?e ;
-             :participant  ?sp , ?tp .
+             :participant  ?sp ;
+             :participant  ?tp .
         ?sp  owl:sameAs    ?p .
         ?tp  owl:sameAs    ?te
         FILTER ( ! sameTerm(?p, ?te) )
@@ -94,33 +97,39 @@ WHERE
     { 
         ?i   :participant  ?sp .
         ?sp  owl:sameAs    ?se .
-        ?se  :interaction  ?i2 .
+        ?se  ?ui           ?i2 .
         ?i2  :experiments  ?e
         FILTER ( ! sameTerm(?i, ?i2) )
         { 
             ?i2  a                     :Non_Self_Interaction ;
-                 :participant          ?tp , ?sp .
+                 :participant          ?tp ;
+                 :participant          ?sp .
             ?tp  owl:sameAs            ?te .
-            ?te :interaction/:participant/owl:sameAs ?p .
+            ?te ?ui ?oi . 
+            { ?oi :participant/owl:sameAs ?p } 
             FILTER ( ( ( ! sameTerm(?se, ?p) ) && ( ! sameTerm(?se, ?te) ) ) && ( ! sameTerm(?te, ?p) ) )
         }
            UNION
         {
             ?i2  a                     :Self_Interaction ;
                  :participant          ?tp .
-            ?tp  owl:sameAs            ?se .
+            ?tp  owl:sameAs            ?se
             BIND(?se AS ?te)
         }
-    }
-  }
+     }
+   }
   OPTIONAL {
-    ?te :mnemonic ?entry_name .
+    ?te :mnemonic  ?entry_name .
   } 
   OPTIONAL {
-    ?te :annotation/:disease ?disease .
+    ?te :annotation ?an . 
+    ?an a :Disease_Annotation ; 
+          :disease ?disease .
   }
   OPTIONAL {
-    ?te :annotation/:locatedIn/(:cellularComponent|:topology|:orientation) ?location .
+    ?te :annotation ?sa . 
+    ?sa a :Subcellular_Location_Annotation ;
+        :locatedIn/(:cellularComponent|:topology|:orientation) ?location .
   }
 }
 GROUP BY ?entry_name ?se ?te ?e ?sp ?tp
