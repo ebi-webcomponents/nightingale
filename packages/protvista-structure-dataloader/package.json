@@ -1,0 +1,33 @@
+{
+  "name": "protvista-structure-dataloader",
+  "version": "1.0.0",
+  "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebi-uniprot/protvista-structure-dataloader.git"
+  },
+  "keywords": [
+    "ProtVista",
+    "dataloader",
+    "parser",
+    "protein-structure"
+  ],
+  "author": "ljgarcia",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ebi-uniprot/protvista-structure-dataloader/issues"
+  },
+  "homepage": "https://github.com/ebi-uniprot/protvista-structure-dataloader#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "karma": "^1.6.0"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "underscore": "^1.8.3"
+  }
+}
