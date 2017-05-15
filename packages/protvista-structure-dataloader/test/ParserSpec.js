@@ -1,5 +1,6 @@
 require('babel-core/register');
 
+var test = require('../src/Parser.js');
 // chai is an assertion library
 var chai = require('chai');
 
@@ -11,9 +12,13 @@ var assert = chai.assert;
 var expect = chai.expect;
 var should = chai.should;
 
-describe('Parser', function() {
+describe('Parser', () => {
 	it('should pass', function() {
 	    var test = true;
 	    assert.equal(test, true);
+	});
+
+	it('should see Parser', () => {
+	    test('aa', 'b', 22, 43);
 	});
 });
