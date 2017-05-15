@@ -1,7 +1,11 @@
-let chai = require('chai');
-chai.expect();
+//let chai = require('chai');
+//chai.expect();
 
-let Parser = require('../src/Parser');
+import {assert} from 'chai';
+import {expect} from 'chai';
+
+//let Parser = require('../src/Parser');
+import {Parser} from ('../src/Parser')
 
 describe('Parser', () => {
     it('constructor', () => {
