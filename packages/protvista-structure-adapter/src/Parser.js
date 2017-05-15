@@ -1,12 +1,15 @@
-function Parser(foo, ...args) {
-    let [bar, baz] = args;
-
-    for(let arg of args) {
-        let bar = 22;
-        console.log(`arg: ${arg} bar: ${bar}`);
+class Parser {
+    constructor(loaderURL) {
+        this._loaderURL = loaderURL;
     }
 
-    console.log(`done: ${bar} :: ${baz}`);
+    get loaderURL() {
+        return this._loaderURL;
+    }
+
+    set loaderURL(loaderURL) {
+        this._loaderURL = loaderURL;
+    };
 }
 
 module.exports = Parser;
