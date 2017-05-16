@@ -2,7 +2,8 @@
 "use strict";
 
 let Constants = require('./Constants');
-let _ = require('underscore')
+let _ = require('underscore');
+require('./UniProtEntryLoader');
 
 class Parser {
     constructor(accession, provider) {
@@ -12,11 +13,14 @@ class Parser {
             this._provider = Constants.getDefaultProvider();
         }
 
-        this._handler = require('./' + Constants.getWebServiceHandler(this._provider));
+        let handler = require('./' + Constants.getWebServiceHandler(this._provider));
+        this._loader = new handler(accession);
     }
 
     parse() {
-
+        this._loader.retrieveEntry().done(function(response) {
+            console.log(response);
+        });
     }
 
     get accession() {
@@ -33,7 +37,11 @@ class Parser {
 
     set provider(provider) {
         this._provider = provider;
-    };
+    }
+
+    get loader() {
+        return this._loader;
+    }
 }
 
 module.exports = Parser;
