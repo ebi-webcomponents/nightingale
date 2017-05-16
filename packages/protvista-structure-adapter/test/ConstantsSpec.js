@@ -14,4 +14,8 @@ describe('Constants', () => {
     it('should get default web service URL', () => {
          expect(Constants.getWebServiceURL('anything')).to.equal(uniprotWebService);
     });
+
+    it('should confirm default web service URL', () => {
+         expect(Constants.isWebServiceURLDefault(Constants.getWebServiceURL('anything'))).to.equal(true);
+    });
 });
