@@ -1,13 +1,21 @@
 /*jslint node: true */
 "use strict";
 
+let Constants = require('./Constants');
+let _ = require('underscore')
+
 class Parser {
-    constructor(accession) {
+    constructor(accession, provider) {
         this._accession = accession;
-        this.init();
+        this._provider = provider;
+        if (!Constants.isValidProvider(this._provider)) {
+            this._provider = Constants.getDefaultProvider();
+        }
+
+        this._handler = require('./' + Constants.getWebServiceHandler(this._provider));
     }
 
-    init() {
+    parse() {
 
     }
 
@@ -17,6 +25,14 @@ class Parser {
 
     set accession(accession) {
         this._accession = accession;
+    };
+
+    get provider() {
+        return this._provider;
+    }
+
+    set provider(provider) {
+        this._provider = provider;
     };
 }
 
