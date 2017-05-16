@@ -1,14 +1,22 @@
+/*jslint node: true */
+"use strict";
+
 class Parser {
-    constructor(loaderURL) {
-        this._loaderURL = loaderURL;
+    constructor(accession) {
+        this._accession = accession;
+        this.init();
     }
 
-    get loaderURL() {
-        return this._loaderURL;
+    init() {
+
     }
 
-    set loaderURL(loaderURL) {
-        this._loaderURL = loaderURL;
+    get accession() {
+        return this._accession;
+    }
+
+    set accession(accession) {
+        this._accession = accession;
     };
 }
 
