@@ -1,5 +1,7 @@
+require('babel-core/register');
+
 let chai = require('chai');
-chai.expect();
+let expect = chai.expect;
 
 let Loader = require('../src/Loader');
 
