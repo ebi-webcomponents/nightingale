@@ -1,5 +1,7 @@
+require('babel-core/register');
+
 let chai = require('chai');
-chai.expect();
+let expect = chai.expect;
 
 let Parser = require('../src/Parser');
 let UniProtEntryLoader = require('../src/UniProtEntryLoader');
