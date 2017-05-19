@@ -1,7 +1,7 @@
 /*jslint node: true */
 "use strict";
 
-let $ = require('jquery');
+let fetch = require('node-fetch');
 
 let Constants = require('./Constants');
 let Loader = require('./Loader');
@@ -12,7 +12,11 @@ class UniProtEntryLoader extends Loader {
     }
 
     retrieveEntry() {
-        return $.getJSON(Constants.getWebServiceURL('uniprot') + this.accession);
+        return fetch(Constants.getWebServiceURL('uniprot') + this.accession, {
+            headers: {'Accept': 'application/json'}
+        }).then(function(response) {
+            return response.json();
+        });
     }
 }
 
