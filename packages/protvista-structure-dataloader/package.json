@@ -32,11 +32,13 @@
     "browserify": "^14.3.0",
     "chai": "^3.5.0",
     "cross-env": "^5.0.0",
+    "fetch-mock": "^5.10.1",
     "mocha": "^3.4.1",
-    "nyc": "^10.3.2"
+    "nyc": "^10.3.2",
+    "sinon": "^2.2.0"
   },
   "dependencies": {
-    "jquery": "^3.2.1",
+    "node-fetch": "^1.6.3",
     "underscore": "^1.8.3"
   },
   "nyc": {
