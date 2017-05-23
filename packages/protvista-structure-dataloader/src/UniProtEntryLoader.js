@@ -14,7 +14,9 @@ class UniProtEntryLoader extends Loader {
     retrieveEntryPromise() {
         return fetch(Constants.getWebServiceURL('uniprot') + this.accession, {
             headers: {'Accept': 'application/json'}
-        });
+        }).then(res => {
+            return res.json();
+        } );
     }
 }
 
