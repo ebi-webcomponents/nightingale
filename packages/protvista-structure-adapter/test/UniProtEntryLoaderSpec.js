@@ -3,12 +3,10 @@ require('babel-core/register');
 let chai = require('chai');
 let expect = chai.expect;
 let sinon = require('sinon');
-let fetchMock = require('fetch-mock');
-let fetch = require('node-fetch');
 
 let MockData = require('./UniProtEntryData');
+let fetch = require('node-fetch');
 let UniProtEntryLoader = require('../src/UniProtEntryLoader');
-let MakeRequest = require('../src/MakeRequest');
 
 const accession = 'P05067';
 
@@ -20,31 +18,16 @@ describe('UniProtEntryLoader', () => {
 
         let aLoader = new UniProtEntryLoaderStub(accession);
 
-        aLoader.retrieveEntry.returns(MockData.data);
-        let data = aLoader.retrieveEntry();
+        aLoader.retrieveEntryPromise.returns(MockData.data);
+        let data = aLoader.retrieveEntryPromise();
         expect(data.accession).to.equal(MockData.data.accession);
         expect(data.id).to.equal(MockData.data.id);
-        /*
-        //This works, regular ES5 module
-        /*
-        fetchMock.get('*', MockData.data);
-
-        MakeRequest.makeRequest().then(function(data) {
-            console.log('got data', data);
-        });
-        //This does not, ES6 class
-        aLoader.retrieveEntry()
-            .then(function(json) {
-                console.log('got json' + JSON.stringify(json));
-            });
-
-        fetchMock.restore();
-        */
     });
 
-    it('should construct a UniProtEntryLoader object', () => {
+    it('should get a fetch promise', (done) => {
         let aLoader = new UniProtEntryLoader(accession);
-        expect(aLoader.accession).to.equal(accession);
-        expect(aLoader instanceof UniProtEntryLoader).to.equals(true);
+        const promise = aLoader.retrieveEntryPromise();
+        expect(promise).to.be.an.instanceof(fetch.Promise);
+        done();
     });
 });
