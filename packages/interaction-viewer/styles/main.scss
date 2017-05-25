@@ -1,6 +1,7 @@
 $font: 'Open Sans', sans-serif;
 $font-size: 12px;
 $primary-color: #4A90E2;
+$colour-black:#3a343a;
 $white: #FFFFFF;
 $grey: #979797;
 $darkgrey: #333333;
@@ -45,7 +46,7 @@ interaction-viewer {
     -webkit-transition: all 0.5s;
     /* Safari */
     transition: all 0.25s;
-
+    min-width: 36em;
     .close-interaction-tooltip {
       cursor: pointer;
       float: right;
@@ -57,15 +58,48 @@ interaction-viewer {
     }
   }
 
+.interaction-filter-container {
+  text-align: left;
+  #filter-display {
+    .filter-selected {
+      margin: .2em .5em;
+      padding: .3em .1em;
+      background-color: $verylightgrey;
+      border: 1px solid $lightgrey;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-block;
+      &::after {
+        content: '✖';
+        margin: 0 .3em;
+      }
+    }
+  }
   .interaction-filter {
     vertical-align: top;
     margin-bottom: .5em;
+    display: inline-block;
     ul {
+      border: $lightgrey 1px solid;
+      max-height: 15em;
+      overflow-y: auto;
       list-style:none;
-      padding: .2em;
+      padding: 0;
       margin: 0;
+      li {
+        cursor: pointer;
+        padding: .5em .5em;
+        border-bottom: $lightgrey 1px solid;
+        &:hover {
+          background-color: $verylightgrey;
+        }
+        &.active {
+          font-weight: bold;
+        }
+      }
     }
   }
+}
 
   .interaction-viewer {
     .cell {
@@ -113,4 +147,62 @@ interaction-viewer {
       text-align: right;
     }
   }
+
+  .button {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 1em 0 0;
+    padding: 0.85em 1em;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    border-radius: 0;
+    -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: $verylightgrey !important;
+    color: $colour-black;
+    border: 1px solid $lightgrey;
+    &:hover {
+      color: $colour-black;
+    }
+  }
+
+  .button.dropdown::after {
+    display: block;
+    width: 0;
+    height: 0;
+    border: inset 0.4em;
+    content: '';
+    border-bottom-width: 0;
+    border-top-style: solid;
+    border-color: $colour-black transparent transparent;
+    position: relative;
+    top: 0.4em;
+    display: inline-block;
+    float: right;
+    margin-left: 1em;
+  }
+
+  .dropdown-pane {
+    position: absolute;
+    z-index: 10;
+    display: block;
+    width: 300px;
+    padding: 1rem;
+    visibility: hidden;
+    border: 1px solid #cacaca;
+    border-radius: 0;
+    background-color: #fefefe;
+  }
+
+  .tree-list {
+    text-align: left;
+    list-style: none;
+    li {
+      margin: .5em 0;
+    }
+  }
+
 }

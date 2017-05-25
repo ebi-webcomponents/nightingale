@@ -1,6 +1,6 @@
 {
   "name": "interaction-viewer",
-  "version": "0.0.2",
+  "version": "1.0.1",
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
   "main": "src/main.js",
   "scripts": {
@@ -11,8 +11,10 @@
     "sass:dist": "node-sass styles/main.scss > dist/style.min.css",
     "sass": "npm run sass:dist",
     "watch": "nodemon -w src -w styles/main.scss -w index.html -x 'npm run build && npm run sass'",
+    "serve": "npm run watch & npm run browsersync",
     "deploy": "git push origin `git subtree split --prefix dist master`:gh-pages --force",
-    "serve": "npm run watch & npm run browsersync"
+    "test-watch": "mocha -w",
+    "test": "mocha"
   },
   "keywords": [
     "interaction",
@@ -21,14 +23,16 @@
     "uniprot",
     "ebi"
   ],
-  "author": "Xavier Watkins <xavier.watkins@gmail.com>",
-  "license": "MIT",
+  "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
+  "license": "Apache-2.0",
   "devDependencies": {
     "babel-cli": "^6.8.0",
     "babel-preset-es2015-nostrict": "^6.6.2",
     "babelify": "^7.3.0",
     "browser-sync": "^2.12.5",
     "browserify": "^13.0.1",
+    "chai": "^3.5.0",
+    "mocha": "^3.3.0",
     "node-sass": "^3.7.0",
     "nodemon": "^1.9.2",
     "uglify-js": "^2.7.4"
