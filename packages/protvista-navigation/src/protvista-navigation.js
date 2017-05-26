@@ -1,4 +1,4 @@
-import d3 from 'd3/build/d3';
+import * as d3 from "d3";
 
 const navHeight = 40,
       width = 400,
@@ -9,12 +9,7 @@ const navHeight = 40,
         left: 10
       };
 
-class ProtVistaNavigation extends HTMLElement() {
-  // length: the sequence length
-  // start
-  // end
-  // hightlightStart
-  // highlightEnd
+class ProtVistaNavigation extends HTMLElement {
 
   constructor() {
     super();
@@ -25,7 +20,11 @@ class ProtVistaNavigation extends HTMLElement() {
     this._highlightEnd = this.getAttribute('highlightEnd');
   }
 
-  createNavRuler() {
+  connectedCallback() {
+    this._createNavRuler();
+  }
+
+  _createNavRuler() {
     var navWithTrapezoid = 50;
 
     var navXScale = d3.scale.linear()
@@ -125,3 +124,5 @@ class ProtVistaNavigation extends HTMLElement() {
     return viewport;
   }
 }
+
+export default ProtVistaNavigation;
