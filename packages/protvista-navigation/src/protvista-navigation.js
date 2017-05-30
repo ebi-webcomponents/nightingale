@@ -25,7 +25,7 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-
+    //TODO Listen to changes and update
   }
 
   _updateLabels(startLabel, endLabel) {
