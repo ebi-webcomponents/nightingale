@@ -1,13 +1,13 @@
 import * as d3 from "d3";
 
 const height = 40,
-      width = 700,
-      padding = {
-        top: 10,
-        right: 10,
-        bottom: 10,
-        left: 10
-      };
+  width = 700,
+  padding = {
+    top: 10,
+    right: 10,
+    bottom: 10,
+    left: 10
+  };
 
 class ProtVistaNavigation extends HTMLElement {
 
@@ -15,13 +15,22 @@ class ProtVistaNavigation extends HTMLElement {
     super();
     this._length = parseInt(this.getAttribute('length'));
     this._start = parseInt(this.getAttribute('start')) || 1;
-    this._end = parseInt(this.getAttribute('end')) || 1;
+    this._end = parseInt(this.getAttribute('end')) || this._length;
     this._highlightStart = parseInt(this.getAttribute('highlightStart'));
     this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
   }
 
   connectedCallback() {
     this._createNavRuler();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+
+  }
+
+  _updateLabels(startLabel, endLabel) {
+    startLabel.text(this._start);
+    endLabel.text(this._end);
   }
 
   _createNavRuler() {
@@ -38,37 +47,40 @@ class ProtVistaNavigation extends HTMLElement {
 
     const xAxis = d3.axisBottom(x);
 
+    let startLabel = svg.append("text")
+                        .attr('class', 'start-label')
+                        .attr('x', 0)
+                        .attr('y', height - padding.bottom);
+
+    let endLabel = svg.append("text")
+                      .attr('class', 'end-label')
+                      .attr('x', width)
+                      .attr('y', height - padding.bottom)
+                      .attr('text-anchor', 'end');
     svg.append('g')
       .attr('class', 'x axis')
       .call(xAxis);
 
-    const viewport = d3.brushX().extent([[padding.left, 0], [(width - padding.right), height]])
-      .on("brush", function() {
+    const viewport = d3.brushX().extent([
+        [padding.left, 0],
+        [(width - padding.right), height]
+      ])
+      .on("brush", () => {
+        this._start = d3.format("d")(x.invert(d3.event.selection[0]));
+        this._end = d3.format("d")(x.invert(d3.event.selection[1]));
         this.dispatchEvent(new CustomEvent("protvista-zoom", {
           detail: {
-            x:d3.event.selection[0],
-            y:d3.event.selection[1]
+            x: this._start,
+            y: this._end
           }
         }));
+        this._updateLabels(startLabel, endLabel);
       });
 
     svg.append("g")
       .attr("class", "brush")
       .call(viewport)
-      .call(viewport.move, x.range());
-
-
-    viewport.domainStartLabel = svg.append("text")
-      .attr('class', 'domain-label')
-      .attr('x', 0)
-      .attr('y', height);
-
-    viewport.domainEndLabel = svg.append("text")
-      .attr('class', 'domain-label')
-      .attr('x', width)
-      .attr('y', height)
-      .attr('text-anchor', 'end');
-
+      .call(viewport.move, [x(this._start), x(this._end)]);
   }
 }
 
