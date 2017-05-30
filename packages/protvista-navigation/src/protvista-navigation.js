@@ -47,12 +47,12 @@ class ProtVistaNavigation extends HTMLElement {
 
     const xAxis = d3.axisBottom(x);
 
-    let startLabel = svg.append("text")
+    const startLabel = svg.append("text")
                         .attr('class', 'start-label')
                         .attr('x', 0)
                         .attr('y', height - padding.bottom);
 
-    let endLabel = svg.append("text")
+    const endLabel = svg.append("text")
                       .attr('class', 'end-label')
                       .attr('x', width)
                       .attr('y', height - padding.bottom)
@@ -70,8 +70,8 @@ class ProtVistaNavigation extends HTMLElement {
         this._end = d3.format("d")(x.invert(d3.event.selection[1]));
         this.dispatchEvent(new CustomEvent("protvista-zoom", {
           detail: {
-            x: this._start,
-            y: this._end
+            start: this._start,
+            end: this._end
           }
         }));
         this._updateLabels(startLabel, endLabel);
