@@ -1,9 +1,9 @@
 require('babel-core/register');
 
-let chai = require('chai');
-let expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
-let ParserHelper = require('../src/ParserHelper');
+const ParserHelper = require('../src/ParserHelper');
 
 const properties = {
     method: 'X-ray',

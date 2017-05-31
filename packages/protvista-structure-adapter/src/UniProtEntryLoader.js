@@ -1,10 +1,10 @@
 /*jslint node: true */
 "use strict";
 
-let fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
-let Constants = require('./Constants');
-let Loader = require('./Loader');
+const Constants = require('./Constants');
+const Loader = require('./Loader');
 
 class UniProtEntryLoader extends Loader {
     constructor(accession) {

@@ -73,7 +73,7 @@ const myTestData = {
    }
  };
 
- var UniProtEntryData = function () {
+ const UniProtEntryData = function () {
      return {
          data: myTestData
      };

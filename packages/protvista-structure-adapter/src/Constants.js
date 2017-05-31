@@ -1,7 +1,7 @@
 /*jslint node: true */
 "use strict";
 
-let Config = require('./config.json');
+const Config = require('./config.json');
 
 const webServices = Config.webServices;
 const defaultProvider = 'uniprot';

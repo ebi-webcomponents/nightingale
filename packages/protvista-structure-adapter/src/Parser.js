@@ -1,46 +1,55 @@
 /*jslint node: true */
 "use strict";
 
-let Constants = require('./Constants');
-let _ = require('underscore');
+const Constants = require('./Constants');
+const _ = require('underscore');
+const ParserHelper = require('./ParserHelper');
 require('./UniProtEntryLoader');
 
 class Parser {
     constructor(accession, provider) {
         this._accession = accession;
         this._provider = provider;
+        this._featureType = "PDB_STRUCTURE";
+        this._featureCategory = "STRUCTURAL";
+        this._parsedObject = {};
         if (!Constants.isValidProvider(this._provider)) {
             this._provider = Constants.getDefaultProvider();
         }
 
-        let handler = require('./' + Constants.getWebServiceHandler(this._provider));
+        const handler = require('./' + Constants.getWebServiceHandler(this._provider));
         this._loader = new handler(accession);
     }
 
     parse() {
-        this._loader.retrieveEntry().done(function(response) {
-            console.log(response);
-        });
+        let self = this;
+        this._loader.retrieveEntryPromise()
+            .then(function(json) {
+                console.log(json);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     }
 
     get accession() {
         return this._accession;
     }
 
-    set accession(accession) {
-        this._accession = accession;
-    };
-
     get provider() {
         return this._provider;
     }
 
-    set provider(provider) {
-        this._provider = provider;
-    }
-
     get loader() {
         return this._loader;
+    }
+
+    get featureType() {
+        return this._featureType;
+    }
+
+    get featureCategory() {
+        return this._featureCategory;
     }
 }
 
