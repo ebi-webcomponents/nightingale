@@ -27,4 +27,11 @@ describe('ParserHelper', () => {
         expect(beginEnd.begin).to.equal(expectedBeginEnd.begin);
         expect(beginEnd.end).to.equal(expectedBeginEnd.end);
     });
+
+    it('should get a default begin-end from a value', () => {
+        const expectedBeginEnd = {begin: 0, end: 0};
+        const beginEnd = ParserHelper.getBeginEnd('');
+        expect(beginEnd.begin).to.equal(expectedBeginEnd.begin);
+        expect(beginEnd.end).to.equal(expectedBeginEnd.end);
+    });
 });
