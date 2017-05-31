@@ -14,12 +14,16 @@ describe('Constants', () => {
         expect(Constants.getWebServiceURL(uniprot)).to.equal(uniprotWebService);
     });
 
+    it('should get default web service URL', () => {
+        expect(Constants.getWebServiceURL('anything')).to.equal(uniprotWebService);
+    });
+
     it('should get UniProt service handler', () => {
         expect(Constants.getWebServiceHandler(uniprot)).to.equal(handler);
     });
 
-    it('should get default web service URL', () => {
-         expect(Constants.getWebServiceURL('anything')).to.equal(uniprotWebService);
+    it('should get default service handler', () => {
+        expect(Constants.getWebServiceHandler('anything')).to.equal(handler);
     });
 
     it('should get default provider', () => {
