@@ -1,9 +1,9 @@
 require('babel-core/register');
 
-let chai = require('chai');
-let expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
-let Constants = require('../src/Constants');
+const Constants = require('../src/Constants');
 
 const uniprot = 'uniprot';
 const uniprotWebService = 'https://www.ebi.ac.uk/proteins/api/proteins/';

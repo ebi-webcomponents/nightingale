@@ -1,7 +1,7 @@
 /*jslint node: true */
 "use strict";
 
-let _ = require('underscore');
+const _ = require('underscore');
 
 class ParserHelper {
     static capitalizeFirstLetter(word) {

@@ -75,7 +75,7 @@ const myFeaturesTestData = {
     ]
 };
 
-var UniProtFeaturesData = function () {
+const UniProtFeaturesData = function () {
     return {
         data: myFeaturesTestData
     };
