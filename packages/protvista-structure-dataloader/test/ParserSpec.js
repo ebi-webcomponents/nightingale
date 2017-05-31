@@ -40,6 +40,6 @@ describe('Parser', () => {
             });
 
         aParser.parse();
-
+        UniProtEntryLoader.prototype.retrieveEntryPromise.restore();
     });
 });
