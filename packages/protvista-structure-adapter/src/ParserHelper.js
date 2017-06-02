@@ -1,9 +1,9 @@
 /*jslint node: true */
 "use strict";
 
-const _ = require('underscore');
+import {_} from 'underscore';
 
-class ParserHelper {
+export class ParserHelper {
     static capitalizeFirstLetter(word) {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
@@ -26,5 +26,3 @@ class ParserHelper {
         }
     }
 }
-
-module.exports = ParserHelper;
