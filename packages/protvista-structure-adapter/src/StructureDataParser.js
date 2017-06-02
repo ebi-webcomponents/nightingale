@@ -1,15 +1,17 @@
 /*jslint node: true */
 "use strict";
 
-import {_} from 'underscore';
+import _ from 'underscore-es';
 import {ParserHelper} from './ParserHelper';
 
 const featureType = 'PDB_STRUCTURE';
 const featureCategory = 'STRUCTURAL';
 
-export class StructureDataParser {
+export class StructureDataParser extends HTMLElement{
     constructor() {
-        this._parsedData = {};
+        super();
+        this._parsedData = {test: 'test'};
+        console.log(this._parsedData);
     }
 
     parseData(data) {
