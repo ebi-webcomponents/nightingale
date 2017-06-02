@@ -1,9 +1,8 @@
-require('babel-core/register');
+import {ParserHelper} from '../src/ParserHelper';
 
-const chai = require('chai');
-const expect = chai.expect;
+import {assert} from 'chai';
+import {expect} from 'chai';
 
-const ParserHelper = require('../src/ParserHelper');
 
 const properties = {
     method: 'X-ray',

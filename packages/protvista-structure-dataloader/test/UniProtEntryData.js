@@ -11,7 +11,6 @@ const myTestData = {
        "id": "1AAP",
        "properties": {
          "method": "X-ray",
-         "chains": "A/B=287-344",
          "resolution": "1.50 A"
        }
      },
@@ -73,10 +72,6 @@ const myTestData = {
    }
  };
 
- const UniProtEntryData = function () {
-     return {
-         data: myTestData
-     };
- }();
-
- module.exports = UniProtEntryData;
+ export function getEntryTestData() {
+     return myTestData;
+ }
