@@ -1,2 +1,2 @@
-# protvista-structure-dataloader
-A dataloader and parser (ProtVista compliant) for structural information
+# protvista-structure-adapter
+A data adapter to transform PDBe cross references into ProtVista features format.
