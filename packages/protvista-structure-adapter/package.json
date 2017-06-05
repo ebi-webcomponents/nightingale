@@ -50,7 +50,7 @@
     "sinon": "^2.2.0"
   },
   "dependencies": {
-    "underscore-es": "^1.9.8",
+    "lodash-es": "^4.17.4",
     "webcomponentsjs": "^1.0.2"
   },
   "nyc": {

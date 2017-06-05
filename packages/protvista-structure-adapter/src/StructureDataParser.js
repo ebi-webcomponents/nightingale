@@ -1,7 +1,8 @@
 /*jslint node: true */
 "use strict";
 
-import _ from 'underscore-es';
+import ldFilter from 'lodash-es/filter';
+import ldMap from 'lodash-es/map';
 import {ParserHelper} from './ParserHelper';
 
 const featureType = 'PDB_STRUCTURE';
@@ -18,10 +19,10 @@ export class StructureDataParser extends HTMLElement{
         this._parsedData.accession = data.accession;
         this._parsedData.sequence = data.sequence.sequence;
         this._parsedData.features = [];
-        const structures = _.filter(data.dbReferences, (reference) => {
+        const structures = ldFilter(data.dbReferences, (reference) => {
             return reference.type === 'PDB';
         });
-        this._parsedData.features = _.map(structures, (structure) => {
+        this._parsedData.features = ldMap(structures, (structure) => {
             const beginEnd = structure.properties.chains
                 ? ParserHelper.getBeginEnd(structure.properties.chains) : {begin: 0, end: 0};
             return {
