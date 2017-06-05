@@ -38,6 +38,14 @@ export class StructureDataParser extends HTMLElement{
                 }]
             };
         });
+        //this.dispatchEvent('protvista-structure-adapter');
+    }
+
+    connectedCallback() {
+        this.addEventListener('load', (e) => {
+            //add some verification before parsing
+            this.parseData(e.detail);
+        });
     }
 
     get parsedData() {

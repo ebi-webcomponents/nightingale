@@ -37,6 +37,7 @@
     "babel-preset-es2017": "^6.24.1",
     "chai": "^3.5.0",
     "cross-env": "^5.0.0",
+    "data-loader": "file:..\\data-loader",
     "mkdirp": "^0.5.1",
     "mocha": "^3.4.1",
     "nodemon": "^1.11.0",
