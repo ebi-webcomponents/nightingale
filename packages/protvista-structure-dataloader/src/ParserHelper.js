@@ -1,7 +1,7 @@
 /*jslint node: true */
 "use strict";
 
-import _ from 'underscore-es';
+import ldEach from 'lodash-es/each';
 
 export class ParserHelper {
     static capitalizeFirstLetter(word) {
@@ -10,7 +10,7 @@ export class ParserHelper {
 
     static getDescription(properties) {
         let description = '';
-        _.each(properties, (property, key) => {
+        ldEach(properties, (property, key) => {
             description += ParserHelper.capitalizeFirstLetter(key) + ': ' + property + '. ';
         });
         return description;
