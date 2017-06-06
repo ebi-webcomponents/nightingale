@@ -3,9 +3,9 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
     entry: 'src/index.js',
-    dest: 'dist/StructureDataParser.js',
+    dest: 'dist/StructureAdapterComponent.js',
     format: 'iife',
-    moduleName: 'StructureDataParser',
+    moduleName: 'StructureAdapterComponent',
     sourceMap: true,
     plugins: [
         nodeResolve({jsnext: true}),

@@ -16,7 +16,7 @@ describe('StructureDataParser', () => {
     });
 
     it('should parse mocked data', () => {
-        const aParser = new StructureDataParser();
+        const aParser = new StructureDataParser('P01234');
         const entryData = getEntryTestData();
         const featuresData = getFeaturesTestData();
 
