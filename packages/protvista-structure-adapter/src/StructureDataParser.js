@@ -8,14 +8,48 @@ import {ParserHelper} from './ParserHelper';
 const featureType = 'PDB_STRUCTURE';
 const featureCategory = 'STRUCTURAL';
 
-export class StructureDataParser extends HTMLElement{
-    constructor() {
-        super();
-        this._parsedData = {test: 'test'};
-        console.log(this._parsedData);
+export class StructureDataParser {
+    constructor(acc) {
+        this._accession = acc;
+        this._parsedData = {};
     }
 
     parseData(data) {
+        this._validateData(data);
+        this._parseValidData(data);
+    }
+
+    get accession() {
+        return this._accession;
+    }
+
+    set accession(acc) {
+        this._accession = acc;
+    }
+
+    get parsedData() {
+        return this._parsedData;
+    }
+
+    _validateData(data) {
+        if (this._accession !== data.accession) {
+            throw 'Retrieved accession does not match with requested';
+        }
+        if (!data.sequence && ! data.sequence.sequence) {
+            throw 'No sequence retrieved';
+        }
+        if (!data.dbReferences || (data.dbReferences.length === 0)) {
+            throw 'No references retrieved'
+        }
+        const structures = ldFilter(data.dbReferences, (reference) => {
+            return reference.type === 'PDB';
+        });
+        if (structures.length === 0) {
+            throw 'No structural references reported for this accession';
+        }
+    }
+
+    _parseValidData(data) {
         this._parsedData.accession = data.accession;
         this._parsedData.sequence = data.sequence.sequence;
         this._parsedData.features = [];
@@ -38,17 +72,5 @@ export class StructureDataParser extends HTMLElement{
                 }]
             };
         });
-        //this.dispatchEvent('protvista-structure-adapter');
-    }
-
-    connectedCallback() {
-        this.addEventListener('load', (e) => {
-            //add some verification before parsing
-            this.parseData(e.detail);
-        });
-    }
-
-    get parsedData() {
-        return this._parsedData;
     }
 }
