@@ -74,6 +74,18 @@ class ProtVistaNavigation extends HTMLElement {
             end: this._end
           }
         }));
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {
+            value: this._start,
+            type: 'start'
+          }
+        }));
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {
+            value: this._end,
+            type: 'end'
+          },
+        }));
         this._updateLabels(startLabel, endLabel);
       });
 
