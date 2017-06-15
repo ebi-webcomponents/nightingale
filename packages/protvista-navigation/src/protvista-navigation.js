@@ -24,17 +24,27 @@ class ProtVistaNavigation extends HTMLElement {
     this._createNavRuler();
   }
 
+  static get observedAttributes() {return [
+    'length', 'start', 'end', 'highlightStart', 'highlightEnd'
+  ]; }
+
   attributeChangedCallback(name, oldValue, newValue) {
-    //TODO Listen to changes and update
+    if (oldValue !== newValue){
+      this[`_${name}`] = parseInt(newValue);
+      this._updateLabels()
+      if (this._brushG) this._brushG
+        .call(this._viewport.move, [this._x(this._start), this._x(this._end)]);
+    }
   }
 
-  _updateLabels(startLabel, endLabel) {
-    startLabel.text(this._start);
-    endLabel.text(this._end);
+  _updateLabels() {
+    if (this._startLabel) this._startLabel.text(this._start);
+    if (this._endLabel) this._endLabel.text(this._end);
   }
 
   _createNavRuler() {
-    const x = d3.scaleLinear().range([padding.left, width - padding.right]);
+    this._x = d3.scaleLinear().range([padding.left, width - padding.right]);
+    const x = this._x;
     x.domain([1, (this._length + 1)]);
 
     const svg = d3.select(this)
@@ -47,12 +57,12 @@ class ProtVistaNavigation extends HTMLElement {
 
     const xAxis = d3.axisBottom(x);
 
-    const startLabel = svg.append("text")
+    this._startLabel = svg.append("text")
                         .attr('class', 'start-label')
                         .attr('x', 0)
                         .attr('y', height - padding.bottom);
 
-    const endLabel = svg.append("text")
+    this._endLabel = svg.append("text")
                       .attr('class', 'end-label')
                       .attr('x', width)
                       .attr('y', height - padding.bottom)
@@ -61,19 +71,13 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('class', 'x axis')
       .call(xAxis);
 
-    const viewport = d3.brushX().extent([
+    this._viewport = d3.brushX().extent([
         [padding.left, 0],
         [(width - padding.right), height]
       ])
       .on("brush", () => {
         this._start = d3.format("d")(x.invert(d3.event.selection[0]));
         this._end = d3.format("d")(x.invert(d3.event.selection[1]));
-        this.dispatchEvent(new CustomEvent("protvista-zoom", {
-          detail: {
-            start: this._start,
-            end: this._end
-          }
-        }));
         this.dispatchEvent(new CustomEvent("change", {
           detail: {
             value: this._start,
@@ -86,13 +90,15 @@ class ProtVistaNavigation extends HTMLElement {
             type: 'end'
           },
         }));
-        this._updateLabels(startLabel, endLabel);
+        this._updateLabels();
       });
 
-    svg.append("g")
+    this._brushG = svg.append("g")
       .attr("class", "brush")
-      .call(viewport)
-      .call(viewport.move, [x(this._start), x(this._end)]);
+      .call(this._viewport);
+
+    this._brushG
+      .call(this._viewport.move, [x(this._start), x(this._end)]);
   }
 }
 
