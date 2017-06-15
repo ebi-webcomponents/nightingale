@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "protvista-navigation": "git://ebi-ppf/protvista-navigation#example_with_manager",
+    "protvista-sequence": "git://ebi-ppf/protvista-sequence",
     "webcomponentsjs": "^1.0.2"
   }
 }
