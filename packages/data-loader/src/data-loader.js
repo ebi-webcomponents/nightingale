@@ -19,7 +19,8 @@ class DataLoader extends HTMLElement {
     for (const sourceDatum of sourceData) {
       try {
         if (sourceDatum.src) {
-          const response = await fetch(sourceDatum.src);
+          const headers = new Headers({accept: 'application/json'});
+          const response = await fetch(sourceDatum.src, {headers: headers});
           detail = await response.json();
         } else {
           detail = JSON.parse(sourceDatum.textContent);
