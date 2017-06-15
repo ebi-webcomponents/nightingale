@@ -1,9 +1,11 @@
-# `<protvista-navigation>`
-A custom element allowing to navigate a protein/nucleic sequence.
+# `<protvista-sequence>`
+Displays the sequence in the selected region if there is enough space for the characters.
+Displays the axis legend of the selected region.
+
 
 ## Usage
 ```html
-      <protvista-navigation length="456" start="34" end="400"></protvista-navigation>
+      <protvista-sequence length="456" start="34" end="400"></protvista-sequence>
 ```
 
 ## API Reference
@@ -25,5 +27,3 @@ The start position of the highlighted region.
 The end position of the highlighted region.
 
 ### Events
-#### `protvista-zoom`
-Custom event containing `start` and `end` horizontal coordinates.
