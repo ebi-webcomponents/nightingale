@@ -34,6 +34,7 @@ class ProtVistaNavigation$1 extends HTMLElement {
       this[`_${name}`] = parseInt(newValue);
       this._updateLabels();
       if (this._brushG) this._brushG.call(this._viewport.move, [this._x(this._start), this._x(this._end)]);
+      this._updatePolygon();
     }
   }
 
@@ -56,7 +57,7 @@ class ProtVistaNavigation$1 extends HTMLElement {
     this._endLabel = svg.append("text").attr('class', 'end-label').attr('x', width).attr('y', height - padding.bottom).attr('text-anchor', 'end');
     svg.append('g').attr('class', 'x axis').call(xAxis);
 
-    this._viewport = d3.brushX().extent([[padding.left, 0], [width - padding.right, height]]).on("brush", () => {
+    this._viewport = d3.brushX().extent([[padding.left, 0], [width - padding.right, height * 0.51]]).on("brush", () => {
       this._start = d3.format("d")(x.invert(d3.event.selection[0]));
       this._end = d3.format("d")(x.invert(d3.event.selection[1]));
       this.dispatchEvent(new CustomEvent("change", {
@@ -77,6 +78,15 @@ class ProtVistaNavigation$1 extends HTMLElement {
     this._brushG = svg.append("g").attr("class", "brush").call(this._viewport);
 
     this._brushG.call(this._viewport.move, [x(this._start), x(this._end)]);
+
+    this.polygon = svg.append("polygon").attr('class', 'zoom-polygon').attr('fill', '#777').attr('fill-opacity', '0.3');
+    this._updatePolygon();
+  }
+  _updatePolygon() {
+    this.polygon.attr('points', `${this._x(this._start)},${height / 2}
+        ${this._x(this._end)},${height / 2}
+        ${width - padding.right},${height}
+        ${padding.left},${height}`);
   }
 }
 
