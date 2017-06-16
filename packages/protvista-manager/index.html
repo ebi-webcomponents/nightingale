@@ -12,7 +12,7 @@
 
     </head>
     <body>
-      <protvista-manager attributes="length start end">
+      <protvista-manager attributes="length start end" id="example">
         <protvista-navigation length="223" start="100" end="150" highlightStart="23" highlightEnd="45"></protvista-navigation>
         <protvista-sequence length="223" start="100" end="150" highlightStart="23" highlightEnd="45"></protvista-sequence>
       </protvista-manager>
@@ -22,5 +22,11 @@
       <script src="node_modules/protvista-navigation/dist/protvista-navigation.js" charset="utf-8" defer></script>
       <script src="node_modules/protvista-sequence/dist/protvista-sequence.js" charset="utf-8" defer></script>
       <script src="dist/protvista-manager.js" charset="utf-8" defer></script>
+      <script>
+      window.onload = () => {
+        const seqE = document.querySelector("#example protvista-sequence");
+        seqE.data = "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
+      }
+      </script>
     </body>
 </html>
