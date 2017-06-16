@@ -17,6 +17,7 @@ export class StructureDataParser {
     parseEntry(data) {
         this._validateEntry(data);
         this._parseValidEntry(data);
+        return this._pdbFeatures;
     }
 
     get accession() {

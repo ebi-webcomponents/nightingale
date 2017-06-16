@@ -18,6 +18,24 @@
 <script src="dist/StructureAdapterComponent.js" charset="utf-8" defer></script>
 <script src="node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
 
+<script>
+    for (const adapter of document.querySelectorAll('protvista-structure-adapter')) {
+      adapter.addEventListener(
+        'protvista-structure-adapter-ready',
+        e => {
+          console.log(e.target);
+          console.table(e.detail);
+        }
+      );
+      adapter.addEventListener(
+        'protvista-structure-adapter-error',
+        e => {
+          console.log(e.target);
+          console.table(e.error);
+        }
+      );
+    }
+</script>
 
 </body>
 </html>

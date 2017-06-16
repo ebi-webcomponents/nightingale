@@ -7,7 +7,7 @@ export class StructureAdapterComponent extends HTMLElement {
     constructor() {
         super();
         this._parser = new StructureDataParser('');
-        this._parsedData = {};
+        this._pdbFeatures = {};
         console.log('component built');
     }
 
@@ -18,11 +18,17 @@ export class StructureAdapterComponent extends HTMLElement {
         this.addEventListener('load', (e) => {
             this._parser.accession = this.accession;
             try {
-                this._parser.parseEntry(e.detail);
-                console.log(this._parser.pdbFeatures);
+                this._pdbFeatures = this._parser.parseEntry(e.detail);
+                this.dispatchEvent(new CustomEvent(
+                    'protvista-structure-adapter-ready',
+                    {detail: this._pdbFeatures, bubbles: true}
+                ));
                 // this.dispatchEvent('protvista-structure-adapter');
             } catch(error) {
-                // this.dispatchEvent('protvista-structure-adapter');
+                this.dispatchEvent(new CustomEvent(
+                    'protvista-structure-adapter-error',
+                    {error: error, bubbles: true}
+                ));
             }
         });
     }
@@ -39,5 +45,9 @@ export class StructureAdapterComponent extends HTMLElement {
 
     set accession(acc) {
         this.setAttribute('accession', acc);
+    }
+
+    get pdbFeatures() {
+        return this._pdbFeatures;
     }
 }
