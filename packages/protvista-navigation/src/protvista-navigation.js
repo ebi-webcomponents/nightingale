@@ -93,6 +93,7 @@ class ProtVistaNavigation extends HTMLElement {
             },
           }));
           this._updateLabels();
+          this._updatePolygon();
         }
       });
 
