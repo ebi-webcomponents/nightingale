@@ -21,6 +21,6 @@ describe('StructureDataParser', () => {
         const featuresData = getFeaturesTestData();
 
         aParser.parseData(entryData);
-        expect(JSON.stringify(aParser.parsedData)).to.equal(JSON.stringify(featuresData));
+        expect(JSON.stringify(aParser.pdbFeaturesData)).to.equal(JSON.stringify(featuresData));
     });
 });
