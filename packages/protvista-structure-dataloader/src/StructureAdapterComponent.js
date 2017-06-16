@@ -25,7 +25,7 @@ export class StructureAdapterComponent extends HTMLElement {
             } catch(error) {
                 this.dispatchEvent(new CustomEvent(
                     'error',
-                    {error: error, bubbles: true}
+                    {detail: error, bubbles: true}
                 ));
             }
         });
