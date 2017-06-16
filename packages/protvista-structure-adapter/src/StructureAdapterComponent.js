@@ -18,8 +18,8 @@ export class StructureAdapterComponent extends HTMLElement {
         this.addEventListener('load', (e) => {
             this._parser.accession = this.accession;
             try {
-                this._parser.parseData(e.detail);
-                console.log(this._parser.parsedData);
+                this._parser.parseEntry(e.detail);
+                console.log(this._parser.pdbFeatures);
                 // this.dispatchEvent('protvista-structure-adapter');
             } catch(error) {
                 // this.dispatchEvent('protvista-structure-adapter');
