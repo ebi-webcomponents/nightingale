@@ -77,21 +77,23 @@ class ProtVistaNavigation extends HTMLElement {
         [(width - padding.right), height*0.51]
       ])
       .on("brush", () => {
-        this._start = d3.format("d")(x.invert(d3.event.selection[0]));
-        this._end = d3.format("d")(x.invert(d3.event.selection[1]));
-        this.dispatchEvent(new CustomEvent("change", {
-          detail: {
-            value: this._start,
-            type: 'start'
-          }
-        }));
-        this.dispatchEvent(new CustomEvent("change", {
-          detail: {
-            value: this._end,
-            type: 'end'
-          },
-        }));
-        this._updateLabels();
+        if (d3.event.selection){
+          this._start = d3.format("d")(x.invert(d3.event.selection[0]));
+          this._end = d3.format("d")(x.invert(d3.event.selection[1]));
+          this.dispatchEvent(new CustomEvent("change", {
+            detail: {
+              value: this._start,
+              type: 'start'
+            }
+          }));
+          this.dispatchEvent(new CustomEvent("change", {
+            detail: {
+              value: this._end,
+              type: 'end'
+            },
+          }));
+          this._updateLabels();
+        }
       });
 
     this._brushG = svg.append("g")
@@ -108,7 +110,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._updatePolygon();
   }
   _updatePolygon(){
-    this.polygon
+    if (this.polygon) this.polygon
       .attr('points',
         `${this._x(this._start)},${height/2}
         ${this._x(this._end)},${height/2}

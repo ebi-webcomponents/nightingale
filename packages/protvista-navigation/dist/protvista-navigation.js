@@ -58,21 +58,23 @@ class ProtVistaNavigation$1 extends HTMLElement {
     svg.append('g').attr('class', 'x axis').call(xAxis);
 
     this._viewport = d3.brushX().extent([[padding.left, 0], [width - padding.right, height * 0.51]]).on("brush", () => {
-      this._start = d3.format("d")(x.invert(d3.event.selection[0]));
-      this._end = d3.format("d")(x.invert(d3.event.selection[1]));
-      this.dispatchEvent(new CustomEvent("change", {
-        detail: {
-          value: this._start,
-          type: 'start'
-        }
-      }));
-      this.dispatchEvent(new CustomEvent("change", {
-        detail: {
-          value: this._end,
-          type: 'end'
-        }
-      }));
-      this._updateLabels();
+      if (d3.event.selection) {
+        this._start = d3.format("d")(x.invert(d3.event.selection[0]));
+        this._end = d3.format("d")(x.invert(d3.event.selection[1]));
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {
+            value: this._start,
+            type: 'start'
+          }
+        }));
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {
+            value: this._end,
+            type: 'end'
+          }
+        }));
+        this._updateLabels();
+      }
     });
 
     this._brushG = svg.append("g").attr("class", "brush").call(this._viewport);
@@ -83,7 +85,7 @@ class ProtVistaNavigation$1 extends HTMLElement {
     this._updatePolygon();
   }
   _updatePolygon() {
-    this.polygon.attr('points', `${this._x(this._start)},${height / 2}
+    if (this.polygon) this.polygon.attr('points', `${this._x(this._start)},${height / 2}
         ${this._x(this._end)},${height / 2}
         ${width - padding.right},${height}
         ${padding.left},${height}`);
