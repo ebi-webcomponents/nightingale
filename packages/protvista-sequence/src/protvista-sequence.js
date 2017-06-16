@@ -81,6 +81,10 @@ class ProtVistaSequence extends HTMLElement {
       this.seq_g.attr('transform',
         `translate(${-this._x(this._start-0.5)},30)`
       );
+      const space = this._x(2) - this._x(1)
+        - this.seq_g.select('text.base').node().getBBox().width * 0.8;
+      this.seq_g
+        .style('opacity', Math.min(1, space));
       this.bases = this.seq_g.selectAll('text.base')
         .data(this.data.sequence.split(''));
       this.bases
