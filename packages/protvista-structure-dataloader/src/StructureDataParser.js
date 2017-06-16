@@ -11,12 +11,12 @@ const featureCategory = 'STRUCTURAL';
 export class StructureDataParser {
     constructor(acc) {
         this._accession = acc;
-        this._parsedData = {};
+        this._pdbFeatures = {};
     }
 
-    parseData(data) {
-        this._validateData(data);
-        this._parseValidData(data);
+    parseEntry(data) {
+        this._validateEntry(data);
+        this._parseValidEntry(data);
     }
 
     get accession() {
@@ -27,11 +27,11 @@ export class StructureDataParser {
         this._accession = acc;
     }
 
-    get parsedData() {
-        return this._parsedData;
+    get pdbFeatures() {
+        return this._pdbFeatures;
     }
 
-    _validateData(data) {
+    _validateEntry(data) {
         if (this._accession !== data.accession) {
             throw 'Retrieved accession does not match with requested';
         }
@@ -49,14 +49,14 @@ export class StructureDataParser {
         }
     }
 
-    _parseValidData(data) {
-        this._parsedData.accession = data.accession;
-        this._parsedData.sequence = data.sequence.sequence;
-        this._parsedData.features = [];
+    _parseValidEntry(data) {
+        this._pdbFeatures.accession = data.accession;
+        this._pdbFeatures.sequence = data.sequence.sequence;
+        this._pdbFeatures.features = [];
         const structures = ldFilter(data.dbReferences, (reference) => {
             return reference.type === 'PDB';
         });
-        this._parsedData.features = ldMap(structures, (structure) => {
+        this._pdbFeatures.features = ldMap(structures, (structure) => {
             const beginEnd = structure.properties.chains
                 ? ParserHelper.getBeginEnd(structure.properties.chains) : {begin: 0, end: 0};
             return {
