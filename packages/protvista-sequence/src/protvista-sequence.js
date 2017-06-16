@@ -18,13 +18,21 @@ class ProtVistaSequence extends HTMLElement {
     this._end = parseInt(this.getAttribute('end')) || this._length;
     this._highlightStart = parseInt(this.getAttribute('highlightStart'));
     this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
-    this.data = {
-      sequence: "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP"
-    }
   }
 
   connectedCallback() {
-    this._createSequence();
+    if (this.sequence)
+      this._createSequence();
+  }
+
+  set data(data) {
+    if (typeof data === 'string')
+      this.sequence = data;
+    else if ('sequence' in data)
+      this.sequence = data.sequence;
+
+    if (this.sequence)
+      this._createSequence();
   }
 
   static get observedAttributes() {return [
@@ -63,7 +71,7 @@ class ProtVistaSequence extends HTMLElement {
       .attr('class', 'sequence')
       .attr('transform', `translate(${-x(this._start-0.5)},30)`);
     this.bases = this.seq_g.selectAll('text.base')
-      .data(this.data.sequence.split(''));
+      .data(this.sequence.split(''));
 
     this.bases.enter()
       .append('text')
@@ -86,7 +94,7 @@ class ProtVistaSequence extends HTMLElement {
       this.seq_g
         .style('opacity', Math.min(1, space));
       this.bases = this.seq_g.selectAll('text.base')
-        .data(this.data.sequence.split(''));
+        .data(this.sequence.split(''));
       this.bases
         .attr('x', (b,i) => this._x(i+1));
     }
