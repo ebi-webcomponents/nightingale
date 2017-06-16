@@ -8,7 +8,6 @@ export class StructureAdapterComponent extends HTMLElement {
         super();
         this._parser = new StructureDataParser('');
         this._pdbFeatures = {};
-        console.log('component built');
     }
 
     static get observedAttributes() { return ['accession']; }
@@ -20,13 +19,12 @@ export class StructureAdapterComponent extends HTMLElement {
             try {
                 this._pdbFeatures = this._parser.parseEntry(e.detail);
                 this.dispatchEvent(new CustomEvent(
-                    'protvista-structure-adapter-ready',
+                    'ready',
                     {detail: this._pdbFeatures, bubbles: true}
                 ));
-                // this.dispatchEvent('protvista-structure-adapter');
             } catch(error) {
                 this.dispatchEvent(new CustomEvent(
-                    'protvista-structure-adapter-error',
+                    'error',
                     {error: error, bubbles: true}
                 ));
             }
