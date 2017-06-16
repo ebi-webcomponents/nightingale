@@ -13,6 +13,17 @@
     </data-loader>
 </protvista-structure-adapter>
 
+<protvista-structure-adapter accession="Q12345">
+    <data-loader>
+        <source src="https://www.ebi.ac.uk/proteins/api/proteins/Q12345123456789">
+    </data-loader>
+</protvista-structure-adapter>
+
+<button onclick="
+  var elem = document.querySelector('protvista-structure-adapter');
+  elem.accession = 'Q01912';
+  console.log(elem);
+">Click</button>
 
 <script src="node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
 <script src="dist/StructureAdapterComponent.js" charset="utf-8" defer></script>
@@ -21,17 +32,19 @@
 <script>
     for (const adapter of document.querySelectorAll('protvista-structure-adapter')) {
       adapter.addEventListener(
-        'protvista-structure-adapter-ready',
+        'ready',
         e => {
+          console.log('ready');
           console.log(e.target);
           console.table(e.detail);
         }
       );
       adapter.addEventListener(
-        'protvista-structure-adapter-error',
+        'error',
         e => {
+          console.log('error');
           console.log(e.target);
-          console.table(e.error);
+          console.log(e.detail);
         }
       );
     }
