@@ -16,8 +16,8 @@ class ProtVistaTrack extends HTMLElement {
     this._length = parseInt(this.getAttribute('length'));
     this._start = parseInt(this.getAttribute('start')) || 1;
     this._end = parseInt(this.getAttribute('end')) || this._length;
-    this._highlightStart = parseInt(this.getAttribute('highlightStart'));
-    this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
+    this._highlightstart = parseInt(this.getAttribute('highlightstart'));
+    this._highlightend = parseInt(this.getAttribute('highlightend'));
   }
 
   connectedCallback() {
@@ -31,7 +31,7 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'start', 'end', 'highlightStart', 'highlightEnd'
+    'length', 'start', 'end', 'highlightstart', 'highlightend'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -46,7 +46,6 @@ class ProtVistaTrack extends HTMLElement {
     this._x = d3.scaleLinear()
       .range([padding.left, width - padding.right])
       .domain([this._start, this._end]);
-    const x = this._x;
 
     const svg = d3.select(this)
       .append('div')
@@ -56,33 +55,63 @@ class ProtVistaTrack extends HTMLElement {
       .attr('width', width)
       .attr('height', (height));
 
+    this.highlighted = svg.append('rect')
+      .attr('class', 'highlighted')
+      .attr('fill', 'yellow')
+      .attr('height', height)
+
     this.seq_g = svg.append('g')
-      .attr('class', 'sequence')
-      .attr('transform', `translate(${-x(this._start-0.5)},0)`);
+      .attr('class', 'sequence');
+
     this.features = this.seq_g.selectAll('rect.feature')
       .data(this._data);
 
     this.features.enter()
       .append('rect')
       .attr('class', 'feature')
-      .attr('x', f => x(f.start))
       .attr('y', height/4)
-      .attr('width', f => Math.abs(x(this._start+f.end-f.start)))
       .attr('fill', f => f.color)
-      .attr('height', height/2);
+      .attr('height', height/2)
+      .on('mouseover', f => {
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {value: f.end, type: 'highlightend'},
+        }));
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {value: f.start, type: 'highlightstart'},
+        }));
+      })
+      .on('mouseout', f => {
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {value: null, type: 'highlightend'},
+        }));
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {value: null, type: 'highlightstart'},
+        }));
+      });
+    this._updateTrack();
   }
   _updateTrack(){
     if (this._x) {
       this._x.domain([this._start, this._end]);
-      this.seq_g.attr('transform',
-        `translate(${-this._x(this._start-0.5)},0)`
-      );
       this.features = this.seq_g.selectAll('rect.feature')
         .data(this._data);
 
       this.features
         .attr('x', f => this._x(f.start))
-        .attr('width', f => Math.abs(this._x(this._start+f.end-f.start)));
+        .attr('width', f => Math.abs(this._x(this._start+
+          Math.max(1, f.end-f.start)
+        )));
+
+      if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
+        this.highlighted
+          .attr('x', this._x(this._highlightstart))
+          .style('opacity', 0.3)
+          .attr('width', this._x(this._start +
+            Math.max(1, this._highlightend - this._highlightstart)
+          ));
+      } else {
+        this.highlighted.style('opacity', 0);
+      }
     }
   }
 }
