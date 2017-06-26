@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
+    "uniprot-entry-data-loader": "file:../uniprot-entry-data-loader",
     "webcomponentsjs": "^1.0.2"
   },
   "nyc": {
