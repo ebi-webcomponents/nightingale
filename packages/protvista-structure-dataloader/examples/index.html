@@ -8,9 +8,7 @@
 </head>
 <body>
 <protvista-structure-adapter accession="P05067">
-    <data-loader>
-        <source src="https://www.ebi.ac.uk/proteins/api/proteins/P05067">
-    </data-loader>
+    <uniprot-entry-data-loader accession="P05067"></uniprot-entry-data-loader>
 </protvista-structure-adapter>
 
 <protvista-structure-adapter accession="Q12345">
@@ -25,9 +23,12 @@
   console.log(elem);
 ">Retrieve Q01912</button>
 
-<script src="node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
-<script src="dist/StructureAdapterComponent.js" charset="utf-8" defer></script>
-<script src="node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+<script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
+<script src="../dist/StructureAdapterComponent.js" charset="utf-8" defer></script>
+<script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoaderComponent.js" charset="utf-8"
+        defer></script>
+<script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+
 
 <script>
     for (const adapter of document.querySelectorAll('protvista-structure-adapter')) {
