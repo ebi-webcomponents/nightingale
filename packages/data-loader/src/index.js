@@ -1,7 +1,7 @@
 import DataLoader from './data-loader';
 
 if (window.customElements) {
-  customElements.define('data-loader', DataLoader);
+  customElements.define(DataLoader.is, DataLoader);
 }
 
 export default DataLoader;

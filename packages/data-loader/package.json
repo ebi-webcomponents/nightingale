@@ -30,25 +30,26 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
-    "babel-plugin-transform-es2015-for-of": "^6.18.0",
-    "babel-preset-babili": "0.0.12",
-    "babel-preset-es2016": "^6.16.0",
-    "babel-preset-es2017": "^6.16.0",
-    "eslint": "^3.10.2",
-    "eslint-config-standard": "^7.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "livereload": "^0.6.0",
-    "rimraf": "^2.5.4",
-    "rollup": "^0.41.6",
-    "rollup-plugin-babel": "^2.6.1",
+    "babel-preset-babili": "^0.1.4",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "eslint": "^4.1.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "livereload": "^0.6.2",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-eslint": "^3.0.0",
-    "rollup-plugin-node-resolve": "^2.1.0",
-    "rollup-watch": "^3.2.2",
-    "skatejs-web-components": "^5.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^4.0.0"
   },
   "dependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.1",
     "lodash-es": "^4.17.4"
-  }
+  },
+  "false": {}
 }

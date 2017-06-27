@@ -12,7 +12,6 @@
     );
     document.head.appendChild(livereloadScript);
   </script>
-  <!--<script defer src="/node_modules/skatejs-web-components/dist/index-with-deps.js"></script>-->
   <script defer src="/dist/index.js"></script>
 </head>
 <body>
@@ -40,6 +39,13 @@
         'load',
         e => {
           console.log(e.target);
+          console.table(e.detail.payload);
+        }
+      );
+      dataLoaderElement.addEventListener(
+        'error',
+        e => {
+          console.error(e.target);
           console.table(e.detail);
         }
       );

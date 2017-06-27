@@ -1,59 +1,68 @@
 import lodashGet from 'lodash-es/get';
 
-const observerConfig = {childList: true};
+const getSourceData = (...children) => children.filter(
+  child => child.matches('source[src], script[type="application/json"]')
+);
 
-const getSourceData = ({children}) => [...children]
-  .filter(child => (
-    child.matches('source[src]') ||
-    child.matches('script[type="application/json"]')
-  ))
-  .map(({src, textContent}) => ({textContent, src}));
+const fetchOne = async source => {
+  // if `<source src="…" >`
+  if (source.src) {
+    // get data from remote endpoint
+    const headers = new Headers({accept: 'application/json'});
+    const response = await DataLoader.fetch(source.src, {headers});
+    return {
+      payload: await response.json(),
+      headers: response.headers,
+      srcElement: source,
+      src: source.src,
+    };
+  } else { // if <script type="application/json">…</script>
+    return {payload: JSON.parse(source.textContent)};
+  }
+};
 
 class DataLoader extends HTMLElement {
-  async _fetch () {
-    const sourceData = getSourceData(this);
-    if (!sourceData.length) return;
+  static get is () { return 'data-loader' }
 
-    let detail = [];
-    let failed = true;
-    for (const sourceDatum of sourceData) {
+  async fetch () {
+    // get all the potentials sources elements
+    const sources = getSourceData(...this.children);
+    // if nothing there, bails
+    if (!sources.length) return;
+
+    let errors = [];
+    let detail;
+    // go over all the potential sources to try to load data from it
+    for (const source of sources) {
       try {
-        if (sourceDatum.src) {
-          const headers = new Headers({accept: 'application/json'});
-          const response = await fetch(sourceDatum.src, {headers: headers});
-          detail = await response.json();
-        } else {
-          detail = JSON.parse(sourceDatum.textContent);
-        }
-        failed = false;
+        detail = await fetchOne(source);
+        // if we're here, we have data, go out of the loop
         break;
       } catch (error) {
-        detail.push(error);
+        errors.push(error);
       }
     }
 
-    if (failed) {
-      return this.dispatchEvent(
-        new CustomEvent('error', {detail, bubbles: true})
+    if (!detail) {
+      this._errors = errors;
+      this.dispatchEvent(
+        new CustomEvent('error', {detail: errors, bubbles: true})
       );
+      return;
     }
 
-    this._data = this._selectorFun(detail);
-    return this.dispatchEvent(
-      new CustomEvent('load', {detail: this._data, bubbles: true})
-    );
-  }
+    // apply selector to retrieved data
+    if (typeof this.selector === 'string') {
+      this._data = lodashGet(detail.payload, this.selector);
+    } else {
+      this._data = this.selector(detail.payload);
+    }
+    detail.payload = this.data;
 
-  _planFetch () {
-    // If fetch is already planned, skip the rest
-    if (this._plannedFetch) return;
-    this._plannedFetch = true;
-    this._data = null;
-    setTimeout(() => {
-      // Removes the planned fetch flag
-      this._plannedFetch = false;
-      this._fetch();
-    }, 0);
+    this.dispatchEvent(
+      new CustomEvent('load', {detail, bubbles: true})
+    );
+    return detail;
   }
 
   // Getters/Setters
@@ -67,34 +76,33 @@ class DataLoader extends HTMLElement {
     return !!this.data;
   }
 
+  // errors
+  get errors () {
+    return this._errors;
+  }
+
   // loaded
   get selector () {
     return this._selector;
   }
 
+  set selector (value) {
+    this._selector = value;
+  }
+
   // Custom element reactions
   constructor () {
     super();
-    this._src = null;
     this._data = null;
-    this._observer = new MutationObserver(() => this._planFetch());
-    this._selector = (this.getAttribute('selector') || '').trim();
-    if (this._selector) {
-      this._selectorFun = data => lodashGet(data, this._selector);
-    } else {
-      this._selectorFun = data => data;
-    }
+    this.selector = (this.getAttribute('selector') || '').trim() || (d => d);
   }
 
   connectedCallback () {
-    this._observer.observe(this, observerConfig);
-    this._planFetch();
-  }
-
-  disconnectedCallback () {
-    this._plannedFetch = false;
-    this._observer.disconnect(this);
+    this.fetch();
   }
 }
+
+// Expose this in case user wants to use custom fetching logic
+DataLoader.fetch = window.fetch.bind(window);
 
 export default DataLoader;
