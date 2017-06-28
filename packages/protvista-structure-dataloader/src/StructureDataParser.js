@@ -9,8 +9,7 @@ const featureType = 'PDB_STRUCTURE';
 const featureCategory = 'STRUCTURAL';
 
 export class StructureDataParser {
-    constructor(acc) {
-        this._accession = acc;
+    constructor() {
         this._pdbFeatures = {};
     }
 
@@ -20,22 +19,11 @@ export class StructureDataParser {
         return this._pdbFeatures;
     }
 
-    get accession() {
-        return this._accession;
-    }
-
-    set accession(acc) {
-        this._accession = acc;
-    }
-
     get pdbFeatures() {
         return this._pdbFeatures;
     }
 
     _validateEntry(data) {
-        if (this._accession !== data.accession) {
-            throw 'Retrieved accession does not match with requested';
-        }
         if (!data.sequence && ! data.sequence.sequence) {
             throw 'No sequence retrieved';
         }
