@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ebi-uniprot/protvista-structure-dataloader.git"
+    "url": "git+https://github.com/ebi-uniprot/protvista-structure-adapter.git"
   },
   "keywords": [
     "ProtVista",
@@ -24,9 +24,9 @@
   "author": "ljgarcia",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ebi-uniprot/protvista-structure-dataloader/issues"
+    "url": "https://github.com/ebi-uniprot/protvista-structure-adapter/issues"
   },
-  "homepage": "https://github.com/ebi-uniprot/protvista-structure-dataloader#readme",
+  "homepage": "https://github.com/ebi-uniprot/protvista-structure-adapter#readme",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
-    "uniprot-entry-data-loader": "file:../uniprot-entry-data-loader",
+    "uniprot-entry-data-adapter": "file:../uniprot-entry-data-adapter",
     "webcomponentsjs": "^1.0.2"
   },
   "nyc": {
