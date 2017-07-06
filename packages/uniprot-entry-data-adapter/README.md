@@ -1,2 +1,2 @@
-# protvista-feature-data-loader
-A data loader for basic ProtVista features
+# uniprot-entry-data-adapter
+An adapter for services retrieving UniProt entries by accession
