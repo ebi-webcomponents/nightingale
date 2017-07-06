@@ -1,0 +1,75 @@
+{
+  "name": "uniprot-entry-data-adapter",
+  "version": "1.0.0",
+  "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
+  "main": "src/EntryDataAdapter",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register",
+    "test-watch": "npm test -- -w",
+    "coverage": "cross-env NODE_ENV=test nyc npm test",
+    "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
+    "watch": "nodemon -w src -x \"npm run build\"",
+    "serve": "browser-sync start --server -f dist/**/*.*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebi-uniprot/uniprot-entry-data-adapter.git"
+  },
+  "keywords": [
+    "ProtVista",
+    "dataloader",
+    "parser",
+    "protein-structure"
+  ],
+  "author": "ljgarcia",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ebi-uniprot/uniprot-entry-data-adapter/issues"
+  },
+  "homepage": "https://github.com/ebi-uniprot/uniprot-entry-data-adapter#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-istanbul": "^4.1.3",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "chai": "^3.5.0",
+    "cross-env": "^5.0.0",
+    "mkdirp": "^0.5.1",
+    "mocha": "^3.4.1",
+    "nodemon": "^1.11.0",
+    "nyc": "^10.3.2",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^3.2.2",
+    "sinon": "^2.2.0"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.4",
+    "uniprot-entry-data-loader": "file:../uniprot-entry-data-loader",
+    "webcomponentsjs": "^1.0.2"
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false,
+    "exclude": [
+      "test/**/*Spec.js",
+      "dist"
+    ],
+    "include": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-core/register"
+    ],
+    "reporter": [
+      "text",
+      "text-summary",
+      "lcov"
+    ]
+  }
+}
