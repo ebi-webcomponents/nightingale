@@ -8,17 +8,13 @@
 </head>
 <body>
 <protvista-structure-adapter id="adapter1">
-    <uniprot-entry-data-loader id="loader1" accession="P05067"></uniprot-entry-data-loader>
-</protvista-structure-adapter>
-
-<protvista-structure-adapter id="adapter2">
-    <uniprot-entry-data-loader id="loader2" accession="P05067">
+    <uniprot-entry-data-loader id="loader1" accession="P05067">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
     </uniprot-entry-data-loader>
 </protvista-structure-adapter>
 
-<protvista-structure-adapter id="adapter3">
-    <uniprot-entry-data-loader id="loader3" accession="P05067">
+<protvista-structure-adapter id="wrongAdpater">
+    <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins" />
     </uniprot-entry-data-loader>
 </protvista-structure-adapter>
@@ -28,14 +24,7 @@
   var elem = document.getElementById('loader1');
   elem.accession = 'P04637';
   console.log(elem);
-">Retrieve P04637 for loader 1 (no source)</button>
-
-<button onclick="
-  var elem = document.getElementById('loader2');
-  elem.accession = 'P04637';
-  console.log(elem);
-">Retrieve P04637 for adapter 2 (with source)</button>
-
+">Retrieve P04637 for loader 1</button>
 
 <script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
 <script src="../dist/StructureAdapterComponent.js" charset="utf-8" defer></script>
