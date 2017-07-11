@@ -1,7 +1,7 @@
-import {ProtVistaFeatureAdapter} from './ProtVistaFeatureAdapter';
+import {StructureAdapterComponent} from './StructureAdapterComponent';
 
 if (window.customElements) {
-    customElements.define('protvista-feature-adapter', ProtVistaFeatureAdapter);
+    customElements.define('protvista-structure-adapter', StructureAdapterComponent);
 }
 
-export default ProtVistaFeatureAdapter;
+export default StructureAdapterComponent;
