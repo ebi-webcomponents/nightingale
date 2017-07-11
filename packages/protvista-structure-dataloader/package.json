@@ -1,8 +1,8 @@
 {
-  "name": "protvista-feature-adapter",
+  "name": "protvista-structure-adapter",
   "version": "1.0.0",
-  "description": "A specialization of the uniprot-entry-data-adapter for ProtVista features (regions and sites)",
-  "main": "src/ProtVistaFeatureAdapter",
+  "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
+  "main": "src/StructureAdapterComponent",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
     "test-watch": "npm test -- -w",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ebi-uniprot/protvista-feature-adapter.git"
+    "url": "git+https://github.com/ebi-uniprot/protvista-structure-adapter.git"
   },
   "keywords": [
     "ProtVista",
@@ -24,9 +24,9 @@
   "author": "ljgarcia",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ebi-uniprot/protvista-feature-adapter/issues"
+    "url": "https://github.com/ebi-uniprot/protvista-structure-adapter/issues"
   },
-  "homepage": "https://github.com/ebi-uniprot/protvista-feature-adapter#readme",
+  "homepage": "https://github.com/ebi-uniprot/protvista-structure-adapter#readme",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",

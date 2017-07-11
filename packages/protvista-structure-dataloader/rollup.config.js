@@ -3,9 +3,9 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
     entry: 'src/index.js',
-    dest: 'dist/ProtVistaFeatureAdapter.js',
+    dest: 'dist/StructureAdapterComponent.js',
     format: 'iife',
-    moduleName: 'ProtVistaFeatureAdapter',
+    moduleName: 'StructureAdapterComponent',
     sourceMap: true,
     plugins: [
         nodeResolve({jsnext: true}),
