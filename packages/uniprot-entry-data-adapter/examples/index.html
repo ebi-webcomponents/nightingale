@@ -7,17 +7,17 @@
 
 </head>
 <body>
-<protvista-structure-adapter id="adapter1">
+<uniprot-entry-data-adapter id="adapter1">
     <uniprot-entry-data-loader id="loader1" accession="P05067">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
     </uniprot-entry-data-loader>
-</protvista-structure-adapter>
+</uniprot-entry-data-adapter>
 
-<protvista-structure-adapter id="wrongAdpater">
+<uniprot-entry-data-adapter id="wrongAdpater">
     <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins" />
     </uniprot-entry-data-loader>
-</protvista-structure-adapter>
+</uniprot-entry-data-adapter>
 
 
 <button onclick="
@@ -27,14 +27,14 @@
 ">Retrieve P04637 for loader 1</button>
 
 <script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
-<script src="../dist/EntryDataAdapter.js" charset="utf-8" defer></script>
+<script src="../dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
 <script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8"
         defer></script>
 <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
 
 
 <script>
-    for (const adapter of document.querySelectorAll('protvista-structure-adapter')) {
+    for (const adapter of document.querySelectorAll('uniprot-entry-data-adapter')) {
       adapter.addEventListener(
         'ready',
         e => {
