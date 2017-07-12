@@ -1,0 +1,58 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>protvista-feature-adapter-demo</title>
+
+</head>
+<body>
+<protvista-feature-adapter id="adapter1">
+    <uniprot-entry-data-loader id="loader1" accession="P05067">
+        <source src="https://www.ebi.ac.uk/proteins/api/features/{0}" />
+    </uniprot-entry-data-loader>
+</protvista-feature-adapter>
+
+<protvista-feature-adapter id="wrongAdpater">
+    <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
+        <source src="https://www.ebi.ac.uk/proteins/api/features/" />
+    </uniprot-entry-data-loader>
+</protvista-feature-adapter>
+
+
+<button onclick="
+  var elem = document.getElementById('loader1');
+  elem.accession = 'P04637';
+  console.log(elem);
+">Retrieve P04637 for loader 1</button>
+
+<script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
+<script src="../dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
+<script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
+<script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
+<script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+
+
+<script>
+    for (const adapter of document.querySelectorAll('protvista-feature-adapter')) {
+      adapter.addEventListener(
+        'ready',
+        e => {
+          console.log('ready');
+          console.log(e.target);
+          console.log(e.detail);
+        }
+      );
+      adapter.addEventListener(
+        'error',
+        e => {
+          console.log('error');
+          console.log(e.target);
+          console.log(e.detail);
+        }
+      );
+    }
+</script>
+
+</body>
+</html>

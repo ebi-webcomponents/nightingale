@@ -1,0 +1,69 @@
+{
+  "name": "protvista-feature-adapter",
+  "version": "1.0.0",
+  "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
+  "main": "src/ProtVistaFeatureAdapter",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register",
+    "test-watch": "npm test -- -w",
+    "coverage": "cross-env NODE_ENV=test nyc npm test",
+    "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
+    "watch": "nodemon -w src -x \"npm run build\"",
+    "serve": "browser-sync start --server -f dist/**/*.*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebi-uniprot/protvista-feature-adapter.git"
+  },
+  "keywords": [
+    "ProtVista",
+    "dataloader",
+    "parser",
+    "protein-structure"
+  ],
+  "author": "ljgarcia",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ebi-uniprot/protvista-feature-adapter/issues"
+  },
+  "homepage": "https://github.com/ebi-uniprot/protvista-feature-adapter#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "cross-env": "^5.0.0",
+    "mkdirp": "^0.5.1",
+    "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^3.2.2"
+  },
+  "dependencies": {
+    "uniprot-entry-data-adapter": "file:../uniprot-entry-data-adapter",
+    "webcomponentsjs": "^1.0.2"
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false,
+    "exclude": [
+      "test/**/*Spec.js",
+      "dist"
+    ],
+    "include": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-core/register"
+    ],
+    "reporter": [
+      "text",
+      "text-summary",
+      "lcov"
+    ]
+  }
+}
