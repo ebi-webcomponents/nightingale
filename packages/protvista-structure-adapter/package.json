@@ -2,7 +2,7 @@
   "name": "protvista-structure-adapter",
   "version": "1.0.0",
   "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
-  "main": "src/StructureAdapterComponent",
+  "main": "src/ProtVistaStructureAdapter",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
     "test-watch": "npm test -- -w",
