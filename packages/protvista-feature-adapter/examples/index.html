@@ -9,13 +9,7 @@
 <body>
 <protvista-feature-adapter id="adapter1">
     <uniprot-entry-data-loader id="loader1" accession="P05067">
-        <source src="https://www.ebi.ac.uk/proteins/api/features/{0}" />
-    </uniprot-entry-data-loader>
-</protvista-feature-adapter>
-
-<protvista-feature-adapter id="wrongAdpater">
-    <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
-        <source src="https://www.ebi.ac.uk/proteins/api/features/" />
+        <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=TOPOLOGY" />
     </uniprot-entry-data-loader>
 </protvista-feature-adapter>
 
