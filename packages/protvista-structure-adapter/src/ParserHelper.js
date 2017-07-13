@@ -3,7 +3,7 @@
 
 import ldEach from 'lodash-es/each';
 
-export class ParserHelper {
+export default class ParserHelper {
     static capitalizeFirstLetter(word) {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
