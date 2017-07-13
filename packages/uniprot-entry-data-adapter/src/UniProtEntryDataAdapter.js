@@ -3,7 +3,7 @@
 
 const loaderComponentType = 'uniprot-entry-data-loader';
 
-export class UniProtEntryDataAdapter extends HTMLElement {
+export default class UniProtEntryDataAdapter extends HTMLElement {
     constructor() {
         super();
         this._listening = false;
@@ -33,15 +33,6 @@ export class UniProtEntryDataAdapter extends HTMLElement {
                 'error',
                 {detail: 'No data to adapt as no loader was specified', bubbles: true}
             ));
-        } else {
-            //TODO response from multiple loader should be mixed, so no loader will be removed!!!
-            this._removeChildrenInList(this, loaders, 1, loaders.length);
-        }
-    }
-
-    _removeChildrenInList(elem, list, start, end) {
-        for (let i = start; (i < end) && (i < list.length); i++) {
-            elem.removeChild(list[i]);
         }
     }
 
