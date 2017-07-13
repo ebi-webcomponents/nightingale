@@ -3,12 +3,12 @@
 
 import ldFilter from 'lodash-es/filter';
 import ldMap from 'lodash-es/map';
-import {ParserHelper} from './ParserHelper';
+import ParserHelper from './ParserHelper';
 
 const featureType = 'PDB_STRUCTURE';
 const featureCategory = 'STRUCTURAL';
 
-export class StructureDataParser {
+export default class StructureDataParser {
     constructor() {
         this._pdbFeatures = {};
     }
