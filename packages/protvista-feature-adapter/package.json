@@ -44,6 +44,8 @@
     "rollup-watch": "^3.2.2"
   },
   "dependencies": {
+    "lodash-es": "^4.17.4",
+    "underscore-es": "^1.9.8",
     "uniprot-entry-data-adapter": "file:../uniprot-entry-data-adapter",
     "webcomponentsjs": "^1.0.2"
   },

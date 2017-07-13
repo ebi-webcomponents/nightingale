@@ -1,4 +1,4 @@
-import {ProtVistaFeatureAdapter} from './ProtVistaFeatureAdapter';
+import ProtVistaFeatureAdapter from './ProtVistaFeatureAdapter';
 
 if (window.customElements) {
     customElements.define('protvista-feature-adapter', ProtVistaFeatureAdapter);
