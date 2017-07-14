@@ -33,6 +33,18 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
                 'error',
                 {detail: 'No data to adapt as no loader was specified', bubbles: true}
             ));
+        } else {
+            this.dispatchEvent(new CustomEvent(
+                'warning',
+                {detail: 'Only one loader is allowed, the first one will be used, the others dismissed', bubbles: true}
+            ));
+            this._removeChildrenInList(this, loaders, 1, loaders.length);
+        }
+    }
+
+    _removeChildrenInList(elem, list, start, end) {
+        for (let i = start; (i < end) && (i < list.length); i++) {
+            elem.removeChild(list[i]);
         }
     }
 
