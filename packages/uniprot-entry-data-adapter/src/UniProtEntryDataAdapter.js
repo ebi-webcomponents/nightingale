@@ -52,14 +52,15 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
         if (!this._listening) {
             this._listening = true;
             this.addEventListener('load', (e) => {
+                e.stopPropagation();
                 try {
                     if (e.detail.payload.errorMessage) {
                         throw e.detail.payload.errorMessage;
                     }
                     this.parseEntry(e.detail.payload);
                     this.dispatchEvent(new CustomEvent(
-                        'ready',
-                        {detail: this._adaptedData, bubbles: true}
+                        'load',
+                        {detail: {payload: this._adaptedData}, bubbles: true}
                     ));
                 } catch(error) {
                     this.dispatchEvent(new CustomEvent(
