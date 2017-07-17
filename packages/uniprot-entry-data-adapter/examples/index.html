@@ -36,9 +36,9 @@
 <script>
     for (const adapter of document.querySelectorAll('uniprot-entry-data-adapter')) {
       adapter.addEventListener(
-        'ready',
+        'adapt',
         e => {
-          console.log('ready');
+          console.log('Adapter');
           console.log(e.target);
           console.log(e.detail);
         }

@@ -6,6 +6,7 @@ const loaderComponentType = 'uniprot-entry-data-loader';
 export default class UniProtEntryDataAdapter extends HTMLElement {
     constructor() {
         super();
+        this._adapterType = 'uniprot-entry-data-adapter';
         this._listening = false;
         this._adaptedData = {};
     }
@@ -59,8 +60,11 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
                     }
                     this.parseEntry(e.detail.payload);
                     this.dispatchEvent(new CustomEvent(
-                        'load',
-                        {detail: {payload: this._adaptedData}, bubbles: true}
+                        'adapt',
+                        {
+                            detail: {adapter: this._adapterType, data: this._adaptedData},
+                            bubbles: true, cancelable: true
+                        }
                     ));
                 } catch(error) {
                     this.dispatchEvent(new CustomEvent(
