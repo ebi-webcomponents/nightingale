@@ -6,7 +6,7 @@ import UniProtEntryDataAdapter from './UniProtEntryDataAdapter';
 export default class EmptyDataAdapter extends UniProtEntryDataAdapter {
     constructor() {
         super();
-        this._adapterType = 'empty-data-adapter';
+        this._adapterType = 'empty-dummy-data-adapter';
         this._adaptedData = {};
     }
 
