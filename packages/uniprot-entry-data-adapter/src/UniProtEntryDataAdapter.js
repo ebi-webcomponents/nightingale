@@ -1,8 +1,6 @@
 /*jslint node: true */
 "use strict";
 
-const loaderComponentType = 'uniprot-entry-data-loader';
-
 export default class UniProtEntryDataAdapter extends HTMLElement {
     constructor() {
         super();
@@ -49,40 +47,28 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
         if (!this._listening) {
             this._listening = true;
             this.addEventListener('load', (e) => {
-                e.stopPropagation();
-                try {
-                    if (e.detail.payload.errorMessage) {
-                        throw e.detail.payload.errorMessage;
-                    }
-                    this.parseEntry(e.detail.payload);
-                    this.dispatchEvent(new CustomEvent(
-                        'adapt',
-                        {
-                            detail: {adapter: this._adapterType, data: this._adaptedData},
-                            bubbles: true, cancelable: true
-                        }
-                    ));
-                } catch(error) {
-                    this.dispatchEvent(new CustomEvent(
-                        'error',
-                        {
-                            detail: error,
-                            bubbles: true, cancelable: true}
-                    ));
-                }
-            });
-            this.addEventListener('adapt', (e) => {
-                if (e.detail.adapter !== this._adapterType) {
-                    //only listen to other adapters not to itself (so infinite loop is avoided)
+                if (e.target !== this) {
                     e.stopPropagation();
-                    this.parseEntry(e.detail.data);
-                    this.dispatchEvent(new CustomEvent(
-                        'adapt',
-                        {
-                            detail: {adapter: this._adapterType, data: this._adaptedData},
-                            bubbles: true, cancelable: true
+                    try {
+                        if (e.detail.payload.errorMessage) {
+                            throw e.detail.payload.errorMessage;
                         }
-                    ));
+                        this.parseEntry(e.detail.payload);
+                        this.dispatchEvent(new CustomEvent(
+                            'load',
+                            {
+                                detail: {payload: this._adaptedData},
+                                bubbles: true, cancelable: true
+                            }
+                        ));
+                    } catch(error) {
+                        this.dispatchEvent(new CustomEvent(
+                            'error',
+                            {
+                                detail: error,
+                                bubbles: true, cancelable: true}
+                        ));
+                    }
                 }
             });
         }
