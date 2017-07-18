@@ -7,63 +7,63 @@
 
 </head>
 <body>
-<uniprot-entry-data-adapter id="adapter1">
-    <uniprot-entry-data-loader id="loader1" accession="P05067">
-        <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
-    </uniprot-entry-data-loader>
-    <uniprot-entry-data-loader id="additionalLoader" accession="P04637">
-        <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
-    </uniprot-entry-data-loader>
-</uniprot-entry-data-adapter>
-
-<uniprot-entry-data-adapter id="wrongAdpater">
-    <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
-        <source src="https://www.ebi.ac.uk/proteins/api/proteins" />
-    </uniprot-entry-data-loader>
-</uniprot-entry-data-adapter>
-
-<uniprot-entry-data-adapter id="adapter2">
-    <empty-dummy-data-adapter>
-        <uniprot-entry-data-loader id="loader2" accession="P05067">
+    <uniprot-entry-data-adapter id="adapter1">
+        <uniprot-entry-data-loader id="loader1" accession="P05067">
             <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
         </uniprot-entry-data-loader>
-    </empty-dummy-data-adapter>
-</uniprot-entry-data-adapter>
+        <uniprot-entry-data-loader id="additionalLoader" accession="P04637">
+            <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
+        </uniprot-entry-data-loader>
+    </uniprot-entry-data-adapter>
 
 
-<button onclick="
-  var elem = document.getElementById('loader1');
-  elem.accession = 'P04637';
-  console.log(elem);
-">Retrieve P04637 for loader 1</button>
+    <uniprot-entry-data-adapter id="wrongAdpater">
+        <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
+            <source src="https://www.ebi.ac.uk/proteins/api/proteins" />
+        </uniprot-entry-data-loader>
+    </uniprot-entry-data-adapter>
 
-<script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
-<script src="../dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
-<script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8"
-        defer></script>
-<script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+    <uniprot-entry-data-adapter id="adapter2">
+        <empty-dummy-data-adapter>
+            <uniprot-entry-data-loader id="loader2" accession="P05067">
+                <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
+            </uniprot-entry-data-loader>
+        </empty-dummy-data-adapter>
+    </uniprot-entry-data-adapter>
+
+    <button onclick="
+      var elem = document.getElementById('loader1');
+      elem.accession = 'P04637';
+      console.log(elem);
+    ">Retrieve P04637 for loader 1</button>
+
+    <script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
+    <script src="../dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
+    <script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8"
+            defer></script>
+    <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
 
 
-<script>
-    for (const adapter of document.querySelectorAll('uniprot-entry-data-adapter')) {
-      adapter.addEventListener(
-        'adapt',
-        e => {
-          console.log('Adapter');
-          console.log(e.target);
-          console.log(e.detail);
+    <script>
+        for (const adapter of document.querySelectorAll('uniprot-entry-data-adapter')) {
+          adapter.addEventListener(
+            'load',
+            e => {
+              console.log('Data loaded');
+              console.log(e.target);
+              console.log(e.detail);
+            }
+          );
+          adapter.addEventListener(
+            'error',
+            e => {
+              console.log('error');
+              console.log(e.target);
+              console.log(e.detail);
+            }
+          );
         }
-      );
-      adapter.addEventListener(
-        'error',
-        e => {
-          console.log('error');
-          console.log(e.target);
-          console.log(e.detail);
-        }
-      );
-    }
-</script>
+    </script>
 
 </body>
 </html>
