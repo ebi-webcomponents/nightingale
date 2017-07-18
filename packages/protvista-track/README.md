@@ -4,7 +4,7 @@ Basic track type of the viewer
 
 ## Usage
 ```html
-      <protvista-track length="456" start="34" end="400"></protvista-sequence>
+      <protvista-track length="456" start="34" end="400"></protvista-track>
 ```
 
 ## API Reference
