@@ -12,12 +12,11 @@ export default class ProtVistaFeatureAdapter extends UniProtEntryDataAdapter {
     }
 
     parseEntry(data) {
-        let features = data.features;
+        console.log('parsing');
+        this._adaptedData = data.features;
 
-        if (features && (features.length !== 0)) {
-            features = ParserHelper.groupEvidencesByCode(features);
-
-            this._adaptedData = features;
+        if (this._adaptedData && (this._adaptedData.length !== 0)) {
+            this._adaptedData = ParserHelper.groupEvidencesByCode(this._adaptedData);
             /*
              TODO old way to return categories remove when category viewer has been modified to {}
              var orderedPairs = [];

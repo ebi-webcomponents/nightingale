@@ -9,16 +9,16 @@
 <body>
 <protvista-feature-adapter id="adapter1">
     <uniprot-entry-data-loader id="loader1" accession="P05067">
-        <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=TOPOLOGY" />
+        <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?types=TOPO_DOM" />
     </uniprot-entry-data-loader>
 </protvista-feature-adapter>
 
 
 <button onclick="
   var elem = document.getElementById('loader1');
-  elem.accession = 'P04637';
+  elem.accession = 'P21802';
   console.log(elem);
-">Retrieve P04637 for loader 1</button>
+">Retrieve P21802 for loader 1</button>
 
 <script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
 <script src="../dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
@@ -30,9 +30,9 @@
 <script>
     for (const adapter of document.querySelectorAll('protvista-feature-adapter')) {
       adapter.addEventListener(
-        'ready',
+        'load',
         e => {
-          console.log('ready');
+          console.log('Data loaded');
           console.log(e.target);
           console.log(e.detail);
         }
