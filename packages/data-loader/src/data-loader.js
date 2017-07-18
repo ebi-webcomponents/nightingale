@@ -46,7 +46,7 @@ class DataLoader extends HTMLElement {
     if (!detail) {
       this._errors = errors;
       this.dispatchEvent(
-        new CustomEvent('error', {detail: errors, bubbles: true})
+        new CustomEvent('error', {detail: errors, bubbles: true, cancelable: true})
       );
       return;
     }
@@ -60,7 +60,7 @@ class DataLoader extends HTMLElement {
     detail.payload = this.data;
 
     this.dispatchEvent(
-      new CustomEvent('load', {detail, bubbles: true})
+      new CustomEvent('load', {detail, bubbles: true, cancelable: true})
     );
     return detail;
   }
