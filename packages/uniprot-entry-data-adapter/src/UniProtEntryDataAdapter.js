@@ -65,7 +65,9 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
                 } catch(error) {
                     this.dispatchEvent(new CustomEvent(
                         'error',
-                        {detail: error, bubbles: true}
+                        {
+                            detail: error,
+                            bubbles: true, cancelable: true}
                     ));
                 }
             });
