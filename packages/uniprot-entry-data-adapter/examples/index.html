@@ -11,12 +11,23 @@
     <uniprot-entry-data-loader id="loader1" accession="P05067">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
     </uniprot-entry-data-loader>
+    <uniprot-entry-data-loader id="additionalLoader" accession="P04637">
+        <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
+    </uniprot-entry-data-loader>
 </uniprot-entry-data-adapter>
 
 <uniprot-entry-data-adapter id="wrongAdpater">
     <uniprot-entry-data-loader id="wrongLoader" accession="P05067">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins" />
     </uniprot-entry-data-loader>
+</uniprot-entry-data-adapter>
+
+<uniprot-entry-data-adapter id="adapter2">
+    <empty-dummy-data-adapter>
+        <uniprot-entry-data-loader id="loader2" accession="P05067">
+            <source src="https://www.ebi.ac.uk/proteins/api/proteins/{0}" />
+        </uniprot-entry-data-loader>
+    </empty-dummy-data-adapter>
 </uniprot-entry-data-adapter>
 
 
