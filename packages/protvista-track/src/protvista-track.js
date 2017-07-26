@@ -14,8 +14,8 @@ class ProtVistaTrack extends HTMLElement {
   constructor() {
     super();
     this._length = parseInt(this.getAttribute('length'));
-    this._start = parseInt(this.getAttribute('start')) || 1;
-    this._end = parseInt(this.getAttribute('end')) || this._length;
+    this._displaystart = parseInt(this.getAttribute('displaystart')) || 1;
+    this._displayend = parseInt(this.getAttribute('displayend')) || this._length;
     this._highlightstart = parseInt(this.getAttribute('highlightstart'));
     this._highlightend = parseInt(this.getAttribute('highlightend'));
   }
@@ -31,7 +31,7 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'start', 'end', 'highlightstart', 'highlightend'
+    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -45,7 +45,7 @@ class ProtVistaTrack extends HTMLElement {
   _createTrack() {
     this._x = d3.scaleLinear()
       .range([padding.left, width - padding.right])
-      .domain([this._start, this._end]);
+      .domain([this._displaystart, this._displayend]);
 
     const svg = d3.select(this)
       .append('div')
@@ -58,7 +58,7 @@ class ProtVistaTrack extends HTMLElement {
     this.highlighted = svg.append('rect')
       .attr('class', 'highlighted')
       .attr('fill', 'yellow')
-      .attr('height', height)
+      .attr('height', height);
 
     this.seq_g = svg.append('g')
       .attr('class', 'sequence');
@@ -74,10 +74,10 @@ class ProtVistaTrack extends HTMLElement {
       .attr('height', height/2)
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.end, type: 'highlightend'},
+          detail: {value: f.displayend, type: 'highlightend'},
         }));
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.start, type: 'highlightstart'},
+          detail: {value: f.displaystart, type: 'highlightstart'},
         }));
       })
       .on('mouseout', f => {
@@ -92,13 +92,13 @@ class ProtVistaTrack extends HTMLElement {
   }
   _updateTrack(){
     if (this._x) {
-      this._x.domain([this._start, this._end]);
+      this._x.domain([this._displaystart, this._displayend]);
       this.features = this.seq_g.selectAll('rect.feature')
         .data(this._data);
 
       this.features
         .attr('x', f => this._x(f.start))
-        .attr('width', f => Math.abs(this._x(this._start+
+        .attr('width', f => Math.abs(this._x(this._displaystart+
           Math.max(1, f.end-f.start)
         )));
 
@@ -106,7 +106,7 @@ class ProtVistaTrack extends HTMLElement {
         this.highlighted
           .attr('x', this._x(this._highlightstart))
           .style('opacity', 0.3)
-          .attr('width', this._x(this._start +
+          .attr('width', this._x(this._displaystart +
             Math.max(1, this._highlightend - this._highlightstart)
           ));
       } else {
