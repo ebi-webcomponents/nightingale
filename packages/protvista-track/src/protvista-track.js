@@ -74,18 +74,18 @@ class ProtVistaTrack extends HTMLElement {
       .attr('height', height/2)
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.displayend, type: 'highlightend'},
+          detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
         }));
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.displaystart, type: 'highlightstart'},
+          detail: {value: f.start, type: 'highlightstart'}, bubbles:true, cancelable: true
         }));
       })
       .on('mouseout', f => {
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: null, type: 'highlightend'},
+          detail: {value: null, type: 'highlightend'}, bubbles:true, cancelable: true
         }));
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: null, type: 'highlightstart'},
+          detail: {value: null, type: 'highlightstart'}, bubbles:true, cancelable: true
         }));
       });
     this._updateTrack();
