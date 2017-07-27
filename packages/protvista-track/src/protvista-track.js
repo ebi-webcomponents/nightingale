@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import _includes from 'lodash-es/includes';
 
 const height = 40,
   width = 700,
@@ -23,6 +24,12 @@ class ProtVistaTrack extends HTMLElement {
   connectedCallback() {
     if (this._data)
       this._createTrack();
+
+    this.addEventListener('load', e => {
+      if (_includes(this.children, e.target)) {
+        this.data = e.detail.payload;
+      }
+    });
   }
 
   set data(data) {
@@ -40,7 +47,6 @@ class ProtVistaTrack extends HTMLElement {
       this._updateTrack();
     }
   }
-
 
   _createTrack() {
     this._x = d3.scaleLinear()
@@ -77,7 +83,7 @@ class ProtVistaTrack extends HTMLElement {
           detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
         }));
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.start, type: 'highlightstart'}, bubbles:true, cancelable: true
+          detail: {value: f.begin, type: 'highlightstart'}, bubbles:true, cancelable: true
         }));
       })
       .on('mouseout', f => {
@@ -90,6 +96,7 @@ class ProtVistaTrack extends HTMLElement {
       });
     this._updateTrack();
   }
+
   _updateTrack(){
     if (this._x) {
       this._x.domain([this._displaystart, this._displayend]);
@@ -97,9 +104,9 @@ class ProtVistaTrack extends HTMLElement {
         .data(this._data);
 
       this.features
-        .attr('x', f => this._x(f.start))
+        .attr('x', f => this._x(f.begin))
         .attr('width', f => Math.abs(this._x(this._displaystart+
-          Math.max(1, f.end-f.start)
+          Math.max(1, f.end-f.begin)
         )));
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){

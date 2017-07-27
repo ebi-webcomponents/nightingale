@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>protvista-navigation-demo</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+    </head>
+    <body>
+      <table>
+        <tr>
+          <th>FROM</th><th>Track</th><th>TO</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>
+            <protvista-track id= "track1" length="770" displaystart="1" displayend="770">
+              <protvista-feature-adapter id="adapter1">
+                <uniprot-entry-data-loader id="loader1" accession="P05067">
+                  <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?types=TOPO_DOM" />
+                </uniprot-entry-data-loader>
+              </protvista-feature-adapter>
+            </protvista-track>
+          </td>
+          <td>770</td>
+        </tr>
+      </table>
+      <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+      <script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
+      <script src="../dist/protvista-track.js" charset="utf-8" defer></script>
+      <script src="../node_modules/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
+      <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
+      <script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
+      <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+    </body>
+</html>
