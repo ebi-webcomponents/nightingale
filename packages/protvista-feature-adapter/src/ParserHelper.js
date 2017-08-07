@@ -31,4 +31,14 @@ export default class ParserHelper {
         });
         return features;
     };
+
+    static renameProperties (features) {
+        _each(features, (ft) => {
+            if (ft.begin) {
+                ft.start = ft.begin;
+                delete ft.begin;
+            }
+        });
+        return features;
+    };
 }

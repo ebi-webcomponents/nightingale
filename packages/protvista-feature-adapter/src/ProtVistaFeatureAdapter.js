@@ -17,6 +17,7 @@ export default class ProtVistaFeatureAdapter extends UniProtEntryDataAdapter {
 
         if (this._adaptedData && (this._adaptedData.length !== 0)) {
             this._adaptedData = ParserHelper.groupEvidencesByCode(this._adaptedData);
+            this._adaptedData = ParserHelper.renameProperties(this._adaptedData);
             /*
              TODO old way to return categories remove when category viewer has been modified to {}
              var orderedPairs = [];
