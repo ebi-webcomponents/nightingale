@@ -19,6 +19,7 @@ class ProtVistaTrack extends HTMLElement {
     this._displayend = parseInt(this.getAttribute('displayend')) || this._length;
     this._highlightstart = parseInt(this.getAttribute('highlightstart'));
     this._highlightend = parseInt(this.getAttribute('highlightend'));
+    this._color = this.getAttribute('color');
   }
 
   connectedCallback() {
@@ -38,12 +39,13 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend'
+    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue){
-      this[`_${name}`] = parseInt(newValue);
+      const intValue = parseInt(newValue);
+      this[`_${name}`] = isNaN(intValue) ? newValue : intValue;
       this._updateTrack();
     }
   }
@@ -76,7 +78,8 @@ class ProtVistaTrack extends HTMLElement {
       .append('rect')
       .attr('class', 'feature')
       .attr('y', height/4)
-      .attr('fill', f => f.color)
+      .attr('fill', f => f.color ? f.color : this._color ? this._color : 'black')
+      .attr('stroke', f => f.color ? f.color : this._color ? this._color : 'black')
       .attr('height', height/2)
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
