@@ -71,12 +71,12 @@ class ProtVistaTrack extends HTMLElement {
     this.seq_g = svg.append('g')
       .attr('class', 'sequence');
 
-    this.features = this.seq_g.selectAll('rect.feature')
+    this.features = this.seq_g.selectAll('rect.protvista-feature')
       .data(this._data);
 
     this.features.enter()
       .append('rect')
-      .attr('class', 'feature')
+      .attr('class', 'protvista-feature')
       .attr('y', height/4)
       .attr('fill', f => f.color ? f.color : this._color ? this._color : 'black')
       .attr('stroke', f => f.color ? f.color : this._color ? this._color : 'black')
@@ -103,7 +103,7 @@ class ProtVistaTrack extends HTMLElement {
   _updateTrack(){
     if (this._x) {
       this._x.domain([this._displaystart, this._displayend]);
-      this.features = this.seq_g.selectAll('rect.feature')
+      this.features = this.seq_g.selectAll('rect.protvista-feature')
         .data(this._data);
 
       this.features
