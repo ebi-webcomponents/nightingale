@@ -50,6 +50,18 @@ class ProtVistaTrack extends HTMLElement {
     }
   }
 
+  _getFeatureColor(f) {
+    if (f.color) {
+      return f.color
+    } else if (this._color) {
+      return this._color;
+    } else {
+      const typeStyle = window.getComputedStyle(document.querySelector('protvista-track'));
+      const typeColor = f.type ? typeStyle.getPropertyValue('--protvista-' + f.type.toLowerCase()).trim() : '';
+      return typeColor.length !== 0 ? typeColor : 'black';
+    }
+  }
+
   _createTrack() {
     this._x = d3.scaleLinear()
       .range([padding.left, width - padding.right])
@@ -57,9 +69,7 @@ class ProtVistaTrack extends HTMLElement {
 
     const svg = d3.select(this)
       .append('div')
-      .attr('class', '')
       .append('svg')
-      .attr('id', '')
       .attr('width', width)
       .attr('height', (height));
 
@@ -69,17 +79,17 @@ class ProtVistaTrack extends HTMLElement {
       .attr('height', height);
 
     this.seq_g = svg.append('g')
-      .attr('class', 'sequence');
+      .attr('class', 'sequence-features');
 
-    this.features = this.seq_g.selectAll('rect.protvista-feature')
+    this.features = this.seq_g.selectAll('rect.feature')
       .data(this._data);
 
     this.features.enter()
       .append('rect')
-      .attr('class', 'protvista-feature')
+      .attr('class', 'feature')
       .attr('y', height/4)
-      .attr('fill', f => f.color ? f.color : this._color ? this._color : 'black')
-      .attr('stroke', f => f.color ? f.color : this._color ? this._color : 'black')
+      .attr('fill', f => this._getFeatureColor(f))
+      .attr('stroke', f => this._getFeatureColor(f))
       .attr('height', height/2)
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
@@ -103,7 +113,7 @@ class ProtVistaTrack extends HTMLElement {
   _updateTrack(){
     if (this._x) {
       this._x.domain([this._displaystart, this._displayend]);
-      this.features = this.seq_g.selectAll('rect.protvista-feature')
+      this.features = this.seq_g.selectAll('rect.feature')
         .data(this._data);
 
       this.features
