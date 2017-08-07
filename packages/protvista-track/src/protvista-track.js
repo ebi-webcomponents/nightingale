@@ -83,7 +83,7 @@ class ProtVistaTrack extends HTMLElement {
           detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
         }));
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.begin, type: 'highlightstart'}, bubbles:true, cancelable: true
+          detail: {value: f.start, type: 'highlightstart'}, bubbles:true, cancelable: true
         }));
       })
       .on('mouseout', () => {
@@ -104,9 +104,9 @@ class ProtVistaTrack extends HTMLElement {
         .data(this._data);
 
       this.features
-        .attr('x', f => this._x(f.begin))
+        .attr('x', f => this._x(f.start))
         .attr('width', f => Math.abs(this._x(this._displaystart+
-          Math.max(1, f.end-f.begin)
+          Math.max(1, f.end-f.start)
         )));
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
