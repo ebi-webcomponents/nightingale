@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import _includes from 'lodash-es/includes';
+import FeatureShape from './FeatureShape';
 
 const height = 40,
   width = 700,
@@ -11,7 +12,6 @@ const height = 40,
   };
 
 class ProtVistaTrack extends HTMLElement {
-
   constructor() {
     super();
     this._length = parseInt(this.getAttribute('length'));
@@ -20,6 +20,8 @@ class ProtVistaTrack extends HTMLElement {
     this._highlightstart = parseInt(this.getAttribute('highlightstart'));
     this._highlightend = parseInt(this.getAttribute('highlightend'));
     this._color = this.getAttribute('color');
+    this._shape = this.getAttribute('shape');
+    this._featureShape = new FeatureShape();
   }
 
   connectedCallback() {
@@ -39,7 +41,7 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color'
+    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color', 'shape'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -56,9 +58,7 @@ class ProtVistaTrack extends HTMLElement {
     } else if (this._color) {
       return this._color;
     } else {
-      const typeStyle = window.getComputedStyle(document.querySelector('protvista-track'));
-      const typeColor = f.type ? typeStyle.getPropertyValue('--protvista-' + f.type.toLowerCase()).trim() : '';
-      return typeColor.length !== 0 ? typeColor : 'black';
+      return 'black';
     }
   }
 
@@ -81,16 +81,19 @@ class ProtVistaTrack extends HTMLElement {
     this.seq_g = svg.append('g')
       .attr('class', 'sequence-features');
 
-    this.features = this.seq_g.selectAll('rect.feature')
+    this.features = this.seq_g.selectAll('path.feature')
       .data(this._data);
-
     this.features.enter()
-      .append('rect')
+      .append('path')
       .attr('class', 'feature')
-      .attr('y', height/4)
+      .attr('d', (f) => {
+          return this._featureShape.getFeatureShape(this._x(2) - this._x(1), height/2, f.end ? f.end - f.start + 1 : 1);
+      })
+      .attr('transform', (f) => {
+          return 'translate(' + this._x(f.start)+ ',' + height/4 + ')';
+      })
       .attr('fill', f => this._getFeatureColor(f))
       .attr('stroke', f => this._getFeatureColor(f))
-      .attr('height', height/2)
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
           detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
@@ -113,14 +116,21 @@ class ProtVistaTrack extends HTMLElement {
   _updateTrack(){
     if (this._x) {
       this._x.domain([this._displaystart, this._displayend]);
-      this.features = this.seq_g.selectAll('rect.feature')
+      this.features = this.seq_g.selectAll('path.feature')
         .data(this._data);
 
-      this.features
-        .attr('x', f => this._x(f.start))
-        .attr('width', f => Math.abs(this._x(this._displaystart+
-          Math.max(1, f.end-f.start)
-        )));
+      this.features  //TODO displaystart
+          .attr('d', (f) => {
+              return this._featureShape.getFeatureShape(this._x(2) - this._x(1), height/2, f.end ? f.end - f.start + 1 : 1);
+          })
+          .attr('transform', (f) => {
+              return 'translate(' + this._x(f.start)+ ',' + height/4 + ')';
+          })
+        //.attr('x', f => this._x(f.start))
+        //.attr('width', f => Math.abs(this._x(this._displaystart+
+        //  Math.max(1, f.end-f.start)
+        //)))
+      ;
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
         this.highlighted

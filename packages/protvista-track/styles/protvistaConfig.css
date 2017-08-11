@@ -1,9 +1,3 @@
-protvista-track {
-    --protvista-topo_dom: #CC0000;
-    --protvista-transmem: #CC00CC;
-    --protvista-intramem: #0000CC;
-}
-
 protvista-track .feature {
     fill-opacity: 0.5;
 }
