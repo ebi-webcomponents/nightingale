@@ -77,6 +77,9 @@ class ProtVistaTrack extends HTMLElement {
       .range([padding.left, width - padding.right])
       .domain([this._displaystart, this._displayend + 1]);
 
+    d3.select(this).selectAll('*').remove();
+    d3.select(this).html('');
+
     const svg = d3.select(this)
       .append('div')
       .append('svg')
@@ -93,6 +96,7 @@ class ProtVistaTrack extends HTMLElement {
 
     this.features = this.seq_g.selectAll('path.feature')
       .data(this._data);
+
     this.features.enter()
       .append('path')
       .attr('class', 'feature')
