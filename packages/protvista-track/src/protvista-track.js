@@ -119,17 +119,13 @@ class ProtVistaTrack extends HTMLElement {
       this.features = this.seq_g.selectAll('path.feature')
         .data(this._data);
 
-      this.features  //TODO displaystart
+      this.features
           .attr('d', (f) => {
               return this._featureShape.getFeatureShape(this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1);
           })
           .attr('transform', (f) => {
               return 'translate(' + this._xScale(f.start)+ ',' + height/4 + ')';
           })
-        //.attr('x', f => this._xScale(f.start))
-        //.attr('width', f => Math.abs(this._xScale(this._displaystart+
-        //  Math.max(1, f.end-f.start)
-        //)))
       ;
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
