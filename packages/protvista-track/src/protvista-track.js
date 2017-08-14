@@ -62,6 +62,16 @@ class ProtVistaTrack extends HTMLElement {
     }
   }
 
+  _getShape(f) {
+    if (f.shape) {
+      return f.shape
+    } else if (this._shape) {
+      return this._shape;
+    } else {
+      return 'rectangle';
+    }
+  }
+
   _createTrack() {
     this._xScale = d3.scaleLinear()
       .range([padding.left, width - padding.right])
@@ -87,7 +97,9 @@ class ProtVistaTrack extends HTMLElement {
       .append('path')
       .attr('class', 'feature')
       .attr('d', (f) => {
-          return this._featureShape.getFeatureShape(this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1);
+          return this._featureShape.getFeatureShape(
+              this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1, this._getShape(f)
+          );
       })
       .attr('transform', (f) => {
           return 'translate(' + this._xScale(f.start)+ ',' + height/4 + ')';
@@ -121,7 +133,9 @@ class ProtVistaTrack extends HTMLElement {
 
       this.features
           .attr('d', (f) => {
-              return this._featureShape.getFeatureShape(this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1);
+              return this._featureShape.getFeatureShape(
+                  this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1, this._getShape(f)
+              );
           })
           .attr('transform', (f) => {
               return 'translate(' + this._xScale(f.start)+ ',' + height/4 + ')';
