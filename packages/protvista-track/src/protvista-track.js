@@ -3,7 +3,7 @@ import _includes from 'lodash-es/includes';
 import FeatureShape from './FeatureShape';
 
 const height = 40,
-  width = 700,
+  width = 760,
   padding = {
     top: 10,
     right: 10,
@@ -63,9 +63,9 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   _createTrack() {
-    this._x = d3.scaleLinear()
+    this._xScale = d3.scaleLinear()
       .range([padding.left, width - padding.right])
-      .domain([this._displaystart, this._displayend]);
+      .domain([this._displaystart, this._displayend + 1]);
 
     const svg = d3.select(this)
       .append('div')
@@ -87,10 +87,10 @@ class ProtVistaTrack extends HTMLElement {
       .append('path')
       .attr('class', 'feature')
       .attr('d', (f) => {
-          return this._featureShape.getFeatureShape(this._x(2) - this._x(1), height/2, f.end ? f.end - f.start + 1 : 1);
+          return this._featureShape.getFeatureShape(this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1);
       })
       .attr('transform', (f) => {
-          return 'translate(' + this._x(f.start)+ ',' + height/4 + ')';
+          return 'translate(' + this._xScale(f.start)+ ',' + height/4 + ')';
       })
       .attr('fill', f => this._getFeatureColor(f))
       .attr('stroke', f => this._getFeatureColor(f))
@@ -114,29 +114,29 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   _updateTrack(){
-    if (this._x) {
-      this._x.domain([this._displaystart, this._displayend]);
+    if (this._xScale) {
+      this._xScale.domain([this._displaystart, this._displayend + 1]);
       this.features = this.seq_g.selectAll('path.feature')
         .data(this._data);
 
       this.features  //TODO displaystart
           .attr('d', (f) => {
-              return this._featureShape.getFeatureShape(this._x(2) - this._x(1), height/2, f.end ? f.end - f.start + 1 : 1);
+              return this._featureShape.getFeatureShape(this._xScale(2) - this._xScale(1), height/2, f.end ? f.end - f.start + 1 : 1);
           })
           .attr('transform', (f) => {
-              return 'translate(' + this._x(f.start)+ ',' + height/4 + ')';
+              return 'translate(' + this._xScale(f.start)+ ',' + height/4 + ')';
           })
-        //.attr('x', f => this._x(f.start))
-        //.attr('width', f => Math.abs(this._x(this._displaystart+
+        //.attr('x', f => this._xScale(f.start))
+        //.attr('width', f => Math.abs(this._xScale(this._displaystart+
         //  Math.max(1, f.end-f.start)
         //)))
       ;
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
         this.highlighted
-          .attr('x', this._x(this._highlightstart))
+          .attr('x', this._xScale(this._highlightstart))
           .style('opacity', 0.3)
-          .attr('width', this._x(this._displaystart +
+          .attr('width', this._xScale(this._displaystart +
             Math.max(1, this._highlightend - this._highlightstart)
           ));
       } else {
