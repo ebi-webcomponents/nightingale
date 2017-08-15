@@ -32,7 +32,11 @@ class ProtVistaTrack extends HTMLElement {
 
     this.addEventListener('load', e => {
       if (_includes(this.children, e.target)) {
-        this.data = e.detail.payload;
+        if (e.path[0].localName === 'protvista-config-data-loader') {
+            console.log('config', e);
+        } else {
+          this.data = e.detail.payload;
+        }
       }
     });
   }
