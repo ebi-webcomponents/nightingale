@@ -72,7 +72,7 @@ export default class FeatureShape {
             + 'L' + this._gapShape + ',' + symbolSize
             + 'L' + (-centerx+this._gapShape) + ',' + centerx;
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',0Z' + getMiddleLine(centerx, this._ftWidth)
+            ? shape + 'L' + this._gapShape + ',0Z' + this._getMiddleLine(centerx, this._ftWidth)
             : shape + 'Z';
     };
 
@@ -85,7 +85,7 @@ export default class FeatureShape {
             + 'L' + (-centerx+this._gapShape) + ',' + centerx
             + 'L' + (-centerx+this._gapShape) + ',0';
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',' + centerx + getMiddleLine(centerx, this._ftWidth) + 'Z'
+            ? shape + 'L' + this._gapShape + ',' + centerx + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
@@ -101,7 +101,7 @@ export default class FeatureShape {
             + 'L' + (2*step+this._gapShape) + ',' + (4*step)
             + 'L' + (-2*step+this._gapShape) + ',' + (4*step);
         return this._ftLength !== 1
-            ? shape + 'M' + (-centerx+this._gapShape) + ',0' + getMiddleLine(centerx, this._ftWidth) + 'Z'
+            ? shape + 'M' + (-centerx+this._gapShape) + ',0' + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
@@ -111,7 +111,7 @@ export default class FeatureShape {
             + 'L' + (centerx+this._gapShape) + ',' + symbolSize
             + 'L' + (-centerx+this._gapShape) + ',' + symbolSize;
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',0' + getMiddleLine(centerx, this._ftWidth) + 'Z'
+            ? shape + 'L' + this._gapShape + ',0' + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
@@ -122,7 +122,7 @@ export default class FeatureShape {
             + "A" + rx + "," + ry + " 0 1,1 " + this._gapShape + "," + ry
             + "A" + rx + "," + ry + " 0 1,0 " + (symbolSize/2+this._gapShape) + ',' + ry;
         return this._ftLength !== 1
-            ? shape + getMiddleLine(ry, this._ftWidth) + 'Z'
+            ? shape + this._getMiddleLine(ry, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 

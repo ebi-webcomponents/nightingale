@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import _includes from 'lodash-es/includes';
 import FeatureShape from './FeatureShape';
 import NonOverlappingLayout from './NonOverlappingLayout';
+import ConfigHelper from "./ConfigHelper";
 
 const height = 44,
   width = 760,
@@ -33,7 +34,8 @@ class ProtVistaTrack extends HTMLElement {
     this.addEventListener('load', e => {
       if (_includes(this.children, e.target)) {
         if (e.path[0].localName === 'protvista-config-data-loader') {
-            console.log('config', e);
+            this._config = new ConfigHelper(e.detail.payload);
+            this._updateTrack();
         } else {
           this.data = e.detail.payload;
         }
@@ -63,6 +65,8 @@ class ProtVistaTrack extends HTMLElement {
       return f.color
     } else if (this._color) {
       return this._color;
+    } else if (this._config) {
+        return this._config.getColorByType(f.type);
     } else {
       return 'black';
     }
@@ -73,6 +77,8 @@ class ProtVistaTrack extends HTMLElement {
       return f.shape
     } else if (this._shape) {
       return this._shape;
+    } else if (this._config) {
+        return this._config.getShapeByType(f.type);
     } else {
       return 'rectangle';
     }
