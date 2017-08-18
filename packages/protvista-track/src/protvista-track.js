@@ -48,9 +48,11 @@ class ProtVistaTrack extends HTMLElement {
     this._createTrack();
   }
 
-  static get observedAttributes() {return [
-    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color', 'shape'
-  ]; }
+  static get observedAttributes() {
+    return [
+      'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color', 'shape'
+    ];
+  }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue){
@@ -114,15 +116,15 @@ class ProtVistaTrack extends HTMLElement {
     this.features.enter()
       .append('path')
       .attr('class', 'feature')
-      .attr('d', (f) => {
-        return this._featureShape.getFeatureShape(
+      .attr('d', f =>
+        this._featureShape.getFeatureShape(
           this._xScale(2) - this._xScale(1), this._layout.getFeatureHeight(),
             f.end ? f.end - f.start + 1 : 1, this._getShape(f)
-        );
-      })
-      .attr('transform', (f) => {
-        return 'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layout.getFeatureYPos(f)) + ')';
-      })
+        )
+      )
+      .attr('transform', f =>
+        'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layout.getFeatureYPos(f)) + ')'
+      )
       .attr('fill', f => this._getFeatureColor(f))
       .attr('stroke', f => this._getFeatureColor(f))
       .on('mouseover', f => {
@@ -151,15 +153,15 @@ class ProtVistaTrack extends HTMLElement {
         .data(this._data);
 
       this.features
-        .attr('d', (f) => {
-          return this._featureShape.getFeatureShape(
+        .attr('d', f =>
+          this._featureShape.getFeatureShape(
             this._xScale(2) - this._xScale(1), this._layout.getFeatureHeight(),
               f.end ? f.end - f.start + 1 : 1, this._getShape(f)
-          );
-        })
-        .attr('transform', (f) => {
-          return 'translate(' + this._xScale(f.start)+ ',' + (padding.top +  + this._layout.getFeatureYPos(f)) + ')';
-        })
+          )
+        )
+        .attr('transform', f =>
+          'translate(' + this._xScale(f.start)+ ',' + (padding.top +  + this._layout.getFeatureYPos(f)) + ')'
+        )
       ;
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
