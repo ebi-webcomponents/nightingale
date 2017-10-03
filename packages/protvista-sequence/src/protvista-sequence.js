@@ -71,9 +71,36 @@ class ProtVistaSequence extends HTMLElement {
     this.highlighted = svg.append('rect')
       .attr('class', 'highlighted')
       .attr('fill', 'yellow')
-      .attr('height', height)
+      .attr('height', height);
 
-    this._updateSequence()
+    this.overlay = svg.append('rect')
+      .attr('class', 'overlay')
+      .attr('fill', 'transparent')
+      .style('cursor', 'move')
+      .attr('width', width)
+      .attr('height', height)
+      .call(d3.drag()
+          .on('drag', ()=>{
+            const l = this._end - this._start;
+
+            const x0 = this._x.range()[0] + d3.event.dx;
+            const dx = this._start - this._x.invert(x0);
+            this._start = Math.max(1, this._start + dx);
+            this._end = this._start + l;
+            if (this._end > this._length+1){
+              this._end = this._length+1;
+              this._start = this._end - l;
+            }
+
+            this.dispatchEvent(new CustomEvent("change", {
+              detail: {value: Math.round(this._start), type: 'start'}
+            }));
+            this.dispatchEvent(new CustomEvent("change", {
+              detail: {value: Math.round(this._end), type: 'end'}
+            }));
+          })
+      );
+    this._updateSequence();
   }
   _updateSequence(){
     if (this._x) {
