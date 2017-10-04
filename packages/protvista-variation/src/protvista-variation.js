@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { processVariants } from './dataTransformer';
 
 const aaList = ['G', 'A', 'V', 'L', 'I', 'S', 'T', 'C', 'M', 'D', 'N', 'E', 'Q', 'R', 'K', 'H', 'F', 'Y', 'W', 'P', 'd', '*'];
 
@@ -20,6 +21,15 @@ class ProtvistaVariation extends HTMLElement {
             bottom: 10,
             left: 10
         }
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+        <style>
+        :host {
+            display: block;
+        }
+        </style>
+        <slot></slot>
+        `;
     }
 
     get width() {
@@ -42,36 +52,48 @@ class ProtvistaVariation extends HTMLElement {
     attributeChangedCallback(attrName, oldVal, newVal) {}
 
     render(data) {
+        processVariants(data.features, data.sequence);
+        const xScale = d3.scaleLinear()
+            .domain([1, this._length + 1])
+            .range([this._margin.left, this._width - this._margin.right]);
+
+        // scale for Amino Acids
         const yScale = d3.scalePoint()
             .domain(aaList)
             .range([0, this._height - this._margin.top - this._margin.bottom]);
 
-        const svg = d3.select(this).append('svg')
+        // xScale is the one about position
+
+        // Create the SVG
+        const svg = d3.select(this.shadowRoot).append('svg')
             .attr('width', this._width)
             .attr('height', this._height);
 
         // const variationPlot = this.getVariationPlot();
 
-        // // Data series
-        // var series = variationPlot()
-        //     .xScale(variantViewer.xScale)
-        //     .yScale(variantViewer.yScale);
+        // Not sure what happens here, but it seems to set the scales on the variation plot
+        var series = variationPlot()
+            .xScale(variantViewer.xScale)
+            .yScale(variantViewer.yScale);
 
-        // var dataSeries = createDataSeries(fv, variantViewer, svg, features, series);
+        // Create the visualisation here
+        var dataSeries = createDataSeries(fv, variantViewer, svg, features, series);
 
-        // this.update = function() {
-        //     dataSeries.call(series);
-        //     if (fv.selectedFeature) {
-        //         ViewerHelper.updateHighlight(fv);
-        //     } else if (fv.highlight) {
-        //         ViewerHelper.updateHighlight(fv);
-        //     }
-        // };
+        // Calling render again (after xScale has changed)
+        this.update = function() {
+            dataSeries.call(series);
+            if (fv.selectedFeature) {
+                ViewerHelper.updateHighlight(fv);
+            } else if (fv.highlight) {
+                ViewerHelper.updateHighlight(fv);
+            }
+        };
 
-        // this.updateData = function(data) {
-        //     dataSeries.datum(data);
-        //     this.update();
-        // };
+        // Calling render again with new data (after filter was used???)
+        this.updateData = function(data) {
+            dataSeries.datum(data);
+            this.update();
+        };
 
     }
 

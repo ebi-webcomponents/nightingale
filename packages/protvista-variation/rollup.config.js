@@ -1,7 +1,5 @@
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import postcss from 'rollup-plugin-postcss';
-import cssnano from 'cssnano';
 import minify from 'rollup-plugin-babel-minify';
 import conditional from "rollup-plugin-conditional";
 
@@ -16,12 +14,6 @@ export default {
         format: 'iife'
     },
     plugins: [
-        postcss({
-            plugins: [
-                cssnano()
-            ],
-            extensions: ['.css']
-        }),
         nodeResolve({
             jsnext: true
         }),
