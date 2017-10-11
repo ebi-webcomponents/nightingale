@@ -1,112 +1,100 @@
-getVariationPlot() {
-    var xScale = d3.scaleOrdinal(),
-        yScale = d3.scaleLinear();
+import * as d3 from 'd3';
 
-    // Scale for opacity of dots based on frequency
-    var frequency = d3.scalePow()
-        .exponent(0.001)
-        .domain([0, 1])
-        .range([5, 10]);
+class VariationPlot {
 
-    var variationPlot = function(selection) {
-        var series, bars;
+    constructor(xScale, yScale, length) {
+        this._length = length;
+        this._xScale = xScale;
+        this._yScale = yScale;
+        // Scale for opacity of dots based on frequency
+        this._frequency = d3.scalePow()
+            .exponent(0.001)
+            .domain([0, 1])
+            .range([5, 10]);
+        // Data bind otherwise babel removes it
+        this.drawVariationPlot = this.drawVariationPlot.bind(this);
+    }
 
+    set xScale(xScale) {
+        this._xScale = xScale;
+    }
+
+    set yScale(yScale) {
+        this._yScale = yScale;
+    }
+
+    set length(length) {
+        this._length = length;
+    }
+
+    drawVariationPlot(selection) {
         // Iterate over data
-        selection.each(function(data) {
+        selection.each((data, i, nodes) => {
             // Generate chart
-            series = d3.select(this);
+            const series = d3.select(nodes[i]);
 
             // ????
-            var withVariants = _.filter(data, function(elem) {
-                return elem.variants.length !== 0;
-            });
+            const withVariants = data.filter(elem => elem.variants.length !== 0);
 
             // bind data
-            bars = series.selectAll('.up_pftv_var-series')
-                .data(withVariants, function(d) {
-                    return d.pos;
-                });
+            const bars = series.selectAll('g')
+                .data(withVariants, d => d.pos);
+
+            bars.exit().remove();
 
             // On enter append for each data point
-            bars.enter()
+            const circle = bars.enter()
                 .append('g')
-                .transition()
-                .duration(250)
-                .attr('class', 'up_pftv_var-series');
+                .merge(bars)
+                .selectAll('circle')
+                .data(d => d.variants);
 
-            drawVariants(variantViewer, bars, frequency, fv, container, catTitle);
-            bars.exit().transition().duration(250).remove();
+            circle.exit().remove();
+
+            circle.enter()
+                .append('circle')
+                .merge(circle)
+                .attr('class', function(d) {
+                    // if (d === fv.selectedFeature) {
+                    //     return 'up_pftv_variant up_pftv_activeFeature';
+                    // } else {
+                    //     return 'up_pftv_variant';
+                    // }
+                })
+                .attr('r', 5)
+                .attr('cx', d => {
+                    return this._xScale(Math.min(d.begin, this._length))
+                })
+                .attr('cy', d => {
+                    return this._yScale(d.alternativeSequence.charAt(0))
+                })
+                .attr('name', d => {
+                    var mutation = d.alternativeSequence === '*' ? 'STOP' :
+                        d.alternativeSequence;
+                    d.internalId = 'var_' + d.wildType + d.begin + mutation;
+                    return d.internalId;
+                })
+                .attr('fill', d => 'black'
+                    // variantsFill(d, fv)
+                )
+                .attr('stroke', d => {
+                    if (d.externalData) {
+                        var keys = _.keys(d.externalData);
+                        var extDatum = d.externalData[keys[0]];
+                        if (extDatum.consequence) {
+                            var pos = Constants.getConsequenceTypes().indexOf(extDatum.consequence);
+                            return pos !== -1 ? LegendDialog.consequenceColors[pos % LegendDialog.consequenceColors.length] : 'black';
+                        } else {
+                            return 'black';
+                        }
+                    } else {
+                        return 'none';
+                    }
+                });
+
+            // ViewerHelper.addEventsClassAndTitle(catTitle, newCircles, fv, container);
         });
-    };
-
-    variationPlot.xScale = function(value) {
-        if (!arguments.length) {
-            return xScale;
-        }
-        xScale = value;
-        return variationPlot;
-    };
-
-    variationPlot.yScale = function(value) {
-        if (!arguments.length) {
-            return yScale;
-        }
-        yScale = value;
-        return variationPlot;
-    };
-
-    return variationPlot;
+    }
 }
 
-var drawVariants = function(variantViewer, bars, frequency, fv, container, catTitle) {
-    var variantCircle = bars.selectAll('circle')
-        .data(function(d) {
-            return d.variants;
-        });
-
-    var newCircles = variantCircle.enter().append('circle')
-        .attr('r', function(d) {
-            return frequency(0);
-        });
-
-    variantCircle
-        .attr('class', function(d) {
-            if (d === fv.selectedFeature) {
-                return 'up_pftv_variant up_pftv_activeFeature';
-            } else {
-                return 'up_pftv_variant';
-            }
-        })
-        .attr('cx', function(d) {
-            return variantViewer.xScale(Math.min(d.begin, fv.sequence.length));
-        })
-        .attr('cy', function(d) {
-            return variantViewer.yScale(d.alternativeSequence.charAt(0));
-        })
-        .attr('name', function(d) {
-            var mutation = d.alternativeSequence === '*' ? 'STOP' :
-                d.alternativeSequence;
-            d.internalId = 'var_' + d.wildType + d.begin + mutation;
-            return d.internalId;
-        })
-        .attr('fill', function(d) {
-            return variantsFill(d, fv);
-        })
-        .attr('stroke', function(d) {
-            if (d.externalData) {
-                var keys = _.keys(d.externalData);
-                var extDatum = d.externalData[keys[0]];
-                if (extDatum.consequence) {
-                    var pos = Constants.getConsequenceTypes().indexOf(extDatum.consequence);
-                    return pos !== -1 ? LegendDialog.consequenceColors[pos % LegendDialog.consequenceColors.length] : 'black';
-                } else {
-                    return 'black';
-                }
-            } else {
-                return 'none';
-            }
-        });
-
-    ViewerHelper.addEventsClassAndTitle(catTitle, newCircles, fv, container);
-    variantCircle.exit().remove();
-};
+export default VariationPlot;

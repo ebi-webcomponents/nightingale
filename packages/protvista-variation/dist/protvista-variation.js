@@ -105,6 +105,180 @@ function tickStep(start, stop, count) {
   return stop < start ? -step1 : step1;
 }
 
+var slice$1 = Array.prototype.slice;
+
+var identity$1 = function(x) {
+  return x;
+};
+
+var top = 1;
+var right = 2;
+var bottom = 3;
+var left = 4;
+var epsilon = 1e-6;
+
+function translateX(x) {
+  return "translate(" + (x + 0.5) + ",0)";
+}
+
+function translateY(y) {
+  return "translate(0," + (y + 0.5) + ")";
+}
+
+function number$1(scale) {
+  return function(d) {
+    return +scale(d);
+  };
+}
+
+function center(scale) {
+  var offset = Math.max(0, scale.bandwidth() - 1) / 2; // Adjust for 0.5px offset.
+  if (scale.round()) offset = Math.round(offset);
+  return function(d) {
+    return +scale(d) + offset;
+  };
+}
+
+function entering() {
+  return !this.__axis;
+}
+
+function axis(orient, scale) {
+  var tickArguments = [],
+      tickValues = null,
+      tickFormat = null,
+      tickSizeInner = 6,
+      tickSizeOuter = 6,
+      tickPadding = 3,
+      k = orient === top || orient === left ? -1 : 1,
+      x = orient === left || orient === right ? "x" : "y",
+      transform = orient === top || orient === bottom ? translateX : translateY;
+
+  function axis(context) {
+    var values = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments) : scale.domain()) : tickValues,
+        format = tickFormat == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments) : identity$1) : tickFormat,
+        spacing = Math.max(tickSizeInner, 0) + tickPadding,
+        range = scale.range(),
+        range0 = +range[0] + 0.5,
+        range1 = +range[range.length - 1] + 0.5,
+        position = (scale.bandwidth ? center : number$1)(scale.copy()),
+        selection = context.selection ? context.selection() : context,
+        path = selection.selectAll(".domain").data([null]),
+        tick = selection.selectAll(".tick").data(values, scale).order(),
+        tickExit = tick.exit(),
+        tickEnter = tick.enter().append("g").attr("class", "tick"),
+        line = tick.select("line"),
+        text = tick.select("text");
+
+    path = path.merge(path.enter().insert("path", ".tick")
+        .attr("class", "domain")
+        .attr("stroke", "#000"));
+
+    tick = tick.merge(tickEnter);
+
+    line = line.merge(tickEnter.append("line")
+        .attr("stroke", "#000")
+        .attr(x + "2", k * tickSizeInner));
+
+    text = text.merge(tickEnter.append("text")
+        .attr("fill", "#000")
+        .attr(x, k * spacing)
+        .attr("dy", orient === top ? "0em" : orient === bottom ? "0.71em" : "0.32em"));
+
+    if (context !== selection) {
+      path = path.transition(context);
+      tick = tick.transition(context);
+      line = line.transition(context);
+      text = text.transition(context);
+
+      tickExit = tickExit.transition(context)
+          .attr("opacity", epsilon)
+          .attr("transform", function(d) { return isFinite(d = position(d)) ? transform(d) : this.getAttribute("transform"); });
+
+      tickEnter
+          .attr("opacity", epsilon)
+          .attr("transform", function(d) { var p = this.parentNode.__axis; return transform(p && isFinite(p = p(d)) ? p : position(d)); });
+    }
+
+    tickExit.remove();
+
+    path
+        .attr("d", orient === left || orient == right
+            ? "M" + k * tickSizeOuter + "," + range0 + "H0.5V" + range1 + "H" + k * tickSizeOuter
+            : "M" + range0 + "," + k * tickSizeOuter + "V0.5H" + range1 + "V" + k * tickSizeOuter);
+
+    tick
+        .attr("opacity", 1)
+        .attr("transform", function(d) { return transform(position(d)); });
+
+    line
+        .attr(x + "2", k * tickSizeInner);
+
+    text
+        .attr(x, k * spacing)
+        .text(format);
+
+    selection.filter(entering)
+        .attr("fill", "none")
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", orient === right ? "start" : orient === left ? "end" : "middle");
+
+    selection
+        .each(function() { this.__axis = position; });
+  }
+
+  axis.scale = function(_) {
+    return arguments.length ? (scale = _, axis) : scale;
+  };
+
+  axis.ticks = function() {
+    return tickArguments = slice$1.call(arguments), axis;
+  };
+
+  axis.tickArguments = function(_) {
+    return arguments.length ? (tickArguments = _ == null ? [] : slice$1.call(_), axis) : tickArguments.slice();
+  };
+
+  axis.tickValues = function(_) {
+    return arguments.length ? (tickValues = _ == null ? null : slice$1.call(_), axis) : tickValues && tickValues.slice();
+  };
+
+  axis.tickFormat = function(_) {
+    return arguments.length ? (tickFormat = _, axis) : tickFormat;
+  };
+
+  axis.tickSize = function(_) {
+    return arguments.length ? (tickSizeInner = tickSizeOuter = +_, axis) : tickSizeInner;
+  };
+
+  axis.tickSizeInner = function(_) {
+    return arguments.length ? (tickSizeInner = +_, axis) : tickSizeInner;
+  };
+
+  axis.tickSizeOuter = function(_) {
+    return arguments.length ? (tickSizeOuter = +_, axis) : tickSizeOuter;
+  };
+
+  axis.tickPadding = function(_) {
+    return arguments.length ? (tickPadding = +_, axis) : tickPadding;
+  };
+
+  return axis;
+}
+
+
+
+function axisRight(scale) {
+  return axis(right, scale);
+}
+
+
+
+function axisLeft(scale) {
+  return axis(left, scale);
+}
+
 var noop = {value: function() {}};
 
 function dispatch() {
@@ -4264,6 +4438,37 @@ function linear$2() {
   return linearish(scale);
 }
 
+function raise$1(x, exponent) {
+  return x < 0 ? -Math.pow(-x, exponent) : Math.pow(x, exponent);
+}
+
+function pow$1() {
+  var exponent = 1,
+      scale = continuous(deinterpolate, reinterpolate),
+      domain = scale.domain;
+
+  function deinterpolate(a, b) {
+    return (b = raise$1(b, exponent) - (a = raise$1(a, exponent)))
+        ? function(x) { return (raise$1(x, exponent) - a) / b; }
+        : constant$9(b);
+  }
+
+  function reinterpolate(a, b) {
+    b = raise$1(b, exponent) - (a = raise$1(a, exponent));
+    return function(t) { return raise$1(a + b * t, 1 / exponent); };
+  }
+
+  scale.exponent = function(_) {
+    return arguments.length ? (exponent = +_, domain(domain())) : exponent;
+  };
+
+  scale.copy = function() {
+    return copy(scale, pow$1().exponent(exponent));
+  };
+
+  return linearish(scale);
+}
+
 var t0$1 = new Date;
 var t1$1 = new Date;
 
@@ -5318,9 +5523,7 @@ function processVariants(variants, sequence) {
     }
 
     
-    console.log(mutationArray);
-
-    return [['VARIATION', mutationArray]];
+    return mutationArray;
 }
 
 var asyncGenerator = function () {
@@ -5506,6 +5709,103 @@ var possibleConstructorReturn = function (self, call) {
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
+var VariationPlot = function () {
+    function VariationPlot(xScale, yScale, length) {
+        classCallCheck(this, VariationPlot);
+
+        this._length = length;
+        this._xScale = xScale;
+        this._yScale = yScale;
+        // Scale for opacity of dots based on frequency
+        this._frequency = pow$1().exponent(0.001).domain([0, 1]).range([5, 10]);
+        // Data bind otherwise babel removes it
+        this.drawVariationPlot = this.drawVariationPlot.bind(this);
+    }
+
+    createClass(VariationPlot, [{
+        key: 'drawVariationPlot',
+        value: function drawVariationPlot(selection) {
+            var _this = this;
+
+            // Iterate over data
+            selection.each(function (data, i, nodes) {
+                // Generate chart
+                var series = select(nodes[i]);
+
+                // ????
+                var withVariants = data.filter(function (elem) {
+                    return elem.variants.length !== 0;
+                });
+
+                // bind data
+                var bars = series.selectAll('g').data(withVariants, function (d) {
+                    return d.pos;
+                });
+
+                bars.exit().remove();
+
+                // On enter append for each data point
+                var circle = bars.enter().append('g').merge(bars).selectAll('circle').data(function (d) {
+                    return d.variants;
+                });
+
+                circle.exit().remove();
+
+                circle.enter().append('circle').merge(circle).attr('class', function (d) {
+                    // if (d === fv.selectedFeature) {
+                    //     return 'up_pftv_variant up_pftv_activeFeature';
+                    // } else {
+                    //     return 'up_pftv_variant';
+                    // }
+                }).attr('r', 5).attr('cx', function (d) {
+                    return _this._xScale(Math.min(d.begin, _this._length));
+                }).attr('cy', function (d) {
+                    return _this._yScale(d.alternativeSequence.charAt(0));
+                }).attr('name', function (d) {
+                    var mutation = d.alternativeSequence === '*' ? 'STOP' : d.alternativeSequence;
+                    d.internalId = 'var_' + d.wildType + d.begin + mutation;
+                    return d.internalId;
+                }).attr('fill', function (d) {
+                    return 'black';
+                }
+                // variantsFill(d, fv)
+                ).attr('stroke', function (d) {
+                    if (d.externalData) {
+                        var keys = _.keys(d.externalData);
+                        var extDatum = d.externalData[keys[0]];
+                        if (extDatum.consequence) {
+                            var pos = Constants.getConsequenceTypes().indexOf(extDatum.consequence);
+                            return pos !== -1 ? LegendDialog.consequenceColors[pos % LegendDialog.consequenceColors.length] : 'black';
+                        } else {
+                            return 'black';
+                        }
+                    } else {
+                        return 'none';
+                    }
+                });
+
+                // ViewerHelper.addEventsClassAndTitle(catTitle, newCircles, fv, container);
+            });
+        }
+    }, {
+        key: 'xScale',
+        set: function set(xScale) {
+            this._xScale = xScale;
+        }
+    }, {
+        key: 'yScale',
+        set: function set(yScale) {
+            this._yScale = yScale;
+        }
+    }, {
+        key: 'length',
+        set: function set(length) {
+            this._length = length;
+        }
+    }]);
+    return VariationPlot;
+}();
+
 var aaList = ['G', 'A', 'V', 'L', 'I', 'S', 'T', 'C', 'M', 'D', 'N', 'E', 'Q', 'R', 'K', 'H', 'F', 'Y', 'W', 'P', 'd', '*'];
 
 var ProtvistaVariation = function (_HTMLElement) {
@@ -5530,6 +5830,11 @@ var ProtvistaVariation = function (_HTMLElement) {
             bottom: 10,
             left: 10
         };
+        _this._xScale = ordinal();
+        _this._yScale = linear$2();
+
+        _this.render = _this.render.bind(_this);
+        _this.createDataSeries = _this.createDataSeries.bind(_this);
         var shadowRoot = _this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = '\n        <style>\n        :host {\n            display: block;\n        }\n        </style>\n        <slot></slot>\n        ';
         return _this;
@@ -5541,9 +5846,9 @@ var ProtvistaVariation = function (_HTMLElement) {
             var _this2 = this;
 
             this.addEventListener('load', function (d) {
-                return _this2.render(d.detail.payload);
+                _this2._length = d.detail.payload.sequence.length;
+                _this2.render(processVariants(d.detail.payload.features, d.detail.payload.sequence));
             });
-            // this.render();
         }
     }, {
         key: 'attributeChangedCallback',
@@ -5551,44 +5856,84 @@ var ProtvistaVariation = function (_HTMLElement) {
     }, {
         key: 'render',
         value: function render(data) {
-            processVariants(data.features, data.sequence);
-            var xScale = linear$2().domain([1, this._length + 1]).range([this._margin.left, this._width - this._margin.right]);
+            
+            this._xScale = linear$2().domain([1, this._length + 1]).range([this._margin.left, this._width - this._margin.right]);
 
             // scale for Amino Acids
-            var yScale = point$1().domain(aaList).range([0, this._height - this._margin.top - this._margin.bottom]);
+            this._yScale = point$1().domain(aaList).range([0, this._height - this._margin.top - this._margin.bottom]);
 
             // xScale is the one about position
 
             // Create the SVG
             var svg = select(this.shadowRoot).append('svg').attr('width', this._width).attr('height', this._height);
 
-            // const variationPlot = this.getVariationPlot();
+            // create the variation plot function to be called by the series?
+            var variationPlot = new VariationPlot(this._xScale, this._yScale, this._length);
 
             // Not sure what happens here, but it seems to set the scales on the variation plot
-            var series = variationPlot().xScale(variantViewer.xScale).yScale(variantViewer.yScale);
+            // var series = 
+            variationPlot.xScale = this._xScale;
+            variationPlot.yScale = this._yScale;
 
             // Create the visualisation here
-            var dataSeries = createDataSeries(fv, variantViewer, svg, features, series);
-
-            // Calling render again (after xScale has changed)
-            this.update = function () {
-                dataSeries.call(series);
-                if (fv.selectedFeature) {
-                    ViewerHelper.updateHighlight(fv);
-                } else if (fv.highlight) {
-                    ViewerHelper.updateHighlight(fv);
-                }
-            };
-
-            // Calling render again with new data (after filter was used???)
-            this.updateData = function (data) {
-                dataSeries.datum(data);
-                this.update();
-            };
+            var dataSeries = this.createDataSeries(svg, data, variationPlot.drawVariationPlot);
         }
     }, {
+        key: 'createDataSeries',
+        value: function createDataSeries(svg, features, series) {
+
+            // Group for the main chart
+            var mainChart = svg.append('g').attr('transform', 'translate(0,' + this._margin.top + ')');
+
+            // clip path prevents drawing outside of it
+            var chartArea = mainChart.append('g').attr('clip-path', 'url(#plotAreaClip)');
+
+            mainChart.append('clipPath').attr('id', 'plotAreaClip').append('rect').attr('width', this._width - 20).attr('height', this._height).attr('transform', 'translate(10, -10)');
+
+            // This is calling the data series render code for each of the items in the data
+            var dataSeries = chartArea.datum(features).call(series);
+
+            // This is the AA axis on left
+            var yAxis = axisLeft().scale(this._yScale).tickSize(-this._width);
+
+            // This is the AA axis on right
+            var yAxis2 = axisRight().scale(this._yScale);
+
+            // Adding AA axis left
+            mainChart.append('g').attr('transform', 'translate(12 ,0)').attr('class', 'variation-y axis').call(yAxis);
+
+            // Adding AA axis right
+            mainChart.append('g').attr('transform', 'translate(' + (this._width - 18) + ', 0)').attr('class', 'variation-y axis').call(yAxis2);
+
+            // ???
+            // fv.globalContainer.selectAll('g.variation-y g.tick').attr('class', function(d) {
+            //     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d === 'del' ? 'deletion' : d);
+            // });
+
+            this._dataSeries = dataSeries;
+        }
+
+        // Calling render again (after xScale has changed)
+
+    }, {
         key: 'update',
-        value: function update() {}
+        value: function update() {
+            this._dataSeries.call(series);
+            if (fv.selectedFeature) {
+                ViewerHelper.updateHighlight(fv);
+            } else if (fv.highlight) {
+                ViewerHelper.updateHighlight(fv);
+            }
+        }
+
+        // Calling render again with new data (after filter was used???)
+
+    }, {
+        key: 'updateData',
+        value: function updateData(data) {
+            dataSeries.datum(data);
+            this.update();
+        }
     }, {
         key: 'width',
         get: function get() {

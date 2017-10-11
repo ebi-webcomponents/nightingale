@@ -50,11 +50,7 @@ function processVariants(variants, sequence) {
         // Constants.addConsequenceType(d.consequence);
         // }
     };
-    console.log(mutationArray);
-
-    return [
-        ['VARIATION', mutationArray]
-    ];
+    return mutationArray;
 }
 
 export { processVariants };
