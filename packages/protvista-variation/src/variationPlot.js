@@ -19,6 +19,10 @@ class VariationPlot {
         this._xScale = xScale;
     }
 
+    get xScale() {
+        return this._xScale;
+    }
+
     set yScale(yScale) {
         this._yScale = yScale;
     }

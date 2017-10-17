@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { zoom as d3Zoom } from 'd3-zoom';
 import { processVariants } from './dataTransformer';
 import VariationPlot from './variationPlot';
 
@@ -27,6 +28,9 @@ class ProtvistaVariation extends HTMLElement {
 
         this.render = this.render.bind(this);
         this.createDataSeries = this.createDataSeries.bind(this);
+        this.zoomed = this.zoomed.bind(this);
+        this.update = this.update.bind(this);
+        
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
         <style>
@@ -60,7 +64,7 @@ class ProtvistaVariation extends HTMLElement {
 
     attributeChangedCallback(attrName, oldVal, newVal) {}
 
-    render(data) {;
+    render(data) {
         this._xScale = d3.scaleLinear()
             .domain([1, this._length + 1])
             .range([this._margin.left, this._width - this._margin.right]);
@@ -71,6 +75,9 @@ class ProtvistaVariation extends HTMLElement {
             .range([0, this._height - this._margin.top - this._margin.bottom]);
 
         // xScale is the one about position
+        this._zoom = d3Zoom().scaleExtent([1, 40])
+                            .translateExtent([[0,0], [this._width, this._height]])
+                            .on("zoom", this.zoomed);        
 
         // Create the SVG
         const svg = d3.select(this.shadowRoot).append('svg')
@@ -85,8 +92,16 @@ class ProtvistaVariation extends HTMLElement {
         variationPlot.xScale = this._xScale;
         variationPlot.yScale = this._yScale;
 
+        this._variationPlot = variationPlot;
+
         // Create the visualisation here
-        var dataSeries = this.createDataSeries(svg, data, variationPlot.drawVariationPlot);
+        this.createDataSeries(svg, data);
+        svg.call(this._zoom);
+    }
+
+    zoomed() {
+        this._variationPlot.xScale = d3.event.transform.rescaleX(this._xScale);
+        this.update();
     }
 
     createDataSeries(svg, features, series) {
@@ -109,7 +124,7 @@ class ProtvistaVariation extends HTMLElement {
         // This is calling the data series render code for each of the items in the data
         var dataSeries = chartArea
             .datum(features)
-            .call(series);
+            .call(this._variationPlot.drawVariationPlot);
 
         // This is the AA axis on left
         var yAxis = d3.axisLeft()
@@ -137,17 +152,17 @@ class ProtvistaVariation extends HTMLElement {
         //     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d === 'del' ? 'deletion' : d);
         // });
 
-        this._dataSeries = dataSeries;
+        this._series = dataSeries;
     }
 
     // Calling render again (after xScale has changed)
     update() {
-        this._dataSeries.call(series);
-        if (fv.selectedFeature) {
-            ViewerHelper.updateHighlight(fv);
-        } else if (fv.highlight) {
-            ViewerHelper.updateHighlight(fv);
-        }
+        this._series.call(this._variationPlot.drawVariationPlot);
+        // if (fv.selectedFeature) {
+        //     ViewerHelper.updateHighlight(fv);
+        // } else if (fv.highlight) {
+        //     ViewerHelper.updateHighlight(fv);
+        // }
     }
 
     // Calling render again with new data (after filter was used???)
