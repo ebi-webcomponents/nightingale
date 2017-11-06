@@ -1,9 +1,32 @@
 import * as d3 from 'd3';
-import { zoom as d3Zoom } from 'd3-zoom';
-import { processVariants } from './dataTransformer';
+import {zoom as d3Zoom} from 'd3-zoom';
+import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
 
-const aaList = ['G', 'A', 'V', 'L', 'I', 'S', 'T', 'C', 'M', 'D', 'N', 'E', 'Q', 'R', 'K', 'H', 'F', 'Y', 'W', 'P', 'd', '*'];
+const aaList = [
+    'G',
+    'A',
+    'V',
+    'L',
+    'I',
+    'S',
+    'T',
+    'C',
+    'M',
+    'D',
+    'N',
+    'E',
+    'Q',
+    'R',
+    'K',
+    'H',
+    'F',
+    'Y',
+    'W',
+    'P',
+    'd',
+    '*'
+];
 
 class ProtvistaVariation extends HTMLElement {
 
@@ -11,12 +34,12 @@ class ProtvistaVariation extends HTMLElement {
         super();
         this._accession = this.getAttribute('accession');
         this._length = parseInt(this.getAttribute('length'));
-        this._start = parseInt(this.getAttribute('start')) || 1;
-        this._end = parseInt(this.getAttribute('end')) || this._length;
         this._highlightStart = parseInt(this.getAttribute('highlightStart'));
         this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
         this._height = 430;
-        this._width = this.getAttribute('width') ? parseInt(this.getAttribute('width')) : 700;
+        this._width = this.getAttribute('width')
+            ? parseInt(this.getAttribute('width'))
+            : 700;
         this._margin = {
             top: 20,
             right: 10,
@@ -26,20 +49,60 @@ class ProtvistaVariation extends HTMLElement {
         this._xScale = d3.scaleOrdinal();
         this._yScale = d3.scaleLinear();
 
-        this.render = this.render.bind(this);
-        this.createDataSeries = this.createDataSeries.bind(this);
-        this.zoomed = this.zoomed.bind(this);
-        this.update = this.update.bind(this);
-        
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+        this.render = this
+            .render
+            .bind(this);
+        this.createDataSeries = this
+            .createDataSeries
+            .bind(this);
+        this.zoomed = this
+            .zoomed
+            .bind(this);
+        this.refresh = this
+            .refresh
+            .bind(this);
+        this.attributeChangedCallback = this
+            .attributeChangedCallback
+            .bind(this);
+
+        const shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.innerHTML = `
         <style>
         :host {
             display: block;
         }
+        circle {
+            opacity: 0.6;
+        }
+        circle:hover {
+            opacity: 0.9;
+        }
+        .tick line, .axis path {
+            opacity: 0.1;
+        }
         </style>
         <slot></slot>
         `;
+    }
+
+    get start() {
+        return this.getAttribute('start');
+    }
+
+    set start(start) {
+        if (start !== this.getAttribute('start')) {
+            this.setAttribute('start', start);
+        }
+    }
+
+    get scale() {
+        return this.getAttribute('scale');
+    }
+
+    set scale(scale) {
+        if (scale !== this.getAttribute('scale')) {
+            this.setAttribute('scale', scale);
+        }
     }
 
     get width() {
@@ -51,70 +114,117 @@ class ProtvistaVariation extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['start', 'end', 'highlightStart', 'highlightEnd', 'width'];
+        return ['start', 'scale', 'highlightStart', 'highlightEnd', 'width'];
     }
 
     connectedCallback() {
         this.addEventListener('load', d => {
             this._length = d.detail.payload.sequence.length;
-            this.render(
-                processVariants(d.detail.payload.features, d.detail.payload.sequence))
+            this.render(processVariants(d.detail.payload.features, d.detail.payload.sequence));
+            if (this.start && this.scale) {
+                this.applyZoomTranslation();
+                this.refresh();
+            }
         });
     }
 
-    attributeChangedCallback(attrName, oldVal, newVal) {}
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        if (!this._svg) {
+            return;
+        }
+        switch (attrName) {
+            case 'start':
+                this.applyZoomTranslation();
+                break;
+            case 'scale':
+                this.applyZoomTranslation();
+                break;
+        }
+    }
+
+    applyZoomTranslation() {
+        this
+            ._svg
+            .transition()
+            .duration(300)
+            .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.start) * this.scale) + this._margin.left), 0).scale(this.scale));
+    }
 
     render(data) {
-        this._xScale = d3.scaleLinear()
-            .domain([1, this._length + 1])
-            .range([this._margin.left, this._width - this._margin.right]);
+        this._xScale = d3
+            .scaleLinear()
+            .domain([
+                1, this._length + 1
+            ])
+            .range([
+                this._margin.left, this._width - this._margin.right
+            ]);
 
         // scale for Amino Acids
-        this._yScale = d3.scalePoint()
+        this._yScale = d3
+            .scalePoint()
             .domain(aaList)
-            .range([0, this._height - this._margin.top - this._margin.bottom]);
+            .range([
+                0, this._height - this._margin.top - this._margin.bottom
+            ]);
 
         // xScale is the one about position
-        this._zoom = d3Zoom().scaleExtent([1, 40])
-                            .translateExtent([[0,0], [this._width, this._height]])
-                            .on("zoom", this.zoomed);        
+        this._zoom = d3Zoom()
+            .scaleExtent([1, 40])
+            .translateExtent([
+                [
+                    0, 0
+                ],
+                [this._width, this._height]
+            ])
+            .on("zoom", this.zoomed);
 
         // Create the SVG
-        const svg = d3.select(this.shadowRoot).append('svg')
+        this._svg = d3
+            .select(this.shadowRoot)
+            .append('svg')
             .attr('width', this._width)
             .attr('height', this._height);
 
         // create the variation plot function to be called by the series?
         const variationPlot = new VariationPlot(this._xScale, this._yScale, this._length);
 
-        // Not sure what happens here, but it seems to set the scales on the variation plot
-        // var series = 
+        // Not sure what happens here, but it seems to set the scales on the variation
+        // plot var series =
         variationPlot.xScale = this._xScale;
         variationPlot.yScale = this._yScale;
 
         this._variationPlot = variationPlot;
 
         // Create the visualisation here
-        this.createDataSeries(svg, data);
-        svg.call(this._zoom);
+        this.createDataSeries(this._svg, data);
+        this
+            ._svg
+            .call(this._zoom);
     }
 
     zoomed() {
-        this._variationPlot.xScale = d3.event.transform.rescaleX(this._xScale);
-        this.update();
+        this._variationPlot.xScale = d3
+            .event
+            .transform
+            .rescaleX(this._xScale);
+        this.refresh();
     }
 
     createDataSeries(svg, features, series) {
 
         // Group for the main chart
-        var mainChart = svg.append('g')
+        var mainChart = svg
+            .append('g')
             .attr('transform', 'translate(0,' + this._margin.top + ')');
 
         // clip path prevents drawing outside of it
-        var chartArea = mainChart.append('g')
+        var chartArea = mainChart
+            .append('g')
             .attr('clip-path', 'url(#plotAreaClip)');
 
-        mainChart.append('clipPath')
+        mainChart
+            .append('clipPath')
             .attr('id', 'plotAreaClip')
             .append('rect')
             .attr('width', (this._width - 20))
@@ -127,48 +237,52 @@ class ProtvistaVariation extends HTMLElement {
             .call(this._variationPlot.drawVariationPlot);
 
         // This is the AA axis on left
-        var yAxis = d3.axisLeft()
+        var yAxis = d3
+            .axisLeft()
             .scale(this._yScale)
             .tickSize(-this._width);
 
         // This is the AA axis on right
-        var yAxis2 = d3.axisRight()
+        var yAxis2 = d3
+            .axisRight()
             .scale(this._yScale);
 
         // Adding AA axis left
-        mainChart.append('g')
+        mainChart
+            .append('g')
             .attr('transform', 'translate(12 ,0)')
             .attr('class', 'variation-y axis')
             .call(yAxis);
 
         // Adding AA axis right
-        mainChart.append('g')
+        mainChart
+            .append('g')
             .attr('transform', 'translate(' + (this._width - 18) + ', 0)')
             .attr('class', 'variation-y axis')
             .call(yAxis2);
 
-        // ???
-        // fv.globalContainer.selectAll('g.variation-y g.tick').attr('class', function(d) {
-        //     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d === 'del' ? 'deletion' : d);
-        // });
+        // ??? fv.globalContainer.selectAll('g.variation-y g.tick').attr('class',
+        // function(d) {     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d ===
+        // 'del' ? 'deletion' : d); });
 
         this._series = dataSeries;
     }
 
     // Calling render again (after xScale has changed)
-    update() {
-        this._series.call(this._variationPlot.drawVariationPlot);
-        // if (fv.selectedFeature) {
-        //     ViewerHelper.updateHighlight(fv);
-        // } else if (fv.highlight) {
-        //     ViewerHelper.updateHighlight(fv);
-        // }
+    refresh() {
+        this
+            ._series
+            .call(this._variationPlot.drawVariationPlot);
+    }
+
+    reset() {
+        // reset zoom, filter and any selections
     }
 
     // Calling render again with new data (after filter was used???)
     updateData(data) {
         dataSeries.datum(data);
-        this.update();
+        this.refresh();
     };
 }
 

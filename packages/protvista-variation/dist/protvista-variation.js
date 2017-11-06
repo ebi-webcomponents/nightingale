@@ -6331,6 +6331,44 @@ var possibleConstructorReturn = function (self, call) {
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
+var UPDiseaseColor = "#990000";
+var UPNonDiseaseColor = "#99cc00";
+var deleteriousColor = "#002594";
+var benignColor = "#8FE3FF";
+var othersColor = "#FFCC00";
+
+var predictionScale = linear$2().domain([0, 1]).range([deleteriousColor, benignColor]);
+
+var VariantColour = function () {
+  function VariantColour() {
+    classCallCheck(this, VariantColour);
+  }
+
+  createClass(VariantColour, null, [{
+    key: "getColour",
+    value: function getColour(variant) {
+      if (variant.alternativeSequence === '*') {
+        return othersColor;
+      } else if (variant.sourceType === 'uniprot' || variant.sourceType === 'mixed') {
+        //|| variant.begin > fv.maxPos
+        if (variant.association && variant.association.length > 0) {
+          return UPDiseaseColor;
+        } else {
+          return UPNonDiseaseColor;
+        }
+      } else if (variant.polyphenScore || variant.siftScore) {
+        return this.getPredictionColour(variant.polyphenScore, variant.siftScore);
+      }
+    }
+  }, {
+    key: "getPredictionColour",
+    value: function getPredictionColour(polyphenScore, siftScore) {
+      return predictionScale((siftScore ? siftScore : 0 + (1 - polyphenScore ? polyphenScore : 1)) / (polyphenScore && siftScore ? 2 : 1));
+    }
+  }]);
+  return VariantColour;
+}();
+
 var VariationPlot = function () {
     function VariationPlot(xScale, yScale, length) {
         classCallCheck(this, VariationPlot);
@@ -6374,11 +6412,10 @@ var VariationPlot = function () {
                 circle.exit().remove();
 
                 circle.enter().append('circle').merge(circle).attr('class', function (d) {
-                    // if (d === fv.selectedFeature) {
-                    //     return 'up_pftv_variant up_pftv_activeFeature';
-                    // } else {
-                    //     return 'up_pftv_variant';
-                    // }
+                    // if (d === fv.selectedFeature) {     return 'up_pftv_variant
+                    // up_pftv_activeFeature'; } else {     return 'up_pftv_variant'; }
+                }).attr('title', function (d) {
+                    return d.begin;
                 }).attr('r', 5).attr('cx', function (d) {
                     return _this._xScale(Math.min(d.begin, _this._length));
                 }).attr('cy', function (d) {
@@ -6388,10 +6425,8 @@ var VariationPlot = function () {
                     d.internalId = 'var_' + d.wildType + d.begin + mutation;
                     return d.internalId;
                 }).attr('fill', function (d) {
-                    return 'black';
-                }
-                // variantsFill(d, fv)
-                ).attr('stroke', function (d) {
+                    return VariantColour.getColour(d);
+                }).attr('stroke', function (d) {
                     if (d.externalData) {
                         var keys = _.keys(d.externalData);
                         var extDatum = d.externalData[keys[0]];
@@ -6443,8 +6478,6 @@ var ProtvistaVariation = function (_HTMLElement) {
 
         _this._accession = _this.getAttribute('accession');
         _this._length = parseInt(_this.getAttribute('length'));
-        _this._start = parseInt(_this.getAttribute('start')) || 1;
-        _this._end = parseInt(_this.getAttribute('end')) || _this._length;
         _this._highlightStart = parseInt(_this.getAttribute('highlightStart'));
         _this._highlightEnd = parseInt(_this.getAttribute('highlightEnd'));
         _this._height = 430;
@@ -6461,10 +6494,11 @@ var ProtvistaVariation = function (_HTMLElement) {
         _this.render = _this.render.bind(_this);
         _this.createDataSeries = _this.createDataSeries.bind(_this);
         _this.zoomed = _this.zoomed.bind(_this);
-        _this.update = _this.update.bind(_this);
+        _this.refresh = _this.refresh.bind(_this);
+        _this.attributeChangedCallback = _this.attributeChangedCallback.bind(_this);
 
         var shadowRoot = _this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = '\n        <style>\n        :host {\n            display: block;\n        }\n        </style>\n        <slot></slot>\n        ';
+        shadowRoot.innerHTML = '\n        <style>\n        :host {\n            display: block;\n        }\n        circle {\n            opacity: 0.6;\n        }\n        circle:hover {\n            opacity: 0.9;\n        }\n        .tick line, .axis path {\n            opacity: 0.1;\n        }\n        </style>\n        <slot></slot>\n        ';
         return _this;
     }
 
@@ -6476,11 +6510,32 @@ var ProtvistaVariation = function (_HTMLElement) {
             this.addEventListener('load', function (d) {
                 _this2._length = d.detail.payload.sequence.length;
                 _this2.render(processVariants(d.detail.payload.features, d.detail.payload.sequence));
+                if (_this2.start && _this2.scale) {
+                    _this2.applyZoomTranslation();
+                    _this2.refresh();
+                }
             });
         }
     }, {
         key: 'attributeChangedCallback',
-        value: function attributeChangedCallback(attrName, oldVal, newVal) {}
+        value: function attributeChangedCallback(attrName, oldVal, newVal) {
+            if (!this._svg) {
+                return;
+            }
+            switch (attrName) {
+                case 'start':
+                    this.applyZoomTranslation();
+                    break;
+                case 'scale':
+                    this.applyZoomTranslation();
+                    break;
+            }
+        }
+    }, {
+        key: 'applyZoomTranslation',
+        value: function applyZoomTranslation() {
+            this._svg.transition().duration(300).call(this._zoom.transform, identity$8.translate(-(this._xScale(this.start) * this.scale) + this._margin.left, 0).scale(this.scale));
+        }
     }, {
         key: 'render',
         value: function render(data) {
@@ -6493,27 +6548,27 @@ var ProtvistaVariation = function (_HTMLElement) {
             this._zoom = d3Zoom().scaleExtent([1, 40]).translateExtent([[0, 0], [this._width, this._height]]).on("zoom", this.zoomed);
 
             // Create the SVG
-            var svg = select(this.shadowRoot).append('svg').attr('width', this._width).attr('height', this._height);
+            this._svg = select(this.shadowRoot).append('svg').attr('width', this._width).attr('height', this._height);
 
             // create the variation plot function to be called by the series?
             var variationPlot = new VariationPlot(this._xScale, this._yScale, this._length);
 
-            // Not sure what happens here, but it seems to set the scales on the variation plot
-            // var series = 
+            // Not sure what happens here, but it seems to set the scales on the variation
+            // plot var series =
             variationPlot.xScale = this._xScale;
             variationPlot.yScale = this._yScale;
 
             this._variationPlot = variationPlot;
 
             // Create the visualisation here
-            this.createDataSeries(svg, data);
-            svg.call(this._zoom);
+            this.createDataSeries(this._svg, data);
+            this._svg.call(this._zoom);
         }
     }, {
         key: 'zoomed',
         value: function zoomed() {
             this._variationPlot.xScale = event.transform.rescaleX(this._xScale);
-            this.update();
+            this.refresh();
         }
     }, {
         key: 'createDataSeries',
@@ -6542,10 +6597,9 @@ var ProtvistaVariation = function (_HTMLElement) {
             // Adding AA axis right
             mainChart.append('g').attr('transform', 'translate(' + (this._width - 18) + ', 0)').attr('class', 'variation-y axis').call(yAxis2);
 
-            // ???
-            // fv.globalContainer.selectAll('g.variation-y g.tick').attr('class', function(d) {
-            //     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d === 'del' ? 'deletion' : d);
-            // });
+            // ??? fv.globalContainer.selectAll('g.variation-y g.tick').attr('class',
+            // function(d) {     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d ===
+            // 'del' ? 'deletion' : d); });
 
             this._series = dataSeries;
         }
@@ -6553,15 +6607,15 @@ var ProtvistaVariation = function (_HTMLElement) {
         // Calling render again (after xScale has changed)
 
     }, {
-        key: 'update',
-        value: function update() {
+        key: 'refresh',
+        value: function refresh() {
             this._series.call(this._variationPlot.drawVariationPlot);
-            // if (fv.selectedFeature) {
-            //     ViewerHelper.updateHighlight(fv);
-            // } else if (fv.highlight) {
-            //     ViewerHelper.updateHighlight(fv);
-            // }
         }
+    }, {
+        key: 'reset',
+        value: function reset() {}
+        // reset zoom, filter and any selections
+
 
         // Calling render again with new data (after filter was used???)
 
@@ -6569,7 +6623,27 @@ var ProtvistaVariation = function (_HTMLElement) {
         key: 'updateData',
         value: function updateData(data) {
             dataSeries.datum(data);
-            this.update();
+            this.refresh();
+        }
+    }, {
+        key: 'start',
+        get: function get() {
+            return this.getAttribute('start');
+        },
+        set: function set(start) {
+            if (start !== this.getAttribute('start')) {
+                this.setAttribute('start', start);
+            }
+        }
+    }, {
+        key: 'scale',
+        get: function get() {
+            return this.getAttribute('scale');
+        },
+        set: function set(scale) {
+            if (scale !== this.getAttribute('scale')) {
+                this.setAttribute('scale', scale);
+            }
         }
     }, {
         key: 'width',
@@ -6582,7 +6656,7 @@ var ProtvistaVariation = function (_HTMLElement) {
     }], [{
         key: 'observedAttributes',
         get: function get() {
-            return ['start', 'end', 'highlightStart', 'highlightEnd', 'width'];
+            return ['start', 'scale', 'highlightStart', 'highlightEnd', 'width'];
         }
     }]);
     return ProtvistaVariation;
