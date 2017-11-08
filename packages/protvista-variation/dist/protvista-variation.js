@@ -8902,27 +8902,57 @@ var filters = [{
 }, {
     name: 'predicted',
     type: 'consequence',
-    label: 'Predicted (deleterious/benign)'
+    label: 'Predicted (deleterious/benign)',
+    applyFilter: function applyFilter(data) {
+        var filteredData = cloneDeep(data);
+        filteredData.forEach(function (variants) {
+            return variants.variants = variants.variants.filter(function (variant) {
+                return variant.sourceType === 'large_scale_study';
+            });
+        });
+        return filteredData;
+    }
 }, {
     name: 'nonDisease',
     type: 'consequence',
-    label: 'Likely benign'
+    label: 'Likely benign',
+    applyFilter: function applyFilter(data) {}
 }, {
     name: 'uncertain',
     type: 'consequence',
-    label: 'Uncertain'
+    label: 'Uncertain',
+    applyFilter: function applyFilter(data) {}
 }, {
     name: 'UniProt',
     type: 'provenance',
-    label: 'UniProt reviewed'
+    label: 'UniProt reviewed',
+    applyFilter: function applyFilter(data) {
+        var filteredData = cloneDeep(data);
+        filteredData.forEach(function (variants) {
+            return variants.variants = variants.variants.filter(function (variant) {
+                return variant.sourceType === 'uniprot' || variant.sourceType === 'mixed';
+            });
+        });
+        return filteredData;
+    }
 }, {
     name: 'ClinVar',
     type: 'provenance',
-    label: 'ClinVar reviewed'
+    label: 'ClinVar reviewed',
+    applyFilter: function applyFilter(data) {}
 }, {
     name: 'LSS',
     type: 'provenance',
-    label: 'Large scale studies'
+    label: 'Large scale studies',
+    applyFilter: function applyFilter(data) {
+        var filteredData = cloneDeep(data);
+        filteredData.forEach(function (variants) {
+            return variants.variants = variants.variants.filter(function (variant) {
+                return variant.sourceType === 'large_scale_study' || variant.sourceType === 'mixed';
+            });
+        });
+        return filteredData;
+    }
 }];
 
 var ProtVistaVariationFilters = function (_HTMLElement) {
@@ -9020,7 +9050,7 @@ var ProtvistaVariation = function (_HTMLElement) {
         _this.attributeChangedCallback = _this.attributeChangedCallback.bind(_this);
 
         var shadowRoot = _this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = '\n        <style>\n        :host {\n            display: block;\n        }\n        .filters-container {\n            display:inline-flex;\n        }\n        circle {\n            opacity: 0.6;\n        }\n        circle:hover {\n            opacity: 0.9;\n        }\n        .tick line, .axis path {\n            opacity: 0.1;\n        }\n        </style>\n        <slot></slot>\n        ';
+        shadowRoot.innerHTML = '\n        <style>\n        :host {\n            display:inline-flex;\n            font-family: \'Helvetica neue\', Helverica, Arial, sans-serif;\n        }\n        ul {\n            list-style:none;\n            margin:0;\n            padding:0;\n        }\n        a {\n            cursor:pointer;\n        }\n        circle {\n            opacity: 0.6;\n        }\n        circle:hover {\n            opacity: 0.9;\n        }\n        .tick line, .axis path {\n            opacity: 0.1;\n        }\n        </style>\n        <slot></slot>\n        ';
         return _this;
     }
 
@@ -9030,7 +9060,7 @@ var ProtvistaVariation = function (_HTMLElement) {
             var _this2 = this;
 
             var filtercontainer = document.createElement('protvista-variation-filters');
-            // filtercontainer.addClass('filters-container');
+            filtercontainer.className = 'filters-container';
             this.shadowRoot.appendChild(filtercontainer);
             // filtercontainer(filtercontainer);
             this.addEventListener('load', function (d) {

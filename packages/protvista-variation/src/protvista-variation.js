@@ -71,10 +71,16 @@ class ProtvistaVariation extends HTMLElement {
         shadowRoot.innerHTML = `
         <style>
         :host {
-            display: block;
-        }
-        .filters-container {
             display:inline-flex;
+            font-family: 'Helvetica neue', Helverica, Arial, sans-serif;
+        }
+        ul {
+            list-style:none;
+            margin:0;
+            padding:0;
+        }
+        a {
+            cursor:pointer;
         }
         circle {
             opacity: 0.6;
@@ -124,7 +130,7 @@ class ProtvistaVariation extends HTMLElement {
 
     connectedCallback() {
         const filtercontainer = document.createElement('protvista-variation-filters');
-        // filtercontainer.addClass('filters-container');
+        filtercontainer.className = 'filters-container';
         this
             .shadowRoot
             .appendChild(filtercontainer);

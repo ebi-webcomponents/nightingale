@@ -14,27 +14,45 @@ const filters = [
     }, {
         name: 'predicted',
         type: 'consequence',
-        label: 'Predicted (deleterious/benign)'
+        label: 'Predicted (deleterious/benign)',
+        applyFilter: data => {
+            const filteredData = cloneDeep(data);
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.sourceType === 'large_scale_study'));
+            return filteredData;
+        }
     }, {
         name: 'nonDisease',
         type: 'consequence',
-        label: 'Likely benign'
+        label: 'Likely benign',
+        applyFilter: data => {}
     }, {
         name: 'uncertain',
         type: 'consequence',
-        label: 'Uncertain'
+        label: 'Uncertain',
+        applyFilter: data => {}
     }, {
         name: 'UniProt',
         type: 'provenance',
-        label: 'UniProt reviewed'
+        label: 'UniProt reviewed',
+        applyFilter: data => {
+            const filteredData = cloneDeep(data);
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.sourceType === 'uniprot' || variant.sourceType === 'mixed'));
+            return filteredData;
+        }
     }, {
         name: 'ClinVar',
         type: 'provenance',
-        label: 'ClinVar reviewed'
+        label: 'ClinVar reviewed',
+        applyFilter: data => {}
     }, {
         name: 'LSS',
         type: 'provenance',
-        label: 'Large scale studies'
+        label: 'Large scale studies',
+        applyFilter: data => {
+            const filteredData = cloneDeep(data);
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.sourceType === 'large_scale_study' || variant.sourceType === 'mixed'));
+            return filteredData;
+        }
     }
 ];
 class ProtVistaVariationFilters extends HTMLElement {
