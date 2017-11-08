@@ -8882,52 +8882,59 @@ class TemplateInstance {
 //# sourceMappingURL=lit-html.js.map
 
 var _templateObject = taggedTemplateLiteral(['\n        <h4>Filter</h4>\n            <h5>Consequence</h5>\n            <ul>\n                ', '\n            </ul>\n            <h5>Data Provenance</h5>\n            <ul>\n                ', '\n            </ul>\n        '], ['\n        <h4>Filter</h4>\n            <h5>Consequence</h5>\n            <ul>\n                ', '\n            </ul>\n            <h5>Data Provenance</h5>\n            <ul>\n                ', '\n            </ul>\n        ']);
-var _templateObject2 = taggedTemplateLiteral(['\n                    <li><label><a id="', '-filter">', '</a></label></li>\n                '], ['\n                    <li><label><a id="', '-filter">', '</a></label></li>\n                ']);
-var _templateObject3 = taggedTemplateLiteral(['\n                    <li><a id="', '-filter">', '</a></li>\n                '], ['\n                    <li><a id="', '-filter">', '</a></li>\n                ']);
+var _templateObject2 = taggedTemplateLiteral(['\n                    <li><a id="', '-filter">', '</a></li>\n                '], ['\n                    <li><a id="', '-filter">', '</a></li>\n                ']);
 
-var filters = {
-    consequenceFilters: [{
-        name: 'disease',
-        label: 'Likely disease',
-        filter: function filter(data) {
-            var filteredData = cloneDeep(data);
-            filteredData.forEach(function (variants) {
-                return variants.variants = variants.variants.filter(function (variant) {
-                    return variant.association && variant.association.some(function (d) {
-                        return d.disease;
-                    });
+var filters = [{
+    name: 'disease',
+    label: 'Likely disease',
+    type: 'consequence',
+    applyFilter: function applyFilter(data) {
+        var filteredData = cloneDeep(data);
+        filteredData.forEach(function (variants) {
+            return variants.variants = variants.variants.filter(function (variant) {
+                return variant.association && variant.association.some(function (d) {
+                    return d.disease;
                 });
             });
-            return filteredData;
-        }
-    }, {
-        name: 'predicted',
-        label: 'Predicted (deleterious/benign)'
-    }, {
-        name: 'nonDisease',
-        label: 'Likely benign'
-    }, {
-        name: 'uncertain',
-        label: 'Uncertain'
-    }],
-    provenanceFilters: [{
-        name: 'UniProt',
-        label: 'UniProt reviewed'
-    }, {
-        name: 'ClinVar',
-        label: 'ClinVar reviewed'
-    }, {
-        name: 'LSS',
-        label: 'Large scale studies'
-    }]
-};
+        });
+        return filteredData;
+    }
+}, {
+    name: 'predicted',
+    type: 'consequence',
+    label: 'Predicted (deleterious/benign)'
+}, {
+    name: 'nonDisease',
+    type: 'consequence',
+    label: 'Likely benign'
+}, {
+    name: 'uncertain',
+    type: 'consequence',
+    label: 'Uncertain'
+}, {
+    name: 'UniProt',
+    type: 'provenance',
+    label: 'UniProt reviewed'
+}, {
+    name: 'ClinVar',
+    type: 'provenance',
+    label: 'ClinVar reviewed'
+}, {
+    name: 'LSS',
+    type: 'provenance',
+    label: 'Large scale studies'
+}];
 
 var ProtVistaVariationFilters = function (_HTMLElement) {
     inherits(ProtVistaVariationFilters, _HTMLElement);
 
     function ProtVistaVariationFilters() {
         classCallCheck(this, ProtVistaVariationFilters);
-        return possibleConstructorReturn(this, (ProtVistaVariationFilters.__proto__ || Object.getPrototypeOf(ProtVistaVariationFilters)).apply(this, arguments));
+
+        var _this = possibleConstructorReturn(this, (ProtVistaVariationFilters.__proto__ || Object.getPrototypeOf(ProtVistaVariationFilters)).call(this));
+
+        _this._selectedFilters = [];
+        return _this;
     }
 
     createClass(ProtVistaVariationFilters, [{
@@ -8938,29 +8945,44 @@ var ProtVistaVariationFilters = function (_HTMLElement) {
     }, {
         key: 'toggleFilter',
         value: function toggleFilter(filterName) {
-            console.log(filterName);
+            if (this._selectedFilters.filter(function (filt) {
+                return filt.name === filterName;
+            }).length > 0) {
+                this._selectedFilters = this._selectedFilters.filter(function (filt) {
+                    return filt.name !== filterName;
+                });
+            } else {
+                this._selectedFilters.push(filters.filter(function (filt) {
+                    return filt.name === filterName;
+                })[0]);
+            }
+            this.dispatchEvent(new CustomEvent('protvista-filter-variants', { detail: this._selectedFilters }));
         }
     }, {
         key: 'renderFilters',
         value: function renderFilters() {
             var _this2 = this;
 
-            render(html$1(_templateObject, filters.consequenceFilters.map(function (filter) {
+            render(html$1(_templateObject, filters.filter(function (filter) {
+                return filter.type === 'consequence';
+            }).map(function (filter) {
                 return html$1(_templateObject2, filter.name, filter.label);
-            }), filters.provenanceFilters.map(function (filter) {
-                return html$1(_templateObject3, filter.name, filter.label);
+            }), filters.filter(function (filter) {
+                return filter.type === 'provenance';
+            }).map(function (filter) {
+                return html$1(_templateObject2, filter.name, filter.label);
             })), this);
 
-            filters.consequenceFilters.map(function (filter) {
+            filters.map(function (filter) {
                 return _this2.querySelectorAll('#' + filter.name + '-filter')[0].addEventListener('click', function (e) {
                     return _this2.toggleFilter(filter.name);
                 });
             });
-            filters.provenanceFilters.map(function (filter) {
-                return _this2.querySelectorAll('#' + filter.name + '-filter')[0].addEventListener('click', function (e) {
-                    return _this2.toggleFilter(filter.name);
-                });
-            });
+        }
+    }, {
+        key: 'selectedFilters',
+        get: function get() {
+            return this._selectedFilters;
         }
     }]);
     return ProtVistaVariationFilters;
@@ -9021,6 +9043,9 @@ var ProtvistaVariation = function (_HTMLElement) {
                 }
                 // this.updateData(filters.consequenceFilters[0].filter(this._data));
             });
+            filtercontainer.addEventListener('protvista-filter-variants', function (d) {
+                _this2.applyFilters(d.detail);
+            });
         }
     }, {
         key: 'attributeChangedCallback',
@@ -9041,11 +9066,6 @@ var ProtvistaVariation = function (_HTMLElement) {
         key: 'applyZoomTranslation',
         value: function applyZoomTranslation() {
             this._svg.transition().duration(300).call(this._zoom.transform, identity$8.translate(-(this._xScale(this.start) * this.scale) + this._margin.left, 0).scale(this.scale));
-        }
-    }, {
-        key: 'testThing',
-        value: function testThing() {
-            console.log('thing');
         }
     }, {
         key: 'renderChart',
@@ -9124,9 +9144,18 @@ var ProtvistaVariation = function (_HTMLElement) {
         }
     }, {
         key: 'reset',
-        value: function reset() {}
-        // reset zoom, filter and any selections
-
+        value: function reset() {
+            // reset zoom, filter and any selections
+        }
+    }, {
+        key: 'applyFilters',
+        value: function applyFilters(selectedFilters) {
+            var filteredData = cloneDeep(this._data);
+            selectedFilters.forEach(function (f) {
+                filteredData = f.applyFilter(filteredData);
+            });
+            this.updateData(filteredData);
+        }
 
         // Calling render again with new data (after filter was used???)
 

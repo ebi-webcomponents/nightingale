@@ -1,49 +1,68 @@
 import cloneDeep from 'lodash-es/cloneDeep';
 import {html, render} from 'lit-html';
 
-const filters = {
-    consequenceFilters: [
-        {
-            name: 'disease',
-            label: 'Likely disease',
-            filter: data => {
-                const filteredData = cloneDeep(data);
-                filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.association && variant.association.some(d => d.disease)));
-                return filteredData;
-            }
-        }, {
-            name: 'predicted',
-            label: 'Predicted (deleterious/benign)'
-        }, {
-            name: 'nonDisease',
-            label: 'Likely benign'
-        }, {
-            name: 'uncertain',
-            label: 'Uncertain'
+const filters = [
+    {
+        name: 'disease',
+        label: 'Likely disease',
+        type: 'consequence',
+        applyFilter: data => {
+            const filteredData = cloneDeep(data);
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.association && variant.association.some(d => d.disease)));
+            return filteredData;
         }
-    ],
-    provenanceFilters: [
-        {
-            name: 'UniProt',
-            label: 'UniProt reviewed'
-        }, {
-            name: 'ClinVar',
-            label: 'ClinVar reviewed'
-        }, {
-            name: 'LSS',
-            label: 'Large scale studies'
-        }
-    ]
-}
-
+    }, {
+        name: 'predicted',
+        type: 'consequence',
+        label: 'Predicted (deleterious/benign)'
+    }, {
+        name: 'nonDisease',
+        type: 'consequence',
+        label: 'Likely benign'
+    }, {
+        name: 'uncertain',
+        type: 'consequence',
+        label: 'Uncertain'
+    }, {
+        name: 'UniProt',
+        type: 'provenance',
+        label: 'UniProt reviewed'
+    }, {
+        name: 'ClinVar',
+        type: 'provenance',
+        label: 'ClinVar reviewed'
+    }, {
+        name: 'LSS',
+        type: 'provenance',
+        label: 'Large scale studies'
+    }
+];
 class ProtVistaVariationFilters extends HTMLElement {
+
+    constructor() {
+        super();
+        this._selectedFilters = [];
+    }
 
     connectedCallback() {
         this.renderFilters();
     }
 
     toggleFilter(filterName) {
-        console.log(filterName);
+        if (this._selectedFilters.filter(filt => filt.name === filterName).length > 0) {
+            this._selectedFilters = this
+                ._selectedFilters
+                .filter(filt => filt.name !== filterName);
+        } else {
+            this
+                ._selectedFilters
+                .push(filters.filter(filt => filt.name === filterName)[0]);
+        }
+        this.dispatchEvent(new CustomEvent('protvista-filter-variants', {detail: this._selectedFilters}));
+    }
+
+    get selectedFilters() {
+        return this._selectedFilters;
     }
 
     renderFilters() {
@@ -51,24 +70,19 @@ class ProtVistaVariationFilters extends HTMLElement {
         <h4>Filter</h4>
             <h5>Consequence</h5>
             <ul>
-                ${filters.consequenceFilters.map(filter => html `
-                    <li><label><a id="${filter.name}-filter">${filter.label}</a></label></li>
+                ${filters.filter(filter => filter.type === 'consequence').map(filter => html `
+                    <li><a id="${filter.name}-filter">${filter.label}</a></li>
                 `)}
             </ul>
             <h5>Data Provenance</h5>
             <ul>
-                ${filters.provenanceFilters.map(filter => html `
+                ${filters.filter(filter => filter.type === 'provenance').map(filter => html `
                     <li><a id="${filter.name}-filter">${filter.label}</a></li>
                 `)}
             </ul>
         `, this);
 
-        filters
-            .consequenceFilters
-            .map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('click', e => this.toggleFilter(filter.name)));
-        filters
-            .provenanceFilters
-            .map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('click', e => this.toggleFilter(filter.name)));
+        filters.map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('click', e => this.toggleFilter(filter.name)));
     }
 }
 

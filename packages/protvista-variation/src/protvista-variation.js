@@ -3,6 +3,7 @@ import {zoom as d3Zoom} from 'd3-zoom';
 import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
 import ProtvistaVariationFilters from './filters'
+import cloneDeep from 'lodash-es/cloneDeep';
 
 const aaList = [
     'G',
@@ -138,6 +139,9 @@ class ProtvistaVariation extends HTMLElement {
             }
             // this.updateData(filters.consequenceFilters[0].filter(this._data));
         });
+        filtercontainer.addEventListener('protvista-filter-variants', d => {
+            this.applyFilters(d.detail);
+        })
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -160,10 +164,6 @@ class ProtvistaVariation extends HTMLElement {
             .transition()
             .duration(300)
             .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.start) * this.scale) + this._margin.left), 0).scale(this.scale));
-    }
-
-    testThing() {
-        console.log('thing');
     }
 
     renderChart() {
@@ -293,6 +293,14 @@ class ProtvistaVariation extends HTMLElement {
 
     reset() {
         // reset zoom, filter and any selections
+    }
+
+    applyFilters(selectedFilters) {
+        let filteredData = cloneDeep(this._data);
+        selectedFilters.forEach(f => {
+            filteredData = f.applyFilter(filteredData);
+        });
+        this.updateData(filteredData);
     }
 
     // Calling render again with new data (after filter was used???)
