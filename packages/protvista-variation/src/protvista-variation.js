@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import {zoom as d3Zoom} from 'd3-zoom';
 import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
+import ProtvistaVariationFilters from './filters'
 
 const aaList = [
     'G',
@@ -49,8 +50,8 @@ class ProtvistaVariation extends HTMLElement {
         this._xScale = d3.scaleOrdinal();
         this._yScale = d3.scaleLinear();
 
-        this.render = this
-            .render
+        this.renderChart = this
+            .renderChart
             .bind(this);
         this.createDataSeries = this
             .createDataSeries
@@ -70,6 +71,9 @@ class ProtvistaVariation extends HTMLElement {
         <style>
         :host {
             display: block;
+        }
+        .filters-container {
+            display:inline-flex;
         }
         circle {
             opacity: 0.6;
@@ -118,13 +122,21 @@ class ProtvistaVariation extends HTMLElement {
     }
 
     connectedCallback() {
+        const filtercontainer = document.createElement('protvista-variation-filters');
+        // filtercontainer.addClass('filters-container');
+        this
+            .shadowRoot
+            .appendChild(filtercontainer);
+        // filtercontainer(filtercontainer);
         this.addEventListener('load', d => {
             this._length = d.detail.payload.sequence.length;
-            this.render(processVariants(d.detail.payload.features, d.detail.payload.sequence));
+            this._data = processVariants(d.detail.payload.features, d.detail.payload.sequence)
+            this.renderChart();
             if (this.start && this.scale) {
                 this.applyZoomTranslation();
                 this.refresh();
             }
+            // this.updateData(filters.consequenceFilters[0].filter(this._data));
         });
     }
 
@@ -150,7 +162,11 @@ class ProtvistaVariation extends HTMLElement {
             .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.start) * this.scale) + this._margin.left), 0).scale(this.scale));
     }
 
-    render(data) {
+    testThing() {
+        console.log('thing');
+    }
+
+    renderChart() {
         this._xScale = d3
             .scaleLinear()
             .domain([
@@ -197,7 +213,7 @@ class ProtvistaVariation extends HTMLElement {
         this._variationPlot = variationPlot;
 
         // Create the visualisation here
-        this.createDataSeries(this._svg, data);
+        this.createDataSeries(this._svg, this._data);
         this
             ._svg
             .call(this._zoom);
@@ -281,7 +297,9 @@ class ProtvistaVariation extends HTMLElement {
 
     // Calling render again with new data (after filter was used???)
     updateData(data) {
-        dataSeries.datum(data);
+        this
+            ._series
+            .datum(data);
         this.refresh();
     };
 }
