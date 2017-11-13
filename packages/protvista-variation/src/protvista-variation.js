@@ -91,6 +91,18 @@ class ProtvistaVariation extends HTMLElement {
         .tick line, .axis path {
             opacity: 0.1;
         }
+        .filter-list li {
+            line-height: 1.5em;
+        }
+        .filter-select {
+            width:.7em;
+            display:inline-block;
+            height:.7em;
+            border-radius:.2em;
+            border:.05em solid #ABABAB;
+            margin-right: .2em;
+            margin-left: .3em;
+        }
         </style>
         <slot></slot>
         `;
@@ -315,7 +327,7 @@ class ProtvistaVariation extends HTMLElement {
             ._series
             .datum(data);
         this.refresh();
-    };
+    }
 }
 
 export default ProtvistaVariation;

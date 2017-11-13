@@ -6,6 +6,7 @@ const filters = [
         name: 'disease',
         label: 'Likely disease',
         type: 'consequence',
+        color: ['#990000'],
         applyFilter: data => {
             const filteredData = cloneDeep(data);
             filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.association && variant.association.some(d => d.disease)));
@@ -15,6 +16,9 @@ const filters = [
         name: 'predicted',
         type: 'consequence',
         label: 'Predicted (deleterious/benign)',
+        color: [
+            '#002594', '#8FE3FF'
+        ],
         applyFilter: data => {
             const filteredData = cloneDeep(data);
             filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.sourceType === 'large_scale_study'));
@@ -24,11 +28,13 @@ const filters = [
         name: 'nonDisease',
         type: 'consequence',
         label: 'Likely benign',
+        color: ['#99cc00'],
         applyFilter: data => {}
     }, {
         name: 'uncertain',
         type: 'consequence',
         label: 'Uncertain',
+        color: '#FFCC00',
         applyFilter: data => {}
     }, {
         name: 'UniProt',
@@ -85,22 +91,21 @@ class ProtVistaVariationFilters extends HTMLElement {
 
     renderFilters() {
         render(html `
-        <h4>Filter</h4>
-            <h5>Consequence</h5>
-            <ul>
+            <h5>Filter Consequence</h5>
+            <ul class="filter-list">
                 ${filters.filter(filter => filter.type === 'consequence').map(filter => html `
-                    <li><a id="${filter.name}-filter">${filter.label}</a></li>
+                    <li><label><input type="checkbox" id="${filter.name}-filter"/><span class="filter-select" style="background-color: ${filter.color[0]}"></span>${filter.label}</label></li>
                 `)}
             </ul>
-            <h5>Data Provenance</h5>
-            <ul>
+            <h5>Filter Data Provenance</h5>
+            <ul class="filter-list">
                 ${filters.filter(filter => filter.type === 'provenance').map(filter => html `
-                    <li><a id="${filter.name}-filter">${filter.label}</a></li>
+                    <li><label><input type="checkbox" id="${filter.name}-filter"/></span>${filter.label}</label></li>
                 `)}
             </ul>
         `, this);
 
-        filters.map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('click', e => this.toggleFilter(filter.name)));
+        filters.map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('change', e => this.toggleFilter(filter.name)));
     }
 }
 
