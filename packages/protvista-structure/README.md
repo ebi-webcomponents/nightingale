@@ -1,17 +1,16 @@
-# `<protvista-navigation>`
-A custom element allowing to navigate a protein/nucleic sequence.
+# `<up-litemol-webcomponent>`
+In progress - A native web component wrapper around LiteMol
 
 ## Usage
 ```html
-      <up-litemol-webcomponent></up-litemol-webcomponent>
+      <up-litemol-webcomponent id="1AAP"></up-litemol-webcomponent>
 ```
 
 ## API Reference
 
 ### Properties
-#### `name: type`
-A property.
-
+#### `id: PDB id`
+A structure id
 ### Events
 #### `my-event`
 An event that does things.
