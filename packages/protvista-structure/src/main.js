@@ -8,35 +8,95 @@ const loadComponent = function () {
             this.loadMolecule = this
                 .loadMolecule
                 .bind(this);
+            this.loadStructureTable = this
+                .loadStructureTable
+                .bind(this);
+            this.innerHTML = `
+                <style>
+                    .jsmol-container, .table-container {
+                        width: 640px; 
+                        height: 480px; 
+                        position: relative;
+                        display:inline-block;
+                    }
+                </style>
+            `;
         }
 
-        getId() {
-            return this.getAttribute('id');
+        getAccession() {
+            return this.getAttribute('accession');
         }
 
-        setId(id) {
-            return this.setAttribute('id', id);
+        setAccession(accession) {
+            return this.setAttribute('accession', accession);
         }
 
         connectedCallback() {
+            this.tableDiv = document.createElement('div');
+            this.tableDiv.className = 'table-container';
             const jsmolDiv = document.createElement('div');
+            jsmolDiv.className = 'jsmol-container';
             jsmolDiv.id = 'app';
             this.appendChild(jsmolDiv);
+            this.appendChild(this.tableDiv);
+            this.loadLiteMol();
+            this
+                .loadEntry()
+                .then(entry => {
+                    const pdbEntries = entry
+                        .dbReferences
+                        .filter(dbref => dbref.type === 'PDB');
+                    this.loadStructureTable(pdbEntries);
+                    this.loadMolecule(pdbEntries[0].id);
+                });
+            // this.loadMolecule(this.id);
+        }
 
+        attributeChangedCallback(attrName, oldVal, newVal) {}
+
+        async loadEntry() {
+            try {
+                return await(await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${this.getAccession()}`)).json();
+            } catch (e) {
+                console.log(`Couldn't load UniProt entry`, e);
+            }
+        }
+
+        loadStructureTable(pdbEntries) {
+            const html = `
+                <table>
+                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>
+                    <tbody>
+                        ${pdbEntries
+                .map(d => `
+                            <tr id="${d.id}" class="pdb-row">
+                                <td>${d.id}</td>
+                                <td>${d.properties.method}</td>
+                                <td>${d.properties.resolution}</td>
+                                <td>${d.properties.chains}</td>
+                            </tr>
+                        `)
+                .join('')}
+                    </tbody>
+                </table>
+            `;
+            this.tableDiv.innerHTML = html;
+            this
+                .querySelectorAll('.pdb-row')
+                .forEach(row => row.addEventListener('click', () => this.loadMolecule(row.id)));
+        }
+
+        loadLiteMol() {
             const Plugin = LiteMol.Plugin;
             this._liteMol = Plugin.create({
                 target: '#app',
                 viewportBackground: '#fff',
                 layoutState: {
-                    hideControls: true,
-                    isExpanded: true
+                    hideControls: true
                 },
                 allowAnalytics: false
             });
-            this.loadMolecule(this.id);
         }
-
-        attributeChangedCallback(attrName, oldVal, newVal) {}
 
         loadMolecule(_id) {
             this

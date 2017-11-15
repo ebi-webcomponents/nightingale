@@ -116,7 +116,34 @@ var asyncGenerator = function () {
 
 
 
+var asyncToGenerator = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
 
+        if (info.done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -196,41 +223,113 @@ var loadComponent = function loadComponent() {
             var _this = possibleConstructorReturn(this, (UpLitemolWebcomponent.__proto__ || Object.getPrototypeOf(UpLitemolWebcomponent)).call(this));
 
             _this.loadMolecule = _this.loadMolecule.bind(_this);
+            _this.loadStructureTable = _this.loadStructureTable.bind(_this);
+            _this.innerHTML = '\n                <style>\n                    .jsmol-container, .table-container {\n                        width: 640px; \n                        height: 480px; \n                        position: relative;\n                        display:inline-block;\n                    }\n                </style>\n            ';
             return _this;
         }
 
         createClass(UpLitemolWebcomponent, [{
-            key: 'getId',
-            value: function getId() {
-                return this.getAttribute('id');
+            key: 'getAccession',
+            value: function getAccession() {
+                return this.getAttribute('accession');
             }
         }, {
-            key: 'setId',
-            value: function setId(id) {
-                return this.setAttribute('id', id);
+            key: 'setAccession',
+            value: function setAccession(accession) {
+                return this.setAttribute('accession', accession);
             }
         }, {
             key: 'connectedCallback',
             value: function connectedCallback() {
+                var _this2 = this;
+
+                this.tableDiv = document.createElement('div');
+                this.tableDiv.className = 'table-container';
                 var jsmolDiv = document.createElement('div');
+                jsmolDiv.className = 'jsmol-container';
                 jsmolDiv.id = 'app';
                 this.appendChild(jsmolDiv);
+                this.appendChild(this.tableDiv);
+                this.loadLiteMol();
+                this.loadEntry().then(function (entry) {
+                    var pdbEntries = entry.dbReferences.filter(function (dbref) {
+                        return dbref.type === 'PDB';
+                    });
+                    _this2.loadStructureTable(pdbEntries);
+                    _this2.loadMolecule(pdbEntries[0].id);
+                });
+                // this.loadMolecule(this.id);
+            }
+        }, {
+            key: 'attributeChangedCallback',
+            value: function attributeChangedCallback(attrName, oldVal, newVal) {}
+        }, {
+            key: 'loadEntry',
+            value: function () {
+                var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                    return regeneratorRuntime.wrap(function _callee$(_context) {
+                        while (1) {
+                            switch (_context.prev = _context.next) {
+                                case 0:
+                                    _context.prev = 0;
+                                    _context.next = 3;
+                                    return fetch('https://www.ebi.ac.uk/proteins/api/proteins/' + this.getAccession());
 
+                                case 3:
+                                    _context.next = 5;
+                                    return _context.sent.json();
+
+                                case 5:
+                                    return _context.abrupt('return', _context.sent);
+
+                                case 8:
+                                    _context.prev = 8;
+                                    _context.t0 = _context['catch'](0);
+
+                                    console.log('Couldn\'t load UniProt entry', _context.t0);
+
+                                case 11:
+                                case 'end':
+                                    return _context.stop();
+                            }
+                        }
+                    }, _callee, this, [[0, 8]]);
+                }));
+
+                function loadEntry() {
+                    return _ref.apply(this, arguments);
+                }
+
+                return loadEntry;
+            }()
+        }, {
+            key: 'loadStructureTable',
+            value: function loadStructureTable(pdbEntries) {
+                var _this3 = this;
+
+                var html = '\n                <table>\n                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>\n                    <tbody>\n                        ' + pdbEntries.map(function (d) {
+                    return '\n                            <tr id="' + d.id + '" class="pdb-row">\n                                <td>' + d.id + '</td>\n                                <td>' + d.properties.method + '</td>\n                                <td>' + d.properties.resolution + '</td>\n                                <td>' + d.properties.chains + '</td>\n                            </tr>\n                        ';
+                }).join('') + '\n                    </tbody>\n                </table>\n            ';
+                this.tableDiv.innerHTML = html;
+                this.querySelectorAll('.pdb-row').forEach(function (row) {
+                    return row.addEventListener('click', function () {
+                        return _this3.loadMolecule(row.id);
+                    });
+                });
+            }
+        }, {
+            key: 'loadLiteMol',
+            value: function loadLiteMol() {
                 var Plugin = LiteMol.Plugin;
                 this._liteMol = Plugin.create({
                     target: '#app',
                     viewportBackground: '#fff',
                     layoutState: {
-                        hideControls: true,
-                        isExpanded: true
+                        hideControls: true
                     },
                     allowAnalytics: false
                 });
-                this.loadMolecule(this.id);
             }
-        }, {
-            key: 'attributeChangedCallback',
-            value: function attributeChangedCallback(attrName, oldVal, newVal) {}
         }, {
             key: 'loadMolecule',
             value: function loadMolecule(_id) {
