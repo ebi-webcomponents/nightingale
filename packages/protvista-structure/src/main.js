@@ -55,6 +55,9 @@ const loadComponent = function () {
                 .table-container tbody tr {
                     cursor: pointer;
                 }
+                .table-container tbody tr:hover {
+                    background-color: rgba(var(--blue), 0.15);;
+                }
                 .table-container tr.active {
                     background-color: rgba(var(--blue), 0.3);;
                 }
