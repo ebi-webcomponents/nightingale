@@ -11,7 +11,7 @@ export default {
     name : 'UpLitemolWebcomponent',
     sourcemap : true,
     output : {
-        file: 'dist/up-litemol-webcomponent.js',
+        file: 'dist/uuw-litemol-component.js',
         format: 'iife'
     },
     plugins : [

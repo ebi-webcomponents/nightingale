@@ -1,5 +1,5 @@
 const loadComponent = function () {
-    class UpLitemolWebcomponent extends HTMLElement {
+    class UuwLitemolComponent extends HTMLElement {
 
         constructor() {
             super();
@@ -18,7 +18,7 @@ const loadComponent = function () {
                     --blue: 0,112,155;
                     --width: 100%;
                 }
-                up-litemol-webcomponent {
+                uuw-litemol-component {
                     display:flex;
                 }
                 .jsmol-container, .table-container {
@@ -186,7 +186,7 @@ const loadComponent = function () {
         }
 
     }
-    customElements.define('up-litemol-webcomponent', UpLitemolWebcomponent);
+    customElements.define('uuw-litemol-component', UuwLitemolComponent);
 }
 
 // Conditional loading of polyfill

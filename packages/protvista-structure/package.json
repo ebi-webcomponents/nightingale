@@ -1,5 +1,5 @@
 {
-  "name": "up-litemol-webcomponent",
+  "name": "uuw-litemol-component",
   "description": "A custom element wrapper for litemol",
   "main": "src/main.js",
   "scripts": {

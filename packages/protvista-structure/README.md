@@ -1,16 +1,13 @@
-# `<up-litemol-webcomponent>`
+# `<uuw-litemol-component>`
 In progress - A native web component wrapper around LiteMol
 
 ## Usage
 ```html
-      <up-litemol-webcomponent id="1AAP"></up-litemol-webcomponent>
+      <uuw-litemol-component id="1AAP"></uuw-litemol-component>
 ```
 
 ## API Reference
 
 ### Properties
-#### `id: PDB id`
-A structure id
-### Events
-#### `my-event`
-An event that does things.
+#### `accession: UniProt accession`
+A protein accession
