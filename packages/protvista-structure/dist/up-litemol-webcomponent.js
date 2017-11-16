@@ -224,7 +224,9 @@ var loadComponent = function loadComponent() {
 
             _this.loadMolecule = _this.loadMolecule.bind(_this);
             _this.loadStructureTable = _this.loadStructureTable.bind(_this);
-            _this.innerHTML = '\n                <style>\n                    :root {\n                        --blue: 0,112,155;\n                    }\n                    .jsmol-container, .table-container {\n                        width: 640px; \n                        height: 480px;\n                        overflow-y: auto;\n                        position: relative;\n                        display:inline-block;\n                    }\n                    .table-container tr {\n                        cursor: pointer;\n                    }\n                    .table-container tr.active {\n                        background-color: rgba(var(--blue), 0.3);;\n                    }\n                </style>\n            ';
+            var styleTag = document.createElement('style');
+            _this.appendChild(styleTag);
+            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                up-litemol-webcomponent {\n                    display:flex;\n                }\n                .jsmol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                  }\n                  \n                .table-container th, .table-container td {\n                    box-sizing: border-box;\n                    flex: 1 0 10em;\n                    overflow: hidden;\n                    text-overflow: ellipsis;\n                }\n                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {\n                    display: flex;\n                    flex-direction: column;\n                }\n                .table-container tr {\n                    display: flex;\n                    flex: 1 0;\n                }\n                .table-container tbody {\n                    overflow-y: auto;\n                }\n                .table-container tbody tr {\n                    cursor: pointer;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
             return _this;
         }
 
@@ -258,7 +260,6 @@ var loadComponent = function loadComponent() {
                     _this2.loadStructureTable(pdbEntries);
                     _this2.selectMolecule(pdbEntries[0].id);
                 });
-                // this.loadMolecule(this.id);
             }
         }, {
             key: 'attributeChangedCallback',
@@ -307,7 +308,7 @@ var loadComponent = function loadComponent() {
             value: function loadStructureTable(pdbEntries) {
                 var _this3 = this;
 
-                var html = '\n                <table>\n                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>\n                    <tbody>\n                        ' + pdbEntries.map(function (d) {
+                var html = '\n                <table>\n                    <colgroup>\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: auto">\n                    </colgroup>\n                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>\n                    <tbody>\n                        ' + pdbEntries.map(function (d) {
                     return '\n                            <tr id="' + d.id + '" class="pdb-row">\n                                <td>' + d.id + '</td>\n                                <td>' + d.properties.method + '</td>\n                                <td>' + d.properties.resolution + '</td>\n                                <td>' + d.properties.chains + '</td>\n                            </tr>\n                        ';
                 }).join('') + '\n                    </tbody>\n                </table>\n            ';
                 this.tableDiv.innerHTML = html;

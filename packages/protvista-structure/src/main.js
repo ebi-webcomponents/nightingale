@@ -11,25 +11,53 @@ const loadComponent = function () {
             this.loadStructureTable = this
                 .loadStructureTable
                 .bind(this);
-            this.innerHTML = `
-                <style>
-                    :root {
-                        --blue: 0,112,155;
-                    }
-                    .jsmol-container, .table-container {
-                        width: 640px; 
-                        height: 480px;
-                        overflow-y: auto;
-                        position: relative;
-                        display:inline-block;
-                    }
-                    .table-container tr {
-                        cursor: pointer;
-                    }
-                    .table-container tr.active {
-                        background-color: rgba(var(--blue), 0.3);;
-                    }
-                </style>
+            const styleTag = document.createElement('style');
+            this.appendChild(styleTag);
+            styleTag.innerHTML = `
+                :root {
+                    --blue: 0,112,155;
+                    --width: 100%;
+                }
+                up-litemol-webcomponent {
+                    display:flex;
+                }
+                .jsmol-container, .table-container {
+                    width: var(--width);
+                    height: 480px;
+                    position: relative;
+                }
+                .table-container table {
+                    width:100%;
+                    height: 480px;
+                    border-collapse: collapse;
+                }
+                .table-container thead {
+                    min-height: 3em;
+                  }
+                  
+                .table-container th, .table-container td {
+                    box-sizing: border-box;
+                    flex: 1 0 10em;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .table-container tr {
+                    display: flex;
+                    flex: 1 0;
+                }
+                .table-container tbody {
+                    overflow-y: auto;
+                }
+                .table-container tbody tr {
+                    cursor: pointer;
+                }
+                .table-container tr.active {
+                    background-color: rgba(var(--blue), 0.3);;
+                }
             `;
         }
 
@@ -59,7 +87,6 @@ const loadComponent = function () {
                     this.loadStructureTable(pdbEntries);
                     this.selectMolecule(pdbEntries[0].id);
                 });
-            // this.loadMolecule(this.id);
         }
 
         attributeChangedCallback(attrName, oldVal, newVal) {}
@@ -75,6 +102,12 @@ const loadComponent = function () {
         loadStructureTable(pdbEntries) {
             const html = `
                 <table>
+                    <colgroup>
+                        <col syle="width: 100px">
+                        <col syle="width: 100px">
+                        <col syle="width: 100px">
+                        <col syle="width: auto">
+                    </colgroup>
                     <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>
                     <tbody>
                         ${pdbEntries
