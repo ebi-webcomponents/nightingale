@@ -13,11 +13,21 @@ const loadComponent = function () {
                 .bind(this);
             this.innerHTML = `
                 <style>
+                    :root {
+                        --blue: 0,112,155;
+                    }
                     .jsmol-container, .table-container {
                         width: 640px; 
-                        height: 480px; 
+                        height: 480px;
+                        overflow-y: auto;
                         position: relative;
                         display:inline-block;
+                    }
+                    .table-container tr {
+                        cursor: pointer;
+                    }
+                    .table-container tr.active {
+                        background-color: rgba(var(--blue), 0.3);;
                     }
                 </style>
             `;
@@ -47,7 +57,7 @@ const loadComponent = function () {
                         .dbReferences
                         .filter(dbref => dbref.type === 'PDB');
                     this.loadStructureTable(pdbEntries);
-                    this.loadMolecule(pdbEntries[0].id);
+                    this.selectMolecule(pdbEntries[0].id);
                 });
             // this.loadMolecule(this.id);
         }
@@ -83,7 +93,18 @@ const loadComponent = function () {
             this.tableDiv.innerHTML = html;
             this
                 .querySelectorAll('.pdb-row')
-                .forEach(row => row.addEventListener('click', () => this.loadMolecule(row.id)));
+                .forEach(row => row.addEventListener('click', (e) => this.selectMolecule(row.id)));
+        }
+
+        selectMolecule(id) {
+            this
+                .querySelectorAll('.active')
+                .forEach(row => row.classList.remove('active'));
+            document
+                .getElementById(id)
+                .classList
+                .add('active');
+            this.loadMolecule(id);
         }
 
         loadLiteMol() {
@@ -99,6 +120,9 @@ const loadComponent = function () {
         }
 
         loadMolecule(_id) {
+            this
+                ._liteMol
+                .clear();
             this
                 ._liteMol
                 .loadMolecule({

@@ -224,7 +224,7 @@ var loadComponent = function loadComponent() {
 
             _this.loadMolecule = _this.loadMolecule.bind(_this);
             _this.loadStructureTable = _this.loadStructureTable.bind(_this);
-            _this.innerHTML = '\n                <style>\n                    .jsmol-container, .table-container {\n                        width: 640px; \n                        height: 480px; \n                        position: relative;\n                        display:inline-block;\n                    }\n                </style>\n            ';
+            _this.innerHTML = '\n                <style>\n                    :root {\n                        --blue: 0,112,155;\n                    }\n                    .jsmol-container, .table-container {\n                        width: 640px; \n                        height: 480px;\n                        overflow-y: auto;\n                        position: relative;\n                        display:inline-block;\n                    }\n                    .table-container tr {\n                        cursor: pointer;\n                    }\n                    .table-container tr.active {\n                        background-color: rgba(var(--blue), 0.3);;\n                    }\n                </style>\n            ';
             return _this;
         }
 
@@ -256,7 +256,7 @@ var loadComponent = function loadComponent() {
                         return dbref.type === 'PDB';
                     });
                     _this2.loadStructureTable(pdbEntries);
-                    _this2.loadMolecule(pdbEntries[0].id);
+                    _this2.selectMolecule(pdbEntries[0].id);
                 });
                 // this.loadMolecule(this.id);
             }
@@ -312,10 +312,19 @@ var loadComponent = function loadComponent() {
                 }).join('') + '\n                    </tbody>\n                </table>\n            ';
                 this.tableDiv.innerHTML = html;
                 this.querySelectorAll('.pdb-row').forEach(function (row) {
-                    return row.addEventListener('click', function () {
-                        return _this3.loadMolecule(row.id);
+                    return row.addEventListener('click', function (e) {
+                        return _this3.selectMolecule(row.id);
                     });
                 });
+            }
+        }, {
+            key: 'selectMolecule',
+            value: function selectMolecule(id) {
+                this.querySelectorAll('.active').forEach(function (row) {
+                    return row.classList.remove('active');
+                });
+                document.getElementById(id).classList.add('active');
+                this.loadMolecule(id);
             }
         }, {
             key: 'loadLiteMol',
@@ -333,6 +342,7 @@ var loadComponent = function loadComponent() {
         }, {
             key: 'loadMolecule',
             value: function loadMolecule(_id) {
+                this._liteMol.clear();
                 this._liteMol.loadMolecule({
                     _id: _id, format: 'cif', // or pdb, sdf, binarycif/bcif
                     url: 'https://www.ebi.ac.uk/pdbe/static/entry/' + _id.toLowerCase() + '_updated.cif',
