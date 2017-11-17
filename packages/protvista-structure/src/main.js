@@ -92,7 +92,9 @@ const loadComponent = function () {
                 });
         }
 
-        attributeChangedCallback(attrName, oldVal, newVal) {}
+        attributeChangedCallback(attrName, oldVal, newVal) {
+            console.log('changed', attrName);
+        }
 
         async loadEntry() {
             try {
