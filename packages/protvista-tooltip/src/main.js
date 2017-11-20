@@ -11,11 +11,12 @@ const loadComponent = function() {
                 // Style your component
             }
             </style>
-            `;    
+            `;
         }
 
         connectedCallback() {
             // do stuff here
+            console.log('do stuff here');
         }
 
         attributeChangedCallback(attrName, oldVal, newVal) {}

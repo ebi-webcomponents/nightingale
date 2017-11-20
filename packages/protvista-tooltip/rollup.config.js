@@ -1,9 +1,9 @@
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
-//import minify from 'rollup-plugin-babel-minify';
+import minify from 'rollup-plugin-babel-minify';
 import conditional from 'rollup-plugin-conditional';
 
-//const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "production";
 
 export default {
     input: 'src/main.js',
@@ -19,9 +19,9 @@ export default {
         }),
         babel({
             exclude: 'node_modules/**'
-        })/*,
+        }),
         conditional(isProduction, [
             minify()
-        ])*/
+        ])
     ]
 };
