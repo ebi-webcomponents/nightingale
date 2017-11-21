@@ -16,14 +16,13 @@ const loadComponent = function() {
 
         connectedCallback() {
             // do stuff here
-            console.log('do stuff here');
         }
 
         attributeChangedCallback(attrName, oldVal, newVal) {}
 
     }
     customElements.define('protvista-tooltip', ProtvistaTooltip);
-}
+};
 
 // Conditional loading of polyfill
 if (window.customElements) {
