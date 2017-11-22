@@ -29,7 +29,8 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-babel-minify": "^3.1.2",
     "rollup-plugin-conditional": "^1.1.1",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "webcomponentsjs": "^1.0.2"
   },
   "dependencies": {}
 }
