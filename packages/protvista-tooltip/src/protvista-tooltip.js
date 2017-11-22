@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 class ProtvistaTooltip extends HTMLElement {
     constructor() {
         super();
         // get properties here
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+        const shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.innerHTML = `
             <style>
             :host {
@@ -11,13 +10,13 @@ class ProtvistaTooltip extends HTMLElement {
             }
             </style>
             `;
-  }
+    }
 
-  connectedCallback() {
-      console.log('callback');
-  }
+    connectedCallback() {
+        console.log('callback');
+    }
 
-  attributeChangedCallback(name, oldValue, newValue) {}
+    attributeChangedCallback(name, oldValue, newValue) {}
 }
 
 export default ProtvistaTooltip;
