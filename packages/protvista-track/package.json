@@ -43,7 +43,6 @@
   "dependencies": {
     "d3": "^4.9.1",
     "lodash-es": "^4.17.4",
-    "webcomponentsjs": "^1.0.2",
     "data-loader": "file:../data-loader"
   }
 }
