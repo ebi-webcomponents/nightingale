@@ -92,16 +92,35 @@ class ProtvistaVariation extends HTMLElement {
             opacity: 0.1;
         }
         .filter-list li {
-            line-height: 1.5em;
+            margin: .4em 0;
         }
-        .filter-select {
-            width:.7em;
+        .filter-select-trigger {
+            box-sizing: border-box;
             display:inline-block;
-            height:.7em;
             border-radius:.2em;
-            border:.05em solid #ABABAB;
+            text-decoration:none;
+            height:1.4em;
+            width:1.4em;
             margin-right: .2em;
             margin-left: .3em;
+            padding: .1em;
+            border: .1em solid rgba(255, 0, 0, .2);
+            text-align: center;
+        }
+        .filter-select {
+            display:inline-block;
+            box-sizing: border-box;
+            border-radius:.2em;
+            width:1em;
+            height:1em;
+            display:inline-block;
+            background-color: #333333;
+        }
+        .filter-select-trigger:hover {
+            border: .1em solid rgba(255, 0, 0, .7);
+        }
+        .filter-select-trigger.active {
+            border: .1em solid rgba(255, 0, 0, 1);
         }
         </style>
         <slot></slot>

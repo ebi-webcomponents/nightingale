@@ -72,15 +72,23 @@ class ProtVistaVariationFilters extends HTMLElement {
         this.renderFilters();
     }
 
-    toggleFilter(filterName) {
+    toggleFilter(elt, filterName) {
         if (this._selectedFilters.filter(filt => filt.name === filterName).length > 0) {
             this._selectedFilters = this
                 ._selectedFilters
                 .filter(filt => filt.name !== filterName);
+            elt
+                .parentElement
+                .classList
+                .remove('active');
         } else {
             this
                 ._selectedFilters
                 .push(filters.filter(filt => filt.name === filterName)[0]);
+            elt
+                .parentElement
+                .classList
+                .add('active');
         }
         this.dispatchEvent(new CustomEvent('protvista-filter-variants', {detail: this._selectedFilters}));
     }
@@ -94,18 +102,18 @@ class ProtVistaVariationFilters extends HTMLElement {
             <h5>Filter Consequence</h5>
             <ul class="filter-list">
                 ${filters.filter(filter => filter.type === 'consequence').map(filter => html `
-                    <li><label><input type="checkbox" id="${filter.name}-filter"/><span class="filter-select" style="background-color: ${filter.color[0]}"></span>${filter.label}</label></li>
+                    <li><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select" style="background-color: ${filter.color[0]}"></span></a>${filter.label}</li>
                 `)}
             </ul>
             <h5>Filter Data Provenance</h5>
             <ul class="filter-list">
                 ${filters.filter(filter => filter.type === 'provenance').map(filter => html `
-                    <li><label><input type="checkbox" id="${filter.name}-filter"/></span>${filter.label}</label></li>
+                    <li id="${filter.name}-filter"><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select"></span></a>${filter.label}</li>
                 `)}
             </ul>
         `, this);
 
-        filters.map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('change', e => this.toggleFilter(filter.name)));
+        filters.map(filter => this.querySelectorAll(`#${filter.name}-filter`)[0].addEventListener('click', e => this.toggleFilter(e.target, filter.name)));
     }
 }
 

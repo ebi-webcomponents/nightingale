@@ -1,5 +1,5 @@
 import ProtvistaVariation from './protvista-variation';
-import ProtvistaVariationFilters from './filters'
+import ProtvistaVariationFilters from './filters';
 
 var loadComponent = function () {
     customElements.define('protvista-variation', ProtvistaVariation);
