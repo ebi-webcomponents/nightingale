@@ -9181,7 +9181,7 @@ var ProtvistaVariation = function (_HTMLElement) {
         _this._highlightStart = parseInt(_this.getAttribute('highlightStart'));
         _this._highlightEnd = parseInt(_this.getAttribute('highlightEnd'));
         _this._height = 430;
-        _this._width = _this.getAttribute('width') ? parseInt(_this.getAttribute('width')) : 700;
+        _this._width = _this.getAttribute('width'); //if empty then takes flexbox width
         _this._margin = {
             top: 20,
             right: 10,
@@ -9196,6 +9196,7 @@ var ProtvistaVariation = function (_HTMLElement) {
         _this.zoomed = _this.zoomed.bind(_this);
         _this.refresh = _this.refresh.bind(_this);
         _this.attributeChangedCallback = _this.attributeChangedCallback.bind(_this);
+        _this.updatedWidth = _this.updatedWidth.bind(_this);
         return _this;
     }
 
@@ -9211,6 +9212,7 @@ var ProtvistaVariation = function (_HTMLElement) {
             var visualisationContainer = document.createElement('div');
             visualisationContainer.className = 'protvista-visualisation-container';
             this.appendChild(visualisationContainer);
+            this.width = this.width ? this.width : visualisationContainer.offsetWidth;
 
             var filtercontainer = document.createElement('protvista-variation-filters');
             filtercontainer.className = 'filters-container';
@@ -9233,7 +9235,7 @@ var ProtvistaVariation = function (_HTMLElement) {
         }
     }, {
         key: 'attributeChangedCallback',
-        value: function attributeChangedCallback(attrName, oldVal, newVal) {
+        value: function attributeChangedCallback(attrName) {
             if (!this._svg) {
                 return;
             }
@@ -9263,7 +9265,7 @@ var ProtvistaVariation = function (_HTMLElement) {
             this._zoom = d3Zoom().scaleExtent([1, 40]).translateExtent([[0, 0], [this._width, this._height]]).on("zoom", this.zoomed);
 
             // Create the SVG
-            this._svg = select(rootElement).append('svg').attr('width', this._width).attr('height', this._height);
+            this._svg = select(rootElement).append('svg').attr('width', '100%').attr('height', this._height);
 
             // create the variation plot function to be called by the series?
             var variationPlot = new VariationPlot(this._xScale, this._yScale, this._length);
@@ -9287,7 +9289,7 @@ var ProtvistaVariation = function (_HTMLElement) {
         }
     }, {
         key: 'createDataSeries',
-        value: function createDataSeries(svg, features, series) {
+        value: function createDataSeries(svg, features) {
 
             // Group for the main chart
             var mainChart = svg.append('g').attr('transform', 'translate(0,' + this._margin.top + ')');
@@ -9295,22 +9297,22 @@ var ProtvistaVariation = function (_HTMLElement) {
             // clip path prevents drawing outside of it
             var chartArea = mainChart.append('g').attr('clip-path', 'url(#plotAreaClip)');
 
-            mainChart.append('clipPath').attr('id', 'plotAreaClip').append('rect').attr('width', this._width - 20).attr('height', this._height).attr('transform', 'translate(10, -10)');
+            this._clipPath = mainChart.append('clipPath').attr('id', 'plotAreaClip').append('rect').attr('width', this._width - 20).attr('height', this._height).attr('transform', 'translate(10, -10)');
 
             // This is calling the data series render code for each of the items in the data
             var dataSeries = chartArea.datum(features).call(this._variationPlot.drawVariationPlot);
 
             // This is the AA axis on left
-            var yAxis = axisLeft().scale(this._yScale).tickSize(-this._width);
+            this._yAxisLScale = axisLeft().scale(this._yScale).tickSize(-this._width);
 
             // This is the AA axis on right
-            var yAxis2 = axisRight().scale(this._yScale);
+            this._yAxisRScale = axisRight().scale(this._yScale);
 
             // Adding AA axis left
-            mainChart.append('g').attr('transform', 'translate(12 ,0)').attr('class', 'variation-y axis').call(yAxis);
+            this._axisLeft = mainChart.append('g').attr('transform', 'translate(12 ,0)').attr('class', 'variation-y axis').call(this._yAxisLScale);
 
             // Adding AA axis right
-            mainChart.append('g').attr('transform', 'translate(' + (this._width - 18) + ', 0)').attr('class', 'variation-y axis').call(yAxis2);
+            this._axisRight = mainChart.append('g').attr('transform', 'translate(' + (this._width - 18) + ', 0)').attr('class', 'variation-y axis').call(this._yAxisRScale);
 
             // ??? fv.globalContainer.selectAll('g.variation-y g.tick').attr('class',
             // function(d) {     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d ===
@@ -9350,17 +9352,27 @@ var ProtvistaVariation = function (_HTMLElement) {
             this.refresh();
         }
     }, {
-        key: 'initSizes',
-        value: function initSizes(parentWidth) {}
+        key: 'updatedWidth',
+        value: function updatedWidth() {
+            this._xScale.range([this._margin.left, this._width - this._margin.right]);
+            //TODO there is also an issue here when already zoomed in
+            this._zoom.translateExtent([[0, 0], [this._width, this._height]]);
+            this._clipPath.attr('width', this._width - 20);
+            this._yAxisLScale.tickSize(-this._width);
+            this._axisLeft.call(this._yAxisLScale);
+            this._axisRight.attr('transform', 'translate(' + (this._width - 18) + ', 0)').call(this._yAxisRScale);
+            this.refresh();
+        }
     }, {
         key: 'listenForResize',
         value: function listenForResize() {
             var _this3 = this;
 
+            // TODO add sleep to make transition appear smoother. Could experiment with CSS3
+            // transitions too
             window.onresize = function () {
                 _this3.width = _this3.querySelector('.protvista-visualisation-container').offsetWidth;
-                // this.refresh;
-                // this.renderChart(this.querySelector('.protvista-visualisation-container'));
+                _this3.updatedWidth();
             };
         }
     }, {

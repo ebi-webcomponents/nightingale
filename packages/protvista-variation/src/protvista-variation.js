@@ -40,9 +40,7 @@ class ProtvistaVariation extends HTMLElement {
         this._highlightStart = parseInt(this.getAttribute('highlightStart'));
         this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
         this._height = 430;
-        this._width = this.getAttribute('width')
-            ? parseInt(this.getAttribute('width'))
-            : 700;
+        this._width = this.getAttribute('width'); //if empty then takes flexbox width
         this._margin = {
             top: 20,
             right: 10,
@@ -66,6 +64,9 @@ class ProtvistaVariation extends HTMLElement {
             .bind(this);
         this.attributeChangedCallback = this
             .attributeChangedCallback
+            .bind(this);
+        this.updatedWidth = this
+            .updatedWidth
             .bind(this);
     }
 
@@ -109,6 +110,9 @@ class ProtvistaVariation extends HTMLElement {
         const visualisationContainer = document.createElement('div');
         visualisationContainer.className = 'protvista-visualisation-container';
         this.appendChild(visualisationContainer);
+        this.width = this.width
+            ? this.width
+            : visualisationContainer.offsetWidth;
 
         const filtercontainer = document.createElement('protvista-variation-filters');
         filtercontainer.className = 'filters-container';
@@ -130,7 +134,7 @@ class ProtvistaVariation extends HTMLElement {
         this.listenForResize();
     }
 
-    attributeChangedCallback(attrName, oldVal, newVal) {
+    attributeChangedCallback(attrName) {
         if (!this._svg) {
             return;
         }
@@ -185,7 +189,7 @@ class ProtvistaVariation extends HTMLElement {
         this._svg = d3
             .select(rootElement)
             .append('svg')
-            .attr('width', this._width)
+            .attr('width', '100%')
             .attr('height', this._height);
 
         // create the variation plot function to be called by the series?
@@ -213,19 +217,19 @@ class ProtvistaVariation extends HTMLElement {
         this.refresh();
     }
 
-    createDataSeries(svg, features, series) {
+    createDataSeries(svg, features) {
 
         // Group for the main chart
-        var mainChart = svg
+        const mainChart = svg
             .append('g')
             .attr('transform', 'translate(0,' + this._margin.top + ')');
 
         // clip path prevents drawing outside of it
-        var chartArea = mainChart
+        const chartArea = mainChart
             .append('g')
             .attr('clip-path', 'url(#plotAreaClip)');
 
-        mainChart
+        this._clipPath = mainChart
             .append('clipPath')
             .attr('id', 'plotAreaClip')
             .append('rect')
@@ -234,34 +238,34 @@ class ProtvistaVariation extends HTMLElement {
             .attr('transform', 'translate(10, -10)');
 
         // This is calling the data series render code for each of the items in the data
-        var dataSeries = chartArea
+        const dataSeries = chartArea
             .datum(features)
             .call(this._variationPlot.drawVariationPlot);
 
         // This is the AA axis on left
-        var yAxis = d3
+        this._yAxisLScale = d3
             .axisLeft()
             .scale(this._yScale)
             .tickSize(-this._width);
 
         // This is the AA axis on right
-        var yAxis2 = d3
+        this._yAxisRScale = d3
             .axisRight()
             .scale(this._yScale);
 
         // Adding AA axis left
-        mainChart
+        this._axisLeft = mainChart
             .append('g')
             .attr('transform', 'translate(12 ,0)')
             .attr('class', 'variation-y axis')
-            .call(yAxis);
+            .call(this._yAxisLScale);
 
         // Adding AA axis right
-        mainChart
+        this._axisRight = mainChart
             .append('g')
             .attr('transform', 'translate(' + (this._width - 18) + ', 0)')
             .attr('class', 'variation-y axis')
-            .call(yAxis2);
+            .call(this._yAxisRScale);
 
         // ??? fv.globalContainer.selectAll('g.variation-y g.tick').attr('class',
         // function(d) {     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d ===
@@ -297,15 +301,45 @@ class ProtvistaVariation extends HTMLElement {
         this.refresh();
     }
 
-    initSizes(parentWidth) {}
+    updatedWidth() {
+        this
+            ._xScale
+            .range([
+                this._margin.left, this._width - this._margin.right
+            ]);
+        //TODO there is also an issue here when already zoomed in
+        this
+            ._zoom
+            .translateExtent([
+                [
+                    0, 0
+                ],
+                [this._width, this._height]
+            ]);
+        this
+            ._clipPath
+            .attr('width', (this._width - 20));
+        this
+            ._yAxisLScale
+            .tickSize(-this._width);
+        this
+            ._axisLeft
+            .call(this._yAxisLScale)
+        this
+            ._axisRight
+            .attr('transform', 'translate(' + (this._width - 18) + ', 0)')
+            .call(this._yAxisRScale)
+        this.refresh();
+    }
 
     listenForResize() {
+        // TODO add sleep to make transition appear smoother. Could experiment with CSS3
+        // transitions too
         window.onresize = () => {
             this.width = this
                 .querySelector('.protvista-visualisation-container')
                 .offsetWidth;
-            // this.refresh;
-            // this.renderChart(this.querySelector('.protvista-visualisation-container'));
+            this.updatedWidth();
         };
     }
 }
