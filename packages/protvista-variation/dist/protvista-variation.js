@@ -1,6 +1,24 @@
 (function () {
 'use strict';
 
+function __$styleInject(css, returnValue) {
+  if (typeof document === 'undefined') {
+    return returnValue;
+  }
+  css = css || '';
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  head.appendChild(style);
+  
+  if (style.styleSheet){
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+  return returnValue;
+}
+
 var ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 };
@@ -9146,6 +9164,8 @@ var ProtVistaVariationFilters = function (_HTMLElement) {
     return ProtVistaVariationFilters;
 }(HTMLElement);
 
+__$styleInject("protvista-variation {\n    display:flex;            \n    width:100%;\n}\n\n.protvista-sidebar-container {\n    flex: 0.2;\n}\n\n.protvista-visualisation-container {\n    flex: 1;   \n}\n\nul {\n    list-style:none;\n    margin:0;\n    padding:0;\n}\na {\n    cursor:pointer;\n}\ncircle {\n    opacity: 0.6;\n}\ncircle:hover {\n    opacity: 0.9;\n}\n.tick line, .axis path {\n    opacity: 0.1;\n}\n.filter-list li {\n    margin: .4em 0;\n}\n.filter-select-trigger {\n    text-decoration:none;\n}\n.filter-select-wrapper {\n    box-sizing: border-box;\n    display:inline-block;\n    border-radius:.2em;\n    margin-right: .2em;\n    margin-left: .3em;\n    line-height: .2em;\n    padding: .2em;\n    border: .1em solid rgba(255, 0, 0, 0);\n}\n.filter-select {\n    margin:0;\n    box-sizing:border-box;\n    border-radius:.2em;\n    width:1.2em;\n    height:1.2em;\n    display:inline-block;\n    background-color: #333333;\n}\n.filter-select-trigger:hover .filter-select-wrapper {\n    border: .1em solid rgba(255, 0, 0, .5);\n}\n.filter-select-trigger.active .filter-select-wrapper {\n    border: .1em solid rgba(255, 0, 0, .9);\n}", undefined);
+
 var aaList = ['G', 'A', 'V', 'L', 'I', 'S', 'T', 'C', 'M', 'D', 'N', 'E', 'Q', 'R', 'K', 'H', 'F', 'Y', 'W', 'P', 'd', '*'];
 
 var ProtvistaVariation = function (_HTMLElement) {
@@ -9176,9 +9196,6 @@ var ProtvistaVariation = function (_HTMLElement) {
         _this.zoomed = _this.zoomed.bind(_this);
         _this.refresh = _this.refresh.bind(_this);
         _this.attributeChangedCallback = _this.attributeChangedCallback.bind(_this);
-
-        var shadowRoot = _this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = '\n        <style>\n        :host {\n            display:inline-flex;\n            // font-family: \'Helvetica neue\', Helverica, Arial, sans-serif;\n        }\n        ul {\n            list-style:none;\n            margin:0;\n            padding:0;\n        }\n        a {\n            cursor:pointer;\n        }\n        circle {\n            opacity: 0.6;\n        }\n        circle:hover {\n            opacity: 0.9;\n        }\n        .tick line, .axis path {\n            opacity: 0.1;\n        }\n        .filter-list li {\n            margin: .4em 0;\n        }\n        .filter-select-trigger {\n            text-decoration:none;\n        }\n        .filter-select-wrapper {\n            box-sizing: border-box;\n            display:inline-block;\n            border-radius:.2em;\n            margin-right: .2em;\n            margin-left: .3em;\n            line-height: .2em;\n            padding: .2em;\n            border: .1em solid rgba(255, 0, 0, 0);\n        }\n        .filter-select {\n            margin:0;\n            box-sizing:border-box;\n            border-radius:.2em;\n            width:1.2em;\n            height:1.2em;\n            display:inline-block;\n            background-color: #333333;\n        }\n        .filter-select-trigger:hover .filter-select-wrapper {\n            border: .1em solid rgba(255, 0, 0, .5);\n        }\n        .filter-select-trigger.active .filter-select-wrapper {\n            border: .1em solid rgba(255, 0, 0, .9);\n        }\n        </style>\n        <slot></slot>\n        ';
         return _this;
     }
 
@@ -9187,14 +9204,22 @@ var ProtvistaVariation = function (_HTMLElement) {
         value: function connectedCallback() {
             var _this2 = this;
 
+            var sidebarContainer = document.createElement('div');
+            sidebarContainer.className = 'protvista-sidebar-container';
+            this.appendChild(sidebarContainer);
+
+            var visualisationContainer = document.createElement('div');
+            visualisationContainer.className = 'protvista-visualisation-container';
+            this.appendChild(visualisationContainer);
+
             var filtercontainer = document.createElement('protvista-variation-filters');
             filtercontainer.className = 'filters-container';
-            this.shadowRoot.appendChild(filtercontainer);
+            sidebarContainer.appendChild(filtercontainer);
             // filtercontainer(filtercontainer);
             this.addEventListener('load', function (d) {
                 _this2._length = d.detail.payload.sequence.length;
                 _this2._data = processVariants(d.detail.payload.features, d.detail.payload.sequence);
-                _this2.renderChart();
+                _this2.renderChart(visualisationContainer);
                 if (_this2.start && _this2.scale) {
                     _this2.applyZoomTranslation();
                     _this2.refresh();
@@ -9204,6 +9229,7 @@ var ProtvistaVariation = function (_HTMLElement) {
             filtercontainer.addEventListener('protvista-filter-variants', function (d) {
                 _this2.applyFilters(d.detail);
             });
+            this.listenForResize();
         }
     }, {
         key: 'attributeChangedCallback',
@@ -9227,7 +9253,7 @@ var ProtvistaVariation = function (_HTMLElement) {
         }
     }, {
         key: 'renderChart',
-        value: function renderChart() {
+        value: function renderChart(rootElement) {
             this._xScale = linear$2().domain([1, this._length + 1]).range([this._margin.left, this._width - this._margin.right]);
 
             // scale for Amino Acids
@@ -9237,7 +9263,7 @@ var ProtvistaVariation = function (_HTMLElement) {
             this._zoom = d3Zoom().scaleExtent([1, 40]).translateExtent([[0, 0], [this._width, this._height]]).on("zoom", this.zoomed);
 
             // Create the SVG
-            this._svg = select(this.shadowRoot).append('svg').attr('width', this._width).attr('height', this._height);
+            this._svg = select(rootElement).append('svg').attr('width', this._width).attr('height', this._height);
 
             // create the variation plot function to be called by the series?
             var variationPlot = new VariationPlot(this._xScale, this._yScale, this._length);
@@ -9322,6 +9348,20 @@ var ProtvistaVariation = function (_HTMLElement) {
         value: function updateData(data) {
             this._series.datum(data);
             this.refresh();
+        }
+    }, {
+        key: 'initSizes',
+        value: function initSizes(parentWidth) {}
+    }, {
+        key: 'listenForResize',
+        value: function listenForResize() {
+            var _this3 = this;
+
+            window.onresize = function () {
+                _this3.width = _this3.querySelector('.protvista-visualisation-container').offsetWidth;
+                // this.refresh;
+                // this.renderChart(this.querySelector('.protvista-visualisation-container'));
+            };
         }
     }, {
         key: 'start',

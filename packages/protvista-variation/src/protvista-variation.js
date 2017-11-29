@@ -4,6 +4,7 @@ import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
 import ProtvistaVariationFilters from './filters'
 import cloneDeep from 'lodash-es/cloneDeep';
+import '../style/style.css';
 
 const aaList = [
     'G',
@@ -66,65 +67,6 @@ class ProtvistaVariation extends HTMLElement {
         this.attributeChangedCallback = this
             .attributeChangedCallback
             .bind(this);
-
-        const shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.innerHTML = `
-        <style>
-        :host {
-            display:inline-flex;
-            // font-family: 'Helvetica neue', Helverica, Arial, sans-serif;
-        }
-        ul {
-            list-style:none;
-            margin:0;
-            padding:0;
-        }
-        a {
-            cursor:pointer;
-        }
-        circle {
-            opacity: 0.6;
-        }
-        circle:hover {
-            opacity: 0.9;
-        }
-        .tick line, .axis path {
-            opacity: 0.1;
-        }
-        .filter-list li {
-            margin: .4em 0;
-        }
-        .filter-select-trigger {
-            text-decoration:none;
-        }
-        .filter-select-wrapper {
-            box-sizing: border-box;
-            display:inline-block;
-            border-radius:.2em;
-            margin-right: .2em;
-            margin-left: .3em;
-            line-height: .2em;
-            padding: .2em;
-            border: .1em solid rgba(255, 0, 0, 0);
-        }
-        .filter-select {
-            margin:0;
-            box-sizing:border-box;
-            border-radius:.2em;
-            width:1.2em;
-            height:1.2em;
-            display:inline-block;
-            background-color: #333333;
-        }
-        .filter-select-trigger:hover .filter-select-wrapper {
-            border: .1em solid rgba(255, 0, 0, .5);
-        }
-        .filter-select-trigger.active .filter-select-wrapper {
-            border: .1em solid rgba(255, 0, 0, .9);
-        }
-        </style>
-        <slot></slot>
-        `;
     }
 
     get start() {
@@ -160,16 +102,22 @@ class ProtvistaVariation extends HTMLElement {
     }
 
     connectedCallback() {
+        const sidebarContainer = document.createElement('div');
+        sidebarContainer.className = 'protvista-sidebar-container';
+        this.appendChild(sidebarContainer);
+
+        const visualisationContainer = document.createElement('div');
+        visualisationContainer.className = 'protvista-visualisation-container';
+        this.appendChild(visualisationContainer);
+
         const filtercontainer = document.createElement('protvista-variation-filters');
         filtercontainer.className = 'filters-container';
-        this
-            .shadowRoot
-            .appendChild(filtercontainer);
+        sidebarContainer.appendChild(filtercontainer);
         // filtercontainer(filtercontainer);
         this.addEventListener('load', d => {
             this._length = d.detail.payload.sequence.length;
             this._data = processVariants(d.detail.payload.features, d.detail.payload.sequence)
-            this.renderChart();
+            this.renderChart(visualisationContainer);
             if (this.start && this.scale) {
                 this.applyZoomTranslation();
                 this.refresh();
@@ -178,7 +126,8 @@ class ProtvistaVariation extends HTMLElement {
         });
         filtercontainer.addEventListener('protvista-filter-variants', d => {
             this.applyFilters(d.detail);
-        })
+        });
+        this.listenForResize();
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -203,7 +152,7 @@ class ProtvistaVariation extends HTMLElement {
             .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.start) * this.scale) + this._margin.left), 0).scale(this.scale));
     }
 
-    renderChart() {
+    renderChart(rootElement) {
         this._xScale = d3
             .scaleLinear()
             .domain([
@@ -234,7 +183,7 @@ class ProtvistaVariation extends HTMLElement {
 
         // Create the SVG
         this._svg = d3
-            .select(this.shadowRoot)
+            .select(rootElement)
             .append('svg')
             .attr('width', this._width)
             .attr('height', this._height);
@@ -346,6 +295,18 @@ class ProtvistaVariation extends HTMLElement {
             ._series
             .datum(data);
         this.refresh();
+    }
+
+    initSizes(parentWidth) {}
+
+    listenForResize() {
+        window.onresize = () => {
+            this.width = this
+                .querySelector('.protvista-visualisation-container')
+                .offsetWidth;
+            // this.refresh;
+            // this.renderChart(this.querySelector('.protvista-visualisation-container'));
+        };
     }
 }
 
