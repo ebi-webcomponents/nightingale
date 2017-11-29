@@ -9,7 +9,9 @@ const filters = [
         color: ['#990000'],
         applyFilter: data => {
             const filteredData = cloneDeep(data);
-            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.association && variant.association.some(d => d.disease)));
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => {
+                return (variant.association && variant.association.some(d => d.disease)) || (variant.clinicalSignificances && variant.clinicalSignificances === 'disease')
+            }));
             return filteredData;
         }
     }, {
@@ -29,7 +31,13 @@ const filters = [
         type: 'consequence',
         label: 'Likely benign',
         color: ['#99cc00'],
-        applyFilter: data => {}
+        applyFilter: data => {
+            const filteredData = cloneDeep(data);
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => {
+                return (variant.association && variant.association.some(d => !d.disease)) || (variant.clinicalSignificances && variant.clinicalSignificances === 'likely benign')
+            }));
+            return filteredData;
+        }
     }, {
         name: 'uncertain',
         type: 'consequence',
@@ -49,7 +57,10 @@ const filters = [
         name: 'ClinVar',
         type: 'provenance',
         label: 'ClinVar reviewed',
-        applyFilter: data => {}
+        applyFilter: data => {
+            // TODO Waiting for data service model change to check variant.sourceType ===
+            // clinVar'
+        }
     }, {
         name: 'LSS',
         type: 'provenance',
@@ -78,7 +89,6 @@ class ProtVistaVariationFilters extends HTMLElement {
                 ._selectedFilters
                 .filter(filt => filt.name !== filterName);
             elt
-                .parentElement
                 .classList
                 .remove('active');
         } else {
@@ -86,7 +96,6 @@ class ProtVistaVariationFilters extends HTMLElement {
                 ._selectedFilters
                 .push(filters.filter(filt => filt.name === filterName)[0]);
             elt
-                .parentElement
                 .classList
                 .add('active');
         }
@@ -102,13 +111,13 @@ class ProtVistaVariationFilters extends HTMLElement {
             <h5>Filter Consequence</h5>
             <ul class="filter-list">
                 ${filters.filter(filter => filter.type === 'consequence').map(filter => html `
-                    <li><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select" style="background-color: ${filter.color[0]}"></span></a>${filter.label}</li>
+                    <li><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ${filter.color[0]}"></span></span>${filter.label}</a></li>
                 `)}
             </ul>
             <h5>Filter Data Provenance</h5>
             <ul class="filter-list">
                 ${filters.filter(filter => filter.type === 'provenance').map(filter => html `
-                    <li id="${filter.name}-filter"><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select"></span></a>${filter.label}</li>
+                    <li id="${filter.name}-filter"><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>${filter.label}</a></li>
                 `)}
             </ul>
         `, this);

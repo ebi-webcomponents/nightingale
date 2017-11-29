@@ -72,7 +72,7 @@ class ProtvistaVariation extends HTMLElement {
         <style>
         :host {
             display:inline-flex;
-            font-family: 'Helvetica neue', Helverica, Arial, sans-serif;
+            // font-family: 'Helvetica neue', Helverica, Arial, sans-serif;
         }
         ul {
             list-style:none;
@@ -95,32 +95,32 @@ class ProtvistaVariation extends HTMLElement {
             margin: .4em 0;
         }
         .filter-select-trigger {
+            text-decoration:none;
+        }
+        .filter-select-wrapper {
             box-sizing: border-box;
             display:inline-block;
             border-radius:.2em;
-            text-decoration:none;
-            height:1.4em;
-            width:1.4em;
             margin-right: .2em;
             margin-left: .3em;
-            padding: .1em;
-            border: .1em solid rgba(255, 0, 0, .2);
-            text-align: center;
+            line-height: .2em;
+            padding: .2em;
+            border: .1em solid rgba(255, 0, 0, 0);
         }
         .filter-select {
-            display:inline-block;
-            box-sizing: border-box;
+            margin:0;
+            box-sizing:border-box;
             border-radius:.2em;
-            width:1em;
-            height:1em;
+            width:1.2em;
+            height:1.2em;
             display:inline-block;
             background-color: #333333;
         }
-        .filter-select-trigger:hover {
-            border: .1em solid rgba(255, 0, 0, .7);
+        .filter-select-trigger:hover .filter-select-wrapper {
+            border: .1em solid rgba(255, 0, 0, .5);
         }
-        .filter-select-trigger.active {
-            border: .1em solid rgba(255, 0, 0, 1);
+        .filter-select-trigger.active .filter-select-wrapper {
+            border: .1em solid rgba(255, 0, 0, .9);
         }
         </style>
         <slot></slot>
