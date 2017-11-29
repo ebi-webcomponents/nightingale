@@ -32,7 +32,7 @@
     "eslint": "^4.7.2",
     "mocha": "^3.3.0",
     "nodemon": "^1.11.0",
-    "protvista-feature-adapter": "file:..\\protvista-feature-adapter",
+    "protvista-feature-adapter": "git+https://github.com/ebi-ppf/protvista-feature-adapter.git",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-babel-minify": "^3.1.2",
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "d3": "^4.9.1",
-    "lodash-es": "^4.17.4",
-    "data-loader": "file:../data-loader"
+    "data-loader": "git+https://github.com/ebi-ppf/data-loader.git",
+    "lodash-es": "^4.17.4"
   }
 }
