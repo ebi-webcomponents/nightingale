@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
-    "uniprot-entry-data-adapter": "file:../uniprot-entry-data-adapter",
+    "uniprot-entry-data-adapter": "git+https://github.com/ebi-ppf/uniprot-entry-data-adapter.git",
     "webcomponentsjs": "^1.0.2"
   },
   "nyc": {
