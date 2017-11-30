@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash-es/cloneDeep';
 import {html, render} from 'lit-html';
+import '../style/protvista-variation-filters.css';
 
 const filters = [
     {

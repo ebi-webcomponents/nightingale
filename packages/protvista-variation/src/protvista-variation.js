@@ -4,7 +4,7 @@ import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
 import ProtvistaVariationFilters from './filters'
 import cloneDeep from 'lodash-es/cloneDeep';
-import '../style/style.css';
+import '../style/protvista-variation.css';
 
 const aaList = [
     'G',
@@ -117,7 +117,7 @@ class ProtvistaVariation extends HTMLElement {
         const filtercontainer = document.createElement('protvista-variation-filters');
         filtercontainer.className = 'filters-container';
         sidebarContainer.appendChild(filtercontainer);
-        // filtercontainer(filtercontainer);
+
         this.addEventListener('load', d => {
             this._length = d.detail.payload.sequence.length;
             this._data = processVariants(d.detail.payload.features, d.detail.payload.sequence)
@@ -274,7 +274,7 @@ class ProtvistaVariation extends HTMLElement {
         this._series = dataSeries;
     }
 
-    // Calling render again (after xScale has changed)
+    // Calling render again
     refresh() {
         this
             ._series

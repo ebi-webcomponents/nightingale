@@ -1,33 +1,4 @@
-protvista-variation {
-    display:flex;            
-    width:100%;
-}
 
-.protvista-sidebar-container {
-    flex: 0.2;
-}
-
-.protvista-visualisation-container {
-    flex: 1;   
-}
-
-ul {
-    list-style:none;
-    margin:0;
-    padding:0;
-}
-a {
-    cursor:pointer;
-}
-circle {
-    opacity: 0.6;
-}
-circle:hover {
-    opacity: 0.9;
-}
-.tick line, .axis path {
-    opacity: 0.1;
-}
 .filter-list li {
     margin: .4em 0;
 }
