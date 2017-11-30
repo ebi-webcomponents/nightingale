@@ -2,7 +2,9 @@
   "name": "protvista-track",
   "version": "1.0.0",
   "description": "Basic track type of the viewer.",
-  "main": "index.js",
+  "main": "dist/protvista-track.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "build": "mkdirp ./dist && shx cp ./config/config.json ./dist/ && rollup -c",
     "watch": "nodemon -w src -x \"npm run build\"",

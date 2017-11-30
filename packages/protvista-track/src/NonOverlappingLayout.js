@@ -3,6 +3,7 @@
 
 import _each from 'lodash-es/each';
 import _some from 'lodash-es/some';
+import DefaultLayout from './DefaultLayout';
 
 class Row {
     constructor() {
@@ -23,11 +24,10 @@ class Row {
     };
 
     containsOverlap(feature) {
-        let self = this;  //this will not work inside the _some loop
-        return _some(self._rowFeatures, function(d) {
+        return _some(this._rowFeatures, d => {
             const ftEnd = (feature.end) ? feature.end : feature.start;
             const dEnd = (d.end) ? d.end : d.start;
-            return self._featureOverlap(feature, d, ftEnd, dEnd) || self._dOverlap(feature, d, ftEnd, dEnd);
+            return this._featureOverlap(feature, d, ftEnd, dEnd) || this._dOverlap(feature, d, ftEnd, dEnd);
         });
     };
 
@@ -36,22 +36,18 @@ class Row {
     };
 }
 
-export default class NonOverlappingLayout {
-    constructor(features, layoutHeight) {
-        this._padding = 1;
-        this._minHeight = 15;
-        this._rowHeight = 0;
-        this._rows = [];
-        this._features = features;
-        this._layoutHeight = layoutHeight;
-        this._init();
-
+export default class NonOverlappingLayout extends DefaultLayout{
+    constructor(options){
+      super(options);
+      this._rowHeight = 0;
+      this._rows = [];
+      this._minHeight = 15;
     }
 
-    _init() {
-        let self = this; //this will not work inside the _some loop
-        _each(self._features, function(feature){
-            let added = _some(self._rows, function(row){
+    init(features){
+        this._features = features;
+        _each(this._features, (feature) => {
+            const added = _some(this._rows, (row) => {
                 if(!row.containsOverlap(feature)) {
                     row.addFeature(feature);
                     return true;
@@ -60,25 +56,24 @@ export default class NonOverlappingLayout {
             if(!added) {
                 let row = new Row();
                 row.addFeature(feature);
-                self._rows.push(row);
+                this._rows.push(row);
             }
         });
 
-        this._rowHeight = (
-                (this._layoutHeight / this._rows.length < this._minHeight)
-                    ? this._layoutHeight /this._rows.length : this._minHeight )
-            - 2 * this._padding;
+        this._rowHeight =
+          Math.min(this._layoutHeight / this._rows.length, this._minHeight)
+          - 2 * this._padding;
     }
 
     getFeatureYPos(feature) {
-        let yPos, self = this;  //this will not work inside the _each loop
+        let yPos;
         const yOffset = (this._layoutHeight /this._rows.length > this._minHeight)
                 ? (this._layoutHeight - (this._rows.length * this._minHeight))/2
                 : 0;
-        _each(self._rows, function(row, i) {
-            _each(row._rowFeatures, function(currFeature){
+        _each(this._rows, (row, i) => {
+            _each(row._rowFeatures, (currFeature) => {
                 if(currFeature === feature) {
-                    yPos = (i * (self._rowHeight + 2 * self._padding) + yOffset);
+                    yPos = (i * (this._rowHeight + 2 * this._padding) + yOffset);
                 }
             });
         });

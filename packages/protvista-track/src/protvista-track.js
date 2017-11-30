@@ -2,6 +2,8 @@ import * as d3 from "d3";
 import _includes from 'lodash-es/includes';
 import FeatureShape from './FeatureShape';
 import NonOverlappingLayout from './NonOverlappingLayout';
+import DefaultLayout from './DefaultLayout';
+
 import ConfigHelper from "./ConfigHelper";
 
 const height = 44,
@@ -24,7 +26,13 @@ class ProtVistaTrack extends HTMLElement {
     this._color = this.getAttribute('color');
     this._shape = this.getAttribute('shape');
     this._featureShape = new FeatureShape();
-    this._layout = undefined;
+    this._layoutObj = this.getLayout();
+
+  }
+  getLayout(data) {
+      if (String(this.getAttribute('layout')).toLowerCase() === "non-overlapping")
+        return new NonOverlappingLayout({layoutHeight:height});
+      return new DefaultLayout({layoutHeight:height});
   }
 
   connectedCallback() {
@@ -50,7 +58,7 @@ class ProtVistaTrack extends HTMLElement {
 
   static get observedAttributes() {
     return [
-      'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color', 'shape'
+      'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color', 'shape', 'layout'
     ];
   }
 
@@ -87,7 +95,7 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   _createTrack() {
-    this._layout = new NonOverlappingLayout(this._data, height);
+    this._layoutObj.init(this._data);
 
     this._xScale = d3.scaleLinear()
       .range([padding.left, width - padding.right])
@@ -118,12 +126,12 @@ class ProtVistaTrack extends HTMLElement {
       .attr('class', 'feature')
       .attr('d', f =>
         this._featureShape.getFeatureShape(
-          this._xScale(2) - this._xScale(1), this._layout.getFeatureHeight(),
+          this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(),
             f.end ? f.end - f.start + 1 : 1, this._getShape(f)
         )
       )
       .attr('transform', f =>
-        'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layout.getFeatureYPos(f)) + ')'
+        'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f)) + ')'
       )
       .attr('fill', f => this._getFeatureColor(f))
       .attr('stroke', f => this._getFeatureColor(f))
@@ -155,12 +163,12 @@ class ProtVistaTrack extends HTMLElement {
       this.features
         .attr('d', f =>
           this._featureShape.getFeatureShape(
-            this._xScale(2) - this._xScale(1), this._layout.getFeatureHeight(),
+            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(),
               f.end ? f.end - f.start + 1 : 1, this._getShape(f)
           )
         )
         .attr('transform', f =>
-          'translate(' + this._xScale(f.start)+ ',' + (padding.top +  + this._layout.getFeatureYPos(f)) + ')'
+          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f)) + ')'
         )
       ;
 
