@@ -22,9 +22,16 @@ class Row {
         const dEndOverlap = (Number(dEnd) >= Number(feature.start)) && (Number(dEnd) <= Number(ftEnd));
         return dBeginOverlap || dEndOverlap;
     };
+    _addAbsoluteLimits(feature){
+      const limits = feature.locations.reduce((acc,e)=>acc.concat(e.fragments),[]).reduce((acc,e)=>({start:Math.min(e.start,acc.start),end:Math.max(e.end,acc.end)}),{start:Number.POSITIVE_INFINITY, end:Number.NEGATIVE_INFINITY})
+      feature.start = limits.start;
+      feature.end = limits.end;
+    }
 
-    containsOverlap(feature) {
-        return _some(this._rowFeatures, d => {
+    containsOverlap({...feature}) {
+        this._addAbsoluteLimits(feature);
+        return _some(this._rowFeatures, ({...d}) => {
+            this._addAbsoluteLimits(d);
             const ftEnd = (feature.end) ? feature.end : feature.start;
             const dEnd = (d.end) ? d.end : d.start;
             return this._featureOverlap(feature, d, ftEnd, dEnd) || this._dOverlap(feature, d, ftEnd, dEnd);

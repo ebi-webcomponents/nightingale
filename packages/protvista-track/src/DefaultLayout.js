@@ -15,7 +15,7 @@ export default class DefaultLayout {
   getFeatureYPos(feature) {
     return Math.min(this._layoutHeight, this._minHeight);
   }
-  getFeatureHeight() {
+  getFeatureHeight(feature) {
     return Math.min(this._layoutHeight, this._minHeight);
   };
 }

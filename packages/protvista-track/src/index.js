@@ -5,7 +5,6 @@ const loadComponent = function() {
     customElements.define('protvista-track', ProtVistaTrack);
     customElements.define('protvista-config-data-loader', DataLoader);
 };
-console.log("ProtVistaTrack");
 // Conditional loading of polyfill
 if (window.customElements) {
     loadComponent();
@@ -15,4 +14,5 @@ if (window.customElements) {
     });
 }
 
+export { default as DefaultLayout } from './DefaultLayout';
 export default ProtVistaTrack;

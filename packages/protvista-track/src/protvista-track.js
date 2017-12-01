@@ -52,7 +52,11 @@ class ProtVistaTrack extends HTMLElement {
   }
 
   set data(data) {
-    this._data = data;
+    this._data = data.map(
+      ({locations, start, end, ...rest}) => locations ?
+        {...rest, locations} :
+        {...rest, locations: [{ fragments:[{start, end}]}]}
+      );
     this._createTrack();
   }
 
@@ -118,23 +122,40 @@ class ProtVistaTrack extends HTMLElement {
     this.seq_g = svg.append('g')
       .attr('class', 'sequence-features');
 
-    this.features = this.seq_g.selectAll('path.feature')
+    this._createFeatures();
+    this._updateTrack();
+  }
+
+  _createFeatures(){
+    this.featuresG = this.seq_g.selectAll('g.feature-group')
       .data(this._data);
 
-    this.features.enter()
-      .append('path')
-      .attr('class', 'feature')
-      .attr('d', f =>
-        this._featureShape.getFeatureShape(
-          this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(),
-            f.end ? f.end - f.start + 1 : 1, this._getShape(f)
+    this.locations = this.featuresG.enter()
+      .append('g')
+        .attr('class', 'feature-group')
+        .attr('id', d => `g_${d.accession}`)
+        .selectAll('g.location-group')
+        .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
+        .enter().append('g')
+          .attr('class', 'location-group');
+
+    this.features = this.locations
+          .selectAll('g.fragment-group')
+          .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
+          .enter()
+        .append('path')
+        .attr('class', 'feature')
+        .attr('d', f =>
+          this._featureShape.getFeatureShape(
+            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
+              f.end ? f.end - f.start + 1 : 1, this._getShape(f)
+          )
         )
-      )
-      .attr('transform', f =>
-        'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f)) + ')'
-      )
-      .attr('fill', f => this._getFeatureColor(f))
-      .attr('stroke', f => this._getFeatureColor(f))
+        .attr('transform', f =>
+          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+        )
+        .attr('fill', f => this._getFeatureColor(f))
+        .attr('stroke', f => this._getFeatureColor(f))
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
           detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
@@ -151,24 +172,26 @@ class ProtVistaTrack extends HTMLElement {
           detail: {value: null, type: 'highlightstart'}, bubbles:true, cancelable: true
         }));
       });
-    this._updateTrack();
   }
 
   _updateTrack(){
     if (this._xScale) {
       this._xScale.domain([this._displaystart, this._displayend + 1]);
       this.features = this.seq_g.selectAll('path.feature')
-        .data(this._data);
-
+        .data(this._data.reduce(
+          (acc,f)=>acc.concat(f.locations.reduce(
+            (acc2,e)=>acc2.concat(e.fragments.map(({...l})=>({feature:f, ...l}))),
+            [])
+          ),[]));
       this.features
         .attr('d', f =>
           this._featureShape.getFeatureShape(
-            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(),
+            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
               f.end ? f.end - f.start + 1 : 1, this._getShape(f)
           )
         )
         .attr('transform', f =>
-          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f)) + ')'
+          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         )
       ;
 
