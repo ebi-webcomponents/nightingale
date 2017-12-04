@@ -148,14 +148,14 @@ class ProtVistaTrack extends HTMLElement {
         .attr('d', f =>
           this._featureShape.getFeatureShape(
             this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-              f.end ? f.end - f.start + 1 : 1, this._getShape(f)
+              f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
           )
         )
         .attr('transform', f =>
           'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         )
-        .attr('fill', f => this._getFeatureColor(f))
-        .attr('stroke', f => this._getFeatureColor(f))
+        .attr('fill', f => this._getFeatureColor(f.feature))
+        .attr('stroke', f => this._getFeatureColor(f.feature))
       .on('mouseover', f => {
         this.dispatchEvent(new CustomEvent("change", {
           detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
