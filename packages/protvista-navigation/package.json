@@ -1,29 +1,34 @@
 {
   "name": "protvista-navigation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Navigation component for the ProtVista tool",
-  "main": "index.js",
+  "main": "dist/protvista-track.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
-    "build": "rm -rf dist && rollup -c",
-    "watch": "nodemon -w src -x \"npm run build\"",
-    "serve": "browser-sync start --server -f dist/**/*.*",
+    "build": "mkdirp ./dist && rollup -c",
+    "rollup-watch": "rollup -cw",
+    "browser-sync": "browser-sync start --server -f dist/**/*.*",
+    "serve": "npm run rollup-watch & npm run browser-sync",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "ISC",
   "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.19",
     "babel-cli": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-custom-element-classes": "^0.1.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
     "browser-sync": "^2.18.12",
-    "nodemon": "^1.11.0",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^4.3.1"
   },
   "dependencies": {
-    "d3": "^4.9.1",
-    "webcomponentsjs": "^1.0.2"
+    "d3": "^4.9.1"
   }
 }

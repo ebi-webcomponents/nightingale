@@ -1,7 +1,16 @@
 import ProtVistaNavigation from './protvista-navigation';
 
-if (window.customElements) {
+const loadComponent = function() {
   customElements.define('protvista-navigation', ProtVistaNavigation);
+};
+
+// Conditional loading of polyfill
+if (window.customElements) {
+    loadComponent();
+} else {
+    document.addEventListener('WebComponentsReady', function() {
+        loadComponent();
+    });
 }
 
 export default ProtVistaNavigation;
