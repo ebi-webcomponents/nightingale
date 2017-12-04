@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "protvista-interpro-track": "git+https://github.com/ebi-ppf/protvista-interpro-track.git",
+    "protvista-navigation": "git+https://github.com/ebi-ppf/protvista-navigation.git",
     "protvista-track": "git+https://github.com/ebi-ppf/protvista-track.git"
   }
 }
