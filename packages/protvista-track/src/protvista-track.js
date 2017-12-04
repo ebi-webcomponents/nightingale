@@ -50,13 +50,16 @@ class ProtVistaTrack extends HTMLElement {
       }
     });
   }
-
-  set data(data) {
-    this._data = data.map(
+  normalizeLocations(data) {
+    return data.map(
       ({locations, start, end, ...rest}) => locations ?
         {...rest, locations} :
         {...rest, locations: [{ fragments:[{start, end}]}]}
       );
+  }
+
+  set data(data) {
+    this._data = this.normalizeLocations(data);
     this._createTrack();
   }
 
@@ -68,8 +71,12 @@ class ProtVistaTrack extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue){
-      const intValue = parseInt(newValue);
-      this[`_${name}`] = isNaN(intValue) ? newValue : intValue;
+      if (newValue===""){
+        this[`_${name}`] = true;
+      } else {
+        const intValue = parseInt(newValue);
+        this[`_${name}`] = isNaN(intValue) ? newValue : intValue;
+      }
       this._updateTrack();
     }
   }
@@ -108,18 +115,18 @@ class ProtVistaTrack extends HTMLElement {
     d3.select(this).selectAll('*').remove();
     d3.select(this).html('');
 
-    const svg = d3.select(this)
+    this.svg = d3.select(this)
       .append('div')
       .append('svg')
       .attr('width', width)
       .attr('height', (height));
 
-    this.highlighted = svg.append('rect')
+    this.highlighted = this.svg.append('rect')
       .attr('class', 'highlighted')
       .attr('fill', 'yellow')
       .attr('height', height);
 
-    this.seq_g = svg.append('g')
+    this.seq_g = this.svg.append('g')
       .attr('class', 'sequence-features');
 
     this._createFeatures();
