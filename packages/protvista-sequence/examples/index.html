@@ -12,11 +12,20 @@
 
     </head>
     <body>
-      <protvista-sequence length="223" start="1" end="50" highlightStart="23" highlightEnd="45" />
+      <div>
+        <protvista-sequence length="223" start="1" end="50" highlightStart="23" highlightEnd="45" />
+      </div>
 
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
-      <script src="node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
-      <script src="dist/protvista-sequence.js" charset="utf-8" defer></script>
+
+      <!-- Required for IE11 -->
+      <script src="../node_modules/babel-polyfill/dist/polyfill.min.js"></script>
+      <!-- Web component polyfill (only loads what it needs) -->
+      <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+      <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+      <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+
+      <script src="../dist/protvista-sequence.js" charset="utf-8" defer></script>
       <script>
       window.onload = () => {
         const seqE = document.querySelector("protvista-sequence");
