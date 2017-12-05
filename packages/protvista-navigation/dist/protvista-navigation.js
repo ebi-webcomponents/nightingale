@@ -68,7 +68,7 @@ var possibleConstructorReturn = function (self, call) {
 };
 
 var height = 40;
-var width = 700;
+var width = 760;
 var padding = {
   top: 10,
   right: 10,
@@ -85,8 +85,8 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
     var _this = possibleConstructorReturn(this, (ProtVistaNavigation.__proto__ || Object.getPrototypeOf(ProtVistaNavigation)).call(this));
 
     _this._length = parseInt(_this.getAttribute('length'));
-    _this._start = parseInt(_this.getAttribute('start')) || 1;
-    _this._end = parseInt(_this.getAttribute('end')) || _this._length;
+    _this._displaystart = parseInt(_this.getAttribute('displaystart')) || 1;
+    _this._displayend = parseInt(_this.getAttribute('displayend')) || _this._length;
     _this._highlightStart = parseInt(_this.getAttribute('highlightStart'));
     _this._highlightEnd = parseInt(_this.getAttribute('highlightEnd'));
     return _this;
@@ -117,20 +117,17 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
 
       var xAxis = d3.axisBottom(this._x);
 
-      this._startLabel = svg.append("text").attr('class', 'start-label').attr('x', 0).attr('y', height - padding.bottom);
+      this._displaystartLabel = svg.append("text").attr('class', 'start-label').attr('x', 0).attr('y', height - padding.bottom);
 
-      this._endLabel = svg.append("text").attr('class', 'end-label').attr('x', width).attr('y', height - padding.bottom).attr('text-anchor', 'end');
+      this._displayendLabel = svg.append("text").attr('class', 'end-label').attr('x', width).attr('y', height - padding.bottom).attr('text-anchor', 'end');
       svg.append('g').attr('class', 'x axis').call(xAxis);
 
       this._viewport = d3.brushX().extent([[padding.left, 0], [width - padding.right, height * 0.51]]).on("brush", function () {
         if (d3.event.selection) {
-          _this2._start = d3.format("d")(_this2._x.invert(d3.event.selection[0]));
-          _this2._end = d3.format("d")(_this2._x.invert(d3.event.selection[1]));
+          _this2._displaystart = d3.format("d")(_this2._x.invert(d3.event.selection[0]));
+          _this2._displayend = d3.format("d")(_this2._x.invert(d3.event.selection[1]));
           _this2.dispatchEvent(new CustomEvent("change", {
-            detail: { value: _this2._start, type: 'start' }
-          }));
-          _this2.dispatchEvent(new CustomEvent("change", {
-            detail: { value: _this2._end, type: 'end' }
+            detail: { displayend: _this2._displayend, displaystart: _this2._displaystart }, bubbles: true, cancelable: true
           }));
           _this2._updateLabels();
           _this2._updatePolygon();
@@ -139,7 +136,7 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
 
       this._brushG = svg.append("g").attr("class", "brush").call(this._viewport);
 
-      this._brushG.call(this._viewport.move, [this._x(this._start), this._x(this._end)]);
+      this._brushG.call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
 
       this.polygon = svg.append("polygon").attr('class', 'zoom-polygon').attr('fill', '#777').attr('fill-opacity', '0.3');
       this._updateNavRuler();
@@ -149,23 +146,23 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
     value: function _updateNavRuler() {
       this._updatePolygon();
       this._updateLabels();
-      if (this._brushG) this._brushG.call(this._viewport.move, [this._x(this._start), this._x(this._end)]);
+      if (this._brushG) this._brushG.call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
     }
   }, {
     key: '_updateLabels',
     value: function _updateLabels() {
-      if (this._startLabel) this._startLabel.text(this._start);
-      if (this._endLabel) this._endLabel.text(this._end);
+      if (this._displaystartLabel) this._displaystartLabel.text(this._displaystart);
+      if (this._displayendLabel) this._displayendLabel.text(this._displayend);
     }
   }, {
     key: '_updatePolygon',
     value: function _updatePolygon() {
-      if (this.polygon) this.polygon.attr('points', this._x(this._start) + ',' + height / 2 + '\n        ' + this._x(this._end) + ',' + height / 2 + '\n        ' + (width - padding.right) + ',' + height + '\n        ' + padding.left + ',' + height);
+      if (this.polygon) this.polygon.attr('points', this._x(this._displaystart) + ',' + height / 2 + '\n        ' + this._x(this._displayend) + ',' + height / 2 + '\n        ' + (width - padding.right) + ',' + height + '\n        ' + padding.left + ',' + height);
     }
   }], [{
     key: 'observedAttributes',
     get: function get$$1() {
-      return ['length', 'start', 'end', 'highlightStart', 'highlightEnd'];
+      return ['length', 'displaystart', 'displayend', 'highlightStart', 'highlightEnd'];
     }
   }]);
   return ProtVistaNavigation;

@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 const height = 40,
-  width = 700,
+  width = 760,
   padding = {
     top: 10,
     right: 10,
@@ -14,8 +14,8 @@ class ProtVistaNavigation extends HTMLElement {
   constructor() {
     super();
     this._length = parseInt(this.getAttribute('length'));
-    this._start = parseInt(this.getAttribute('start')) || 1;
-    this._end = parseInt(this.getAttribute('end')) || this._length;
+    this._displaystart = parseInt(this.getAttribute('displaystart')) || 1;
+    this._displayend = parseInt(this.getAttribute('displayend')) || this._length;
     this._highlightStart = parseInt(this.getAttribute('highlightStart'));
     this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
   }
@@ -25,7 +25,7 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'start', 'end', 'highlightStart', 'highlightEnd'
+    'length', 'displaystart', 'displayend', 'highlightStart', 'highlightEnd'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -49,12 +49,12 @@ class ProtVistaNavigation extends HTMLElement {
 
     const xAxis = d3.axisBottom(this._x);
 
-    this._startLabel = svg.append("text")
+    this._displaystartLabel = svg.append("text")
                         .attr('class', 'start-label')
                         .attr('x', 0)
                         .attr('y', height - padding.bottom);
 
-    this._endLabel = svg.append("text")
+    this._displayendLabel = svg.append("text")
                       .attr('class', 'end-label')
                       .attr('x', width)
                       .attr('y', height - padding.bottom)
@@ -69,13 +69,10 @@ class ProtVistaNavigation extends HTMLElement {
       ])
       .on("brush", () => {
         if (d3.event.selection){
-          this._start = d3.format("d")(this._x.invert(d3.event.selection[0]));
-          this._end = d3.format("d")(this._x.invert(d3.event.selection[1]));
+          this._displaystart = d3.format("d")(this._x.invert(d3.event.selection[0]));
+          this._displayend = d3.format("d")(this._x.invert(d3.event.selection[1]));
           this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: this._start, type: 'start'}
-          }));
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: this._end, type: 'end'},
+            detail: {displayend: this._displayend, displaystart: this._displaystart}, bubbles:true, cancelable: true
           }));
           this._updateLabels();
           this._updatePolygon();
@@ -87,7 +84,7 @@ class ProtVistaNavigation extends HTMLElement {
       .call(this._viewport);
 
     this._brushG
-      .call(this._viewport.move, [this._x(this._start), this._x(this._end)]);
+      .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
 
     this.polygon = svg.append("polygon")
       .attr('class', 'zoom-polygon')
@@ -99,17 +96,17 @@ class ProtVistaNavigation extends HTMLElement {
     this._updatePolygon();
     this._updateLabels();
     if (this._brushG) this._brushG
-      .call(this._viewport.move, [this._x(this._start), this._x(this._end)]);
+      .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
   }
   _updateLabels() {
-    if (this._startLabel) this._startLabel.text(this._start);
-    if (this._endLabel) this._endLabel.text(this._end);
+    if (this._displaystartLabel) this._displaystartLabel.text(this._displaystart);
+    if (this._displayendLabel) this._displayendLabel.text(this._displayend);
   }
   _updatePolygon(){
     if (this.polygon) this.polygon
       .attr('points',
-        `${this._x(this._start)},${height/2}
-        ${this._x(this._end)},${height/2}
+        `${this._x(this._displaystart)},${height/2}
+        ${this._x(this._displayend)},${height/2}
         ${width-padding.right},${height}
         ${padding.left},${height}`
       );
