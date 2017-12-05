@@ -38,6 +38,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
   static get observedAttributes() {
     return ProtVistaTrack.observedAttributes.concat('expanded');
   }
+
   _createFeatures(){
     this.featuresG = this.seq_g.selectAll('g.feature-group')
       .data(this._data)
@@ -73,24 +74,15 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
             this.removeAttribute('expanded')
           else
             this.setAttribute('expanded', 'expanded')
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: !this._expanded, type: 'expanded'}, bubbles:true, cancelable: true
-          }));
         })
         .on('mouseover', f => {
           this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
-          }));
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: f.start, type: 'highlightstart'}, bubbles:true, cancelable: true
+            detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
           }));
         })
         .on('mouseout', () => {
           this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: null, type: 'highlightend'}, bubbles:true, cancelable: true
-          }));
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {value: null, type: 'highlightstart'}, bubbles:true, cancelable: true
+            detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
           }));
         });
 
@@ -127,6 +119,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
   }
   _updateTrack(){
     if (this._xScale) {
+      this._xScale.domain([this._displaystart, this._displayend + 1]);
       this._layoutObj.expanded = this._expanded;
       this._layoutObj.init(this._data);
       this.childrenGroup.attr('visibility', this._expanded ? 'visible' : 'hidden' );
@@ -150,6 +143,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .attr('transform', f =>
           'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         );
+      this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);
     }
   }

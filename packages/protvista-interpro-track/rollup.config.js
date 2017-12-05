@@ -9,7 +9,7 @@ export default {
       file: 'dist/protvista-interpro-track.js',
       format: 'iife',
   },
-  external: ['d3'],
+  external: ['d3', 'protvista-track'],
   // paths: {
   //   d3: 'https://d3js.org/d3.v4.min.js'
   // },
