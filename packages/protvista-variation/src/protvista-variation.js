@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import {zoom as d3Zoom} from 'd3-zoom';
 import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
-import ProtvistaVariationFilters from './filters'
+import {getFiltersFromAttribute} from './filters';
 import cloneDeep from 'lodash-es/cloneDeep';
 import '../style/protvista-variation.css';
 
@@ -36,11 +36,17 @@ class ProtvistaVariation extends HTMLElement {
     constructor() {
         super();
         this._accession = this.getAttribute('accession');
-        this._length = parseInt(this.getAttribute('length'));
-        this._highlightStart = parseInt(this.getAttribute('highlightStart'));
-        this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
-        this._height = 430;
+        this._highlightStart = parseInt(this.getAttribute('highlight-start'))
+            ? parseInt(this.getAttribute('highlight-start'))
+            : 0;
+        this._highlightEnd = parseInt(this.getAttribute('highlight-end'))
+            ? parseInt(this.getAttribute('highlight-end'))
+            : 0;
+        this._height = parseInt(this.getAttribute('height'))
+            ? parseInt(this.getAttribute('height'))
+            : 430;
         this._width = this.getAttribute('width'); //if empty then takes flexbox width
+        this._selectedFilters = getFiltersFromAttribute(this.getAttribute('filters'));
         this._margin = {
             top: 20,
             right: 10,
@@ -98,25 +104,40 @@ class ProtvistaVariation extends HTMLElement {
         this._width = width;
     }
 
+    get highlightStart() {
+        return this._highlightStart;
+    }
+
+    set highlightStart(highlightStart) {
+        this._highlightStart = highlightStart;
+    }
+
+    get highlightEnd() {
+        return this._highlightEnd;
+    }
+
+    set highlightEnd(highlighEnd) {
+        this._highlightEnd = highlighEnd;
+    }
+
     static get observedAttributes() {
-        return ['start', 'scale', 'highlightStart', 'highlightEnd', 'width'];
+        return [
+            'start',
+            'scale',
+            'highlightStart',
+            'highlightEnd',
+            'filters',
+            'width'
+        ];
     }
 
     connectedCallback() {
-        const sidebarContainer = document.createElement('div');
-        sidebarContainer.className = 'protvista-sidebar-container';
-        this.appendChild(sidebarContainer);
-
         const visualisationContainer = document.createElement('div');
         visualisationContainer.className = 'protvista-visualisation-container';
         this.appendChild(visualisationContainer);
         this.width = this.width
             ? this.width
             : visualisationContainer.offsetWidth;
-
-        const filtercontainer = document.createElement('protvista-variation-filters');
-        filtercontainer.className = 'filters-container';
-        sidebarContainer.appendChild(filtercontainer);
 
         this.addEventListener('load', d => {
             this._length = d.detail.payload.sequence.length;
@@ -128,13 +149,12 @@ class ProtvistaVariation extends HTMLElement {
             }
             // this.updateData(filters.consequenceFilters[0].filter(this._data));
         });
-        filtercontainer.addEventListener('protvista-filter-variants', d => {
-            this.applyFilters(d.detail);
-        });
+        // filtercontainer.addEventListener('protvista-filter-variants', d => {
+        // this.applyFilters(d.detail); });
         this.listenForResize();
     }
 
-    attributeChangedCallback(attrName) {
+    attributeChangedCallback(attrName, oldVal, newVal) {
         if (!this._svg) {
             return;
         }
@@ -145,6 +165,11 @@ class ProtvistaVariation extends HTMLElement {
             case 'scale':
                 this.applyZoomTranslation();
                 break;
+            case 'filters':
+                if (newVal !== oldVal) {
+                    this._selectedFilters = getFiltersFromAttribute(this.getAttribute('filters'));
+                    this.applyFilters(this._selectedFilters);
+                }
         }
     }
 
@@ -218,6 +243,13 @@ class ProtvistaVariation extends HTMLElement {
     }
 
     createDataSeries(svg, features) {
+        // Highlight area behind everything else
+        this._highlightArea = svg
+            .append('rect')
+            .attr('class', 'protvista-highlight')
+            .attr('x', this._xScale(this.highlightStart))
+            .attr('width', this._xScale(this.highlightEnd - this.highlightStart))
+            .attr('height', this._height);
 
         // Group for the main chart
         const mainChart = svg
@@ -341,6 +373,10 @@ class ProtvistaVariation extends HTMLElement {
                 .offsetWidth;
             this.updatedWidth();
         };
+    }
+
+    setHighlightRegion() {
+        this._svg.append
     }
 }
 
