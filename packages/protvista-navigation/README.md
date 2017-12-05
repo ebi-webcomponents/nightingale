@@ -1,5 +1,6 @@
 # `<protvista-navigation>`
 A custom element allowing to navigate a protein/nucleic sequence.
+See it running [Here](https://ebi-ppf.github.io/protvista-navigation/).
 
 ## Usage
 ```html
