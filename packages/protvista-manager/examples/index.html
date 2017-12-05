@@ -12,9 +12,12 @@
 
     </head>
     <body>
-      <protvista-manager attributes="length start end highlightstart highlightend" id="example">
-        <protvista-navigation length="223" start="5" end="158" highlightStart="10" highlightEnd="45"></protvista-navigation>
-        <protvista-track id= "track1" length="223" start="5" end="158" highlightstart="10" highlightend="45"></protvista-track>
+      <protvista-manager attributes="length displaystart displayend highlightstart highlightend" id="example">
+        <protvista-navigation length="223" displaystart="1" displayend="158" highlightStart="10" highlightEnd="45"></protvista-navigation>
+        <protvista-sequence length="223" displaystart="1" displayend="158" highlightStart="10" highlightEnd="45"></protvista-sequence>
+        <protvista-track id= "track1" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-track>
+        <protvista-track id= "track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track>
+        <protvista-interpro-track id= "track3" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-interpro-track>
       </protvista-manager>
 
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -28,18 +31,34 @@
 
       <script src="../node_modules/protvista-navigation/dist/protvista-navigation.js" charset="utf-8" defer></script>
       <script src="../node_modules/protvista-track/dist/protvista-track.js" charset="utf-8" defer></script>
+      <script src="../node_modules/protvista-interpro-track/dist/protvista-interpro-track.js" charset="utf-8" defer></script>
+      <script src="../node_modules/protvista-sequence/dist/protvista-sequence.js" charset="utf-8" defer></script>
       <script src="../dist/protvista-manager.js" charset="utf-8" defer></script>
       <script>
       window.onload = () => {
-        // const seqE = document.querySelector("#example protvista-sequence");
-        // seqE.data = "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
-        const track1 = document.querySelector("#track1");
-        track1.data = [
-          {accession:'feature1', start: 10, end: 40, color: '#342ea2'},
-          {accession:'feature2', start: 50, end: 150, color: '#A42ea2'},
+        const seqE = document.querySelector("#example protvista-sequence");
+        seqE.data = "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
+
+        const data = [
+          {accession:'feature1', start: 10, end: 40, color: '#342ea2', children: [
+            {accession:'feature1.1', start: 12, end: 40},
+            {accession:'feature1.2', locations: [{ fragments:[
+              {start: 10, end: 27},
+              {start: 29, end: 40},
+            ]}]},
+          ]},
+          {accession:'feature2', start: 30, end: 150, color: '#A42ea2'},
           {accession:'feature3', start: 155, end: 155, color: '#A4Aea2'},
-          {accession:'feature4', start: 200, end: 210, color: '#34Aea2'},
+          {accession:'feature4', locations: [
+            { fragments:[
+              {start: 200, end: 204},
+              {start: 206, end: 210}
+            ]}
+          ], color: '#34Aea2'},
         ];
+        document.querySelector("#track1").data = data;
+        document.querySelector("#track2").data = data;
+        document.querySelector("#track3").data = data;
       }
       </script>
     </body>
