@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 const height = 40,
-  width = 700,
+  width = 760,
   padding = {
     top: 10,
     right: 10,
@@ -14,8 +14,8 @@ class ProtVistaSequence extends HTMLElement {
   constructor() {
     super();
     this._length = parseInt(this.getAttribute('length'));
-    this._start = parseInt(this.getAttribute('start')) || 1;
-    this._end = parseInt(this.getAttribute('end')) || this._length;
+    this._displaystart = parseInt(this.getAttribute('displaystart')) || 1;
+    this._displayend = parseInt(this.getAttribute('displayend')) || this._length;
     this._highlightstart = parseInt(this.getAttribute('highlightstart'));
     this._highlightend = parseInt(this.getAttribute('highlightend'));
   }
@@ -36,7 +36,7 @@ class ProtVistaSequence extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'start', 'end', 'highlightstart', 'highlightend'
+    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -50,7 +50,7 @@ class ProtVistaSequence extends HTMLElement {
   _createSequence() {
     this._x = d3.scaleLinear()
       .range([padding.left, width - padding.right])
-      .domain([this._start, this._end]);
+      .domain([this._displaystart, this._displayend]);
 
     const svg = d3.select(this)
       .append('div')
@@ -81,22 +81,18 @@ class ProtVistaSequence extends HTMLElement {
       .attr('height', height)
       .call(d3.drag()
           .on('drag', ()=>{
-            const l = this._end - this._start;
+            const l = this._displayend - this._displaystart;
 
             const x0 = this._x.range()[0] + d3.event.dx;
-            const dx = this._start - this._x.invert(x0);
-            this._start = Math.max(1, this._start + dx);
-            this._end = this._start + l;
-            if (this._end > this._length+1){
-              this._end = this._length+1;
-              this._start = this._end - l;
+            const dx = this._displaystart - this._x.invert(x0);
+            this._displaystart = Math.max(1, this._displaystart + dx);
+            this._displayend = this._displaystart + l;
+            if (this._displayend > this._length+1){
+              this._displayend = this._length+1;
+              this._displaystart = this._displayend - l;
             }
-
             this.dispatchEvent(new CustomEvent("change", {
-              detail: {value: Math.round(this._start), type: 'start'}
-            }));
-            this.dispatchEvent(new CustomEvent("change", {
-              detail: {value: Math.round(this._end), type: 'end'}
+              detail: {displayend: this._displayend, displaystart: this._displaystart}, bubbles:true, cancelable: true
             }));
           })
       );
@@ -104,7 +100,7 @@ class ProtVistaSequence extends HTMLElement {
   }
   _updateSequence(){
     if (this._x) {
-      this._x.domain([this._start, this._end]);
+      this._x.domain([this._displaystart, this._displayend]);
 
       this.axis.call(this.xAxis);
       this.axis.select('.domain').remove();
@@ -128,7 +124,7 @@ class ProtVistaSequence extends HTMLElement {
           .attr('x', this._x(this._highlightstart))
           .style('opacity', 0.3)
           .attr('width',
-            this._x(this._start +
+            this._x(this._displaystart +
               Math.max(1, this._highlightend - this._highlightstart)
             )
           );
