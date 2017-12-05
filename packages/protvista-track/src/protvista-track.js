@@ -63,8 +63,7 @@ class ProtVistaTrack extends HTMLElement {
     this._createTrack();
   }
 
-  static get observedAttributes() {
-    return [
+  static get observedAttributes() {return [
       'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend', 'color', 'shape', 'layout'
     ];
   }
@@ -147,38 +146,32 @@ class ProtVistaTrack extends HTMLElement {
           .attr('class', 'location-group');
 
     this.features = this.locations
-          .selectAll('g.fragment-group')
-          .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
-          .enter()
+        .selectAll('g.fragment-group')
+        .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
+        .enter()
         .append('path')
-        .attr('class', 'feature')
-        .attr('d', f =>
-          this._featureShape.getFeatureShape(
-            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-              f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
+          .attr('class', 'feature')
+          .attr('d', f =>
+            this._featureShape.getFeatureShape(
+              this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
+                f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
+            )
           )
-        )
-        .attr('transform', f =>
-          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-        )
-        .attr('fill', f => this._getFeatureColor(f.feature))
-        .attr('stroke', f => this._getFeatureColor(f.feature))
-      .on('mouseover', f => {
-        this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.end, type: 'highlightend'}, bubbles:true, cancelable: true
-        }));
-        this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: f.start, type: 'highlightstart'}, bubbles:true, cancelable: true
-        }));
-      })
-      .on('mouseout', () => {
-        this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: null, type: 'highlightend'}, bubbles:true, cancelable: true
-        }));
-        this.dispatchEvent(new CustomEvent("change", {
-          detail: {value: null, type: 'highlightstart'}, bubbles:true, cancelable: true
-        }));
-      });
+          .attr('transform', f =>
+            'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+          )
+          .attr('fill', f => this._getFeatureColor(f.feature))
+          .attr('stroke', f => this._getFeatureColor(f.feature))
+          .on('mouseover', f => {
+            this.dispatchEvent(new CustomEvent("change", {
+              detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
+            }));
+          })
+          .on('mouseout', () => {
+            this.dispatchEvent(new CustomEvent("change", {
+              detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
+            }));
+          });
   }
 
   _updateTrack(){
@@ -199,20 +192,22 @@ class ProtVistaTrack extends HTMLElement {
         )
         .attr('transform', f =>
           'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-        )
-      ;
-
-      if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
-        this.highlighted
-          .attr('x', this._xScale(this._highlightstart))
-          .style('opacity', 0.3)
-          .attr('width', this._xScale(this._displaystart +
-            Math.max(1, this._highlightend - this._highlightstart)
-          ));
-      } else {
-        this.highlighted.style('opacity', 0);
-      }
+        );
+      this._updateHighlight();
     }
+  }
+  _updateHighlight() {
+    if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
+      this.highlighted
+        .attr('x', this._xScale(this._highlightstart))
+        .style('opacity', 0.3)
+        .attr('width', this._xScale(this._displaystart +
+          Math.max(1, this._highlightend - this._highlightstart)
+        ));
+    } else {
+      this.highlighted.style('opacity', 0);
+    }
+
   }
 }
 
