@@ -121,12 +121,10 @@ class ProtVistaSequence extends HTMLElement {
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
         this.highlighted
-          .attr('x', this._x(this._highlightstart))
+          .attr('x', this._x(this._highlightstart - 0.5))
           .style('opacity', 0.3)
-          .attr('width',
-            this._x(this._displaystart +
-              Math.max(1, this._highlightend - this._highlightstart)
-            )
+          .attr('width', (this._x(2) - this._x(1))*
+            (this._highlightend - this._highlightstart + 1)
           );
       } else {
         this.highlighted.style('opacity', 0);
