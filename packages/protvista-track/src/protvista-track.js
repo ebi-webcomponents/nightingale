@@ -73,7 +73,7 @@ class ProtVistaTrack extends HTMLElement {
       if (newValue===""){
         this[`_${name}`] = true;
       } else {
-        const intValue = parseInt(newValue);
+        const intValue = parseFloat(newValue);
         this[`_${name}`] = isNaN(intValue) ? newValue : intValue;
       }
       this._updateTrack();
