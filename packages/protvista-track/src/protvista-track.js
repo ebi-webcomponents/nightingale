@@ -109,7 +109,7 @@ class ProtVistaTrack extends HTMLElement {
 
     this._xScale = d3.scaleLinear()
       .range([padding.left, width - padding.right])
-      .domain([this._displaystart, this._displayend + 1]);
+      .domain([this._displaystart, this._displayend]);
 
     d3.select(this).selectAll('*').remove();
     d3.select(this).html('');
@@ -123,6 +123,7 @@ class ProtVistaTrack extends HTMLElement {
     this.highlighted = this.svg.append('rect')
       .attr('class', 'highlighted')
       .attr('fill', 'yellow')
+      // .attr('stroke', 'black')
       .attr('height', height);
 
     this.seq_g = this.svg.append('g')
@@ -154,7 +155,7 @@ class ProtVistaTrack extends HTMLElement {
           .attr('d', f =>
             this._featureShape.getFeatureShape(
               this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-                f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
+                f.end ? f.end - f.start : 1, this._getShape(f.feature)
             )
           )
           .attr('transform', f =>
@@ -176,7 +177,7 @@ class ProtVistaTrack extends HTMLElement {
 
   _updateTrack(){
     if (this._xScale) {
-      this._xScale.domain([this._displaystart, this._displayend + 1]);
+      this._xScale.domain([this._displaystart, this._displayend]);
       this.features = this.seq_g.selectAll('path.feature')
         .data(this._data.reduce(
           (acc,f)=>acc.concat(f.locations.reduce(
@@ -187,7 +188,7 @@ class ProtVistaTrack extends HTMLElement {
         .attr('d', f =>
           this._featureShape.getFeatureShape(
             this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-              f.end ? f.end - f.start + 1 : 1, this._getShape(f)
+              f.end ? f.end - f.start : 1, this._getShape(f)
           )
         )
         .attr('transform', f =>
