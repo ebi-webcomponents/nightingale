@@ -84,7 +84,13 @@ const loadComponent = function () {
                     .classList
                     .add('active');
             }
-            this.dispatchEvent(new CustomEvent('protvista-filter-variants', {detail: this._selectedFilters}));
+            this.dispatchEvent(new CustomEvent("change", {
+                detail: {
+                    variantfilters: this._selectedFilters
+                },
+                bubbles: true,
+                cancelable: true
+            }))
         }
 
     }

@@ -1,5 +1,5 @@
-# `<protvista-navigation>`
-A custom element allowing to navigate a protein/nucleic sequence.
+# `<protvista-variation-filter>`
+A custom element to filter variation data
 
 ## Usage
 ```html
@@ -9,9 +9,8 @@ A custom element allowing to navigate a protein/nucleic sequence.
 ## API Reference
 
 ### Properties
-#### `name: type`
-A property.
+#### `N/A`
 
 ### Events
-#### `my-event`
-An event that does things.
+#### `change: variantfilters`
+The list of selected filters
