@@ -107,7 +107,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
               .attr('d', f =>
                 this._featureShape.getFeatureShape(
                   this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-                    f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature.parent)
+                    f.end ? f.end - f.start : 1, this._getShape(f.feature.parent)
                 )
               )
               .attr('transform', f =>
@@ -119,7 +119,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
   }
   _updateTrack(){
     if (this._xScale) {
-      this._xScale.domain([this._displaystart, this._displayend + 1]);
+      this._xScale.domain([this._displaystart, this._displayend]);
       this._layoutObj.expanded = this._expanded;
       this._layoutObj.init(this._data);
       this.childrenGroup.attr('visibility', this._expanded ? 'visible' : 'hidden' );
@@ -127,7 +127,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .attr('d', f =>
           this._featureShape.getFeatureShape(
             this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-              f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
+              f.end ? f.end - f.start : 1, this._getShape(f.feature)
           )
         )
         .attr('transform', f =>
