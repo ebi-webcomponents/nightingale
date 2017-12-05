@@ -41,7 +41,7 @@ class ProtVistaSequence extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue){
-      this[`_${name}`] = parseInt(newValue);
+      this[`_${name}`] = parseFloat(newValue);
       this._updateSequence();
     }
   }
@@ -73,12 +73,29 @@ class ProtVistaSequence extends HTMLElement {
       .attr('fill', 'yellow')
       .attr('height', height);
 
+    this.prevScale = 1;
     this.overlay = svg.append('rect')
       .attr('class', 'overlay')
       .attr('fill', 'transparent')
       .style('cursor', 'move')
       .attr('width', width)
       .attr('height', height)
+      .call(d3.zoom()
+        .on('zoom', ()=>{
+          const delta = this.prevScale - d3.event.transform.k;
+          const scale = this._length/(this._displayend-this._displaystart);
+          this._displayend = this._displaystart + this._length/(scale-delta);
+          if (this._displayend - this._displaystart < 4)
+            this._displayend = this._displaystart + 4;
+          if (this._displayend > this._length)
+            this._displayend = this._length;
+
+          this.prevScale = d3.event.transform.k;
+          this.dispatchEvent(new CustomEvent("change", {
+            detail: {displayend: this._displayend, displaystart: this._displaystart}, bubbles:true, cancelable: true
+          }));
+        })
+      , d3.zoomIdentity)
       .call(d3.drag()
           .on('drag', ()=>{
             const l = this._displayend - this._displaystart;
