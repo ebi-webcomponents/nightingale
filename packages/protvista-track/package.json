@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Basic track type of the viewer.",
   "main": "dist/protvista-track.js",
   "module": "src/index.js",

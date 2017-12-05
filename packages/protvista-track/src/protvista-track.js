@@ -155,7 +155,7 @@ class ProtVistaTrack extends HTMLElement {
           .attr('d', f =>
             this._featureShape.getFeatureShape(
               this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-                f.end ? f.end - f.start : 1, this._getShape(f.feature)
+                f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
             )
           )
           .attr('transform', f =>
@@ -188,7 +188,7 @@ class ProtVistaTrack extends HTMLElement {
         .attr('d', f =>
           this._featureShape.getFeatureShape(
             this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-              f.end ? f.end - f.start : 1, this._getShape(f)
+              f.end ? f.end - f.start + 1: 1, this._getShape(f)
           )
         )
         .attr('transform', f =>
@@ -200,11 +200,11 @@ class ProtVistaTrack extends HTMLElement {
   _updateHighlight() {
     if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
       this.highlighted
-        .attr('x', this._xScale(this._highlightstart))
+        .attr('x', this._xScale(this._highlightstart - 0.5))
         .style('opacity', 0.3)
-        .attr('width', this._xScale(this._displaystart +
-          Math.max(1, this._highlightend - this._highlightstart)
-        ));
+        .attr('width', (this._xScale(2) - this._xScale(1))*
+          (this._highlightend - this._highlightstart + 1)
+      );
     } else {
       this.highlighted.style('opacity', 0);
     }

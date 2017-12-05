@@ -12,7 +12,7 @@ export default class FeatureShape {
         //0,0 is in the top middle, so we first move to the starting of the aa at gapShape,0.
         this._gapShape = ftLength === 1 ? 0 : this._ftWidth/ftLength/2;
         //again a gap is needed for regions
-        this._gapRegion = 0;//aaWidth/2;
+        this._gapRegion = aaWidth/2;
         // if the constructor doesn't exist, rectangle is used by default
         if (typeof this['_' + shape] !== 'function') {
             shape = 'rectangle';
