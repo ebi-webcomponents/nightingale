@@ -2,17 +2,14 @@
   "name": "protvista-interpro-track",
   "version": "0.0.1",
   "description": "Interpro extension of the track type.",
-  "main": "index.js",
+  "main": "dist/protvista-interpro-track.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
-    "build": "mkdirp ./dist && rollup -c",
-    "watch": "nodemon -w src -x \"npm run build\"",
-    "build-dev": "rollup -c",
-    "build-prod": "NODE_ENV=production rollup -c",
+    "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
     "rollup-watch": "rollup -cw",
-    "test": "mocha",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "test-watch": "mocha -w"
+    "serve": "npm run rollup-watch & npm run browser-sync"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
@@ -20,26 +17,18 @@
     "@webcomponents/webcomponentsjs": "^1.0.19",
     "babel-cli": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-custom-element-classes": "^0.1.0",
+    "babel-preset-env": "^1.6.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2016": "^6.24.1",
-    "browser-sync": "^2.18.12",
-    "chai": "^3.5.0",
-    "cssnano": "^3.10.0",
-    "eslint": "^4.7.2",
-    "mocha": "^3.3.0",
-    "nodemon": "^1.11.0",
+    "browser-sync": "^2.18.13",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.1",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-babel-minify": "^3.1.2",
-    "rollup-plugin-conditional": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {
     "d3": "^4.9.1",
-    "protvista-track": "git+https://github.com/ebi-ppf/protvista-track.git"
+    "protvista-track": "^0.0.1"
   }
 }
