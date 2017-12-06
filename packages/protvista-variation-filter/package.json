@@ -1,6 +1,7 @@
 {
     "name": "protvista-variation-filter",
     "description": "Filters for variation track",
+    "version": "0.0.0",
     "main": "src/main.js",
     "scripts": {
         "build-dev": "rollup -c",

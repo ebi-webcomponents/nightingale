@@ -54,13 +54,13 @@ const loadComponent = function () {
                 <h5>Filter Consequence</h5>
                 <ul class="filter-list">
                     ${filters.filter(filter => filter.type === 'consequence').map(filter => html `
-                        <li><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ${filter.color[0]}"></span></span>${filter.label}</a></li>
+                        <li><a id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ${filter.color[0]}"></span></span>${filter.label}</a></li>
                     `)}
                 </ul>
                 <h5>Filter Data Provenance</h5>
                 <ul class="filter-list">
                     ${filters.filter(filter => filter.type === 'provenance').map(filter => html `
-                        <li id="${filter.name}-filter"><a href="#" id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>${filter.label}</a></li>
+                        <li id="${filter.name}-filter"><a id="${filter.name}-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>${filter.label}</a></li>
                     `)}
                 </ul>
             `, this);
@@ -86,7 +86,10 @@ const loadComponent = function () {
             }
             this.dispatchEvent(new CustomEvent("change", {
                 detail: {
-                    variantfilters: this._selectedFilters
+                    variantfilters: this
+                        ._selectedFilters
+                        .map(d => d.name)
+                        .toString()
                 },
                 bubbles: true,
                 cancelable: true

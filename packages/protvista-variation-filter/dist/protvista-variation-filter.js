@@ -44,10 +44,6 @@ const envCachesTemplates = ((t) => t() === t())(() => ((s) => s) ``);
 // calls to a tag for the same literal, so we can cache work done per literal
 // in a Map.
 const templates = new Map();
-/**
- * Interprets a template literal as an HTML template that can efficiently
- * render to and update a container.
- */
 const html = (strings, ...values) => litTag(strings, values, templates, false);
 /**
  * Interprets a template literal as an SVG template that can efficiently
@@ -518,6 +514,7 @@ class TemplateInstance {
         return fragment;
     }
 }
+//# sourceMappingURL=lit-html.js.map
 
 __$styleInject("ul.filter-list {\n    list-style:none;\n    margin:0;\n    padding:0;\n}\nul.filter-list a {\n    cursor:pointer;\n}\n.filter-list li {\n    margin: .4em 0;\n}\n.filter-select-trigger {\n    text-decoration:none;\n}\n.filter-select-wrapper {\n    box-sizing: border-box;\n    display:inline-block;\n    border-radius:.2em;\n    margin-right: .2em;\n    margin-left: .3em;\n    line-height: .2em;\n    padding: .2em;\n    border: .1em solid rgba(255, 0, 0, 0);\n}\n.filter-select {\n    margin:0;\n    box-sizing:border-box;\n    border-radius:.2em;\n    width:1.2em;\n    height:1.2em;\n    display:inline-block;\n    background-color: #333333;\n}\n.filter-select-trigger:hover .filter-select-wrapper {\n    border: .1em solid rgba(255, 0, 0, .5);\n}\n.filter-select-trigger.active .filter-select-wrapper {\n    border: .1em solid rgba(255, 0, 0, .9);\n}", undefined);
 
@@ -721,8 +718,8 @@ var taggedTemplateLiteral = function (strings, raw) {
 };
 
 var _templateObject = taggedTemplateLiteral(['\n                <h5>Filter Consequence</h5>\n                <ul class="filter-list">\n                    ', '\n                </ul>\n                <h5>Filter Data Provenance</h5>\n                <ul class="filter-list">\n                    ', '\n                </ul>\n            '], ['\n                <h5>Filter Consequence</h5>\n                <ul class="filter-list">\n                    ', '\n                </ul>\n                <h5>Filter Data Provenance</h5>\n                <ul class="filter-list">\n                    ', '\n                </ul>\n            ']);
-var _templateObject2 = taggedTemplateLiteral(['\n                        <li><a href="#" id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ', '"></span></span>', '</a></li>\n                    '], ['\n                        <li><a href="#" id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ', '"></span></span>', '</a></li>\n                    ']);
-var _templateObject3 = taggedTemplateLiteral(['\n                        <li id="', '-filter"><a href="#" id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>', '</a></li>\n                    '], ['\n                        <li id="', '-filter"><a href="#" id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>', '</a></li>\n                    ']);
+var _templateObject2 = taggedTemplateLiteral(['\n                        <li><a id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ', '"></span></span>', '</a></li>\n                    '], ['\n                        <li><a id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select" style="background-color: ', '"></span></span>', '</a></li>\n                    ']);
+var _templateObject3 = taggedTemplateLiteral(['\n                        <li id="', '-filter"><a id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>', '</a></li>\n                    '], ['\n                        <li id="', '-filter"><a id="', '-filter" class="filter-select-trigger"><span class="filter-select-wrapper"><span class="filter-select"></span></span>', '</a></li>\n                    ']);
 
 var filters = [{
     name: 'disease',
@@ -815,7 +812,9 @@ var loadComponent = function loadComponent() {
                 }
                 this.dispatchEvent(new CustomEvent("change", {
                     detail: {
-                        variantfilters: this._selectedFilters
+                        variantfilters: this._selectedFilters.map(function (d) {
+                            return d.name;
+                        }).toString()
                     },
                     bubbles: true,
                     cancelable: true
