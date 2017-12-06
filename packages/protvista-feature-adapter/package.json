@@ -1,8 +1,10 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
-  "main": "src/ProtVistaFeatureAdapter",
+  "main": "dist/ProtVistaFeatureAdapter.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
     "rollup-watch": "rollup -cw",
