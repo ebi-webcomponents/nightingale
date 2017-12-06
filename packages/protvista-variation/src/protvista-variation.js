@@ -36,17 +36,17 @@ class ProtvistaVariation extends HTMLElement {
     constructor() {
         super();
         this._accession = this.getAttribute('accession');
-        this._highlightStart = parseInt(this.getAttribute('highlight-start'))
-            ? parseInt(this.getAttribute('highlight-start'))
+        this._highlightStart = parseInt(this.getAttribute('highlightstart'))
+            ? parseInt(this.getAttribute('highlightstart'))
             : 0;
-        this._highlightEnd = parseInt(this.getAttribute('highlight-end'))
-            ? parseInt(this.getAttribute('highlight-end'))
+        this._highlightEnd = parseInt(this.getAttribute('highlightend'))
+            ? parseInt(this.getAttribute('highlightend'))
             : 0;
         this._height = parseInt(this.getAttribute('height'))
             ? parseInt(this.getAttribute('height'))
             : 430;
         this._width = this.getAttribute('width'); //if empty then takes flexbox width
-        this._selectedFilters = getFiltersFromAttribute(this.getAttribute('filters'));
+        this._selectedFilters = getFiltersFromAttribute(this.getAttribute('variantfilters'));
         this._margin = {
             top: 20,
             right: 10,
@@ -76,13 +76,23 @@ class ProtvistaVariation extends HTMLElement {
             .bind(this);
     }
 
-    get start() {
-        return this.getAttribute('start');
+    get displayStart() {
+        return this.getAttribute('displaystart');
     }
 
-    set start(start) {
-        if (start !== this.getAttribute('start')) {
-            this.setAttribute('start', start);
+    set displayStart(displaystart) {
+        if (displaystart !== this.getAttribute('displaystart')) {
+            this.setAttribute('displaystart', displaystart);
+        }
+    }
+
+    get displayEnd() {
+        return this.getAttribute('displayend');
+    }
+
+    set displayEnd(displayend) {
+        if (displayend !== this.getAttribute('displayend')) {
+            this.setAttribute('displayend', displayend);
         }
     }
 
@@ -122,11 +132,12 @@ class ProtvistaVariation extends HTMLElement {
 
     static get observedAttributes() {
         return [
-            'start',
+            'displaystart',
+            'displayend',
             'scale',
             'highlightStart',
             'highlightEnd',
-            'filters',
+            'variantfilters',
             'width'
         ];
     }
@@ -143,7 +154,7 @@ class ProtvistaVariation extends HTMLElement {
             this._length = d.detail.payload.sequence.length;
             this._data = processVariants(d.detail.payload.features, d.detail.payload.sequence)
             this.renderChart(visualisationContainer);
-            if (this.start && this.scale) {
+            if (this.displayStart && this.scale) {
                 this.applyZoomTranslation();
                 this.refresh();
             }
@@ -165,9 +176,9 @@ class ProtvistaVariation extends HTMLElement {
             case 'scale':
                 this.applyZoomTranslation();
                 break;
-            case 'filters':
+            case 'variantfilters':
                 if (newVal !== oldVal) {
-                    this._selectedFilters = getFiltersFromAttribute(this.getAttribute('filters'));
+                    this._selectedFilters = getFiltersFromAttribute(this.getAttribute('variantfilters'));
                     this.applyFilters(this._selectedFilters);
                 }
         }
@@ -178,7 +189,7 @@ class ProtvistaVariation extends HTMLElement {
             ._svg
             .transition()
             .duration(300)
-            .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.start) * this.scale) + this._margin.left), 0).scale(this.scale));
+            .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.displayStart) * this.scale) + this._margin.left), 0).scale(this.scale));
     }
 
     renderChart(rootElement) {

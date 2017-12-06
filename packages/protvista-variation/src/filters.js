@@ -64,7 +64,7 @@ function getFiltersFromAttribute(attrValue) {
         const filterStrings = attrValue.split(',');
         return filters.filter(f => filterStrings.find(d => d === f.name));
     } else {
-        return;
+        return [];
     }
 }
 
