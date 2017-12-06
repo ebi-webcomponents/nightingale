@@ -36,6 +36,12 @@ class ProtvistaVariation extends HTMLElement {
     constructor() {
         super();
         this._accession = this.getAttribute('accession');
+        this.displayStart = this.getAttribute('displaystart')
+            ? this.getAttribute('displaystart')
+            : 0;
+        this._highlightEnd = parseInt(this.getAttribute('highlightend'))
+            ? parseInt(this.getAttribute('highlightend'))
+            : 0;
         this._highlightStart = parseInt(this.getAttribute('highlightstart'))
             ? parseInt(this.getAttribute('highlightstart'))
             : 0;
@@ -96,16 +102,6 @@ class ProtvistaVariation extends HTMLElement {
         }
     }
 
-    get scale() {
-        return this.getAttribute('scale');
-    }
-
-    set scale(scale) {
-        if (scale !== this.getAttribute('scale')) {
-            this.setAttribute('scale', scale);
-        }
-    }
-
     get width() {
         return this._width;
     }
@@ -152,9 +148,12 @@ class ProtvistaVariation extends HTMLElement {
 
         this.addEventListener('load', d => {
             this._length = d.detail.payload.sequence.length;
+            this.displayEnd = this.getAttribute('displayend')
+                ? this.getAttribute('displayend')
+                : this._length;
             this._data = processVariants(d.detail.payload.features, d.detail.payload.sequence)
             this.renderChart(visualisationContainer);
-            if (this.displayStart && this.scale) {
+            if (this.displayStart && this.displayEnd) {
                 this.applyZoomTranslation();
                 this.refresh();
             }
@@ -170,10 +169,10 @@ class ProtvistaVariation extends HTMLElement {
             return;
         }
         switch (attrName) {
-            case 'start':
+            case 'displaystart':
                 this.applyZoomTranslation();
                 break;
-            case 'scale':
+            case 'displayend':
                 this.applyZoomTranslation();
                 break;
             case 'variantfilters':
@@ -185,11 +184,12 @@ class ProtvistaVariation extends HTMLElement {
     }
 
     applyZoomTranslation() {
+        this._scale = (this._length - this.displayEnd) / this.displayStart;
         this
             ._svg
             .transition()
             .duration(300)
-            .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.displayStart) * this.scale) + this._margin.left), 0).scale(this.scale));
+            .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.displayStart) * this._scale) + this._margin.left), 0).scale(this._scale));
     }
 
     renderChart(rootElement) {
