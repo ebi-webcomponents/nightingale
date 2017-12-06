@@ -3,22 +3,18 @@ import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
-  entry: 'src/index.js',
-  format: 'iife',
-  dest: 'dist/index.js',
+  input: 'src/index.js',
+  name: 'DataLoader',
   sourceMap: true,
-  moduleName: 'DataLoader',
+  output: {
+      file: 'dist/index.js',
+      format: 'iife',
+  },
   plugins: [
     nodeResolve({jsnext: true}),
     eslint(),
     babel({
-      babelrc: false,
-      presets: ['es2016', 'es2017'],
-      env: {
-        production: {
-          presets: ['babili'],
-        }
-      }
+      exclude: 'node_modules/**'
     }),
   ],
 };
