@@ -1,5 +1,6 @@
 build/
 node_modules/
+dist/
 .idea/
 *.log
 coverage/
@@ -16,10 +17,4 @@ _includes/
 _posts/
 _sass/
 _site/
-<<<<<<< HEAD
 Gemfile.lock
-=======
-Gemfile.lock
-
-
->>>>>>> master

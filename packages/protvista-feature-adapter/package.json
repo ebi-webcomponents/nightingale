@@ -4,12 +4,10 @@
   "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
   "main": "src/ProtVistaFeatureAdapter",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register",
-    "test-watch": "npm test -- -w",
-    "coverage": "cross-env NODE_ENV=test nyc npm test",
     "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
-    "watch": "nodemon -w src -x \"npm run build\"",
-    "serve": "browser-sync start --server -f dist/**/*.*"
+    "rollup-watch": "rollup -cw",
+    "browser-sync": "browser-sync start --server -f dist/**/*.*",
+    "serve": "npm run rollup-watch & npm run browser-sync"
   },
   "repository": {
     "type": "git",
@@ -28,43 +26,20 @@
   },
   "homepage": "https://github.com/ebi-uniprot/protvista-feature-adapter#readme",
   "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.19",
     "babel-cli": "^6.24.1",
-    "babel-core": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-es2016": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
-    "cross-env": "^5.0.0",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.18.13",
     "mkdirp": "^0.5.1",
-    "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
-    "rollup": "^0.41.6",
+    "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-eslint": "^3.0.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-watch": "^3.2.2"
+    "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
-    "uniprot-entry-data-adapter": "git+https://github.com/ebi-ppf/uniprot-entry-data-adapter.git",
-    "webcomponentsjs": "^1.0.2"
-  },
-  "nyc": {
-    "sourceMap": false,
-    "instrument": false,
-    "exclude": [
-      "test/**/*Spec.js",
-      "dist"
-    ],
-    "include": [
-      "src/**/*.js"
-    ],
-    "require": [
-      "babel-core/register"
-    ],
-    "reporter": [
-      "text",
-      "text-summary",
-      "lcov"
-    ]
+    "uniprot-entry-data-adapter": "^0.0.3",
+    "uniprot-entry-data-loader": "^0.0.5"
   }
 }

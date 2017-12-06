@@ -1,5 +1,14 @@
 {
-    "presets": ["es2016", "es2017"],
+    "presets": [
+        [
+            "env", {
+            "targets": {
+                "ie": 11
+            },
+            "modules": false
+        }
+        ]
+    ],
     "plugins": [
         "external-helpers"
     ]
