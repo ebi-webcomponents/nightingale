@@ -5,7 +5,7 @@ This component is in charge of capturing the events that its children trigger, a
 
 The children should fire events of the type change, and the detail object should contain the attributes `type` and `value`.
 
-See it running [Here](https://ebi-ppf.github.io/protvista-manager/).
+See it running [Here](https://ebi-ppf.github.io/protvista-manager/index.html).
 
 
 ## Usage
