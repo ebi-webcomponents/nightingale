@@ -21,6 +21,7 @@ It can also parse JSON from the content of a script tag of type
   <source src="https://www.example.com/some/data">
 </data-loader>
 ```
+See it running [Here](https://ebi-ppf.github.io/data-loader/).
 
 ### Use with custom namespace
 
