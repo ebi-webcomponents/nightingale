@@ -1,21 +1,15 @@
 {
   "name": "protvista-track",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic track type of the viewer.",
   "main": "dist/protvista-track.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "build": "mkdirp ./dist && shx cp ./config/config.json ./dist/ && rollup -c",
-    "watch": "nodemon -w src -x \"npm run build\"",
-    "serve1": "browser-sync start --server -f dist/**/*.*",
-    "build-dev": "rollup -c",
-    "build-prod": "NODE_ENV=production rollup -c",
+    "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
     "rollup-watch": "rollup -cw",
-    "test": "mocha",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "test-watch": "mocha -w"
+    "serve": "npm run rollup-watch & npm run browser-sync"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
@@ -27,25 +21,19 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2016": "^6.24.1",
     "browser-sync": "^2.18.12",
-    "chai": "^3.5.0",
-    "cssnano": "^3.10.0",
-    "eslint": "^4.7.2",
-    "mocha": "^3.3.0",
-    "nodemon": "^1.11.0",
-    "protvista-feature-adapter": "git+https://github.com/ebi-ppf/protvista-feature-adapter.git",
+    "data-loader": "^0.3.0",
+    "mkdirp": "^0.5.1",
+    "protvista-feature-adapter": "^0.0.2",
+    "rimraf": "^2.6.1",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-babel-minify": "^3.1.2",
-    "rollup-plugin-conditional": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "shx": "^0.2.2"
+    "uniprot-entry-data-adapter": "0.0.4",
+    "uniprot-entry-data-loader": "^0.1.0"
   },
   "dependencies": {
     "d3": "^4.9.1",
-    "data-loader": "git+https://github.com/ebi-ppf/data-loader.git",
     "lodash-es": "^4.17.4"
   }
 }

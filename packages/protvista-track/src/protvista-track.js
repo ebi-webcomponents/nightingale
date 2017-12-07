@@ -41,7 +41,7 @@ class ProtVistaTrack extends HTMLElement {
 
     this.addEventListener('load', e => {
       if (_includes(this.children, e.target)) {
-        if (e.path[0].localName === 'protvista-config-data-loader') {
+        if (e.target.dataset.key==='config') {
             this._config = new ConfigHelper(e.detail.payload);
             this._updateTrack();
         } else {
@@ -188,7 +188,7 @@ class ProtVistaTrack extends HTMLElement {
         .attr('d', f =>
           this._featureShape.getFeatureShape(
             this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f),
-              f.end ? f.end - f.start + 1: 1, this._getShape(f)
+              f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
           )
         )
         .attr('transform', f =>

@@ -1,9 +1,7 @@
 import ProtVistaTrack from './protvista-track';
-import DataLoader from 'data-loader';
 
 const loadComponent = function() {
     customElements.define('protvista-track', ProtVistaTrack);
-    customElements.define('protvista-config-data-loader', DataLoader);
 };
 // Conditional loading of polyfill
 if (window.customElements) {

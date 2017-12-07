@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>protvista-navigation-demo</title>
+        <title>protvista-track-demo</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../styles/protvistaConfig.css"/>
@@ -22,20 +22,26 @@
                   <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
                 </uniprot-entry-data-loader>
               </protvista-feature-adapter>
-              <protvista-config-data-loader>
+              <data-loader data-key="config">
                   <source src="../dist/config.json">
-              </protvista-config-data-loader>
+              </data-loader>
             </protvista-track>
           </td>
           <td>770</td>
         </tr>
       </table>
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
-      <script src="../node_modules/webcomponentsjs/lite.js" charset="utf-8" defer></script>
-      <script src="../dist/protvista-track.js" charset="utf-8" defer></script>
-      <script src="../node_modules/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
+      <!-- Required for IE11 -->
+      <script src="../node_modules/babel-polyfill/dist/polyfill.min.js"></script>
+      <!-- Web component polyfill (only loads what it needs) -->
+      <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+      <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+      <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+
+      <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
       <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
       <script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
-      <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+      <script src="../node_modules/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
+      <script src="../dist/protvista-track.js" charset="utf-8" defer></script>
     </body>
 </html>
