@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Sequence component for the ProtVista tool",
   "main": "dist/protvista-track.js",
   "module": "src/index.js",
