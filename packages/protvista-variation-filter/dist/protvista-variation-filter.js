@@ -44,6 +44,10 @@ const envCachesTemplates = ((t) => t() === t())(() => ((s) => s) ``);
 // calls to a tag for the same literal, so we can cache work done per literal
 // in a Map.
 const templates = new Map();
+/**
+ * Interprets a template literal as an HTML template that can efficiently
+ * render to and update a container.
+ */
 const html = (strings, ...values) => litTag(strings, values, templates, false);
 /**
  * Interprets a template literal as an SVG template that can efficiently
@@ -514,7 +518,6 @@ class TemplateInstance {
         return fragment;
     }
 }
-//# sourceMappingURL=lit-html.js.map
 
 __$styleInject("ul.filter-list {\n    list-style:none;\n    margin:0;\n    padding:0;\n}\nul.filter-list a {\n    cursor:pointer;\n}\n.filter-list li {\n    margin: .4em 0;\n}\n.filter-select-trigger {\n    text-decoration:none;\n}\n.filter-select-wrapper {\n    box-sizing: border-box;\n    display:inline-block;\n    border-radius:.2em;\n    margin-right: .2em;\n    margin-left: .3em;\n    line-height: .2em;\n    padding: .2em;\n    border: .1em solid rgba(255, 0, 0, 0);\n}\n.filter-select {\n    margin:0;\n    box-sizing:border-box;\n    border-radius:.2em;\n    width:1.2em;\n    height:1.2em;\n    display:inline-block;\n    background-color: #333333;\n}\n.filter-select-trigger:hover .filter-select-wrapper {\n    border: .1em solid rgba(255, 0, 0, .5);\n}\n.filter-select-trigger.active .filter-select-wrapper {\n    border: .1em solid rgba(255, 0, 0, .9);\n}", undefined);
 
