@@ -22,7 +22,7 @@
     "protein-structure"
   ],
   "author": "ljgarcia",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ebi-uniprot/uniprot-entry-data-adapter/issues"
   },
