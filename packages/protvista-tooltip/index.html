@@ -10,12 +10,15 @@
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
+    <style>
+        .myTestClass {
+            color: pink;
+        }
+    </style>
 </head>
 
 <body>
-    <div>
-    <protvista-tooltip></protvista-tooltip>
-    </div>
+    <protvista-tooltip id="testTooltip"></protvista-tooltip>
 
     <!-- Required for IE11 -->
     <script src="node_modules/babel-polyfill/dist/polyfill.min.js"></script>
@@ -24,6 +27,29 @@
     <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
     <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
     <script src="dist/protvista-tooltip.js" charset="utf-8"></script>
+
+    <script>
+        window.onload = () => {
+            console.log('script');
+            const testData = {
+                "title": "REGION 96-110",
+                "elements": [
+                    {"Description": "Heparin-binding"},
+                    {"Tools": "<a href='http://www.uniprot.org/blast/?about=P05067[96-110]&key=Region'>BLAST</a>"},
+                    {
+                        "title": "UniProt",
+                        "elements": [
+                            {"Feature ID": "XYZ"},
+                            {
+                                "title": "<span class='myTestClass'>Disease association</span>"
+                            }
+                        ]
+                    }
+                ]
+            };
+            document.getElementById('testTooltip').data = testData;
+        };
+    </script>
 </body>
 
 </html>

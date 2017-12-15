@@ -11,7 +11,7 @@
     "serve": "npm run rollup-watch & npm run browser-sync",
     "test-watch": "mocha -w"
   },
-  "keywords": [],
+  "keywords": ["protvista", "webcomponents", "protein sequence", "protein annotation"],
   "author": "ljgarcia@ebi.ac.uk",
   "license": "MIT",
   "devDependencies": {
