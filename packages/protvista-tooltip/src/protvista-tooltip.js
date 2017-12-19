@@ -1,31 +1,34 @@
-/* eslint-disable no-console */
+import _keys from 'lodash-es/keys';
+
 class ProtvistaTooltip extends HTMLElement {
     constructor() {
         super();
-        this._left = 0;
-        this._top = 0;
-
+        this.className = 'protvista-tooltip';
+        this._left = parseInt(this.getAttribute('left')) || 0;
+        this._top = parseInt(this.getAttribute('top')) || 0;
         // get properties here
         this._shadowRoot = this.attachShadow({mode: 'open'});
         this._shadowRoot.innerHTML = '';
+        this._createContainer();
     }
 
     static get observedAttributes() {
         return [
-            'left', 'top' //relative to parent
+            'left', 'top'
         ];
     }
 
     connectedCallback() {
-        if (this._data)
+        if (this._data) {
             this._createTooltip();
+        }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue){
             const intValue = parseFloat(newValue);
-            this[`_${name}`] = isNaN(intValue) ? oldValue : intValue;
-            this._updateTooltip();
+            this[`_${name}`] = isNaN(intValue) ? newValue : intValue;
+            this._updateTooltipPosition();
         }
     }
 
@@ -34,46 +37,103 @@ class ProtvistaTooltip extends HTMLElement {
         this._createTooltip();
     }
 
-    _createTooltip() {
-        this._shadowRoot.innerHTML = '';
-        const container = this._createContainer();
-        const ttTable = this._populateTooltip();
-        container.appendChild(ttTable);
-        this._shadowRoot.appendChild(container);
-    }
-
     _createContainer() {
-        const container = document.createElement('div');
-        container.className = 'tooltip-container';
+        this._container = document.createElement('div');
+        this._container.className = 'protvista-tooltip-container';
+        this._shadowRoot.appendChild(this._container);
+    }
 
+    _createTooltip() {
+        this._emptyContainer();
+
+        this._container.appendChild(this._createCloseButton());
+        this._container.appendChild(this._createTooltipContent());
+
+        this._container.style.opacity = 1;
+        this._container.style.display = 'block';
+    }
+
+    _emptyContainer() {
+        this._container.innerText = '';
+        this._container.innerHTML = '';
+    }
+
+    _createCloseButton() {
         const closeSpan = document.createElement('span');
-        container.appendChild(closeSpan);
         closeSpan.innerText = 'X';
-        closeSpan.className = 'tooltip-close';
+        closeSpan.className = 'protvista-tooltip-close';
         closeSpan.addEventListener('click', () => {
-            container.style = 'transition: 20; opacity: 0; display: none';
-            this._shadowRoot.innerHTML = '';
+            this._container.style = 'transition: 20; opacity: 0; display: none';
+            this._emptyContainer();
         });
-
-        return container;
+        return closeSpan;
     }
 
-    _populateTooltip() {
-        const ttTable = document.createElement('table');
-        const ttRow = document.createElement('tr');
-        const ttHeader = document.createElement('th');
-        ttHeader.colSpan = 2;
-        ttHeader.innerText = this._data.title;
-        ttRow.appendChild(ttHeader);
-        ttTable.appendChild(ttRow);
-        for (let elem of this._data.elements) {
-            console.log(elem);
+    _createTooltipContent() {
+        const table = document.createElement('table');
+
+        const row = document.createElement('tr');
+
+        const header = document.createElement('th');
+        header.colSpan = 2;
+        header.innerText = this._data.title;
+
+        row.appendChild(header);
+
+        table.appendChild(row);
+
+        this._processSection(this._data.elements, table, 1);
+        return table;
+    }
+
+    _processSection(root, table, level) {
+        for (let elem of root) {
+            if (typeof elem === 'string') {
+                const row = document.createElement('tr');
+
+                let col = document.createElement('td');
+                row.appendChild(col);
+
+                col = document.createElement('td');
+                col.innerHTML = elem;
+                row.appendChild(col);
+
+                table.appendChild(row);
+            } else {
+                const keys = _keys(elem);
+                if (keys.length === 1) {
+                    const row = document.createElement('tr');
+
+                    let col = document.createElement('td');
+                    col.innerText = keys[0];
+                    row.appendChild(col);
+
+                    col = document.createElement('td');
+                    col.innerHTML = elem[keys[0]];
+                    row.appendChild(col);
+
+                    table.appendChild(row);
+                } else {
+                    const row = document.createElement('tr');
+                    row.className = 'protvista-tooltip-level' + level;
+
+                    let col = document.createElement('td');
+                    col.colSpan = 2;
+                    col.innerText = elem.title;
+                    row.appendChild(col);
+                    table.appendChild(row);
+
+                    this._processSection(elem.elements, table, ++level);
+                }
+            }
         }
-        return ttTable;
     }
 
-    _updateTooltip() {
-
+    _updateTooltipPosition() {
+        if (this._container) {
+            this._container.style.left = this._left + 'px';
+            this._container.style.top = this._top + 'px';
+        }
     }
 }
 

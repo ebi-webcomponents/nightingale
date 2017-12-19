@@ -11,7 +11,12 @@
     "serve": "npm run rollup-watch & npm run browser-sync",
     "test-watch": "mocha -w"
   },
-  "keywords": ["protvista", "webcomponents", "protein sequence", "protein annotation"],
+  "keywords": [
+    "protvista",
+    "webcomponents",
+    "protein sequence",
+    "protein annotation"
+  ],
   "author": "ljgarcia@ebi.ac.uk",
   "license": "MIT",
   "devDependencies": {
@@ -22,7 +27,6 @@
     "babel-preset-env": "^1.6.0",
     "browser-sync": "^2.12.5",
     "chai": "^3.5.0",
-    "cssnano": "^3.10.0",
     "eslint": "^4.7.2",
     "mocha": "^3.3.0",
     "rollup": "^0.49.3",
@@ -31,5 +35,7 @@
     "rollup-plugin-conditional": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lodash-es": "^4.17.4"
+  }
 }

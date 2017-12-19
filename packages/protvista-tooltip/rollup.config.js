@@ -14,6 +14,9 @@ export default {
         format: 'iife'
     },
     plugins: [
+        postcss({
+            extensions: ['.css']
+        }),
         nodeResolve({
             jsnext: true
         }),

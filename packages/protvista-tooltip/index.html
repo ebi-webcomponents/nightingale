@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <protvista-tooltip id="testTooltip"></protvista-tooltip>
+    <protvista-tooltip id="testTooltip" left="50" top ="50"></protvista-tooltip>
 
     <!-- Required for IE11 -->
     <script src="node_modules/babel-polyfill/dist/polyfill.min.js"></script>
@@ -30,7 +30,6 @@
 
     <script>
         window.onload = () => {
-            console.log('script');
             const testData = {
                 "title": "REGION 96-110",
                 "elements": [
@@ -41,13 +40,18 @@
                         "elements": [
                             {"Feature ID": "XYZ"},
                             {
-                                "title": "<span class='myTestClass'>Disease association</span>"
+                                "title": "Disease association",
+                                "elements": [
+                                    {"Disease": "Alzheimer disease 1 (AD1)"},
+                                    "OMIM <a href='http://www.omim.org/entry/104300'>104300</a>"
+                                ]
                             }
                         ]
                     }
                 ]
             };
-            document.getElementById('testTooltip').data = testData;
+            const myTooltip = document.getElementById('testTooltip');
+            myTooltip.data = testData;
         };
     </script>
 </body>
