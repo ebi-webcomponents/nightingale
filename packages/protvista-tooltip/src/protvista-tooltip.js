@@ -1,4 +1,5 @@
 import _keys from 'lodash-es/keys';
+import '../style/protvista-tooltip.css';
 
 class ProtvistaTooltip extends HTMLElement {
     constructor() {

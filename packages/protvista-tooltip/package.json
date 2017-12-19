@@ -27,13 +27,15 @@
     "babel-preset-env": "^1.6.0",
     "browser-sync": "^2.12.5",
     "chai": "^3.5.0",
+    "cssnano": "^3.10.0",
     "eslint": "^4.7.2",
     "mocha": "^3.3.0",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-babel-minify": "^3.1.2",
     "rollup-plugin-conditional": "^1.1.1",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-postcss": "^0.5.5"
   },
   "dependencies": {
     "lodash-es": "^4.17.4"

@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import minify from 'rollup-plugin-babel-minify';
 import conditional from 'rollup-plugin-conditional';
+import postcss from "rollup-plugin-postcss";
 
 const isProduction = process.env.NODE_ENV === "production";
 

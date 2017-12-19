@@ -1,0 +1,70 @@
+.protvista-tooltip-container {
+    z-index: 50000;
+    position: absolute;
+    min-width: 220px;
+    opacity: 0;
+    display: none;
+}
+
+.protvista-tooltip-close {
+    color: #FFF;
+    background-color: #333333;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+    font-size: 14px !important;
+    text-align: center;
+    border: 1px solid #fff;
+}
+
+.protvista-tooltip-container table {
+    font-size: 13px;
+    border: 2px solid #CCC;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background-color: #FFF;
+    -webkit-box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.protvista-tooltip-container table th {
+    text-transform: capitalize;
+    font-weight: 400;
+    white-space: nowrap;
+    letter-spacing: .05em;
+    font-size: 1.1em;
+    background-color: #595959;
+    line-height: 2em;
+    padding: 0 .7em;
+    color: #FFF;
+    text-align: center;
+}
+
+.protvista-tooltip-container table a {
+    text-decoration: underline !important;
+}
+
+.protvista-tooltip-container table td {
+    padding: .4em;
+    margin: 0;
+    border: 1px solid #CCC;
+}
+
+.protvista-tooltip-container td:first-child {
+    font-weight: bold;
+}
+
+.protvista-tooltip-container .protvista-tooltip-level1 {
+    background-color: #B3B3B3;
+    text-align: center;
+}
+
+.protvista-tooltip-container .protvista-tooltip-level2 {
+    color: black;
+}
