@@ -20,7 +20,8 @@
 <body>
     <protvista-tooltip id="testTooltip" left="50" top ="50"></protvista-tooltip>
     <div id="testDiv" style="left:20px; top:150px; position: absolute">
-        <span id="testSpan">Click and get a tooltip</span>
+        <div id="testClickDiv">Click and get a tooltip at a random position</div>
+        <div id="testPositionDiv"></div>
     </div>
 
     <!-- Required for IE11 -->
@@ -57,13 +58,15 @@
             myTooltip.data = testData;
 
             const myDiv = document.getElementById('testDiv');
-            const mySpan = document.getElementById('testSpan');
-            mySpan.addEventListener('click', () => {
+            const testClickDiv = document.getElementById('testClickDiv');
+            const testPositionDiv = document.getElementById('testPositionDiv');
+            testClickDiv.addEventListener('click', () => {
                 const popTooltip = document.createElement('protvista-tooltip');
                 myDiv.appendChild(popTooltip);
-                popTooltip.left = 10;
-                popTooltip.top = 10;
+                popTooltip.left = Math.random() * 100;
+                popTooltip.top = Math.random() * 100;
                 popTooltip.data = testData;
+                testPositionDiv.innerText = '(' + popTooltip.left + ', ' + popTooltip.top + ')';
             });
         };
     </script>

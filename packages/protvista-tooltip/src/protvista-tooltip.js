@@ -33,6 +33,22 @@ class ProtvistaTooltip extends HTMLElement {
         }
     }
 
+    get left() {
+        return this._left;
+    }
+
+    set left(left) {
+        this.setAttribute('left', left);
+    }
+
+    get top() {
+        return this._top;
+    }
+
+    set top(top) {
+        this.setAttribute('top', top);
+    }
+
     set data(data) {
         this._data = data;
         this._createTooltip();
@@ -45,7 +61,8 @@ class ProtvistaTooltip extends HTMLElement {
     }
 
     _createTooltip() {
-        this._emptyContainer();
+        this._container.innerText = '';
+        this._container.innerHTML = '';
 
         this._container.appendChild(this._createCloseButton());
         this._container.appendChild(this._createTooltipContent());
@@ -54,18 +71,13 @@ class ProtvistaTooltip extends HTMLElement {
         this._container.style.display = 'block';
     }
 
-    _emptyContainer() {
-        this._container.innerText = '';
-        this._container.innerHTML = '';
-    }
-
     _createCloseButton() {
         const closeSpan = document.createElement('span');
         closeSpan.innerText = 'X';
         closeSpan.className = 'protvista-tooltip-close';
         closeSpan.addEventListener('click', () => {
             this._container.style = 'transition: 20; opacity: 0; display: none';
-            this._emptyContainer();
+            this.parentElement.removeChild(this);
         });
         return closeSpan;
     }
