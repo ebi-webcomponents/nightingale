@@ -55,6 +55,9 @@
                 ]
             };
             const myTooltip = document.getElementById('testTooltip');
+            myTooltip.addEventListener('close', e => {
+                console.log(e.detail);
+            });
             myTooltip.data = testData;
 
             const myDiv = document.getElementById('testDiv');

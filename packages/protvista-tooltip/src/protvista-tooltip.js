@@ -77,6 +77,9 @@ class ProtvistaTooltip extends HTMLElement {
         closeSpan.className = 'protvista-tooltip-close';
         closeSpan.addEventListener('click', () => {
             this._container.style = 'transition: 20; opacity: 0; display: none';
+            this.dispatchEvent(new CustomEvent("close", {
+                detail: this._data, bubbles:true, cancelable: true
+            }));
             this.parentElement.removeChild(this);
         });
         return closeSpan;
