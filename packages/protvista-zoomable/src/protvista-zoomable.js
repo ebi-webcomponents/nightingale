@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 class ProtvistaZoomable extends HTMLElement {
 
@@ -70,7 +71,8 @@ class ProtvistaZoomable extends HTMLElement {
 
     set xScale(xScale) {
         this._xScale = xScale;
-        this._orignXScale = xScale;
+        if(!this._originXScale)
+            this._originXScale = cloneDeep(xScale);
     }
 
     get zoom() {
@@ -102,18 +104,18 @@ class ProtvistaZoomable extends HTMLElement {
             .scaleExtent([1, 40])
             .translateExtent([
                 [
-                    0, 0
+                    0,100
                 ],
                 [this.width, 100]
             ])
-            .on("zoom", this.zoomed.bind(this));
+            .on("zoom", this.zoomed);
     }
 
     zoomed() {
         this.xScale =
             d3.event
                 .transform
-                .rescaleX(this._orignXScale);
+                .rescaleX(this._originXScale);
         this.refresh();
     }
 
