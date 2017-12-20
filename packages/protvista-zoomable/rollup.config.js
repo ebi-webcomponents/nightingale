@@ -13,6 +13,7 @@ export default {
         file: 'dist/protvista-zoomable.js',
         format: 'iife'
     },
+    external: ['d3'],
     plugins: [
         nodeResolve({
             jsnext: true
