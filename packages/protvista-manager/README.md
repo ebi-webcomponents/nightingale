@@ -1,7 +1,9 @@
 # `<protvista-manager>`
 It is a container for all the tracks and other inner components (e.g. protvista-navigation).
 
-This component is in charge of capturing the events that its children trigger, and adjust element attributes accordingly.
+This component is in charge of capturing the events that its protvista descendent trigger, and adjust element attributes accordingly.
+
+A protvista descendent is any element in its subtree which tag name starts with 'protvista'.
 
 The children should fire events of the type change, and the detail object should contain the attributes `type` and `value`.
 
