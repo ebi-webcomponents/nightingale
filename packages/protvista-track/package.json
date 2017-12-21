@@ -12,7 +12,7 @@
     "serve": "npm run rollup-watch & npm run browser-sync"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.19",
     "babel-cli": "^6.24.1",
