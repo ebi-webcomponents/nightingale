@@ -11,7 +11,10 @@ class ProtvistaZoomable extends HTMLElement {
             bottom: 10,
             left: 10
         }
-        this.width = this.getAttribute('width') ? this.getAttribute('width') : this.offsetWidth;
+        this.style.display = 'block';
+        this.style.width = '100%';
+        this.width = this.offsetWidth;
+
         this.length = this.getAttribute('length') ? parseInt(this.getAttribute('length')) : 0;
 
         this.displayStart = this.getAttribute('displaystart')
@@ -25,6 +28,11 @@ class ProtvistaZoomable extends HTMLElement {
         this.updateScaleDomain = this.updateScaleDomain.bind(this);
         this.zoomed = this.zoomed.bind(this);
         this.applyZoomTranslation = this.applyZoomTranslation.bind(this);
+        this.listenForResize = this.listenForResize.bind(this);
+
+        this.initZoom();
+        this.updateScaleDomain();
+        this.listenForResize();
     }
 
     get displayStart() {
@@ -53,12 +61,10 @@ class ProtvistaZoomable extends HTMLElement {
 
     set width(width) {
         this._width = width;
-        this.initZoom();
     }
 
     set length(length) {
         this._length = length;
-        this.updateScaleDomain();
     }
 
     get length() {
@@ -88,6 +94,10 @@ class ProtvistaZoomable extends HTMLElement {
         return this._svg;
     }
 
+    get margin() {
+        return this._margin;
+    }
+
     updateScaleDomain() {
         this.xScale = d3
             .scaleLinear()
@@ -95,7 +105,7 @@ class ProtvistaZoomable extends HTMLElement {
                 1, this._length + 1
             ])
             .range([
-                this._margin.left, this._width - this._margin.right
+                this._margin.left, this.width - this._margin.right
             ]);
     }
 
@@ -128,6 +138,16 @@ class ProtvistaZoomable extends HTMLElement {
             .duration(300)
             .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.displayStart) * this._zoomScale) + this._margin.left), 0).scale(this._zoomScale));
         this.refresh();
+    }
+
+    listenForResize() {
+        // TODO add sleep to make transition appear smoother. Could experiment with CSS3
+        // transitions too
+        window.onresize = () => {
+            this.width = this
+                .offsetWidth;
+            //TODO trigger repaint here
+        };
     }
 
 }
