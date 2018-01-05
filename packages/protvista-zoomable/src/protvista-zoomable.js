@@ -5,12 +5,12 @@ class ProtvistaZoomable extends HTMLElement {
 
     constructor() {
         super();
-        this._margin = {
-            top: 10,
-            right: 10,
-            bottom: 10,
-            left: 10
-        }
+        // this._margin = {
+        //     top: 10,
+        //     right: 10,
+        //     bottom: 10,
+        //     left: 10
+        // }
         this.style.display = 'block';
         this.style.width = '100%';
         this.width = this.offsetWidth;
@@ -24,14 +24,14 @@ class ProtvistaZoomable extends HTMLElement {
             ? parseInt(this.getAttribute('displayEnd'))
             : this.width;
 
-        this.initZoom = this.initZoom.bind(this);
         this.updateScaleDomain = this.updateScaleDomain.bind(this);
+        this.initZoom = this.initZoom.bind(this);
         this.zoomed = this.zoomed.bind(this);
         this.applyZoomTranslation = this.applyZoomTranslation.bind(this);
         this.listenForResize = this.listenForResize.bind(this);
 
-        this.initZoom();
         this.updateScaleDomain();
+        this.initZoom();
         this.listenForResize();
     }
 
@@ -77,7 +77,7 @@ class ProtvistaZoomable extends HTMLElement {
 
     set xScale(xScale) {
         this._xScale = xScale;
-        if(!this._originXScale)
+        if (!this._originXScale)
             this._originXScale = cloneDeep(xScale);
     }
 
@@ -88,35 +88,37 @@ class ProtvistaZoomable extends HTMLElement {
     set svg(svg) {
         this._svg = svg;
         svg.call(this._zoom);
+        this.applyZoomTranslation();
     }
 
     get svg() {
         return this._svg;
     }
 
-    get margin() {
-        return this._margin;
-    }
+    // get margin() {
+    //     return this._margin;
+    // }
 
     updateScaleDomain() {
         this.xScale = d3
             .scaleLinear()
             .domain([
-                1, this._length + 1
+                1, this._length
             ])
             .range([
-                this._margin.left, this.width - this._margin.right
+                // this._margin.left, this.width - this._margin.right
+                0, this._width
             ]);
     }
 
     initZoom() {
         this._zoom = d3.zoom()
-            .scaleExtent([1, 40])
+            .scaleExtent([1, 4])
             .translateExtent([
                 [
-                    0,100
+                    this.xScale(1), 0
                 ],
-                [this.width, 100]
+                [this.width, 0]
             ])
             .on("zoom", this.zoomed);
     }
@@ -127,16 +129,19 @@ class ProtvistaZoomable extends HTMLElement {
                 .transform
                 .rescaleX(this._originXScale);
         this.refresh();
+        // TODO calculate new displaystart/displayend positions
+        this.dispatchEvent(new CustomEvent("change", {
+            detail: { displayend: this.displayend, displaystart: this.displaystart }, bubbles: true, cancelable: true
+        }));
     }
 
     applyZoomTranslation() {
-        // TODO pass the SVG here or SVG should be on zoomable?
-        this._zoomScale = (this._length - this.displayEnd) / this.displayStart;
+        const k = this.width / (this.xScale(this.displayEnd) - this.xScale(this.displayStart));
         this
-            ._svg
+            .svg
             .transition()
             .duration(300)
-            .call(this._zoom.transform, d3.zoomIdentity.translate((-(this._xScale(this.displayStart) * this._zoomScale) + this._margin.left), 0).scale(this._zoomScale));
+            .call(this.zoom.transform, d3.zoomIdentity.scale(k).translate(-this.xScale(this.displayStart) , 0));
         this.refresh();
     }
 
