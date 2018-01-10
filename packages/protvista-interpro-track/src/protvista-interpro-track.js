@@ -2,7 +2,7 @@ import ProtVistaTrack from "protvista-track";
 import InterproEntryLayout from "./InterproEntryLayout";
 
 const height = 44,
-  width = 760,
+  // width = 760,
   padding = {
     top: 2,
     right: 10,
@@ -14,6 +14,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
   constructor() {
     super();
     this._expanded = this.hasAttribute('expanded');
+    this._haveCreatedFeatures = false;
   }
   _createTrack() {
     this._layoutObj.expanded = this._expanded;
@@ -48,24 +49,26 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .attr('id', d => `g_${d.accession}`);
 
     this.locations = this.featuresG.selectAll('g.location-group')
-        .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
+      .data(d => d.locations.map(attrs =>({feature:d, ...attrs})))
+      // .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
         .enter().append('g')
           .attr('class', 'location-group');
 
     this.features = this.locations
       .selectAll('g.fragment-group')
-      .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
+      .data(d=>d.fragments.map(attrs =>({feature: d.feature, ...attrs})))
+      // .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
       .enter()
       .append('path')
         .attr('class', 'feature')
         .attr('d', f =>
           this._featureShape.getFeatureShape(
-            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f.feature),
+            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
               f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
           )
         )
         .attr('transform', f =>
-          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+          'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         )
         .attr('fill', f => this._getFeatureColor(f.feature))
         .attr('stroke', f => this._getFeatureColor(f.feature))
@@ -96,52 +99,55 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       .append('g')
         .attr('class', 'child-group')
         .selectAll('g.child-location-group')
-          .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
+          .data(d => d.locations.map(attrs =>({feature:d, ...attrs})))
+          // .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
           .enter().append('g')
             .attr('class', 'child-location-group')
             .selectAll('path.child-fragment')
-            .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
+            .data(d=>d.fragments.map(attrs =>({feature: d.feature, ...attrs})))
+            // .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
             .enter()
             .append('path')
               .attr('class', 'child-fragment')
               .attr('d', f =>
                 this._featureShape.getFeatureShape(
-                  this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f.feature),
+                  this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
                     f.end ? f.end - f.start + 1: 1, this._getShape(f.feature.parent)
                 )
               )
               .attr('transform', f =>
-                'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+                'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
               )
               .attr('fill', f => this._getFeatureColor(f.feature.parent))
               .attr('stroke', f => this._getFeatureColor(f.feature.parent));
     this.svg.attr("height", this._layoutObj.maxYPos);
+    this._haveCreatedFeatures = true;
   }
-  _updateTrack(){
-    if (this._xScale) {
-      this._xScale.domain([this._displaystart, this._displayend]);
+  refresh(){
+    if (this._haveCreatedFeatures) {
+      // this.xScale.domain([this._displaystart, this._displayend]);
       this._layoutObj.expanded = this._expanded;
       this._layoutObj.init(this._data);
       this.childrenGroup.attr('visibility', this._expanded ? 'visible' : 'hidden' );
       this.features
         .attr('d', f =>
           this._featureShape.getFeatureShape(
-            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f.feature),
+            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
               f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
           )
         )
         .attr('transform', f =>
-          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+          'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         );
       this.featureChildren
         .attr('d', f =>
           this._featureShape.getFeatureShape(
-            this._xScale(2) - this._xScale(1), this._layoutObj.getFeatureHeight(f.feature),
+            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
               f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature.parent)
           )
         )
         .attr('transform', f =>
-          'translate(' + this._xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+          'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         );
       this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);

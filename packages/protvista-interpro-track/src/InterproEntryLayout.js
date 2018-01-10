@@ -9,6 +9,7 @@ export default class InterproEntryLayout extends DefaultLayout{
     this.height = {}
     this.yPos = {}
     this.maxYPos = 0;
+    if (!features) return;
     for (let feature of features) {
       this.height[feature.accession] = this.expanded ? EXPANDED_HEIGHT : COLLAPSED_HEIGHT;
       this.yPos[feature.accession] = this._padding;
