@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 const height = 40,
-  width = 760,
+  // width = 760,
   padding = {
     top: 10,
     right: 10,
@@ -13,11 +13,15 @@ class ProtVistaNavigation extends HTMLElement {
 
   constructor() {
     super();
-    this._length = parseInt(this.getAttribute('length'));
-    this._displaystart = parseInt(this.getAttribute('displaystart')) || 1;
-    this._displayend = parseInt(this.getAttribute('displayend')) || this._length;
-    this._highlightStart = parseInt(this.getAttribute('highlightStart'));
-    this._highlightEnd = parseInt(this.getAttribute('highlightEnd'));
+    this.style.display = 'block';
+    this.style.width = '100%';
+    this.width = this.offsetWidth;
+
+    this._length = parseFloat(this.getAttribute('length'));
+    this._displaystart = parseFloat(this.getAttribute('displaystart')) || 1;
+    this._displayend = parseFloat(this.getAttribute('displayend')) || this._length;
+    this._highlightStart = parseFloat(this.getAttribute('highlightStart'));
+    this._highlightEnd = parseFloat(this.getAttribute('highlightEnd'));
   }
 
   connectedCallback() {
@@ -25,26 +29,33 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   static get observedAttributes() {return [
-    'length', 'displaystart', 'displayend', 'highlightStart', 'highlightEnd'
+    'length', 'displaystart', 'displayend', 'highlightStart', 'highlightEnd', 'width'
   ]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue){
-      this[`_${name}`] = parseInt(newValue);
+      this[`_${name}`] = parseFloat(newValue);
       this._updateNavRuler();
     }
   }
+  get width() {
+      return this._width;
+  }
+
+  set width(width) {
+      this._width = width;
+  }
 
   _createNavRuler() {
-    this._x = d3.scaleLinear().range([padding.left, width - padding.right]);
-    this._x.domain([1, (this._length + 1)]);
+    this._x = d3.scaleLinear().range([padding.left, this.width - padding.right]);
+    this._x.domain([1, this._length]);
 
     const svg = d3.select(this)
       .append('div')
       .attr('class', '')
       .append('svg')
       .attr('id', '')
-      .attr('width', width)
+      .attr('width', this.width)
       .attr('height', (height));
 
     const xAxis = d3.axisBottom(this._x);
@@ -56,7 +67,7 @@ class ProtVistaNavigation extends HTMLElement {
 
     this._displayendLabel = svg.append("text")
                       .attr('class', 'end-label')
-                      .attr('x', width)
+                      .attr('x', this.width)
                       .attr('y', height - padding.bottom)
                       .attr('text-anchor', 'end');
     svg.append('g')
@@ -65,14 +76,17 @@ class ProtVistaNavigation extends HTMLElement {
 
     this._viewport = d3.brushX().extent([
         [padding.left, 0],
-        [(width - padding.right), height*0.51]
+        [(this.width - padding.right), height*0.51]
       ])
       .on("brush", () => {
         if (d3.event.selection){
           this._displaystart = d3.format("d")(this._x.invert(d3.event.selection[0]));
           this._displayend = d3.format("d")(this._x.invert(d3.event.selection[1]));
           this.dispatchEvent(new CustomEvent("change", {
-            detail: {displayend: this._displayend, displaystart: this._displaystart}, bubbles:true, cancelable: true
+            detail: {
+              displayend: this._displayend, displaystart: this._displaystart,
+              extra: {transform: d3.event.transform}
+            }, bubbles:true, cancelable: true
           }));
           this._updateLabels();
           this._updatePolygon();
@@ -107,7 +121,7 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('points',
         `${this._x(this._displaystart)},${height/2}
         ${this._x(this._displayend)},${height/2}
-        ${width-padding.right},${height}
+        ${this.width-padding.right},${height}
         ${padding.left},${height}`
       );
   }

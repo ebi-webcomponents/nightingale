@@ -68,7 +68,6 @@ var possibleConstructorReturn = function (self, call) {
 };
 
 var height = 40;
-var width = 760;
 var padding = {
   top: 10,
   right: 10,
@@ -84,11 +83,15 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
 
     var _this = possibleConstructorReturn(this, (ProtVistaNavigation.__proto__ || Object.getPrototypeOf(ProtVistaNavigation)).call(this));
 
-    _this._length = parseInt(_this.getAttribute('length'));
-    _this._displaystart = parseInt(_this.getAttribute('displaystart')) || 1;
-    _this._displayend = parseInt(_this.getAttribute('displayend')) || _this._length;
-    _this._highlightStart = parseInt(_this.getAttribute('highlightStart'));
-    _this._highlightEnd = parseInt(_this.getAttribute('highlightEnd'));
+    _this.style.display = 'block';
+    _this.style.width = '100%';
+    _this.width = _this.offsetWidth;
+
+    _this._length = parseFloat(_this.getAttribute('length'));
+    _this._displaystart = parseFloat(_this.getAttribute('displaystart')) || 1;
+    _this._displayend = parseFloat(_this.getAttribute('displayend')) || _this._length;
+    _this._highlightStart = parseFloat(_this.getAttribute('highlightStart'));
+    _this._highlightEnd = parseFloat(_this.getAttribute('highlightEnd'));
     return _this;
   }
 
@@ -101,7 +104,7 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
     key: 'attributeChangedCallback',
     value: function attributeChangedCallback(name, oldValue, newValue) {
       if (oldValue !== newValue) {
-        this['_' + name] = parseInt(newValue);
+        this['_' + name] = parseFloat(newValue);
         this._updateNavRuler();
       }
     }
@@ -110,24 +113,27 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
     value: function _createNavRuler() {
       var _this2 = this;
 
-      this._x = d3.scaleLinear().range([padding.left, width - padding.right]);
-      this._x.domain([1, this._length + 1]);
+      this._x = d3.scaleLinear().range([padding.left, this.width - padding.right]);
+      this._x.domain([1, this._length]);
 
-      var svg = d3.select(this).append('div').attr('class', '').append('svg').attr('id', '').attr('width', width).attr('height', height);
+      var svg = d3.select(this).append('div').attr('class', '').append('svg').attr('id', '').attr('width', this.width).attr('height', height);
 
       var xAxis = d3.axisBottom(this._x);
 
       this._displaystartLabel = svg.append("text").attr('class', 'start-label').attr('x', 0).attr('y', height - padding.bottom);
 
-      this._displayendLabel = svg.append("text").attr('class', 'end-label').attr('x', width).attr('y', height - padding.bottom).attr('text-anchor', 'end');
+      this._displayendLabel = svg.append("text").attr('class', 'end-label').attr('x', this.width).attr('y', height - padding.bottom).attr('text-anchor', 'end');
       svg.append('g').attr('class', 'x axis').call(xAxis);
 
-      this._viewport = d3.brushX().extent([[padding.left, 0], [width - padding.right, height * 0.51]]).on("brush", function () {
+      this._viewport = d3.brushX().extent([[padding.left, 0], [this.width - padding.right, height * 0.51]]).on("brush", function () {
         if (d3.event.selection) {
           _this2._displaystart = d3.format("d")(_this2._x.invert(d3.event.selection[0]));
           _this2._displayend = d3.format("d")(_this2._x.invert(d3.event.selection[1]));
           _this2.dispatchEvent(new CustomEvent("change", {
-            detail: { displayend: _this2._displayend, displaystart: _this2._displaystart }, bubbles: true, cancelable: true
+            detail: {
+              displayend: _this2._displayend, displaystart: _this2._displaystart,
+              extra: { transform: d3.event.transform }
+            }, bubbles: true, cancelable: true
           }));
           _this2._updateLabels();
           _this2._updatePolygon();
@@ -157,12 +163,20 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
   }, {
     key: '_updatePolygon',
     value: function _updatePolygon() {
-      if (this.polygon) this.polygon.attr('points', this._x(this._displaystart) + ',' + height / 2 + '\n        ' + this._x(this._displayend) + ',' + height / 2 + '\n        ' + (width - padding.right) + ',' + height + '\n        ' + padding.left + ',' + height);
+      if (this.polygon) this.polygon.attr('points', this._x(this._displaystart) + ',' + height / 2 + '\n        ' + this._x(this._displayend) + ',' + height / 2 + '\n        ' + (this.width - padding.right) + ',' + height + '\n        ' + padding.left + ',' + height);
+    }
+  }, {
+    key: 'width',
+    get: function get$$1() {
+      return this._width;
+    },
+    set: function set$$1(width) {
+      this._width = width;
     }
   }], [{
     key: 'observedAttributes',
     get: function get$$1() {
-      return ['length', 'displaystart', 'displayend', 'highlightStart', 'highlightEnd'];
+      return ['length', 'displaystart', 'displayend', 'highlightStart', 'highlightEnd', 'width'];
     }
   }]);
   return ProtVistaNavigation;
