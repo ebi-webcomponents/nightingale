@@ -35,14 +35,16 @@
     </div><br/>
 
     <interaction-viewer accession="O60941"></interaction-viewer>
+
     <!-- Required for IE11 -->
-    <script src="node_modules/babel-polyfill/dist/polyfill.min.js"></script>
-    <script src="node_modules/whatwg-fetch/fetch.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
     <!-- Web component polyfill (only loads what it needs) -->
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8" defer></script>
     <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-    <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
-    <script src="dist/interaction-viewer.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/whatwg-fetch/fetch.min.js" charset="utf-8" defer></script>
+
+    <script src="dist/interaction-viewer.js" charset="utf-8" defer></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $('.accession-selector').change(function() {
