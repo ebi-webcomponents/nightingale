@@ -439,6 +439,13 @@ function clickFilter(d, filterName) {
     updateFilterSelection();
 }
 
+function resetFilter(filterName, filterLabel) {
+    selectAll('.dropdown-pane').style('visibility', 'hidden');
+    filters.filter(d => d.type === filterName).forEach(d => d.selected = false);
+    select(`[data-toggle=iv_${filterName}]`).text(filterLabel);
+    updateFilterSelection();    
+}
+
 function resetAllFilters() {
     filters.filter(d => d.selected).forEach(d => d.selected = false);
     getFilters().forEach(d=> {
@@ -478,11 +485,15 @@ function createFilter(el, filtersToAdd) {
                 .attr("class", "button dropdown")
                 .attr("data-toggle", `iv_${filter.name}`)
                 .on("click", toggleFilterVisibility);
+
+            var ul = filterContainer
+                .append("ul")
+                .attr("id", `iv_${filter.name}`)
+                .attr("class", "dropdown-pane");
+
+            ul.append('li').text('None').on('click', () => resetFilter(filter.name, filter.label));
             if (filter.type === 'tree') {
-                var ul = filterContainer
-                    .append("ul")
-                    .attr("id", `iv_${filter.name}`)
-                    .attr("class", "dropdown-pane");
+
                 traverseTree(filter.items, function (d) {
                     d.type = filter.name;
                     filters.push(d);
@@ -500,10 +511,7 @@ function createFilter(el, filtersToAdd) {
                     filters.push(d);
                 }
 
-                filterContainer
-                    .append("ul")
-                    .attr("id", `iv_${filter.name}`)
-                    .attr("class", "dropdown-pane")
+                ul
                     .selectAll('li')
                     .data(filter.items)
                     .enter()
