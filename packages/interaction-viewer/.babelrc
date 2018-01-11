@@ -1,1 +1,15 @@
-{ "presets": ["es2015-nostrict"] }
+{
+    "presets": [
+        [
+            "env", {
+                "targets": {
+                    "ie": 11
+                },
+                "modules": false
+            }
+        ]
+    ],
+    "plugins": [
+        "external-helpers"
+    ]
+}

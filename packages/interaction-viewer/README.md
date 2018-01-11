@@ -2,37 +2,17 @@
 http://ebi-uniprot.github.io/interaction-viewer/
 An adjacency graph visualisation of protein interaction data.
 
-# Installing
-Once you have https://nodejs.org/ installed, run:
-```
-npm install
-```
 
-## Running locally
- - ```npm run watch``` whatches files for changes and automatically builds the application
- - ```npm run browsersync``` runs a local webserver to serve the application
-
-## Building the application
-```npm run build```
-builds the application into the `dist/` directory
-
-# Usage
+## Usage
 ```html
-<interaction-viewer accession="A8BBG3"></interaction-viewer>
+  <interaction-viewer accession="O60941"></interaction-viewer>
 ```
 
-# API
-You can change the accession on the fly by changing the attribute 'accession':
-```javascript
-document.querySelector("interaction-viewer").setAttribute('accession', accession);
-```
+## API
+ - `accession` changing the accession will cause the component to fetch the data for the given entry
 
-# Dependencies
-All dependencies are handled by npm
-
-https://d3js.org/
-
-http://webcomponents.org/polyfills/
+## Dependencies
+This component uses Custom elements V1 (https://www.webcomponents.org/polyfills/), which requires the use of a polyfill in certain browsers.
 
 # Contact
 For support contact help@uniprot.org and please put interaction viewer in the subject line.

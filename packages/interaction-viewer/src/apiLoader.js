@@ -1,73 +1,113 @@
-const d3 = require('d3');
-const _ = require('underscore');
-const treeMenu = require('./treeMenu');
+import {addStringItem} from './treeMenu';
 
 const subcellulartreeMenu = [];
 const diseases = {};
 
-const apiLoader = {
-    load: function(accession) {
-        var promise = new Promise(function(resolve) {
-            return d3.json(`https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`, function(json) {
-                var data = apiLoader.process(json);
-                resolve(data);
-            });
-        });
-        return promise;
-    },
-    process: function(data) {
-        // remove interactions which are not part of current set
-        _.each(data, function(element) {
-            let interactors = [];
-            element.filterTerms = [];
+function load(accession) {
+    return fetch(`https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`).then(resp => resp.json().then(json => process(json)));
+}
 
-            // Add source  to the nodes
-            _.each(element.interactions, function(interactor) {
-                // Add interaction for SELF
-                if (interactor.interactionType === 'SELF') {
-                    interactor.source = element.accession;
-                    interactor.id = element.accession;
-                    interactors.push(interactor);
-                }
-                // TODO review this as it's not nice.
-                // TODO also save the reverse??
-                else if (_.some(data, function(d) { //Check that interactor is in the data
-                        return d.accession === interactor.id;
-                    })) {
-                    interactor.source = element.accession;
-                    interactors.push(interactor);
-                } else if (interactor.id.includes('-')) { //handle isoforms
-                    // TODO handle isoforms
-                    // console.log(interactor.id);
-                }
-            });
-            element.interactions = interactors;
+function process(data) {
+    // remove interactions which are not part of current set
+    for (let element of data) {
+        let interactors = [];
+        element.filterTerms = [];
+        // we need this until production fixes data as it's not symetrical
+        if (!element.interactions) {
+            continue;
+        }
+        if (element.accession.includes('-')) {
+            element.isoform = element.accession;
+            element.accession = element
+                .accession
+                .split('-')[0];
+        }
+        // Add source  to the nodes
+        for (const interactor of element.interactions) {
+            if (interactor.id && interactor.id.includes('-')) {
+                interactor.isoform = interactor.id;
+                interactor.id = interactor
+                    .id
+                    .split('-')[0];
+            }
+            // Add interaction for SELF
+            if (interactor.interactionType === 'SELF') {
+                interactor.source = element.accession;
+                interactor.id = element.accession;
+                addInteractor(interactor, interactors)
+                // interactors.push(interactor) // TODO review this as it's not nice.
+                // TODO also save the reverse??;
+            } else if (data.some(function (d) { //Check that interactor is in the data
+                return d.accession === interactor.id;
+            })) {
+                interactor.source = element
+                    .accession
+                    .split('-')[0];
+                addInteractor(interactor, interactors)
+            }
+            // else if (interactor.id.includes('-')) { console.log(interactor,
+            // element.accession); .accession     .split('-')[0];
+            // interactors.push(interactor); console.log(interactor.id); handle isoforms
+            // TODO handle isoforms console.log(interactor.id); }
+        }
+        element.interactions = interactors;
 
-            if (element.subcellularLocations) {
-                for (let location of element.subcellularLocations) {
-                    for (let actualLocation of location.locations) {
-                        treeMenu.addStringItem(actualLocation.location.value, subcellulartreeMenu);
-                        let locationSplit = actualLocation.location.value.split(', ');
-                        element.filterTerms = element.filterTerms.concat(locationSplit);
-                    }
+        if (element.subcellularLocations) {
+            for (let location of element.subcellularLocations) {
+                for (let actualLocation of location.locations) {
+                    addStringItem(actualLocation.location.value, subcellulartreeMenu);
+                    let locationSplit = actualLocation
+                        .location
+                        .value
+                        .split(', ');
+                    element.filterTerms = element
+                        .filterTerms
+                        .concat(locationSplit);
                 }
             }
-            if (element.diseases) {
-                for (let disease of element.diseases) {
-                    if (disease.diseaseId) {
-                        diseases[disease.diseaseId] = {
-                            name: disease.diseaseId,
-                            selected: false
-                        };
-                        element.filterTerms.push(disease.diseaseId);
-                    }
+        }
+        if (element.diseases) {
+            for (let disease of element.diseases) {
+                if (disease.diseaseId) {
+                    diseases[disease.diseaseId] = {
+                        name: disease.diseaseId,
+                        selected: false
+                    };
+                    element
+                        .filterTerms
+                        .push(disease.diseaseId);
                 }
             }
-        });
-        return data;
-    },
-    getFilters: function() {
-        return [{
+        }
+    }
+    return data;
+}
+
+function addInteractor(interactor, interactors) {
+    const existingInteractor = interactors.find(i => interactor.id === i.id);
+    if (existingInteractor) {
+        //Merge objects
+        if (interactor.isoform) {
+            existingInteractor.isoform = interactor.isoform;
+        }
+    } else {
+        interactors.push(interactor);
+    }
+}
+
+function values(obj) {
+    let ret = [];
+    for (let [k,
+        v]of Object.entries(obj)) {
+        ret.push(v);
+    }
+    return ret;
+}
+
+function getFilters() {
+    return [
+        {
+
             name: 'subcellularLocations',
             label: 'Subcellular location',
             type: 'tree',
@@ -75,8 +115,9 @@ const apiLoader = {
         }, {
             name: 'diseases',
             label: 'Diseases',
-            items: _.values(diseases)
-        }];
-    }
-};
-module.exports = apiLoader;
+            items: values(diseases)
+        }
+    ];
+}
+
+export {load, getFilters};
