@@ -2124,7 +2124,7 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
         _this.style.width = '100%';
         _this.width = _this.offsetWidth;
 
-        _this.length = _this.getAttribute('length') ? parseInt(_this.getAttribute('length')) : 0;
+        _this._length = _this.getAttribute('length') ? parseInt(_this.getAttribute('length')) : 0;
 
         _this.displayStart = _this.getAttribute('displaystart') ? parseInt(_this.getAttribute('displaystart')) : 0;
         _this.displayEnd = _this.getAttribute('displayEnd') ? parseInt(_this.getAttribute('displayEnd')) : _this.width;
