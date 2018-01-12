@@ -49,14 +49,14 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .attr('id', d => `g_${d.accession}`);
 
     this.locations = this.featuresG.selectAll('g.location-group')
-      .data(d => d.locations.map(attrs =>({feature:d, ...attrs})))
+      .data(d => d.locations.map((loc) => Object.assign({}, loc, {feature: d})))
       // .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
         .enter().append('g')
           .attr('class', 'location-group');
 
     this.features = this.locations
       .selectAll('g.fragment-group')
-      .data(d=>d.fragments.map(attrs =>({feature: d.feature, ...attrs})))
+      .data(d => d.fragments.map((loc) => Object.assign({}, loc, {feature: d.feature})))
       // .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
       .enter()
       .append('path')
@@ -99,12 +99,15 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       .append('g')
         .attr('class', 'child-group')
         .selectAll('g.child-location-group')
-          .data(d => d.locations.map(attrs =>({feature:d, ...attrs})))
+          .data(d => d.locations.map((loc) => Object.assign({}, loc, {feature: d})))
+
+          // .data(d => d.locations.map(attrs =>({feature:d, ...attrs})))
           // .data(d => d.locations.map(({...l})=>({feature:d, ...l})))
           .enter().append('g')
             .attr('class', 'child-location-group')
             .selectAll('path.child-fragment')
-            .data(d=>d.fragments.map(attrs =>({feature: d.feature, ...attrs})))
+            .data(d => d.fragments.map((loc) => Object.assign({}, loc, {feature: d.feature})))
+            // .data(d=>d.fragments.map(attrs =>({feature: d.feature, ...attrs})))
             // .data(d=>d.fragments.map(({...l})=>({feature:d.feature, ...l})))
             .enter()
             .append('path')
