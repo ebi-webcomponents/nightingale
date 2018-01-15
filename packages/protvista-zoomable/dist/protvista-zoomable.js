@@ -196,15 +196,24 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
         _this.style.width = '100%';
         _this.width = _this.offsetWidth;
 
-        _this._length = _this.getAttribute('length') ? parseInt(_this.getAttribute('length')) : 0;
+        _this._length = _this.getAttribute('length') ? parseFloat(_this.getAttribute('length')) : 0;
 
-        _this.displayStart = _this.getAttribute('displaystart') ? parseInt(_this.getAttribute('displaystart')) : 0;
-        _this.displayEnd = _this.getAttribute('displayEnd') ? parseInt(_this.getAttribute('displayEnd')) : _this.width;
+        _this.displaystart = _this.getAttribute('displaystart') ? parseFloat(_this.getAttribute('displaystart')) : 0;
+        _this.displayend = _this.getAttribute('displayend') ? parseFloat(_this.getAttribute('displayend')) : _this.width;
 
         _this.updateScaleDomain = _this.updateScaleDomain.bind(_this);
         _this.initZoom = _this.initZoom.bind(_this);
         _this.zoomed = _this.zoomed.bind(_this);
-        _this.applyZoomTranslation = _this.applyZoomTranslation.bind(_this);
+        _this._applyZoomTranslation = _this.applyZoomTranslation.bind(_this);
+        var aboutToApply = false;
+        _this.applyZoomTranslation = function () {
+            if (aboutToApply) return;
+            aboutToApply = true;
+            requestAnimationFrame(function () {
+                aboutToApply = false;
+                _this._applyZoomTranslation();
+            });
+        };
         _this.listenForResize = _this.listenForResize.bind(_this);
 
         _this.updateScaleDomain();
@@ -237,20 +246,31 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
         key: 'zoomed',
         value: function zoomed() {
             this.xScale = d3.event.transform.rescaleX(this._originXScale);
-            this.refresh();
+            // this.refresh();
+            // Only refresh in the applyZoomTranslation
 
             // If the source event is null the zoom wasn't initiated by this component, don't send event
-            if (!d3.event.sourceEvent) return;
+            if (this.dontDispatch) return;
             this.dispatchEvent(new CustomEvent("change", {
-                detail: { displayend: this.xScale.domain()[1], displaystart: this.xScale.domain()[0] }, bubbles: true, cancelable: true
+                detail: {
+                    displaystart: this.xScale.domain()[0],
+                    displayend: this.xScale.domain()[1]
+                }, bubbles: true, cancelable: true
             }));
         }
     }, {
         key: 'applyZoomTranslation',
         value: function applyZoomTranslation() {
             if (!this.svg) return;
-            var k = this.width / (this.xScale(this.displayEnd) - this.xScale(this.displayStart));
-            this.svg.transition().duration(300).call(this.zoom.transform, d3.zoomIdentity.scale(k).translate(-this.xScale(this.displayStart), 0));
+            var k = Math.max(1, this.length / (this.displayend - this.displaystart));
+            var dx = -this._originXScale(this.displaystart);
+            this.dontDispatch = true;
+            this.svg
+            // .transition()
+            // .duration(300)
+            .call(this.zoom.transform, d3.zoomIdentity.scale(k).translate(dx, 0));
+            this.dontDispatch = false;
+            this.refresh();
         }
     }, {
         key: 'listenForResize',
@@ -298,7 +318,7 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
         set: function set$$1(svg) {
             this._svg = svg;
             svg.call(this._zoom);
-            // this.applyZoomTranslation();
+            this.applyZoomTranslation();
         },
         get: function get$$1() {
             return this._svg;

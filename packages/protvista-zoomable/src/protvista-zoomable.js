@@ -8,19 +8,28 @@ class ProtvistaZoomable extends HTMLElement {
         this.style.width = '100%';
         this.width = this.offsetWidth;
 
-        this._length = this.getAttribute('length') ? parseInt(this.getAttribute('length')) : 0;
+        this._length = this.getAttribute('length') ? parseFloat(this.getAttribute('length')) : 0;
 
-        this.displayStart = this.getAttribute('displaystart')
-            ? parseInt(this.getAttribute('displaystart'))
+        this.displaystart = this.getAttribute('displaystart')
+            ? parseFloat(this.getAttribute('displaystart'))
             : 0;
-        this.displayEnd = this.getAttribute('displayEnd')
-            ? parseInt(this.getAttribute('displayEnd'))
+        this.displayend = this.getAttribute('displayend')
+            ? parseFloat(this.getAttribute('displayend'))
             : this.width;
 
         this.updateScaleDomain = this.updateScaleDomain.bind(this);
         this.initZoom = this.initZoom.bind(this);
         this.zoomed = this.zoomed.bind(this);
-        this.applyZoomTranslation = this.applyZoomTranslation.bind(this);
+        this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
+        let aboutToApply = false;
+        this.applyZoomTranslation = () => {
+          if (aboutToApply) return;
+          aboutToApply = true;
+          requestAnimationFrame(() => {
+            aboutToApply = false;
+            this._applyZoomTranslation();
+          });
+        }
         this.listenForResize = this.listenForResize.bind(this);
 
         this.updateScaleDomain();
@@ -60,7 +69,7 @@ class ProtvistaZoomable extends HTMLElement {
     set svg(svg) {
         this._svg = svg;
         svg.call(this._zoom);
-        // this.applyZoomTranslation();
+        this.applyZoomTranslation();
     }
 
     get svg() {
@@ -103,26 +112,33 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     zoomed() {
-        this.xScale = d3.event
-                .transform
+        this.xScale = d3.event.transform
                 .rescaleX(this._originXScale);
-        this.refresh();
+        // this.refresh();
+        // Only refresh in the applyZoomTranslation
 
         // If the source event is null the zoom wasn't initiated by this component, don't send event
-        if(!d3.event.sourceEvent) return;
+        if(this.dontDispatch) return;
         this.dispatchEvent(new CustomEvent("change", {
-            detail: { displayend: this.xScale.domain()[1], displaystart: this.xScale.domain()[0] }, bubbles: true, cancelable: true
+            detail: {
+              displaystart: this.xScale.domain()[0],
+              displayend: this.xScale.domain()[1]
+            }, bubbles: true, cancelable: true
         }));
     }
 
     applyZoomTranslation() {
         if (!this.svg) return;
-        const k = this.width / (this.xScale(this.displayEnd) - this.xScale(this.displayStart));
+        const k = Math.max (1, this.length / (this.displayend - this.displaystart));
+        const dx = -this._originXScale(this.displaystart);
+        this.dontDispatch = true;
         this
             .svg
-            .transition()
-            .duration(300)
-            .call(this.zoom.transform, d3.zoomIdentity.scale(k).translate(-this.xScale(this.displayStart), 0));
+            // .transition()
+            // .duration(300)
+            .call(this.zoom.transform, d3.zoomIdentity.scale(k).translate(dx, 0));
+        this.dontDispatch = false;
+        this.refresh();
     }
 
     listenForResize() {
