@@ -13,6 +13,10 @@ class ProtVistaNavigation extends HTMLElement {
 
   constructor() {
     super();
+    this._x = null;
+  }
+
+  connectedCallback() {
     this.style.display = 'block';
     this.style.width = '100%';
     this.width = this.offsetWidth;
@@ -22,9 +26,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._displayend = parseFloat(this.getAttribute('displayend')) || this._length;
     this._highlightStart = parseFloat(this.getAttribute('highlightStart'));
     this._highlightEnd = parseFloat(this.getAttribute('highlightEnd'));
-  }
 
-  connectedCallback() {
     this._createNavRuler();
   }
 
@@ -107,10 +109,12 @@ class ProtVistaNavigation extends HTMLElement {
     this._updateNavRuler();
   }
   _updateNavRuler(){
-    this._updatePolygon();
-    this._updateLabels();
-    if (this._brushG) this._brushG
-      .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
+    if (this._x){
+      this._updatePolygon();
+      this._updateLabels();
+      if (this._brushG) this._brushG
+        .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
+    }
   }
   _updateLabels() {
     if (this._displaystartLabel) this._displaystartLabel.text(this._displaystart);
