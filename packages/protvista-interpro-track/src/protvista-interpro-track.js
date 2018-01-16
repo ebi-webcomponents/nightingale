@@ -11,14 +11,14 @@ const height = 44,
   };
 
 class ProtVistaInterproTrack extends ProtVistaTrack {
-  constructor() {
-    super();
-    this._expanded = this.hasAttribute('expanded');
-    this._haveCreatedFeatures = false;
-  }
   _createTrack() {
     this._layoutObj.expanded = this._expanded;
     super._createTrack();
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    this._expanded = this.hasAttribute('expanded');
+    this._haveCreatedFeatures = false;
   }
 
   set data(data) {
@@ -37,7 +37,13 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       });
   }
   static get observedAttributes() {
-    return ProtVistaTrack.observedAttributes.concat('expanded');
+    return ProtVistaTrack.observedAttributes.concat(['expanded','color']);
+  }
+  set color(value){
+    if (this._color !== value) {
+      this._color = value;
+      this.refresh();
+    }
   }
 
   _createFeatures(){
@@ -121,8 +127,8 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
               .attr('transform', f =>
                 'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
               )
-              .attr('fill', f => this._getFeatureColor(f.feature.parent))
-              .attr('stroke', f => this._getFeatureColor(f.feature.parent));
+              .attr('fill', f => this._getFeatureColor(f.feature))
+              .attr('stroke', f => this._getFeatureColor(f.feature));
     this.svg.attr("height", this._layoutObj.maxYPos);
     this._haveCreatedFeatures = true;
   }
@@ -139,6 +145,8 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
               f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
           )
         )
+        .attr('fill', f => this._getFeatureColor(f.feature))
+        .attr('stroke', f => this._getFeatureColor(f.feature))
         .attr('transform', f =>
           'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
         );
@@ -151,7 +159,9 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         )
         .attr('transform', f =>
           'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-        );
+        )
+        .attr('fill', f => this._getFeatureColor(f.feature))
+        .attr('stroke', f => this._getFeatureColor(f.feature));
       this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);
     }
