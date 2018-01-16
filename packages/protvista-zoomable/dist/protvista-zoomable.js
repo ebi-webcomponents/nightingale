@@ -192,15 +192,6 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
 
         var _this = possibleConstructorReturn(this, (ProtvistaZoomable.__proto__ || Object.getPrototypeOf(ProtvistaZoomable)).call(this));
 
-        _this.style.display = 'block';
-        _this.style.width = '100%';
-        _this.width = _this.offsetWidth;
-
-        _this._length = _this.getAttribute('length') ? parseFloat(_this.getAttribute('length')) : 0;
-
-        _this.displaystart = _this.getAttribute('displaystart') ? parseFloat(_this.getAttribute('displaystart')) : 0;
-        _this.displayend = _this.getAttribute('displayend') ? parseFloat(_this.getAttribute('displayend')) : _this.width;
-
         _this.updateScaleDomain = _this.updateScaleDomain.bind(_this);
         _this.initZoom = _this.initZoom.bind(_this);
         _this.zoomed = _this.zoomed.bind(_this);
@@ -216,14 +207,26 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
         };
         _this.listenForResize = _this.listenForResize.bind(_this);
 
-        _this.updateScaleDomain();
-        _this._originXScale = _this.xScale.copy();
-        _this.initZoom();
-        _this.listenForResize();
         return _this;
     }
 
     createClass(ProtvistaZoomable, [{
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+            this.style.display = 'block';
+            this.style.width = '100%';
+            this.width = this.offsetWidth;
+
+            this._length = this.getAttribute('length') ? parseFloat(this.getAttribute('length')) : 0;
+
+            this._displaystart = this.getAttribute('displaystart') ? parseFloat(this.getAttribute('displaystart')) : 0;
+            this._displayend = this.getAttribute('displayend') ? parseFloat(this.getAttribute('displayend')) : this.width;
+            this.updateScaleDomain();
+            this._originXScale = this.xScale.copy();
+            this.initZoom();
+            this.listenForResize();
+        }
+    }, {
         key: 'updateScaleDomain',
         value: function updateScaleDomain() {
             this.xScale = d3.scaleLinear().domain([1, this._length]).range([0, this._width]);
@@ -238,7 +241,7 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
         value: function attributeChangedCallback(name, oldValue, newValue) {
             if (oldValue !== newValue) {
                 var value = parseFloat(newValue);
-                this[name] = isNaN(newValue) ? newValue : value;
+                this['_' + name] = isNaN(value) ? newValue : value;
                 this.applyZoomTranslation();
             }
         }
@@ -261,9 +264,9 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
     }, {
         key: 'applyZoomTranslation',
         value: function applyZoomTranslation() {
-            if (!this.svg) return;
-            var k = Math.max(1, this.length / (this.displayend - this.displaystart));
-            var dx = -this._originXScale(this.displaystart);
+            if (!this.svg || !this._originXScale) return;
+            var k = Math.max(1, this.length / (this._displayend - this._displaystart));
+            var dx = -this._originXScale(this._displaystart);
             this.dontDispatch = true;
             this.svg
             // .transition()

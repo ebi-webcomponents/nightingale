@@ -4,18 +4,6 @@ class ProtvistaZoomable extends HTMLElement {
 
     constructor() {
         super();
-        this.style.display = 'block';
-        this.style.width = '100%';
-        this.width = this.offsetWidth;
-
-        this._length = this.getAttribute('length') ? parseFloat(this.getAttribute('length')) : 0;
-
-        this.displaystart = this.getAttribute('displaystart')
-            ? parseFloat(this.getAttribute('displaystart'))
-            : 0;
-        this.displayend = this.getAttribute('displayend')
-            ? parseFloat(this.getAttribute('displayend'))
-            : this.width;
 
         this.updateScaleDomain = this.updateScaleDomain.bind(this);
         this.initZoom = this.initZoom.bind(this);
@@ -32,10 +20,24 @@ class ProtvistaZoomable extends HTMLElement {
         }
         this.listenForResize = this.listenForResize.bind(this);
 
-        this.updateScaleDomain();
-        this._originXScale = this.xScale.copy();
-        this.initZoom();
-        this.listenForResize();
+    }
+    connectedCallback() {
+      this.style.display = 'block';
+      this.style.width = '100%';
+      this.width = this.offsetWidth;
+
+      this._length = this.getAttribute('length') ? parseFloat(this.getAttribute('length')) : 0;
+
+      this._displaystart = this.getAttribute('displaystart')
+          ? parseFloat(this.getAttribute('displaystart'))
+          : 0;
+      this._displayend = this.getAttribute('displayend')
+          ? parseFloat(this.getAttribute('displayend'))
+          : this.width;
+      this.updateScaleDomain();
+      this._originXScale = this.xScale.copy();
+      this.initZoom();
+      this.listenForResize();
     }
 
     get width() {
@@ -106,7 +108,7 @@ class ProtvistaZoomable extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
             const value = parseFloat(newValue);
-            this[name] = isNaN(newValue) ? newValue : value;
+            this[`_${name}`] = isNaN(value) ? newValue : value;
             this.applyZoomTranslation();
         }
     }
@@ -128,9 +130,9 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     applyZoomTranslation() {
-        if (!this.svg) return;
-        const k = Math.max (1, this.length / (this.displayend - this.displaystart));
-        const dx = -this._originXScale(this.displaystart);
+        if (!this.svg || !this._originXScale) return;
+        const k = Math.max (1, this.length / (this._displayend - this._displaystart));
+        const dx = -this._originXScale(this._displaystart);
         this.dontDispatch = true;
         this
             .svg
