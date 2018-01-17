@@ -1,4 +1,5 @@
-import {addStringItem} from './treeMenu';
+import { addStringItem } from './treeMenu';
+import clone from 'lodash-es/clone';
 
 const subcellulartreeMenu = [];
 const diseases = {};
@@ -8,14 +9,31 @@ function load(accession) {
 }
 
 function process(data) {
+    // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
+    data = data.map(d => {
+        if(!d.interactions)
+            d.interactions = [];
+        return d;
+    });
+
+    // Add symmetry if required
+    for (let element of data) {
+        for (const interactor of element.interactions) {
+            const otherInteractor = data.find(d => d.accession === interactor.id);
+            if (otherInteractor) {
+                if (!otherInteractor.interactions.find(d =>d.id === element.accession)) {
+                    const interactorToAdd = clone(interactor);
+                    interactorToAdd.id = element.accession;
+                    otherInteractor.interactions.push(interactorToAdd);
+                }
+            }
+        }
+    }
+
     // remove interactions which are not part of current set
     for (let element of data) {
         element.filterTerms = [];
         const interactors = [];
-        // we need this until production fixes data as it's not symetrical
-        if (!element.interactions) {
-            continue;
-        }
         if (element.accession.includes('-')) {
             element.isoform = element.accession;
             element.accession = element
@@ -94,7 +112,7 @@ function addInteractor(interactor, interactors) {
 function values(obj) {
     let ret = [];
     for (let [k,
-        v]of Object.entries(obj)) {
+        v] of Object.entries(obj)) {
         ret.push(v);
     }
     return ret;
@@ -116,4 +134,4 @@ function getFilters() {
     ];
 }
 
-export {load, getFilters};
+export { load, getFilters };
