@@ -10,8 +10,8 @@ function load(accession) {
 function process(data) {
     // remove interactions which are not part of current set
     for (let element of data) {
-        let interactors = [];
         element.filterTerms = [];
+        const interactors = [];
         // we need this until production fixes data as it's not symetrical
         if (!element.interactions) {
             continue;
@@ -34,22 +34,17 @@ function process(data) {
             if (interactor.interactionType === 'SELF') {
                 interactor.source = element.accession;
                 interactor.id = element.accession;
-                addInteractor(interactor, interactors)
-                // interactors.push(interactor) // TODO review this as it's not nice.
-                // TODO also save the reverse??;
+                addInteractor(interactor, interactors);
             } else if (data.some(function (d) { //Check that interactor is in the data
                 return d.accession === interactor.id;
             })) {
                 interactor.source = element
                     .accession
                     .split('-')[0];
-                addInteractor(interactor, interactors)
+                addInteractor(interactor, interactors);
             }
-            // else if (interactor.id.includes('-')) { console.log(interactor,
-            // element.accession); .accession     .split('-')[0];
-            // interactors.push(interactor); console.log(interactor.id); handle isoforms
-            // TODO handle isoforms console.log(interactor.id); }
         }
+
         element.interactions = interactors;
 
         if (element.subcellularLocations) {
@@ -80,6 +75,7 @@ function process(data) {
             }
         }
     }
+
     return data;
 }
 

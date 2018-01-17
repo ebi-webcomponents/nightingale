@@ -313,8 +313,6 @@ function draw(el, accession, data) {
             .attr('href', `//uniprot.org/uniprot/${target.accession}`)
             .text(`${target.accession}`);
 
-        console.log(data);
-
         var diseaseRow = table.append('tr');
         diseaseRow
             .append('td')
@@ -380,7 +378,8 @@ function hasFilterMatch(source, target, filters) {
     if (filters.length <= 0) {
         return true;
     }
-    return _intersection(source.filterTerms, filters.map(item => item['name'])).length > 0 || _intersection(target.filterTerms, filters.map(item => item['name'])).length > 0;
+    return _intersection(source.filterTerms, filters.map(item => item['name'])).length === filters.length
+    || _intersection(target.filterTerms, filters.map(item => item['name'])).length === filters.length;
 }
 
 // Hide nodes and labels which don't belong to a visible filter
