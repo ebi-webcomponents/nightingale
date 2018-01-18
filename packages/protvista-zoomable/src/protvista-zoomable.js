@@ -82,7 +82,7 @@ class ProtvistaZoomable extends HTMLElement {
         this.xScale = d3
             .scaleLinear()
             .domain([
-                1, this._length
+                0, this._length
             ])
             .range([
                 0, this._width
@@ -146,11 +146,13 @@ class ProtvistaZoomable extends HTMLElement {
     listenForResize() {
         // TODO add sleep to make transition appear smoother. Could experiment with CSS3
         // transitions too
-        window.onresize = () => {
-            this.width = this
-                .offsetWidth;
-            //TODO trigger repaint here
-        };
+        window.addEventListener("resize", e => {
+            this.width = this.offsetWidth;
+            this.updateScaleDomain();
+            this._originXScale = this.xScale.copy();
+            this.svg.attr('width', this.width)
+            this.applyZoomTranslation();
+        });
     }
 
 }

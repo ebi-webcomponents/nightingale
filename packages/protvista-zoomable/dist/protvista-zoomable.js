@@ -229,7 +229,7 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
     }, {
         key: 'updateScaleDomain',
         value: function updateScaleDomain() {
-            this.xScale = d3.scaleLinear().domain([1, this._length]).range([0, this._width]);
+            this.xScale = d3.scaleLinear().domain([0, this._length]).range([0, this._width]);
         }
     }, {
         key: 'initZoom',
@@ -282,10 +282,13 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
 
             // TODO add sleep to make transition appear smoother. Could experiment with CSS3
             // transitions too
-            window.onresize = function () {
+            window.addEventListener("resize", function (e) {
                 _this2.width = _this2.offsetWidth;
-                //TODO trigger repaint here
-            };
+                _this2.updateScaleDomain();
+                _this2._originXScale = _this2.xScale.copy();
+                _this2.svg.attr('width', _this2.width);
+                _this2.applyZoomTranslation();
+            });
         }
     }, {
         key: 'width',
