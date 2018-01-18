@@ -1,5 +1,6 @@
 import {select, selectAll, mouse} from 'd3-selection';
 import {scaleBand, scaleLinear} from 'd3-scale';
+import _union from 'lodash-es/union';
 import _intersection from 'lodash-es/intersection';
 import {load, getFilters} from './apiLoader';
 import {addStringItem, traverseTree, getPath} from './treeMenu';
@@ -378,8 +379,8 @@ function hasFilterMatch(source, target, filters) {
     if (filters.length <= 0) {
         return true;
     }
-    return _intersection(source.filterTerms, filters.map(item => item['name'])).length === filters.length
-    || _intersection(target.filterTerms, filters.map(item => item['name'])).length === filters.length;
+    const interactionFilters = _union(source.filterTerms, target.filterTerms);
+    return _intersection(interactionFilters, filters.map(item => item['name'])).length === filters.length;
 }
 
 // Hide nodes and labels which don't belong to a visible filter
