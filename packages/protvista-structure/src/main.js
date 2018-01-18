@@ -128,7 +128,7 @@ const loadComponent = function () {
                                 </td>
                                 <td>${d.properties.method}</td>
                                 <td>${d.properties.resolution}</td>
-                                <td>${this.getChain(d.properties.chains)}</td>
+                                <td title="${this.getChain(d.properties.chains)}">${this.getChain(d.properties.chains)}</td>
                                 <td>${this.getPositions(d.properties.chains)}</td>
                             </tr>
                         `)
