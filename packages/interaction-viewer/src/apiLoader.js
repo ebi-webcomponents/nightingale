@@ -1,10 +1,11 @@
 import { addStringItem } from './treeMenu';
 import clone from 'lodash-es/clone';
 
-const subcellulartreeMenu = [];
-const diseases = {};
+let subcellulartreeMenu, diseases;
 
 function load(accession) {
+    subcellulartreeMenu = [];
+    diseases = {};
     return fetch(`https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`).then(resp => resp.json().then(json => process(json)));
 }
 
