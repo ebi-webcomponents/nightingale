@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export default {
     input : 'src/main.js',
-    name : 'UpLitemolWebcomponent',
+    name : 'UuwLitemolComponent',
     sourcemap : true,
     output : {
         file: 'dist/uuw-litemol-component.js',

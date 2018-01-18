@@ -37,7 +37,7 @@ const loadComponent = function () {
                   
                 .table-container th, .table-container td {
                     box-sizing: border-box;
-                    flex: 1 0 10em;
+                    flex: 1 0 5em;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
@@ -111,17 +111,25 @@ const loadComponent = function () {
                         <col syle="width: 100px">
                         <col syle="width: 100px">
                         <col syle="width: 100px">
+                        <col syle="width: 100px">
                         <col syle="width: auto">
                     </colgroup>
-                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>
+                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th><th>Positions</th></thead>
                     <tbody>
                         ${pdbEntries
                 .map(d => `
                             <tr id="${d.id}" class="pdb-row">
-                                <td>${d.id}</td>
+                                <td>
+                                <strong>${d.id}</strong><br/>
+                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/${d.id}">PDB</a> 
+                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${d.id}">RCSB-PDBi</a>
+                                <a target="_blank" href="//pdbj.org/mine/summary/${d.id}">PDBj</a>
+                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${d.id}">PDBSUM</a>
+                                </td>
                                 <td>${d.properties.method}</td>
                                 <td>${d.properties.resolution}</td>
-                                <td>${d.properties.chains}</td>
+                                <td>${this.getChain(d.properties.chains)}</td>
+                                <td>${this.getPositions(d.properties.chains)}</td>
                             </tr>
                         `)
                 .join('')}
@@ -132,6 +140,14 @@ const loadComponent = function () {
             this
                 .querySelectorAll('.pdb-row')
                 .forEach(row => row.addEventListener('click', (e) => this.selectMolecule(row.id)));
+        }
+
+        getChain(chains) {
+            return chains.split('=')[0];
+        }
+
+        getPositions(chains) {
+            return chains.split('=')[1];
         }
 
         selectMolecule(id) {
@@ -161,6 +177,9 @@ const loadComponent = function () {
             this
                 ._liteMol
                 .clear();
+            // TODO: we beed to swap to use the coordinates service
+            // https://wwwdev.ebi.ac.uk/pdbe/coordinates/demo.html passing chain information
+            // we can retrieve only what is needed also get as bcif format will be faster
             this
                 ._liteMol
                 .loadMolecule({

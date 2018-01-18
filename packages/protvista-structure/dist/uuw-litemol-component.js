@@ -226,7 +226,7 @@ var loadComponent = function loadComponent() {
             _this.loadStructureTable = _this.loadStructureTable.bind(_this);
             var styleTag = document.createElement('style');
             _this.appendChild(styleTag);
-            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .jsmol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                  }\n                  \n                .table-container th, .table-container td {\n                    box-sizing: border-box;\n                    flex: 1 0 10em;\n                    overflow: hidden;\n                    text-overflow: ellipsis;\n                }\n                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {\n                    display: flex;\n                    flex-direction: column;\n                }\n                .table-container tr {\n                    display: flex;\n                    flex: 1 0;\n                }\n                .table-container tbody {\n                    overflow-y: auto;\n                }\n                .table-container tbody tr {\n                    cursor: pointer;\n                }\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
+            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .jsmol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                  }\n                  \n                .table-container th, .table-container td {\n                    box-sizing: border-box;\n                    flex: 1 0 5em;\n                    overflow: hidden;\n                    text-overflow: ellipsis;\n                }\n                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {\n                    display: flex;\n                    flex-direction: column;\n                }\n                .table-container tr {\n                    display: flex;\n                    flex: 1 0;\n                }\n                .table-container tbody {\n                    overflow-y: auto;\n                }\n                .table-container tbody tr {\n                    cursor: pointer;\n                }\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
             return _this;
         }
 
@@ -310,8 +310,8 @@ var loadComponent = function loadComponent() {
             value: function loadStructureTable(pdbEntries) {
                 var _this3 = this;
 
-                var html = '\n                <table>\n                    <colgroup>\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: auto">\n                    </colgroup>\n                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th></thead>\n                    <tbody>\n                        ' + pdbEntries.map(function (d) {
-                    return '\n                            <tr id="' + d.id + '" class="pdb-row">\n                                <td>' + d.id + '</td>\n                                <td>' + d.properties.method + '</td>\n                                <td>' + d.properties.resolution + '</td>\n                                <td>' + d.properties.chains + '</td>\n                            </tr>\n                        ';
+                var html = '\n                <table>\n                    <colgroup>\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: 100px">\n                        <col syle="width: auto">\n                    </colgroup>\n                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th><th>Positions</th></thead>\n                    <tbody>\n                        ' + pdbEntries.map(function (d) {
+                    return '\n                            <tr id="' + d.id + '" class="pdb-row">\n                                <td>\n                                <strong>' + d.id + '</strong><br/>\n                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/' + d.id + '">PDB</a> \n                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=' + d.id + '">RCSB-PDBi</a>\n                                <a target="_blank" href="//pdbj.org/mine/summary/' + d.id + '">PDBj</a>\n                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=' + d.id + '">PDBSUM</a>\n                                </td>\n                                <td>' + d.properties.method + '</td>\n                                <td>' + d.properties.resolution + '</td>\n                                <td>' + _this3.getChain(d.properties.chains) + '</td>\n                                <td>' + _this3.getPositions(d.properties.chains) + '</td>\n                            </tr>\n                        ';
                 }).join('') + '\n                    </tbody>\n                </table>\n            ';
                 this.tableDiv.innerHTML = html;
                 this.querySelectorAll('.pdb-row').forEach(function (row) {
@@ -319,6 +319,16 @@ var loadComponent = function loadComponent() {
                         return _this3.selectMolecule(row.id);
                     });
                 });
+            }
+        }, {
+            key: 'getChain',
+            value: function getChain(chains) {
+                return chains.split('=')[0];
+            }
+        }, {
+            key: 'getPositions',
+            value: function getPositions(chains) {
+                return chains.split('=')[1];
             }
         }, {
             key: 'selectMolecule',
@@ -346,6 +356,9 @@ var loadComponent = function loadComponent() {
             key: 'loadMolecule',
             value: function loadMolecule(_id) {
                 this._liteMol.clear();
+                // TODO: we beed to swap to use the coordinates service
+                // https://wwwdev.ebi.ac.uk/pdbe/coordinates/demo.html passing chain information
+                // we can retrieve only what is needed also get as bcif format will be faster
                 this._liteMol.loadMolecule({
                     _id: _id, format: 'cif', // or pdb, sdf, binarycif/bcif
                     url: 'https://www.ebi.ac.uk/pdbe/static/entry/' + _id.toLowerCase() + '_updated.cif',
