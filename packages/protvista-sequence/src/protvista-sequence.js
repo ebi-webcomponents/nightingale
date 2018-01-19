@@ -1,28 +1,17 @@
 import * as d3 from "d3";
+import ProtvistaZoomable from 'protvista-zoomable';
 
-const height = 40,
-  width = 760,
-  padding = {
-    top: 10,
-    right: 10,
-    bottom: 10,
-    left: 10
-  };
+const height = 40;
 
-class ProtVistaSequence extends HTMLElement {
-
-  constructor() {
-    super();
-    this._length = parseInt(this.getAttribute('length'));
-    this._displaystart = parseInt(this.getAttribute('displaystart')) || 1;
-    this._displayend = parseInt(this.getAttribute('displayend')) || this._length;
-    this._highlightstart = parseInt(this.getAttribute('highlightstart'));
-    this._highlightend = parseInt(this.getAttribute('highlightend'));
-  }
+class ProtVistaSequence extends ProtvistaZoomable {
 
   connectedCallback() {
-    if (this.sequence)
+    super.connectedCallback();
+    this._highlightstart = parseInt(this.getAttribute('highlightstart'));
+    this._highlightend = parseInt(this.getAttribute('highlightend'));
+    if (this.sequence) {
       this._createSequence();
+    }
   }
 
   set data(data) {
@@ -35,90 +24,35 @@ class ProtVistaSequence extends HTMLElement {
       this._createSequence();
   }
 
-  static get observedAttributes() {return [
-    'length', 'displaystart', 'displayend', 'highlightstart', 'highlightend'
-  ]; }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue){
-      this[`_${name}`] = parseFloat(newValue);
-      this._updateSequence();
-    }
-  }
 
 
   _createSequence() {
-    this._x = d3.scaleLinear()
-      .range([padding.left, width - padding.right])
-      .domain([this._displaystart, this._displayend]);
-
-    const svg = d3.select(this)
+    super.svg = d3.select(this)
       .append('div')
       .attr('class', '')
       .append('svg')
       .attr('id', '')
-      .attr('width', width)
+      .attr('width', this.width)
       .attr('height', (height));
 
-    this.xAxis = d3.axisBottom(this._x);
-    this.axis = svg.append('g')
+    this.axis = super.svg.append('g')
       .attr('class', 'x axis');
 
-    this.seq_g = svg.append('g')
+    this.seq_g = super.svg.append('g')
       .attr('class', 'sequence')
       .attr('transform', `translate(0,30)`);
 
-    this.highlighted = svg.append('rect')
+    this.highlighted = super.svg.append('rect')
       .attr('class', 'highlighted')
       .attr('fill', 'yellow')
       .attr('height', height);
 
-    this.prevScale = 1;
-    this.overlay = svg.append('rect')
-      .attr('class', 'overlay')
-      .attr('fill', 'transparent')
-      .style('cursor', 'move')
-      .attr('width', width)
-      .attr('height', height)
-      .call(d3.zoom()
-        .on('zoom', ()=>{
-          const delta = this.prevScale - d3.event.transform.k;
-          const scale = this._length/(this._displayend-this._displaystart);
-          this._displayend = this._displaystart + this._length/(scale-delta);
-          if (this._displayend - this._displaystart < 4)
-            this._displayend = this._displaystart + 4;
-          if (this._displayend > this._length)
-            this._displayend = this._length;
-
-          this.prevScale = d3.event.transform.k;
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {displayend: this._displayend, displaystart: this._displaystart}, bubbles:true, cancelable: true
-          }));
-        })
-      , d3.zoomIdentity)
-      .call(d3.drag()
-          .on('drag', ()=>{
-            const l = this._displayend - this._displaystart;
-
-            const x0 = this._x.range()[0] + d3.event.dx;
-            const dx = this._displaystart - this._x.invert(x0);
-            this._displaystart = Math.max(1, this._displaystart + dx);
-            this._displayend = this._displaystart + l;
-            if (this._displayend > this._length+1){
-              this._displayend = this._length+1;
-              this._displaystart = this._displayend - l;
-            }
-            this.dispatchEvent(new CustomEvent("change", {
-              detail: {displayend: this._displayend, displaystart: this._displaystart}, bubbles:true, cancelable: true
-            }));
-          })
-      );
-    this._updateSequence();
+    this.refresh();
   }
-  _updateSequence(){
-    if (this._x) {
-      this._x.domain([this._displaystart, this._displayend]);
 
+  refresh(){
+    if (this.axis) {
+      this.xAxis = d3.axisBottom(super.xScale);
       this.axis.call(this.xAxis);
       this.axis.select('.domain').remove();
       this.axis.selectAll('.tick line').remove();
@@ -128,19 +62,20 @@ class ProtVistaSequence extends HTMLElement {
       this.bases.enter()
         .append('text')
         .attr('class', 'base')
-        .attr('x', (b,i) => this._x(i+1))
-        .text(d=>d);
-      this.bases.attr('x', (b,i) => this._x(i+1));
+        .attr('x', (b,i) => super.xScale(i+1))
+        .text(d=>d)
+        .attr('style','font-family:monospace');
+      this.bases.attr('x', (b,i) => super.xScale(i+1));
 
-      const space = this._x(2) - this._x(1)
+      const space = super.xScale(2) - super.xScale(1)
         - this.seq_g.select('text.base').node().getBBox().width * 0.8;
       this.seq_g.style('opacity', Math.min(1, space));
 
       if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)){
         this.highlighted
-          .attr('x', this._x(this._highlightstart - 0.5))
+          .attr('x', super.xScale(this._highlightstart - 0.5))
           .style('opacity', 0.3)
-          .attr('width', (this._x(2) - this._x(1))*
+          .attr('width', (super.xScale(2) - super.xScale(1))*
             (this._highlightend - this._highlightstart + 1)
           );
       } else {

@@ -9,6 +9,7 @@ export default {
     file: 'dist/protvista-sequence.js',
     format: 'iife'
   },
+  external: ['protvista-zoomable','d3'],
   plugins : [
     nodeResolve({jsnext: true}),
     babel({exclude: 'node_modules/**'})
