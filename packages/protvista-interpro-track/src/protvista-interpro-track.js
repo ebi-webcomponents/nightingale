@@ -78,20 +78,29 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         )
         .attr('fill', f => this._getFeatureColor(f.feature))
         .attr('stroke', f => this._getFeatureColor(f.feature))
-        .on('click', f => {
+        .on('click', (f, i, d) => {
           if (this._expanded)
             this.removeAttribute('expanded')
           else
             this.setAttribute('expanded', 'expanded')
+          this.dispatchEvent(new CustomEvent("entryclick", {
+            detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+          }));
         })
-        .on('mouseover', f => {
+        .on('mouseover', (f, i, d) => {
           this.dispatchEvent(new CustomEvent("change", {
             detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
           }));
+          this.dispatchEvent(new CustomEvent("entrymouseover", {
+            detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+          }));
         })
-        .on('mouseout', () => {
+        .on('mouseout', (f, i, d) => {
           this.dispatchEvent(new CustomEvent("change", {
             detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
+          }));
+          this.dispatchEvent(new CustomEvent("entrymouseout", {
+            detail: f, bubbles:true, cancelable: true
           }));
         });
 
@@ -128,7 +137,29 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
                 'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
               )
               .attr('fill', f => this._getFeatureColor(f.feature))
-              .attr('stroke', f => this._getFeatureColor(f.feature));
+              .attr('stroke', f => this._getFeatureColor(f.feature))
+              .on('click', (f, i, d) => {
+                this.dispatchEvent(new CustomEvent("entryclick", {
+                  detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+                }));
+              })
+              .on('mouseover', (f, i, d) => {
+                this.dispatchEvent(new CustomEvent("change", {
+                  detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
+                }));
+                this.dispatchEvent(new CustomEvent("entrymouseover", {
+                  detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+                }));
+              })
+              .on('mouseout', (f, i, d) => {
+                this.dispatchEvent(new CustomEvent("change", {
+                  detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
+                }));
+                this.dispatchEvent(new CustomEvent("entrymouseout", {
+                  detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+                }));
+              });
+;
     this.svg.attr("height", this._layoutObj.maxYPos);
     this._haveCreatedFeatures = true;
   }
@@ -164,6 +195,8 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .attr('stroke', f => this._getFeatureColor(f.feature));
       this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);
+      this.highlighted.attr('height', this._layoutObj.maxYPos);
+
     }
   }
 }
