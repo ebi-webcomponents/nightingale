@@ -12,14 +12,14 @@
 
     </head>
     <body>
-      <table>
+      <table style="width:  100%;">
         <tr>
-          <th>FROM</th><th>Track</th><th>TO</th>
+          <th>FROM</th><th style="width:  90%;">Track</th><th>TO</th>
         </tr>
         <tr>
           <td>1</td>
           <td><protvista-interpro-track id= "track1" length="223" displaystart="1" displayend="223" highlightstart="23"
-                               highlightend="45" color="red"></protvista-track></td>
+                               highlightend="45" color="red" expanded></protvista-track></td>
           <td>223</td>
         </tr>
         <tr>
@@ -43,6 +43,7 @@
       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
       <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
 
+      <script src="../node_modules/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
       <script src="../node_modules/protvista-track/dist/protvista-track.js" charset="utf-8" defer></script>
       <script src="../dist/protvista-interpro-track.js" charset="utf-8" defer></script>
       <script>

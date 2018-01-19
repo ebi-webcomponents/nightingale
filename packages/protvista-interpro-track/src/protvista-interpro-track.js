@@ -159,7 +159,6 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
                   detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
                 }));
               });
-;
     this.svg.attr("height", this._layoutObj.maxYPos);
     this._haveCreatedFeatures = true;
   }

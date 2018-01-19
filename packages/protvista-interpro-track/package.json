@@ -26,6 +26,7 @@
     "babel-polyfill": "^6.26.0",
     "browser-sync": "^2.18.13",
     "mkdirp": "^0.5.1",
+    "protvista-zoomable": "0.0.1",
     "rimraf": "^2.6.1",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
@@ -33,6 +34,6 @@
   },
   "dependencies": {
     "d3": "^4.9.1",
-    "protvista-track": "^0.0.2"
+    "protvista-track": "0.0.3"
   }
 }
