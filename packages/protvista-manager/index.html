@@ -14,16 +14,10 @@
     <body>
       <protvista-manager attributes="length displaystart displayend highlightstart highlightend" id="example">
         <protvista-navigation length="223" displaystart="1" displayend="158" highlightStart="10" highlightEnd="45"></protvista-navigation>
-        <protvista-sequence length="223" displaystart="1" displayend="158" highlightStart="10" highlightEnd="45"></protvista-sequence>
+        <protvista-sequence id="seq1" length="223" displaystart="1" displayend="158"></protvista-sequence>
         <protvista-track id= "track1" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-track>
         <protvista-track id= "track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track>
         <protvista-interpro-track id= "track3" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-interpro-track>
-        <protvista-variation width="760">
-          <uniprot-entry-data-loader accession="P05067">
-              <source src="https://www.ebi.ac.uk/proteins/api/variation/{0}" />
-          </uniprot-entry-data-loader>
-        </protvista-variation>
-        <protvista-variation-filter></protvista-variation-filter>
       </protvista-manager>
 
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -35,14 +29,13 @@
       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
       <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
 
-      <script src="https://cdn.jsdelivr.net/npm/protvista-navigation/dist/protvista-navigation.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/protvista-track/dist/protvista-track.js" charset="utf-8" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest/dist/protvista-navigation.js" charset="utf-8" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/protvista-track@latest/dist/protvista-track.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/protvista-interpro-track/dist/protvista-interpro-track.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/protvista-sequence/dist/protvista-sequence.js" charset="utf-8" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/protvista-sequence@latest/dist/protvista-sequence.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/data-loader/dist/index.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/protvista-variation/dist/protvista-variation.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/protvista-variation-filter/dist/protvista-variation-filter.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/protvista-manager/dist/protvista-manager.js" charset="utf-8" defer></script>
       <script>
       window.onload = () => {
