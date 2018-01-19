@@ -9,7 +9,7 @@ export default {
       file: 'dist/protvista-track.js',
       format: 'iife',
   },
-  external: ['d3'],
+  external: ['d3', 'protvista-zoomable'],
   // paths: {
   //   d3: 'https://d3js.org/d3.v4.min.js'
   // },

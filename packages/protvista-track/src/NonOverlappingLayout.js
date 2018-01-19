@@ -28,10 +28,10 @@ class Row {
       feature.end = limits.end;
     }
 
-    containsOverlap({...feature}) {
-        this._addAbsoluteLimits(feature);
-        return _some(this._rowFeatures, ({...d}) => {
-            this._addAbsoluteLimits(d);
+    containsOverlap(feature) {
+        this._addAbsoluteLimits(Object.assign(feature));
+        return _some(this._rowFeatures, d => {
+            this._addAbsoluteLimits(Object.assign(d));
             const ftEnd = (feature.end) ? feature.end : feature.start;
             const dEnd = (d.end) ? d.end : d.start;
             return this._featureOverlap(feature, d, ftEnd, dEnd) || this._dOverlap(feature, d, ftEnd, dEnd);

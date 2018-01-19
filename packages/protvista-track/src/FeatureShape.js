@@ -37,6 +37,19 @@ export default class FeatureShape {
             + 'L' + -(this._gapRegion) + ',' + this._ftHeight
             + 'Z';
     }
+    _roundRectangle() {
+        const radius = 6;
+        return 'M' + (radius-this._gapRegion) + ',0'
+            + 'h' + (this._ftWidth - this._gapRegion-2*radius) + ',0'
+            + "a" + radius + "," + radius + " 0 0 1 " + radius + "," + radius
+            + "v" + (this._ftHeight - 2 * radius)
+            + "a" + radius + "," + radius + " 0 0 1 " + -radius + "," + radius
+            + "h" + (2 * radius - this._ftWidth)
+            + "a" + radius + "," + radius + " 0 0 1 " + -radius + "," + -radius
+            + "v" + (2 * radius - this._ftHeight)
+            + "a" + radius + "," + radius + " 0 0 1 " + radius + "," + -radius
+            + 'Z';
+    }
 
     _bridge() {
         if (this._ftLength !== 1) {
