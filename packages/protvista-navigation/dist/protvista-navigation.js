@@ -83,21 +83,23 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
 
     var _this = possibleConstructorReturn(this, (ProtVistaNavigation.__proto__ || Object.getPrototypeOf(ProtVistaNavigation)).call(this));
 
-    _this.style.display = 'block';
-    _this.style.width = '100%';
-    _this.width = _this.offsetWidth;
-
-    _this._length = parseFloat(_this.getAttribute('length'));
-    _this._displaystart = parseFloat(_this.getAttribute('displaystart')) || 1;
-    _this._displayend = parseFloat(_this.getAttribute('displayend')) || _this._length;
-    _this._highlightStart = parseFloat(_this.getAttribute('highlightStart'));
-    _this._highlightEnd = parseFloat(_this.getAttribute('highlightEnd'));
+    _this._x = null;
     return _this;
   }
 
   createClass(ProtVistaNavigation, [{
     key: 'connectedCallback',
     value: function connectedCallback() {
+      this.style.display = 'block';
+      this.style.width = '100%';
+      this.width = this.offsetWidth;
+
+      this._length = parseFloat(this.getAttribute('length'));
+      this._displaystart = parseFloat(this.getAttribute('displaystart')) || 1;
+      this._displayend = parseFloat(this.getAttribute('displayend')) || this._length;
+      this._highlightStart = parseFloat(this.getAttribute('highlightStart'));
+      this._highlightEnd = parseFloat(this.getAttribute('highlightEnd'));
+
       this._createNavRuler();
     }
   }, {
@@ -114,7 +116,7 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
       var _this2 = this;
 
       this._x = d3.scaleLinear().range([padding.left, this.width - padding.right]);
-      this._x.domain([1, this._length]);
+      this._x.domain([0, this._length + 1]);
 
       var svg = d3.select(this).append('div').attr('class', '').append('svg').attr('id', '').attr('width', this.width).attr('height', height);
 
@@ -123,7 +125,7 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
       this._displaystartLabel = svg.append("text").attr('class', 'start-label').attr('x', 0).attr('y', height - padding.bottom);
 
       this._displayendLabel = svg.append("text").attr('class', 'end-label').attr('x', this.width).attr('y', height - padding.bottom).attr('text-anchor', 'end');
-      svg.append('g').attr('class', 'x axis').call(xAxis);
+      var axis = svg.append('g').attr('class', 'x axis').call(xAxis);
 
       this._viewport = d3.brushX().extent([[padding.left, 0], [this.width - padding.right, height * 0.51]]).on("brush", function () {
         if (d3.event.selection) {
@@ -146,13 +148,22 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
 
       this.polygon = svg.append("polygon").attr('class', 'zoom-polygon').attr('fill', '#777').attr('fill-opacity', '0.3');
       this._updateNavRuler();
+      window.addEventListener("resize", function (e) {
+        _this2.width = _this2.offsetWidth;
+        _this2._x = _this2._x.range([padding.left, _this2.width - padding.right]);
+        svg.attr('width', _this2.width);
+        axis.call(xAxis);
+        _this2._updateNavRuler();
+      });
     }
   }, {
     key: '_updateNavRuler',
     value: function _updateNavRuler() {
-      this._updatePolygon();
-      this._updateLabels();
-      if (this._brushG) this._brushG.call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
+      if (this._x) {
+        this._updatePolygon();
+        this._updateLabels();
+        if (this._brushG) this._brushG.call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
+      }
     }
   }, {
     key: '_updateLabels',
@@ -163,7 +174,7 @@ var ProtVistaNavigation$1 = function (_HTMLElement) {
   }, {
     key: '_updatePolygon',
     value: function _updatePolygon() {
-      if (this.polygon) this.polygon.attr('points', this._x(this._displaystart) + ',' + height / 2 + '\n        ' + this._x(this._displayend) + ',' + height / 2 + '\n        ' + (this.width - padding.right) + ',' + height + '\n        ' + padding.left + ',' + height);
+      if (this.polygon) this.polygon.attr('points', this._x(this._displaystart) + ',' + height / 2 + '\n        ' + this._x(this._displayend) + ',' + height / 2 + '\n        ' + this.width + ',' + height + '\n        0,' + height);
     }
   }, {
     key: 'width',
