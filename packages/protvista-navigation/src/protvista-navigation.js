@@ -28,6 +28,8 @@ class ProtVistaNavigation extends HTMLElement {
     this._highlightEnd = parseFloat(this.getAttribute('highlightEnd'));
 
     this._createNavRuler();
+
+
   }
 
   static get observedAttributes() {return [
@@ -50,7 +52,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _createNavRuler() {
     this._x = d3.scaleLinear().range([padding.left, this.width - padding.right]);
-    this._x.domain([1, this._length]);
+    this._x.domain([0, this._length+1]);
 
     const svg = d3.select(this)
       .append('div')
@@ -72,7 +74,7 @@ class ProtVistaNavigation extends HTMLElement {
                       .attr('x', this.width)
                       .attr('y', height - padding.bottom)
                       .attr('text-anchor', 'end');
-    svg.append('g')
+    const axis = svg.append('g')
       .attr('class', 'x axis')
       .call(xAxis);
 
@@ -107,6 +109,14 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('fill', '#777')
       .attr('fill-opacity','0.3');
     this._updateNavRuler();
+    window.addEventListener("resize", e => {
+        this.width = this.offsetWidth;
+        this._x = this._x.range([padding.left, this.width - padding.right]);
+        svg.attr('width', this.width);
+        axis.call(xAxis);
+        this._updateNavRuler();
+    });
+
   }
   _updateNavRuler(){
     if (this._x){
@@ -125,8 +135,8 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('points',
         `${this._x(this._displaystart)},${height/2}
         ${this._x(this._displayend)},${height/2}
-        ${this.width-padding.right},${height}
-        ${padding.left},${height}`
+        ${this.width},${height}
+        0,${height}`
       );
   }
 }
