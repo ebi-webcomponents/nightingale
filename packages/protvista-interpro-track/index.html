@@ -50,35 +50,12 @@
       <script>
       window.onload = () => {
         const data = [
-            {accession:'feature1', start: 10, end: 40, color: '#342ea2', children: [
-              {accession:'feature1.1', start: 12, end: 40},
-              {accession:'feature1.2', locations: [{ fragments:[
-                {start: 10, end: 27},
-                {start: 29, end: 40},
-              ]}]},
-            ]},
-            {accession:'feature2', locations: [{ fragments:[{start: 50, end: 160}]}], color: '#A42ea2', children:[
-              {accession:'feature2.1', start: 50, end: 160},
-              {accession:'feature2.2', locations: [{ fragments:[
-                {start: 50, end: 94},
-                {start: 99, end: 110},
-                {start: 116, end: 158},
-              ]}]},
-              {accession:'feature2.3', locations: [{ fragments:[
-                {start: 52, end: 98},
-                {start: 104, end: 160},
-              ]}]},
-
-            ]},
+            {accession:'feature1', start: 10, end: 40, color: '#342ea2'},
+            {accession:'feature2', locations: [{ fragments:[{start: 50, end: 160}]}], color: '#A42ea2'},
             {accession:'feature3', locations: [{
               fragments:[{start: 155, end: 155}]},
               {fragments:[{start: 158, end: 158}]}
-            ], color: '#A4Aea2', children: [
-              {accession:'feature3.1', locations: [
-                {fragments:[{start: 155, end: 155}]},
-                {fragments:[{start: 158, end: 158}]}
-              ]},
-            ]},
+            ], color: '#A4Aea2'},
             {accession:'feature4', locations: [
               { fragments:[
                 {start: 200, end: 204},
@@ -86,9 +63,33 @@
               ]}
             ]},
         ];
+        const contributors = [
+          {accession:'feature1.1', start: 12, end: 40},
+          {accession:'feature1.2', locations: [{ fragments:[
+            {start: 10, end: 27},
+            {start: 29, end: 40},
+          ]}]},
+          {accession:'feature2.1', start: 50, end: 160},
+          {accession:'feature2.2', locations: [{ fragments:[
+            {start: 50, end: 94},
+            {start: 99, end: 110},
+            {start: 116, end: 158},
+          ]}]},
+          {accession:'feature2.3', locations: [{ fragments:[
+            {start: 52, end: 98},
+            {start: 104, end: 160},
+          ]}]},
+          {accession:'feature3.1', locations: [
+            {fragments:[{start: 155, end: 155}]},
+            {fragments:[{start: 158, end: 158}]}
+          ]},
+        ];
         document.querySelector("#track1").data = data;
         document.querySelector("#track2").data = data;
         document.querySelector("#track3").data = data;
+        document.querySelector("#track1").contributors = contributors;
+        document.querySelector("#track2").contributors = contributors;
+        document.querySelector("#track3").contributors = contributors;
       }
       </script>
     </body>

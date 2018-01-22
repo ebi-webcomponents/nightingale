@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-track",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Interpro extension of the track type.",
   "main": "dist/protvista-interpro-track.js",
   "module": "src/index.js",
