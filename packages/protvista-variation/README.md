@@ -3,7 +3,7 @@
       <protvista-variation accession="P05067"></protvista-variation>
 ```
 
-See it running [Here](https://ebi-ppf.github.io/protvista-variation/).
+See it running [Here](https://ebi-webcomponents.github.io/protvista-variation/).
 
 ## API Reference
 ### Attributes
