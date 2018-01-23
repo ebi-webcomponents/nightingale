@@ -7,7 +7,7 @@ A protvista descendent is any element in its subtree which tag name starts with 
 
 The children should fire events of the type change, and the detail object should contain the attributes `type` and `value`.
 
-See it running [Here](https://ebi-ppf.github.io/protvista-manager/index.html).
+See it running [Here](https://ebi-webcomponents.github.io/protvista-manager/index.html).
 
 
 ## Usage
