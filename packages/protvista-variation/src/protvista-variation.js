@@ -3,6 +3,7 @@ import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
 import {getFiltersFromAttribute} from './filters';
 import cloneDeep from 'lodash-es/cloneDeep';
+import union from 'lodash-es/union';
 import '../style/protvista-variation.css';
 
 const aaList = [
@@ -221,9 +222,9 @@ class ProtvistaVariation extends ProtvistaZoomable {
     }
 
     applyFilters(selectedFilters) {
-        let filteredData = cloneDeep(this._data);
+        let filteredData = [];
         selectedFilters.forEach(f => {
-            filteredData = f.applyFilter(filteredData);
+            filteredData = union(f.applyFilter(this._data), filteredData);
         });
         this.updateData(filteredData);
     }
