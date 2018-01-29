@@ -10,7 +10,6 @@ const height = 40,
   };
 
 class ProtVistaNavigation extends HTMLElement {
-
   constructor() {
     super();
     this._x = null;
@@ -27,9 +26,17 @@ class ProtVistaNavigation extends HTMLElement {
     this._highlightStart = parseFloat(this.getAttribute('highlightStart'));
     this._highlightEnd = parseFloat(this.getAttribute('highlightEnd'));
 
+    this._onResize = this._onResize.bind(this);
+
     this._createNavRuler();
+  }
 
-
+  disconnectedCallback() {
+    if (this._ro) {
+      this._ro.unobserve(this);
+    } else {
+      window.removeEventListener(this._onResize);
+    }
   }
 
   static get observedAttributes() {return [
@@ -54,7 +61,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._x = d3.scaleLinear().range([padding.left, this.width - padding.right]);
     this._x.domain([0, this._length+1]);
 
-    const svg = d3.select(this)
+    this._svg = d3.select(this)
       .append('div')
       .attr('class', '')
       .append('svg')
@@ -62,21 +69,21 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('width', this.width)
       .attr('height', (height));
 
-    const xAxis = d3.axisBottom(this._x);
+    this._xAxis = d3.axisBottom(this._x);
 
-    this._displaystartLabel = svg.append("text")
+    this._displaystartLabel = this._svg.append("text")
                         .attr('class', 'start-label')
                         .attr('x', 0)
                         .attr('y', height - padding.bottom);
 
-    this._displayendLabel = svg.append("text")
+    this._displayendLabel = this._svg.append("text")
                       .attr('class', 'end-label')
                       .attr('x', this.width)
                       .attr('y', height - padding.bottom)
                       .attr('text-anchor', 'end');
-    const axis = svg.append('g')
+    this._axis = this._svg.append('g')
       .attr('class', 'x axis')
-      .call(xAxis);
+      .call(this._xAxis);
 
     this._viewport = d3.brushX().extent([
         [padding.left, 0],
@@ -97,27 +104,34 @@ class ProtVistaNavigation extends HTMLElement {
         }
       });
 
-    this._brushG = svg.append("g")
+    this._brushG = this._svg.append("g")
       .attr("class", "brush")
       .call(this._viewport);
 
     this._brushG
       .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
 
-    this.polygon = svg.append("polygon")
+    this.polygon = this._svg.append("polygon")
       .attr('class', 'zoom-polygon')
       .attr('fill', '#777')
       .attr('fill-opacity','0.3');
     this._updateNavRuler();
-    window.addEventListener("resize", e => {
-        this.width = this.offsetWidth;
-        this._x = this._x.range([padding.left, this.width - padding.right]);
-        svg.attr('width', this.width);
-        axis.call(xAxis);
-        this._updateNavRuler();
-    });
 
+    if ('ResizeObserver' in window) {
+      this._ro = new ResizeObserver(this._onResize);
+      this._ro.observe(this);
+    }
+    window.addEventListener("resize", this._onResize);
   }
+
+  _onResize() {
+    this.width = this.offsetWidth;
+    this._x = this._x.range([padding.left, this.width - padding.right]);
+    this._svg.attr('width', this.width);
+    this._axis.call(this._xAxis);
+    this._updateNavRuler();
+  }
+
   _updateNavRuler(){
     if (this._x){
       this._updatePolygon();
