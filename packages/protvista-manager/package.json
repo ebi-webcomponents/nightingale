@@ -2,6 +2,10 @@
   "name": "protvista-manager",
   "version": "0.0.3",
   "description": "Manager component for the ProtVista tool",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/protvista-manager.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
@@ -10,7 +14,8 @@
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
@@ -25,10 +30,10 @@
     "babel-preset-es2016": "^6.24.1",
     "browser-sync": "^2.23.5",
     "data-loader": "^0.3.0",
-    "protvista-interpro-track": "^0.0.3",
-    "protvista-navigation": "^0.0.2",
-    "protvista-sequence": "^0.0.3",
-    "protvista-track": "^0.0.3",
+    "protvista-interpro-track": "0.0.5",
+    "protvista-navigation": "0.0.4",
+    "protvista-sequence": "0.0.4",
+    "protvista-track": "0.0.4",
     "protvista-variation": "0.0.0",
     "protvista-variation-filter": "0.0.0",
     "rollup": "^0.41.6",
