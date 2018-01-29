@@ -30,8 +30,7 @@ class ProtVistaManager extends HTMLElement {
     }
   }
 
-  connectedCallback() {
-    this._registerProtvistaDescendents(this);
+  addListeners() {
     for (const child of this.protvistaElements){
 
       child.addEventListener("change", e => {
@@ -48,6 +47,30 @@ class ProtVistaManager extends HTMLElement {
           }
         }
       });
+    }
+  }
+
+  connectedCallback() {
+    this._registerProtvistaDescendents(this);
+    this.addListeners();
+    var that = this;
+
+    if('MutationObserver' in window) {
+      this.mutationObserver = new MutationObserver(mutationList => {
+        that._registerProtvistaDescendents(that);
+        that.addListeners();
+      });
+      this.mutationObserver.observe(this, {
+        childList:true
+      });
+      
+    }
+
+  }
+
+  disconnectedCallback() {
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
     }
   }
 
