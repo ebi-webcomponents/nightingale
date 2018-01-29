@@ -1,6 +1,6 @@
 {
     "name": "protvista-zoomable",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A zoomable component for ProtVista",
     "main": "src/main.js",
     "module": "src/protvista-zoomable.js",
