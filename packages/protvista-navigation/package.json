@@ -10,7 +10,8 @@
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build"
   },
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "ISC",
