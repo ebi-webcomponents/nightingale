@@ -2,6 +2,10 @@
   "name": "protvista-navigation",
   "version": "0.0.4",
   "description": "Navigation component for the ProtVista tool",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/protvista-track.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
