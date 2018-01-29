@@ -2,6 +2,10 @@
     "name": "protvista-zoomable",
     "version": "0.0.3",
     "description": "A zoomable component for ProtVista",
+    "files": [
+        "dist",
+        "src"
+    ],
     "main": "src/main.js",
     "module": "src/protvista-zoomable.js",
     "jsnext:main": "src/protvista-zoomable.js",
