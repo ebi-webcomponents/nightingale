@@ -226,7 +226,7 @@ var loadComponent = function loadComponent() {
             _this.loadStructureTable = _this.loadStructureTable.bind(_this);
             var styleTag = document.createElement('style');
             _this.appendChild(styleTag);
-            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .jsmol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                  }\n                  \n                .table-container th, .table-container td {\n                    box-sizing: border-box;\n                    flex: 1 0 5em;\n                    overflow: hidden;\n                    text-overflow: ellipsis;\n                }\n                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {\n                    display: flex;\n                    flex-direction: column;\n                }\n                .table-container tr {\n                    display: flex;\n                    flex: 1 0;\n                }\n                .table-container tbody {\n                    overflow-y: auto;\n                }\n                .table-container tbody tr {\n                    cursor: pointer;\n                }\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
+            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .litemol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                  }\n                  \n                .table-container th, .table-container td {\n                    box-sizing: border-box;\n                    flex: 1 0 5em;\n                    overflow: hidden;\n                    text-overflow: ellipsis;\n                }\n                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {\n                    display: flex;\n                    flex-direction: column;\n                }\n                .table-container tr {\n                    display: flex;\n                    flex: 1 0;\n                }\n                .table-container tbody {\n                    overflow-y: auto;\n                }\n                .table-container tbody tr {\n                    cursor: pointer;\n                }\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
             return _this;
         }
 
@@ -245,12 +245,15 @@ var loadComponent = function loadComponent() {
             value: function connectedCallback() {
                 var _this2 = this;
 
+                this.titleContainer = document.createElement('h4');
+                this.titleContainer.id = 'litemol-title';
                 this.tableDiv = document.createElement('div');
                 this.tableDiv.className = 'table-container';
-                var jsmolDiv = document.createElement('div');
-                jsmolDiv.className = 'jsmol-container';
-                jsmolDiv.id = 'app';
-                this.appendChild(jsmolDiv);
+                var litemolDiv = document.createElement('div');
+                litemolDiv.className = 'litemol-container';
+                litemolDiv.id = 'app';
+                this.appendChild(this.titleContainer);
+                this.appendChild(litemolDiv);
                 this.appendChild(this.tableDiv);
                 this.loadLiteMol();
                 this.loadEntry().then(function (entry) {
@@ -337,6 +340,7 @@ var loadComponent = function loadComponent() {
                     return row.classList.remove('active');
                 });
                 document.getElementById(id).classList.add('active');
+                document.getElementById('litemol-title').textContent = id;
                 this.loadMolecule(id);
             }
         }, {

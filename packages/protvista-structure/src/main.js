@@ -21,7 +21,7 @@ const loadComponent = function () {
                 uuw-litemol-component {
                     display:flex;
                 }
-                .jsmol-container, .table-container {
+                .litemol-container, .table-container {
                     width: var(--width);
                     height: 480px;
                     position: relative;
@@ -73,12 +73,15 @@ const loadComponent = function () {
         }
 
         connectedCallback() {
+            this.titleContainer = document.createElement('h4');
+            this.titleContainer.id = 'litemol-title';
             this.tableDiv = document.createElement('div');
             this.tableDiv.className = 'table-container';
-            const jsmolDiv = document.createElement('div');
-            jsmolDiv.className = 'jsmol-container';
-            jsmolDiv.id = 'app';
-            this.appendChild(jsmolDiv);
+            const litemolDiv = document.createElement('div');
+            litemolDiv.className = 'litemol-container';
+            litemolDiv.id = 'app';
+            this.appendChild(this.titleContainer);
+            this.appendChild(litemolDiv);
             this.appendChild(this.tableDiv);
             this.loadLiteMol();
             this
@@ -158,6 +161,7 @@ const loadComponent = function () {
                 .getElementById(id)
                 .classList
                 .add('active');
+            document.getElementById('litemol-title').textContent = id;
             this.loadMolecule(id);
         }
 
