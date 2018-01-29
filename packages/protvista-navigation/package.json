@@ -1,6 +1,6 @@
 {
   "name": "protvista-navigation",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Navigation component for the ProtVista tool",
   "main": "dist/protvista-track.js",
   "module": "src/index.js",
