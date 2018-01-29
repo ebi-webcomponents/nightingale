@@ -242,6 +242,12 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
             if (oldValue !== newValue) {
                 var value = parseFloat(newValue);
                 this['_' + name] = isNaN(value) ? newValue : value;
+
+                if (name === 'length') {
+                    this.updateScaleDomain();
+                    this._originXScale = this.xScale.copy();
+                }
+
                 this.applyZoomTranslation();
             }
         }
@@ -332,7 +338,7 @@ var ProtvistaZoomable$1 = function (_HTMLElement) {
     }], [{
         key: 'observedAttributes',
         get: function get$$1() {
-            return ['displaystart', 'displayend'];
+            return ['displaystart', 'displayend', 'length'];
         }
     }]);
     return ProtvistaZoomable;

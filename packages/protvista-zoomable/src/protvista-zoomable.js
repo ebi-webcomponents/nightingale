@@ -112,13 +112,19 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['displaystart', 'displayend'];
+        return ['displaystart', 'displayend', 'length'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
             const value = parseFloat(newValue);
             this[`_${name}`] = isNaN(value) ? newValue : value;
+
+            if(name === 'length') {
+                this.updateScaleDomain();
+                this._originXScale = this.xScale.copy();
+            }
+
             this.applyZoomTranslation();
         }
     }
