@@ -46,7 +46,7 @@ class ProtvistaZoomable extends HTMLElement {
       if (this._ro) {
         this._ro.unobserve(this);
       } else {
-        window.addEventListener("resize", this._onResize);
+        window.removeEventListener("resize", this._onResize);
       }
     }
 
