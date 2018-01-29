@@ -17,10 +17,12 @@ class ProtvistaZoomable extends HTMLElement {
             aboutToApply = false;
             this._applyZoomTranslation();
           });
-        }
+        };
+        this._onResize = this._onResize.bind(this);
         this.listenForResize = this.listenForResize.bind(this);
 
     }
+
     connectedCallback() {
       this.style.display = 'block';
       this.style.width = '100%';
@@ -38,6 +40,14 @@ class ProtvistaZoomable extends HTMLElement {
       this._originXScale = this.xScale.copy();
       this.initZoom();
       this.listenForResize();
+    }
+
+    disconnectedCallback() {
+      if (this._ro) {
+        this._ro.unobserve(this);
+      } else {
+        window.addEventListener("resize", this._onResize);
+      }
     }
 
     get width() {
@@ -143,16 +153,23 @@ class ProtvistaZoomable extends HTMLElement {
         this.refresh();
     }
 
+    _onResize() {
+       this.width = this.offsetWidth;
+       this.updateScaleDomain();
+       this._originXScale = this.xScale.copy();
+       if (this.svg) this.svg.attr('width', this.width);
+       this.applyZoomTranslation();
+    }
+
     listenForResize() {
         // TODO add sleep to make transition appear smoother. Could experiment with CSS3
         // transitions too
-        window.addEventListener("resize", e => {
-            this.width = this.offsetWidth;
-            this.updateScaleDomain();
-            this._originXScale = this.xScale.copy();
-            this.svg.attr('width', this.width)
-            this.applyZoomTranslation();
-        });
+        if ('ResizeObserver' in window) {
+            this._ro = new ResizeObserver(this._onResize);
+            this._ro.observe(this);
+            return;
+        }
+        window.addEventListener("resize", this._onResize);
     }
 
 }

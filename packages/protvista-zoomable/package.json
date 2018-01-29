@@ -6,8 +6,8 @@
     "module": "src/protvista-zoomable.js",
     "jsnext:main": "src/protvista-zoomable.js",
     "repository": {
-      "type": "git",
-      "url": "https://github.com/ebi-ppf/protvista-zoomable"
+        "type": "git",
+        "url": "https://github.com/ebi-ppf/protvista-zoomable"
     },
     "scripts": {
         "build-dev": "rollup -c",
