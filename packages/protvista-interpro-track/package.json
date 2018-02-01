@@ -1,7 +1,11 @@
 {
   "name": "protvista-interpro-track",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Interpro extension of the track type.",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/protvista-interpro-track.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
@@ -13,7 +17,8 @@
     "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync"
+    "serve": "npm run rollup-watch & npm run browser-sync",
+    "prepublishOnly": "npm run build"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
@@ -21,12 +26,12 @@
     "@webcomponents/webcomponentsjs": "^1.0.19",
     "babel-cli": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.18.13",
     "mkdirp": "^0.5.1",
-    "protvista-zoomable": "0.0.1",
+    "protvista-zoomable": "0.0.3",
     "rimraf": "^2.6.1",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
@@ -34,6 +39,6 @@
   },
   "dependencies": {
     "d3": "^4.9.1",
-    "protvista-track": "0.0.3"
+    "protvista-track": "0.0.4"
   }
 }

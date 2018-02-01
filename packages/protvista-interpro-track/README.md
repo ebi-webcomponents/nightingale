@@ -1,7 +1,7 @@
 # `<protvista-track>`
 Basic track type of the viewer
 
-See it running [Here](https://ebi-ppf.github.io/protvista-interpro-track/).
+See it running [Here](https://ebi-webcomponents.github.io/protvista-interpro-track/).
 
 
 ## Usage
