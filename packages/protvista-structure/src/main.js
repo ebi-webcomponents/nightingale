@@ -181,14 +181,11 @@ const loadComponent = function () {
             this
                 ._liteMol
                 .clear();
-            // TODO: we beed to swap to use the coordinates service
-            // https://wwwdev.ebi.ac.uk/pdbe/coordinates/demo.html passing chain information
-            // we can retrieve only what is needed also get as bcif format will be faster
             this
                 ._liteMol
                 .loadMolecule({
-                    _id, format: 'cif', // or pdb, sdf, binarycif/bcif
-                    url: `https://www.ebi.ac.uk/pdbe/static/entry/${_id.toLowerCase()}_updated.cif`,
+                    _id, format: 'binarycif', // or pdb, sdf, binarycif/bcif
+                    url: `https://www.ebi.ac.uk/pdbe/coordinates/${_id.toLowerCase()}/full?encoding=BCIF`,
                     // instead of url, it is possible to use data: "string" or ArrayBuffer (for
                     // BinaryCIF) loaded molecule and model can be accessed after load using
                     // plugin.context.select(modelRef/moleculeRef)[0], for example
