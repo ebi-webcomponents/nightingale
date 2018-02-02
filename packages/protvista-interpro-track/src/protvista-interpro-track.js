@@ -12,17 +12,17 @@ const height = 44,
 
 class ProtVistaInterproTrack extends ProtVistaTrack {
   _createTrack() {
-    console.log("Features!!!");
-
     this._layoutObj.expanded = this._expanded;
     super._createTrack();
     this.children_g = null;
   }
+
   connectedCallback() {
     super.connectedCallback();
     this._expanded = this.hasAttribute('expanded');
     this._haveCreatedFeatures = false;
   }
+
   attributeChangedCallback(name, oldValue, newValue) {
     if (name==='expanded' && oldValue !== newValue && this._contributors){
       for (let c of this._contributors){
@@ -36,10 +36,12 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
     this._data = this.normalizeLocations(data);
     this._createTrack();
   }
+
   set contributors(contributors) {
     this._contributors = this.normalizeLocations(contributors);
     if (this._data) this._createTrack();
   }
+
   getLayout(data) {
       return new InterproEntryLayout({
         layoutHeight:height,
@@ -47,6 +49,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         padding: 2,
       });
   }
+
   static get observedAttributes() {
     return ProtVistaTrack.observedAttributes.concat(['expanded','color']);
   }
@@ -56,6 +59,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       this.refresh();
     }
   }
+
   _createResidueGroup(baseG){
     return baseG.selectAll('g.residues-group')
       .data(d => d.residues ? d.residues.map(r => Object.assign({}, r, {feature: d})) : [])
@@ -75,6 +79,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
           .enter().append('g')
             .attr('class', 'residues-locations');
   }
+
   _createResiduePaths(baseG){
     return baseG
       .selectAll('g.residue')
@@ -94,6 +99,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .attr('fill', f => this._getFeatureColor(f))
         .attr('stroke', 'transparent');
   }
+
   _refreshResiduePaths(baseG){
     baseG
       .attr('d', f =>
@@ -106,8 +112,28 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         f =>'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(`${f.accession}_${f.i}_${f.j}`)) + ')'
       )
       .attr('fill', f => this._getFeatureColor(f));
-
   }
+
+  _addHoverEvents(features){
+    features
+      .on('mouseover', (f, i, d) => {
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
+        }));
+        this.dispatchEvent(new CustomEvent("entrymouseover", {
+          detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+        }));
+      })
+      .on('mouseout', (f, i, d) => {
+        this.dispatchEvent(new CustomEvent("change", {
+          detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
+        }));
+        this.dispatchEvent(new CustomEvent("entrymouseout", {
+          detail: f, bubbles:true, cancelable: true
+        }));
+      })
+  }
+
   _createFeatures(){
     this._layoutObj.init(this._data, this._contributors);
     this.featuresG = this.seq_g.selectAll('g.feature-group')
@@ -128,17 +154,6 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       .enter()
       .append('path')
         .attr('class', 'feature')
-        .attr('d', f =>
-          this._featureShape.getFeatureShape(
-            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-              f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
-          )
-        )
-        .attr('transform', f =>
-          'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-        )
-        .attr('fill', f => this._getFeatureColor(f.feature))
-        .attr('stroke', f => this._getFeatureColor(f.feature))
         .on('click', (f, i, d) => {
           if (this._expanded)
             this.removeAttribute('expanded')
@@ -147,26 +162,10 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
           this.dispatchEvent(new CustomEvent("entryclick", {
             detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
           }));
-        })
-        .on('mouseover', (f, i, d) => {
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
-          }));
-          this.dispatchEvent(new CustomEvent("entrymouseover", {
-            detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
-          }));
-        })
-        .on('mouseout', (f, i, d) => {
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
-          }));
-          this.dispatchEvent(new CustomEvent("entrymouseout", {
-            detail: f, bubbles:true, cancelable: true
-          }));
         });
+    this._addHoverEvents(this.features);
     this.residues_g = this._createResidueGroup(this.featuresG);
     this.residues_loc = this._createResiduePaths(this.residues_g);
-
 
     if (this._contributors) {
       if (!this.children_g)
@@ -193,40 +192,15 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
           .enter()
           .append('path')
             .attr('class', 'child-fragment')
-            .attr('d', f =>
-              this._featureShape.getFeatureShape(
-                this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-                  f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
-              )
-            )
-            .attr('transform', f =>
-              'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-            )
-            .attr('fill', f => this._getFeatureColor(f.feature))
-            .attr('stroke', f => this._getFeatureColor(f.feature))
             .on('click', (f, i, d) => {
               f.feature.expanded = !f.feature.expanded;
               this.refresh();
               this.dispatchEvent(new CustomEvent("entryclick", {
                 detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
               }));
-            })
-            .on('mouseover', (f, i, d) => {
-              this.dispatchEvent(new CustomEvent("change", {
-                detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
-              }));
-              this.dispatchEvent(new CustomEvent("entrymouseover", {
-                detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
-              }));
-            })
-            .on('mouseout', (f, i, d) => {
-              this.dispatchEvent(new CustomEvent("change", {
-                detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
-              }));
-              this.dispatchEvent(new CustomEvent("entrymouseout", {
-                detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
-              }));
             });
+        this._addHoverEvents(this.featureChildren);
+
         this.child_residues_g = this._createResidueGroup(this.childGroup);
         this.child_residues_loc = this._createResiduePaths(this.child_residues_g);
 
@@ -234,41 +208,35 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
     this.svg.attr("height", this._layoutObj.maxYPos);
     this._haveCreatedFeatures = true;
   }
+
+  _refreshFeatures(base) {
+    base
+      .attr('d', f =>
+        this._featureShape.getFeatureShape(
+          this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
+            f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
+        )
+      )
+      .attr('fill', f => this._getFeatureColor(f.feature))
+      .attr('stroke', f => this._getFeatureColor(f.feature))
+      .attr('transform', f =>
+        'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
+      );
+  }
+
   refresh(){
     if (this._haveCreatedFeatures) {
-      // this.xScale.domain([this._displaystart, this._displayend]);
       this._layoutObj.expanded = this._expanded;
       this._layoutObj.init(this._data, this._contributors);
-      this.features
-        .attr('d', f =>
-          this._featureShape.getFeatureShape(
-            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-              f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
-          )
-        )
-        .attr('fill', f => this._getFeatureColor(f.feature))
-        .attr('stroke', f => this._getFeatureColor(f.feature))
-        .attr('transform', f =>
-          'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-        );
+
+      this._refreshFeatures(this.features);
 
       this.residues_g.attr('visibility', this._expanded ? 'visible' : 'hidden' );
       this._refreshResiduePaths(this.residues_loc);
 
       if (this._contributors) {
         this.childrenGroup.attr('visibility', this._expanded ? 'visible' : 'hidden' );
-        this.featureChildren
-          .attr('d', f =>
-            this._featureShape.getFeatureShape(
-              this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-                f.end ? f.end - f.start + 1 : 1, this._getShape(f.feature)
-            )
-          )
-          .attr('transform', f =>
-            'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
-          )
-          .attr('fill', f => this._getFeatureColor(f.feature))
-          .attr('stroke', f => this._getFeatureColor(f.feature));
+        this._refreshFeatures(this.featureChildren);
         this.child_residues_g.attr('visibility', d => d.feature.expanded ? 'visible' : 'hidden');
         this._refreshResiduePaths(this.child_residues_loc);
 
@@ -276,7 +244,6 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);
       this.highlighted.attr('height', this._layoutObj.maxYPos);
-
     }
   }
 }
