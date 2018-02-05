@@ -10,68 +10,31 @@
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
-    <style>
-        .myTestClass {
-            color: pink;
-        }
-    </style>
 </head>
 
 <body>
-    <protvista-tooltip id="testTooltip" left="50" top ="50"></protvista-tooltip>
-    <div id="testDiv" style="left:20px; top:150px; position: absolute">
-        <div id="testClickDiv">Click and get a tooltip at a random position</div>
-        <div id="testPositionDiv"></div>
-    </div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris varius aliquam ex vitae rhoncus. Cras orci ipsum, tempus dapibus nibh ut, ultrices luctus quam. Donec fermentum odio in velit ornare euismod. Etiam libero sapien, bibendum vel mi in, varius consequat tortor. Fusce laoreet, ante eget posuere lobortis, nunc lorem laoreet quam, non accumsan leo sem a nunc. Nulla sed tincidunt neque. Aliquam in lobortis massa. Nulla eget faucibus quam, at porta augue. Fusce commodo, arcu et viverra ultricies, neque nisi ultrices tellus, sit amet mollis sapien magna at metus. Maecenas tempus, erat eu posuere interdum, ante augue egestas elit, sit amet vestibulum quam neque id nulla.</p>
+    <button id="create-tooltip" tooltip-trigger>Make another one</button>
+    <protvista-tooltip id="testTooltip" left="50" top ="50" type="Test tooltip" start="45" end="50" content="Test content"></protvista-tooltip>
 
     <!-- Required for IE11 -->
-    <script src="node_modules/babel-polyfill/dist/polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
     <!-- Web component polyfill (only loads what it needs) -->
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
     <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-    <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
-    <script src="dist/protvista-tooltip.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+    <script src="../dist/protvista-tooltip.js" charset="utf-8"></script>
 
     <script>
-        window.onload = () => {
-            const testData = {
-                "title": "REGION 96-110",
-                "elements": [
-                    {"Description": "Heparin-binding"},
-                    {"Tools": "<a href='http://www.uniprot.org/blast/?about=P05067[96-110]&key=Region'>BLAST</a>"},
-                    {
-                        "title": "UniProt",
-                        "elements": [
-                            {"Feature ID": "XYZ"},
-                            {
-                                "title": "Disease association",
-                                "elements": [
-                                    {"Disease": "Alzheimer disease 1 (AD1)"},
-                                    "OMIM <a href='http://www.omim.org/entry/104300'>104300</a>"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            };
-            const myTooltip = document.getElementById('testTooltip');
-            myTooltip.addEventListener('close', e => {
-                console.log(e.detail);
-            });
-            myTooltip.data = testData;
-
-            const myDiv = document.getElementById('testDiv');
-            const testClickDiv = document.getElementById('testClickDiv');
-            const testPositionDiv = document.getElementById('testPositionDiv');
-            testClickDiv.addEventListener('click', () => {
-                const popTooltip = document.createElement('protvista-tooltip');
-                myDiv.appendChild(popTooltip);
-                popTooltip.left = Math.random() * 100;
-                popTooltip.top = Math.random() * 100;
-                popTooltip.data = testData;
-                testPositionDiv.innerText = '(' + popTooltip.left + ', ' + popTooltip.top + ')';
-            });
-        };
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+        function createRandomTooltip() {
+            var tooltipContainer = document.createElement('div');
+            tooltipContainer.innerHTML = `<protvista-tooltip id="testTooltip" left="${getRandomInt(600)}" top ="${getRandomInt(400)}" type="Test tooltip" start="45" end="50" content="Test content"></protvista-tooltip>`;
+            document.getElementsByTagName('body')[0].appendChild(tooltipContainer);
+        }
+        document.getElementById('create-tooltip').addEventListener('click', createRandomTooltip);
     </script>
 </body>
 

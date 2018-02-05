@@ -36,8 +36,5 @@
     "rollup-plugin-conditional": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-postcss": "^0.5.5"
-  },
-  "dependencies": {
-    "lodash-es": "^4.17.4"
   }
 }
