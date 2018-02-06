@@ -8,18 +8,41 @@ protvista-tooltip {
     opacity: .9;
 }
 
-protvista-tooltip .tooltip-header, protvista-tooltip .tooltip-body {
+protvista-tooltip .tooltip-header .tooltip-header-title , protvista-tooltip .tooltip-body {
     color: #ffffff;
-    padding: 1em;
 }
 
 protvista-tooltip .tooltip-header {
     background-color: #000000;
-    text-align: center;
-    font-weight: 500;
+    line-height: 3em;
+}
+
+protvista-tooltip .tooltip-header .tooltip-header-title {
+    background-color: #000000;
+    font-weight: 600;
+    line-height: 1em;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: .4em;
 }
 
 protvista-tooltip .tooltip-body {
+    padding: 1em;
     background:#616161;
     font-weight: normal;
+}
+
+protvista-tooltip .tooltip-close {
+    height: 3em;
+    width: 3em;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: svg-load("close-icon.svg", fill=#fff);
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+protvista-tooltip .tooltip-close:hover {
+    background-color: #1a1a1a;
 }

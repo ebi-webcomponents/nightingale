@@ -3,12 +3,13 @@ import '../style/protvista-tooltip.css';
 class ProtvistaTooltip extends HTMLElement {
     constructor() {
         super();
-        this._top = this.getAttribute("top");
-        this._left = this.getAttribute("left");
+        this._top = parseInt(this.getAttribute("top"));
+        this._left = parseInt(this.getAttribute("left"));
         this._content = this.getAttribute("content");
         this._type = this.getAttribute("type");
         this._start = this.getAttribute("start");
         this._end = this.getAttribute("end");
+        this._closeable = this.getAttribute("closeable");
     }
 
     static get observedAttributes() {
@@ -28,12 +29,23 @@ class ProtvistaTooltip extends HTMLElement {
         this._createContainer();
         this._updatePosition();
         document.getElementsByTagName('body')[0].addEventListener('click', e => {
-            // TODO check e.target and its parents to see if it's part of protvista-tooltip, return if true
-            if(e.target.getAttribute('tooltip-trigger') !== null) {
+            // TODO if another tooltip-trigger than the one for that feature is selected, remove the other tooltip(s)
+            if((this.hasTooltipParent(e.target) && !e.target.classList.contains('tooltip-close'))
+                || e.target.getAttribute('tooltip-trigger') !== null) {
                 return;
             }
             this.remove();
         });
+    }
+
+    hasTooltipParent(el) {
+        if(!el.parentElement || el.parentElement.tagName === 'body') {
+            return false;
+        } else if(el.parentElement.tagName === 'PROTVISTA-TOOLTIP')
+            return true;
+        else {
+            return this.hasTooltipParent(el.parentElement);
+        }
     }
 
     _updatePosition() {
@@ -42,51 +54,13 @@ class ProtvistaTooltip extends HTMLElement {
     }
 
     _createContainer() {
-        this.innerHTML = `
-            <div class="tooltip-header">${this._type} ${this._start}-${this._end}</div>
-            <div class="tooltip-body">${this._content}</div>
-        `
-    }
-
-    _createTooltip() {
-        this._container.innerHTML = '';
-
-        this._container.appendChild(this._createCloseButton());
-        this._container.appendChild(this._createTooltipContent());
-
-        this._container.style.opacity = 1;
-        this._container.style.display = 'block';
-    }
-
-    _createCloseButton() {
-        const closeSpan = document.createElement('span');
-        closeSpan.innerText = 'X';
-        closeSpan.className = 'protvista-tooltip-close';
-        closeSpan.addEventListener('click', () => {
-            this._container.style = 'transition: 20; opacity: 0; display: none';
-            this.dispatchEvent(new CustomEvent("close", {
-                detail: this._data, bubbles:true, cancelable: true
-            }));
-            this.parentElement.removeChild(this);
-        });
-        return closeSpan;
-    }
-
-    _createTooltipContent() {
-        const table = document.createElement('table');
-
-        const row = document.createElement('tr');
-
-        const header = document.createElement('th');
-        header.colSpan = 2;
-        header.innerText = this._data.title;
-
-        row.appendChild(header);
-
-        table.appendChild(row);
-
-        this._processSection(this._data.elements, table, 1);
-        return table;
+        let html = `<div class="tooltip-header">`;
+        if(this._closeable) {
+            html = `${html}<span class="tooltip-close"></span>`
+        }
+        html = `${html}<span class="tooltip-header-title">${this._type} ${this._start}-${this._end}</span></div>
+        <div class="tooltip-body">${this._content}</div>`;
+        this.innerHTML = html;
     }
 
 }
