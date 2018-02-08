@@ -6,10 +6,51 @@ class ProtvistaTooltip extends HTMLElement {
         this._top = parseInt(this.getAttribute("top"));
         this._left = parseInt(this.getAttribute("left"));
         this._content = this.getAttribute("content");
-        this._type = this.getAttribute("type");
-        this._start = this.getAttribute("start");
-        this._end = this.getAttribute("end");
-        this._closeable = this.getAttribute("closeable");
+        this._title = this.getAttribute("title");
+    }
+    
+    set top(top) {
+        this._top = top;
+    }
+
+    get top() {
+        return this._top;
+    }
+
+    set left(left) {
+        this._left = left;
+    }
+
+    get left() {
+        return this._left;
+    }
+
+    set content(content) {
+        this._content = content;
+    }
+
+    get content() {
+        return this._content;
+    }
+
+    set title(title) {
+        this._title = title;
+    }
+
+    get title() {
+        return this._title;
+    }
+
+    set closeable(isCloseable) {
+        if(isCloseable) {
+            this.setAttribute('closeable', '');
+        } else {
+            this.removeAttribute('closeable');
+        }
+    }
+
+    get closeable() {
+        return this.hasAttribute('closeable');
     }
 
     static get observedAttributes() {
@@ -19,15 +60,16 @@ class ProtvistaTooltip extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if(oldValue != newValue) {
             if(name === 'top' || name === 'left' ) {
-                this[`_${name}`] = this.getAttribute(name);                
+                this[`_${name}`] = this.getAttribute(name);
+                this._updatePosition();
+            } else {
+                this.render();
             }
-            this._updatePosition();
         }
     }
 
     connectedCallback() {
-        this._createContainer();
-        this._updatePosition();
+        this.render();
         document.getElementsByTagName('body')[0].addEventListener('click', e => {
             // TODO if another tooltip-trigger than the one for that feature is selected, remove the other tooltip(s)
             if((this.hasTooltipParent(e.target) && !e.target.classList.contains('tooltip-close'))
@@ -53,12 +95,13 @@ class ProtvistaTooltip extends HTMLElement {
         this.style.left = `${this._left}px`;
     }
 
-    _createContainer() {
+    render() {
+        this._updatePosition();
         let html = `<div class="tooltip-header">`;
-        if(this._closeable) {
+        if(this.closeable) {
             html = `${html}<span class="tooltip-close"></span>`
         }
-        html = `${html}<span class="tooltip-header-title">${this._type} ${this._start}-${this._end}</span></div>
+        html = `${html}<span class="tooltip-header-title">${this._title}</span></div>
         <div class="tooltip-body">${this._content}</div>`;
         this.innerHTML = html;
     }
