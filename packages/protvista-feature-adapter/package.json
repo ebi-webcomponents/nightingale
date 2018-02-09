@@ -1,7 +1,11 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/ProtVistaFeatureAdapter.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
