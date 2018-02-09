@@ -1,4 +1,3 @@
-
 import * as d3 from "d3";
 import _includes from 'lodash-es/includes';
 import FeatureShape from './FeatureShape';
@@ -18,18 +17,24 @@ class ProtVistaTrack extends ProtvistaZoomable {
 
   getLayout(data) {
     if (String(this.getAttribute('layout')).toLowerCase() === "non-overlapping")
-      return new NonOverlappingLayout({ layoutHeight: height });
-    return new DefaultLayout({ layoutHeight: height });
+      return new NonOverlappingLayout({
+        layoutHeight: height
+      });
+    return new DefaultLayout({
+      layoutHeight: height
+    });
   }
 
   connectedCallback() {
     super.connectedCallback();
     this._highlightstart = parseInt(this.getAttribute('highlightstart'));
     this._highlightend = parseInt(this.getAttribute('highlightend'));
+    this._tooltipEvent = this.getAttribute('tooltip-event') ? this.getAttribute('tooltip-event') : 'mouseover';
     this._color = this.getAttribute('color');
     this._shape = this.getAttribute('shape');
     this._featureShape = new FeatureShape();
     this._layoutObj = this.getLayout();
+    this.createTooltip = this.createTooltip.bind(this);
 
     if (this._data)
       this._createTrack();
@@ -48,11 +53,22 @@ class ProtVistaTrack extends ProtvistaZoomable {
   normalizeLocations(data) {
     return data.map(
       (obj) => {
-        const { locations, start, end} = obj;
+        const {
+          locations,
+          start,
+          end
+        } = obj;
         return locations ?
           obj :
-          Object.assign(obj, { locations: [{ fragments: [{ start, end }] }] })
-    });
+          Object.assign(obj, {
+            locations: [{
+              fragments: [{
+                start,
+                end
+              }]
+            }]
+          })
+      });
   }
 
   set data(data) {
@@ -97,10 +113,10 @@ class ProtVistaTrack extends ProtvistaZoomable {
 
     this.svg = d3.select(this)
       .append('div')
-        .style('line-height', 0)
+      .style('line-height', 0)
       .append('svg')
-        .attr('width', this.width)
-        .attr('height', (height));
+      .attr('width', this.width)
+      .attr('height', (height));
 
     this.highlighted = this.svg.append('rect')
       .attr('class', 'highlighted')
@@ -124,18 +140,23 @@ class ProtVistaTrack extends ProtvistaZoomable {
       .attr('class', 'feature-group')
       .attr('id', d => `g_${d.accession}`)
       .selectAll('g.location-group')
-      .data(d => d.locations.map((loc) => Object.assign({}, loc, {feature: d})))
+      .data(d => d.locations.map((loc) => Object.assign({}, loc, {
+        feature: d
+      })))
       // .data(d => d.locations.map((loc) => ({ feature: d, ...l })))
       .enter().append('g')
       .attr('class', 'location-group');
 
     this.features = this.locations
       .selectAll('g.fragment-group')
-      .data(d => d.fragments.map((loc) => Object.assign({}, loc, {feature: d.feature})))
+      .data(d => d.fragments.map((loc) => Object.assign({}, loc, {
+        feature: d.feature
+      })))
       // .data(d => d.fragments.map(({ ...l }) => ({ feature: d.feature, ...l })))
       .enter()
       .append('path')
       .attr('class', 'feature')
+      .attr('tooltip-trigger', 'true')
       .attr('d', f =>
         this._featureShape.getFeatureShape(
           this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f),
@@ -148,15 +169,51 @@ class ProtVistaTrack extends ProtvistaZoomable {
       .attr('fill', f => this._getFeatureColor(f.feature))
       .attr('stroke', f => this._getFeatureColor(f.feature))
       .on('mouseover', f => {
+        if (this._tooltipEvent === 'mouseover') {
+          this.createTooltip(d3.event, f);
+        }
         this.dispatchEvent(new CustomEvent("change", {
-          detail: { highlightend: f.end, highlightstart: f.start }, bubbles: true, cancelable: true
+          detail: {
+            highlightend: f.end,
+            highlightstart: f.start
+          },
+          bubbles: true,
+          cancelable: true
         }));
       })
       .on('mouseout', () => {
+        if (this._tooltipEvent === 'mouseover') {
+          this.removeAllTooltips();
+        }
         this.dispatchEvent(new CustomEvent("change", {
-          detail: { highlightend: null, highlightstart: null }, bubbles: true, cancelable: true
+          detail: {
+            highlightend: null,
+            highlightstart: null
+          },
+          bubbles: true,
+          cancelable: true
         }));
+      })
+      .on('click', d => {
+        if (this._tooltipEvent === 'click') {
+          this.createTooltip(d3.event, d, true);
+        }
       });
+  }
+
+  createTooltip(e, d, closeable = false) {
+    const tooltip = document.createElement('protvista-tooltip');
+    tooltip.top = e.clientY;
+    tooltip.left = e.clientX;
+    tooltip.title = `${d.feature.type} ${d.start}-${d.end}`;
+    tooltip.closeable = closeable
+    // Passing the content as a property as it can contain HTML
+    tooltip.content = d.feature.tooltipContent;
+    this.appendChild(tooltip);
+  }
+
+  removeAllTooltips() {
+    document.querySelectorAll('protvista-tooltip').forEach(tooltip => tooltip.remove());
   }
 
   refresh() {
@@ -166,10 +223,10 @@ class ProtVistaTrack extends ProtvistaZoomable {
           (acc, f) => acc.concat(f.locations.reduce(
             (acc2, e) => acc2.concat(e.fragments
               // .map(({ ...l }) => ({ feature: f, ...l }))
-              .map((loc) => Object.assign({}, loc, {feature: f}))
-            ),
-            [])
-          ), []));
+              .map((loc) => Object.assign({}, loc, {
+                feature: f
+              }))
+            ), [])), []));
       this.features
         .attr('d', f =>
           this._featureShape.getFeatureShape(
@@ -189,7 +246,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
         .attr('x', this.xScale(this._highlightstart - 0.5))
         .style('opacity', 0.3)
         .attr('width',
-        this.xScale(this._highlightend - this._highlightstart + 1)-this.xScale(0)
+          this.xScale(this._highlightend - this._highlightstart + 1) - this.xScale(0)
         );
     } else {
       this.highlighted.style('opacity', 0);

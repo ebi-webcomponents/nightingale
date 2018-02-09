@@ -16,14 +16,14 @@
         <tr>
           <td>1</td>
           <td width="100%">
-            <protvista-track id="track1" length="770" displaystart="1" displayend="770">
+            <protvista-track id="track1" length="770" displaystart="1" displayend="770" tooltip-event="click">
               <protvista-feature-adapter id="adapter1">
                 <uniprot-entry-data-loader id="loader1" accession="P05067">
                   <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
                 </uniprot-entry-data-loader>
               </protvista-feature-adapter>
               <data-loader data-key="config">
-                  <source src="../dist/config.json">
+                  <source src="../config/config.json">
               </data-loader>
             </protvista-track>
           </td>
@@ -43,6 +43,7 @@
       <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
       <script src="../node_modules/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
       <script src="../node_modules/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
+      <script src="../node_modules/protvista-tooltip/dist/protvista-tooltip.js" charset="utf-8" defer></script>
       <script src="../dist/protvista-track.js" charset="utf-8" defer></script>
     </body>
 </html>
