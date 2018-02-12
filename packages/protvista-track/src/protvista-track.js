@@ -4,6 +4,7 @@ import FeatureShape from './FeatureShape';
 import NonOverlappingLayout from './NonOverlappingLayout';
 import DefaultLayout from './DefaultLayout';
 import ProtvistaZoomable from 'protvista-zoomable';
+import {config} from './config';
 import ConfigHelper from "./ConfigHelper";
 
 const height = 44;
@@ -34,6 +35,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
     this._shape = this.getAttribute('shape');
     this._featureShape = new FeatureShape();
     this._layoutObj = this.getLayout();
+    this._config = new ConfigHelper(config);
     this.createTooltip = this.createTooltip.bind(this);
 
     if (this._data)
@@ -41,12 +43,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
 
     this.addEventListener('load', e => {
       if (_includes(this.children, e.target)) {
-        if (e.target.dataset.key === 'config') {
-          this._config = new ConfigHelper(e.detail.payload);
-          this.refresh();
-        } else {
-          this.data = e.detail.payload;
-        }
+        this.data = e.detail.payload;
       }
     });
   }
@@ -86,7 +83,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
       return f.color
     } else if (this._color) {
       return this._color;
-    } else if (this._config) {
+    } else if (f.type) {
       return this._config.getColorByType(f.type);
     } else {
       return 'black';
@@ -98,7 +95,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
       return f.shape
     } else if (this._shape) {
       return this._shape;
-    } else if (this._config) {
+    } else if (f.type) {
       return this._config.getShapeByType(f.type);
     } else {
       return 'rectangle';

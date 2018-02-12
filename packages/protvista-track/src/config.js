@@ -1,4 +1,4 @@
-{
+export const config = {
   "chain": {
     "label": "Chain",
     "tooltip": "(aka mature region). This describes the extent of a polypeptide chain in the mature protein following processing",
@@ -245,4 +245,4 @@
     "shape": "rectangle",
     "color": "#996699"
   }
-}
+};
