@@ -28,6 +28,7 @@
         "chai": "^3.5.0",
         "cssnano": "^3.10.0",
         "eslint": "^4.7.2",
+        "lit-html": "^0.9.0",
         "mocha": "^3.3.0",
         "rollup": "^0.49.3",
         "rollup-plugin-babel": "^3.0.2",

@@ -1,6 +1,8 @@
 import {
     categories
 } from './categories';
+import {html, render} from 'lit-html';
+import '../styles/protvista-uniprot.css';
 
 const loadComponent = function () {
     class ProtvistaUniprot extends HTMLElement {
@@ -15,7 +17,7 @@ const loadComponent = function () {
             this.loadEntry(this._accession).then(entryData => {
                 this._sequenceLength = entryData.sequence.sequence.length;
                 // We need to get the length of the protein before rendering it
-                this.render();
+                this._render();
             })
         }
 
@@ -27,34 +29,49 @@ const loadComponent = function () {
             }
         }
 
-        render() {
-            let html = `
+        _render() {
+            const mainHtml = () => html`
             <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters">
                 <protvista-navigation length="${this._sequenceLength}"></protvista-navigation>
                 <protvista-sequence length="${this._sequenceLength}"></protvista-sequence>
-                ${categories.map(category => 
+                ${categories.map(category =>
+                    html`
+                        <div class="category-label" data-category-toggle="${category.name}">${category.label}</div><div>${this.getTrack(this.getCategoryTypesAsString(category.tracks), 'non-overlapping')}</div>
+                        ${category.tracks.map(track => html`<div class="track-label" data-toggle="${category.name}">${track.label}</div><div data-toggle="${category.name}">${this.getTrack(track.API)}</div>`)}
                     `
-                        <div class="">${category.label}</div>
-                        ${category.tracks.map(track => `<div class="">${track.label}</div><div>${this.getTrack()}</div>`).join('')}
-                    `
-                ).join('')}
+                )}
                 <protvista-sequence id="seq1" length="${this._sequenceLength}"></protvista-sequence>
-            </protvista-manager>
-            `;
-            this.innerHTML = html;
+            </protvista-manager>`;
+            render(mainHtml(), this);
+            this.querySelectorAll('.category-label').forEach(cat => {
+                cat.addEventListener('click', e => {
+                    const toggle = e.target.getAttribute('data-category-toggle');
+                    this.querySelectorAll(`[data-toggle=${toggle}]`).forEach(track => this.toggleVisibility(track));
+                });
+            });
         }
 
-        getTrack() {
-            return `      
-            <protvista-track id="track1" length="${this._sequenceLength}">
+        toggleVisibility(elt) {
+            console.log(elt.style.display);
+            if(elt.style.display === 'none') {
+                elt.style.display = 'block';
+            } else {
+                elt.style.display = 'none';
+            }
+        }
+
+        getCategoryTypesAsString(tracks) {
+            return tracks.map(t => t.API).join(",");
+        }
+
+        getTrack(trackTypes, layout = '') {
+            return html`      
+            <protvista-track length="${this._sequenceLength}" tooltip-event="click" layout="${layout}">
                 <protvista-feature-adapter>
-                <uniprot-entry-data-loader accession="${this._accession}">
-                    <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
-                </uniprot-entry-data-loader>
+                    <data-loader>
+                        <source src="https://www.ebi.ac.uk/proteins/api/features/${this._accession}?types=${trackTypes}" />
+                    </data-loader>
                 </protvista-feature-adapter>
-                <data-loader data-key="config">
-                    <source src="https://cdn.jsdelivr.net/npm/protvista-track/dist/config.json">
-                </data-loader>
             </protvista-track>
             `;
         }
