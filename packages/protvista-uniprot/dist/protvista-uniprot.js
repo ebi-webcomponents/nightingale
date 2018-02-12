@@ -868,7 +868,7 @@ const removeNodes = (container, startNode, endNode = null) => {
 };
 //# sourceMappingURL=lit-html.js.map
 
-var css = "protvista-uniprot {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\nprotvista-uniprot protvista-manager {\n    display: grid;\n    grid-template-columns: 200px 1fr;\n    grid-gap: 2px 10px;\n}\n\nprotvista-uniprot protvista-manager protvista-navigation, protvista-uniprot protvista-manager protvista-sequence {\n    grid-column-start: 2;\n}\n\n.category-label, .track-label {\n    padding: .5em;\n}\n\n.category-label {\n    background-color: #b2f5ff;\n    cursor: pointer;\n}\n\n.category-label.arrow-down:before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    border-top: 5px solid #333;\n    margin-right: 5px;\n}\n\n.track-label {\n    background-color: #d9faff;\n    padding-left: 1em;\n}";
+var css = "protvista-uniprot {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\nprotvista-uniprot protvista-manager {\n    display: grid;\n    grid-template-columns: 200px 1fr;\n    grid-gap: 2px 10px;\n}\n\nprotvista-uniprot protvista-manager protvista-navigation, protvista-uniprot protvista-manager protvista-sequence {\n    grid-column-start: 2;\n}\n\n.category-label, .track-label {\n    padding: .5em;\n}\n\n.category-label {\n    background-color: #b2f5ff;\n    cursor: pointer;\n}\n\n.category-label.arrow-down:before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    border-top: 5px solid #333;\n    margin-right: 5px;\n}\n\n.track-label {\n    background-color: #d9faff;\n    padding-left: 1em;\n}\n.aggregate-track-content { \n    opacity: 1;\n    -webkit-transition: opacity .1s; /* Safari */\n    transition: opacity .1s;\n}\n.track-label, .track-content {\n    display:none;\n}";
 __$$styleInject(css);
 
 var asyncGenerator = function () {
@@ -1098,8 +1098,8 @@ var taggedTemplateLiteral = function (strings, raw) {
 };
 
 var _templateObject = taggedTemplateLiteral(['\n            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters">\n                <protvista-navigation length="', '"></protvista-navigation>\n                <protvista-sequence length="', '"></protvista-sequence>\n                ', '\n                <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n            </protvista-manager>'], ['\n            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters">\n                <protvista-navigation length="', '"></protvista-navigation>\n                <protvista-sequence length="', '"></protvista-sequence>\n                ', '\n                <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n            </protvista-manager>']);
-var _templateObject2 = taggedTemplateLiteral(['\n                        <div class="category-label" data-category-toggle="', '">', '</div><div>', '</div>\n                        ', '\n                    '], ['\n                        <div class="category-label" data-category-toggle="', '">', '</div><div>', '</div>\n                        ', '\n                    ']);
-var _templateObject3 = taggedTemplateLiteral(['<div class="track-label" data-toggle="', '">', '</div><div data-toggle="', '">', '</div>'], ['<div class="track-label" data-toggle="', '">', '</div><div data-toggle="', '">', '</div>']);
+var _templateObject2 = taggedTemplateLiteral(['\n                        <div class="category-label" data-category-toggle="', '">', '</div><div class="aggregate-track-content" data-toggle-aggregate="', '">', '</div>\n                        ', '\n                    '], ['\n                        <div class="category-label" data-category-toggle="', '">', '</div><div class="aggregate-track-content" data-toggle-aggregate="', '">', '</div>\n                        ', '\n                    ']);
+var _templateObject3 = taggedTemplateLiteral(['<div class="track-label" data-toggle="', '">', '</div><div class="track-content" data-toggle="', '">', '</div>'], ['<div class="track-label" data-toggle="', '">', '</div><div class="track-content" data-toggle="', '">', '</div>']);
 var _templateObject4 = taggedTemplateLiteral(['      \n            <protvista-track length="', '" tooltip-event="click" layout="', '">\n                <protvista-feature-adapter>\n                    <data-loader>\n                        <source src="https://www.ebi.ac.uk/proteins/api/features/', '?types=', '" />\n                    </data-loader>\n                </protvista-feature-adapter>\n            </protvista-track>\n            '], ['      \n            <protvista-track length="', '" tooltip-event="click" layout="', '">\n                <protvista-feature-adapter>\n                    <data-loader>\n                        <source src="https://www.ebi.ac.uk/proteins/api/features/', '?types=', '" />\n                    </data-loader>\n                </protvista-feature-adapter>\n            </protvista-track>\n            ']);
 
 var loadComponent = function loadComponent() {
@@ -1173,7 +1173,7 @@ var loadComponent = function loadComponent() {
 
                 var mainHtml = function mainHtml() {
                     return html(_templateObject, _this3._sequenceLength, _this3._sequenceLength, categories.map(function (category) {
-                        return html(_templateObject2, category.name, category.label, _this3.getTrack(_this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
+                        return html(_templateObject2, category.name, category.label, category.name, _this3.getTrack(_this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
                             return html(_templateObject3, category.name, track.label, category.name, _this3.getTrack(track.API));
                         }));
                     }), _this3._sequenceLength);
@@ -1182,6 +1182,7 @@ var loadComponent = function loadComponent() {
                 this.querySelectorAll('.category-label').forEach(function (cat) {
                     cat.addEventListener('click', function (e) {
                         var toggle = e.target.getAttribute('data-category-toggle');
+                        _this3.toggleOpacity(_this3.querySelector('[data-toggle-aggregate=' + toggle + ']'));
                         _this3.querySelectorAll('[data-toggle=' + toggle + ']').forEach(function (track) {
                             return _this3.toggleVisibility(track);
                         });
@@ -1189,10 +1190,18 @@ var loadComponent = function loadComponent() {
                 });
             }
         }, {
+            key: 'toggleOpacity',
+            value: function toggleOpacity(elt) {
+                if (elt.style.opacity === '' || parseInt(elt.style.opacity) === 1) {
+                    elt.style.opacity = 0;
+                } else {
+                    elt.style.opacity = 1;
+                }
+            }
+        }, {
             key: 'toggleVisibility',
             value: function toggleVisibility(elt) {
-                console.log(elt.style.display);
-                if (elt.style.display === 'none') {
+                if (elt.style.display === '' || elt.style.display === 'none') {
                     elt.style.display = 'block';
                 } else {
                     elt.style.display = 'none';

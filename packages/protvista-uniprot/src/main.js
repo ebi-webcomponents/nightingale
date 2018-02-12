@@ -36,8 +36,8 @@ const loadComponent = function () {
                 <protvista-sequence length="${this._sequenceLength}"></protvista-sequence>
                 ${categories.map(category =>
                     html`
-                        <div class="category-label" data-category-toggle="${category.name}">${category.label}</div><div>${this.getTrack(this.getCategoryTypesAsString(category.tracks), 'non-overlapping')}</div>
-                        ${category.tracks.map(track => html`<div class="track-label" data-toggle="${category.name}">${track.label}</div><div data-toggle="${category.name}">${this.getTrack(track.API)}</div>`)}
+                        <div class="category-label" data-category-toggle="${category.name}">${category.label}</div><div class="aggregate-track-content" data-toggle-aggregate="${category.name}">${this.getTrack(this.getCategoryTypesAsString(category.tracks), 'non-overlapping')}</div>
+                        ${category.tracks.map(track => html`<div class="track-label" data-toggle="${category.name}">${track.label}</div><div class="track-content" data-toggle="${category.name}">${this.getTrack(track.API)}</div>`)}
                     `
                 )}
                 <protvista-sequence id="seq1" length="${this._sequenceLength}"></protvista-sequence>
@@ -46,14 +46,22 @@ const loadComponent = function () {
             this.querySelectorAll('.category-label').forEach(cat => {
                 cat.addEventListener('click', e => {
                     const toggle = e.target.getAttribute('data-category-toggle');
+                    this.toggleOpacity(this.querySelector(`[data-toggle-aggregate=${toggle}]`));
                     this.querySelectorAll(`[data-toggle=${toggle}]`).forEach(track => this.toggleVisibility(track));
                 });
             });
         }
 
+        toggleOpacity(elt) {
+            if(elt.style.opacity === '' || parseInt(elt.style.opacity) === 1) {
+                elt.style.opacity = 0;
+            } else {
+                elt.style.opacity = 1;
+            }
+        }
+
         toggleVisibility(elt) {
-            console.log(elt.style.display);
-            if(elt.style.display === 'none') {
+            if(elt.style.display === '' || elt.style.display === 'none') {
                 elt.style.display = 'block';
             } else {
                 elt.style.display = 'none';

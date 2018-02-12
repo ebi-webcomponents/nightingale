@@ -36,3 +36,11 @@ protvista-uniprot protvista-manager protvista-navigation, protvista-uniprot prot
     background-color: #d9faff;
     padding-left: 1em;
 }
+.aggregate-track-content { 
+    opacity: 1;
+    -webkit-transition: opacity .1s; /* Safari */
+    transition: opacity .1s;
+}
+.track-label, .track-content {
+    display:none;
+}
