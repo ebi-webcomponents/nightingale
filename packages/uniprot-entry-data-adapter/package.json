@@ -1,7 +1,11 @@
 {
   "name": "uniprot-entry-data-adapter",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A generic/abstract adapter for services retrieving UniProt entries by accession",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/UniProtEntryDataAdapter.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
@@ -38,8 +42,5 @@
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-node-resolve": "^3.0.0"
-  },
-  "dependencies": {
-    "uniprot-entry-data-loader": "^0.1.0"
   }
 }

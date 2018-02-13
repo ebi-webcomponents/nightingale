@@ -9,7 +9,6 @@ export default {
         file: 'dist/UniProtEntryDataAdapter.js',
         format: 'iife',
     },
-    external: ['uniprot-entry-data-loader'],
     plugins: [
         nodeResolve({jsnext: true}),
         babel({

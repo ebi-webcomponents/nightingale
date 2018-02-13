@@ -1,15 +1,10 @@
-/*jslint node: true */
-"use strict";
-
 export default class UniProtEntryDataAdapter extends HTMLElement {
     constructor() {
         super();
-        this._adapterType = 'uniprot-entry-data-adapter';
-        this._listening = false;
-        this._adaptedData = {};
     }
 
     connectedCallback() {
+        this._filters = this.getAttribute('filters') ? this.getAttribute('filters').split(',') : [];
         this._initLoaders();
         this._addLoaderListeners();
     }
@@ -21,6 +16,15 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
         return this._adaptedData;
     }
 
+    filterData() {
+        if (this._filters.length > 0) {
+            this._adaptedData =
+                this._adaptedData.filter(d => {
+                    return this._filters.includes(d.type)
+                });
+        }
+    }
+
     get adaptedData() {
         return this._adaptedData;
     }
@@ -29,48 +33,52 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
         let children = this.children;
         if (this.childElementCount !== 1) {
             this.dispatchEvent(new CustomEvent(
-                'warning',
-                {detail: 'Only one loader OR adapter is allowed, the first one will be used, the others dismissed',
-                    bubbles: true, cancelable: true}
+                'warning', {
+                    detail: 'Only one loader OR adapter is allowed, the first one will be used, the others dismissed',
+                    bubbles: true,
+                    cancelable: true
+                }
             ));
             this._removeChildrenInList(this, children, 1, this.childElementCount);
         }
     }
 
     _removeChildrenInList(elem, list, start, end) {
-        for (let i = start; (i < end) && (i < list.length); i++) {
+        for (let i = start;
+            (i < end) && (i < list.length); i++) {
             elem.removeChild(list[i]);
         }
     }
 
     _addLoaderListeners() {
-        if (!this._listening) {
-            this._listening = true;
-            this.addEventListener('load', (e) => {
-                if (e.target !== this) {
-                    e.stopPropagation();
-                    try {
-                        if (e.detail.payload.errorMessage) {
-                            throw e.detail.payload.errorMessage;
-                        }
-                        this.parseEntry(e.detail.payload);
-                        this.dispatchEvent(new CustomEvent(
-                            'load',
-                            {
-                                detail: {payload: this._adaptedData},
-                                bubbles: true, cancelable: true
-                            }
-                        ));
-                    } catch(error) {
-                        this.dispatchEvent(new CustomEvent(
-                            'error',
-                            {
-                                detail: error,
-                                bubbles: true, cancelable: true}
-                        ));
+        this.addEventListener('load', (e) => {
+            if (e.target !== this) {
+                e.stopPropagation();
+                try {
+                    if (e.detail.payload.errorMessage) {
+                        throw e.detail.payload.errorMessage;
                     }
+                    this.parseEntry(e.detail.payload);
+                    this.filterData();
+                    this.dispatchEvent(new CustomEvent(
+                        'load', {
+                            detail: {
+                                payload: this._adaptedData
+                            },
+                            bubbles: true,
+                            cancelable: true
+                        }
+                    ));
+                } catch (error) {
+                    this.dispatchEvent(new CustomEvent(
+                        'error', {
+                            detail: error,
+                            bubbles: true,
+                            cancelable: true
+                        }
+                    ));
                 }
-            });
-        }
+            }
+        });
     }
 }
