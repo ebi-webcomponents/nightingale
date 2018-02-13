@@ -31,164 +31,218 @@ function __$$styleInject(css, ref) {
 var categories = [{
     "name": "DOMAINS_AND_SITES",
     "label": "Domains & sites",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "domain",
         "label": "Domain",
-        "API": "DOMAIN",
+        "filter": "DOMAIN",
+        "trackType": "protvista-track",
         "tooltip": "Specific combination of secondary structures organized into a characteristic three-dimensional structure or fold"
     }, {
         "name": "region",
         "label": "Region",
-        "API": "REGION",
+        "filter": "REGION",
+        "trackType": "protvista-track",
         "tooltip": "Regions in multifunctional enzymes or fusion proteins, or characteristics of a region, e.g., protein-protein interactions mediation"
     }, {
         "name": "motif",
         "label": "Motif",
-        "API": "MOTIF",
+        "filter": "MOTIF",
+        "trackType": "protvista-track",
         "tooltip": "Short conserved sequence motif of biological significance"
     }, {
         "name": "metal",
         "label": "Metal binding",
-        "API": "METAL",
+        "filter": "METAL",
+        "trackType": "protvista-track",
         "tooltip": "Binding site for a metal ion"
     }, {
         "name": "site",
         "label": "Site",
-        "API": "SITE",
+        "filter": "SITE",
+        "trackType": "protvista-track",
         "tooltip": "Any interesting single amino acid site on the sequence"
     }]
 }, {
     "name": "MOLECULE_PROCESSING",
     "label": "Molecule processing",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "signal",
         "label": "Signal peptide",
-        "API": "SIGNAL",
+        "filter": "SIGNAL",
+        "trackType": "protvista-track",
         "tooltip": "N-terminal signal peptide"
     }, {
         "name": "chain",
         "label": "Chain",
-        "API": "CHAIN",
+        "filter": "CHAIN",
+        "trackType": "protvista-track",
         "tooltip": "(aka mature region). This describes the extent of a polypeptide chain in the mature protein following processing"
     }, {
         "name": "peptide",
         "label": "Peptide",
-        "API": "PEPTIDE",
+        "filter": "PEPTIDE",
+        "trackType": "protvista-track",
         "tooltip": "The position and length of an active peptide in the mature protein"
     }]
 }, {
     "name": "PTM",
     "label": "PTM",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "mod_res",
         "label": "Modified residue",
-        "API": "MOD_RES",
+        "filter": "MOD_RES",
+        "trackType": "protvista-track",
         "tooltip": "Modified residues such as phosphorylation, acetylation, acylation, methylation"
     }, {
         "name": "carbohyd",
         "label": "Glycosylation",
-        "API": "CARBOHYD",
+        "filter": "CARBOHYD",
+        "trackType": "protvista-track",
         "tooltip": "Covalently attached glycan group(s)"
     }, {
         "name": "disulfid",
         "label": "Disulfide bond",
-        "API": "DISULFID",
+        "filter": "DISULFID",
+        "trackType": "protvista-track",
         "tooltip": "The positions of cysteine residues participating in disulphide bonds"
     }, {
         "name": "crosslnk",
         "label": "Cross-link",
-        "API": "CROSSLNK",
+        "filter": "CROSSLNK",
+        "trackType": "protvista-track",
         "tooltip": "Covalent linkages of various types formed between two proteins or between two parts of the same protein"
     }]
 }, {
     "name": "SEQUENCE_INFORMATION",
     "label": "Sequence information",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "compbias",
         "label": "Compositional bias",
+        "filter": "COMPBIAS",
+        "trackType": "protvista-track",
         "tooltip": "Position of regions of compositional bias within the protein and the particular amino acids that are over-represented within those regions"
     }, {
         "name": "conflict",
         "label": "Sequence conflict",
+        "filter": "CONFLICT",
+        "trackType": "protvista-track",
         "tooltip": "Sequence discrepancies of unknown origin"
     }]
 }, {
     "name": "STRUCTURAL",
     "label": "Structural features",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "helix",
         "label": "Helix",
+        "filter": "HELIX",
+        "trackType": "protvista-track",
         "tooltip": "The positions of experimentally determined helical regions"
     }, {
         "name": "strand",
         "label": "Beta strand",
+        "filter": "STRAND",
+        "trackType": "protvista-track",
         "tooltip": "The positions of experimentally determined beta strands"
     }, {
         "name": "turn",
         "label": "Turn",
+        "filter": "TURN",
+        "trackType": "protvista-track",
         "tooltip": "The positions of experimentally determined hydrogen-bonded turns"
     }, {
         "name": "coiled",
         "label": "Coiled coil",
+        "filter": "COILED",
+        "trackType": "protvista-track",
         "tooltip": "Coiled coils are built by two or more alpha-helices that wind around each other to form a supercoil"
     }]
 }, {
     "name": "TOPOLOGY",
     "label": "Topology",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "topo_dom",
         "label": "Topological domain",
+        "filter": "TOPO_DOM",
+        "trackType": "protvista-track",
         "tooltip": "Location of non-membrane regions of membrane-spanning proteins"
     }, {
         "name": "transmem",
         "label": "Transmembrane",
+        "filter": "TRANSMEM",
+        "trackType": "protvista-track",
         "tooltip": "Extent of a membrane-spanning region"
     }, {
         "name": "intramem",
         "label": "Intramembrane",
+        "filter": "INTRAMEM",
+        "trackType": "protvista-track",
         "tooltip": "Extent of a region located in a membrane without crossing it"
     }]
 }, {
     "name": "MUTAGENESIS",
     "label": "Mutagenesis",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/features/",
     "tracks": [{
         "name": "mutagen",
         "label": "Mutagenesis",
+        "filter": "MUTAGEN",
+        "trackType": "protvista-track",
         "tooltip": "Site which has been experimentally altered by mutagenesis"
     }]
 }, {
     "name": "PROTEOMICS",
     "label": "Proteomics",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/proteomics/",
     "tracks": [{
         "name": "unique",
         "label": "Unique peptide",
+        "trackType": "protvista-track",
         "tooltip": ""
     }, {
         "name": "non_unique",
         "label": "Non-unique peptide",
+        "trackType": "protvista-track",
         "tooltip": ""
     }]
 }, {
     "name": "ANTIGEN",
     "label": "Antigenic sequences",
-    "component": "protvista-track",
+    "trackType": "protvista-track",
+    "adapter": "protvista-feature-adapter",
+    "url": "https://www.ebi.ac.uk/proteins/api/antigen/",
     "tracks": [{
         "name": "antigen",
         "label": "Antibody binding sequences",
+        "trackType": "protvista-track",
         "tooltip": ""
     }]
 }, {
     "name": "VARIATION",
     "label": "Variants",
-    "component": "protvista-variant",
+    "adapter": "protvista-feature-adapter",
+    "trackType": "protvista-variation",
     "tracks": []
 }];
 // "trackNames": {
@@ -866,9 +920,8 @@ const removeNodes = (container, startNode, endNode = null) => {
         node = n;
     }
 };
-//# sourceMappingURL=lit-html.js.map
 
-var css = "protvista-uniprot {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\nprotvista-uniprot protvista-manager {\n    display: grid;\n    grid-template-columns: 200px 1fr;\n    grid-gap: 2px 10px;\n}\n\nprotvista-uniprot protvista-manager protvista-navigation, protvista-uniprot protvista-manager protvista-sequence {\n    grid-column-start: 2;\n}\n\n.category-label, .track-label {\n    padding: .5em;\n}\n\n.category-label {\n    background-color: #b2f5ff;\n    cursor: pointer;\n}\n\n.category-label.arrow-down:before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    border-top: 5px solid #333;\n    margin-right: 5px;\n}\n\n.track-label {\n    background-color: #d9faff;\n    padding-left: 1em;\n}\n.aggregate-track-content { \n    opacity: 1;\n    -webkit-transition: opacity .1s; /* Safari */\n    transition: opacity .1s;\n}\n.track-label, .track-content {\n    display:none;\n}";
+var css = "protvista-uniprot {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\nprotvista-uniprot protvista-manager {\n    display: grid;\n    grid-template-columns: 200px 1fr;\n    grid-gap: 2px 10px;\n}\n\nprotvista-uniprot protvista-manager protvista-navigation,\nprotvista-uniprot protvista-manager protvista-sequence {\n    grid-column-start: 2;\n}\n\n.category-label,\n.track-label {\n    padding: .5em;\n}\n\n.category-label {\n    background-color: #b2f5ff;\n    cursor: pointer;\n}\n\n.category-label::before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-top: 5px solid transparent;\n    border-bottom: 5px solid transparent;\n    border-left: 5px solid #333;\n    margin-right: 5px;\n    -webkit-transition: all .1s;\n    /* Safari */\n    transition: all .1s;\n}\n\n.category-label.open::before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    border-top: 5px solid #333;\n    margin-right: 5px;\n}\n\n.track-label {\n    background-color: #d9faff;\n    padding-left: 1em;\n}\n\nprotvista-track {\n    border-top: 1px solid #d9faff;\n}\n\n.aggregate-track-content {\n    opacity: 1;\n    -webkit-transition: opacity .1s;\n    /* Safari */\n    transition: opacity .1s;\n}\n\n.track-label,\n.track-content {\n    display: none;\n}";
 __$$styleInject(css);
 
 var asyncGenerator = function () {
@@ -1098,9 +1151,11 @@ var taggedTemplateLiteral = function (strings, raw) {
 };
 
 var _templateObject = taggedTemplateLiteral(['\n            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters">\n                <protvista-navigation length="', '"></protvista-navigation>\n                <protvista-sequence length="', '"></protvista-sequence>\n                ', '\n                <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n            </protvista-manager>'], ['\n            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters">\n                <protvista-navigation length="', '"></protvista-navigation>\n                <protvista-sequence length="', '"></protvista-sequence>\n                ', '\n                <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n            </protvista-manager>']);
-var _templateObject2 = taggedTemplateLiteral(['\n                        <div class="category-label" data-category-toggle="', '">', '</div><div class="aggregate-track-content" data-toggle-aggregate="', '">', '</div>\n                        ', '\n                    '], ['\n                        <div class="category-label" data-category-toggle="', '">', '</div><div class="aggregate-track-content" data-toggle-aggregate="', '">', '</div>\n                        ', '\n                    ']);
-var _templateObject3 = taggedTemplateLiteral(['<div class="track-label" data-toggle="', '">', '</div><div class="track-content" data-toggle="', '">', '</div>'], ['<div class="track-label" data-toggle="', '">', '</div><div class="track-content" data-toggle="', '">', '</div>']);
-var _templateObject4 = taggedTemplateLiteral(['      \n            <protvista-track length="', '" tooltip-event="click" layout="', '">\n                <protvista-feature-adapter>\n                    <data-loader>\n                        <source src="https://www.ebi.ac.uk/proteins/api/features/', '?types=', '" />\n                    </data-loader>\n                </protvista-feature-adapter>\n            </protvista-track>\n            '], ['      \n            <protvista-track length="', '" tooltip-event="click" layout="', '">\n                <protvista-feature-adapter>\n                    <data-loader>\n                        <source src="https://www.ebi.ac.uk/proteins/api/features/', '?types=', '" />\n                    </data-loader>\n                </protvista-feature-adapter>\n            </protvista-track>\n            ']);
+var _templateObject2 = taggedTemplateLiteral(['\n                        <div class="category-label" data-category-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                            ', '\n                        </div>\n                        ', '\n                    '], ['\n                        <div class="category-label" data-category-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                            ', '\n                        </div>\n                        ', '\n                    ']);
+var _templateObject3 = taggedTemplateLiteral(['\n                            <div class="track-label" data-toggle="', '">\n                                ', '\n                            </div>\n                            <div class="track-content" data-toggle="', '">\n                                ', '\n                            </div>'], ['\n                            <div class="track-label" data-toggle="', '">\n                                ', '\n                            </div>\n                            <div class="track-content" data-toggle="', '">\n                                ', '\n                            </div>']);
+var _templateObject4 = taggedTemplateLiteral(['\n                    <protvista-feature-adapter filters="', '">\n                            <data-loader>\n                                <source src="', '', '" />\n                            </data-loader>\n                    </protvista-feature-adapter>\n                    '], ['\n                    <protvista-feature-adapter filters="', '">\n                            <data-loader>\n                                <source src="', '', '" />\n                            </data-loader>\n                    </protvista-feature-adapter>\n                    ']);
+var _templateObject5 = taggedTemplateLiteral(['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    '], ['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    ']);
+var _templateObject6 = taggedTemplateLiteral(['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    '], ['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    ']);
 
 var loadComponent = function loadComponent() {
     var ProtvistaUniprot = function (_HTMLElement) {
@@ -1173,20 +1228,32 @@ var loadComponent = function loadComponent() {
 
                 var mainHtml = function mainHtml() {
                     return html(_templateObject, _this3._sequenceLength, _this3._sequenceLength, categories.map(function (category) {
-                        return html(_templateObject2, category.name, category.label, category.name, _this3.getTrack(_this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
-                            return html(_templateObject3, category.name, track.label, category.name, _this3.getTrack(track.API));
+                        return html(_templateObject2, category.name, category.label, category.name, _this3.getTrack(category.trackType, category.adapter, category.url, _this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
+                            return html(_templateObject3, category.name, track.label, category.name, _this3.getTrack(category.trackType, category.adapter, category.url, track.filter));
                         }));
                     }), _this3._sequenceLength);
                 };
                 render(mainHtml(), this);
                 this.querySelectorAll('.category-label').forEach(function (cat) {
                     cat.addEventListener('click', function (e) {
-                        var toggle = e.target.getAttribute('data-category-toggle');
-                        _this3.toggleOpacity(_this3.querySelector('[data-toggle-aggregate=' + toggle + ']'));
-                        _this3.querySelectorAll('[data-toggle=' + toggle + ']').forEach(function (track) {
-                            return _this3.toggleVisibility(track);
-                        });
+                        _this3.handleCategoryClick(e);
                     });
+                });
+            }
+        }, {
+            key: 'handleCategoryClick',
+            value: function handleCategoryClick(e) {
+                var _this4 = this;
+
+                var toggle = e.target.getAttribute('data-category-toggle');
+                if (!e.target.classList.contains('open')) {
+                    e.target.classList.add('open');
+                } else {
+                    e.target.classList.remove('open');
+                }
+                this.toggleOpacity(this.querySelector('[data-toggle-aggregate=' + toggle + ']'));
+                this.querySelectorAll('[data-toggle=' + toggle + ']').forEach(function (track) {
+                    return _this4.toggleVisibility(track);
                 });
             }
         }, {
@@ -1211,15 +1278,30 @@ var loadComponent = function loadComponent() {
             key: 'getCategoryTypesAsString',
             value: function getCategoryTypesAsString(tracks) {
                 return tracks.map(function (t) {
-                    return t.API;
+                    return t.filter;
                 }).join(",");
             }
         }, {
+            key: 'getAdapter',
+            value: function getAdapter(adapter, url, trackTypes) {
+                // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
+                switch (adapter) {
+                    case 'protvista-feature-adapter':
+                        return html(_templateObject4, trackTypes, url, this._accession);
+                }
+            }
+        }, {
             key: 'getTrack',
-            value: function getTrack(trackTypes) {
-                var layout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+            value: function getTrack(trackType, adapter, url, trackTypes) {
+                var layout = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
 
-                return html(_templateObject4, this._sequenceLength, layout, this._accession, trackTypes);
+                // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
+                switch (trackType) {
+                    case 'protvista-track':
+                        return html(_templateObject5, this._sequenceLength, layout, this.getAdapter(adapter, url, trackTypes));
+                    case 'protvista-variation':
+                        return html(_templateObject6, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
+                }
             }
         }]);
         return ProtvistaUniprot;

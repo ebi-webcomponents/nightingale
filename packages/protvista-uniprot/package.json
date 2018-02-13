@@ -13,7 +13,8 @@
         "test": "mocha",
         "browser-sync": "browser-sync start --server -f dist/**/*.*",
         "serve": "npm run rollup-watch & npm run browser-sync",
-        "test-watch": "mocha -w"
+        "test-watch": "mocha -w",
+        "npm-linkall" : "npm link protvista-navigation protvista-zoomable protvista-tooltip protvista-track protvista-sequence protvista-variation protvista-variation-filter data-loader uniprot-entry-data-adapter protvista-feature-adapter protvista-manager"
     },
     "keywords": [],
     "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
