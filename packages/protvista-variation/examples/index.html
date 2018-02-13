@@ -20,9 +20,9 @@
             </div>
             <div style="flex-grow:1">
                 <protvista-variation filters="disease" displaystart="100" displayend="400" length="770">
-                    <uniprot-entry-data-loader accession="P05067">
-                        <source src="https://www.ebi.ac.uk/proteins/api/variation/{0}" />
-                    </uniprot-entry-data-loader>
+                    <data-loader>
+                        <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+                    </data-loader>
                 </protvista-variation>
             </div>
         </protvista-manager>
@@ -36,7 +36,6 @@
         <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
         <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
         <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
-        <script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
         <script src="../node_modules/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
         <script src="../node_modules/protvista-variation-filter/dist/protvista-variation-filter.js" charset="utf-8" defer></script>
         <script src="../node_modules/protvista-manager/dist/protvista-manager.js" charset="utf-8" defer></script>

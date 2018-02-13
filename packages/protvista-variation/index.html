@@ -15,9 +15,9 @@
 <body>
     <div>
         <protvista-variation filters="disease" displaystart="100" displayend="400" length="770">
-            <uniprot-entry-data-loader accession="P05067">
-                <source src="https://www.ebi.ac.uk/proteins/api/variation/{0}" />
-            </uniprot-entry-data-loader>
+            <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+            </data-loader>
         </protvista-variation>
 
         <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -30,7 +30,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
 
         <script src="https://cdn.jsdelivr.net/npm/data-loader/dist/index.js" charset="utf-8" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/protvista-variation/dist/protvista-variation.js" charset="utf-8" defer></script>
 </body>
