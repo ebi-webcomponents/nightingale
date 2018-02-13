@@ -18,9 +18,9 @@
           <td width="100%">
             <protvista-track id="track1" length="770" displaystart="1" displayend="770" tooltip-event="click">
               <protvista-feature-adapter id="adapter1">
-                <uniprot-entry-data-loader id="loader1" accession="P05067">
-                  <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
-                </uniprot-entry-data-loader>
+                <data-loader>
+                  <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+                </data-loader>
               </protvista-feature-adapter>
             </protvista-track>
           </td>
@@ -36,7 +36,6 @@
       <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
 
       <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
-      <script src="../node_modules/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
       <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
       <script src="../node_modules/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
       <script src="../node_modules/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>

@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -38,8 +38,7 @@
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "uniprot-entry-data-adapter": "0.0.4",
-    "uniprot-entry-data-loader": "^0.1.0"
+    "uniprot-entry-data-adapter": "0.0.4"
   },
   "dependencies": {
     "d3": "^4.9.1",

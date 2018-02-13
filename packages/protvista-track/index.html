@@ -46,13 +46,10 @@
           <td width="100%">
             <protvista-track id="track1" width="1020" length="770" displaystart="1" displayend="770">
               <protvista-feature-adapter id="adapter1">
-                <uniprot-entry-data-loader id="loader1" accession="P05067">
-                  <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
-                </uniprot-entry-data-loader>
+                <data-loader>
+                  <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+                </data-loader>
               </protvista-feature-adapter>
-              <data-loader data-key="config">
-                  <source src="https://cdn.jsdelivr.net/npm/protvista-track/dist/config.json">
-              </data-loader>
             </protvista-track>
           </td>
           <td>770</td>
@@ -61,13 +58,10 @@
 
       <protvista-track id="track1" length="770" displaystart="1" displayend="770">
         <protvista-feature-adapter id="adapter1">
-          <uniprot-entry-data-loader id="loader1" accession="P05067">
-            <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
-          </uniprot-entry-data-loader>
+            <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+            </data-loader>
         </protvista-feature-adapter>
-        <data-loader data-key="config">
-            <source src="https://cdn.jsdelivr.net/npm/protvista-track/dist/config.json">
-        </data-loader>
       </protvista-track>
 
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -79,7 +73,6 @@
       <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
 
       <script src="https://cdn.jsdelivr.net/npm/data-loader@latest/dist/index.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
