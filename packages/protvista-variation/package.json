@@ -13,7 +13,8 @@
     "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync"
+    "serve": "npm run rollup-watch & npm run browser-sync",
+    "test": "npm run build"
   },
   "keywords": [],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
