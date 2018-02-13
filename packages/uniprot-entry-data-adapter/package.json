@@ -1,6 +1,6 @@
 {
   "name": "uniprot-entry-data-adapter",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A generic/abstract adapter for services retrieving UniProt entries by accession",
   "files": [
     "dist",
