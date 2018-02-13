@@ -1,6 +1,6 @@
 {
   "name": "protvista-manager",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Manager component for the ProtVista tool",
   "files": [
     "dist",
@@ -39,7 +39,6 @@
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "rollup-watch": "^4.3.1",
-    "uniprot-entry-data-loader": "^0.1.0"
+    "rollup-watch": "^4.3.1"
   }
 }

@@ -19,17 +19,17 @@
         <protvista-track id="track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track> -->
         <protvista-track id="track1" length="770" displaystart="1" displayend="770">
           <protvista-feature-adapter id="adapter1">
-            <uniprot-entry-data-loader id="loader1" accession="P05067">
-              <source src="https://www.ebi.ac.uk/proteins/api/features/{0}?categories=PTM" />
-            </uniprot-entry-data-loader>
+            <data-loader>
+              <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+            </data-loader>
           </protvista-feature-adapter>
         </protvista-track>
         <protvista-track id= "track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track>
         <protvista-interpro-track id="track3" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-interpro-track>
         <protvista-variation filters="disease" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45">
-          <uniprot-entry-data-loader accession="P05067">
-            <source src="https://www.ebi.ac.uk/proteins/api/variation/{0}" />
-          </uniprot-entry-data-loader>
+          <data-loader>
+            <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+          </data-loader>
         </protvista-variation>
         <protvista-variation-filter></protvista-variation-filter>
       </protvista-manager>
@@ -52,8 +52,7 @@
       <script src="https://cdn.jsdelivr.net/npm/protvista-variation/dist/protvista-variation.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/protvista-variation-filter@latest/dist/protvista-variation-filter.js" charset="utf-8" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/data-loader/dist/index.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-data-loader/dist/UniProtEntryDataLoader.js" charset="utf-8" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>      
+      <script src="https://cdn.jsdelivr.net/npm/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>      
       <script src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>      
       <script src="https://cdn.jsdelivr.net/npm/protvista-manager/dist/protvista-manager.js" charset="utf-8" defer></script>
       <script>
