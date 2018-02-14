@@ -78,6 +78,8 @@ To be completed
 ## To-do
 
  - [ ] Finish writing README.md
+ - [ ] Handle change in source (new `load` event emitted on change)
+ - [ ] Implement some cache, or at least shareable payload for multiple use of same data in same page
  - [ ] Add tests
  - [ ] Add continuous integration
  - [ ] Add bundle in `dist` folder for older browsers (but not before what is supported by the webcomponentjs polyfill)
