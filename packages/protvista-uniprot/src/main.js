@@ -47,10 +47,10 @@ const loadComponent = function () {
                         </div>
                         ${category.tracks.map(track => html`
                             <div class="track-label" data-toggle="${category.name}">
-                                ${track.label}
+                                ${track.label ? track.label : this.getLabelComponent(track.labelComponent)}
                             </div>
                             <div class="track-content" data-toggle="${category.name}">
-                                ${this.getTrack(category.trackType, category.adapter, category.url, track.filter)}
+                                ${this.getTrack(track.trackType, category.adapter, category.url, track.filter)}
                             </div>`)}
                     `
                 )}
@@ -106,6 +106,19 @@ const loadComponent = function () {
                             </data-loader>
                     </protvista-feature-adapter>
                     `;
+                case ('protvista-variation-adapter'):
+                    return html `                            
+                    <data-loader>
+                        <source src="${url}${this._accession}" />
+                    </data-loader>
+                `;
+            }
+        }
+
+        getLabelComponent(name) {
+            switch(name) {
+                case ('protvista-variation-filter'):
+                    return html`<protvista-variation-filter></protvista-variation-filter`;
             }
         }
 

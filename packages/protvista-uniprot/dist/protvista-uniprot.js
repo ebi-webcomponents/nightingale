@@ -64,6 +64,48 @@ var categories = [{
         "filter": "SITE",
         "trackType": "protvista-track",
         "tooltip": "Any interesting single amino acid site on the sequence"
+    }, {
+        "name": "repeat",
+        "label": "Repeat",
+        "filter": "REPEAT",
+        "trackType": "protvista-track",
+        "tooltip": "Repeated sequence motifs or repeated domains within the protein"
+    }, {
+        "name": "ca_bind",
+        "label": "Calcium binding",
+        "filter": "CA_BIND",
+        "trackType": "protvista-track",
+        "tooltip": "Calcium-binding regions, such as the EF-hand motif"
+    }, {
+        "name": "dna_bind",
+        "label": "DNA binding",
+        "filter": "DNA_BIND",
+        "trackType": "protvista-track",
+        "tooltip": "DNA-binding domains such as AP2/ERF domain, the ETS domain, the Fork-Head domain, the HMG box and the Myb domain"
+    }, {
+        "name": "zn_fing",
+        "label": "Zinc finger",
+        "filter": "ZN_FING",
+        "trackType": "protvista-track",
+        "tooltip": "Small, functional, independently folded domain that coordinates one or more zinc ions"
+    }, {
+        "name": "np_bind",
+        "label": "Nucleotide binding",
+        "filter": "NP_BIND",
+        "trackType": "protvista-track",
+        "tooltip": "(aka flavin-binding). Region in the protein which binds nucleotide phosphates"
+    }, {
+        "name": "binding",
+        "label": "Binding site",
+        "filter": "BINDIND",
+        "trackType": "protvista-track",
+        "tooltip": "Binding site for any chemical group (co-enzyme, prosthetic group, etc.)"
+    }, {
+        "name": "act_site",
+        "label": "Active site",
+        "filter": "ACT_SITE",
+        "trackType": "protvista-track",
+        "tooltip": "Amino acid(s) directly involved in the activity of an enzyme"
     }]
 }, {
     "name": "MOLECULE_PROCESSING",
@@ -83,6 +125,24 @@ var categories = [{
         "filter": "CHAIN",
         "trackType": "protvista-track",
         "tooltip": "(aka mature region). This describes the extent of a polypeptide chain in the mature protein following processing"
+    }, {
+        "name": "transit",
+        "label": "Transit peptide",
+        "filter": "TRANSIT",
+        "trackType": "protvista-track",
+        "tooltip": "This describes the extent of a transit peptide"
+    }, {
+        "name": "init_met",
+        "label": "Initiator methionine",
+        "filter": "INIT_MET",
+        "trackType": "protvista-track",
+        "tooltip": "This indicates that the initiator methionine is cleaved from the mature protein"
+    }, {
+        "name": "propep",
+        "label": "Propeptide",
+        "filter": "PROPEP",
+        "trackType": "protvista-track",
+        "tooltip": "Part of a protein that is cleaved during maturation or activation"
     }, {
         "name": "peptide",
         "label": "Peptide",
@@ -120,6 +180,12 @@ var categories = [{
         "filter": "CROSSLNK",
         "trackType": "protvista-track",
         "tooltip": "Covalent linkages of various types formed between two proteins or between two parts of the same protein"
+    }, {
+        "name": "lipid",
+        "label": "Lipidation",
+        "filter": "LIPID",
+        "trackType": "protvista-track",
+        "tooltip": "Covalently attached lipid group(s)"
     }]
 }, {
     "name": "SEQUENCE_INFORMATION",
@@ -139,6 +205,30 @@ var categories = [{
         "filter": "CONFLICT",
         "trackType": "protvista-track",
         "tooltip": "Sequence discrepancies of unknown origin"
+    }, {
+        "name": "non_cons",
+        "filter": "NON_CONS",
+        "trackType": "protvista-track",
+        "label": "Non-adjacent residues",
+        "tooltip": "Indicates that two residues in a sequence are not consecutive and that there is an undetermined number of unsequenced residues between them"
+    }, {
+        "name": "non_ter",
+        "filter": "NON_TER",
+        "trackType": "protvista-track",
+        "label": "Non-terminal residue",
+        "tooltip": "The sequence is incomplete. The residue is not the terminal residue of the complete protein"
+    }, {
+        "name": "unsure",
+        "filter": "UNSURE",
+        "trackType": "protvista-track",
+        "label": "Sequence uncertainty",
+        "tooltip": "Regions of a sequence for which the authors are unsure about the sequence assignment"
+    }, {
+        "name": "non_std",
+        "filter": "NON_STD",
+        "trackType": "protvista-track",
+        "label": "Non-standard residue",
+        "tooltip": "Non-standard amino acids (selenocysteine and pyrrolysine)"
     }]
 }, {
     "name": "STRUCTURAL",
@@ -241,75 +331,16 @@ var categories = [{
 }, {
     "name": "VARIATION",
     "label": "Variants",
-    "adapter": "protvista-feature-adapter",
-    "trackType": "protvista-variation",
-    "tracks": []
+    "adapter": "protvista-variation-adapter",
+    "trackType": "protvista-variation-graph",
+    "url": "https://www.ebi.ac.uk/proteins/api/variation/",
+    "tracks": [{
+        "name": "variation",
+        "labelComponent": "protvista-variation-filter",
+        "trackType": "protvista-variation",
+        "tooltip": "Natural variant of the protein, including polymorphisms, variations between strains, isolates or cultivars, disease-associated mutations and RNA editing events"
+    }]
 }];
-// "trackNames": {
-//     "transit": {
-//         "label": "Transit peptide",
-//         "tooltip": "This describes the extent of a transit peptide"
-//     },
-//     "init_met": {
-//         "label": "Initiator methionine",
-//         "tooltip": "This indicates that the initiator methionine is cleaved from the mature protein"
-//     },
-//     "propep": {
-//         "label": "Propeptide",
-//         "tooltip": "Part of a protein that is cleaved during maturation or activation"
-//     },
-//     "repeat": {
-//         "label": "Repeat",
-//         "tooltip": "Repeated sequence motifs or repeated domains within the protein"
-//     },
-//     "ca_bind": {
-//         "label": "Calcium binding",
-//         "tooltip": "Calcium-binding regions, such as the EF-hand motif"
-//     },
-//     "dna_bind": {
-//         "label": "DNA binding",
-//         "tooltip": "DNA-binding domains such as AP2/ERF domain, the ETS domain, the Fork-Head domain, the HMG box and the Myb domain"
-//     },
-//     "zn_fing": {
-//         "label": "Zinc finger",
-//         "tooltip": "Small, functional, independently folded domain that coordinates one or more zinc ions"
-//     },
-//     "np_bind": {
-//         "label": "Nucleotide binding",
-//         "tooltip": "(aka flavin-binding). Region in the protein which binds nucleotide phosphates"
-//     },
-//     "binding": {
-//         "label": "Binding site",
-//         "tooltip": "Binding site for any chemical group (co-enzyme, prosthetic group, etc.)"
-//     },
-//     "act_site": {
-//         "label": "Active site",
-//         "tooltip": "Amino acid(s) directly involved in the activity of an enzyme"
-//     },
-//     "lipid": {
-//         "label": "Lipidation",
-//         "tooltip": "Covalently attached lipid group(s)"
-//     },
-//     "non_cons": {
-//         "label": "Non-adjacent residues",
-//         "tooltip": "Indicates that two residues in a sequence are not consecutive and that there is an undetermined number of unsequenced residues between them"
-//     },
-//     "non_ter": {
-//         "label": "Non-terminal residue",
-//         "tooltip": "The sequence is incomplete. The residue is not the terminal residue of the complete protein"
-//     },
-//     "unsure": {
-//         "label": "Sequence uncertainty",
-//         "tooltip": "Regions of a sequence for which the authors are unsure about the sequence assignment"
-//     },
-//     "non_std": {
-//         "label": "Non-standard residue",
-//         "tooltip": "Non-standard amino acids (selenocysteine and pyrrolysine)"
-//     },
-//     "variant": {
-//         "label": "Natural variant",
-//         "tooltip": "Natural variant of the protein, including polymorphisms, variations between strains, isolates or cultivars, disease-associated mutations and RNA editing events"
-//     },
 
 /**
  * @license
@@ -920,6 +951,7 @@ const removeNodes = (container, startNode, endNode = null) => {
         node = n;
     }
 };
+//# sourceMappingURL=lit-html.js.map
 
 var css = "protvista-uniprot {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\nprotvista-uniprot protvista-manager {\n    display: grid;\n    grid-template-columns: 200px 1fr;\n    grid-gap: 2px 10px;\n}\n\nprotvista-uniprot protvista-manager protvista-navigation,\nprotvista-uniprot protvista-manager protvista-sequence {\n    grid-column-start: 2;\n}\n\n.category-label,\n.track-label {\n    padding: .5em;\n}\n\n.category-label {\n    background-color: #b2f5ff;\n    cursor: pointer;\n}\n\n.category-label::before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-top: 5px solid transparent;\n    border-bottom: 5px solid transparent;\n    border-left: 5px solid #333;\n    margin-right: 5px;\n    -webkit-transition: all .1s;\n    /* Safari */\n    transition: all .1s;\n}\n\n.category-label.open::before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    border-top: 5px solid #333;\n    margin-right: 5px;\n}\n\n.track-label {\n    background-color: #d9faff;\n    padding-left: 1em;\n}\n\nprotvista-track {\n    border-top: 1px solid #d9faff;\n}\n\n.aggregate-track-content {\n    opacity: 1;\n    -webkit-transition: opacity .1s;\n    /* Safari */\n    transition: opacity .1s;\n}\n\n.track-label,\n.track-content {\n    display: none;\n}";
 __$$styleInject(css);
@@ -1154,8 +1186,10 @@ var _templateObject = taggedTemplateLiteral(['\n            <protvista-manager a
 var _templateObject2 = taggedTemplateLiteral(['\n                        <div class="category-label" data-category-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                            ', '\n                        </div>\n                        ', '\n                    '], ['\n                        <div class="category-label" data-category-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                            ', '\n                        </div>\n                        ', '\n                    ']);
 var _templateObject3 = taggedTemplateLiteral(['\n                            <div class="track-label" data-toggle="', '">\n                                ', '\n                            </div>\n                            <div class="track-content" data-toggle="', '">\n                                ', '\n                            </div>'], ['\n                            <div class="track-label" data-toggle="', '">\n                                ', '\n                            </div>\n                            <div class="track-content" data-toggle="', '">\n                                ', '\n                            </div>']);
 var _templateObject4 = taggedTemplateLiteral(['\n                    <protvista-feature-adapter filters="', '">\n                            <data-loader>\n                                <source src="', '', '" />\n                            </data-loader>\n                    </protvista-feature-adapter>\n                    '], ['\n                    <protvista-feature-adapter filters="', '">\n                            <data-loader>\n                                <source src="', '', '" />\n                            </data-loader>\n                    </protvista-feature-adapter>\n                    ']);
-var _templateObject5 = taggedTemplateLiteral(['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    '], ['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    ']);
-var _templateObject6 = taggedTemplateLiteral(['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    '], ['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    ']);
+var _templateObject5 = taggedTemplateLiteral(['                            \n                    <data-loader>\n                        <source src="', '', '" />\n                    </data-loader>\n                '], ['                            \n                    <data-loader>\n                        <source src="', '', '" />\n                    </data-loader>\n                ']);
+var _templateObject6 = taggedTemplateLiteral(['<protvista-variation-filter></protvista-variation-filter'], ['<protvista-variation-filter></protvista-variation-filter']);
+var _templateObject7 = taggedTemplateLiteral(['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    '], ['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    ']);
+var _templateObject8 = taggedTemplateLiteral(['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    '], ['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    ']);
 
 var loadComponent = function loadComponent() {
     var ProtvistaUniprot = function (_HTMLElement) {
@@ -1229,7 +1263,7 @@ var loadComponent = function loadComponent() {
                 var mainHtml = function mainHtml() {
                     return html(_templateObject, _this3._sequenceLength, _this3._sequenceLength, categories.map(function (category) {
                         return html(_templateObject2, category.name, category.label, category.name, _this3.getTrack(category.trackType, category.adapter, category.url, _this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
-                            return html(_templateObject3, category.name, track.label, category.name, _this3.getTrack(category.trackType, category.adapter, category.url, track.filter));
+                            return html(_templateObject3, category.name, track.label ? track.label : _this3.getLabelComponent(track.labelComponent), category.name, _this3.getTrack(track.trackType, category.adapter, category.url, track.filter));
                         }));
                     }), _this3._sequenceLength);
                 };
@@ -1288,6 +1322,16 @@ var loadComponent = function loadComponent() {
                 switch (adapter) {
                     case 'protvista-feature-adapter':
                         return html(_templateObject4, trackTypes, url, this._accession);
+                    case 'protvista-variation-adapter':
+                        return html(_templateObject5, url, this._accession);
+                }
+            }
+        }, {
+            key: 'getLabelComponent',
+            value: function getLabelComponent(name) {
+                switch (name) {
+                    case 'protvista-variation-filter':
+                        return html(_templateObject6);
                 }
             }
         }, {
@@ -1298,9 +1342,9 @@ var loadComponent = function loadComponent() {
                 // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
                 switch (trackType) {
                     case 'protvista-track':
-                        return html(_templateObject5, this._sequenceLength, layout, this.getAdapter(adapter, url, trackTypes));
+                        return html(_templateObject7, this._sequenceLength, layout, this.getAdapter(adapter, url, trackTypes));
                     case 'protvista-variation':
-                        return html(_templateObject6, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
+                        return html(_templateObject8, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
                 }
             }
         }]);
