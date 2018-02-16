@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -41,8 +41,8 @@
     "uniprot-entry-data-adapter": "0.0.4"
   },
   "dependencies": {
-    "d3": "^4.9.1",
+    "d3": "4.13.0",
     "lodash-es": "^4.17.4",
-    "protvista-zoomable": "0.0.3"
+    "protvista-zoomable": "0.0.4"
   }
 }

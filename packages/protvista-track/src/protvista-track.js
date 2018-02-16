@@ -1,4 +1,7 @@
-import * as d3 from "d3";
+import {
+  select,
+  event as d3Event
+} from 'd3';
 import _includes from 'lodash-es/includes';
 import FeatureShape from './FeatureShape';
 import NonOverlappingLayout from './NonOverlappingLayout';
@@ -105,10 +108,10 @@ class ProtVistaTrack extends ProtvistaZoomable {
   _createTrack() {
     this._layoutObj.init(this._data);
 
-    d3.select(this).selectAll('*').remove();
-    d3.select(this).html('');
+    select(this).selectAll('*').remove();
+    select(this).html('');
 
-    this.svg = d3.select(this)
+    this.svg = select(this)
       .append('div')
       .style('line-height', 0)
       .append('svg')
@@ -167,7 +170,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
       .attr('stroke', f => this._getFeatureColor(f.feature))
       .on('mouseover', f => {
         if (this._tooltipEvent === 'mouseover') {
-          this.createTooltip(d3.event, f);
+          this.createTooltip(d3Event, f);
         }
         this.dispatchEvent(new CustomEvent("change", {
           detail: {
@@ -193,7 +196,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
       })
       .on('click', d => {
         if (this._tooltipEvent === 'click') {
-          this.createTooltip(d3.event, d, true);
+          this.createTooltip(d3Event, d, true);
         }
       });
   }
