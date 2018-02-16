@@ -1,4 +1,11 @@
-import * as d3 from "d3";
+import {
+  scaleLinear,
+  axisBottom,
+  brushX,
+  format,
+  select,
+  event as d3Event
+} from 'd3';
 
 const height = 40,
   // width = 760,
@@ -58,10 +65,10 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   _createNavRuler() {
-    this._x = d3.scaleLinear().range([padding.left, this.width - padding.right]);
+    this._x = scaleLinear().range([padding.left, this.width - padding.right]);
     this._x.domain([0, this._length+1]);
 
-    this._svg = d3.select(this)
+    this._svg = select(this)
       .append('div')
       .attr('class', '')
       .append('svg')
@@ -69,7 +76,7 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('width', this.width)
       .attr('height', (height));
 
-    this._xAxis = d3.axisBottom(this._x);
+    this._xAxis = axisBottom(this._x);
 
     this._displaystartLabel = this._svg.append("text")
                         .attr('class', 'start-label')
@@ -85,18 +92,18 @@ class ProtVistaNavigation extends HTMLElement {
       .attr('class', 'x axis')
       .call(this._xAxis);
 
-    this._viewport = d3.brushX().extent([
+    this._viewport = brushX().extent([
         [padding.left, 0],
         [(this.width - padding.right), height*0.51]
       ])
       .on("brush", () => {
-        if (d3.event.selection){
-          this._displaystart = d3.format("d")(this._x.invert(d3.event.selection[0]));
-          this._displayend = d3.format("d")(this._x.invert(d3.event.selection[1]));
+        if (d3Event.selection){
+          this._displaystart = format("d")(this._x.invert(d3Event.selection[0]));
+          this._displayend = format("d")(this._x.invert(d3Event.selection[1]));
           this.dispatchEvent(new CustomEvent("change", {
             detail: {
               displayend: this._displayend, displaystart: this._displaystart,
-              extra: {transform: d3.event.transform}
+              extra: {transform: d3Event.transform}
             }, bubbles:true, cancelable: true
           }));
           this._updateLabels();

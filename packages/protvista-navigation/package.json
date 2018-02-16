@@ -1,6 +1,6 @@
 {
   "name": "protvista-navigation",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Navigation component for the ProtVista tool",
   "files": [
     "dist",
@@ -35,6 +35,6 @@
     "rollup-watch": "^4.3.1"
   },
   "dependencies": {
-    "d3": "^4.9.1"
+    "d3": "4.13.0",
   }
 }
