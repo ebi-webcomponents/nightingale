@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-track",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",
@@ -38,7 +38,7 @@
     "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {
-    "d3": "^4.9.1",
-    "protvista-track": "0.0.4"
+    "d3": "4.13.0",
+    "protvista-track": "0.0.7"
   }
 }
