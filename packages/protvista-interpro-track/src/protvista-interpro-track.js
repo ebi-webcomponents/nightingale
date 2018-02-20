@@ -114,22 +114,22 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       .attr('fill', f => this._getFeatureColor(f));
   }
 
-  _addHoverEvents(features){
+  _addHoverEvents(features, type="entry"){
     features
       .on('mouseover', (f, i, d) => {
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {highlightend: f.end, highlightstart: f.start}, bubbles:true, cancelable: true
+          detail: {highlightend: f.end, highlightstart: f.start, type}, bubbles:true, cancelable: true
         }));
         this.dispatchEvent(new CustomEvent("entrymouseover", {
-          detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
+          detail: Object.assign(f, {target: d[i], type}), bubbles:true, cancelable: true
         }));
       })
       .on('mouseout', (f, i, d) => {
         this.dispatchEvent(new CustomEvent("change", {
-          detail: {highlightend: null, highlightstart: null}, bubbles:true, cancelable: true
+          detail: {highlightend: null, highlightstart: null, type}, bubbles:true, cancelable: true
         }));
         this.dispatchEvent(new CustomEvent("entrymouseout", {
-          detail: f, bubbles:true, cancelable: true
+          detail: Object.assign(f, {type}), bubbles:true, cancelable: true
         }));
       })
   }
@@ -166,6 +166,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
     this._addHoverEvents(this.features);
     this.residues_g = this._createResidueGroup(this.featuresG);
     this.residues_loc = this._createResiduePaths(this.residues_g);
+    this._addHoverEvents(this.residues_loc, "residue");
 
     if (this._contributors) {
       if (!this.children_g)
@@ -203,6 +204,8 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
 
         this.child_residues_g = this._createResidueGroup(this.childGroup);
         this.child_residues_loc = this._createResiduePaths(this.child_residues_g);
+        this._addHoverEvents(this.child_residues_loc, "residue");
+
 
     }
     this.svg.attr("height", this._layoutObj.maxYPos);

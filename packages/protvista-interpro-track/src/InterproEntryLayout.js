@@ -22,7 +22,7 @@ export default class InterproEntryLayout extends DefaultLayout{
           for (let j=0; j<resGroup.locations.length; j++) {
             this.height[`${resGroup.accession}_${i}_${j}`] = this.expanded ? CHILD_HEIGHT: 0;
             this.yPos[`${resGroup.accession}_${i}_${j}`] = this.maxYPos + this._padding;
-            yPos += 2*this._padding + this.height[`${resGroup.accession}_${i}_${j}`];
+            yPos += (this.expanded ? 2*this._padding : 0) + this.height[`${resGroup.accession}_${i}_${j}`];
             this.maxYPos = Math.max(this.maxYPos, yPos)
           }
         }
@@ -39,7 +39,7 @@ export default class InterproEntryLayout extends DefaultLayout{
           for (let j=0; j<resGroup.locations.length; j++) {
             this.height[`${resGroup.accession}_${i}_${j}`] = this.expanded && child.expanded ? CHILD_HEIGHT: 0;
             this.yPos[`${resGroup.accession}_${i}_${j}`] = this.maxYPos + this._padding;
-            yPos += 2*this._padding + this.height[`${resGroup.accession}_${i}_${j}`];
+            yPos += (this.expanded ? 2*this._padding : 0) + this.height[`${resGroup.accession}_${i}_${j}`];
             this.maxYPos = Math.max(this.maxYPos, yPos)
           }
         }
