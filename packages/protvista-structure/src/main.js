@@ -167,6 +167,8 @@ const loadComponent = function () {
 
         loadLiteMol() {
             const Plugin = LiteMol.Plugin;
+            this.Command = LiteMol.Bootstrap.Command;
+            this.Query = LiteMol.Core.Structure.Query;
             this._liteMol = Plugin.create({
                 target: '#app',
                 viewportBackground: '#fff',
@@ -205,6 +207,12 @@ const loadComponent = function () {
                 .catch(e => {
                     console.error(e);
                 });
+            const query = this.Query.sequence(1, 'B', { seqNumber: 288 }, { seqNumber: 240 });
+            this.Command.Molecule.Highlight.dispatch(this._liteMol.context, { query: query, isOn: true });
+            // this.Command.highlightOn({
+            //     start_residue_number: 10,
+            //     end_residue_number: 15
+            // });
         }
 
     }
