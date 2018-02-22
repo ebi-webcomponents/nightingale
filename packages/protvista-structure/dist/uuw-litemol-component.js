@@ -361,9 +361,12 @@ var loadComponent = function loadComponent() {
         }, {
             key: 'loadMolecule',
             value: function loadMolecule(_id) {
+                var _this4 = this;
+
                 this._liteMol.clear();
                 this._liteMol.loadMolecule({
-                    _id: _id, format: 'binarycif', // or pdb, sdf, binarycif/bcif
+                    _id: _id,
+                    format: 'binarycif', // or pdb, sdf, binarycif/bcif
                     url: 'https://www.ebi.ac.uk/pdbe/coordinates/' + _id.toLowerCase() + '/full?encoding=BCIF',
                     // instead of url, it is possible to use data: "string" or ArrayBuffer (for
                     // BinaryCIF) loaded molecule and model can be accessed after load using
@@ -379,11 +382,11 @@ var loadComponent = function loadComponent() {
                     // LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateVisual, { style: style })
                     // plugin.applyTransform(t);
                     console.log('Molecule loaded');
+                    var query = _this4.Query.sequence(1, 'A', { seqNumber: 288 }, { seqNumber: 240 });
+                    _this4.Command.Molecule.Highlight.dispatch(_this4._liteMol.context, { query: query, isOn: true });
                 }).catch(function (e) {
                     console.error(e);
                 });
-                var query = this.Query.sequence(1, 'B', { seqNumber: 288 }, { seqNumber: 240 });
-                this.Command.Molecule.Highlight.dispatch(this._liteMol.context, { query: query, isOn: true });
                 // this.Command.highlightOn({
                 //     start_residue_number: 10,
                 //     end_residue_number: 15
