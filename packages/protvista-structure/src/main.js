@@ -183,6 +183,7 @@ const loadComponent = function () {
             this
                 ._liteMol
                 .clear();
+
             this
                 ._liteMol
                 .loadMolecule({
@@ -204,8 +205,16 @@ const loadComponent = function () {
                     // LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateVisual, { style: style })
                     // plugin.applyTransform(t);
                     console.log('Molecule loaded');
-                    const query = this.Query.sequence(1, 'A', { seqNumber: 288 }, { seqNumber: 240 });
-                    this.Command.Molecule.Highlight.dispatch(this._liteMol.context, { query: query, isOn: true });
+                    
+                    // this.Event.Tree.NodeAdded.getStream(this._liteMol.context).subscribe(function (e) {
+                    //     //check if model is added
+                    //     if (e.data.ref == 'model') {
+                    //         console.log('painted');
+                    //         //call highlight now
+                    //     }
+                    // });
+                    setTimeout(() => 
+                    this.highlightChain(), 5000);
                 })
                 .catch(e => {
                     console.error(e);
@@ -214,6 +223,14 @@ const loadComponent = function () {
             //     start_residue_number: 10,
             //     end_residue_number: 15
             // });
+        }
+
+        highlightChain() {
+            console.log('highlighting');
+            const model = this._liteMol.context.select('1AAP-model')[0];
+
+            const query = this.Query.sequence(1, 'A', { seqNumber: 10 }, { seqNumber: 20 });
+            this.Command.Molecule.Highlight.dispatch(this._liteMol.context, {model: model, query: query, isOn: true });
         }
 
     }

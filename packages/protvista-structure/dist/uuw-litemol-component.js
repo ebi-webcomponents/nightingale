@@ -364,6 +364,7 @@ var loadComponent = function loadComponent() {
                 var _this4 = this;
 
                 this._liteMol.clear();
+
                 this._liteMol.loadMolecule({
                     _id: _id,
                     format: 'binarycif', // or pdb, sdf, binarycif/bcif
@@ -382,8 +383,17 @@ var loadComponent = function loadComponent() {
                     // LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateVisual, { style: style })
                     // plugin.applyTransform(t);
                     console.log('Molecule loaded');
-                    var query = _this4.Query.sequence(1, 'A', { seqNumber: 288 }, { seqNumber: 240 });
-                    _this4.Command.Molecule.Highlight.dispatch(_this4._liteMol.context, { query: query, isOn: true });
+
+                    // this.Event.Tree.NodeAdded.getStream(this._liteMol.context).subscribe(function (e) {
+                    //     //check if model is added
+                    //     if (e.data.ref == 'model') {
+                    //         console.log('painted');
+                    //         //call highlight now
+                    //     }
+                    // });
+                    setTimeout(function () {
+                        return _this4.highlightChain();
+                    }, 5000);
                 }).catch(function (e) {
                     console.error(e);
                 });
@@ -391,6 +401,15 @@ var loadComponent = function loadComponent() {
                 //     start_residue_number: 10,
                 //     end_residue_number: 15
                 // });
+            }
+        }, {
+            key: 'highlightChain',
+            value: function highlightChain() {
+                console.log('highlighting');
+                var model = this._liteMol.context.select('1AAP-model')[0];
+
+                var query = this.Query.sequence(1, 'A', { seqNumber: 10 }, { seqNumber: 20 });
+                this.Command.Molecule.Highlight.dispatch(this._liteMol.context, { model: model, query: query, isOn: true });
             }
         }]);
         return UuwLitemolComponent;
