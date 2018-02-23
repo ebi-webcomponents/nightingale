@@ -5,6 +5,9 @@ const loadComponent = function () {
             super();
             // We can't use the shadow DOM as the LiteMol component interacts with the
             // document DOM.
+            this._loaded = false;
+            this._highlightstart = parseInt(this.getAttribute('highlightstart'));
+            this._highlightend = parseInt(this.getAttribute('highlightend'));
             this.loadMolecule = this
                 .loadMolecule
                 .bind(this);
@@ -95,8 +98,16 @@ const loadComponent = function () {
                 });
         }
 
+        static get observedAttributes() {
+            return ['highlightstart', 'highlightend'];
+        }
+
         attributeChangedCallback(attrName, oldVal, newVal) {
-            console.log('changed', attrName);
+            if (oldVal !== newVal) {
+                const value = parseInt(newVal);
+                this[`_${attrName}`] = isNaN(value) ? newVal : value;
+                this.highlightChain();
+            }
         }
 
         async loadEntry() {
@@ -171,9 +182,11 @@ const loadComponent = function () {
             this.Query = LiteMol.Core.Structure.Query;
             this.Bootstrap = LiteMol.Bootstrap;
             this.Core = LiteMol.Core;
+            this.Tree = this.Bootstrap.Tree;
             this.CoreVis = LiteMol.Visualization;
             this.Transformer = this.Bootstrap.Entity.Transformer;
             this.Visualization = this.Bootstrap.Visualization;
+            this.Event = this.Bootstrap.Event;
             // Plugin.Components.Context.Log(LayoutRegion.Bottom, true),
             this._liteMol = Plugin.create({
                 target: '#app',
@@ -186,6 +199,8 @@ const loadComponent = function () {
         }
 
         loadMolecule(_id) {
+            this._loaded = false;
+
             this
                 ._liteMol
                 .clear();
@@ -204,30 +219,35 @@ const loadComponent = function () {
                 .then(this.Transformer.Molecule.CreateMacromoleculeVisual, { polymer: true, polymerRef: 'polymer-visual', het: true, water: true });
 
             this
-                ._liteMol.applyTransform(transform);
-
-            setTimeout(() => this.highlightChain(), 3000);
-
+                ._liteMol.applyTransform(transform).then(()=> {
+                    this._loaded = true;
+                    this.highlightChain();
+                });
         }
 
         getTheme() {
             let colors = new Map();
             colors.set('Uniform', this.CoreVis.Color.fromRgb(207,178,178));
-            colors.set('Selection', this.CoreVis.Color.fromRgb(0,81,51));
+            colors.set('Selection', this.CoreVis.Color.fromRgb(255,255,0));
             colors.set('Highlight', this.CoreVis.Theme.Default.HighlightColor);
             return this.Visualization.Molecule.uniformThemeProvider(void 0, { colors: colors });
         }
 
         highlightChain() {
-            console.log('highlighting', this._liteMol.context.select('polymer-visual')[0]);
+            if(!this._loaded || !this._highlightstart || !this._highlightend)
+                return;
+            
+            this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, void 0);
+            this.Command.Tree.RemoveNode.dispatch(this._liteMol.context, 'sequence-selection');
+
             const visual = this._liteMol.context.select('polymer-visual')[0];
             if (!visual)
                 return;
 
-            const query = this.Query.sequence(1, 'A', {
-                seqNumber: 10
+            const query = this.Query.sequence('1', 'A', {
+                seqNumber: this._highlightstart
             }, {
-                seqNumber: 40
+                seqNumber: this._highlightend
             });
 
             const theme = this.getTheme();
@@ -235,10 +255,7 @@ const loadComponent = function () {
             const action = this._liteMol.createTransform()
                 .add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, { query: query, name: 'My name' }, { ref: 'sequence-selection' });
 
-            action.then(this.Transformer.Molecule.CreateVisual, { style: this.Visualization.Molecule.Default.ForType.get('BallsAndSticks') });
-
             this._liteMol.applyTransform(action).then(() => {
-                console.log(theme);
                 this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, { visual: visual, theme: theme });
                 this.Command.Entity.Focus.dispatch(this._liteMol.context, this._liteMol.context.select('sequence-selection'));
             });

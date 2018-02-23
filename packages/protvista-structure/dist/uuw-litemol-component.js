@@ -222,6 +222,9 @@ var loadComponent = function loadComponent() {
             // document DOM.
             var _this = possibleConstructorReturn(this, (UuwLitemolComponent.__proto__ || Object.getPrototypeOf(UuwLitemolComponent)).call(this));
 
+            _this._loaded = false;
+            _this._highlightstart = parseInt(_this.getAttribute('highlightstart'));
+            _this._highlightend = parseInt(_this.getAttribute('highlightend'));
             _this.loadMolecule = _this.loadMolecule.bind(_this);
             _this.loadStructureTable = _this.loadStructureTable.bind(_this);
             var styleTag = document.createElement('style');
@@ -267,7 +270,11 @@ var loadComponent = function loadComponent() {
         }, {
             key: 'attributeChangedCallback',
             value: function attributeChangedCallback(attrName, oldVal, newVal) {
-                console.log('changed', attrName);
+                if (oldVal !== newVal) {
+                    var value = parseInt(newVal);
+                    this['_' + attrName] = isNaN(value) ? newVal : value;
+                    this.highlightChain();
+                }
             }
         }, {
             key: 'loadEntry',
@@ -351,9 +358,11 @@ var loadComponent = function loadComponent() {
                 this.Query = LiteMol.Core.Structure.Query;
                 this.Bootstrap = LiteMol.Bootstrap;
                 this.Core = LiteMol.Core;
+                this.Tree = this.Bootstrap.Tree;
                 this.CoreVis = LiteMol.Visualization;
                 this.Transformer = this.Bootstrap.Entity.Transformer;
                 this.Visualization = this.Bootstrap.Visualization;
+                this.Event = this.Bootstrap.Event;
                 // Plugin.Components.Context.Log(LayoutRegion.Bottom, true),
                 this._liteMol = Plugin.create({
                     target: '#app',
@@ -369,6 +378,8 @@ var loadComponent = function loadComponent() {
             value: function loadMolecule(_id) {
                 var _this4 = this;
 
+                this._loaded = false;
+
                 this._liteMol.clear();
 
                 var transform = this._liteMol.createTransform();
@@ -379,18 +390,17 @@ var loadComponent = function loadComponent() {
                     _id: _id
                 }).then(this.Transformer.Data.ParseBinaryCif, { id: _id }, { isBinding: true, ref: 'cifDict' }).then(this.Transformer.Molecule.CreateFromMmCif, { blockIndex: 0 }, { isBinding: true }).then(this.Transformer.Molecule.CreateModel, { modelIndex: 0 }, { isBinding: false, ref: 'model' }).then(this.Transformer.Molecule.CreateMacromoleculeVisual, { polymer: true, polymerRef: 'polymer-visual', het: true, water: true });
 
-                this._liteMol.applyTransform(transform);
-
-                setTimeout(function () {
-                    return _this4.highlightChain();
-                }, 3000);
+                this._liteMol.applyTransform(transform).then(function () {
+                    _this4._loaded = true;
+                    _this4.highlightChain();
+                });
             }
         }, {
             key: 'getTheme',
             value: function getTheme() {
                 var colors = new Map();
                 colors.set('Uniform', this.CoreVis.Color.fromRgb(207, 178, 178));
-                colors.set('Selection', this.CoreVis.Color.fromRgb(0, 81, 51));
+                colors.set('Selection', this.CoreVis.Color.fromRgb(255, 255, 0));
                 colors.set('Highlight', this.CoreVis.Theme.Default.HighlightColor);
                 return this.Visualization.Molecule.uniformThemeProvider(void 0, { colors: colors });
             }
@@ -399,27 +409,33 @@ var loadComponent = function loadComponent() {
             value: function highlightChain() {
                 var _this5 = this;
 
-                console.log('highlighting', this._liteMol.context.select('polymer-visual')[0]);
+                if (!this._loaded || !this._highlightstart || !this._highlightend) return;
+
+                this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, void 0);
+                this.Command.Tree.RemoveNode.dispatch(this._liteMol.context, 'sequence-selection');
+
                 var visual = this._liteMol.context.select('polymer-visual')[0];
                 if (!visual) return;
 
-                var query = this.Query.sequence(1, 'A', {
-                    seqNumber: 10
+                var query = this.Query.sequence('1', 'A', {
+                    seqNumber: this._highlightstart
                 }, {
-                    seqNumber: 40
+                    seqNumber: this._highlightend
                 });
 
                 var theme = this.getTheme();
 
                 var action = this._liteMol.createTransform().add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, { query: query, name: 'My name' }, { ref: 'sequence-selection' });
 
-                action.then(this.Transformer.Molecule.CreateVisual, { style: this.Visualization.Molecule.Default.ForType.get('BallsAndSticks') });
-
                 this._liteMol.applyTransform(action).then(function () {
-                    console.log(theme);
                     _this5.Command.Visual.UpdateBasicTheme.dispatch(_this5._liteMol.context, { visual: visual, theme: theme });
                     _this5.Command.Entity.Focus.dispatch(_this5._liteMol.context, _this5._liteMol.context.select('sequence-selection'));
                 });
+            }
+        }], [{
+            key: 'observedAttributes',
+            get: function get$$1() {
+                return ['highlightstart', 'highlightend'];
             }
         }]);
         return UuwLitemolComponent;
