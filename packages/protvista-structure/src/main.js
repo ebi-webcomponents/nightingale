@@ -171,6 +171,7 @@ const loadComponent = function () {
             this.Query = LiteMol.Core.Structure.Query;
             this.Bootstrap = LiteMol.Bootstrap;
             this.Core = LiteMol.Core;
+            this.CoreVis = LiteMol.Visualization;
             this.Transformer = this.Bootstrap.Entity.Transformer;
             this.Visualization = this.Bootstrap.Visualization;
             // Plugin.Components.Context.Log(LayoutRegion.Bottom, true),
@@ -209,6 +210,14 @@ const loadComponent = function () {
 
         }
 
+        getTheme() {
+            let colors = new Map();
+            colors.set('Uniform', this.CoreVis.Color.fromRgb(207,178,178));
+            colors.set('Selection', this.CoreVis.Color.fromRgb(0,81,51));
+            colors.set('Highlight', this.CoreVis.Theme.Default.HighlightColor);
+            return this.Visualization.Molecule.uniformThemeProvider(void 0, { colors: colors });
+        }
+
         highlightChain() {
             console.log('highlighting', this._liteMol.context.select('polymer-visual')[0]);
             const visual = this._liteMol.context.select('polymer-visual')[0];
@@ -221,20 +230,18 @@ const loadComponent = function () {
                 seqNumber: 40
             });
 
+            const theme = this.getTheme();
+
             const action = this._liteMol.createTransform()
                 .add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, { query: query, name: 'My name' }, { ref: 'sequence-selection' });
 
-            // action.then(this.Transformer.Molecule.CreateVisual, { style: this.Visualization.Molecule.Default.ForType.get('BallsAndSticks') });
+            action.then(this.Transformer.Molecule.CreateVisual, { style: this.Visualization.Molecule.Default.ForType.get('BallsAndSticks') });
 
-            this._liteMol.applyTransform(action);
-
-            // this._liteMol.applyTransforms(action).then(function () {
-                // _this.Command.Visual.UpdateBasicTheme.dispatch(_this.plugin.context, { visual: visual, theme: theme });
-                // this.Command.Entity.Focus.dispatch(this._liteMol.context.context, this._liteMol.context.select('sequence-selection'));
-                // alternatively, you can do this
-                //Command.Molecule.FocusQuery.dispatch(plugin.context, { model: selectNodes('model')[0] as any, query })
-            // });
-
+            this._liteMol.applyTransform(action).then(() => {
+                console.log(theme);
+                this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, { visual: visual, theme: theme });
+                this.Command.Entity.Focus.dispatch(this._liteMol.context, this._liteMol.context.select('sequence-selection'));
+            });
         }
 
     }
