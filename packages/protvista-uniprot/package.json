@@ -1,6 +1,7 @@
 {
     "name": "protvista-uniprot",
     "description": "ProtVista tool for the UniProt website",
+    "version": "0.0.0",
     "files": [
         "dist",
         "src"

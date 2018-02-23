@@ -951,7 +951,6 @@ const removeNodes = (container, startNode, endNode = null) => {
         node = n;
     }
 };
-//# sourceMappingURL=lit-html.js.map
 
 var css = "protvista-uniprot {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\nprotvista-uniprot protvista-manager {\n    display: grid;\n    grid-template-columns: 200px 1fr;\n    grid-gap: 2px 10px;\n}\n\nprotvista-uniprot protvista-manager protvista-navigation,\nprotvista-uniprot protvista-manager protvista-sequence {\n    grid-column-start: 2;\n}\n\n.category-label,\n.track-label {\n    padding: .5em;\n}\n\n.category-label {\n    background-color: #b2f5ff;\n    cursor: pointer;\n}\n\n.category-label::before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-top: 5px solid transparent;\n    border-bottom: 5px solid transparent;\n    border-left: 5px solid #333;\n    margin-right: 5px;\n    -webkit-transition: all .1s;\n    /* Safari */\n    transition: all .1s;\n}\n\n.category-label.open::before {\n    content: ' ';\n    display: inline-block;\n    width: 0;\n    height: 0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    border-top: 5px solid #333;\n    margin-right: 5px;\n}\n\n.track-label {\n    background-color: #d9faff;\n    padding-left: 1em;\n}\n\nprotvista-track {\n    border-top: 1px solid #d9faff;\n}\n\n.aggregate-track-content {\n    opacity: 1;\n    -webkit-transition: opacity .1s;\n    /* Safari */\n    transition: opacity .1s;\n}\n\n.track-label,\n.track-content {\n    display: none;\n}";
 __$$styleInject(css);
