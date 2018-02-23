@@ -101,7 +101,7 @@ const loadComponent = function () {
 
         async loadEntry() {
             try {
-                return await(await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${this.getAccession()}`)).json();
+                return await (await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${this.getAccession()}`)).json();
             } catch (e) {
                 console.log(`Couldn't load UniProt entry`, e);
             }
@@ -169,6 +169,11 @@ const loadComponent = function () {
             const Plugin = LiteMol.Plugin;
             this.Command = LiteMol.Bootstrap.Command;
             this.Query = LiteMol.Core.Structure.Query;
+            this.Bootstrap = LiteMol.Bootstrap;
+            this.Core = LiteMol.Core;
+            this.Transformer = this.Bootstrap.Entity.Transformer;
+            this.Visualization = this.Bootstrap.Visualization;
+            // Plugin.Components.Context.Log(LayoutRegion.Bottom, true),
             this._liteMol = Plugin.create({
                 target: '#app',
                 viewportBackground: '#fff',
@@ -184,53 +189,52 @@ const loadComponent = function () {
                 ._liteMol
                 .clear();
 
-            this
-                ._liteMol
-                .loadMolecule({
-                    _id, 
-                    format: 'binarycif', // or pdb, sdf, binarycif/bcif
+            let transform = this._liteMol.createTransform();
+
+            transform.add(this
+                ._liteMol.root, this.Transformer.Data.Download, {
                     url: `https://www.ebi.ac.uk/pdbe/coordinates/${_id.toLowerCase()}/full?encoding=BCIF`,
-                    // instead of url, it is possible to use data: "string" or ArrayBuffer (for
-                    // BinaryCIF) loaded molecule and model can be accessed after load using
-                    // plugin.context.select(modelRef/moleculeRef)[0], for example
-                    // plugin.context.select('1tqn-molecule')[0]
-                    moleculeRef: _id + '-molecule',
-                    modelRef: _id + '-model',
-                    // Use this if you want to create your own visual. doNotCreateVisual: true
+                    type: 'Binary',
+                    _id
                 })
-                .then(() => {
-                    // Use this (or a modification of this) for custom visualization: const style =
-                    // LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get('BallsAndSticks'
-                    // ); const t = plugin.createTransform(); t.add(id + '-model',
-                    // LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateVisual, { style: style })
-                    // plugin.applyTransform(t);
-                    console.log('Molecule loaded');
-                    
-                    // this.Event.Tree.NodeAdded.getStream(this._liteMol.context).subscribe(function (e) {
-                    //     //check if model is added
-                    //     if (e.data.ref == 'model') {
-                    //         console.log('painted');
-                    //         //call highlight now
-                    //     }
-                    // });
-                    setTimeout(() => 
-                    this.highlightChain(), 5000);
-                })
-                .catch(e => {
-                    console.error(e);
-                });
-            // this.Command.highlightOn({
-            //     start_residue_number: 10,
-            //     end_residue_number: 15
-            // });
+                .then(this.Transformer.Data.ParseBinaryCif, { id: _id }, { isBinding: true, ref: 'cifDict' })
+                .then(this.Transformer.Molecule.CreateFromMmCif, { blockIndex: 0 }, { isBinding: true })
+                .then(this.Transformer.Molecule.CreateModel, { modelIndex: 0 }, { isBinding: false, ref: 'model' })
+                .then(this.Transformer.Molecule.CreateMacromoleculeVisual, { polymer: true, polymerRef: 'polymer-visual', het: true, water: true });
+
+            this
+                ._liteMol.applyTransform(transform);
+
+            setTimeout(() => this.highlightChain(), 3000);
+
         }
 
         highlightChain() {
-            console.log('highlighting');
-            const model = this._liteMol.context.select('1AAP-model')[0];
+            console.log('highlighting', this._liteMol.context.select('polymer-visual')[0]);
+            const visual = this._liteMol.context.select('polymer-visual')[0];
+            if (!visual)
+                return;
 
-            const query = this.Query.sequence(1, 'A', { seqNumber: 10 }, { seqNumber: 20 });
-            this.Command.Molecule.Highlight.dispatch(this._liteMol.context, {model: model, query: query, isOn: true });
+            const query = this.Query.sequence(1, 'A', {
+                seqNumber: 10
+            }, {
+                seqNumber: 40
+            });
+
+            const action = this._liteMol.createTransform()
+                .add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, { query: query, name: 'My name' }, { ref: 'sequence-selection' });
+
+            // action.then(this.Transformer.Molecule.CreateVisual, { style: this.Visualization.Molecule.Default.ForType.get('BallsAndSticks') });
+
+            this._liteMol.applyTransform(action);
+
+            // this._liteMol.applyTransforms(action).then(function () {
+                // _this.Command.Visual.UpdateBasicTheme.dispatch(_this.plugin.context, { visual: visual, theme: theme });
+                // this.Command.Entity.Focus.dispatch(this._liteMol.context.context, this._liteMol.context.select('sequence-selection'));
+                // alternatively, you can do this
+                //Command.Molecule.FocusQuery.dispatch(plugin.context, { model: selectNodes('model')[0] as any, query })
+            // });
+
         }
 
     }
