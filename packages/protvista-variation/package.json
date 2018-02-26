@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Variation viewer for the ProtVista tool",
   "main": "dist/protvista-variation.js",
   "module": "src/main.js",

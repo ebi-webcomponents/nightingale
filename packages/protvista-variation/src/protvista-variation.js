@@ -68,6 +68,10 @@ class ProtvistaVariation extends ProtvistaZoomable {
         this._highlightEnd = highlighEnd;
     }
 
+    get isManaged() {
+        return true;
+    }
+
     static get observedAttributes() {
         return ProtvistaZoomable.observedAttributes.concat(['variantfilters','color']);
     }
