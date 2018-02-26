@@ -24,7 +24,7 @@ class ProtVistaManager extends HTMLElement {
 
   _registerProtvistaDescendents(element){
     for (const child of element.children){
-      if (child.localName.startsWith("protvista"))
+      if (child.isManaged)
         this.protvistaElements.add(child);
       this._registerProtvistaDescendents(child);
     }
