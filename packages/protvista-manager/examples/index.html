@@ -15,25 +15,25 @@
 
 <body>
   <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters" id="example">
-      <protvista-navigation length="223" displaystart="1" displayend="158" highlightStart="10" highlightEnd="45"></protvista-navigation>
-      <protvista-sequence id="seq1" length="223" displaystart="1" displayend="158"></protvista-sequence>
-      <!-- <protvista-track id="track1" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-track>
-      <protvista-track id="track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track> -->
-      <protvista-track id="track1" length="770" displaystart="1" displayend="770">
-        <protvista-feature-adapter id="adapter1">
-          <data-loader>
-            <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
-          </data-loader>
-        </protvista-feature-adapter>
-      </protvista-track>
-      <protvista-track id= "track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track>
-      <protvista-interpro-track id="track3" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-interpro-track>
-      <protvista-variation filters="disease" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45">
+    <protvista-navigation length="223" displaystart="1" displayend="158" highlightStart="10" highlightEnd="45"></protvista-navigation>
+    <protvista-sequence id="seq1" length="223" displaystart="1" displayend="158"></protvista-sequence>
+    <!-- <protvista-track id="track1" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-track>
+    <protvista-track id="track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track> -->
+    <protvista-track id="track1" length="770" displaystart="1" displayend="770">
+      <protvista-feature-adapter id="adapter1">
         <data-loader>
-          <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+          <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
         </data-loader>
-      </protvista-variation>
-      <protvista-variation-filter></protvista-variation-filter>
+      </protvista-feature-adapter>
+    </protvista-track>
+    <protvista-track id= "track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track>
+    <protvista-interpro-track id="track3" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-interpro-track>
+    <protvista-variation filters="disease" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45">
+      <data-loader>
+        <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+      </data-loader>
+    </protvista-variation>
+    <protvista-variation-filter></protvista-variation-filter>
   </protvista-manager>
 
   <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -54,40 +54,30 @@
   <script src="../node_modules/protvista-variation-filter/dist/protvista-variation-filter.js" charset="utf-8" defer></script>
   <script src="../node_modules/protvista-tooltip/dist/protvista-tooltip.js" charset="utf-8" defer></script>
   <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
-  <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>  
+  <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" charset="utf-8" defer></script>
   <script src="../node_modules/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
   <script src="../dist/protvista-manager.js" charset="utf-8" defer></script>
   <script>
     window.onload = () => {
       const seq = "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
-      document.querySelector("#seq1").data = seq;
+      document.querySelector("#example protvista-sequence").data = seq;
 
       const data = [
-        {
-          accession: 'feature1', start: 10, end: 40, color: '#342ea2', children: [
-            { accession: 'feature1.1', start: 12, end: 40 },
-            {
-              accession: 'feature1.2', locations: [{
-                fragments: [
-                  { start: 10, end: 27 },
-                  { start: 29, end: 40 },
-                ]              
-}]            
-},
-          ]
-        },
-        { accession: 'feature2', start: 30, end: 150, color: '#A42ea2' },
-        { accession: 'feature3', start: 155, end: 155, color: '#A4Aea2' },
-        {
-          accession: 'feature4', locations: [
-            {
-              fragments: [
-                { start: 2, end: 3 },
-                { start: 5, end: 5 }
-              ]
-            }
-          ], color: '#34Aea2'
-        },
+        {accession:'feature1', start: 10, end: 40, color: '#342ea2', children: [
+          {accession:'feature1.1', start: 12, end: 40},
+          {accession:'feature1.2', locations: [{ fragments:[
+            {start: 10, end: 27},
+            {start: 29, end: 40},
+          ]}]},
+        ]},
+        {accession:'feature2', start: 30, end: 150, color: '#A42ea2'},
+        {accession:'feature3', start: 155, end: 155, color: '#A4Aea2'},
+        {accession:'feature4', locations: [
+          { fragments:[
+            {start: 2, end: 3},
+            {start: 5, end: 5}
+          ]}
+        ], color: '#34Aea2'},
       ];
       document.querySelector("#track1").data = data;
       document.querySelector("#track2").data = data;

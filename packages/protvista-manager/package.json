@@ -1,6 +1,6 @@
 {
   "name": "protvista-manager",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Manager component for the ProtVista tool",
   "files": [
     "dist",
@@ -30,15 +30,19 @@
     "babel-preset-es2016": "^6.24.1",
     "browser-sync": "^2.23.5",
     "data-loader": "^0.3.0",
-    "protvista-interpro-track": "0.0.5",
-    "protvista-navigation": "0.0.4",
-    "protvista-sequence": "0.0.4",
-    "protvista-track": "0.0.4",
-    "protvista-variation": "0.0.0",
+    "protvista-feature-adapter": "0.0.4",
+    "protvista-interpro-track": "0.0.7",
+    "protvista-navigation": "0.0.5",
+    "protvista-sequence": "0.0.5",
+    "protvista-tooltip": "0.0.1",
+    "protvista-track": "0.0.7",
+    "protvista-variation": "0.0.4",
     "protvista-variation-filter": "0.0.0",
+    "protvista-zoomable": "0.0.4",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "rollup-watch": "^4.3.1"
+    "rollup-watch": "^4.3.1",
+    "uniprot-entry-data-adapter": "0.0.6"
   }
 }
