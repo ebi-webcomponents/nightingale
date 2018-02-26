@@ -64,6 +64,10 @@ class ProtVistaNavigation extends HTMLElement {
       this._width = width;
   }
 
+  get isManaged() {
+    return true;
+  }
+
   _createNavRuler() {
     this._x = scaleLinear().range([padding.left, this.width - padding.right]);
     this._x.domain([0, this._length+1]);
