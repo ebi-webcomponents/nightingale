@@ -88,6 +88,10 @@ class ProtvistaZoomable extends HTMLElement {
         return this._svg;
     }
 
+    get isManaged() {
+        return true;
+    }
+
     updateScaleDomain() {
         this.xScale = d3
             .scaleLinear()
