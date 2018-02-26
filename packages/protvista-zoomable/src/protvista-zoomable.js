@@ -1,4 +1,9 @@
-import * as d3 from 'd3';
+import {
+  scaleLinear,
+  zoom as d3zoom,
+  zoomIdentity,
+  event as d3Event
+} from 'd3';
 
 class ProtvistaZoomable extends HTMLElement {
 
@@ -93,8 +98,7 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     updateScaleDomain() {
-        this.xScale = d3
-            .scaleLinear()
+        this.xScale = scaleLinear()
             .domain([
                 0, this._length
             ])
@@ -104,7 +108,7 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     initZoom() {
-        this._zoom = d3.zoom()
+        this._zoom = d3zoom()
             .scaleExtent([1, 4])
             .translateExtent([
                 [
@@ -134,7 +138,7 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     zoomed() {
-        this.xScale = d3.event.transform
+        this.xScale = d3Event.transform
                 .rescaleX(this._originXScale);
         // this.refresh();
         // Only refresh in the applyZoomTranslation
@@ -158,7 +162,7 @@ class ProtvistaZoomable extends HTMLElement {
             .svg
             // .transition()
             // .duration(300)
-            .call(this.zoom.transform, d3.zoomIdentity.scale(k).translate(dx, 0));
+            .call(this.zoom.transform, zoomIdentity.scale(k).translate(dx, 0));
         this.dontDispatch = false;
         this.refresh();
     }
