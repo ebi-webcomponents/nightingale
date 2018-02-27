@@ -34,7 +34,7 @@ const loadComponent = function () {
 
         _render() {
             const mainHtml = () => html `
-            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters">
+            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters" additionalsubscribers="uuw-litemol-component">
                 <protvista-navigation length="${this._sequenceLength}"></protvista-navigation>
                 <protvista-sequence length="${this._sequenceLength}"></protvista-sequence>
                 ${categories.map(category =>
@@ -55,6 +55,7 @@ const loadComponent = function () {
                     `
                 )}
                 <protvista-sequence id="seq1" length="${this._sequenceLength}"></protvista-sequence>
+                <uuw-litemol-component accession="${this._accession}"></uuw-litemol-component>
             </protvista-manager>`;
             render(mainHtml(), this);
             this.querySelectorAll('.category-label').forEach(cat => {

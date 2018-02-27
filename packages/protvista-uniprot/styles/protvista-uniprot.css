@@ -13,6 +13,10 @@ protvista-uniprot protvista-manager protvista-sequence {
     grid-column-start: 2;
 }
 
+uuw-litemol-component {
+    grid-column: span 2;
+}
+
 .category-label,
 .track-label {
     padding: .5em;
