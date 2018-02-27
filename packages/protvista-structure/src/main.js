@@ -6,6 +6,7 @@ const loadComponent = function () {
             // We can't use the shadow DOM as the LiteMol component interacts with the
             // document DOM.
             this._loaded = false;
+            this._mappings = [];
             this._highlightstart = parseInt(this.getAttribute('highlightstart'));
             this._highlightend = parseInt(this.getAttribute('highlightend'));
             this.loadMolecule = this
@@ -67,11 +68,11 @@ const loadComponent = function () {
             `;
         }
 
-        getAccession() {
+        get accession() {
             return this.getAttribute('accession');
         }
 
-        setAccession(accession) {
+        set accession(accession) {
             return this.setAttribute('accession', accession);
         }
 
@@ -88,7 +89,7 @@ const loadComponent = function () {
             this.appendChild(this.tableDiv);
             this.loadLiteMol();
             this
-                .loadEntry()
+                .loadUniProtEntry()
                 .then(entry => {
                     const pdbEntries = entry
                         .dbReferences
@@ -102,6 +103,10 @@ const loadComponent = function () {
             return ['highlightstart', 'highlightend'];
         }
 
+        get isManaged() {
+            return true;
+        }
+
         attributeChangedCallback(attrName, oldVal, newVal) {
             if (oldVal !== newVal) {
                 const value = parseInt(newVal);
@@ -110,13 +115,22 @@ const loadComponent = function () {
             }
         }
 
-        async loadEntry() {
+        async loadUniProtEntry() {
             try {
-                return await (await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${this.getAccession()}`)).json();
+                return await (await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${this.accession}`)).json();
             } catch (e) {
-                console.log(`Couldn't load UniProt entry`, e);
+                throw new Error(`Couldn't load UniProt entry`, e);
             }
         }
+
+        async loadPDBEntry(pdbId) {
+            try {
+                return await (await fetch(`http://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`)).json();
+            } catch (e) {
+                throw new Error(`Couldn't load PDB entry`, e);
+            }
+        }
+
 
         loadStructureTable(pdbEntries) {
             const html = `
@@ -178,6 +192,7 @@ const loadComponent = function () {
                 .add('active');
             document.getElementById('litemol-title').textContent = id;
             this.loadMolecule(id);
+            this.loadMappingContext(id);
         }
 
         loadLiteMol() {
@@ -237,6 +252,33 @@ const loadComponent = function () {
             return this.Visualization.Molecule.uniformThemeProvider(void 0, { colors: colors });
         }
 
+        processMapping(id, mappingData) {
+            if(!Object.values(mappingData)[0].UniProt[this.accession])
+                return;
+            this._mappings = Object.values(mappingData)[0].UniProt[this.accession].mappings;
+        }
+
+        translatePositions(start, end) {
+            for(const mapping of this._mappings) {
+                if(start >= mapping.unp_start && end <= mapping.unp_end) {
+                    const offset = mapping.unp_start - mapping.start.residue_number;
+                    //TODO this is wrong because there are gaps in the PDB sequence
+                    return {
+                        entity: mapping.entity_id,
+                        chain: mapping.chain_id,
+                        start: (start - offset),
+                        end: (end - offset) 
+                    }
+                }
+            }
+        }
+
+        loadMappingContext(id) {
+            this.loadPDBEntry(id).then(d => {
+                this.processMapping(id, d);
+            });
+        }
+
         highlightChain() {
             if(!this._loaded || !this._highlightstart || !this._highlightend)
                 return;
@@ -248,10 +290,12 @@ const loadComponent = function () {
             if (!visual)
                 return;
 
-            const query = this.Query.sequence('1', 'A', {
-                seqNumber: this._highlightstart
+            const translatedPos = this.translatePositions(this._highlightstart, this._highlightend);
+
+            const query = this.Query.sequence(translatedPos.entity, translatedPos.chain, {
+                seqNumber: translatedPos.start
             }, {
-                seqNumber: this._highlightend
+                seqNumber: translatedPos.end
             });
 
             const theme = this.getTheme();
