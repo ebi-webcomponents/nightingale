@@ -1,6 +1,6 @@
 {
   "name": "uuw-litemol-component",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A custom element wrapper for litemol",
   "main": "dist/uuw-litemol-component.js",
   "files": [

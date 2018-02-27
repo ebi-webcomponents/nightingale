@@ -432,6 +432,12 @@ var loadComponent = function loadComponent() {
                     _this5.Command.Entity.Focus.dispatch(_this5._liteMol.context, _this5._liteMol.context.select('sequence-selection'));
                 });
             }
+        }, {
+            key: 'isManaged',
+            get: function get$$1() {
+                console.log('here');
+                return true;
+            }
         }], [{
             key: 'observedAttributes',
             get: function get$$1() {
