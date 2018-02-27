@@ -164,6 +164,10 @@ const loadComponent = function () {
             return chains.split('=')[1];
         }
 
+        get isManaged() {
+            return true;
+        }
+
         selectMolecule(id) {
             this
                 .querySelectorAll('.active')
