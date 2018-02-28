@@ -10,6 +10,12 @@ const fetchOne = async source => {
     // get data from remote endpoint
     const headers = new Headers({accept: 'application/json'});
     const response = await DataLoader.fetch(source.src, {headers});
+    if (!response.ok) {
+      throw new Error({
+        status: response.status,
+        statusText: response.statusText,
+      });
+    }
     return {
       payload: await response.json(),
       headers: response.headers,

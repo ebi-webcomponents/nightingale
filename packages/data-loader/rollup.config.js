@@ -7,8 +7,8 @@ export default {
   name: 'DataLoader',
   sourceMap: true,
   output: {
-      file: 'dist/index.js',
-      format: 'iife',
+    file: 'dist/index.js',
+    format: 'iife',
   },
   plugins: [
     nodeResolve({jsnext: true}),
