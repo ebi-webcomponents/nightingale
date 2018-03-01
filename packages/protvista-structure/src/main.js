@@ -3,8 +3,6 @@ const loadComponent = function () {
 
         constructor() {
             super();
-            // We can't use the shadow DOM as the LiteMol component interacts with the
-            // document DOM.
             this._loaded = false;
             this._mappings = [];
             this._highlightstart = parseInt(this.getAttribute('highlightstart'));
@@ -136,11 +134,11 @@ const loadComponent = function () {
             const html = `
                 <table>
                     <colgroup>
-                        <col syle="width: 100px">
-                        <col syle="width: 100px">
-                        <col syle="width: 100px">
-                        <col syle="width: 100px">
-                        <col syle="width: auto">
+                        <col style="width: 100px">
+                        <col style="width: 100px">
+                        <col style="width: 100px">
+                        <col style="width: 100px">
+                        <col style="width: auto">
                     </colgroup>
                     <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th><th>Positions</th></thead>
                     <tbody>
@@ -155,7 +153,7 @@ const loadComponent = function () {
                                 <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${d.id}">PDBSUM</a>
                                 </td>
                                 <td>${d.properties.method}</td>
-                                <td>${d.properties.resolution}</td>
+                                <td>${this.formatAngstrom(d.properties.resolution)}</td>
                                 <td title="${this.getChain(d.properties.chains)}">${this.getChain(d.properties.chains)}</td>
                                 <td>${this.getPositions(d.properties.chains)}</td>
                             </tr>
@@ -260,15 +258,21 @@ const loadComponent = function () {
 
         translatePositions(start, end) {
             for(const mapping of this._mappings) {
-                if(start >= mapping.unp_start && end <= mapping.unp_end) {
-                    const offset = mapping.unp_start - mapping.start.residue_number;
-                    //TODO this is wrong because there are gaps in the PDB sequence
-                    return {
-                        entity: mapping.entity_id,
-                        chain: mapping.chain_id,
-                        start: (start - offset),
-                        end: (end - offset) 
+                console.log(mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number);
+                if(mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number) {
+                    if(start >= mapping.unp_start && end <= mapping.unp_end) {
+                        const offset = mapping.unp_start - mapping.start.residue_number;
+                        //TODO this is wrong because there are gaps in the PDB sequence
+                        return {
+                            entity: mapping.entity_id,
+                            chain: mapping.chain_id,
+                            start: (start - offset),
+                            end: (end - offset) 
+                        }
                     }
+                } else {
+                    console.log('Non-exact mapping');
+                    return;
                 }
             }
         }
@@ -307,6 +311,10 @@ const loadComponent = function () {
                 this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, { visual: visual, theme: theme });
                 this.Command.Entity.Focus.dispatch(this._liteMol.context, this._liteMol.context.select('sequence-selection'));
             });
+        }
+
+        formatAngstrom(val) {
+            return val.replace('A','&#8491;');
         }
 
     }
