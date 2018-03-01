@@ -29,34 +29,35 @@ const loadComponent = function () {
                     position: relative;
                 }
                 .table-container table {
+                    display:flex;
+                    flex-flow:column;
                     width:100%;
                     height: 480px;
                     border-collapse: collapse;
                 }
                 .table-container thead {
                     min-height: 3em;
-                  }
-                  
-                .table-container th, .table-container td {
-                    box-sizing: border-box;
-                    flex: 1 0 5em;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                    flex: 0 0 auto;
+                    width: 100%;
                 }
-                .table-container table, .table-container thead, .table-container tbody, .table-container tfoot {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .table-container tr {
-                    display: flex;
-                    flex: 1 0;
-                }
+
                 .table-container tbody {
-                    overflow-y: auto;
+                    flex: 1 1 auto;
+                    display:block;
+                    overflow-y: scroll;
+                    border:none;
                 }
+
                 .table-container tbody tr {
+                    width:100%;
                     cursor: pointer;
                 }
+
+                .table-container thead, .table-container tbody tr {
+                    display: table;
+                    table-layout: fixed;
+                }
+
                 .table-container tbody tr:hover {
                     background-color: rgba(var(--blue), 0.15);;
                 }
@@ -133,29 +134,31 @@ const loadComponent = function () {
         loadStructureTable(pdbEntries) {
             const html = `
                 <table>
-                    <colgroup>
-                        <col style="width: 100px">
-                        <col style="width: 100px">
-                        <col style="width: 100px">
-                        <col style="width: 100px">
-                        <col style="width: auto">
-                    </colgroup>
-                    <thead><th>PDB Entry</th><th>Method</th><th>Resolution</th><th>Chain</th><th>Positions</th></thead>
+                    <thead>
+                        <th>PDB Entry</th>
+                        <th>Method</th>
+                        <th>Resolution</th>
+                        <th>Chain</th>
+                        <th>Positions</th>
+                        <th>Links</th>
+                    </thead>
                     <tbody>
                         ${pdbEntries
                 .map(d => `
                             <tr id="${d.id}" class="pdb-row">
                                 <td>
                                 <strong>${d.id}</strong><br/>
-                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/${d.id}">PDB</a> 
-                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${d.id}">RCSB-PDBi</a>
-                                <a target="_blank" href="//pdbj.org/mine/summary/${d.id}">PDBj</a>
-                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${d.id}">PDBSUM</a>
                                 </td>
                                 <td>${d.properties.method}</td>
                                 <td>${this.formatAngstrom(d.properties.resolution)}</td>
                                 <td title="${this.getChain(d.properties.chains)}">${this.getChain(d.properties.chains)}</td>
                                 <td>${this.getPositions(d.properties.chains)}</td>
+                                <td>
+                                    <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/${d.id}">PDB</a> 
+                                    <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${d.id}">RCSB-PDBi</a>
+                                    <a target="_blank" href="//pdbj.org/mine/summary/${d.id}">PDBj</a>
+                                    <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${d.id}">PDBSUM</a>
+                                </td>
                             </tr>
                         `)
                 .join('')}
