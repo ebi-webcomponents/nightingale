@@ -522,6 +522,7 @@ var loadComponent = function loadComponent() {
         }, {
             key: 'formatAngstrom',
             value: function formatAngstrom(val) {
+                if (!val) return;
                 return val.replace('A', '&#8491;');
             }
         }, {

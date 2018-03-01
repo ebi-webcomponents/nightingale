@@ -314,6 +314,8 @@ const loadComponent = function () {
         }
 
         formatAngstrom(val) {
+            if(!val) 
+                return;
             return val.replace('A','&#8491;');
         }
 
