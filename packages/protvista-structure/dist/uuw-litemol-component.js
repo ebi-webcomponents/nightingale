@@ -228,7 +228,7 @@ var loadComponent = function loadComponent() {
             _this.loadStructureTable = _this.loadStructureTable.bind(_this);
             var styleTag = document.createElement('style');
             _this.appendChild(styleTag);
-            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .litemol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    display:flex;\n                    flex-flow:column;\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                    flex: 0 0 auto;\n                    width: 100%;\n                }\n\n                .table-container tbody {\n                    flex: 1 1 auto;\n                    display:block;\n                    overflow-y: scroll;\n                    border:none;\n                }\n\n                .table-container tbody tr {\n                    width:100%;\n                    cursor: pointer;\n                }\n\n                .table-container thead, .table-container tbody tr {\n                    display: table;\n                    table-layout: fixed;\n                }\n\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
+            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .litemol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    display:flex;\n                    flex-flow:column;\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                    flex: 0 0 auto;\n                    width: 100%;\n                }\n\n                .table-container tbody {\n                    flex: 1 1 auto;\n                    display:block;\n                    overflow-y: scroll;\n                    border:none;\n                }\n                \n                .table-container tbody tr {\n                    width:100%;\n                    cursor: pointer;\n                }\n\n                .table-container thead, .table-container tbody tr {\n                    display: table;\n                    table-layout: fixed;\n                }\n\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
             return _this;
         }
 
@@ -390,7 +390,7 @@ var loadComponent = function loadComponent() {
                 this.Transformer = this.Bootstrap.Entity.Transformer;
                 this.Visualization = this.Bootstrap.Visualization;
                 this.Event = this.Bootstrap.Event;
-                // Plugin.Components.Context.Log(LayoutRegion.Bottom, true),
+                // Plugin.Components.Context.Log(this.Bootstrap.Components.LayoutRegion.Bottom, true);
                 this._liteMol = Plugin.create({
                     target: '#app',
                     viewportBackground: '#fff',
@@ -415,7 +415,26 @@ var loadComponent = function loadComponent() {
                     url: 'https://www.ebi.ac.uk/pdbe/coordinates/' + _id.toLowerCase() + '/full?encoding=BCIF',
                     type: 'Binary',
                     _id: _id
-                }).then(this.Transformer.Data.ParseBinaryCif, { id: _id }, { isBinding: true, ref: 'cifDict' }).then(this.Transformer.Molecule.CreateFromMmCif, { blockIndex: 0 }, { isBinding: true }).then(this.Transformer.Molecule.CreateModel, { modelIndex: 0 }, { isBinding: false, ref: 'model' }).then(this.Transformer.Molecule.CreateMacromoleculeVisual, { polymer: true, polymerRef: 'polymer-visual', het: true, water: true });
+                }).then(this.Transformer.Data.ParseBinaryCif, {
+                    id: _id
+                }, {
+                    isBinding: true,
+                    ref: 'cifDict'
+                }).then(this.Transformer.Molecule.CreateFromMmCif, {
+                    blockIndex: 0
+                }, {
+                    isBinding: true
+                }).then(this.Transformer.Molecule.CreateModel, {
+                    modelIndex: 0
+                }, {
+                    isBinding: false,
+                    ref: 'model'
+                }).then(this.Transformer.Molecule.CreateMacromoleculeVisual, {
+                    polymer: true,
+                    polymerRef: 'polymer-visual',
+                    het: true,
+                    water: true
+                });
 
                 this._liteMol.applyTransform(transform).then(function () {
                     _this4._loaded = true;
@@ -429,7 +448,9 @@ var loadComponent = function loadComponent() {
                 colors.set('Uniform', this.CoreVis.Color.fromRgb(207, 178, 178));
                 colors.set('Selection', this.CoreVis.Color.fromRgb(255, 255, 0));
                 colors.set('Highlight', this.CoreVis.Theme.Default.HighlightColor);
-                return this.Visualization.Molecule.uniformThemeProvider(void 0, { colors: colors });
+                return this.Visualization.Molecule.uniformThemeProvider(void 0, {
+                    colors: colors
+                });
             }
         }, {
             key: 'processMapping',
@@ -448,7 +469,8 @@ var loadComponent = function loadComponent() {
                     for (var _iterator = this._mappings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                         var mapping = _step.value;
 
-                        console.log(mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number);
+                        console.log('UP ' + mapping.unp_start + '-' + mapping.unp_end);
+                        console.log('PDB ' + mapping.start.residue_number + '-' + mapping.end.residue_number);
                         if (mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number) {
                             if (start >= mapping.unp_start && end <= mapping.unp_end) {
                                 var offset = mapping.unp_start - mapping.start.residue_number;
@@ -459,6 +481,9 @@ var loadComponent = function loadComponent() {
                                     start: start - offset,
                                     end: end - offset
                                 };
+                            } else {
+                                console.log('Positions not found in this structure');
+                                return;
                             }
                         } else {
                             console.log('Non-exact mapping');
@@ -503,8 +528,9 @@ var loadComponent = function loadComponent() {
                 if (!visual) return;
 
                 var translatedPos = this.translatePositions(this._highlightstart, this._highlightend);
+                if (!translatedPos) return;
 
-                var query = this.Query.sequence(translatedPos.entity, translatedPos.chain, {
+                var query = this.Query.sequence(translatedPos.entity.toString(), translatedPos.chain, {
                     seqNumber: translatedPos.start
                 }, {
                     seqNumber: translatedPos.end
@@ -512,10 +538,18 @@ var loadComponent = function loadComponent() {
 
                 var theme = this.getTheme();
 
-                var action = this._liteMol.createTransform().add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, { query: query, name: 'My name' }, { ref: 'sequence-selection' });
+                var action = this._liteMol.createTransform().add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, {
+                    query: query,
+                    name: 'My name'
+                }, {
+                    ref: 'sequence-selection'
+                });
 
                 this._liteMol.applyTransform(action).then(function () {
-                    _this6.Command.Visual.UpdateBasicTheme.dispatch(_this6._liteMol.context, { visual: visual, theme: theme });
+                    _this6.Command.Visual.UpdateBasicTheme.dispatch(_this6._liteMol.context, {
+                        visual: visual,
+                        theme: theme
+                    });
                     _this6.Command.Entity.Focus.dispatch(_this6._liteMol.context, _this6._liteMol.context.select('sequence-selection'));
                 });
             }
