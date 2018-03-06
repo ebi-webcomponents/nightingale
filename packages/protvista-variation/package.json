@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Variation viewer for the ProtVista tool",
   "files": [
     "dist",
