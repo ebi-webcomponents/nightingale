@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import {select, scalePow} from 'd3';
 import VariantColour from './variantColour';
 class VariationPlot {
 
@@ -7,8 +7,7 @@ class VariationPlot {
         this._xScale = xScale;
         this._yScale = yScale;
         // Scale for opacity of dots based on frequency
-        this._frequency = d3
-            .scalePow()
+        this._frequency = scalePow()
             .exponent(0.001)
             .domain([0, 1])
             .range([5, 10]);
@@ -38,7 +37,7 @@ class VariationPlot {
         // Iterate over data
         selection.each((data, i, nodes) => {
             // Generate chart
-            const series = d3.select(nodes[i]);
+            const series = select(nodes[i]);
 
             // ????
             const withVariants = data.filter(elem => elem.variants.length !== 0);

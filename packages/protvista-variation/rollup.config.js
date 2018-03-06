@@ -10,7 +10,7 @@ export default {
         file: 'dist/protvista-variation.js',
         format: 'iife'
     },
-    external: ['protvista-zoomable','d3'],
+    external: ['d3','protvista-track'],
     plugins : [
         postcss({extensions: ['.css']}),
         nodeResolve({jsnext: true}),

@@ -2,6 +2,10 @@
   "name": "protvista-variation",
   "version": "0.0.6",
   "description": "Variation viewer for the ProtVista tool",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/protvista-variation.js",
   "module": "src/main.js",
   "jsnext:main": "src/main.js",
@@ -29,7 +33,6 @@
     "bower": "^1.8.2",
     "browser-sync": "^2.12.5",
     "cssnano": "^3.10.0",
-    "data-loader": "^0.3.0",
     "eslint": "^4.12.0",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^3.0.2",

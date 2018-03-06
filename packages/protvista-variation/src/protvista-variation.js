@@ -1,4 +1,12 @@
-import * as d3 from 'd3';
+import ProtVistaTrack from "protvista-track";
+import {
+    scaleLinear,
+    scalePoint,
+    axisLeft,
+    axisRight,
+    select,
+    event as d3Event
+  } from 'd3';
 import {processVariants} from './dataTransformer';
 import VariationPlot from './variationPlot';
 import {getFiltersFromAttribute} from './filters';
@@ -31,64 +39,15 @@ const aaList = [
     '*'
 ];
 
-class ProtvistaVariation extends ProtvistaZoomable {
-
-    constructor() {
-        super();
-        this.renderChart = this
-            .renderChart
-            .bind(this);
-        this.createDataSeries = this
-            .createDataSeries
-            .bind(this);
-        this.refresh = this
-            .refresh
-            .bind(this);
-        // this.attributeChangedCallback = this
-        //     .attributeChangedCallback
-            // .bind(this);
-        this.updatedWidth = this
-            .updatedWidth
-            .bind(this);
-    }
-
-    get highlightStart() {
-        return this._highlightStart;
-    }
-
-    set highlightStart(highlightStart) {
-        this._highlightStart = highlightStart;
-    }
-
-    get highlightEnd() {
-        return this._highlightEnd;
-    }
-
-    set highlightEnd(highlighEnd) {
-        this._highlightEnd = highlighEnd;
-    }
-
-    get isManaged() {
-        return true;
-    }
+class ProtvistaVariation extends ProtVistaTrack {
 
     static get observedAttributes() {
-        return ProtvistaZoomable.observedAttributes.concat(['variantfilters','color']);
+        return ProtVistaTrack.observedAttributes.concat(['variantfilters']);
     }
 
     connectedCallback() {
         super.connectedCallback();
-
         this._accession = this.getAttribute('accession');
-        this._highlightEnd = parseInt(this.getAttribute('highlightend'))
-            ? parseInt(this.getAttribute('highlightend'))
-            : 0;
-        this._highlightStart = parseInt(this.getAttribute('highlightstart'))
-            ? parseInt(this.getAttribute('highlightstart'))
-            : 0;
-        this._highlightEnd = parseInt(this.getAttribute('highlightend'))
-            ? parseInt(this.getAttribute('highlightend'))
-            : 0;
         this._height = parseInt(this.getAttribute('height'))
             ? parseInt(this.getAttribute('height'))
             : 430;
@@ -100,13 +59,8 @@ class ProtvistaVariation extends ProtvistaZoomable {
             left: 10
         }
         // super.xScale = d3.scaleOrdinal();
-        this._yScale = d3.scaleLinear();
+        this._yScale = scaleLinear();
 
-        this.addEventListener('load', d => {
-            this._data = processVariants(d.detail.payload.features, d.detail.payload.sequence)
-            this.renderChart(this);
-            // this.updateData(filters.consequenceFilters[0].filter(this._data));
-        });
         // filtercontainer.addEventListener('protvista-filter-variants', d => {
         // this.applyFilters(d.detail); });
         // this.listenForResize();
@@ -126,16 +80,20 @@ class ProtvistaVariation extends ProtvistaZoomable {
         }
     }
 
-    renderChart(rootElement) {
-        super.svg = d3
-            .select(rootElement)
+    set data(data) {
+        this._data = processVariants(data.features, data.sequence);
+        this._createTrack();
+    }
+    
+    _createTrack() {
+        super.svg = select(this)
             .append('svg')
             .attr('width', '100%')
             .attr('height', this._height);
 
         // scale for Amino Acids
-        this._yScale = d3
-            .scalePoint()
+        this._yScale = 
+            scalePoint()
             .domain(aaList)
             .range([
                 0, this._height - this._margin.top - this._margin.bottom
@@ -152,13 +110,13 @@ class ProtvistaVariation extends ProtvistaZoomable {
         this._variationPlot = variationPlot;
 
         // Create the visualisation here
-        this.createDataSeries(super.svg, this._data);
+        this._createFeatures(super.svg, this._data);
     }
 
-    createDataSeries(svg, features) {
+    _createFeatures() {
 
         // Group for the main chart
-        const mainChart = svg
+        const mainChart = super.svg
             .append('g')
             .attr('transform', 'translate(0,' + this._margin.top + ')');
 
@@ -177,18 +135,18 @@ class ProtvistaVariation extends ProtvistaZoomable {
 
         // This is calling the data series render code for each of the items in the data
         const dataSeries = chartArea
-            .datum(features)
+            .datum(this._data)
             .call(this._variationPlot.drawVariationPlot);
 
         // This is the AA axis on left
-        this._yAxisLScale = d3
-            .axisLeft()
+        this._yAxisLScale = 
+            axisLeft()
             .scale(this._yScale)
             .tickSize(-this._width);
 
         // This is the AA axis on right
-        this._yAxisRScale = d3
-            .axisRight()
+        this._yAxisRScale = 
+            axisRight()
             .scale(this._yScale);
 
         // Adding AA axis left
@@ -241,40 +199,6 @@ class ProtvistaVariation extends ProtvistaZoomable {
         this.refresh();
     }
 
-    updatedWidth() {
-        this
-            ._xScale
-            .range([
-                this._margin.left, this._width - this._margin.right
-            ]);
-        //TODO there is also an issue here when already zoomed in
-        this
-            ._zoom
-            .translateExtent([
-                [
-                    0, 0
-                ],
-                [this._width, this._height]
-            ]);
-        this
-            ._clipPath
-            .attr('width', (this._width - 20));
-        this
-            ._yAxisLScale
-            .tickSize(-this._width);
-        this
-            ._axisLeft
-            .call(this._yAxisLScale)
-        this
-            ._axisRight
-            .attr('transform', 'translate(' + (this._width - 18) + ', 0)')
-            .call(this._yAxisRScale)
-        this.refresh();
-    }
-
-    setHighlightRegion() {
-        // this.svg.append
-    }
 }
 
 export default ProtvistaVariation;

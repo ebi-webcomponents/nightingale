@@ -4,9 +4,13 @@ function processVariants(variants, sequence) {
     // } ??? if (!evidenceAlreadyGrouped) {     variants =
     // groupEvidencesByCode(variants); }
 
+    if(!sequence)
+        return;
+
     const mutationArray = [];
     // ??? mutationArray.push({     'type': 'VARIANT',     'normal': 'del', 'pos':
     // 0,     'variants': [] });
+
     const seq = sequence.split('');
     for (let i in seq) {
         mutationArray.push({
