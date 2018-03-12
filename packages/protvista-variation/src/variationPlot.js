@@ -1,4 +1,8 @@
-import {select, scalePow} from 'd3';
+import {
+    select,
+    scalePow,
+    event as d3Event
+} from 'd3';
 import VariantColour from './variantColour';
 class VariationPlot {
 
@@ -33,7 +37,7 @@ class VariationPlot {
         this._length = length;
     }
 
-    drawVariationPlot(selection) {
+    drawVariationPlot(selection, element) {
         // Iterate over data
         selection.each((data, i, nodes) => {
             // Generate chart
@@ -80,13 +84,14 @@ class VariationPlot {
                     return this._yScale(d.alternativeSequence.charAt(0))
                 })
                 .attr('name', d => {
-                    var mutation = d.alternativeSequence === '*'
-                        ? 'STOP'
-                        : d.alternativeSequence;
+                    var mutation = d.alternativeSequence === '*' ?
+                        'STOP' :
+                        d.alternativeSequence;
                     d.internalId = 'var_' + d.wildType + d.begin + mutation;
                     return d.internalId;
                 })
                 .attr('fill', d => VariantColour.getColour(d))
+                .attr('tooltip-trigger', 'true')
                 .attr('stroke', d => {
                     if (d.externalData) {
                         var keys = _.keys(d.externalData);
@@ -95,15 +100,28 @@ class VariationPlot {
                             var pos = Constants
                                 .getConsequenceTypes()
                                 .indexOf(extDatum.consequence);
-                            return pos !== -1
-                                ? LegendDialog.consequenceColors[pos % LegendDialog.consequenceColors.length]
-                                : 'black';
+                            return pos !== -1 ?
+                                LegendDialog.consequenceColors[pos % LegendDialog.consequenceColors.length] :
+                                'black';
                         } else {
                             return 'black';
                         }
                     } else {
                         return 'none';
                     }
+                })
+                .on('mouseover', f => {
+                    element.dispatchEvent(new CustomEvent("change", {
+                        detail: {
+                            highlightend: f.end,
+                            highlightstart: f.start
+                        },
+                        bubbles: true,
+                        cancelable: true
+                    }));
+                })
+                .on('click', d => {
+                    element.createTooltip(d3Event, d, true);
                 });
 
             // ViewerHelper.addEventsClassAndTitle(catTitle, newCircles, fv, container);

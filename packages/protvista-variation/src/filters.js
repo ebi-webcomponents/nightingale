@@ -40,14 +40,15 @@ const filters = [
         name: 'UniProt',
         applyFilter: data => {
             const filteredData = cloneDeep(data);
-            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.sourceType === 'uniprot' || variant.sourceType === 'mixed'));
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.xrefNames.includes('uniprot')));
             return filteredData;
         }
     }, {
         name: 'ClinVar',
         applyFilter: data => {
-            // TODO Waiting for data service model change to check variant.sourceType ===
-            // clinVar'
+            const filteredData = cloneDeep(data);
+            filteredData.forEach(variants => variants.variants = variants.variants.filter(variant => variant.xrefNames.includes('clinvar')));
+            return filteredData;
         }
     }, {
         name: 'LSS',

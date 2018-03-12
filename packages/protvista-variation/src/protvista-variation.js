@@ -75,7 +75,7 @@ class ProtvistaVariation extends ProtVistaTrack {
             case 'variantfilters':
                 if (newVal !== oldVal) {
                     this._selectedFilters = getFiltersFromAttribute(this.getAttribute('variantfilters'));
-                    this.applyFilters(this._selectedFilters);
+                    this.applyFilters();
                 }
         }
     }
@@ -83,6 +83,8 @@ class ProtvistaVariation extends ProtVistaTrack {
     set data(data) {
         this._data = processVariants(data.features, data.sequence);
         this._createTrack();
+        if(this._selectedFilters)
+            this.applyFilters();
     }
     
     _createTrack() {
@@ -136,7 +138,7 @@ class ProtvistaVariation extends ProtVistaTrack {
         // This is calling the data series render code for each of the items in the data
         const dataSeries = chartArea
             .datum(this._data)
-            .call(this._variationPlot.drawVariationPlot);
+            .call(this._variationPlot.drawVariationPlot, this);
 
         // This is the AA axis on left
         this._yAxisLScale = 
@@ -175,7 +177,7 @@ class ProtvistaVariation extends ProtVistaTrack {
             this._variationPlot.xScale = super.xScale;
             this
             ._series
-            .call(this._variationPlot.drawVariationPlot);
+            .call(this._variationPlot.drawVariationPlot, this);
         }
     }
 
@@ -183,9 +185,13 @@ class ProtvistaVariation extends ProtVistaTrack {
         // reset zoom, filter and any selections
     }
 
-    applyFilters(selectedFilters) {
+    applyFilters() {
         let filteredData = [];
-        selectedFilters.forEach(f => {
+        if(this._selectedFilters.length <= 0) {
+            this.updateData(this._data);
+            return;
+        }
+        this._selectedFilters.forEach(f => {
             filteredData = union(f.applyFilter(this._data), filteredData);
         });
         this.updateData(filteredData);
