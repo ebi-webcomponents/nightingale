@@ -1,0 +1,48 @@
+:root {
+    --blue: 0,112,155;
+    --width: 100%;
+}
+uuw-litemol-component {
+    display:flex;
+}
+.litemol-container, .table-container {
+    width: var(--width);
+    height: 480px;
+    position: relative;
+}
+.table-container table {
+    display:flex;
+    flex-flow:column;
+    width:100%;
+    height: 480px;
+    border-collapse: collapse;
+}
+.table-container thead {
+    min-height: 3em;
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+.table-container tbody {
+    flex: 1 1 auto;
+    display:block;
+    overflow-y: scroll;
+    border:none;
+}
+
+.table-container tbody tr {
+    width:100%;
+    cursor: pointer;
+}
+
+.table-container thead, .table-container tbody tr {
+    display: table;
+    table-layout: fixed;
+}
+
+.table-container tbody tr:hover {
+    background-color: rgba(var(--blue), 0.15);;
+}
+.table-container tr.active {
+    background-color: rgba(var(--blue), 0.3);;
+}

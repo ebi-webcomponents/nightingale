@@ -1,6 +1,36 @@
 (function () {
 'use strict';
 
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css = ":root {\n    --blue: 0,112,155;\n    --width: 100%;\n}\nuuw-litemol-component {\n    display:flex;\n}\n.litemol-container, .table-container {\n    width: var(--width);\n    height: 480px;\n    position: relative;\n}\n.table-container table {\n    display:flex;\n    flex-flow:column;\n    width:100%;\n    height: 480px;\n    border-collapse: collapse;\n}\n.table-container thead {\n    min-height: 3em;\n    flex: 0 0 auto;\n    width: 100%;\n}\n\n.table-container tbody {\n    flex: 1 1 auto;\n    display:block;\n    overflow-y: scroll;\n    border:none;\n}\n\n.table-container tbody tr {\n    width:100%;\n    cursor: pointer;\n}\n\n.table-container thead, .table-container tbody tr {\n    display: table;\n    table-layout: fixed;\n}\n\n.table-container tbody tr:hover {\n    background-color: rgba(var(--blue), 0.15);;\n}\n.table-container tr.active {\n    background-color: rgba(var(--blue), 0.3);;\n}";
+styleInject(css);
+
 var asyncGenerator = function () {
   function AwaitValue(value) {
     this.value = value;
@@ -211,376 +241,376 @@ var possibleConstructorReturn = function (self, call) {
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
-var loadComponent = function loadComponent() {
-    var UuwLitemolComponent = function (_HTMLElement) {
-        inherits(UuwLitemolComponent, _HTMLElement);
+var UuwLitemolComponent = function (_HTMLElement) {
+    inherits(UuwLitemolComponent, _HTMLElement);
 
-        function UuwLitemolComponent() {
-            classCallCheck(this, UuwLitemolComponent);
+    function UuwLitemolComponent() {
+        classCallCheck(this, UuwLitemolComponent);
 
-            var _this = possibleConstructorReturn(this, (UuwLitemolComponent.__proto__ || Object.getPrototypeOf(UuwLitemolComponent)).call(this));
+        var _this = possibleConstructorReturn(this, (UuwLitemolComponent.__proto__ || Object.getPrototypeOf(UuwLitemolComponent)).call(this));
 
-            _this._loaded = false;
-            _this._mappings = [];
-            _this._highlightstart = parseInt(_this.getAttribute('highlightstart'));
-            _this._highlightend = parseInt(_this.getAttribute('highlightend'));
-            _this.loadMolecule = _this.loadMolecule.bind(_this);
-            _this.loadStructureTable = _this.loadStructureTable.bind(_this);
-            var styleTag = document.createElement('style');
-            _this.appendChild(styleTag);
-            styleTag.innerHTML = '\n                :root {\n                    --blue: 0,112,155;\n                    --width: 100%;\n                }\n                uuw-litemol-component {\n                    display:flex;\n                }\n                .litemol-container, .table-container {\n                    width: var(--width);\n                    height: 480px;\n                    position: relative;\n                }\n                .table-container table {\n                    display:flex;\n                    flex-flow:column;\n                    width:100%;\n                    height: 480px;\n                    border-collapse: collapse;\n                }\n                .table-container thead {\n                    min-height: 3em;\n                    flex: 0 0 auto;\n                    width: 100%;\n                }\n\n                .table-container tbody {\n                    flex: 1 1 auto;\n                    display:block;\n                    overflow-y: scroll;\n                    border:none;\n                }\n                \n                .table-container tbody tr {\n                    width:100%;\n                    cursor: pointer;\n                }\n\n                .table-container thead, .table-container tbody tr {\n                    display: table;\n                    table-layout: fixed;\n                }\n\n                .table-container tbody tr:hover {\n                    background-color: rgba(var(--blue), 0.15);;\n                }\n                .table-container tr.active {\n                    background-color: rgba(var(--blue), 0.3);;\n                }\n            ';
-            return _this;
+        _this._loaded = false;
+        _this._mappings = [];
+        _this._highlightstart = parseInt(_this.getAttribute('highlightstart'));
+        _this._highlightend = parseInt(_this.getAttribute('highlightend'));
+        _this.loadMolecule = _this.loadMolecule.bind(_this);
+        _this.loadStructureTable = _this.loadStructureTable.bind(_this);
+        return _this;
+    }
+
+    createClass(UuwLitemolComponent, [{
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+            var _this2 = this;
+
+            this.titleContainer = document.createElement('h4');
+            this.titleContainer.id = 'litemol-title';
+            this.tableDiv = document.createElement('div');
+            this.tableDiv.className = 'table-container';
+            var litemolDiv = document.createElement('div');
+            litemolDiv.className = 'litemol-container';
+            litemolDiv.id = 'app';
+            this.appendChild(this.titleContainer);
+            this.appendChild(litemolDiv);
+            this.appendChild(this.tableDiv);
+            this.loadLiteMol();
+            this.loadUniProtEntry().then(function (entry) {
+                _this2._pdbEntries = entry.dbReferences.filter(function (dbref) {
+                    return dbref.type === 'PDB';
+                });
+                _this2.loadStructureTable();
+                _this2.selectMolecule(_this2._pdbEntries[0].id);
+            });
         }
-
-        createClass(UuwLitemolComponent, [{
-            key: 'connectedCallback',
-            value: function connectedCallback() {
-                var _this2 = this;
-
-                this.titleContainer = document.createElement('h4');
-                this.titleContainer.id = 'litemol-title';
-                this.tableDiv = document.createElement('div');
-                this.tableDiv.className = 'table-container';
-                var litemolDiv = document.createElement('div');
-                litemolDiv.className = 'litemol-container';
-                litemolDiv.id = 'app';
-                this.appendChild(this.titleContainer);
-                this.appendChild(litemolDiv);
-                this.appendChild(this.tableDiv);
-                this.loadLiteMol();
-                this.loadUniProtEntry().then(function (entry) {
-                    var pdbEntries = entry.dbReferences.filter(function (dbref) {
-                        return dbref.type === 'PDB';
-                    });
-                    _this2.loadStructureTable(pdbEntries);
-                    _this2.selectMolecule(pdbEntries[0].id);
-                });
+    }, {
+        key: 'attributeChangedCallback',
+        value: function attributeChangedCallback(attrName, oldVal, newVal) {
+            if (oldVal !== newVal) {
+                var value = parseInt(newVal);
+                this['_' + attrName] = isNaN(value) ? newVal : value;
+                this.highlightChain();
             }
-        }, {
-            key: 'attributeChangedCallback',
-            value: function attributeChangedCallback(attrName, oldVal, newVal) {
-                if (oldVal !== newVal) {
-                    var value = parseInt(newVal);
-                    this['_' + attrName] = isNaN(value) ? newVal : value;
-                    this.highlightChain();
-                }
-            }
-        }, {
-            key: 'loadUniProtEntry',
-            value: function () {
-                var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                        while (1) {
-                            switch (_context.prev = _context.next) {
-                                case 0:
-                                    _context.prev = 0;
-                                    _context.next = 3;
-                                    return fetch('https://www.ebi.ac.uk/proteins/api/proteins/' + this.accession);
+        }
+    }, {
+        key: 'loadUniProtEntry',
+        value: function () {
+            var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.prev = 0;
+                                _context.next = 3;
+                                return fetch('https://www.ebi.ac.uk/proteins/api/proteins/' + this.accession);
 
-                                case 3:
-                                    _context.next = 5;
-                                    return _context.sent.json();
+                            case 3:
+                                _context.next = 5;
+                                return _context.sent.json();
 
-                                case 5:
-                                    return _context.abrupt('return', _context.sent);
+                            case 5:
+                                return _context.abrupt('return', _context.sent);
 
-                                case 8:
-                                    _context.prev = 8;
-                                    _context.t0 = _context['catch'](0);
-                                    throw new Error('Couldn\'t load UniProt entry', _context.t0);
+                            case 8:
+                                _context.prev = 8;
+                                _context.t0 = _context['catch'](0);
+                                throw new Error('Couldn\'t load UniProt entry', _context.t0);
 
-                                case 11:
-                                case 'end':
-                                    return _context.stop();
-                            }
+                            case 11:
+                            case 'end':
+                                return _context.stop();
                         }
-                    }, _callee, this, [[0, 8]]);
-                }));
+                    }
+                }, _callee, this, [[0, 8]]);
+            }));
 
-                function loadUniProtEntry() {
-                    return _ref.apply(this, arguments);
-                }
+            function loadUniProtEntry() {
+                return _ref.apply(this, arguments);
+            }
 
-                return loadUniProtEntry;
-            }()
-        }, {
-            key: 'loadPDBEntry',
-            value: function () {
-                var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(pdbId) {
-                    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-                        while (1) {
-                            switch (_context2.prev = _context2.next) {
-                                case 0:
-                                    _context2.prev = 0;
-                                    _context2.next = 3;
-                                    return fetch('http://www.ebi.ac.uk/pdbe/api/mappings/uniprot/' + pdbId);
+            return loadUniProtEntry;
+        }()
+    }, {
+        key: 'loadPDBEntry',
+        value: function () {
+            var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(pdbId) {
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                _context2.prev = 0;
+                                _context2.next = 3;
+                                return fetch('http://www.ebi.ac.uk/pdbe/api/mappings/uniprot/' + pdbId);
 
-                                case 3:
-                                    _context2.next = 5;
-                                    return _context2.sent.json();
+                            case 3:
+                                _context2.next = 5;
+                                return _context2.sent.json();
 
-                                case 5:
-                                    return _context2.abrupt('return', _context2.sent);
+                            case 5:
+                                return _context2.abrupt('return', _context2.sent);
 
-                                case 8:
-                                    _context2.prev = 8;
-                                    _context2.t0 = _context2['catch'](0);
-                                    throw new Error('Couldn\'t load PDB entry', _context2.t0);
+                            case 8:
+                                _context2.prev = 8;
+                                _context2.t0 = _context2['catch'](0);
+                                throw new Error('Couldn\'t load PDB entry', _context2.t0);
 
-                                case 11:
-                                case 'end':
-                                    return _context2.stop();
-                            }
+                            case 11:
+                            case 'end':
+                                return _context2.stop();
                         }
-                    }, _callee2, this, [[0, 8]]);
-                }));
+                    }
+                }, _callee2, this, [[0, 8]]);
+            }));
 
-                function loadPDBEntry(_x) {
-                    return _ref2.apply(this, arguments);
-                }
+            function loadPDBEntry(_x) {
+                return _ref2.apply(this, arguments);
+            }
 
-                return loadPDBEntry;
-            }()
-        }, {
-            key: 'loadStructureTable',
-            value: function loadStructureTable(pdbEntries) {
-                var _this3 = this;
+            return loadPDBEntry;
+        }()
+    }, {
+        key: 'loadStructureTable',
+        value: function loadStructureTable() {
+            var _this3 = this;
 
-                var html = '\n                <table>\n                    <thead>\n                        <th>PDB Entry</th>\n                        <th>Method</th>\n                        <th>Resolution</th>\n                        <th>Chain</th>\n                        <th>Positions</th>\n                        <th>Links</th>\n                    </thead>\n                    <tbody>\n                        ' + pdbEntries.map(function (d) {
-                    return '\n                            <tr id="' + d.id + '" class="pdb-row">\n                                <td>\n                                <strong>' + d.id + '</strong><br/>\n                                </td>\n                                <td>' + d.properties.method + '</td>\n                                <td>' + _this3.formatAngstrom(d.properties.resolution) + '</td>\n                                <td title="' + _this3.getChain(d.properties.chains) + '">' + _this3.getChain(d.properties.chains) + '</td>\n                                <td>' + _this3.getPositions(d.properties.chains) + '</td>\n                                <td>\n                                    <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/' + d.id + '">PDB</a> \n                                    <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=' + d.id + '">RCSB-PDBi</a>\n                                    <a target="_blank" href="//pdbj.org/mine/summary/' + d.id + '">PDBj</a>\n                                    <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=' + d.id + '">PDBSUM</a>\n                                </td>\n                            </tr>\n                        ';
-                }).join('') + '\n                    </tbody>\n                </table>\n            ';
-                this.tableDiv.innerHTML = html;
-                this.querySelectorAll('.pdb-row').forEach(function (row) {
-                    return row.addEventListener('click', function (e) {
-                        return _this3.selectMolecule(row.id);
-                    });
+            var html = '\n            <table>\n                <thead>\n                    <th>PDB Entry</th>\n                    <th>Method</th>\n                    <th>Resolution</th>\n                    <th>Chain</th>\n                    <th>Positions</th>\n                    <th>Links</th>\n                </thead>\n                <tbody>\n                    ' + this._pdbEntries.map(function (d) {
+                return '\n                        <tr id="' + d.id + '" class="pdb-row">\n                            <td>\n                            <strong>' + d.id + '</strong><br/>\n                            </td>\n                            <td>' + d.properties.method + '</td>\n                            <td>' + _this3.formatAngstrom(d.properties.resolution) + '</td>\n                            <td title="' + _this3.getChain(d.properties.chains) + '">' + _this3.getChain(d.properties.chains) + '</td>\n                            <td>' + _this3.getPositions(d.properties.chains) + '</td>\n                            <td>\n                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/' + d.id + '">PDB</a> \n                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=' + d.id + '">RCSB-PDBi</a>\n                                <a target="_blank" href="//pdbj.org/mine/summary/' + d.id + '">PDBj</a>\n                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=' + d.id + '">PDBSUM</a>\n                            </td>\n                        </tr>\n                    ';
+            }).join('') + '\n                </tbody>\n            </table>\n        ';
+            this.tableDiv.innerHTML = html;
+            this.querySelectorAll('.pdb-row').forEach(function (row) {
+                return row.addEventListener('click', function (e) {
+                    return _this3.selectMolecule(row.id);
                 });
-            }
-        }, {
-            key: 'getChain',
-            value: function getChain(chains) {
-                return chains.split('=')[0];
-            }
-        }, {
-            key: 'getPositions',
-            value: function getPositions(chains) {
-                return chains.split('=')[1];
-            }
-        }, {
-            key: 'selectMolecule',
-            value: function selectMolecule(id) {
-                this.querySelectorAll('.active').forEach(function (row) {
-                    return row.classList.remove('active');
-                });
-                document.getElementById(id).classList.add('active');
-                document.getElementById('litemol-title').textContent = id;
-                this.loadMolecule(id);
-                this.loadMappingContext(id);
-            }
-        }, {
-            key: 'loadLiteMol',
-            value: function loadLiteMol() {
-                var Plugin = LiteMol.Plugin;
-                this.Command = LiteMol.Bootstrap.Command;
-                this.Query = LiteMol.Core.Structure.Query;
-                this.Bootstrap = LiteMol.Bootstrap;
-                this.Core = LiteMol.Core;
-                this.Tree = this.Bootstrap.Tree;
-                this.CoreVis = LiteMol.Visualization;
-                this.Transformer = this.Bootstrap.Entity.Transformer;
-                this.Visualization = this.Bootstrap.Visualization;
-                this.Event = this.Bootstrap.Event;
-                // Plugin.Components.Context.Log(this.Bootstrap.Components.LayoutRegion.Bottom, true);
-                this._liteMol = Plugin.create({
-                    target: '#app',
-                    viewportBackground: '#fff',
-                    layoutState: {
-                        hideControls: true
-                    },
-                    allowAnalytics: false
-                });
-            }
-        }, {
-            key: 'loadMolecule',
-            value: function loadMolecule(_id) {
-                var _this4 = this;
+            });
+        }
+    }, {
+        key: 'getChain',
+        value: function getChain(chains) {
+            return chains.split('=')[0];
+        }
+    }, {
+        key: 'getPositions',
+        value: function getPositions(chains) {
+            return chains.split('=')[1];
+        }
+    }, {
+        key: 'selectMolecule',
+        value: function selectMolecule(id) {
+            this.querySelectorAll('.active').forEach(function (row) {
+                return row.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+            document.getElementById('litemol-title').textContent = id;
+            this.loadMolecule(id);
+            this.loadMappingContext(id);
+        }
+    }, {
+        key: 'loadLiteMol',
+        value: function loadLiteMol() {
+            var Plugin = LiteMol.Plugin;
+            this.Command = LiteMol.Bootstrap.Command;
+            this.Query = LiteMol.Core.Structure.Query;
+            this.Bootstrap = LiteMol.Bootstrap;
+            this.Core = LiteMol.Core;
+            this.Tree = this.Bootstrap.Tree;
+            this.CoreVis = LiteMol.Visualization;
+            this.Transformer = this.Bootstrap.Entity.Transformer;
+            this.Visualization = this.Bootstrap.Visualization;
+            this.Event = this.Bootstrap.Event;
+            // Plugin.Components.Context.Log(this.Bootstrap.Components.LayoutRegion.Bottom, true);
+            this._liteMol = Plugin.create({
+                target: '#app',
+                viewportBackground: '#fff',
+                layoutState: {
+                    hideControls: true
+                },
+                allowAnalytics: false
+            });
+        }
+    }, {
+        key: 'loadMolecule',
+        value: function loadMolecule(_id) {
+            var _this4 = this;
 
-                this._loaded = false;
+            this._loaded = false;
 
-                this._liteMol.clear();
+            this._liteMol.clear();
 
-                var transform = this._liteMol.createTransform();
+            var transform = this._liteMol.createTransform();
 
-                transform.add(this._liteMol.root, this.Transformer.Data.Download, {
-                    url: 'https://www.ebi.ac.uk/pdbe/coordinates/' + _id.toLowerCase() + '/full?encoding=BCIF',
-                    type: 'Binary',
-                    _id: _id
-                }).then(this.Transformer.Data.ParseBinaryCif, {
-                    id: _id
-                }, {
-                    isBinding: true,
-                    ref: 'cifDict'
-                }).then(this.Transformer.Molecule.CreateFromMmCif, {
-                    blockIndex: 0
-                }, {
-                    isBinding: true
-                }).then(this.Transformer.Molecule.CreateModel, {
-                    modelIndex: 0
-                }, {
-                    isBinding: false,
-                    ref: 'model'
-                }).then(this.Transformer.Molecule.CreateMacromoleculeVisual, {
-                    polymer: true,
-                    polymerRef: 'polymer-visual',
-                    het: true,
-                    water: true
-                });
+            transform.add(this._liteMol.root, this.Transformer.Data.Download, {
+                url: 'https://www.ebi.ac.uk/pdbe/coordinates/' + _id.toLowerCase() + '/full?encoding=BCIF',
+                type: 'Binary',
+                _id: _id
+            }).then(this.Transformer.Data.ParseBinaryCif, {
+                id: _id
+            }, {
+                isBinding: true,
+                ref: 'cifDict'
+            }).then(this.Transformer.Molecule.CreateFromMmCif, {
+                blockIndex: 0
+            }, {
+                isBinding: true
+            }).then(this.Transformer.Molecule.CreateModel, {
+                modelIndex: 0
+            }, {
+                isBinding: false,
+                ref: 'model'
+            }).then(this.Transformer.Molecule.CreateMacromoleculeVisual, {
+                polymer: true,
+                polymerRef: 'polymer-visual',
+                het: true,
+                water: true
+            });
 
-                this._liteMol.applyTransform(transform).then(function () {
-                    _this4._loaded = true;
-                    _this4.highlightChain();
-                });
-            }
-        }, {
-            key: 'getTheme',
-            value: function getTheme() {
-                var colors = new Map();
-                colors.set('Uniform', this.CoreVis.Color.fromRgb(207, 178, 178));
-                colors.set('Selection', this.CoreVis.Color.fromRgb(255, 255, 0));
-                colors.set('Highlight', this.CoreVis.Theme.Default.HighlightColor);
-                return this.Visualization.Molecule.uniformThemeProvider(void 0, {
-                    colors: colors
-                });
-            }
-        }, {
-            key: 'processMapping',
-            value: function processMapping(id, mappingData) {
-                if (!Object.values(mappingData)[0].UniProt[this.accession]) return;
-                this._mappings = Object.values(mappingData)[0].UniProt[this.accession].mappings;
-            }
-        }, {
-            key: 'translatePositions',
-            value: function translatePositions(start, end) {
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
+            this._liteMol.applyTransform(transform).then(function () {
+                _this4._loaded = true;
+                _this4.highlightChain();
+            });
+        }
+    }, {
+        key: 'getTheme',
+        value: function getTheme() {
+            var colors = new Map();
+            colors.set('Uniform', this.CoreVis.Color.fromRgb(207, 178, 178));
+            colors.set('Selection', this.CoreVis.Color.fromRgb(255, 255, 0));
+            colors.set('Highlight', this.CoreVis.Theme.Default.HighlightColor);
+            return this.Visualization.Molecule.uniformThemeProvider(void 0, {
+                colors: colors
+            });
+        }
+    }, {
+        key: 'processMapping',
+        value: function processMapping(id, mappingData) {
+            if (!Object.values(mappingData)[0].UniProt[this.accession]) return;
+            this._mappings = Object.values(mappingData)[0].UniProt[this.accession].mappings;
+        }
+    }, {
+        key: 'translatePositions',
+        value: function translatePositions(start, end) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-                try {
-                    for (var _iterator = this._mappings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var mapping = _step.value;
+            try {
+                for (var _iterator = this._mappings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var mapping = _step.value;
 
-                        console.log('UP ' + mapping.unp_start + '-' + mapping.unp_end);
-                        console.log('PDB ' + mapping.start.residue_number + '-' + mapping.end.residue_number);
-                        if (mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number) {
-                            if (start >= mapping.unp_start && end <= mapping.unp_end) {
-                                var offset = mapping.unp_start - mapping.start.residue_number;
-                                //TODO this is wrong because there are gaps in the PDB sequence
-                                return {
-                                    entity: mapping.entity_id,
-                                    chain: mapping.chain_id,
-                                    start: start - offset,
-                                    end: end - offset
-                                };
-                            } else {
-                                console.log('Positions not found in this structure');
-                                return;
-                            }
+                    console.log('UP ' + mapping.unp_start + '-' + mapping.unp_end);
+                    console.log('PDB ' + mapping.start.residue_number + '-' + mapping.end.residue_number);
+                    if (mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number) {
+                        if (start >= mapping.unp_start && end <= mapping.unp_end) {
+                            var offset = mapping.unp_start - mapping.start.residue_number;
+                            //TODO this is wrong because there are gaps in the PDB sequence
+                            return {
+                                entity: mapping.entity_id,
+                                chain: mapping.chain_id,
+                                start: start - offset,
+                                end: end - offset
+                            };
                         } else {
-                            console.log('Non-exact mapping');
+                            console.log('Positions not found in this structure');
                             return;
                         }
+                    } else {
+                        console.log('Non-exact mapping');
+                        return;
                     }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
                 } finally {
-                    try {
-                        if (!_iteratorNormalCompletion && _iterator.return) {
-                            _iterator.return();
-                        }
-                    } finally {
-                        if (_didIteratorError) {
-                            throw _iteratorError;
-                        }
+                    if (_didIteratorError) {
+                        throw _iteratorError;
                     }
                 }
             }
-        }, {
-            key: 'loadMappingContext',
-            value: function loadMappingContext(id) {
-                var _this5 = this;
+        }
+    }, {
+        key: 'loadMappingContext',
+        value: function loadMappingContext(id) {
+            var _this5 = this;
 
-                this.loadPDBEntry(id).then(function (d) {
-                    _this5.processMapping(id, d);
+            this.loadPDBEntry(id).then(function (d) {
+                _this5.processMapping(id, d);
+            });
+        }
+    }, {
+        key: 'highlightChain',
+        value: function highlightChain() {
+            var _this6 = this;
+
+            if (!this._loaded || !this._highlightstart || !this._highlightend) return;
+
+            this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, void 0);
+            this.Command.Tree.RemoveNode.dispatch(this._liteMol.context, 'sequence-selection');
+
+            var visual = this._liteMol.context.select('polymer-visual')[0];
+            if (!visual) return;
+
+            var translatedPos = this.translatePositions(this._highlightstart, this._highlightend);
+            if (!translatedPos) return;
+
+            var query = this.Query.sequence(translatedPos.entity.toString(), translatedPos.chain, {
+                seqNumber: translatedPos.start
+            }, {
+                seqNumber: translatedPos.end
+            });
+
+            var theme = this.getTheme();
+
+            var action = this._liteMol.createTransform().add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, {
+                query: query,
+                name: 'My name'
+            }, {
+                ref: 'sequence-selection'
+            });
+
+            this._liteMol.applyTransform(action).then(function () {
+                _this6.Command.Visual.UpdateBasicTheme.dispatch(_this6._liteMol.context, {
+                    visual: visual,
+                    theme: theme
                 });
-            }
-        }, {
-            key: 'highlightChain',
-            value: function highlightChain() {
-                var _this6 = this;
+                _this6.Command.Entity.Focus.dispatch(_this6._liteMol.context, _this6._liteMol.context.select('sequence-selection'));
+            });
+        }
+    }, {
+        key: 'findMoleculeWithinRange',
+        value: function findMoleculeWithinRange(start, end) {}
+    }, {
+        key: 'formatAngstrom',
+        value: function formatAngstrom(val) {
+            if (!val) return;
+            return val.replace('A', '&#8491;');
+        }
+    }, {
+        key: 'accession',
+        get: function get$$1() {
+            return this.getAttribute('accession');
+        },
+        set: function set$$1(accession) {
+            return this.setAttribute('accession', accession);
+        }
+    }, {
+        key: 'isManaged',
+        get: function get$$1() {
+            return true;
+        }
+    }], [{
+        key: 'observedAttributes',
+        get: function get$$1() {
+            return ['highlightstart', 'highlightend'];
+        }
+    }]);
+    return UuwLitemolComponent;
+}(HTMLElement);
 
-                if (!this._loaded || !this._highlightstart || !this._highlightend) return;
-
-                this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, void 0);
-                this.Command.Tree.RemoveNode.dispatch(this._liteMol.context, 'sequence-selection');
-
-                var visual = this._liteMol.context.select('polymer-visual')[0];
-                if (!visual) return;
-
-                var translatedPos = this.translatePositions(this._highlightstart, this._highlightend);
-                if (!translatedPos) return;
-
-                var query = this.Query.sequence(translatedPos.entity.toString(), translatedPos.chain, {
-                    seqNumber: translatedPos.start
-                }, {
-                    seqNumber: translatedPos.end
-                });
-
-                var theme = this.getTheme();
-
-                var action = this._liteMol.createTransform().add(visual, this.Transformer.Molecule.CreateSelectionFromQuery, {
-                    query: query,
-                    name: 'My name'
-                }, {
-                    ref: 'sequence-selection'
-                });
-
-                this._liteMol.applyTransform(action).then(function () {
-                    _this6.Command.Visual.UpdateBasicTheme.dispatch(_this6._liteMol.context, {
-                        visual: visual,
-                        theme: theme
-                    });
-                    _this6.Command.Entity.Focus.dispatch(_this6._liteMol.context, _this6._liteMol.context.select('sequence-selection'));
-                });
-            }
-        }, {
-            key: 'formatAngstrom',
-            value: function formatAngstrom(val) {
-                if (!val) return;
-                return val.replace('A', '&#8491;');
-            }
-        }, {
-            key: 'accession',
-            get: function get$$1() {
-                return this.getAttribute('accession');
-            },
-            set: function set$$1(accession) {
-                return this.setAttribute('accession', accession);
-            }
-        }, {
-            key: 'isManaged',
-            get: function get$$1() {
-                return true;
-            }
-        }], [{
-            key: 'observedAttributes',
-            get: function get$$1() {
-                return ['highlightstart', 'highlightend'];
-            }
-        }]);
-        return UuwLitemolComponent;
-    }(HTMLElement);
-
+var loadComponent = function loadComponent() {
     customElements.define('uuw-litemol-component', UuwLitemolComponent);
 };
 
