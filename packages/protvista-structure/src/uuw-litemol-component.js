@@ -85,7 +85,7 @@ class UuwLitemolComponent extends HTMLElement {
 
     async loadPDBEntry(pdbId) {
         try {
-            return await (await fetch(`http://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`)).json();
+            return await (await fetch(`https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`)).json();
         } catch (e) {
             throw new Error(`Couldn't load PDB entry`, e);
         }
