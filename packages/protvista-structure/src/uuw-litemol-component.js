@@ -41,7 +41,18 @@ class UuwLitemolComponent extends HTMLElement {
             .then(entry => {
                 this._pdbEntries = entry
                     .dbReferences
-                    .filter(dbref => dbref.type === 'PDB');
+                    .filter(dbref => dbref.type === 'PDB')
+                    .map(d => {
+                        return {
+                            id: d.id,
+                            properties: {
+                                method: d.properties.method,
+                                chains: this.getChain(d.properties.chains),
+                                start: this.getStart(d.properties.chains),
+                                end:  this.getEnd(d.properties.chains)
+                            }
+                        }
+                    });
                 this.loadStructureTable();
                 this.selectMolecule(this._pdbEntries[0].id);
             });
@@ -59,6 +70,7 @@ class UuwLitemolComponent extends HTMLElement {
         if (oldVal !== newVal) {
             const value = parseInt(newVal);
             this[`_${attrName}`] = isNaN(value) ? newVal : value;
+            this._selectMoleculeWithinRange(this._highlightstart, this._highlightend);
             this.highlightChain();
         }
     }
@@ -94,14 +106,14 @@ class UuwLitemolComponent extends HTMLElement {
                 <tbody>
                     ${this._pdbEntries
             .map(d => `
-                        <tr id="${d.id}" class="pdb-row">
+                        <tr id="entry_${d.id}" class="pdb-row">
                             <td>
                             <strong>${d.id}</strong><br/>
                             </td>
                             <td>${d.properties.method}</td>
                             <td>${this.formatAngstrom(d.properties.resolution)}</td>
-                            <td title="${this.getChain(d.properties.chains)}">${this.getChain(d.properties.chains)}</td>
-                            <td>${this.getPositions(d.properties.chains)}</td>
+                            <td title="${d.properties.chains}">${d.properties.chains}</td>
+                            <td>${d.properties.start}-${d.properties.end}</td>
                             <td>
                                 <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/${d.id}">PDB</a> 
                                 <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${d.id}">RCSB-PDBi</a>
@@ -117,32 +129,42 @@ class UuwLitemolComponent extends HTMLElement {
         this.tableDiv.innerHTML = html;
         this
             .querySelectorAll('.pdb-row')
-            .forEach(row => row.addEventListener('click', (e) => this.selectMolecule(row.id)));
+            .forEach(row => row.addEventListener('click', (e) => this.selectMolecule(row.id.replace('entry_', ''))));
     }
 
     getChain(chains) {
         return chains.split('=')[0];
     }
 
-    getPositions(chains) {
-        return chains.split('=')[1];
+    getStart(chains) {
+        return chains.split('=')[1].split('-')[0];
+    }
+
+    getEnd(chains) {
+        return chains.split('=')[1].split('-')[1];
     }
 
     get isManaged() {
         return true;
     }
 
-    selectMolecule(id) {
-        this
-            .querySelectorAll('.active')
-            .forEach(row => row.classList.remove('active'));
-        document
-            .getElementById(id)
-            .classList
-            .add('active');
-        document.getElementById('litemol-title').textContent = id;
-        this.loadMolecule(id);
-        this.loadMappingContext(id);
+    async selectMolecule(id) {
+        this.loadPDBEntry(id).then(d => {
+            const mappings = this.processMapping(d);
+            this._selectedMolecule = {
+                'id': id,
+                'mappings': mappings
+            };
+            this
+                .querySelectorAll('.active')
+                .forEach(row => row.classList.remove('active'));
+            this
+                .querySelector(`#entry_${id}`)
+                .classList
+                .add('active');
+            this.querySelector('#litemol-title').textContent = id;
+            this.loadMolecule(id);
+        });
     }
 
     loadLiteMol() {
@@ -223,16 +245,14 @@ class UuwLitemolComponent extends HTMLElement {
         });
     }
 
-    processMapping(id, mappingData) {
+    processMapping(mappingData) {
         if (!Object.values(mappingData)[0].UniProt[this.accession])
             return;
-        this._mappings = Object.values(mappingData)[0].UniProt[this.accession].mappings;
+        return Object.values(mappingData)[0].UniProt[this.accession].mappings;
     }
 
     translatePositions(start, end) {
-        for (const mapping of this._mappings) {
-            console.log(`UP ${mapping.unp_start}-${mapping.unp_end}`);
-            console.log(`PDB ${mapping.start.residue_number}-${mapping.end.residue_number}`);
+        for (const mapping of this._selectedMolecule.mappings) {
             if (mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number) {
                 if (start >= mapping.unp_start && end <= mapping.unp_end) {
                     const offset = mapping.unp_start - mapping.start.residue_number;
@@ -252,12 +272,6 @@ class UuwLitemolComponent extends HTMLElement {
                 return;
             }
         }
-    }
-
-    loadMappingContext(id) {
-        this.loadPDBEntry(id).then(d => {
-            this.processMapping(id, d);
-        });
     }
 
     highlightChain() {
@@ -300,7 +314,16 @@ class UuwLitemolComponent extends HTMLElement {
         });
     }
 
-    findMoleculeWithinRange(start, end) {
+    _selectMoleculeWithinRange(start, end) {
+        if(! this._selectedMolecule)
+            return;
+        if (this._selectedMolecule.mappings.filter(d => d.unp_start <= start && d.unp_end >= end).length > 0) {
+            return;
+        }
+        const matches = this._pdbEntries.filter(d => d.properties.start <= start && d.properties.end >= end);
+        if (matches && matches.length > 0) {
+            this.selectMolecule(matches[0].id);
+        }
 
     }
 

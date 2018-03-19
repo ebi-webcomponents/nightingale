@@ -277,6 +277,16 @@ var UuwLitemolComponent = function (_HTMLElement) {
             this.loadUniProtEntry().then(function (entry) {
                 _this2._pdbEntries = entry.dbReferences.filter(function (dbref) {
                     return dbref.type === 'PDB';
+                }).map(function (d) {
+                    return {
+                        id: d.id,
+                        properties: {
+                            method: d.properties.method,
+                            chains: _this2.getChain(d.properties.chains),
+                            start: _this2.getStart(d.properties.chains),
+                            end: _this2.getEnd(d.properties.chains)
+                        }
+                    };
                 });
                 _this2.loadStructureTable();
                 _this2.selectMolecule(_this2._pdbEntries[0].id);
@@ -288,6 +298,7 @@ var UuwLitemolComponent = function (_HTMLElement) {
             if (oldVal !== newVal) {
                 var value = parseInt(newVal);
                 this['_' + attrName] = isNaN(value) ? newVal : value;
+                this._selectMoleculeWithinRange(this._highlightstart, this._highlightend);
                 this.highlightChain();
             }
         }
@@ -373,12 +384,12 @@ var UuwLitemolComponent = function (_HTMLElement) {
             var _this3 = this;
 
             var html = '\n            <table>\n                <thead>\n                    <th>PDB Entry</th>\n                    <th>Method</th>\n                    <th>Resolution</th>\n                    <th>Chain</th>\n                    <th>Positions</th>\n                    <th>Links</th>\n                </thead>\n                <tbody>\n                    ' + this._pdbEntries.map(function (d) {
-                return '\n                        <tr id="' + d.id + '" class="pdb-row">\n                            <td>\n                            <strong>' + d.id + '</strong><br/>\n                            </td>\n                            <td>' + d.properties.method + '</td>\n                            <td>' + _this3.formatAngstrom(d.properties.resolution) + '</td>\n                            <td title="' + _this3.getChain(d.properties.chains) + '">' + _this3.getChain(d.properties.chains) + '</td>\n                            <td>' + _this3.getPositions(d.properties.chains) + '</td>\n                            <td>\n                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/' + d.id + '">PDB</a> \n                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=' + d.id + '">RCSB-PDBi</a>\n                                <a target="_blank" href="//pdbj.org/mine/summary/' + d.id + '">PDBj</a>\n                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=' + d.id + '">PDBSUM</a>\n                            </td>\n                        </tr>\n                    ';
+                return '\n                        <tr id="entry_' + d.id + '" class="pdb-row">\n                            <td>\n                            <strong>' + d.id + '</strong><br/>\n                            </td>\n                            <td>' + d.properties.method + '</td>\n                            <td>' + _this3.formatAngstrom(d.properties.resolution) + '</td>\n                            <td title="' + d.properties.chains + '">' + d.properties.chains + '</td>\n                            <td>' + d.properties.start + '-' + d.properties.end + '</td>\n                            <td>\n                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/' + d.id + '">PDB</a> \n                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=' + d.id + '">RCSB-PDBi</a>\n                                <a target="_blank" href="//pdbj.org/mine/summary/' + d.id + '">PDBj</a>\n                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=' + d.id + '">PDBSUM</a>\n                            </td>\n                        </tr>\n                    ';
             }).join('') + '\n                </tbody>\n            </table>\n        ';
             this.tableDiv.innerHTML = html;
             this.querySelectorAll('.pdb-row').forEach(function (row) {
                 return row.addEventListener('click', function (e) {
-                    return _this3.selectMolecule(row.id);
+                    return _this3.selectMolecule(row.id.replace('entry_', ''));
                 });
             });
         }
@@ -388,21 +399,53 @@ var UuwLitemolComponent = function (_HTMLElement) {
             return chains.split('=')[0];
         }
     }, {
-        key: 'getPositions',
-        value: function getPositions(chains) {
-            return chains.split('=')[1];
+        key: 'getStart',
+        value: function getStart(chains) {
+            return chains.split('=')[1].split('-')[0];
+        }
+    }, {
+        key: 'getEnd',
+        value: function getEnd(chains) {
+            return chains.split('=')[1].split('-')[1];
         }
     }, {
         key: 'selectMolecule',
-        value: function selectMolecule(id) {
-            this.querySelectorAll('.active').forEach(function (row) {
-                return row.classList.remove('active');
-            });
-            document.getElementById(id).classList.add('active');
-            document.getElementById('litemol-title').textContent = id;
-            this.loadMolecule(id);
-            this.loadMappingContext(id);
-        }
+        value: function () {
+            var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(id) {
+                var _this4 = this;
+
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                    while (1) {
+                        switch (_context3.prev = _context3.next) {
+                            case 0:
+                                this.loadPDBEntry(id).then(function (d) {
+                                    var mappings = _this4.processMapping(d);
+                                    _this4._selectedMolecule = {
+                                        'id': id,
+                                        'mappings': mappings
+                                    };
+                                    _this4.querySelectorAll('.active').forEach(function (row) {
+                                        return row.classList.remove('active');
+                                    });
+                                    _this4.querySelector('#entry_' + id).classList.add('active');
+                                    _this4.querySelector('#litemol-title').textContent = id;
+                                    _this4.loadMolecule(id);
+                                });
+
+                            case 1:
+                            case 'end':
+                                return _context3.stop();
+                        }
+                    }
+                }, _callee3, this);
+            }));
+
+            function selectMolecule(_x2) {
+                return _ref3.apply(this, arguments);
+            }
+
+            return selectMolecule;
+        }()
     }, {
         key: 'loadLiteMol',
         value: function loadLiteMol() {
@@ -429,7 +472,7 @@ var UuwLitemolComponent = function (_HTMLElement) {
     }, {
         key: 'loadMolecule',
         value: function loadMolecule(_id) {
-            var _this4 = this;
+            var _this5 = this;
 
             this._loaded = false;
 
@@ -463,8 +506,8 @@ var UuwLitemolComponent = function (_HTMLElement) {
             });
 
             this._liteMol.applyTransform(transform).then(function () {
-                _this4._loaded = true;
-                _this4.highlightChain();
+                _this5._loaded = true;
+                _this5.highlightChain();
             });
         }
     }, {
@@ -480,9 +523,9 @@ var UuwLitemolComponent = function (_HTMLElement) {
         }
     }, {
         key: 'processMapping',
-        value: function processMapping(id, mappingData) {
+        value: function processMapping(mappingData) {
             if (!Object.values(mappingData)[0].UniProt[this.accession]) return;
-            this._mappings = Object.values(mappingData)[0].UniProt[this.accession].mappings;
+            return Object.values(mappingData)[0].UniProt[this.accession].mappings;
         }
     }, {
         key: 'translatePositions',
@@ -492,11 +535,9 @@ var UuwLitemolComponent = function (_HTMLElement) {
             var _iteratorError = undefined;
 
             try {
-                for (var _iterator = this._mappings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                for (var _iterator = this._selectedMolecule.mappings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var mapping = _step.value;
 
-                    console.log('UP ' + mapping.unp_start + '-' + mapping.unp_end);
-                    console.log('PDB ' + mapping.start.residue_number + '-' + mapping.end.residue_number);
                     if (mapping.unp_end - mapping.unp_start === mapping.end.residue_number - mapping.start.residue_number) {
                         if (start >= mapping.unp_start && end <= mapping.unp_end) {
                             var offset = mapping.unp_start - mapping.start.residue_number;
@@ -530,15 +571,6 @@ var UuwLitemolComponent = function (_HTMLElement) {
                     }
                 }
             }
-        }
-    }, {
-        key: 'loadMappingContext',
-        value: function loadMappingContext(id) {
-            var _this5 = this;
-
-            this.loadPDBEntry(id).then(function (d) {
-                _this5.processMapping(id, d);
-            });
         }
     }, {
         key: 'highlightChain',
@@ -580,8 +612,21 @@ var UuwLitemolComponent = function (_HTMLElement) {
             });
         }
     }, {
-        key: 'findMoleculeWithinRange',
-        value: function findMoleculeWithinRange(start, end) {}
+        key: '_selectMoleculeWithinRange',
+        value: function _selectMoleculeWithinRange(start, end) {
+            if (!this._selectedMolecule) return;
+            if (this._selectedMolecule.mappings.filter(function (d) {
+                return d.unp_start <= start && d.unp_end >= end;
+            }).length > 0) {
+                return;
+            }
+            var matches = this._pdbEntries.filter(function (d) {
+                return d.properties.start <= start && d.properties.end >= end;
+            });
+            if (matches && matches.length > 0) {
+                this.selectMolecule(matches[0].id);
+            }
+        }
     }, {
         key: 'formatAngstrom',
         value: function formatAngstrom(val) {
