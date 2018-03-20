@@ -4,6 +4,7 @@ import {
   zoomIdentity,
   event as d3Event
 } from 'd3';
+import ResizeObserver from 'resize-observer-polyfill';
 
 class ProtvistaZoomable extends HTMLElement {
 
@@ -25,7 +26,6 @@ class ProtvistaZoomable extends HTMLElement {
         };
         this._onResize = this._onResize.bind(this);
         this.listenForResize = this.listenForResize.bind(this);
-
     }
 
     connectedCallback() {
@@ -140,8 +140,6 @@ class ProtvistaZoomable extends HTMLElement {
     zoomed() {
         this.xScale = d3Event.transform
                 .rescaleX(this._originXScale);
-        // this.refresh();
-        // Only refresh in the applyZoomTranslation
 
         // If the source event is null the zoom wasn't initiated by this component, don't send event
         if(this.dontDispatch) return;
@@ -160,8 +158,6 @@ class ProtvistaZoomable extends HTMLElement {
         this.dontDispatch = true;
         this
             .svg
-            // .transition()
-            // .duration(300)
             .call(this.zoom.transform, zoomIdentity.scale(k).translate(dx, 0));
         this.dontDispatch = false;
         this.refresh();
@@ -178,12 +174,8 @@ class ProtvistaZoomable extends HTMLElement {
     listenForResize() {
         // TODO add sleep to make transition appear smoother. Could experiment with CSS3
         // transitions too
-        if ('ResizeObserver' in window) {
-            this._ro = new ResizeObserver(this._onResize);
-            this._ro.observe(this);
-            return;
-        }
-        window.addEventListener("resize", this._onResize);
+        this._ro = new ResizeObserver(this._onResize);
+        this._ro.observe(this);
     }
 
 }
