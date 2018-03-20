@@ -1,4 +1,4 @@
-(function () {
+var ProtvistaUniprot = (function () {
 'use strict';
 
 function __$$styleInject(css, ref) {
@@ -1181,176 +1181,176 @@ var taggedTemplateLiteral = function (strings, raw) {
   }));
 };
 
-var _templateObject = taggedTemplateLiteral(['\n            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters" additionalsubscribers="uuw-litemol-component">\n                <protvista-navigation length="', '"></protvista-navigation>\n                <protvista-sequence length="', '"></protvista-sequence>\n                ', '\n                <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n                <uuw-litemol-component accession="', '"></uuw-litemol-component>\n            </protvista-manager>'], ['\n            <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters" additionalsubscribers="uuw-litemol-component">\n                <protvista-navigation length="', '"></protvista-navigation>\n                <protvista-sequence length="', '"></protvista-sequence>\n                ', '\n                <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n                <uuw-litemol-component accession="', '"></uuw-litemol-component>\n            </protvista-manager>']);
-var _templateObject2 = taggedTemplateLiteral(['\n                        <div class="category-label" data-category-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                            ', '\n                        </div>\n                        ', '\n                    '], ['\n                        <div class="category-label" data-category-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                            ', '\n                        </div>\n                        ', '\n                    ']);
-var _templateObject3 = taggedTemplateLiteral(['\n                            <div class="track-label" data-toggle="', '">\n                                ', '\n                            </div>\n                            <div class="track-content" data-toggle="', '">\n                                ', '\n                            </div>'], ['\n                            <div class="track-label" data-toggle="', '">\n                                ', '\n                            </div>\n                            <div class="track-content" data-toggle="', '">\n                                ', '\n                            </div>']);
-var _templateObject4 = taggedTemplateLiteral(['\n                    <protvista-feature-adapter filters="', '">\n                            <data-loader>\n                                <source src="', '', '" />\n                            </data-loader>\n                    </protvista-feature-adapter>\n                    '], ['\n                    <protvista-feature-adapter filters="', '">\n                            <data-loader>\n                                <source src="', '', '" />\n                            </data-loader>\n                    </protvista-feature-adapter>\n                    ']);
-var _templateObject5 = taggedTemplateLiteral(['                            \n                    <data-loader>\n                        <source src="', '', '" />\n                    </data-loader>\n                '], ['                            \n                    <data-loader>\n                        <source src="', '', '" />\n                    </data-loader>\n                ']);
+var _templateObject = taggedTemplateLiteral(['\n        <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters" additionalsubscribers="uuw-litemol-component">\n            <protvista-navigation length="', '"></protvista-navigation>\n            <protvista-sequence length="', '"></protvista-sequence>\n            ', '\n            <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n            <uuw-litemol-component accession="', '"></uuw-litemol-component>\n        </protvista-manager>'], ['\n        <protvista-manager attributes="length displaystart displayend highlightstart highlightend variantfilters" additionalsubscribers="uuw-litemol-component">\n            <protvista-navigation length="', '"></protvista-navigation>\n            <protvista-sequence length="', '"></protvista-sequence>\n            ', '\n            <protvista-sequence id="seq1" length="', '"></protvista-sequence>\n            <uuw-litemol-component accession="', '"></uuw-litemol-component>\n        </protvista-manager>']);
+var _templateObject2 = taggedTemplateLiteral(['\n                    <div class="category-label" data-category-toggle="', '">\n                        ', '\n                    </div>\n                    <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                        ', '\n                    </div>\n                    ', '\n                '], ['\n                    <div class="category-label" data-category-toggle="', '">\n                        ', '\n                    </div>\n                    <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                        ', '\n                    </div>\n                    ', '\n                ']);
+var _templateObject3 = taggedTemplateLiteral(['\n                        <div class="track-label" data-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="track-content" data-toggle="', '">\n                            ', '\n                        </div>'], ['\n                        <div class="track-label" data-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="track-content" data-toggle="', '">\n                            ', '\n                        </div>']);
+var _templateObject4 = taggedTemplateLiteral(['\n                <protvista-feature-adapter filters="', '">\n                        <data-loader>\n                            <source src="', '', '" />\n                        </data-loader>\n                </protvista-feature-adapter>\n                '], ['\n                <protvista-feature-adapter filters="', '">\n                        <data-loader>\n                            <source src="', '', '" />\n                        </data-loader>\n                </protvista-feature-adapter>\n                ']);
+var _templateObject5 = taggedTemplateLiteral(['                            \n                <data-loader>\n                    <source src="', '', '" />\n                </data-loader>\n            '], ['                            \n                <data-loader>\n                    <source src="', '', '" />\n                </data-loader>\n            ']);
 var _templateObject6 = taggedTemplateLiteral(['<protvista-variation-filter></protvista-variation-filter'], ['<protvista-variation-filter></protvista-variation-filter']);
-var _templateObject7 = taggedTemplateLiteral(['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    '], ['\n                    <protvista-track length="', '" tooltip-event="click" layout="', '">\n                        ', '\n                    </protvista-track>\n                    ']);
-var _templateObject8 = taggedTemplateLiteral(['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    '], ['\n                    <protvista-variation length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation>\n                    ']);
+var _templateObject7 = taggedTemplateLiteral(['\n                <protvista-track length="', '" tooltip-event="click" layout="', '">\n                    ', '\n                </protvista-track>\n                '], ['\n                <protvista-track length="', '" tooltip-event="click" layout="', '">\n                    ', '\n                </protvista-track>\n                ']);
+var _templateObject8 = taggedTemplateLiteral(['\n                <protvista-variation length="', '" tooltip-event="click">\n                    ', '\n                </protvista-variation>\n                '], ['\n                <protvista-variation length="', '" tooltip-event="click">\n                    ', '\n                </protvista-variation>\n                ']);
+
+var ProtvistaUniprot$1 = function (_HTMLElement) {
+    inherits(ProtvistaUniprot, _HTMLElement);
+
+    function ProtvistaUniprot() {
+        classCallCheck(this, ProtvistaUniprot);
+
+        var _this = possibleConstructorReturn(this, (ProtvistaUniprot.__proto__ || Object.getPrototypeOf(ProtvistaUniprot)).call(this));
+
+        _this._accession = _this.getAttribute('accession');
+        // get properties here
+        return _this;
+    }
+
+    createClass(ProtvistaUniprot, [{
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+            var _this2 = this;
+
+            this.loadEntry(this._accession).then(function (entryData) {
+                _this2._sequenceLength = entryData.sequence.sequence.length;
+                // We need to get the length of the protein before rendering it
+                _this2._render();
+            });
+        }
+    }, {
+        key: 'loadEntry',
+        value: function () {
+            var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(accession) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.prev = 0;
+                                _context.next = 3;
+                                return fetch('https://www.ebi.ac.uk/proteins/api/proteins/' + accession);
+
+                            case 3:
+                                _context.next = 5;
+                                return _context.sent.json();
+
+                            case 5:
+                                return _context.abrupt('return', _context.sent);
+
+                            case 8:
+                                _context.prev = 8;
+                                _context.t0 = _context['catch'](0);
+
+                                console.log('Couldn\'t load UniProt entry', _context.t0);
+
+                            case 11:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this, [[0, 8]]);
+            }));
+
+            function loadEntry(_x) {
+                return _ref.apply(this, arguments);
+            }
+
+            return loadEntry;
+        }()
+    }, {
+        key: '_render',
+        value: function _render() {
+            var _this3 = this;
+
+            var mainHtml = function mainHtml() {
+                return html(_templateObject, _this3._sequenceLength, _this3._sequenceLength, categories.map(function (category) {
+                    return html(_templateObject2, category.name, category.label, category.name, _this3.getTrack(category.trackType, category.adapter, category.url, _this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
+                        return html(_templateObject3, category.name, track.label ? track.label : _this3.getLabelComponent(track.labelComponent), category.name, _this3.getTrack(track.trackType, category.adapter, category.url, track.filter));
+                    }));
+                }), _this3._sequenceLength, _this3._accession);
+            };
+            render(mainHtml(), this);
+            this.querySelectorAll('.category-label').forEach(function (cat) {
+                cat.addEventListener('click', function (e) {
+                    _this3.handleCategoryClick(e);
+                });
+            });
+        }
+    }, {
+        key: 'handleCategoryClick',
+        value: function handleCategoryClick(e) {
+            var _this4 = this;
+
+            var toggle = e.target.getAttribute('data-category-toggle');
+            if (!e.target.classList.contains('open')) {
+                e.target.classList.add('open');
+            } else {
+                e.target.classList.remove('open');
+            }
+            this.toggleOpacity(this.querySelector('[data-toggle-aggregate=' + toggle + ']'));
+            this.querySelectorAll('[data-toggle=' + toggle + ']').forEach(function (track) {
+                return _this4.toggleVisibility(track);
+            });
+        }
+    }, {
+        key: 'toggleOpacity',
+        value: function toggleOpacity(elt) {
+            if (elt.style.opacity === '' || parseInt(elt.style.opacity) === 1) {
+                elt.style.opacity = 0;
+            } else {
+                elt.style.opacity = 1;
+            }
+        }
+    }, {
+        key: 'toggleVisibility',
+        value: function toggleVisibility(elt) {
+            if (elt.style.display === '' || elt.style.display === 'none') {
+                elt.style.display = 'block';
+            } else {
+                elt.style.display = 'none';
+            }
+        }
+    }, {
+        key: 'getCategoryTypesAsString',
+        value: function getCategoryTypesAsString(tracks) {
+            return tracks.map(function (t) {
+                return t.filter;
+            }).join(",");
+        }
+    }, {
+        key: 'getAdapter',
+        value: function getAdapter(adapter, url, trackTypes) {
+            // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
+            switch (adapter) {
+                case 'protvista-feature-adapter':
+                    return html(_templateObject4, trackTypes, url, this._accession);
+                case 'protvista-variation-adapter':
+                    return html(_templateObject5, url, this._accession);
+            }
+        }
+    }, {
+        key: 'getLabelComponent',
+        value: function getLabelComponent(name) {
+            switch (name) {
+                case 'protvista-variation-filter':
+                    return html(_templateObject6);
+            }
+        }
+    }, {
+        key: 'getTrack',
+        value: function getTrack(trackType, adapter, url, trackTypes) {
+            var layout = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
+
+            // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
+            switch (trackType) {
+                case 'protvista-track':
+                    return html(_templateObject7, this._sequenceLength, layout, this.getAdapter(adapter, url, trackTypes));
+                case 'protvista-variation':
+                    return html(_templateObject8, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
+            }
+        }
+    }]);
+    return ProtvistaUniprot;
+}(HTMLElement);
 
 var loadComponent = function loadComponent() {
-    var ProtvistaUniprot = function (_HTMLElement) {
-        inherits(ProtvistaUniprot, _HTMLElement);
-
-        function ProtvistaUniprot() {
-            classCallCheck(this, ProtvistaUniprot);
-
-            var _this = possibleConstructorReturn(this, (ProtvistaUniprot.__proto__ || Object.getPrototypeOf(ProtvistaUniprot)).call(this));
-
-            _this._accession = _this.getAttribute('accession');
-            // get properties here
-            return _this;
-        }
-
-        createClass(ProtvistaUniprot, [{
-            key: 'connectedCallback',
-            value: function connectedCallback() {
-                var _this2 = this;
-
-                this.loadEntry(this._accession).then(function (entryData) {
-                    _this2._sequenceLength = entryData.sequence.sequence.length;
-                    // We need to get the length of the protein before rendering it
-                    _this2._render();
-                });
-            }
-        }, {
-            key: 'loadEntry',
-            value: function () {
-                var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(accession) {
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                        while (1) {
-                            switch (_context.prev = _context.next) {
-                                case 0:
-                                    _context.prev = 0;
-                                    _context.next = 3;
-                                    return fetch('https://www.ebi.ac.uk/proteins/api/proteins/' + accession);
-
-                                case 3:
-                                    _context.next = 5;
-                                    return _context.sent.json();
-
-                                case 5:
-                                    return _context.abrupt('return', _context.sent);
-
-                                case 8:
-                                    _context.prev = 8;
-                                    _context.t0 = _context['catch'](0);
-
-                                    console.log('Couldn\'t load UniProt entry', _context.t0);
-
-                                case 11:
-                                case 'end':
-                                    return _context.stop();
-                            }
-                        }
-                    }, _callee, this, [[0, 8]]);
-                }));
-
-                function loadEntry(_x) {
-                    return _ref.apply(this, arguments);
-                }
-
-                return loadEntry;
-            }()
-        }, {
-            key: '_render',
-            value: function _render() {
-                var _this3 = this;
-
-                var mainHtml = function mainHtml() {
-                    return html(_templateObject, _this3._sequenceLength, _this3._sequenceLength, categories.map(function (category) {
-                        return html(_templateObject2, category.name, category.label, category.name, _this3.getTrack(category.trackType, category.adapter, category.url, _this3.getCategoryTypesAsString(category.tracks), 'non-overlapping'), category.tracks.map(function (track) {
-                            return html(_templateObject3, category.name, track.label ? track.label : _this3.getLabelComponent(track.labelComponent), category.name, _this3.getTrack(track.trackType, category.adapter, category.url, track.filter));
-                        }));
-                    }), _this3._sequenceLength, _this3._accession);
-                };
-                render(mainHtml(), this);
-                this.querySelectorAll('.category-label').forEach(function (cat) {
-                    cat.addEventListener('click', function (e) {
-                        _this3.handleCategoryClick(e);
-                    });
-                });
-            }
-        }, {
-            key: 'handleCategoryClick',
-            value: function handleCategoryClick(e) {
-                var _this4 = this;
-
-                var toggle = e.target.getAttribute('data-category-toggle');
-                if (!e.target.classList.contains('open')) {
-                    e.target.classList.add('open');
-                } else {
-                    e.target.classList.remove('open');
-                }
-                this.toggleOpacity(this.querySelector('[data-toggle-aggregate=' + toggle + ']'));
-                this.querySelectorAll('[data-toggle=' + toggle + ']').forEach(function (track) {
-                    return _this4.toggleVisibility(track);
-                });
-            }
-        }, {
-            key: 'toggleOpacity',
-            value: function toggleOpacity(elt) {
-                if (elt.style.opacity === '' || parseInt(elt.style.opacity) === 1) {
-                    elt.style.opacity = 0;
-                } else {
-                    elt.style.opacity = 1;
-                }
-            }
-        }, {
-            key: 'toggleVisibility',
-            value: function toggleVisibility(elt) {
-                if (elt.style.display === '' || elt.style.display === 'none') {
-                    elt.style.display = 'block';
-                } else {
-                    elt.style.display = 'none';
-                }
-            }
-        }, {
-            key: 'getCategoryTypesAsString',
-            value: function getCategoryTypesAsString(tracks) {
-                return tracks.map(function (t) {
-                    return t.filter;
-                }).join(",");
-            }
-        }, {
-            key: 'getAdapter',
-            value: function getAdapter(adapter, url, trackTypes) {
-                // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
-                switch (adapter) {
-                    case 'protvista-feature-adapter':
-                        return html(_templateObject4, trackTypes, url, this._accession);
-                    case 'protvista-variation-adapter':
-                        return html(_templateObject5, url, this._accession);
-                }
-            }
-        }, {
-            key: 'getLabelComponent',
-            value: function getLabelComponent(name) {
-                switch (name) {
-                    case 'protvista-variation-filter':
-                        return html(_templateObject6);
-                }
-            }
-        }, {
-            key: 'getTrack',
-            value: function getTrack(trackType, adapter, url, trackTypes) {
-                var layout = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
-
-                // TODO Allow injection of static content into templates https://github.com/Polymer/lit-html/issues/78
-                switch (trackType) {
-                    case 'protvista-track':
-                        return html(_templateObject7, this._sequenceLength, layout, this.getAdapter(adapter, url, trackTypes));
-                    case 'protvista-variation':
-                        return html(_templateObject8, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
-                }
-            }
-        }]);
-        return ProtvistaUniprot;
-    }(HTMLElement);
-
-    customElements.define('protvista-uniprot', ProtvistaUniprot);
+    customElements.define('protvista-uniprot', ProtvistaUniprot$1);
 };
 
 // Conditional loading of polyfill
@@ -1361,6 +1361,8 @@ if (window.customElements) {
         loadComponent();
     });
 }
+
+return ProtvistaUniprot$1;
 
 }());
 //# sourceMappingURL=protvista-uniprot.js.map
