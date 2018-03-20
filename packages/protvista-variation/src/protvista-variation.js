@@ -6,10 +6,14 @@ import {
     axisRight,
     select,
     event as d3Event
-  } from 'd3';
-import {processVariants} from './dataTransformer';
+} from 'd3';
+import {
+    processVariants
+} from './dataTransformer';
 import VariationPlot from './variationPlot';
-import {getFiltersFromAttribute} from './filters';
+import {
+    getFiltersFromAttribute
+} from './filters';
 import cloneDeep from 'lodash-es/cloneDeep';
 import union from 'lodash-es/union';
 import '../style/protvista-variation.css';
@@ -48,22 +52,16 @@ class ProtvistaVariation extends ProtVistaTrack {
     connectedCallback() {
         super.connectedCallback();
         this._accession = this.getAttribute('accession');
-        this._height = parseInt(this.getAttribute('height'))
-            ? parseInt(this.getAttribute('height'))
-            : 430;
+        this._height = parseInt(this.getAttribute('height')) ?
+            parseInt(this.getAttribute('height')) :
+            430;
+        this._width = this._width ? this._width : 0;
         this._selectedFilters = getFiltersFromAttribute(this.getAttribute('variantfilters'));
         this._margin = {
             top: 20,
-            right: 10,
-            bottom: 10,
-            left: 10
+            bottom: 10
         }
-        // super.xScale = d3.scaleOrdinal();
         this._yScale = scaleLinear();
-
-        // filtercontainer.addEventListener('protvista-filter-variants', d => {
-        // this.applyFilters(d.detail); });
-        // this.listenForResize();
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -83,10 +81,10 @@ class ProtvistaVariation extends ProtVistaTrack {
     set data(data) {
         this._data = processVariants(data.features, data.sequence);
         this._createTrack();
-        if(this._selectedFilters)
+        if (this._selectedFilters)
             this.applyFilters();
     }
-    
+
     _createTrack() {
         super.svg = select(this)
             .append('svg')
@@ -94,7 +92,7 @@ class ProtvistaVariation extends ProtVistaTrack {
             .attr('height', this._height);
 
         // scale for Amino Acids
-        this._yScale = 
+        this._yScale =
             scalePoint()
             .domain(aaList)
             .range([
@@ -102,21 +100,14 @@ class ProtvistaVariation extends ProtVistaTrack {
             ]);
 
         // create the variation plot function to be called by the series?
-        const variationPlot = new VariationPlot(super.xScale, this._yScale, super.length);
-
-        // Not sure what happens here, but it seems to set the scales on the variation
-        // plot var series =
-        variationPlot.xScale = super.xScale;
-        variationPlot.yScale = this._yScale;
-
-        this._variationPlot = variationPlot;
+        this._variationPlot = new VariationPlot();
 
         // Create the visualisation here
-        this._createFeatures(super.svg, this._data);
+        this._createFeatures();
+        this.refresh();
     }
 
     _createFeatures() {
-
         // Group for the main chart
         const mainChart = super.svg
             .append('g')
@@ -131,55 +122,69 @@ class ProtvistaVariation extends ProtVistaTrack {
             .append('clipPath')
             .attr('id', 'plotAreaClip')
             .append('rect')
-            .attr('width', (this._width - 20))
+            .attr('width', this._width)
             .attr('height', this._height)
             .attr('transform', 'translate(10, -10)');
 
         // This is calling the data series render code for each of the items in the data
-        const dataSeries = chartArea
-            .datum(this._data)
-            .call(this._variationPlot.drawVariationPlot, this);
+        this._series = chartArea
+            .datum(this._data);
 
-        // This is the AA axis on left
-        this._yAxisLScale = 
-            axisLeft()
-            .scale(this._yScale)
-            .tickSize(-this._width);
-
-        // This is the AA axis on right
-        this._yAxisRScale = 
-            axisRight()
-            .scale(this._yScale);
-
-        // Adding AA axis left
         this._axisLeft = mainChart
-            .append('g')
-            .attr('transform', 'translate(12 ,0)')
-            .attr('class', 'variation-y axis')
-            .call(this._yAxisLScale);
+            .append('g');
 
-        // Adding AA axis right
         this._axisRight = mainChart
-            .append('g')
-            .attr('transform', 'translate(' + (this._width - 18) + ', 0)')
-            .attr('class', 'variation-y axis')
-            .call(this._yAxisRScale);
+            .append('g');
 
+        this.updateScale();
         // ??? fv.globalContainer.selectAll('g.variation-y g.tick').attr('class',
         // function(d) {     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d ===
         // 'del' ? 'deletion' : d); });
-        this._series = dataSeries;
     }
 
     // Calling render again
     refresh() {
-        if(this._series) {
-            this._variationPlot.xScale = super.xScale;
+        if (this._series) {
+            // this._variationPlot.xScale = super.xScale;
+            this._clipPath.attr('width', this._width);
+            this.updateScale();
             this
-            ._series
-            .call(this._variationPlot.drawVariationPlot, this);
+                ._series
+                .call(this._variationPlot.drawVariationPlot, this);
         }
     }
+
+    updateScale() {
+        this._yAxisLScale =
+            axisLeft()
+            .scale(this._yScale)
+            .tickSize(-this._width);
+
+        this._yAxisRScale =
+            axisRight()
+            .scale(this._yScale);
+
+        this._axisLeft
+            .attr('transform', 'translate(12 ,0)')
+            .attr('class', 'variation-y axis')
+            .call(this._yAxisLScale);
+
+        this._axisRight
+            .attr('transform', 'translate(' + (this._width - 18) + ', 0)')
+            .attr('class', 'variation-y axis')
+            .call(this._yAxisRScale);
+    }
+
+    // Calling render again with new data (after filter was used)
+    updateData(data) {
+        if (this._series) {
+            this
+                ._series
+                .datum(data);
+            this.refresh();
+        }
+    }
+
 
     reset() {
         // reset zoom, filter and any selections
@@ -187,7 +192,7 @@ class ProtvistaVariation extends ProtVistaTrack {
 
     applyFilters() {
         let filteredData = [];
-        if(this._selectedFilters.length <= 0) {
+        if (this._selectedFilters.length <= 0) {
             this.updateData(this._data);
             return;
         }
@@ -195,14 +200,6 @@ class ProtvistaVariation extends ProtVistaTrack {
             filteredData = union(f.applyFilter(this._data), filteredData);
         });
         this.updateData(filteredData);
-    }
-
-    // Calling render again with new data (after filter was used???)
-    updateData(data) {
-        this
-            ._series
-            .datum(data);
-        this.refresh();
     }
 
 }

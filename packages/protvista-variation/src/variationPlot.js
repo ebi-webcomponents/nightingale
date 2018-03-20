@@ -6,11 +6,7 @@ import {
 import VariantColour from './variantColour';
 class VariationPlot {
 
-    constructor(xScale, yScale, length) {
-        this._length = length;
-        this._xScale = xScale;
-        this._yScale = yScale;
-        // Scale for opacity of dots based on frequency
+    constructor() {
         this._frequency = scalePow()
             .exponent(0.001)
             .domain([0, 1])
@@ -19,22 +15,6 @@ class VariationPlot {
         this.drawVariationPlot = this
             .drawVariationPlot
             .bind(this);
-    }
-
-    set xScale(xScale) {
-        this._xScale = xScale;
-    }
-
-    get xScale() {
-        return this._xScale;
-    }
-
-    set yScale(yScale) {
-        this._yScale = yScale;
-    }
-
-    set length(length) {
-        this._length = length;
     }
 
     drawVariationPlot(selection, element) {
@@ -78,10 +58,10 @@ class VariationPlot {
                 .attr('title', d => d.begin)
                 .attr('r', 5)
                 .attr('cx', d => {
-                    return this._xScale(Math.min(d.begin, this._length))
+                    return element._xScale(Math.min(d.begin, element._length))
                 })
                 .attr('cy', d => {
-                    return this._yScale(d.alternativeSequence.charAt(0))
+                    return element._yScale(d.alternativeSequence.charAt(0))
                 })
                 .attr('name', d => {
                     var mutation = d.alternativeSequence === '*' ?
@@ -123,8 +103,6 @@ class VariationPlot {
                 .on('click', d => {
                     element.createTooltip(d3Event, d, true);
                 });
-
-            // ViewerHelper.addEventsClassAndTitle(catTitle, newCircles, fv, container);
         });
     }
 }

@@ -35,7 +35,6 @@ function processVariants(variants, sequence) {
             sequence.substring(variant.begin, variant.end + 1);
         variant.xrefNames = getSourceType(variant.xrefs, variant.sourceType);
         //expected by tooltip
-        console.log(variant);
         variant.feature = {
             type: variant.type,
             tooltipContent: formatTooltip(variant)
