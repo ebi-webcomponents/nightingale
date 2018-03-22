@@ -1,6 +1,6 @@
 import '../style/style.css';
 
-class UuwLitemolComponent extends HTMLElement {
+class ProtvistaStructure extends HTMLElement {
 
     constructor() {
         super();
@@ -339,4 +339,4 @@ class UuwLitemolComponent extends HTMLElement {
 
 }
 
-export default UuwLitemolComponent;
+export default ProtvistaStructure;

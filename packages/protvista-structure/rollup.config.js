@@ -5,10 +5,10 @@ import postcss from 'rollup-plugin-postcss';
 
 export default {
     input : 'src/main.js',
-    name : 'UuwLitemolComponent',
+    name : 'ProtvistaStructure',
     sourcemap : true,
     output : {
-        file: 'dist/uuw-litemol-component.js',
+        file: 'dist/protvista-structure.js',
         format: 'iife'
     },
     plugins : [

@@ -1,5 +1,5 @@
 {
-  "name": "uuw-litemol-component",
+  "name": "protvista-structure",
   "version": "0.0.9",
   "description": "A custom element wrapper for LiteMol",
   "main": "src/main.js",

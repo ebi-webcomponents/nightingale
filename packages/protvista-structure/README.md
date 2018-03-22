@@ -1,9 +1,9 @@
-# `<uuw-litemol-component>`
+# `<protvista-structure>`
 In progress - A native web component wrapper around LiteMol
 
 ## Usage
 ```html
-      <uuw-litemol-component id="1AAP"></uuw-litemol-component>
+      <protvista-structure id="1AAP"></protvista-structure>
 ```
 
 ## API Reference

@@ -1,7 +1,7 @@
-import UuwLitemolComponent from './uuw-litemol-component';
+import ProtvistaStructure from './protvista-structure';
 
 const loadComponent = function () {
-    customElements.define('uuw-litemol-component', UuwLitemolComponent);
+    customElements.define('protvista-structure', ProtvistaStructure);
 }
 
 // Conditional loading of polyfill
