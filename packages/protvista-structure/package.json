@@ -1,20 +1,17 @@
 {
   "name": "uuw-litemol-component",
-  "version": "0.0.8",
-  "description": "A custom element wrapper for litemol",
-  "main": "dist/uuw-litemol-component.js",
+  "version": "0.0.9",
+  "description": "A custom element wrapper for LiteMol",
+  "main": "src/main.js",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
     "build-dev": "rollup -c",
-    "build-prod": "NODE_ENV=production rollup -c",
     "rollup-watch": "rollup -cw",
-    "test": "mocha",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "test-watch": "mocha -w"
+    "serve": "npm run rollup-watch & npm run browser-sync"
   },
   "keywords": [],
   "author": "xwatkins@ebi.ac.uk",
@@ -26,10 +23,8 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "browser-sync": "^2.12.5",
-    "chai": "^3.5.0",
     "cssnano": "^3.10.0",
     "eslint": "^4.7.2",
-    "mocha": "^3.3.0",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-babel-minify": "^3.1.2",
