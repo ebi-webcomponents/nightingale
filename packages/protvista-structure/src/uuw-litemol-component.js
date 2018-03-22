@@ -53,6 +53,10 @@ class UuwLitemolComponent extends HTMLElement {
                             }
                         }
                     });
+                if(this._pdbEntries.length <= 0) {
+                    this.style.display = 'none';
+                    return;
+                }
                 this.loadStructureTable();
                 this.selectMolecule(this._pdbEntries[0].id);
             });

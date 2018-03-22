@@ -288,6 +288,10 @@ var UuwLitemolComponent = function (_HTMLElement) {
                         }
                     };
                 });
+                if (_this2._pdbEntries.length <= 0) {
+                    _this2.style.display = 'none';
+                    return;
+                }
                 _this2.loadStructureTable();
                 _this2.selectMolecule(_this2._pdbEntries[0].id);
             });
