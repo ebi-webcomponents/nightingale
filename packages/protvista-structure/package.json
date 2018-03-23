@@ -8,7 +8,8 @@
     "src"
   ],
   "scripts": {
-    "build-dev": "rollup -c",
+    "copy-dependencies": "cp litemol-dist-2.4.1/js/LiteMol-plugin.min.js dist/ && cp litemol-dist-2.4.1/css/LiteMol-plugin.min.css dist/css && cp litemol-dist-2.4.1/fonts/* dist/fonts",
+    "build": "rimraf ./dist && mkdirp ./dist/fonts && mkdirp ./dist/css && npm run copy-dependencies && rollup -c",
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync"
@@ -25,11 +26,12 @@
     "browser-sync": "^2.12.5",
     "cssnano": "^3.10.0",
     "eslint": "^4.7.2",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.49.3",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-babel-minify": "^3.1.2",
     "rollup-plugin-conditional": "^1.1.1",
-    "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-postcss": "^1.3.4"
   },

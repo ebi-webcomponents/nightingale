@@ -49,7 +49,8 @@ class ProtvistaStructure extends HTMLElement {
                                 method: d.properties.method,
                                 chains: this.getChain(d.properties.chains),
                                 start: this.getStart(d.properties.chains),
-                                end:  this.getEnd(d.properties.chains)
+                                end:  this.getEnd(d.properties.chains),
+                                resolution: this.formatAngstrom(d.properties.resolution)
                             }
                         }
                     });
@@ -115,7 +116,7 @@ class ProtvistaStructure extends HTMLElement {
                             <strong>${d.id}</strong><br/>
                             </td>
                             <td>${d.properties.method}</td>
-                            <td>${this.formatAngstrom(d.properties.resolution)}</td>
+                            <td>${d.properties.resolution}</td>
                             <td title="${d.properties.chains}">${d.properties.chains}</td>
                             <td>${d.properties.start}-${d.properties.end}</td>
                             <td>

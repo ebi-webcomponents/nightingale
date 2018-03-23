@@ -35,6 +35,12 @@ protvista-structure {
     cursor: pointer;
 }
 
+.table-container tbody tr td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .table-container thead, .table-container tbody tr {
     display: table;
     table-layout: fixed;
