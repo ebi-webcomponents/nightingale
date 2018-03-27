@@ -1,5 +1,6 @@
+// import 'litemol/dist/css/LiteMol-plugin.css';Styles rely on fonts being ../fonts
+import LiteMol from 'litemol';
 import '../style/style.css';
-// import LiteMol from 'litemol';
 
 class ProtvistaStructure extends HTMLElement {
     constructor() {
@@ -186,6 +187,10 @@ class ProtvistaStructure extends HTMLElement {
                 hideControls: true
             },
             allowAnalytics: false
+        });
+
+        this._liteMol.context.highlight.addProvider(info => {
+            console.log(info);
         });
     }
 
