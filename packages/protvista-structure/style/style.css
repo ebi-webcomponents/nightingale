@@ -2,7 +2,7 @@
     --blue: 0,112,155;
     --width: 100%;
 }
-protvista-structure {
+.main-container {
     display:flex;
 }
 .litemol-container, .table-container {
@@ -32,6 +32,13 @@ protvista-structure {
 
 .table-container tbody tr {
     width:100%;
+}
+
+.table-container tbody tr.pdb-row {
+    color: #CCC;
+}
+
+.table-container tbody tr.pdb-row-clickable {
     cursor: pointer;
 }
 
@@ -46,7 +53,7 @@ protvista-structure {
     table-layout: fixed;
 }
 
-.table-container tbody tr:hover {
+.table-container tbody tr.pdb-row-clickable:hover {
     background-color: rgba(var(--blue), 0.15);;
 }
 .table-container tr.active {

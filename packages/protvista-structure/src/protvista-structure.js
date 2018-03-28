@@ -23,6 +23,8 @@ class ProtvistaStructure extends HTMLElement {
 
     connectedCallback() {
         this.titleContainer = document.createElement('h4');
+        const flexContainer = document.createElement('div');
+        flexContainer.className = 'main-container';
         this.titleContainer.id = 'litemol-title';
         this.tableDiv = document.createElement('div');
         this.tableDiv.className = 'table-container';
@@ -30,8 +32,9 @@ class ProtvistaStructure extends HTMLElement {
         litemolDiv.className = 'litemol-container';
         litemolDiv.id = 'app';
         this.appendChild(this.titleContainer);
-        this.appendChild(litemolDiv);
-        this.appendChild(this.tableDiv);
+        this.appendChild(flexContainer);
+        flexContainer.appendChild(litemolDiv);
+        flexContainer.appendChild(this.tableDiv);
         this.loadLiteMol();
         this.loadUniProtEntry().then(entry => {
             this._pdbEntries = entry.dbReferences.filter(dbref => dbref.type === 'PDB').map(d => {
@@ -51,7 +54,9 @@ class ProtvistaStructure extends HTMLElement {
                 return;
             }
             this.loadStructureTable();
-            this.selectMolecule(this._pdbEntries[0].id);
+            this.selectMolecule(
+                this._pdbEntries.filter(d => d.properties.method !== 'Model')[0].id
+            );
         });
     }
 
@@ -80,9 +85,8 @@ class ProtvistaStructure extends HTMLElement {
 
     async loadPDBEntry(pdbId) {
         try {
-            return await (await fetch(
-                `https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`
-            )).json();
+            const data = await fetch(`https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`);
+            return await data.json();
         } catch (e) {
             throw new Error(`Couldn't load PDB entry`, e);
         }
@@ -103,7 +107,13 @@ class ProtvistaStructure extends HTMLElement {
                     ${this._pdbEntries
                         .map(
                             d => `
-                        <tr id="entry_${d.id}" class="pdb-row">
+                        <tr id="entry_${d.id}" class="${
+                                d.properties.method === 'Model' ? 'pdb-row' : 'pdb-row-clickable'
+                            }" title="${
+                                d.properties.method === 'Model'
+                                    ? 'No structure available for this model'
+                                    : ''
+                            }">
                             <td>
                             <strong>${d.id}</strong><br/>
                             </td>
@@ -133,7 +143,7 @@ class ProtvistaStructure extends HTMLElement {
             </table>
         `;
         this.tableDiv.innerHTML = html;
-        this.querySelectorAll('.pdb-row').forEach(row =>
+        this.querySelectorAll('.pdb-row-clickable').forEach(row =>
             row.addEventListener('click', () => this.selectMolecule(row.id.replace('entry_', '')))
         );
     }
@@ -155,17 +165,19 @@ class ProtvistaStructure extends HTMLElement {
     }
 
     async selectMolecule(id) {
-        this.loadPDBEntry(id).then(d => {
-            const mappings = this.processMapping(d);
-            this._selectedMolecule = {
-                id: id,
-                mappings: mappings
-            };
-            this.querySelectorAll('.active').forEach(row => row.classList.remove('active'));
-            this.querySelector(`#entry_${id}`).classList.add('active');
-            this.querySelector('#litemol-title').textContent = id;
-            this.loadMolecule(id);
-        });
+        this.loadPDBEntry(id)
+            .then(d => {
+                const mappings = this.processMapping(d);
+                this._selectedMolecule = {
+                    id: id,
+                    mappings: mappings
+                };
+                this.querySelectorAll('.active').forEach(row => row.classList.remove('active'));
+                this.querySelector(`#entry_${id}`).classList.add('active');
+                this.querySelector('#litemol-title').textContent = id;
+                this.loadMolecule(id);
+            })
+            .catch(e => console.log(e));
     }
 
     loadLiteMol() {
