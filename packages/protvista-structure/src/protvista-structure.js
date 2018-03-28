@@ -112,18 +112,18 @@ class ProtvistaStructure extends HTMLElement {
                             <td title="${d.properties.chains}">${d.properties.chains}</td>
                             <td>${d.properties.start}-${d.properties.end}</td>
                             <td>
-                                <a target="_blank" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
+                                <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
                                     d.id
-                                }">PDB</a><br> 
-                                <a target="_blank" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
+                                }">PDBe</a><br> 
+                                <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
                                     d.id
-                                }">RCSB-PDBi</a><br>
-                                <a target="_blank" href="//pdbj.org/mine/summary/${
+                                }">RCSB PDBi</a><br>
+                                <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${
                                     d.id
                                 }">PDBj</a><br>
                                 <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${
                                     d.id
-                                }">PDBSUM</a>
+                                }">PDBsum</a>
                             </td>
                         </tr>
                     `
