@@ -7,6 +7,7 @@ class ProtvistaTooltip extends HTMLElement {
         this._left = parseInt(this.getAttribute("left"));
         this._content = this.getAttribute("content");
         this._title = this.getAttribute("title");
+        this._mirror = undefined;
     }
     
     set top(top) {
@@ -53,8 +54,16 @@ class ProtvistaTooltip extends HTMLElement {
         return this.hasAttribute('closeable');
     }
 
+    get mirror() {
+        return this._mirror;
+    }
+
+    set mirror(orientation) {
+        this.setAttribute('mirror', orientation);
+    }
+
     static get observedAttributes() {
-        return ['top', 'left'];
+        return ['top', 'left', 'mirror'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -97,6 +106,11 @@ class ProtvistaTooltip extends HTMLElement {
 
     render() {
         this._updatePosition();
+
+        if ('undefined' !== typeof this.mirror) {
+            this.mirror = this.mirror;
+        }
+
         let html = `<div class="tooltip-header">`;
         if(this.closeable) {
             html = `${html}<span class="tooltip-close"></span>`

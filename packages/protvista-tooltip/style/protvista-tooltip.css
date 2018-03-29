@@ -9,6 +9,12 @@ protvista-tooltip {
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     opacity: .9;
 }
+
+protvista-tooltip[mirror="H"] {
+    margin-left: 0;
+    margin-right: 20px;
+}
+
 protvista-tooltip .tooltip-header .tooltip-header-title,
 protvista-tooltip .tooltip-body,
 protvista-tooltip a,
@@ -33,6 +39,11 @@ protvista-tooltip .tooltip-header::before {
     border-width: 10px;
     border-style: solid;
     border-color: transparent transparent black transparent;
+}
+
+protvista-tooltip[mirror="H"] .tooltip-header::before {
+    left: initial;
+    right: 20px;
 }
 
 protvista-tooltip .tooltip-header .tooltip-header-title {
