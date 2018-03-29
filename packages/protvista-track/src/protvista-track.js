@@ -169,8 +169,13 @@ class ProtVistaTrack extends ProtvistaZoomable {
       .attr('fill', f => this._getFeatureColor(f.feature))
       .attr('stroke', f => this._getFeatureColor(f.feature))
       .on('mouseover', f => {
+        var self = this;
+        var e = d3Event;
+
         if (this._tooltipEvent === 'mouseover') {
-          this.createTooltip(d3Event, f);
+          window.setTimeout(function () {
+            self.createTooltip(e, f);
+          }, 50);
         }
         this.dispatchEvent(new CustomEvent("change", {
           detail: {
@@ -182,8 +187,12 @@ class ProtVistaTrack extends ProtvistaZoomable {
         }));
       })
       .on('mouseout', () => {
+        var self = this;
+
         if (this._tooltipEvent === 'mouseover') {
-          this.removeAllTooltips();
+          window.setTimeout(function () {
+            self.removeAllTooltips();
+          }, 50);
         }
         this.dispatchEvent(new CustomEvent("change", {
           detail: {
@@ -202,14 +211,28 @@ class ProtVistaTrack extends ProtvistaZoomable {
   }
 
   createTooltip(e, d, closeable = false) {
+
+    this.removeAllTooltips();
     const tooltip = document.createElement('protvista-tooltip');
-    tooltip.top = e.clientY;
-    tooltip.left = e.clientX;
+    tooltip.top = e.clientY + 3;
+    tooltip.left = e.clientX + 2;
     tooltip.title = `${d.feature.type} ${d.start}-${d.end}`;
     tooltip.closeable = closeable
     // Passing the content as a property as it can contain HTML
     tooltip.content = d.feature.tooltipContent;
     this.appendChild(tooltip);
+
+    const parentWidth = this.svg._groups[0][0].clientWidth;
+    const tooltipPosition = select(tooltip).node().getBoundingClientRect();
+
+    if (tooltipPosition.width + tooltipPosition.x > parentWidth) {
+      this.removeChild(tooltip);
+
+      tooltip.left = parentWidth - tooltipPosition.width;
+      tooltip.mirror = "H";
+
+      this.appendChild(tooltip);
+    }
   }
 
   removeAllTooltips() {
