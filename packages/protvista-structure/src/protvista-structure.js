@@ -21,6 +21,10 @@ class ProtvistaStructure extends HTMLElement {
         return this.setAttribute('accession', accession);
     }
 
+    get isManaged() {
+        return true;
+    }
+
     connectedCallback() {
         this.titleContainer = document.createElement('h4');
         const flexContainer = document.createElement('div');
