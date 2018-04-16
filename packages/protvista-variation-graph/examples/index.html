@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+</head>
+
+<body>
+    <div>
+    <protvista-variation-graph width="800" height="60">
+        <data-loader>
+            <source src="https://www.ebi.ac.uk/proteins/api/variation/P21802" />
+        </data-loader>
+    </protvista-variation-graph>
+    </div>
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+
+    <!-- Required for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
+    <!-- Web component polyfill (only loads what it needs) -->
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8" defer></script>
+    <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
+    <script src="../node_modules/data-loader/dist/index.js" defer></script>
+    <script src="../node_modules/uniprot-entry-data-adapter/dist/UniProtEntryDataAdapter.js" defer></script>
+
+    <script src="../node_modules/protvista-variation-adapter/dist/protvista-variation-adapter.js" defer></script>
+    <script src="../node_modules/protvista-zoomable/dist/protvista-zoomable.js" defer></script>
+    <script src="../node_modules/protvista-track/dist/protvista-track.js" defer></script>
+    <script src="../dist/protvista-variation-graph.js" defer charset="utf-8"></script>
+</body>
+
+</html>
