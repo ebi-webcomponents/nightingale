@@ -38,7 +38,10 @@ class ProtvistaVariationAdapter extends UniProtEntryDataAdapter {
             variant.wildType = variant.wildType
                 ? variant.wildType
                 : sequence.substring(variant.begin, variant.end + 1);
-            variant.xrefNames = this.getSourceType(variant.xrefs, variant.sourceType);
+            variant.xrefNames = variant.xrefs
+                ? this.getSourceType(variant.xrefs, variant.sourceType)
+                : [];
+
             //expected by tooltip
             variant.feature = {
                 type: variant.type,
@@ -177,7 +180,7 @@ class ProtvistaVariationAdapter extends UniProtEntryDataAdapter {
 
     //TODO this should be inherited from ParserHelper
     getEvidenceFromCodes(evidences) {
-        return evidences.map(
+        return evidences && evidences.map(
             evidence => `
             <tr><td>Evidence</td><td>${evidence.code}</td></tr>
             <tr><td>Source</td><td><a href="${evidence.source.url}">${evidence.source.id}</a> (${
