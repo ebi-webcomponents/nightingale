@@ -45,6 +45,7 @@ class ProtvistaZoomable extends HTMLElement {
       this._originXScale = this.xScale.copy();
       this.initZoom();
       this.listenForResize();
+      this.addEventListener('error', e => { throw e; });
     }
 
     disconnectedCallback() {
