@@ -1185,10 +1185,11 @@ var _templateObject = taggedTemplateLiteral(['\n        <protvista-manager attri
 var _templateObject2 = taggedTemplateLiteral(['\n                    <div class="category-label" data-category-toggle="', '">\n                        ', '\n                    </div>\n                    <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                        ', '\n                    </div>\n                    ', '\n                '], ['\n                    <div class="category-label" data-category-toggle="', '">\n                        ', '\n                    </div>\n                    <div class="aggregate-track-content" data-toggle-aggregate="', '">\n                        ', '\n                    </div>\n                    ', '\n                ']);
 var _templateObject3 = taggedTemplateLiteral(['\n                        <div class="track-label" data-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="track-content" data-toggle="', '">\n                            ', '\n                        </div>'], ['\n                        <div class="track-label" data-toggle="', '">\n                            ', '\n                        </div>\n                        <div class="track-content" data-toggle="', '">\n                            ', '\n                        </div>']);
 var _templateObject4 = taggedTemplateLiteral(['\n                <protvista-feature-adapter filters="', '">\n                        <data-loader>\n                            <source src="', '', '" />\n                        </data-loader>\n                </protvista-feature-adapter>\n                '], ['\n                <protvista-feature-adapter filters="', '">\n                        <data-loader>\n                            <source src="', '', '" />\n                        </data-loader>\n                </protvista-feature-adapter>\n                ']);
-var _templateObject5 = taggedTemplateLiteral(['                            \n                <data-loader>\n                    <source src="', '', '" />\n                </data-loader>\n            '], ['                            \n                <data-loader>\n                    <source src="', '', '" />\n                </data-loader>\n            ']);
+var _templateObject5 = taggedTemplateLiteral(['\n                    <protvista-variation-adapter>\n                        <data-loader>\n                            <source src="', '', '" />\n                        </data-loader>\n                    </protvista-variation-adapter>\n                '], ['\n                    <protvista-variation-adapter>\n                        <data-loader>\n                            <source src="', '', '" />\n                        </data-loader>\n                    </protvista-variation-adapter>\n                ']);
 var _templateObject6 = taggedTemplateLiteral(['<protvista-variation-filter></protvista-variation-filter'], ['<protvista-variation-filter></protvista-variation-filter']);
 var _templateObject7 = taggedTemplateLiteral(['\n                <protvista-track length="', '" tooltip-event="click" layout="', '">\n                    ', '\n                </protvista-track>\n                '], ['\n                <protvista-track length="', '" tooltip-event="click" layout="', '">\n                    ', '\n                </protvista-track>\n                ']);
 var _templateObject8 = taggedTemplateLiteral(['\n                <protvista-variation length="', '" tooltip-event="click">\n                    ', '\n                </protvista-variation>\n                '], ['\n                <protvista-variation length="', '" tooltip-event="click">\n                    ', '\n                </protvista-variation>\n                ']);
+var _templateObject9 = taggedTemplateLiteral(['\n                    <protvista-variation-graph length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation-graph>\n                '], ['\n                    <protvista-variation-graph length="', '" tooltip-event="click">\n                        ', '\n                    </protvista-variation-graph>\n                ']);
 
 var ProtvistaUniprot$1 = function (_HTMLElement) {
     inherits(ProtvistaUniprot, _HTMLElement);
@@ -1322,6 +1323,9 @@ var ProtvistaUniprot$1 = function (_HTMLElement) {
                     return html(_templateObject4, trackTypes, url, this._accession);
                 case 'protvista-variation-adapter':
                     return html(_templateObject5, url, this._accession);
+                default:
+                    console.log("No Matching ProtvistaAdapter Found.");
+                    break;
             }
         }
     }, {
@@ -1343,6 +1347,11 @@ var ProtvistaUniprot$1 = function (_HTMLElement) {
                     return html(_templateObject7, this._sequenceLength, layout, this.getAdapter(adapter, url, trackTypes));
                 case 'protvista-variation':
                     return html(_templateObject8, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
+                case 'protvista-variation-graph':
+                    return html(_templateObject9, this._sequenceLength, this.getAdapter(adapter, url, trackTypes));
+                default:
+                    console.log("No Matching ProtvistaTrack Found.");
+                    break;
             }
         }
     }]);

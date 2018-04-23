@@ -106,12 +106,17 @@ class ProtvistaUniprot extends HTMLElement {
                         </data-loader>
                 </protvista-feature-adapter>
                 `;
-            case ('protvista-variation-adapter'):
-                return html `                            
-                <data-loader>
-                    <source src="${url}${this._accession}" />
-                </data-loader>
-            `;
+            case 'protvista-variation-adapter':
+                return html `
+                    <protvista-variation-adapter>
+                        <data-loader>
+                            <source src="${url}${this._accession}" />
+                        </data-loader>
+                    </protvista-variation-adapter>
+                `;
+            default:
+                console.log("No Matching ProtvistaAdapter Found.");
+                break;
         }
     }
 
@@ -137,6 +142,15 @@ class ProtvistaUniprot extends HTMLElement {
                     ${this.getAdapter(adapter, url, trackTypes)}
                 </protvista-variation>
                 `;
+            case 'protvista-variation-graph':
+                return html `
+                    <protvista-variation-graph length="${this._sequenceLength}" tooltip-event="click">
+                        ${this.getAdapter(adapter, url, trackTypes)}
+                    </protvista-variation-graph>
+                `;
+            default:
+                console.log("No Matching ProtvistaTrack Found.");
+                break;
         }
 
     }
