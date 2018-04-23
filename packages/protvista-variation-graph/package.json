@@ -1,6 +1,7 @@
 {
     "name": "protvista-variation-graph",
     "description": "ProtVista Variation Graph",
+    "version": "0.0.1",
     "files": [
         "dist",
         "src"

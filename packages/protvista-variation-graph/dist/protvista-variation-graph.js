@@ -278,55 +278,37 @@ var loadComponent = function loadComponent() {
 
                 this._data = undefined;
 
-                this._margin = {
-                    top: 20,
-                    bottom: 10,
-                    right: 10,
-                    left: 10
-                };
-
-                this._height = parseInt(this.getAttribute('height')) || 60;
-                this._width = parseInt(this.getAttribute('width')) || 800;
-                // console.log("++ w/h:", this._width, this._height);
-                // const bbox = select(this).node().getBoundingClientRect();
-                // console.log("bbox:", bbox);
-                // this._width = bbox.width;
-                // this._height = bbox.height;
-
-                this._xScale = d3.scaleLinear();
+                this._height = parseInt(this.getAttribute('height')) || 40;
                 this._yScale = d3.scaleLinear();
                 this._xExtent;
                 this._yExtent;
 
                 this._totals_line = d3.line().x(function (d) {
-                    return _this2._xScale(d.x);
+                    return _this2.xScale(d.x);
                 }).y(function (d) {
                     return _this2._yScale(d.y);
                 }).curve(d3.curveBasis);
 
                 this._totals_dataset = {};
+                this._totals_feature = undefined;
 
                 this._disease_line = d3.line().x(function (d) {
-                    return _this2._xScale(d.x);
+                    return _this2.xScale(d.x);
                 }).y(function (d) {
                     return _this2._yScale(d.y);
                 }).curve(d3.curveBasis);
 
                 this._disease_dataset = {};
-
-                this._non_disease_line = d3.line().x(function (d) {
-                    return _this2._xScale(d.x);
-                }).y(function (d) {
-                    return _this2._yScale(d.y);
-                }).curve(d3.curveBasis);
-
-                this._non_disease_dataset = {};
+                this._disease_feature = undefined;
             }
         }, {
             key: 'attributeChangedCallback',
             value: function attributeChangedCallback(attrName, oldVal, newVal) {
-                // super.attributeChangedCallback(attrName, oldVal, newVal);
-                console.log('attr changed:', attrName, oldVal, newVal);
+                get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'attributeChangedCallback', this).call(this, attrName, oldVal, newVal);
+
+                if (!get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this)) {
+                    return;
+                }
             }
         }, {
             key: '_emptyFillMissingRecords',
@@ -356,24 +338,15 @@ var loadComponent = function loadComponent() {
         }, {
             key: '_createTrack',
             value: function _createTrack() {
-                set(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', d3.select(this).append('svg')
-                // .attr('width', this._width + this._margin.left + this._margin.right)
-                .attr('height', this._height + this._margin.top + this._margin.bottom).attr('width', this._width)
-                // .attr('height', this._height)
-                // .append('g')
-                //     .attr('transform', `translate(${this._margin.top},${this._margin.left})`);
-                .append('g').attr('transform', 'translate(0, 20)'), this);
-
-                get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this).append('rect').attr('width', '100%').attr('height', '100%').attr('fill', 'white').attr('stroke-width', '1').attr('stroke', 'grey');
-                // .attr('transform', `translate(0,0)`);
+                set(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', d3.select(this).append('svg').attr('width', this.width).attr('height', this._height), this);
 
                 // Create the visualisation here
                 this._createFeatures();
+                this.refresh();
             }
         }, {
             key: '_createFeatures',
             value: function _createFeatures() {
-
                 this._xExtent = d3.extent(this._totals_dataset, function (d) {
                     return parseInt(d.x);
                 });
@@ -381,81 +354,56 @@ var loadComponent = function loadComponent() {
                     return d.y;
                 });
 
-                //             const bbox = select(this).node().getBoundingClientRect();
-                // console.log("bbox:", bbox);
-                console.log("width/height:", this._width, this._height);
-                this._xScale.domain(this._xExtent).range([0, this._width]);
+                // just a bit of padding on the top
+                this._yExtent[1] += 2;
+
+                this.xScale.domain(this._xExtent).range([0, this._width]);
                 this._yScale.domain(this._yExtent).range([this._height, 0]);
-
-                get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this).append('path').data([this._disease_dataset]).attr('fill', 'none').attr('stroke', 'red').attr('stroke-width', '1.5px').attr('stroke-dasharray', '0').attr('d', this._disease_line);
-
-                // super.svg
-                //     .append('path')
-                //     .data([this._non_disease_dataset])
-                //     .attr('fill', 'none')
-                //     .attr('stroke', 'yellow')
-                //     .attr('stroke-width', '1.5px')
-                //     .attr('stroke-dasharray', '0')
-                //     .attr('d', this._non_disease_line);
-
-                get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this).append('path').data([this._totals_dataset]).attr('fill', 'none').attr('stroke', 'darkgrey').attr('stroke-width', '1px').attr('stroke-dasharray', '.5').attr('d', this._totals_line);
             }
         }, {
-            key: 'updateScale',
-            value: function updateScale() {}
+            key: 'refresh',
+            value: function refresh() {
+                get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this).selectAll('path').remove();
+
+                this._disease_feature = get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this).append('path').data([this._disease_dataset]).attr('fill', 'none').attr('stroke', 'red').attr('stroke-width', '1.5px').attr('stroke-dasharray', '0').attr('d', this._disease_line).attr('transform', 'translate(0,0)');
+
+                this._totals_feature = get(ProtvistaVariationGraph.prototype.__proto__ || Object.getPrototypeOf(ProtvistaVariationGraph.prototype), 'svg', this).append('path').data([this._totals_dataset]).attr('fill', 'none').attr('stroke', 'darkgrey').attr('stroke-width', '1px').attr('stroke-dasharray', '.5').attr('d', this._totals_line).attr('transform', 'translate(0,0)');
+            }
         }, {
             key: 'data',
             set: function set$$1(data) {
                 var _this3 = this;
 
-                console.log('data:', data);
-                // this._data = this.normalizeLocations(data);
                 this._data = data;
 
-                this._data.features.forEach(function (r) {
-                    if ('undefined' === typeof _this3._totals_dataset[r.begin]) {
-                        _this3._totals_dataset[r.begin] = 0;
+                this._data.forEach(function (m) {
+                    if (0 >= m.variants.length) {
+                        return;
                     }
 
-                    if ('undefined' === typeof _this3._disease_dataset[r.begin]) {
-                        _this3._disease_dataset[r.begin] = 0;
-                    }
+                    m.variants.forEach(function (v) {
+                        if ('undefined' === typeof _this3._totals_dataset[v.begin]) {
+                            _this3._totals_dataset[v.begin] = 0;
+                        }
 
-                    if ('undefined' === typeof _this3._non_disease_dataset[r.begin]) {
-                        _this3._non_disease_dataset[r.begin] = 0;
-                    }
+                        if ('undefined' === typeof _this3._disease_dataset[v.begin]) {
+                            _this3._disease_dataset[v.begin] = 0;
+                        }
 
-                    _this3._totals_dataset[r.begin]++;
+                        _this3._totals_dataset[v.begin]++;
 
-                    if ('undefined' !== typeof r.association) {
-                        r.association.forEach(function (a) {
-                            // console.log("disease:", a);
-                            if (true === a.disease) {
-                                _this3._disease_dataset[r.begin]++;
-                            } else if (false === a.disease) {
-                                _this3._non_disease_dataset[r.begin]++;
-                            }
-                        });
-                    }
+                        if ('undefined' !== typeof v.association) {
+                            v.association.forEach(function (a) {
+                                if (true === a.disease) {
+                                    _this3._disease_dataset[v.begin]++;
+                                }
+                            });
+                        }
+                    });
                 });
 
                 this._totals_dataset = this._emptyFillMissingRecords(this._totals_dataset);
                 this._disease_dataset = this._emptyFillMissingRecords(this._disease_dataset);
-                this._non_disease_dataset = this._emptyFillMissingRecords(this._non_disease_dataset);
-
-                // const sortedDiseases = Object.keys(this._disease_dataset)
-                //     .map(k => parseInt(k))
-                //     .sort((a, b) => a - b)
-                //     .map(k => ({
-                //         x: k,
-                //         y: this._disease_dataset[k]
-                //     }));
-
-                // this._disease_dataset = sortedDiseases;
-
-                // console.log('TOTALS:', this._totals_dataset);
-                // console.log('DISEASES:', this._disease_dataset);
-                // console.log("NON-DISEASE:", this._non_disease_dataset);
 
                 this._createTrack();
             }

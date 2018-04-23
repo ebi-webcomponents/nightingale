@@ -14,10 +14,12 @@
 
 <body>
     <div>
-    <protvista-variation-graph width="800" height="60">
-        <data-loader>
-            <source src="https://www.ebi.ac.uk/proteins/api/variation/P21802" />
-        </data-loader>
+    <protvista-variation-graph height="60" >
+        <protvista-variation-adapter>
+            <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/variation/P21802" />
+            </data-loader>
+        </protvista-variation-adapter>
     </protvista-variation-graph>
     </div>
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
