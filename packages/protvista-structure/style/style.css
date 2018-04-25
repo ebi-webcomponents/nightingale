@@ -2,6 +2,10 @@
     --blue: 0,112,155;
     --width: 100%;
 }
+protvista-structure h4 {
+    display: inline;
+    margin-right: 1em;
+}
 .main-container {
     display:flex;
 }
