@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -14,7 +14,7 @@
     "url": "https://github.com/ebi-ppf/protvista-track"
   },
   "scripts": {
-    "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
+    "build": "NODE_ENV=production rollup -c",
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync",
@@ -23,26 +23,24 @@
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "MIT",
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.19",
+    "@webcomponents/webcomponentsjs": "^1.2.0",
     "babel-cli": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-custom-element-classes": "^0.1.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.18.12",
-    "data-loader": "^0.3.0",
-    "mkdirp": "^0.5.1",
-    "protvista-feature-adapter": "^0.0.2",
-    "rimraf": "^2.6.1",
-    "rollup": "^0.49.3",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "uniprot-entry-data-adapter": "0.0.4"
+    "browser-sync": "^2.24.1",
+    "data-loader": "^0.3.2",
+    "protvista-feature-adapter": "^0.0.4",
+    "rollup": "^0.58.2",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "uniprot-entry-data-adapter": "0.0.6"
   },
   "dependencies": {
     "d3": "4.13.0",
-    "lodash-es": "^4.17.4",
-    "protvista-zoomable": "0.0.4"
+    "lodash-es": "^4.17.10",
+    "protvista-zoomable": "0.0.8"
   }
 }
