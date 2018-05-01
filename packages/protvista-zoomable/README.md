@@ -1,4 +1,4 @@
-# `<protvista-navigation>`
+# `<protvista-zoomable>`
 A custom element allowing to navigate a protein/nucleic sequence.
 
 ## Usage
