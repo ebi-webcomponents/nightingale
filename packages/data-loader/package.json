@@ -23,6 +23,7 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore \"./**/*.js\"",
     "bundle": "rollup -c",
+    "rollup-watch": "rollup -cw",
     "livereload": "livereload \"dist, test\"",
     "build": "rimraf dist && npm run bundle -- --environment NODE_ENV:production",
     "start": "rimraf dist && npm run livereload & npm run bundle -- --watch",

@@ -1,31 +1,9 @@
 import lodashGet from 'lodash-es/get';
+import RequestManager from './request-manager';
 
 const getSourceData = (...children) => children.filter(
   child => child.matches('source[src], script[type="application/json"]')
 );
-
-const fetchOne = async source => {
-  // if `<source src="…" >`
-  if (source.src) {
-    // get data from remote endpoint
-    const headers = new Headers({accept: 'application/json'});
-    const response = await DataLoader.fetch(source.src, {headers});
-    if (!response.ok) {
-      throw new Error({
-        status: response.status,
-        statusText: response.statusText,
-      });
-    }
-    return {
-      payload: await response.json(),
-      headers: response.headers,
-      srcElement: source,
-      src: source.src,
-    };
-  } else { // if <script type="application/json">…</script>
-    return {payload: JSON.parse(source.textContent)};
-  }
-};
 
 class DataLoader extends HTMLElement {
   static get is () { return 'data-loader' }
@@ -34,14 +12,20 @@ class DataLoader extends HTMLElement {
     // get all the potentials sources elements
     const sources = getSourceData(...this.children);
     // if nothing there, bails
-    if (!sources.length) return;
+    if (!sources.length) {
+      return;
+    }
 
     let errors = [];
     let detail;
+
     // go over all the potential sources to try to load data from it
     for (const source of sources) {
       try {
-        detail = await fetchOne(source);
+        detail = await RequestManager.fetch(source);
+        detail.srcElement = source;
+        detail.src = source.src;
+
         // if we're here, we have data, go out of the loop
         break;
       } catch (error) {
