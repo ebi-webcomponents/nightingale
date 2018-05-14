@@ -18,3 +18,4 @@ _sass/
 _site/
 Gemfile.lock
 package-lock.json
+dist/
