@@ -39,6 +39,7 @@ export default class StructureDataParser {
     }
 
     _parseValidEntry(data) {
+        this._pdbFeatures = {};
         this._pdbFeatures.accession = data.accession;
         this._pdbFeatures.sequence = data.sequence.sequence;
         this._pdbFeatures.features = [];
@@ -47,12 +48,12 @@ export default class StructureDataParser {
         });
         this._pdbFeatures.features = ldMap(structures, (structure) => {
             const beginEnd = structure.properties.chains
-                ? ParserHelper.getBeginEnd(structure.properties.chains) : {begin: 0, end: 0};
+                ? ParserHelper.getBeginEnd(structure.properties.chains) : {start: 0, end: 0};
             return {
                 type: featureType,
                 category: featureCategory,
                 description: ParserHelper.getDescription(structure.properties),
-                begin: beginEnd.begin,
+                start: beginEnd.begin,
                 end: beginEnd.end,
                 xrefs: [{
                     name: 'PDB',
