@@ -1,32 +1,31 @@
 class RequestManager {
-  static get storeSymbol() {
+  static get storeSymbol () {
     return Symbol.for('protvista-request-manager-store');
   }
 
-  static get storeRef() {
+  static get storeRef () {
     return window[RequestManager.storeSymbol];
   }
 
-  static initStore() {
+  static initStore () {
     window[RequestManager.storeSymbol] = new Map();
   }
 
-  static loadFromCache(key) {
+  static loadFromCache (key) {
     return RequestManager.storeRef.get(key);
   }
 
-  static storeInCache(key, result) {
+  static storeInCache (key, result) {
     const value = result
       .then(async response => {
-
-        if (200 !== response.status) {
+        if (response.status !== 200) {
           throw Error(`Request Failed: Status = ${response.status}; URI = ${key}; Time = ${(new Date())}`);
         }
 
         return {
           payload: await response.json(),
           headers: response.headers,
-        }
+        };
       });
 
     RequestManager.storeRef.set(key, value);
@@ -34,17 +33,16 @@ class RequestManager {
     return RequestManager.loadFromCache(key);
   }
 
-  static async fetch(source) {
-    if ('undefined' === typeof RequestManager.storeRef) {
+  static async fetch (source) {
+    if (typeof RequestManager.storeRef === 'undefined') {
       RequestManager.initStore();
     }
 
     const cached = RequestManager.loadFromCache(source.src);
 
-    if ('undefined' !== typeof cached) {
+    if (typeof cached !== 'undefined') {
       return cached;
     } else {
-
       // if `<source src="…" >`
       if (source.src) {
         // get data from remote endpoint
