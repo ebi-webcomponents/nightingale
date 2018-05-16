@@ -12,5 +12,6 @@ export default class ProtVistaStructureAdapter extends UniProtEntryDataAdapter {
 
     parseEntry(data) {
         this._adaptedData = this._parser.parseEntry(data);
+        return this._adaptedData;
     }
 }

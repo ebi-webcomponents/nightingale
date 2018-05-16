@@ -5,12 +5,12 @@ import ldFilter from 'lodash-es/filter';
 import ldMap from 'lodash-es/map';
 import ParserHelper from './ParserHelper';
 
-const featureType = 'PDB_STRUCTURE';
+const featureType = 'PDBE_COV';
 const featureCategory = 'STRUCTURAL';
 
 export default class StructureDataParser {
     constructor() {
-        this._pdbFeatures = {};
+        this._pdbFeatures = [];
     }
 
     parseEntry(data) {
@@ -39,14 +39,11 @@ export default class StructureDataParser {
     }
 
     _parseValidEntry(data) {
-        this._pdbFeatures = {};
-        this._pdbFeatures.accession = data.accession;
-        this._pdbFeatures.sequence = data.sequence.sequence;
-        this._pdbFeatures.features = [];
+        this._pdbFeatures = [];
         const structures = ldFilter(data.dbReferences, (reference) => {
             return reference.type === 'PDB';
         });
-        this._pdbFeatures.features = ldMap(structures, (structure) => {
+        this._pdbFeatures = ldMap(structures, (structure) => {
             const beginEnd = structure.properties.chains
                 ? ParserHelper.getBeginEnd(structure.properties.chains) : {start: 0, end: 0};
             return {
