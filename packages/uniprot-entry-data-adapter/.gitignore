@@ -21,5 +21,6 @@ _includes
 _posts
 _sass
 _site
+dist/
 package-lock.json
 
