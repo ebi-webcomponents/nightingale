@@ -21,3 +21,5 @@ _includes
 _posts
 _sass
 _site
+package-lock.json
+
