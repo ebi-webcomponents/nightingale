@@ -1,12 +1,12 @@
-# `<protvista-track>`
-Basic track type of the viewer
+# `<protvista-interpro-track>`
+Interpro adpation of the track
 
 See it running [Here](https://ebi-webcomponents.github.io/protvista-interpro-track/).
 
 
 ## Usage
 ```html
-      <protvista-track length="456" start="34" end="400"></protvista-track>
+      <protvista-interpro-track length="456" start="34" end="400"></protvista-track>
 ```
 
 ## API Reference
