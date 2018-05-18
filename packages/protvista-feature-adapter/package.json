@@ -46,6 +46,6 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
-    "uniprot-entry-data-adapter": "^0.0.4"
+    "uniprot-entry-data-adapter": "^0.0.6"
   }
 }
