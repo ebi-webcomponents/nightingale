@@ -81,7 +81,50 @@
       ];
       document.querySelector("#track1").data = data;
       document.querySelector("#track2").data = data;
+      const contributors = [
+        { accession:'feature1.1', start: 12, end: 40,
+          residues: [{
+            accession: "CAP_ED",
+            locations: [
+              {
+                description: "ligand binding site",
+                fragments: [
+                  {start: 20, end: 20, residue: 'G'},
+                  {start: 25, end: 25, residue: 'A'},
+                  {start: 30, end: 30, residue: 'S'},
+                ]
+              }, {
+                description: "flexible hinge region",
+                fragments: [
+                  {start: 22, end: 22, residue: 'T'},
+                  {start: 24, end: 24, residue: 'G'},
+                ]
+              }
+            ]
+          }]
+        },
+        {accession:'feature1.2', locations: [{ fragments:[
+          {start: 10, end: 27},
+          {start: 29, end: 40},
+        ]}]},
+        {accession:'feature2.1', start: 50, end: 160},
+        {accession:'feature2.2', locations: [{ fragments:[
+          {start: 50, end: 94},
+          {start: 99, end: 110},
+          {start: 116, end: 158},
+        ]}]},
+        {accession:'feature2.3', locations: [{ fragments:[
+          {start: 52, end: 98},
+          {start: 104, end: 160},
+        ]}]},
+        {accession:'feature3.1', locations: [
+          {fragments:[{start: 155, end: 155}]},
+          {fragments:[{start: 158, end: 158}]}
+        ]},
+      ];
+
       document.querySelector("#track3").data = data;
+      document.querySelector("#track3").contributors = contributors;
     }
   </script>
 </body>
