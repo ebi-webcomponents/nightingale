@@ -31,7 +31,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.24.1",
-    "data-loader": "^0.3.2",
+    "data-loader": "^0.3.3",
     "protvista-feature-adapter": "^0.0.4",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
