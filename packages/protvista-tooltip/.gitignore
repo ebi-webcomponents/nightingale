@@ -5,3 +5,7 @@ dist/
 
 .vscode
 protvista-webcomp.code-workspace
+
+package-lock.json
+yarn.lock
+
