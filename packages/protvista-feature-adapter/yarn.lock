@@ -802,7 +802,7 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-data-loader@^0.3.0:
+data-loader@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/data-loader/-/data-loader-0.3.3.tgz#a1faa45940adedac4fd7adae6d4dd84aef6b49e9"
   dependencies:
