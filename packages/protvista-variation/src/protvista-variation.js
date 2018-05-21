@@ -62,6 +62,13 @@ class ProtvistaVariation extends ProtVistaTrack {
             bottom: 10
         }
         this._yScale = scaleLinear();
+        // scale for Amino Acids
+        this._yScale =
+            scalePoint()
+            .domain(aaList)
+            .range([
+                0, this._height - this._margin.top - this._margin.bottom
+            ]);    
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -85,29 +92,8 @@ class ProtvistaVariation extends ProtVistaTrack {
             this.applyFilters();
     }
 
-    _createTrack() {
-        super.svg = select(this)
-            .append('svg')
-            .attr('width', '100%')
-            .attr('height', this._height);
-
-        // scale for Amino Acids
-        this._yScale =
-            scalePoint()
-            .domain(aaList)
-            .range([
-                0, this._height - this._margin.top - this._margin.bottom
-            ]);
-
-        // create the variation plot function to be called by the series?
-        this._variationPlot = new VariationPlot();
-
-        // Create the visualisation here
-        this._createFeatures();
-        this.refresh();
-    }
-
     _createFeatures() {
+        this._variationPlot = new VariationPlot();
         // Group for the main chart
         const mainChart = super.svg
             .append('g')
@@ -151,6 +137,7 @@ class ProtvistaVariation extends ProtVistaTrack {
             this
                 ._series
                 .call(this._variationPlot.drawVariationPlot, this);
+            this._updateHighlight();
         }
     }
 
