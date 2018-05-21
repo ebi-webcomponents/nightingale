@@ -8,6 +8,7 @@ class ProtvistaStructure extends HTMLElement {
         this._mappings = [];
         this._highlightstart = parseInt(this.getAttribute('highlightstart'));
         this._highlightend = parseInt(this.getAttribute('highlightend'));
+        this.pdbId = this.getAttribute('pdbId') ? this.getAttribute('pdbId') : '';
         this.loadMolecule = this.loadMolecule.bind(this);
         this.loadStructureTable = this.loadStructureTable.bind(this);
         this._planHighlight = this._planHighlight.bind(this);
@@ -67,14 +68,16 @@ class ProtvistaStructure extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['highlightstart', 'highlightend'];
+        return ['highlightstart', 'highlightend','molecule'];
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
         if (oldVal !== newVal) {
-            const value = parseInt(newVal);
+            const value = parseFloat(newVal);
             this[`_${attrName}`] = isNaN(value) ? newVal : value;
-            // if (!this._selectedMolecule) return;
+            if(attrName === 'molecule') {
+                this.selectMolecule(newVal);
+            }
             this._planHighlight(true);
         }
     }
