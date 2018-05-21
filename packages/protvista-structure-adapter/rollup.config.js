@@ -9,10 +9,10 @@ export default {
         name: 'ProtVistaStructureAdapter',
         sourcemap: true,
         globals: {
-            'uniprot-entry-data-adapter': 'UniProtEntryDataAdapter'
+            'protvista-uniprot-entry-adapter': 'UniProtEntryDataAdapter'
         }
     },
-    external: ['uniprot-entry-data-adapter'],
+    external: ['protvista-uniprot-entry-adapter'],
     plugins: [
         nodeResolve({jsnext: true}),
         babel({

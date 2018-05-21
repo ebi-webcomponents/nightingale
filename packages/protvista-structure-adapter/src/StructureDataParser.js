@@ -56,11 +56,10 @@ export default class StructureDataParser {
                         description: ParserHelper.getDescription(structure.properties),
                         start: beginEnd.begin,
                         end: beginEnd.end,
-                        xrefs: [{
-                            name: 'PDB',
+                        source: {
                             id: structure.id,
                             url: 'http://www.ebi.ac.uk/pdbe-srv/view/entry/' + structure.id
-                        }]
+                        }
                     }
                 ],
                 start: beginEnd.begin,
@@ -102,5 +101,29 @@ export default class StructureDataParser {
                 this._pdbFeatures.push(ftStructure);
             }
         });
+    }
+
+    _getStructuresHTML(structureList) {
+        if(!structureList)
+            return;
+
+        let html = '';
+        structureList.map(structure => {
+            html += `
+                <a href='${structure.source.url}' target='_blank'>
+                    ${structure.source.id}
+                </a> (${structure.start}-${structure.end}) | 
+            `;
+        });
+        return html;
+    }
+
+    formatTooltip (feature) {
+        const structuresHTML = this._getStructuresHTML(feature.structures);
+        return `
+            <table>
+                ${structuresHTML ? `<tr><td>Structures</td><td>${structuresHTML}</td></tr>` : ``}
+            </table>
+        `;
     }
 }

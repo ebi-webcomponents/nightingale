@@ -10,7 +10,7 @@
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync",
-    "npm-linkall": "npm link uniprot-entry-data-loader uniprot-entry-data-adapter data-loader"
+    "npm-linkall": "npm link protvista-uniprot-entry-adapter data-loader"
   },
   "repository": {
     "type": "git",

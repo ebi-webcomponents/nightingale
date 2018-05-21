@@ -1,7 +1,7 @@
 /*jslint node: true */
 "use strict";
 
-import UniProtEntryDataAdapter from 'uniprot-entry-data-adapter';
+import UniProtEntryDataAdapter from 'protvista-uniprot-entry-adapter';
 import StructureDataParser from './StructureDataParser';
 
 export default class ProtVistaStructureAdapter extends UniProtEntryDataAdapter {
@@ -11,7 +11,11 @@ export default class ProtVistaStructureAdapter extends UniProtEntryDataAdapter {
     }
 
     parseEntry(data) {
-        this._adaptedData = this._parser.parseEntry(data);
+        this._adaptedData = [];
+        if (data && (data.length !== 0)) {
+            this._adaptedData = this._parser.parseEntry(data);
+            this._adaptedData.map(feature => feature.tooltipContent = this._parser.formatTooltip(feature));
+        }
         return this._adaptedData;
     }
 }
