@@ -10,8 +10,6 @@ import ProtvistaZoomable from 'protvista-zoomable';
 import {config} from './config';
 import ConfigHelper from "./ConfigHelper";
 
-const height = 44;
-
 const margin = {
   top: 10,
   bottom: 10
@@ -22,17 +20,26 @@ class ProtVistaTrack extends ProtvistaZoomable {
   getLayout(data) {
     if (String(this.getAttribute('layout')).toLowerCase() === "non-overlapping")
       return new NonOverlappingLayout({
-        layoutHeight: height
+        layoutHeight: this._height
       });
     return new DefaultLayout({
-      layoutHeight: height
+      layoutHeight: this._height
     });
+  }
+
+  set height(height) {
+    this._height = height;
+  }
+
+  get height() {
+    return this._height;
   }
 
   connectedCallback() {
     super.connectedCallback();
     this._highlightstart = parseInt(this.getAttribute('highlightstart'));
     this._highlightend = parseInt(this.getAttribute('highlightend'));
+    this._height = this.getAttribute('height') ?  parseInt(this.getAttribute('height')) : 44;
     this._tooltipEvent = this.getAttribute('tooltip-event') ? this.getAttribute('tooltip-event') : 'mouseover';
     this._color = this.getAttribute('color');
     this._shape = this.getAttribute('shape');
@@ -116,13 +123,13 @@ class ProtVistaTrack extends ProtvistaZoomable {
       .style('line-height', 0)
       .append('svg')
       .attr('width', this.width)
-      .attr('height', (height));
+      .attr('height', (this._height));
 
     this.highlighted = this.svg.append('rect')
       .attr('class', 'highlighted')
       .attr('fill', 'rgba(255, 235, 59, 0.8)')
       // .attr('stroke', 'black')
-      .attr('height', height);
+      .attr('height', this._height);
 
     this.seq_g = this.svg.append('g')
       .attr('class', 'sequence-features');
