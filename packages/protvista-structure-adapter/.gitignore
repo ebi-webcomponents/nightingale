@@ -19,3 +19,5 @@ _site/
 Gemfile.lock
 package-lock.json
 dist/
+yarn.lock
+
