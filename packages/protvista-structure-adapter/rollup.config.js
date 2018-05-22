@@ -9,7 +9,7 @@ export default {
         name: 'ProtVistaStructureAdapter',
         sourcemap: true,
         globals: {
-            'protvista-uniprot-entry-adapter': 'UniProtEntryDataAdapter'
+            'protvista-uniprot-entry-adapter': 'ProtVistaUniProtEntryAdapter'
         }
     },
     external: ['protvista-uniprot-entry-adapter'],
