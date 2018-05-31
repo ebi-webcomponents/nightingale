@@ -7,8 +7,8 @@ import ldForEach from 'lodash-es/foreach';
 import ldRemove from 'lodash-es/remove';
 import ParserHelper from './ParserHelper';
 
-const featureType = 'PDBE_COV';
-const featureCategory = 'STRUCTURAL';
+const featureType = 'PDBE_COVER';
+const featureCategory = 'STRUCTURE_COVERAGE';
 
 export default class StructureDataParser {
     constructor() {
