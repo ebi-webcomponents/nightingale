@@ -1,26 +1,32 @@
 :root {
-    --blue: 0,112,155;
-    --width: 100%;
+    --blue: 0, 112, 155;
+    /* --width: 100%; */
 }
+
 protvista-structure h4 {
     display: inline;
     margin-right: 1em;
 }
+
 .main-container {
-    display:flex;
+    display: flex;
 }
-.litemol-container, .table-container {
-    width: var(--width);
+
+.litemol-container,
+.table-container {
+    width: 50%;
     height: 480px;
     position: relative;
 }
+
 .table-container table {
-    display:flex;
-    flex-flow:column;
-    width:100%;
+    display: flex;
+    flex-flow: column;
+    width: 100%;
     height: 480px;
     border-collapse: collapse;
 }
+
 .table-container thead {
     min-height: 3em;
     flex: 0 0 auto;
@@ -29,13 +35,13 @@ protvista-structure h4 {
 
 .table-container tbody {
     flex: 1 1 auto;
-    display:block;
+    display: block;
     overflow-y: scroll;
-    border:none;
+    border: none;
 }
 
 .table-container tbody tr {
-    width:100%;
+    width: 100%;
 }
 
 .table-container tbody tr.pdb-row {
@@ -52,14 +58,18 @@ protvista-structure h4 {
     text-overflow: ellipsis;
 }
 
-.table-container thead, .table-container tbody tr {
+.table-container thead,
+.table-container tbody tr {
     display: table;
     table-layout: fixed;
 }
 
 .table-container tbody tr.pdb-row-clickable:hover {
-    background-color: rgba(var(--blue), 0.15);;
+    background-color: rgba(0, 112, 155, 0.15);
+    ;
 }
+
 .table-container tr.active {
-    background-color: rgba(var(--blue), 0.3);;
+    background-color: rgba(0, 112, 155, 0.3);
+    ;
 }

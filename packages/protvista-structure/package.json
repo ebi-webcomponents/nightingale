@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "A custom element wrapper for LiteMol",
   "main": "src/main.js",
   "files": [
@@ -37,6 +37,7 @@
     "rollup-plugin-uglify": "^3.0.0"
   },
   "dependencies": {
-    "litemol": "github:dsehnal/LiteMol"
+    "litemol": "github:dsehnal/LiteMol",
+    "whatwg-fetch": "^2.0.4"
   }
 }

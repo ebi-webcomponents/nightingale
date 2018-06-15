@@ -1,5 +1,6 @@
 // import 'litemol/dist/css/LiteMol-plugin.css';Styles rely on fonts being ../fonts
 import LiteMol from 'litemol';
+import 'whatwg-fetch';
 import '../style/style.css';
 
 class ProtvistaStructure extends HTMLElement {
@@ -68,14 +69,14 @@ class ProtvistaStructure extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['highlightstart', 'highlightend','molecule'];
+        return ['highlightstart', 'highlightend', 'molecule'];
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
         if (oldVal !== newVal) {
             const value = parseFloat(newVal);
             this[`_${attrName}`] = isNaN(value) ? newVal : value;
-            if(attrName === 'molecule') {
+            if (attrName === 'molecule') {
                 this.selectMolecule(newVal);
             }
             this._planHighlight(true);
