@@ -2,12 +2,8 @@
 "use strict";
 
 export default class ProteomicsDataParser {
-    constructor() {
-        this._proteomicsFeatures = [];
-    }
-
     parseEntry(data) {
-        this._proteomicsFeatures = data.map((feature) => {
+        data.features.map((feature) => {
             return Object.assign(
                 feature,
                 {
@@ -16,10 +12,6 @@ export default class ProteomicsDataParser {
                 }
             );
         });
-        return this._proteomicsFeatures;
-    }
-
-    get proteomicsFeatures() {
-        return this._proteomicsFeatures;
+        return data.features;
     }
 }
