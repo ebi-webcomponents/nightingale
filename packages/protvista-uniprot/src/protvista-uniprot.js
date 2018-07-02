@@ -49,7 +49,7 @@ class ProtvistaUniprot extends HTMLElement {
                             ${track.label ? track.label : this.getLabelComponent(track.labelComponent)}
                         </div>
                         <div class="track-content" data-toggle="${category.name}">
-                            ${this.getTrack(track.trackType, category.adapter, category.url, track.filter)}
+                            ${this.getTrack(track.trackType, category.adapter, category.url, track.filter, 'non-overlapping')}
                         </div>`)}
                 `
             )}
