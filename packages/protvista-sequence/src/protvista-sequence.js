@@ -1,4 +1,8 @@
-import * as d3 from "d3";
+import {
+  axisBottom,
+  select,
+} from 'd3';
+
 import ProtvistaZoomable from 'protvista-zoomable';
 
 const height = 40;
@@ -14,6 +18,10 @@ class ProtVistaSequence extends ProtvistaZoomable {
     }
   }
 
+  get data() {
+    return this.sequence;
+  }
+
   set data(data) {
     if (typeof data === 'string')
       this.sequence = data;
@@ -27,7 +35,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
 
 
   _createSequence() {
-    super.svg = d3.select(this)
+    super.svg = select(this)
       .append('div')
       .attr('class', '')
       .append('svg')
@@ -52,7 +60,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
 
   refresh(){
     if (this.axis) {
-      this.xAxis = d3.axisBottom(super.xScale);
+      this.xAxis = axisBottom(super.xScale);
       this.axis.call(this.xAxis);
       this.axis.select('.domain').remove();
       this.axis.selectAll('.tick line').remove();
