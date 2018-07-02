@@ -4,13 +4,16 @@ import postcss from 'rollup-plugin-postcss';
 
 export default {
     input: 'src/main.js',
-    name: 'ProtvistaVariationAdapter',
-    sourcemap: true,
     output: {
         file: 'dist/protvista-variation-adapter.js',
-        format: 'iife'
+        format: 'iife',
+        name: 'ProtvistaVariationAdapter',
+        sourcemap: true,
+        globals: {
+            'protvista-uniprot-entry-adapter': 'ProtVistaUniProtEntryAdapter'
+        }
     },
-    external: ['uniprot-entry-data-adapter'],
+    external: ['protvista-uniprot-entry-adapter'],
     plugins: [
         postcss({ extensions: ['.css'] }),
         nodeResolve({ jsnext: true }),

@@ -1,7 +1,7 @@
 import groupBy from 'lodash-es/groupBy';
-import UniProtEntryDataAdapter from 'uniprot-entry-data-adapter';
+import ProtVistaUniProtEntryAdapter from 'protvista-uniprot-entry-adapter';
 
-class ProtvistaVariationAdapter extends UniProtEntryDataAdapter {
+class ProtvistaVariationAdapter extends ProtVistaUniProtEntryAdapter {
     constructor() {
         super();
     }
