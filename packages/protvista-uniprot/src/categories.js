@@ -251,6 +251,19 @@
            }]
        },
        {
+           "name": "STRUCTURE_COVERAGE",
+           "label": "PDBe 3D structure coverage",
+           "trackType": "protvista-track",
+           "adapter": "protvista-structure-adapter",
+           "url": "https://www.ebi.ac.uk/proteins/api/proteins/",
+           "tracks": [{
+               "name": "pdbe_cover",
+               "label": "PDBe coverage",
+               "trackType": "protvista-track",
+               "tooltip": "PDBe 3D structure coverage"
+           }]
+       },
+       {
            "name": "TOPOLOGY",
            "label": "Topology",
            "trackType": "protvista-track",
@@ -294,16 +307,18 @@
            "name": "PROTEOMICS",
            "label": "Proteomics",
            "trackType": "protvista-track",
-           "adapter": "protvista-feature-adapter",
+           "adapter": "protvista-proteomics-adapter",
            "url": "https://www.ebi.ac.uk/proteins/api/proteomics/",
            "tracks": [{
                "name": "unique",
                "label": "Unique peptide",
+               "filter": "unique",
                "trackType": "protvista-track",
                "tooltip": ""
            }, {
                "name": "non_unique",
                "label": "Non-unique peptide",
+               "filter": "non_unique",
                "trackType": "protvista-track",
                "tooltip": ""
            }]

@@ -106,6 +106,22 @@ class ProtvistaUniprot extends HTMLElement {
                         </data-loader>
                 </protvista-feature-adapter>
                 `;
+            case ('protvista-structure-adapter'):
+                return html `
+                <protvista-structure-adapter>
+                        <data-loader>
+                            <source src="${url}${this._accession}" />
+                        </data-loader>
+                </protvista-structure-adapter>
+                `;
+            case ('protvista-proteomics-adapter'):
+                return html `
+                <protvista-proteomics-adapter filters="${trackTypes}">
+                    <data-loader>
+                        <source src="${url}${this._accession}" />
+                    </data-loader>
+                </protvista-proteomics-adapter>
+            `;
             case 'protvista-variation-adapter':
                 return html `
                     <protvista-variation-adapter>
@@ -123,7 +139,7 @@ class ProtvistaUniprot extends HTMLElement {
     getLabelComponent(name) {
         switch (name) {
             case ('protvista-variation-filter'):
-                return html `<protvista-variation-filter></protvista-variation-filter`;
+                return html `<protvista-variation-filter></protvista-variation-filter>`;
         }
     }
 

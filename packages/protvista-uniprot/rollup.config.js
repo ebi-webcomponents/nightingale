@@ -8,11 +8,11 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export default {
     input: 'src/main.js',
-    name: 'ProtvistaUniprot',
-    sourcemap: true,
     output: {
         file: 'dist/protvista-uniprot.js',
-        format: 'iife'
+        format: 'iife',
+        name: 'ProtvistaUniprot',
+        sourcemap: true
     },
     plugins: [
         postcss({
