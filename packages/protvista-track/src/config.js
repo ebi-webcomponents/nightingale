@@ -244,5 +244,11 @@ export const config = {
     "tooltip": "",
     "shape": "rectangle",
     "color": "#996699"
+  },
+  "pdbe_cover": {
+    "label": "PDBe 3D structure coverage",
+    "tooltip": "",
+    "shape": "rectangle",
+    "color": "#669966"
   }
 };

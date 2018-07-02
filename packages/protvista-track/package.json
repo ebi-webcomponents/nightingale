@@ -18,7 +18,8 @@
     "rollup-watch": "rollup -cw",
     "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "npm-linkall": "npm link protvista-feature-adapter protvista-uniprot-entry-adapter protvista-zoomable data-loader"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "MIT",
@@ -35,8 +36,7 @@
     "protvista-feature-adapter": "^0.0.4",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "uniprot-entry-data-adapter": "0.0.6"
+    "rollup-plugin-node-resolve": "^3.3.0"
   },
   "dependencies": {
     "d3": "4.13.0",
