@@ -1,4 +1,6 @@
-import { addStringItem } from './treeMenu';
+import {
+    addStringItem
+} from './treeMenu';
 import clone from 'lodash-es/clone';
 
 let subcellulartreeMenu, diseases;
@@ -12,7 +14,7 @@ function load(accession) {
 function process(data) {
     // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
     data = data.map(d => {
-        if(!d.interactions)
+        if (!d.interactions)
             d.interactions = [];
         return d;
     });
@@ -22,7 +24,7 @@ function process(data) {
         for (const interactor of element.interactions) {
             const otherInteractor = data.find(d => d.accession === interactor.id);
             if (otherInteractor) {
-                if (!otherInteractor.interactions.find(d =>d.id === element.accession)) {
+                if (!otherInteractor.interactions.find(d => d.id === element.accession)) {
                     const interactorToAdd = clone(interactor);
                     interactorToAdd.id = element.accession;
                     otherInteractor.interactions.push(interactorToAdd);
@@ -35,31 +37,32 @@ function process(data) {
     for (let element of data) {
         element.filterTerms = [];
         const interactors = [];
-        if (element.accession.includes('-')) {
-            element.isoform = element.accession;
-            element.accession = element
-                .accession
-                .split('-')[0];
-        }
+        //isoforms
+        // if (element.accession.includes('-')) {
+        //     element.isoform = element.accession;
+        //     element.accession = element
+        //         .accession
+        //         .split('-')[0];
+        // }
         // Add source  to the nodes
         for (const interactor of element.interactions) {
-            if (interactor.id && interactor.id.includes('-')) {
-                interactor.isoform = interactor.id;
-                interactor.id = interactor
-                    .id
-                    .split('-')[0];
-            }
+            // if (interactor.id && interactor.id.includes('-')) {
+            //     interactor.isoform = interactor.id;
+            //     interactor.id = interactor
+            //         .id
+            //         .split('-')[0];
+            // }
             // Add interaction for SELF
             if (interactor.interactionType === 'SELF') {
                 interactor.source = element.accession;
                 interactor.id = element.accession;
                 addInteractor(interactor, interactors);
             } else if (data.some(function (d) { //Check that interactor is in the data
-                return d.accession === interactor.id;
-            })) {
+                    return d.accession === interactor.id;
+                })) {
                 interactor.source = element
-                    .accession
-                    .split('-')[0];
+                    .accession;
+                // .split('-')[0];
                 addInteractor(interactor, interactors);
             }
         }
@@ -68,6 +71,9 @@ function process(data) {
 
         if (element.subcellularLocations) {
             for (let location of element.subcellularLocations) {
+                if (!location.locations) {
+                    continue;
+                }
                 for (let actualLocation of location.locations) {
                     addStringItem(actualLocation.location.value, subcellulartreeMenu);
                     let locationSplit = actualLocation
@@ -94,7 +100,6 @@ function process(data) {
             }
         }
     }
-
     return data;
 }
 
@@ -113,26 +118,28 @@ function addInteractor(interactor, interactors) {
 function values(obj) {
     let ret = [];
     for (let [k,
-        v] of Object.entries(obj)) {
+            v
+        ] of Object.entries(obj)) {
         ret.push(v);
     }
     return ret;
 }
 
 function getFilters() {
-    return [
-        {
+    return [{
 
-            name: 'subcellularLocations',
-            label: 'Subcellular location',
-            type: 'tree',
-            items: subcellulartreeMenu
-        }, {
-            name: 'diseases',
-            label: 'Diseases',
-            items: values(diseases)
-        }
-    ];
+        name: 'subcellularLocations',
+        label: 'Subcellular location',
+        type: 'tree',
+        items: subcellulartreeMenu
+    }, {
+        name: 'diseases',
+        label: 'Diseases',
+        items: values(diseases)
+    }];
 }
 
-export { load, getFilters };
+export {
+    load,
+    getFilters
+};

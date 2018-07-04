@@ -73,6 +73,9 @@ function formatSubcellularLocationInfo(data) {
         let formatedString = '<ul class="tree-list">';
         let tree = [];
         for (var interactionType of data) {
+            if (!interactionType.locations) {
+                continue;
+            }
             for (var location of interactionType.locations) {
                 addStringItem(location.location.value, tree);
                 // formatedString += `<p>${location.location.value}</p>`;
