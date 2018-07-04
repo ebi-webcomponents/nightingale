@@ -363,10 +363,10 @@ class ProtvistaStructure extends HTMLElement {
                 visual: visual,
                 theme: theme
             });
-            this.Command.Entity.Focus.dispatch(
-                this._liteMol.context,
-                this._liteMol.context.select('sequence-selection')
-            );
+            // this.Command.Entity.Focus.dispatch(
+            //     this._liteMol.context,
+            //     this._liteMol.context.select('sequence-selection')
+            // );
         });
     }
 
