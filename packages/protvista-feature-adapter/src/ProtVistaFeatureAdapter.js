@@ -1,7 +1,6 @@
-import UniProtEntryDataAdapter from 'uniprot-entry-data-adapter';
-import ParserHelper from './ParserHelper';
+import ProtVistaUniProtEntryAdapter from 'protvista-uniprot-entry-adapter';
 
-export default class ProtVistaFeatureAdapter extends UniProtEntryDataAdapter {
+export default class ProtVistaFeatureAdapter extends ProtVistaUniProtEntryAdapter {
     constructor() {
         super();
     }
@@ -10,9 +9,8 @@ export default class ProtVistaFeatureAdapter extends UniProtEntryDataAdapter {
         this._adaptedData = data.features;
 
         if (this._adaptedData && (this._adaptedData.length !== 0)) {
-            // this._adaptedData = ParserHelper.groupEvidencesByCode(this._adaptedData);
-            this._adaptedData = ParserHelper.renameProperties(this._adaptedData);
-            this._adaptedData.map(d => d.tooltipContent = ParserHelper.formatTooltip(d));
+            this._adaptedData = this._basicHelper.renameProperties(this._adaptedData);
+            this._adaptedData.map(d => d.tooltipContent = this._basicHelper.formatTooltip(d));
         }
         return this._adaptedData;
     }

@@ -3,13 +3,16 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
     input: 'src/index.js',
-    name: 'ProtVistaFeatureAdapter',
-    sourcemap: true,
     output: {
         file: 'dist/ProtVistaFeatureAdapter.js',
         format: 'iife',
+        name: 'ProtVistaFeatureAdapter',
+        sourcemap: true,
+        globals: {
+            'protvista-uniprot-entry-adapter': 'ProtVistaUniProtEntryAdapter'
+        }
     },
-    external: ['uniprot-entry-data-adapter'],
+    external: ['protvista-uniprot-entry-adapter'],
     plugins: [
         nodeResolve({jsnext: true}),
         babel({
