@@ -3,10 +3,10 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
     input: 'src/index.js',
-    name: 'UniProtEntryDataAdapter',
+    name: 'ProtVistaUniProtEntryAdapter',
     sourcemap: true,
     output: {
-        file: 'dist/UniProtEntryDataAdapter.js',
+        file: 'dist/ProtVistaUniProtEntryAdapter.js',
         format: 'iife',
     },
     plugins: [

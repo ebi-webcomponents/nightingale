@@ -1,6 +1,10 @@
-export default class UniProtEntryDataAdapter extends HTMLElement {
+import BasicHelper from './BasicHelper';
+
+export default class ProtVistaUniProtEntryAdapter extends HTMLElement {
     constructor() {
         super();
+        this._adaptedData = [];
+        this._basicHelper = BasicHelper;
     }
 
     connectedCallback() {
@@ -27,6 +31,10 @@ export default class UniProtEntryDataAdapter extends HTMLElement {
 
     get adaptedData() {
         return this._adaptedData;
+    }
+
+    get basicHelper() {
+        return this._basicHelper;
     }
 
     _initLoaders() {
