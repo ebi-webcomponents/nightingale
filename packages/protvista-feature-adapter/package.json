@@ -23,7 +23,7 @@
     "ProtVista",
     "dataloader",
     "parser",
-    "protein-structure"
+    "protein-feature"
   ],
   "author": "ljgarcia",
   "license": "MIT",
