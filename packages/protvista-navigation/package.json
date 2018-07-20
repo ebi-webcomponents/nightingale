@@ -1,11 +1,15 @@
 {
   "name": "protvista-navigation",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Navigation component for the ProtVista tool",
   "files": [
     "dist",
     "src"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/protvista-navigation"
+  },
   "main": "dist/protvista-track.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",

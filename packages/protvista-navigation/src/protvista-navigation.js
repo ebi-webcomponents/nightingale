@@ -8,7 +8,6 @@ import {
 } from 'd3';
 
 const height = 40,
-  // width = 760,
   padding = {
     top: 10,
     right: 10,
@@ -70,7 +69,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _createNavRuler() {
     this._x = scaleLinear().range([padding.left, this.width - padding.right]);
-    this._x.domain([0, this._length+1]);
+    this._x.domain([1, this._length]);
 
     this._svg = select(this)
       .append('div')
@@ -140,6 +139,11 @@ class ProtVistaNavigation extends HTMLElement {
     this._x = this._x.range([padding.left, this.width - padding.right]);
     this._svg.attr('width', this.width);
     this._axis.call(this._xAxis);
+    this._viewport.extent([
+        [padding.left, 0],
+        [(this.width - padding.right), height*0.51]
+      ])
+    this._brushG.call(this._viewport);
     this._updateNavRuler();
   }
 
@@ -153,7 +157,10 @@ class ProtVistaNavigation extends HTMLElement {
   }
   _updateLabels() {
     if (this._displaystartLabel) this._displaystartLabel.text(this._displaystart);
-    if (this._displayendLabel) this._displayendLabel.text(this._displayend);
+    if (this._displayendLabel)
+      this._displayendLabel
+        .attr('x', this.width)
+        .text(this._displayend);
   }
   _updatePolygon(){
     if (this.polygon) this.polygon
