@@ -14,24 +14,51 @@
     <body>
       <table style="width:  100%;">
         <tr>
-          <th>FROM</th><th style="width:  90%;">Track</th><th>TO</th>
+          <th>Example</th><th style="width:  90%;">Track</th>
         </tr>
         <tr>
-          <td>1</td>
-          <td><protvista-interpro-track id= "track1" length="223" displaystart="1" displayend="223" highlightstart="23"
-                               highlightend="45" color="red" expanded></protvista-track></td>
-          <td>223</td>
+          <td>Interpro Entry with contributing signatures</td>
+          <td>
+            <protvista-interpro-track
+              id= "track1" length="466"
+              displaystart="1" displayend="466"
+              highlightstart="23" highlightend="45"
+              color="red" shape="roundRectangle" expanded>
+            </protvista-track>
+          </td>
         </tr>
         <tr>
-          <td>1</td>
-          <td><protvista-interpro-track id= "track2" length="223" displaystart="1" displayend="223" highlightstart="23"
-                               highlightend="45" color="green"></protvista-track></td>
-          <td>223</td>
+          <td>Multiple residues in unintegrated entry</td>
+          <td>
+            <protvista-interpro-track
+              id= "track2" length="466"
+              displaystart="1" displayend="466"
+              highlightstart="23" highlightend="45"
+              color="red" expanded>
+            </protvista-track>
+          </td>
         </tr>
         <tr>
-          <td>110</td>
-          <td><protvista-interpro-track id= "track3" length="223" displaystart="110" displayend="210" highlightstart="23" highlightend="45"></protvista-track></td>
-          <td>210</td>
+          <td>Multiple residues in integrated entry</td>
+          <td>
+            <protvista-interpro-track
+              id= "track3" length="466"
+              displaystart="1" displayend="466"
+              highlightstart="23" highlightend="45"
+              color="cornflowerblue" expanded>
+            </protvista-track>
+          </td>
+        </tr>
+        <tr>
+          <td>Small feature</td>
+          <td>
+            <protvista-interpro-track
+              id= "track4" length="4"
+              displaystart="2" displayend="4"
+              highlightstart="3" highlightend="3"
+              color="cornflowerblue" shape="roundRectangle" expanded>
+            </protvista-track>
+          </td>
         </tr>
       </table>
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -48,87 +75,215 @@
       <script src="../dist/protvista-interpro-track.js" charset="utf-8" defer></script>
       <script>
       window.onload = () => {
-        const data = [
-            {accession:'feature1', start: 10, end: 40, color: '#342ea2'},
-            {accession:'feature2', locations: [{ fragments:[{start: 50, end: 160}]}], color: '#A42ea2'},
-            {accession:'feature3', locations: [{
-              fragments:[{start: 155, end: 155}]},
-              {fragments:[{start: 158, end: 158}]}
-            ], color: '#A4Aea2'},
-            {accession:'feature4', locations: [
-                { fragments:[
-                  {start: 200, end: 204},
-                  {start: 206, end: 210}
-                ]}
-              ], residues: [{
-                accession: "CAP_EDI",
-                locations: [
+        const dataIPR = [
+          {
+            "accession":"IPR00001",
+            "locations":[{"fragments":[{"start":1,"end":466}]}],
+            "color":"#cacaca",
+          }
+        ];
+        const signatures = [
+          {
+            "accession":"SF00001",
+            "locations":[
+              {"fragments":[
+                {"start":127,"end":264},
+                {"start":279,"end":385},
+                {"start":400,"end":466},
+              ]},
+            ],
+            "color":"#7acaca",
+          },
+          {
+            "accession":"PF00001",
+            "locations":[
+              {"fragments":[{"start":146,"end":266}]},
+              {"fragments":[{"start":346,"end":466}]},
+            ],
+            "color":"#ca7aca",
+          },
+          {
+            "accession":"CD0001",
+            "locations":[{"fragments":[{"start":146,"end":456}]}],
+            "color":"#caca7a",
+          },
+        ];
+        const withResidues = [
+          {
+            "accession":"cd00108",
+            "locations":[{"fragments":[{"start":127,"end":203}]}],
+            "color":"#cacaca",
+            "residues":[
+              {
+                "accession":"KR","entry_accession":"cd00108","source_database":"CDD",
+                "locations":[
                   {
-                    description: "ligand binding site",
-                    fragments: [
-                      {start: 201, end: 201, residue: 'G'},
-                      {start: 203, end: 203, residue: 'A'},
-                    ]
-                  }, {
-                    description: "flexible hinge region",
-                    fragments: [
-                      {start: 208, end: 208, residue: 'T'},
-                    ]
+                    "fragments":[
+                      {"start":153,"end":153,"residues":"W"},
+                      {"start":163,"end":163,"residues":"Y"},
+                      {"start":184,"end":184,"residues":"W"},
+                      {"start":186,"end":186,"residues":"F"},
+                      {"start":194,"end":194,"residues":"Y"},
+                      {"start":231,"end":231,"residus":"W"},
+                      {"start":241,"end":241,"residues":"F"},
+                      {"start":266,"end":266,"residues":"W"},
+                      {"start":268,"end":268,"residues":"Y"},
+                      {"start":276,"end":276,"residues":"W"},
+                      {"start":325,"end":325,"residues":"W"},
+                      {"start":335,"end":335,"residues":"V"},
+                      {"start":360,"end":360,"residues":"W"},
+                      {"start":362,"end":362,"residues":"F"},
+                      {"start":370,"end":370,"residues":"V"},
+                      {"start":411,"end":411,"residues":"W"},
+                      {"start":421,"end":421,"residues":"H"},
+                      {"start":447,"end":447,"residues":"W"},
+                      {"start":449,"end":449,"residues":"Y"},
+                      {"start":457,"end":457,"residues":"W"}
+                    ],"description":"ligand binding site"
+                  },{
+                    "fragments":[
+                      {"start":138,"end":138,"residues":"K"},
+                      {"start":216,"end":216,"residues":"R"},
+                      {"start":310,"end":310,"residues":"R"},
+                      {"start":396,"end":396,"residues":"M"}
+                    ],"description":"putative domain interaction site"
                   }
                 ]
-              }]
-            },
-        ];
-        const contributors = [
-          { accession:'feature1.1', start: 12, end: 40,
-            residues: [{
-              accession: "CAP_ED",
-              locations: [
-                {
-                  description: "ligand binding site",
-                  fragments: [
-                    {start: 20, end: 20, residue: 'G'},
-                    {start: 25, end: 25, residue: 'A'},
-                    {start: 30, end: 30, residue: 'S'},
-                  ]
-                }, {
-                  description: "flexible hinge region",
-                  fragments: [
-                    {start: 22, end: 22, residue: 'T'},
-                    {start: 24, end: 24, residue: 'G'},
-                  ]
-                }
-              ]
-            }]
+              }
+            ]
           },
-          {accession:'feature1.2', locations: [{ fragments:[
-            {start: 10, end: 27},
-            {start: 29, end: 40},
-          ]}]},
-          {accession:'feature2.1', start: 50, end: 160},
-          {accession:'feature2.2', locations: [{ fragments:[
-            {start: 50, end: 94},
-            {start: 99, end: 110},
-            {start: 116, end: 158},
-          ]}]},
-          {accession:'feature2.3', locations: [{ fragments:[
-            {start: 52, end: 98},
-            {start: 104, end: 160},
-          ]}]},
-          {accession:'feature3.1', locations: [
-            {fragments:[{start: 155, end: 155}]},
-            {fragments:[{start: 158, end: 158}]}
-          ]},
-        ];
-        const residues = {
-
-        }
-        document.querySelector("#track1").data = data;
-        document.querySelector("#track2").data = data;
-        document.querySelector("#track3").data = data;
-        document.querySelector("#track1").contributors = contributors;
-        document.querySelector("#track2").contributors = contributors;
-        document.querySelector("#track3").contributors = contributors;
+          {
+            "accession":"cd00108",
+            "locations":[{"fragments":[{"start":204,"end":285}]}],
+            "color":"#c00aca",
+            "residues":[
+              {
+                "accession":"KR","entry_accession":"cd00108","source_database":"CDD",
+                "locations":[
+                  {
+                    "fragments":[
+                      {"start":153,"end":153,"residues":"W"},
+                      {"start":163,"end":163,"residues":"Y"},
+                      {"start":184,"end":184,"residues":"W"},
+                      {"start":186,"end":186,"residues":"F"},
+                      {"start":194,"end":194,"residues":"Y"},
+                      {"start":231,"end":231,"residus":"W"},
+                      {"start":241,"end":241,"residues":"F"},
+                      {"start":266,"end":266,"residues":"W"},
+                      {"start":268,"end":268,"residues":"Y"},
+                      {"start":276,"end":276,"residues":"W"},
+                      {"start":325,"end":325,"residues":"W"},
+                      {"start":335,"end":335,"residues":"V"},
+                      {"start":360,"end":360,"residues":"W"},
+                      {"start":362,"end":362,"residues":"F"},
+                      {"start":370,"end":370,"residues":"V"},
+                      {"start":411,"end":411,"residues":"W"},
+                      {"start":421,"end":421,"residues":"H"},
+                      {"start":447,"end":447,"residues":"W"},
+                      {"start":449,"end":449,"residues":"Y"},
+                      {"start":457,"end":457,"residues":"W"}
+                    ],"description":"ligand binding site"
+                  },{
+                    "fragments":[
+                      {"start":138,"end":138,"residues":"K"},
+                      {"start":216,"end":216,"residues":"R"},
+                      {"start":310,"end":310,"residues":"R"},
+                      {"start":396,"end":396,"residues":"M"}
+                    ],"description":"putative domain interaction site"
+                  }
+                ]
+              }
+            ]
+          },
+          {"accession":"cd00108","source_database":"cdd",
+          "locations":[{"fragments":[{"start":298,"end":380}]}],
+          "color":"#caca0a","entry_type":"domain","type":"entry",
+          "residues":[{"accession":"KR","entry_accession":"cd00108","source_database":"CDD",
+          "locations":[
+            {
+              "fragments":[
+                {"start":153,"end":153,"residues":"W"},
+                {"start":163,"end":163,"residues":"Y"},
+                {"start":184,"end":184,"residues":"W"},
+                {"start":186,"end":186,"residues":"F"},
+                {"start":194,"end":194,"residues":"Y"},
+                {"start":231,"end":231,"residus":"W"},
+                {"start":241,"end":241,"residues":"F"},
+                {"start":266,"end":266,"residues":"W"},
+                {"start":268,"end":268,"residues":"Y"},
+                {"start":276,"end":276,"residues":"W"},
+                {"start":325,"end":325,"residues":"W"},
+                {"start":335,"end":335,"residues":"V"},
+                {"start":360,"end":360,"residues":"W"},
+                {"start":362,"end":362,"residues":"F"},
+                {"start":370,"end":370,"residues":"V"},
+                {"start":411,"end":411,"residues":"W"},
+                {"start":421,"end":421,"residues":"H"},
+                {"start":447,"end":447,"residues":"W"},
+                {"start":449,"end":449,"residues":"Y"},
+                {"start":457,"end":457,"residues":"W"}
+              ],"description":"ligand binding site"
+            },{
+              "fragments":[
+                {"start":138,"end":138,"residues":"K"},
+                {"start":216,"end":216,"residues":"R"},
+                {"start":310,"end":310,"residues":"R"},
+                {"start":396,"end":396,"residues":"M"}
+              ],"description":"putative domain interaction site"
+            }
+          ]
+      }]},
+          {"accession":"cd00108","source_database":"cdd",
+          "locations":[{"fragments":[{"start":384,"end":466}]}],
+          "color":"#0acaca","entry_type":"domain","type":"entry",
+          "residues":[{"accession":"KR","entry_accession":"cd00108","source_database":"CDD",
+          "locations":[
+            {
+              "fragments":[
+                {"start":153,"end":153,"residues":"W"},
+                {"start":163,"end":163,"residues":"Y"},
+                {"start":184,"end":184,"residues":"W"},
+                {"start":186,"end":186,"residues":"F"},
+                {"start":194,"end":194,"residues":"Y"},
+                {"start":231,"end":231,"residus":"W"},
+                {"start":241,"end":241,"residues":"F"},
+                {"start":266,"end":266,"residues":"W"},
+                {"start":268,"end":268,"residues":"Y"},
+                {"start":276,"end":276,"residues":"W"},
+                {"start":325,"end":325,"residues":"W"},
+                {"start":335,"end":335,"residues":"V"},
+                {"start":360,"end":360,"residues":"W"},
+                {"start":362,"end":362,"residues":"F"},
+                {"start":370,"end":370,"residues":"V"},
+                {"start":411,"end":411,"residues":"W"},
+                {"start":421,"end":421,"residues":"H"},
+                {"start":447,"end":447,"residues":"W"},
+                {"start":449,"end":449,"residues":"Y"},
+                {"start":457,"end":457,"residues":"W"}
+              ],"description":"ligand binding site"
+            },{
+              "fragments":[
+                {"start":138,"end":138,"residues":"K"},
+                {"start":216,"end":216,"residues":"R"},
+                {"start":310,"end":310,"residues":"R"},
+                {"start":396,"end":396,"residues":"M"}
+              ],"description":"putative domain interaction site"
+            }
+          ]
+      }]}
+    ];
+        document.querySelector("#track1").data = dataIPR;
+        document.querySelector("#track2").data = withResidues;
+        document.querySelector("#track3").data = dataIPR;
+        document.querySelector("#track1").contributors = signatures;
+        document.querySelector("#track3").contributors = withResidues;
+        document.querySelector("#track4").data = [
+          {accession:'feature1', start: 1, end: 4},
+        ]
+        document.querySelector("#track4").contributors = [
+          {accession:'feature2', start: 2, end: 2},
+          {accession:'feature3', start: 4, end: 4},
+        ]
       }
       </script>
     </body>

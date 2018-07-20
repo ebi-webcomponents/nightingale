@@ -62,17 +62,18 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
 
   _createResidueGroup(baseG){
     return baseG.selectAll('g.residues-group')
-      .data(d => d.residues ? d.residues.map(r => Object.assign({}, r, {feature: d})) : [])
+      .data(d => d.residues ? d.residues.map((r,i) => Object.assign({}, r, {feature: d, i:i})) : [])
         .enter().append('g')
           .attr('class', 'residues-group')
           .selectAll('g.residues-locations')
-          .data((d, i) =>
-            d.locations.map((loc) =>
+          .data(d =>
+            d.locations.map((loc, j) =>
              Object.assign({}, loc, {
                accession: d.accession,
                feature: d.feature,
                location: loc,
-               i:i,
+               i: d.i,
+               j: j,
                // expended: true
              }))
           )
@@ -83,18 +84,18 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
   _createResiduePaths(baseG){
     return baseG
       .selectAll('g.residue')
-      .data((d, j) => d.fragments.map((loc) => Object.assign({}, loc, {accession: d.accession, feature: d.feature, location: d.location, i: d.i, j:j})))
+      .data(d => d.fragments.map((loc) => Object.assign({}, loc, {accession: d.accession, feature: d.feature, location: d.location, k:d.feature.k, i: d.i, j:d.j})))
       .enter()
       .append('path')
         .attr('class', 'feature')
         .attr('d', (f,j) =>
           this._featureShape.getFeatureShape(
-            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(`${f.accession}_${f.i}_${f.j}`),
+            this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(`${f.accession}_${f.k}_${f.i}_${f.j}`),
               f.end ? f.end - f.start + 1 : 1, 'rectangle'
           )
         )
         .attr('transform',
-          f =>'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(`${f.accession}_${f.i}_${f.j}`)) + ')'
+          f =>'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(`${f.accession}_${f.k}_${f.i}_${f.j}`)) + ')'
         )
         .attr('fill', f => this._getFeatureColor(f))
         .attr('stroke', 'transparent');
@@ -104,12 +105,12 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
     baseG
       .attr('d', f =>
         this._featureShape.getFeatureShape(
-          this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(`${f.accession}_${f.i}_${f.j}`),
+          this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(`${f.accession}_${f.k}_${f.i}_${f.j}`),
             f.end ? f.end - f.start + 1 : 1, 'rectangle'
         )
       )
       .attr('transform',
-        f =>'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(`${f.accession}_${f.i}_${f.j}`)) + ')'
+        f =>'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(`${f.accession}_${f.k}_${f.i}_${f.j}`)) + ')'
       )
       .attr('fill', f => this._getFeatureColor(f));
   }
@@ -136,6 +137,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
 
   _createFeatures(){
     this._layoutObj.init(this._data, this._contributors);
+    this._data.forEach((d,i) => d.k = i);
     this.featuresG = this.seq_g.selectAll('g.feature-group')
       .data(this._data)
       .enter()
