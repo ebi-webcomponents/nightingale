@@ -8,10 +8,6 @@ export default {
       format: 'iife',
       sourcemap: true,
       name: 'ProtVistaTrack',
-      globals: {
-        'd3': 'd3',
-        'provista-zoomable': 'ProtvistaZoomable'
-      }
   },
   external: ['d3', 'protvista-zoomable'],
   // paths: {

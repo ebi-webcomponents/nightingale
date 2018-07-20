@@ -252,7 +252,6 @@ class ProtVistaTrack extends ProtvistaZoomable {
         .data(this._data.reduce(
           (acc, f) => acc.concat(f.locations.reduce(
             (acc2, e) => acc2.concat(e.fragments
-              // .map(({ ...l }) => ({ feature: f, ...l }))
               .map((loc) => Object.assign({}, loc, {
                 feature: f
               }))
@@ -273,7 +272,7 @@ class ProtVistaTrack extends ProtvistaZoomable {
   _updateHighlight() {
     if (Number.isInteger(this._highlightstart) && Number.isInteger(this._highlightend)) {
       this.highlighted
-        .attr('x', this.xScale(this._highlightstart - 0.5))
+        .attr('x', this.xScale(this._highlightstart))
         .style('opacity', 0.3)
         .attr('width',
           this.xScale(this._highlightend - this._highlightstart + 1) - this.xScale(0)
@@ -281,7 +280,6 @@ class ProtVistaTrack extends ProtvistaZoomable {
     } else {
       this.highlighted.style('opacity', 0);
     }
-
   }
 
 }

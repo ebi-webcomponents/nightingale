@@ -9,15 +9,10 @@ export default class FeatureShape {
         this._ftLength = ftLength;
         this._ftHeight = ftHeight;
         this._ftWidth = aaWidth * ftLength;
-        //0,0 is in the top middle, so we first move to the starting of the aa at gapShape,0.
-        this._gapShape = ftLength === 1 ? 0 : this._ftWidth/ftLength/2;
-        //again a gap is needed for regions
-        this._gapRegion = aaWidth/2;
-        // if the constructor doesn't exist, rectangle is used by default
         if (typeof this['_' + shape] !== 'function') {
             shape = 'rectangle';
         }
-        let feature = this['_' + shape]();
+        const feature = this['_' + shape]();
 
         return feature;
     }
@@ -31,16 +26,16 @@ export default class FeatureShape {
     }
 
     _rectangle() {
-        return 'M' + -(this._gapRegion) + ',0'
-            + 'L' + (this._ftWidth - this._gapRegion) + ',0'
-            + 'L' + (this._ftWidth - this._gapRegion) + ',' + this._ftHeight
-            + 'L' + -(this._gapRegion) + ',' + this._ftHeight
+        return 'M0,0'
+            + 'L' + (this._ftWidth) + ',0'
+            + 'L' + (this._ftWidth) + ',' + this._ftHeight
+            + 'L0,' + this._ftHeight
             + 'Z';
     }
     _roundRectangle() {
         const radius = 6;
-        return 'M' + (radius-this._gapRegion) + ',0'
-            + 'h' + (this._ftWidth - this._gapRegion-2*radius) + ',0'
+        return 'M' + (radius) + ',0'
+            + 'h' + (this._ftWidth - 2 * radius) + ',0'
             + "a" + radius + "," + radius + " 0 0 1 " + radius + "," + radius
             + "v" + (this._ftHeight - 2 * radius)
             + "a" + radius + "," + radius + " 0 0 1 " + -radius + "," + radius
@@ -53,101 +48,106 @@ export default class FeatureShape {
 
     _bridge() {
         if (this._ftLength !== 1) {
-            return 'M' + -(this._gapRegion) + ',' + this._ftHeight
-                + 'L' + -(this._gapRegion) + ',0'
-                + 'L' + (this._ftWidth-this._gapRegion) + ',0'
-                + 'L' + (this._ftWidth-this._gapRegion) + ',' + this._ftHeight
-                + 'L' + (this._ftWidth-this._gapRegion) + ',2'
-                + 'L' + -(this._gapRegion) + ',2Z';
-        } else {
-            return 'M' + -(this._gapRegion) + ',' + this._ftHeight
-                + 'L' + -(this._gapRegion) + ',' + (this._ftHeight/2)
-                + 'L0,' + (this._ftHeight/2)
+            return 'M0,' + this._ftHeight
                 + 'L0,0'
+                + 'L' + this._ftWidth + ',0'
+                + 'L' + this._ftWidth + ',' + this._ftHeight
+                + 'L' + this._ftWidth + ',2'
+                + 'L0,2Z';
+        } else {
+            return 'M0,' + this._ftHeight
                 + 'L0,' + (this._ftHeight/2)
-                + 'L' + (this._ftWidth-this._gapRegion) + ',' + (this._ftHeight/2)
-                + 'L' + (this._ftWidth-this._gapRegion) + ',' + this._ftHeight
+                + 'L' + (this._ftWidth/2) + ',' + (this._ftHeight/2)
+                + 'L' + (this._ftWidth/2) + ',0'
+                + 'L' + (this._ftWidth/2) + ',' + (this._ftHeight/2)
+                + 'L' + this._ftWidth + ',' + (this._ftHeight/2)
+                + 'L' + this._ftWidth + ',' + this._ftHeight
                 + 'Z';
         }
     };
 
     _getMiddleLine(centerx) {
-        return 'M' + (centerx + this._gapShape) + ',' + centerx
-        + 'L' + (this._ftWidth/2 + this._gapShape) + ',' + centerx
-        + 'M' + (-centerx + this._gapShape) + ',' + centerx
-        + 'L' + (-this._ftWidth/2 + this._gapShape) + ',' + centerx;
+        return 'M0,' + centerx
+        + 'L' + this._ftWidth + ',' + centerx
+        + 'Z'
     };
 
     _diamond() {
-        var centerx = symbolSize/2;
-        var shape = 'M' + this._gapShape + ',0'
-            + 'L' + (centerx+this._gapShape) + ',' + centerx
-            + 'L' + this._gapShape + ',' + symbolSize
-            + 'L' + (-centerx+this._gapShape) + ',' + centerx;
+        const centerx = symbolSize/2;
+        const m = this._ftWidth/2;
+        const shape = 'M' + m + ',0'
+            + 'L' + (m+centerx) + ',' + centerx
+            + 'L' + m + ',' + symbolSize
+            + 'L' + (m-centerx) + ',' + centerx;
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',0Z' + this._getMiddleLine(centerx, this._ftWidth)
+            ? shape + this._getMiddleLine(centerx, this._ftWidth)
             : shape + 'Z';
     };
 
     _chevron() {
-        var centerx = symbolSize/2;
-        var shape = 'M' + this._gapShape + ',' + centerx
-            + 'L' + (centerx+this._gapShape) + ',0'
-            + 'L' + (centerx+this._gapShape) +',' + centerx
-            + 'L' + this._gapShape + ',' + symbolSize
-            + 'L' + (-centerx+this._gapShape) + ',' + centerx
-            + 'L' + (-centerx+this._gapShape) + ',0';
+        const m = this._ftWidth/2;
+        const centerx = symbolSize/2;
+        const shape = 'M' + m + ',' + centerx
+            + 'L' + (centerx+m) + ',0'
+            + 'L' + (centerx+m) +',' + centerx
+            + 'L' + m + ',' + symbolSize
+            + 'L' + (-centerx+m) + ',' + centerx
+            + 'L' + (-centerx+m) + ',0';
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',' + centerx + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
+            ? shape + 'L' + m + ',' + centerx + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
     _catFace() {
         var centerx = symbolSize/2;
         var step = symbolSize/10;
-        var shape = 'M' + (-centerx+this._gapShape) + ',0'
-            + 'L' + (-centerx+this._gapShape) + ',' + (6*step)
-            + 'L' + (-2*step+this._gapShape) + ',' + symbolSize
-            + 'L' + (2*step+this._gapShape) + ',' + symbolSize
-            + 'L' + (centerx+this._gapShape) + ',' + (6*step)
-            + 'L' + (centerx+this._gapShape) + ',0'
-            + 'L' + (2*step+this._gapShape) + ',' + (4*step)
-            + 'L' + (-2*step+this._gapShape) + ',' + (4*step);
+        const m = this._ftWidth/2;
+        var shape = 'M' + (-centerx+m) + ',0'
+            + 'L' + (-centerx+m) + ',' + (6*step)
+            + 'L' + (-2*step+m) + ',' + symbolSize
+            + 'L' + (2*step+m) + ',' + symbolSize
+            + 'L' + (centerx+m) + ',' + (6*step)
+            + 'L' + (centerx+m) + ',0'
+            + 'L' + (2*step+m) + ',' + (4*step)
+            + 'L' + (-2*step+m) + ',' + (4*step);
         return this._ftLength !== 1
-            ? shape + 'M' + (-centerx+this._gapShape) + ',0' + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
+            ? shape + 'M' + m + ',0' + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
     _triangle() {
         var centerx = symbolSize/2;
-        var shape = 'M' + this._gapShape + ',0'
-            + 'L' + (centerx+this._gapShape) + ',' + symbolSize
-            + 'L' + (-centerx+this._gapShape) + ',' + symbolSize;
+        const m = this._ftWidth/2;
+        var shape = 'M' + m + ',0'
+            + 'L' + (centerx+m) + ',' + symbolSize
+            + 'L' + (-centerx+m) + ',' + symbolSize;
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',0' + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
+            ? shape + 'L' + m + ',0' + this._getMiddleLine(centerx, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
     _wave() {
         var rx = symbolSize/4;
         var ry = symbolSize/2;
-        var shape = 'M' + (-symbolSize/2+this._gapShape) + ',' + ry
-            + "A" + rx + "," + ry + " 0 1,1 " + this._gapShape + "," + ry
-            + "A" + rx + "," + ry + " 0 1,0 " + (symbolSize/2+this._gapShape) + ',' + ry;
+        const m = this._ftWidth/2;
+        var shape = 'M' + (-symbolSize/2+m) + ',' + ry
+            + "A" + rx + "," + ry + " 0 1,1 " + m + "," + ry
+            + "A" + rx + "," + ry + " 0 1,0 " + (symbolSize/2+m) + ',' + ry;
         return this._ftLength !== 1
             ? shape + this._getMiddleLine(ry, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
     _getPolygon(sidesNumber){
-        var r = symbolSize/2;
-        var polygon = 'M ';
+        const r = symbolSize/2;
+        let polygon = 'M ';
+        const m = this._ftWidth/2;
         for(var i=0; i < sidesNumber; i++) {
-            polygon += (r * Math.cos(2*Math.PI*i/sidesNumber) + this._gapShape) + ',' +
+            polygon += (r * Math.cos(2*Math.PI*i/sidesNumber) + m) + ',' +
                 (r * Math.sin(2*Math.PI*i/sidesNumber)+r)  + ' ';
         }
         return this._ftLength !== 1
-            ? polygon + ' ' + (r * Math.cos(0) + this._gapShape) + ',' + (r * Math.sin(0)+r)  + ' ' +
+            ? polygon + ' ' + (r * Math.cos(0) + m) + ',' + (r * Math.sin(0)+r)  + ' ' +
             this._getMiddleLine(r, this._ftWidth) + 'Z'
             : polygon + 'Z';
     };
@@ -161,36 +161,39 @@ export default class FeatureShape {
     };
 
     _circle() {
-        var r = Math.sqrt(symbolSize / Math.PI);
-        var shape = "M" + this._gapShape + ",0"
-            + "A" + r + "," + r + " 0 1,1 " + this._gapShape + "," + symbolSize
-            + "A" + r + "," + r + " 0 1,1 " + this._gapShape + ",0";
+        const m = this._ftWidth/2;
+        const r = Math.sqrt(symbolSize / Math.PI);
+        const shape = "M" + m + ",0"
+            + "A" + r + "," + r + " 0 1,1 " + m + "," + symbolSize
+            + "A" + r + "," + r + " 0 1,1 " + m + ",0";
         return this._ftLength !== 1
             ? shape + this._getMiddleLine(symbolSize/2, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
     _arrow() {
-        var step = symbolSize/10;
-        var shape = 'M' + this._gapShape + ',0'
-            + 'L' + (-step+this._gapShape) + ',0'
-            + 'L' + (-5*step+this._gapShape) + ',' + (4*step)
-            + 'L' + (-step+this._gapShape) + ',' + this._ftHeight
-            + 'L' + this._gapShape + ',' + this._ftHeight
-            + 'L' + (4*step+this._gapShape) + ',' + (4*step);
+        const step = symbolSize/10;
+        const m = this._ftWidth/2;
+        const shape = 'M' + m + ',0'
+            + 'L' + (-step+m) + ',0'
+            + 'L' + (-5*step+m) + ',' + (4*step)
+            + 'L' + (-step+m) + ',' + this._ftHeight
+            + 'L' + m + ',' + this._ftHeight
+            + 'L' + (4*step+m) + ',' + (4*step);
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',0' + this._getMiddleLine(symbolSize/2, this._ftWidth) + 'Z'
+            ? shape + 'L' + m + ',0' + this._getMiddleLine(symbolSize/2, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 
     _doubleBar() {
-        var centerx = symbolSize/2;
-        var shape = 'M' + this._gapShape + ',0'
-            + 'L' + (-centerx+this._gapShape) + ',' + symbolSize
-            + 'L' + this._gapShape + ',' + symbolSize
-            + 'L' + (centerx+this._gapShape) + ',0';
+        const m = this._ftWidth/2;
+        const centerx = symbolSize/2;
+        const shape = 'M' + m + ',0'
+            + 'L' + (-centerx+m) + ',' + symbolSize
+            + 'L' + m + ',' + symbolSize
+            + 'L' + (centerx+m) + ',0';
         return this._ftLength !== 1
-            ? shape + 'L' + this._gapShape + ',0' + this._getMiddleLine(symbolSize/2, this._ftWidth) + 'Z'
+            ? shape + 'L' + m + ',0' + this._getMiddleLine(symbolSize/2, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
 }

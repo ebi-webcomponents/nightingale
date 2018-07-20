@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -34,13 +34,13 @@
     "browser-sync": "^2.24.1",
     "data-loader": "^0.3.3",
     "protvista-feature-adapter": "^0.0.4",
-    "rollup": "^0.58.2",
-    "rollup-plugin-babel": "^3.0.4",
+    "rollup": "^0.63.2",
+    "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "dependencies": {
     "d3": "4.13.0",
     "lodash-es": "^4.17.10",
-    "protvista-zoomable": "0.0.8"
+    "protvista-zoomable": "^0.1.0"
   }
 }
