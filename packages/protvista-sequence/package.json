@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Sequence component for the ProtVista tool",
   "files": [
     "dist",
@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "d3": "^4.13.0",
-    "protvista-zoomable": "0.0.8"
+    "protvista-zoomable": "^0.1.0"
   }
 }
