@@ -101,7 +101,7 @@ class ProtvistaZoomable extends HTMLElement {
     updateScaleDomain() {
         this.xScale = scaleLinear()
             .domain([
-                0, this._length
+                1, this._length+1
             ])
             .range([
                 0, this._width
@@ -113,7 +113,7 @@ class ProtvistaZoomable extends HTMLElement {
             .scaleExtent([1, 4])
             .translateExtent([
                 [
-                    this.xScale(1), 0
+                    this.xScale(2), 0
                 ],
                 [this.width, 0]
             ])
@@ -154,7 +154,7 @@ class ProtvistaZoomable extends HTMLElement {
 
     applyZoomTranslation() {
         if (!this.svg || !this._originXScale) return;
-        const k = Math.max (1, this.length / (this._displayend - this._displaystart));
+        const k = Math.max (1, this.length / (this._displayend + 1 - this._displaystart));
         const dx = -this._originXScale(this._displaystart);
         this.dontDispatch = true;
         this
