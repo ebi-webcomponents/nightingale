@@ -41,6 +41,6 @@
   "dependencies": {
     "d3": "4.13.0",
     "lodash-es": "^4.17.10",
-    "protvista-zoomable": "^0.1.1"
+    "protvista-zoomable": "^0.1.2"
   }
 }
