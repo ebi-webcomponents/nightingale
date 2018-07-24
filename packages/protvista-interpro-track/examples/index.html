@@ -60,6 +60,26 @@
             </protvista-track>
           </td>
         </tr>
+        <tr>
+          <td>Discontinuos Entry</td>
+          <td>
+            <protvista-interpro-track
+              id= "track5" length="20"
+              displaystart="1" displayend="20"
+              color="purple" >
+            </protvista-track>
+          </td>
+        </tr>
+        <tr>
+          <td>Discontinuos Contributor</td>
+          <td>
+            <protvista-interpro-track
+              id= "track6" length="20"
+              displaystart="1" displayend="20"
+              color="lightslategrey" expanded>
+            </protvista-track>
+          </td>
+        </tr>
       </table>
       <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
 
@@ -284,6 +304,24 @@
           {accession:'feature2', start: 2, end: 2},
           {accession:'feature3', start: 4, end: 4},
         ]
+        const discontinuos = [
+          {
+            accession: 'feature1',
+            shape: 'roundRectangle',
+            locations:[{
+              fragments: [
+                {start: 2, end:5, shape: 'discontinuosEnd'},
+                {start: 8, end:12, shape: 'discontinuos'},
+                {start: 15, end:20, shape: 'discontinuosStart'},
+              ]
+            }]
+          },
+        ]
+        document.querySelector("#track5").data = discontinuos;
+        document.querySelector("#track6").data = [
+          {accession:'feature', start: 2, end: 20},
+        ];
+        document.querySelector("#track6").contributors = discontinuos;
       }
       </script>
     </body>

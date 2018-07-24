@@ -150,6 +150,19 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .enter().append('g')
           .attr('class', 'location-group');
 
+    this.coverLines = this.locations
+      .selectAll('line.cover')
+      .data(d => [d.fragments.reduce(
+        (agg, v) => ({
+          start: Math.min(agg.start, v.start),
+          end: Math.max(agg.end, v.end),
+          feature: d.feature,
+        }) ,{start: Infinity, end: -Infinity})]
+      )
+      .enter()
+      .append('line')
+        .attr('class', 'cover');
+
     this.features = this.locations
       .selectAll('path.feature')
       .data(d => d.fragments.map((loc) => Object.assign({}, loc, {feature: d.feature})))
@@ -165,6 +178,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
             detail: Object.assign(f, {target: d[i]}), bubbles:true, cancelable: true
           }));
         });
+
     this._addHoverEvents(this.features);
     this.residues_g = this._createResidueGroup(this.featuresG);
     this.residues_loc = this._createResiduePaths(this.residues_g);
@@ -183,13 +197,28 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         .enter()
         .append('g')
           .attr('class', 'child-group');
-      this.featureChildren = this.childGroup.selectAll('g.child-location-group')
+      const locationChildrenG = this.childGroup.selectAll('g.child-location-group')
         .data(d => {
           d.expanded=this._expanded;
           return d.locations.map((loc) => Object.assign({}, loc, {feature: d}))
         })
         .enter().append('g')
-          .attr('class', 'child-location-group')
+          .attr('class', 'child-location-group');
+
+          this.coverLinesChildren = locationChildrenG
+            .selectAll('line.cover')
+            .data(d => [d.fragments.reduce(
+              (agg, v) => ({
+                start: Math.min(agg.start, v.start),
+                end: Math.max(agg.end, v.end),
+                feature: d.feature,
+              }) ,{start: Infinity, end: -Infinity})]
+            )
+            .enter()
+            .append('line')
+              .attr('class', 'cover');
+
+        this.featureChildren = locationChildrenG
           .selectAll('path.child-fragment')
           .data(d => d.fragments.map((fragment) => Object.assign({}, fragment, {feature: d.feature})))
           .enter()
@@ -219,7 +248,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
       .attr('d', f =>
         this._featureShape.getFeatureShape(
           this.xScale(2) - this.xScale(1), this._layoutObj.getFeatureHeight(f.feature),
-            f.end ? f.end - f.start + 1: 1, this._getShape(f.feature)
+            f.end ? f.end - f.start + 1: 1, this._getShape(f.shape ? f :f.feature)
         )
       )
       .attr('fill', f => this._getFeatureColor(f.feature))
@@ -228,12 +257,21 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
         'translate(' + this.xScale(f.start)+ ',' + (padding.top + this._layoutObj.getFeatureYPos(f.feature)) + ')'
       );
   }
+  _refreshCoverLine(base) {
+    base
+      .attr('x1', f => this.xScale(f.start))
+      .attr('x2', f => this.xScale(f.end))
+      .attr('y1', f => padding.top + this._layoutObj.getFeatureYPos(f.feature) + this._layoutObj.getFeatureHeight(f.feature)/2)
+      .attr('y2', f => padding.top + this._layoutObj.getFeatureYPos(f.feature) + this._layoutObj.getFeatureHeight(f.feature)/2)
+      .attr('stroke', f => this._getFeatureColor(f.feature))
+  }
 
   refresh(){
     if (this._haveCreatedFeatures) {
       this._layoutObj.expanded = this._expanded;
       this._layoutObj.init(this._data, this._contributors);
 
+      this._refreshCoverLine(this.coverLines);
       this._refreshFeatures(this.features);
 
       this.residues_g.attr('visibility', this._expanded ? 'visible' : 'hidden' );
@@ -241,6 +279,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
 
       if (this._contributors) {
         this.childrenGroup.attr('visibility', this._expanded ? 'visible' : 'hidden' );
+        this._refreshCoverLine(this.coverLinesChildren);
         this._refreshFeatures(this.featureChildren);
         this.child_residues_g.attr('visibility', d => d.feature.expanded ? 'visible' : 'hidden');
         this._refreshResiduePaths(this.child_residues_loc);
