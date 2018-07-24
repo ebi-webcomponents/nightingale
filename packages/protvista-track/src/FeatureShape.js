@@ -196,4 +196,41 @@ export default class FeatureShape {
             ? shape + 'L' + m + ',0' + this._getMiddleLine(symbolSize/2, this._ftWidth) + 'Z'
             : shape + 'Z';
     };
+
+    _getBrokenEnd() {
+      const qh = this._ftHeight/4.0;
+      return 'L' + (this._ftWidth - qh) + ',' + qh
+          + 'L' + (this._ftWidth) + ',' + 2*qh
+          + 'L' + (this._ftWidth - qh) + ',' + 3*qh
+          + 'L' + (this._ftWidth) + ',' + this._ftHeight;
+    }
+    _getBrokenStart() {
+      const qh = this._ftHeight/4.0;
+      return 'L' + qh + ',' + 3*qh
+          + 'L0,' + 2*qh
+          + 'L' + qh + ',' + qh;
+    }
+    _discontinuosStart() {
+      return 'M0,0'
+          + 'L' + (this._ftWidth) + ',0'
+          + 'L' + (this._ftWidth) + ',' + this._ftHeight
+          + 'L0,' + this._ftHeight
+          + this._getBrokenStart()
+          + 'Z';
+    }
+    _discontinuos() {
+      return 'M0,0'
+          + 'L' + (this._ftWidth) + ',0'
+          + this._getBrokenEnd()
+          + 'L0,' + this._ftHeight
+          + this._getBrokenStart()
+          + 'Z';
+    }
+    _discontinuosEnd() {
+      return 'M0,0'
+          + 'L' + (this._ftWidth) + ',0'
+          + this._getBrokenEnd()
+          + 'L0,' + this._ftHeight
+          + 'Z';
+    }
 }
