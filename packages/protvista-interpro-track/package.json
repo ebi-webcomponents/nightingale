@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-track",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",
@@ -30,13 +30,13 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.24.1",
-    "protvista-zoomable": "^0.1.0",
+    "protvista-zoomable": "^0.1.1",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "dependencies": {
     "d3": "4.13.0",
-    "protvista-track": "^0.1.0"
+    "protvista-track": "^0.1.1"
   }
 }
