@@ -32,7 +32,6 @@ class ProtVistaManager extends HTMLElement {
 
   addListeners() {
     for (const child of this.protvistaElements){
-
       child.addEventListener("change", e => {
         if (this._attributes.indexOf(e.detail.type) !== -1){
           for (const ch of this.protvistaElements){
@@ -63,9 +62,7 @@ class ProtVistaManager extends HTMLElement {
       this.mutationObserver.observe(this, {
         childList:true
       });
-      
     }
-
   }
 
   disconnectedCallback() {
