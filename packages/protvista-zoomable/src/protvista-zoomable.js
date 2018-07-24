@@ -110,6 +110,7 @@ class ProtvistaZoomable extends HTMLElement {
 
     initZoom() {
         this._zoom = d3zoom()
+            .scaleExtent([1, Infinity])
             .translateExtent([
                 [0, 0],
                 [this.width, 0]
@@ -130,8 +131,7 @@ class ProtvistaZoomable extends HTMLElement {
                 this.updateScaleDomain();
                 this._originXScale = this.xScale.copy();
             }
-            // if (name === "displaystart" || name === "displayend")
-              this.applyZoomTranslation();
+            this.applyZoomTranslation();
         }
     }
 
@@ -144,8 +144,8 @@ class ProtvistaZoomable extends HTMLElement {
         if(this.dontDispatch) return;
         this.dispatchEvent(new CustomEvent("change", {
             detail: {
-              displaystart: this.xScale.domain()[0],
-              displayend: this.xScale.domain()[1]
+              displaystart: Math.max(1, this.xScale.domain()[0]),
+              displayend: Math.min(this.length, this.xScale.domain()[1])
             }, bubbles: true, cancelable: true
         }));
     }
