@@ -19,6 +19,7 @@ class ProtVistaNavigation extends HTMLElement {
   constructor() {
     super();
     this._x = null;
+    this.dontDispatch = false;
   }
 
   connectedCallback() {
@@ -103,12 +104,13 @@ class ProtVistaNavigation extends HTMLElement {
         if (d3Event.selection){
           this._displaystart = format("d")(this._x.invert(d3Event.selection[0]));
           this._displayend = format("d")(this._x.invert(d3Event.selection[1]));
-          this.dispatchEvent(new CustomEvent("change", {
-            detail: {
-              displayend: this._displayend, displaystart: this._displaystart,
-              extra: {transform: d3Event.transform}
-            }, bubbles:true, cancelable: true
-          }));
+          if (!this.dontDispatch)
+            this.dispatchEvent(new CustomEvent("change", {
+              detail: {
+                displayend: this._displayend, displaystart: this._displaystart,
+                extra: {transform: d3Event.transform}
+              }, bubbles:true, cancelable: true
+            }));
           this._updateLabels();
           this._updatePolygon();
         }
@@ -151,8 +153,12 @@ class ProtVistaNavigation extends HTMLElement {
     if (this._x){
       this._updatePolygon();
       this._updateLabels();
-      if (this._brushG) this._brushG
-        .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
+      if (this._brushG) {
+        this.dontDispatch = true;
+        this._brushG
+          .call(this._viewport.move, [this._x(this._displaystart), this._x(this._displayend)]);
+        this.dontDispatch = false;
+      }
     }
   }
   _updateLabels() {
