@@ -101,7 +101,7 @@ class ProtvistaZoomable extends HTMLElement {
     updateScaleDomain() {
         this.xScale = scaleLinear()
             .domain([
-                1, this._length+1
+                1, this._length
             ])
             .range([
                 0, this._width
@@ -110,11 +110,8 @@ class ProtvistaZoomable extends HTMLElement {
 
     initZoom() {
         this._zoom = d3zoom()
-            .scaleExtent([1, 4])
             .translateExtent([
-                [
-                    this.xScale(2), 0
-                ],
+                [0, 0],
                 [this.width, 0]
             ])
             .on("zoom", this.zoomed);
@@ -133,12 +130,13 @@ class ProtvistaZoomable extends HTMLElement {
                 this.updateScaleDomain();
                 this._originXScale = this.xScale.copy();
             }
-
-            this.applyZoomTranslation();
+            // if (name === "displaystart" || name === "displayend")
+              this.applyZoomTranslation();
         }
     }
 
     zoomed() {
+
         this.xScale = d3Event.transform
                 .rescaleX(this._originXScale);
 
@@ -154,7 +152,7 @@ class ProtvistaZoomable extends HTMLElement {
 
     applyZoomTranslation() {
         if (!this.svg || !this._originXScale) return;
-        const k = Math.max (1, this.length / (this._displayend + 1 - this._displaystart));
+        const k = Math.max (1, (this.length-1) / (this._displayend - this._displaystart));
         const dx = -this._originXScale(this._displaystart);
         this.dontDispatch = true;
         this
