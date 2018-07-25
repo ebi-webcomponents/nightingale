@@ -142,10 +142,11 @@ class ProtvistaZoomable extends HTMLElement {
 
         // If the source event is null the zoom wasn't initiated by this component, don't send event
         if(this.dontDispatch) return;
+        let [start, end] = this.xScale.domain();
         this.dispatchEvent(new CustomEvent("change", {
             detail: {
-              displaystart: Math.max(1, this.xScale.domain()[0]),
-              displayend: Math.min(this.length, this.xScale.domain()[1])
+              displaystart: Math.max(1, start),
+              displayend: Math.min(this.length, end)
             }, bubbles: true, cancelable: true
         }));
     }
@@ -167,6 +168,13 @@ class ProtvistaZoomable extends HTMLElement {
        this.updateScaleDomain();
        this._originXScale = this.xScale.copy();
        if (this.svg) this.svg.attr('width', this.width);
+       this._zoom
+           .scaleExtent([1, Infinity])
+           .translateExtent([
+               [0, 0],
+               [this.width, 0]
+           ]);
+
        this.applyZoomTranslation();
     }
 
