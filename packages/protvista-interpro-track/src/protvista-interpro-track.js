@@ -260,7 +260,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
   _refreshCoverLine(base) {
     base
       .attr('x1', f => this.xScale(f.start))
-      .attr('x2', f => this.xScale(f.end))
+      .attr('x2', f => this.xScale(f.end + 1))
       .attr('y1', f => padding.top + this._layoutObj.getFeatureYPos(f.feature) + this._layoutObj.getFeatureHeight(f.feature)/2)
       .attr('y2', f => padding.top + this._layoutObj.getFeatureYPos(f.feature) + this._layoutObj.getFeatureHeight(f.feature)/2)
       .attr('stroke', f => this._getFeatureColor(f.feature))
