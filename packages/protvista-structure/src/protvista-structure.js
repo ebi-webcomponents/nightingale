@@ -49,7 +49,7 @@ class ProtvistaStructure extends HTMLElement {
                 return {
                     id: d.id,
                     properties: {
-                        method: d.properties.method,
+                        method: this.formatMethod(d.properties.method),
                         chains: this.getChains(d.properties.chains),
                         resolution: this.formatAngstrom(d.properties.resolution)
                     }
@@ -148,7 +148,7 @@ class ProtvistaStructure extends HTMLElement {
                             <td>
                             <strong>${d.id}</strong><br/>
                             </td>
-                            <td>${d.properties.method}</td>
+                            <td title="${d.properties.method}">${d.properties.method}</td>
                             <td>${d.properties.resolution}</td>
                             <td>${d.properties.chains.map(chain=> 
                                 `<div title="${chain.chains}">${chain.chain}</div>`
@@ -190,6 +190,15 @@ class ProtvistaStructure extends HTMLElement {
                 end: split[1].split('-')[1],
             }
         });
+    }
+
+    formatMethod(method) {
+        switch (method) {
+            case 'EM':
+                return 'Electron microscopy'
+            default:
+                return method;
+        }
     }
 
     async selectMolecule(id) {
