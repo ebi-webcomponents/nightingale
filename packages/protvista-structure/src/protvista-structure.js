@@ -50,9 +50,7 @@ class ProtvistaStructure extends HTMLElement {
                     id: d.id,
                     properties: {
                         method: d.properties.method,
-                        chains: this.getChain(d.properties.chains),
-                        start: this.getStart(d.properties.chains),
-                        end: this.getEnd(d.properties.chains),
+                        chains: this.getChains(d.properties.chains),
                         resolution: this.formatAngstrom(d.properties.resolution)
                     }
                 };
@@ -152,8 +150,10 @@ class ProtvistaStructure extends HTMLElement {
                             </td>
                             <td>${d.properties.method}</td>
                             <td>${d.properties.resolution}</td>
-                            <td title="${d.properties.chains}">${d.properties.chains}</td>
-                            <td>${d.properties.start}-${d.properties.end}</td>
+                            <td>${d.properties.chains.map(chain=> 
+                                `<div title="${chain.chains}">${chain.chain}</div>`
+                            ).join('')}</td>
+                            <td>${d.properties.chains.map(chain=> `<div>${chain.start}-${chain.end}</div>`).join('')}</td>
                             <td>
                                 <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
                                     d.id
@@ -181,16 +181,15 @@ class ProtvistaStructure extends HTMLElement {
         );
     }
 
-    getChain(chains) {
-        return chains.split('=')[0];
-    }
-
-    getStart(chains) {
-        return chains.split('=')[1].split('-')[0];
-    }
-
-    getEnd(chains) {
-        return chains.split('=')[1].split('-')[1];
+    getChains(chains) {
+        return chains.split(',').map(chain => {
+            const split = chain.trim().split('=')
+            return {
+                chain: split[0],
+                start: split[1].split('-')[0],
+                end: split[1].split('-')[1],
+            }
+        });
     }
 
     async selectMolecule(id) {
@@ -345,6 +344,8 @@ class ProtvistaStructure extends HTMLElement {
                 seqNumber: translatedPos.end
             }
         );
+
+        console.log(translatedPos.start, translatedPos.end);
 
         const theme = this.getTheme();
 
