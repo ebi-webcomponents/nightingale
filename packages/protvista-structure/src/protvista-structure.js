@@ -27,6 +27,10 @@ class ProtvistaStructure extends HTMLElement {
         return true;
     }
 
+    get isResidueOnlyHighlight() {
+        return this.hasAttribute('highlightresidues');
+    }
+
     connectedCallback() {
         this.titleContainer = document.createElement('h4');
         const flexContainer = document.createElement('div');
@@ -67,7 +71,7 @@ class ProtvistaStructure extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['highlightstart', 'highlightend', 'molecule'];
+        return ['highlightstart', 'highlightend', 'molecule', 'highlightresidues'];
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -345,16 +349,25 @@ class ProtvistaStructure extends HTMLElement {
         const translatedPos = this.translatePositions(this._highlightstart, this._highlightend);
         if (!translatedPos) return;
 
-        const query = this.Query.sequence(
-            translatedPos.entity.toString(),
-            translatedPos.chain, {
+        let query = null;
+
+        if (this.isResidueOnlyHighlight) {
+            query = this.Query.residues({
+                entityId: translatedPos.entity.toString(),
                 seqNumber: translatedPos.start
             }, {
+                entityId: translatedPos.entity.toString(),
                 seqNumber: translatedPos.end
-            }
-        );
-
-        console.log(translatedPos.start, translatedPos.end);
+            });
+        } else {
+            query = this.Query.sequence(
+                translatedPos.entity.toString(), translatedPos.chain, {
+                    seqNumber: translatedPos.start
+                }, {
+                    seqNumber: translatedPos.end
+                }
+            );
+        }
 
         const theme = this.getTheme();
 
