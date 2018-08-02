@@ -415,7 +415,11 @@ class ProtvistaStructure extends HTMLElement {
             return;
         }
         const matches = this._pdbEntries.filter(
-            d => d.properties.start <= start && d.properties.end >= end
+            d => {
+                return d.properties.method !== 'Model' && d.properties.chains.filter(chain => {
+                    return chain.start <= start && chain.end >= end
+                }).length > 0;
+            }
         );
         if (this._selectedMolecule) {
             if (
