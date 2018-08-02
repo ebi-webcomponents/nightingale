@@ -114,7 +114,8 @@ class ProtvistaStructure extends HTMLElement {
                 `https://www.ebi.ac.uk/proteins/api/proteins/${this.accession}`
             )).json();
         } catch (e) {
-            throw new Error(`Couldn't load UniProt entry`, e);
+            this.addMessage(`Couldn't load UniProt entry`);
+            throw new Error(e);
         }
     }
 
@@ -123,7 +124,8 @@ class ProtvistaStructure extends HTMLElement {
             const data = await fetch(`https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`);
             return await data.json();
         } catch (e) {
-            throw new Error(`Couldn't load PDB entry`, e);
+            this.addMessage(`Couldn't load PDB entry`);
+            throw new Error(e);
         }
     }
 
@@ -210,7 +212,6 @@ class ProtvistaStructure extends HTMLElement {
         const mappings = this.processMapping(pdbEntry);
         this.querySelectorAll('.active').forEach(row => row.classList.remove('active'));
         this.querySelector(`#entry_${id}`).classList.add('active');
-        this.querySelector('#litemol-title').textContent = id;
         await this.loadMolecule(id);
         this._selectedMolecule = {
             id: id,
@@ -230,6 +231,7 @@ class ProtvistaStructure extends HTMLElement {
         this.Transformer = this.Bootstrap.Entity.Transformer;
         this.Visualization = this.Bootstrap.Visualization;
         this.Event = this.Bootstrap.Event;
+        this.Context = Plugin.Components.Context;
         // Plugin.Components.Context.Log(this.Bootstrap.Components.LayoutRegion.Bottom, true);
         this._liteMol = Plugin.create({
             target: '#app',
@@ -299,13 +301,27 @@ class ProtvistaStructure extends HTMLElement {
         });
     }
 
+    addMessage(message) {
+        this.removeMessage();
+        this._liteMol.command(this.Bootstrap.Command.Toast.Show, {
+            key: 'UPMessage',
+            message: message,
+            timeoutMs: 30 * 1000
+        });
+    }
+
+    removeMessage() {
+        this._liteMol.command(this.Bootstrap.Command.Toast.Hide, {
+            key: 'UPMessage'
+        });
+    }
+
     processMapping(mappingData) {
         if (!Object.values(mappingData)[0].UniProt[this.accession]) return;
         return Object.values(mappingData)[0].UniProt[this.accession].mappings;
     }
 
     translatePositions(start, end) {
-        this.messageContainer.textContent = '';
         // return if they have been set to 'undefined'
         if (
             'string' === typeof this._highlightend ||
@@ -328,12 +344,12 @@ class ProtvistaStructure extends HTMLElement {
                         end: end - offset
                     };
                 } else {
-                    this.messageContainer.textContent = `Positions ${this._highlightstart}-${
+                    this.addMessage(`Positions ${this._highlightstart}-${
                         this._highlightend
-                    } not found in this structure`;
+                    } not found in this structure`);
                 }
             } else {
-                this.messageContainer.textContent = 'Non-exact mapping';
+                this.addMessage('Mismatch between protein sequence and structure residues');
             }
         }
     }
@@ -391,6 +407,7 @@ class ProtvistaStructure extends HTMLElement {
             //     this._liteMol.context.select('sequence-selection')
             // );
         });
+        this.removeMessage();
     }
 
     async _selectMoleculeWithinRange(start, end) {
