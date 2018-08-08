@@ -185,6 +185,7 @@ class ProtVistaInterproTrack extends ProtVistaTrack {
     this._addHoverEvents(this.residues_loc, "residue");
 
     if (this._contributors) {
+      this._contributors.forEach((d,i) => d.k = i);
       if (!this.children_g)
         this.children_g = this.svg.append('g')
           .attr('class', 'children-features');
