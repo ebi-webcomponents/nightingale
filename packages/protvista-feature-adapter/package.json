@@ -9,13 +9,6 @@
   "main": "dist/ProtVistaFeatureAdapter.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
-  "scripts": {
-    "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
-    "rollup-watch": "rollup -cw",
-    "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "npm-linkall": "npm link protvista-uniprot-entry-adapter data-loader"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ebi-uniprot/protvista-feature-adapter.git"
@@ -27,22 +20,5 @@
     "protein-feature"
   ],
   "author": "ljgarcia",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ebi-uniprot/protvista-feature-adapter/issues"
-  },
-  "homepage": "https://github.com/ebi-uniprot/protvista-feature-adapter#readme",
-  "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.19",
-    "babel-cli": "^6.24.1",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.18.13",
-    "data-loader": "^0.3.3",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.1",
-    "rollup": "^0.49.3",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-node-resolve": "^3.0.0"
-  }
+  "license": "MIT"
 }

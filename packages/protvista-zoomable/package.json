@@ -6,42 +6,14 @@
         "dist",
         "src"
     ],
-    "main": "src/main.js",
-    "module": "src/protvista-zoomable.js",
-    "jsnext:main": "src/protvista-zoomable.js",
+    "main": "dist/index.js",
+    "module": "src/index.js",
+    "jsnext:main": "src/index.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/ebi-ppf/protvista-zoomable"
     },
-    "scripts": {
-        "build-dev": "rollup -c",
-        "build-prod": "NODE_ENV=production rollup -c",
-        "rollup-watch": "rollup -cw",
-        "browser-sync": "browser-sync start --server -f dist/**/*.*",
-        "serve": "npm run rollup-watch & npm run browser-sync",
-        "prepublishOnly": "npm run build-prod"
-    },
     "keywords": [],
     "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-    "license": "MIT",
-    "devDependencies": {
-        "@webcomponents/webcomponentsjs": "^1.2.0",
-        "babel-plugin-external-helpers": "^6.22.0",
-        "babel-plugin-transform-custom-element-classes": "^0.1.0",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.6.0",
-        "browser-sync": "^2.24.1",
-        "cssnano": "^3.10.0",
-        "eslint": "^4.19.1",
-        "resize-observer-polyfill": "^1.5.0",
-        "rollup": "^0.58.2",
-        "rollup-plugin-babel": "^3.0.4",
-        "rollup-plugin-babel-minify": "^4.0.0",
-        "rollup-plugin-conditional": "^1.1.1",
-        "rollup-plugin-node-resolve": "^3.3.0"
-    },
-    "dependencies": {
-        "d3": "4.13.0",
-        "lodash-es": "^4.17.10"
-    }
+    "license": "MIT"
 }

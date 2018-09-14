@@ -6,35 +6,8 @@
         "dist",
         "src"
     ],
-    "main": "dist/protvista-variation-adapter.js",
-    "scripts": {
-        "build": "rimraf ./dist && mkdirp ./dist && rollup -c",
-        "rollup-watch": "rollup -cw",
-        "browser-sync": "browser-sync start --server -f dist/**/*.*",
-        "serve": "npm run rollup-watch & npm run browser-sync",
-        "test": "npm run build && wct",
-        "npm-linkall": "npm link protvista-uniprot-entry-adapter data-loader"
-    },
+    "main": "dist/index.js",
     "keywords": [],
     "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-    "license": "MIT",
-    "devDependencies": {
-        "@webcomponents/webcomponentsjs": "^1.0.19",
-        "babel-cli": "^6.26.0",
-        "babel-plugin-external-helpers": "^6.22.0",
-        "babel-plugin-transform-custom-element-classes": "^0.1.0",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.6.1",
-        "bower": "^1.8.2",
-        "browser-sync": "^2.12.5",
-        "cssnano": "^3.10.0",
-        "eslint": "^4.12.0",
-        "rollup": "^0.49.3",
-        "rollup-plugin-babel": "^3.0.2",
-        "rollup-plugin-node-resolve": "^3.0.0",
-        "rollup-plugin-postcss": "^0.5.5"
-    },
-    "dependencies": {
-        "lodash-es": "^4.17.8"
-    }
+    "license": "MIT"
 }

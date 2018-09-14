@@ -1,25 +1,24 @@
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import postcss from 'rollup-plugin-postcss';
-import lerna from 'lerna';
-
-const {
-    LERNA_PACKAGE_NAME,
-    LERNA_ROOT_PATH
-} = process.env;
+import postcss from "rollup-plugin-postcss";
+import postcssInlineSvg from "postcss-inline-svg";
 
 export default {
-    input: 'src/main.js',
-    name: 'ProtvistaVariation',
-    sourcemap: true,
+    input: 'src/index.js',
     output: {
-        file: 'dist/protvista-variation.js',
-        format: 'iife'
+        file: 'dist/index.js',
+        format: 'iife',
+        name: 'wc',
+        sourcemap: true,
+        globals: {
+            'protvista-uniprot-entry-adapter': 'ProtVistaUniProtEntryAdapter'
+        }
     },
-    external: ['d3', 'protvista-track'],
+    external: ['protvista-uniprot-entry-adapter'],
     plugins: [
         postcss({
-            extensions: ['.css']
+            extensions: ['.css'],
+            plugins: [postcssInlineSvg]
         }),
         nodeResolve({
             jsnext: true
@@ -27,5 +26,5 @@ export default {
         babel({
             exclude: 'node_modules/**'
         })
-    ]
+    ],
 };

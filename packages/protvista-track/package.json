@@ -13,34 +13,6 @@
     "type": "git",
     "url": "https://github.com/ebi-ppf/protvista-track"
   },
-  "scripts": {
-    "build": "NODE_ENV=production rollup -c",
-    "rollup-watch": "rollup -cw",
-    "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "prepublishOnly": "npm run build",
-    "npm-linkall": "npm link protvista-feature-adapter protvista-uniprot-entry-adapter protvista-zoomable data-loader"
-  },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "MIT",
-  "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^1.2.0",
-    "babel-cli": "^6.24.1",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-custom-element-classes": "^0.1.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.24.1",
-    "data-loader": "^0.3.3",
-    "protvista-feature-adapter": "^0.0.4",
-    "rollup": "^0.63.2",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-node-resolve": "^3.3.0"
-  },
-  "dependencies": {
-    "d3": "4.13.0",
-    "lodash-es": "^4.17.10",
-    "protvista-zoomable": "^0.1.2"
-  }
+  "license": "MIT"
 }
