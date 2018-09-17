@@ -15,5 +15,8 @@
     },
     "keywords": [],
     "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "resize-observer-polyfill": "^1.5.0"
+    }
 }

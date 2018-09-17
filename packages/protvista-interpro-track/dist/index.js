@@ -373,5 +373,5 @@ var wc = (function (ProtVistaTrack) {
 
   return ProtVistaInterproTrack;
 
-}(ProtVistaTrack));
+}(ProtvistaTrack));
 //# sourceMappingURL=index.js.map

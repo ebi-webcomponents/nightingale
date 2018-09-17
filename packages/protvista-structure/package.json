@@ -12,6 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "litemol": "github:dsehnal/LiteMol",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^3.0.0"
   }
 }
