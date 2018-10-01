@@ -166,7 +166,7 @@ class ProtvistaStructure extends HTMLElement {
                                 }">PDBe</a><br> 
                                 <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
                                     d.id
-                                }">RCSB PDBi</a><br>
+                                }">RCSB PDB</a><br>
                                 <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${
                                     d.id
                                 }">PDBj</a><br>
