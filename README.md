@@ -4,7 +4,10 @@
 
 ## building
 
-First you need to bootstrap:
+First install all of the packages:
+`yarn`
+
+Then run bootstrap:
 `yarn bootstrap`
 
 Then run:
