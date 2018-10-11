@@ -7,6 +7,7 @@
     "build": "lerna exec --parallel -- rollup --config ../../rollup.config.js",
     "watch": "lerna exec --parallel -- rollup -c ../../rollup.config.js -w",
     "clean": "lerna exec --parallel -- rimraf .jshint .eslint",
+    "browser-sync": "browser-sync start --server -f ../packages/**/dist/**/*.*",
     "test": ""
   },
   "devDependencies": {
