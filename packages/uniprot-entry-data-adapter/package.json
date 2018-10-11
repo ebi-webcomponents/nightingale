@@ -23,9 +23,5 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ebi-uniprot/protvista-uniprot-entry-adapter/issues"
-  },
-  "dependencies": {
-    "lodash-es": "^4.17.4",
-    "data-loader": "^0.3.3"
   }
 }
