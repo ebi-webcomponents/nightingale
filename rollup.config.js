@@ -12,7 +12,6 @@ export default {
         name: 'wc',
         sourcemap: true,
         globals: {
-            'uniprot-entry-data-adapter': 'UniProtEntryDataAdapter',
             'protvista-uniprot-entry-adapter': 'ProtVistaUniProtEntryAdapter',
             'd3': 'd3',
             'protvista-zoomable': 'ProtvistaZoomable',
