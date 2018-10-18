@@ -1,5 +1,8 @@
 node_modules
 ./**/dist/*
+./packages/**/dist/*
 *.log
 *.lock
 *.bak
+.idea/
+*.iml
