@@ -6967,7 +6967,7 @@
     }
   }
 
-  var css = "protvista-variation {\n    display:flex;            \n    width:100%;\n}\n\n.protvista-sidebar-container {\n    flex: 0.2;\n}\n\n.protvista-visualisation-container {\n    flex: 1;   \n}\ncircle {\n    opacity: 0.6;\n}\ncircle:hover {\n    opacity: 0.9;\n}\n.tick line, .axis path {\n    opacity: 0.1;\n}\n\n.protvista-highlight {\n    fill: #FFE999;\n}";
+  var css = "protvista-variation {\r\n    display:flex;            \r\n    width:100%;\r\n}\r\n\r\n.protvista-sidebar-container {\r\n    flex: 0.2;\r\n}\r\n\r\n.protvista-visualisation-container {\r\n    flex: 1;   \r\n}\r\ncircle {\r\n    opacity: 0.6;\r\n}\r\ncircle:hover {\r\n    opacity: 0.9;\r\n}\r\n.tick line, .axis path {\r\n    opacity: 0.1;\r\n}\r\n\r\n.protvista-highlight {\r\n    fill: #FFE999;\r\n}";
   styleInject(css);
 
   const aaList = ['G', 'A', 'V', 'L', 'I', 'S', 'T', 'C', 'M', 'D', 'N', 'E', 'Q', 'R', 'K', 'H', 'F', 'Y', 'W', 'P', 'd', '*'];

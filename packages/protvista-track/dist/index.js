@@ -18,12 +18,11 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     var length = array.length,
         index = fromIndex + (fromRight ? 1 : -1);
 
-    while (fromRight ? index-- : ++index < length) {
+    while ((fromRight ? index-- : ++index < length)) {
       if (predicate(array[index], index, array)) {
         return index;
       }
     }
-
     return -1;
   }
 
@@ -57,7 +56,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
         return index;
       }
     }
-
     return -1;
   }
 
@@ -70,41 +68,40 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {number} fromIndex The index to search from.
    * @returns {number} Returns the index of the matched value, else `-1`.
    */
-
   function baseIndexOf(array, value, fromIndex) {
-    return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
+    return value === value
+      ? strictIndexOf(array, value, fromIndex)
+      : baseFindIndex(array, baseIsNaN, fromIndex);
   }
 
   /** Detect free variable `global` from Node.js. */
   var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
 
   /** Detect free variable `self`. */
-
   var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-  /** Used as a reference to the global object. */
 
+  /** Used as a reference to the global object. */
   var root = freeGlobal || freeSelf || Function('return this')();
 
   /** Built-in value references. */
-
   var Symbol = root.Symbol;
 
   /** Used for built-in method references. */
-
   var objectProto = Object.prototype;
-  /** Used to check objects for own properties. */
 
+  /** Used to check objects for own properties. */
   var hasOwnProperty = objectProto.hasOwnProperty;
+
   /**
    * Used to resolve the
    * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
    * of values.
    */
-
   var nativeObjectToString = objectProto.toString;
-  /** Built-in value references. */
 
+  /** Built-in value references. */
   var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
   /**
    * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
    *
@@ -112,37 +109,36 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to query.
    * @returns {string} Returns the raw `toStringTag`.
    */
-
   function getRawTag(value) {
     var isOwn = hasOwnProperty.call(value, symToStringTag),
         tag = value[symToStringTag];
 
     try {
       value[symToStringTag] = undefined;
+      var unmasked = true;
     } catch (e) {}
 
     var result = nativeObjectToString.call(value);
-
-    {
+    if (unmasked) {
       if (isOwn) {
         value[symToStringTag] = tag;
       } else {
         delete value[symToStringTag];
       }
     }
-
     return result;
   }
 
   /** Used for built-in method references. */
   var objectProto$1 = Object.prototype;
+
   /**
    * Used to resolve the
    * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
    * of values.
    */
-
   var nativeObjectToString$1 = objectProto$1.toString;
+
   /**
    * Converts `value` to a string using `Object.prototype.toString`.
    *
@@ -150,18 +146,17 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to convert.
    * @returns {string} Returns the converted string.
    */
-
   function objectToString(value) {
     return nativeObjectToString$1.call(value);
   }
 
   /** `Object#toString` result references. */
-
   var nullTag = '[object Null]',
       undefinedTag = '[object Undefined]';
-  /** Built-in value references. */
 
+  /** Built-in value references. */
   var symToStringTag$1 = Symbol ? Symbol.toStringTag : undefined;
+
   /**
    * The base implementation of `getTag` without fallbacks for buggy environments.
    *
@@ -169,13 +164,13 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to query.
    * @returns {string} Returns the `toStringTag`.
    */
-
   function baseGetTag(value) {
     if (value == null) {
       return value === undefined ? undefinedTag : nullTag;
     }
-
-    return symToStringTag$1 && symToStringTag$1 in Object(value) ? getRawTag(value) : objectToString(value);
+    return (symToStringTag$1 && symToStringTag$1 in Object(value))
+      ? getRawTag(value)
+      : objectToString(value);
   }
 
   /**
@@ -209,11 +204,11 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** `Object#toString` result references. */
-
   var asyncTag = '[object AsyncFunction]',
       funcTag = '[object Function]',
       genTag = '[object GeneratorFunction]',
       proxyTag = '[object Proxy]';
+
   /**
    * Checks if `value` is classified as a `Function` object.
    *
@@ -231,20 +226,19 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isFunction(/abc/);
    * // => false
    */
-
   function isFunction(value) {
     if (!isObject(value)) {
       return false;
-    } // The use of `Object#toString` avoids issues with the `typeof` operator
+    }
+    // The use of `Object#toString` avoids issues with the `typeof` operator
     // in Safari 9 which returns 'object' for typed arrays and other constructors.
-
-
     var tag = baseGetTag(value);
     return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
   }
 
   /** Used as references for various `Number` constants. */
   var MAX_SAFE_INTEGER = 9007199254740991;
+
   /**
    * Checks if `value` is a valid array-like length.
    *
@@ -271,9 +265,9 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isLength('3');
    * // => false
    */
-
   function isLength(value) {
-    return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+    return typeof value == 'number' &&
+      value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
   }
 
   /**
@@ -301,7 +295,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isArrayLike(_.noop);
    * // => false
    */
-
   function isArrayLike(value) {
     return value != null && isLength(value.length) && !isFunction(value);
   }
@@ -360,8 +353,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** `Object#toString` result references. */
-
   var stringTag = '[object String]';
+
   /**
    * Checks if `value` is classified as a `String` primitive or object.
    *
@@ -379,14 +372,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isString(1);
    * // => false
    */
-
   function isString(value) {
-    return typeof value == 'string' || !isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag;
+    return typeof value == 'string' ||
+      (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
   }
 
   /** `Object#toString` result references. */
-
   var symbolTag = '[object Symbol]';
+
   /**
    * Checks if `value` is classified as a `Symbol` primitive or object.
    *
@@ -404,29 +397,29 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isSymbol('abc');
    * // => false
    */
-
   function isSymbol(value) {
-    return typeof value == 'symbol' || isObjectLike(value) && baseGetTag(value) == symbolTag;
+    return typeof value == 'symbol' ||
+      (isObjectLike(value) && baseGetTag(value) == symbolTag);
   }
 
   /** Used as references for various `Number` constants. */
-
   var NAN = 0 / 0;
+
   /** Used to match leading and trailing whitespace. */
-
   var reTrim = /^\s+|\s+$/g;
+
   /** Used to detect bad signed hexadecimal string values. */
-
   var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
   /** Used to detect binary string values. */
-
   var reIsBinary = /^0b[01]+$/i;
+
   /** Used to detect octal string values. */
-
   var reIsOctal = /^0o[0-7]+$/i;
-  /** Built-in method references without a dependency on `root`. */
 
+  /** Built-in method references without a dependency on `root`. */
   var freeParseInt = parseInt;
+
   /**
    * Converts `value` to a number.
    *
@@ -450,34 +443,31 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.toNumber('3.2');
    * // => 3.2
    */
-
   function toNumber(value) {
     if (typeof value == 'number') {
       return value;
     }
-
     if (isSymbol(value)) {
       return NAN;
     }
-
     if (isObject(value)) {
       var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-      value = isObject(other) ? other + '' : other;
+      value = isObject(other) ? (other + '') : other;
     }
-
     if (typeof value != 'string') {
       return value === 0 ? value : +value;
     }
-
     value = value.replace(reTrim, '');
     var isBinary = reIsBinary.test(value);
-    return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
+    return (isBinary || reIsOctal.test(value))
+      ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+      : (reIsBadHex.test(value) ? NAN : +value);
   }
 
   /** Used as references for various `Number` constants. */
-
   var INFINITY = 1 / 0,
       MAX_INTEGER = 1.7976931348623157e+308;
+
   /**
    * Converts `value` to a finite number.
    *
@@ -501,19 +491,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.toFinite('3.2');
    * // => 3.2
    */
-
   function toFinite(value) {
     if (!value) {
       return value === 0 ? value : 0;
     }
-
     value = toNumber(value);
-
     if (value === INFINITY || value === -INFINITY) {
-      var sign = value < 0 ? -1 : 1;
+      var sign = (value < 0 ? -1 : 1);
       return sign * MAX_INTEGER;
     }
-
     return value === value ? value : 0;
   }
 
@@ -543,11 +529,11 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.toInteger('3.2');
    * // => 3
    */
-
   function toInteger(value) {
     var result = toFinite(value),
         remainder = result % 1;
-    return result === result ? remainder ? result - remainder : result : 0;
+
+    return result === result ? (remainder ? result - remainder : result) : 0;
   }
 
   /**
@@ -567,7 +553,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     while (++index < length) {
       result[index] = iteratee(array[index], index, array);
     }
-
     return result;
   }
 
@@ -581,9 +566,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Array} props The property names to get values for.
    * @returns {Object} Returns the array of property values.
    */
-
   function baseValues(object, props) {
-    return arrayMap(props, function (key) {
+    return arrayMap(props, function(key) {
       return object[key];
     });
   }
@@ -604,13 +588,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     while (++index < n) {
       result[index] = iteratee(index);
     }
-
     return result;
   }
 
   /** `Object#toString` result references. */
-
   var argsTag = '[object Arguments]';
+
   /**
    * The base implementation of `_.isArguments`.
    *
@@ -618,20 +601,19 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to check.
    * @returns {boolean} Returns `true` if `value` is an `arguments` object,
    */
-
   function baseIsArguments(value) {
     return isObjectLike(value) && baseGetTag(value) == argsTag;
   }
 
   /** Used for built-in method references. */
-
   var objectProto$2 = Object.prototype;
+
   /** Used to check objects for own properties. */
-
   var hasOwnProperty$1 = objectProto$2.hasOwnProperty;
-  /** Built-in value references. */
 
+  /** Built-in value references. */
   var propertyIsEnumerable = objectProto$2.propertyIsEnumerable;
+
   /**
    * Checks if `value` is likely an `arguments` object.
    *
@@ -650,11 +632,9 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isArguments([1, 2, 3]);
    * // => false
    */
-
-  var isArguments = baseIsArguments(function () {
-    return arguments;
-  }()) ? baseIsArguments : function (value) {
-    return isObjectLike(value) && hasOwnProperty$1.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
+  var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+    return isObjectLike(value) && hasOwnProperty$1.call(value, 'callee') &&
+      !propertyIsEnumerable.call(value, 'callee');
   };
 
   /**
@@ -675,20 +655,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** Detect free variable `exports`. */
-
   var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
   /** Detect free variable `module`. */
-
   var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+
   /** Detect the popular CommonJS extension `module.exports`. */
-
   var moduleExports = freeModule && freeModule.exports === freeExports;
+
   /** Built-in value references. */
-
   var Buffer = moduleExports ? root.Buffer : undefined;
-  /* Built-in method references for those with the same name as other `lodash` methods. */
 
+  /* Built-in method references for those with the same name as other `lodash` methods. */
   var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
+
   /**
    * Checks if `value` is a buffer.
    *
@@ -706,14 +686,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isBuffer(new Uint8Array(2));
    * // => false
    */
-
   var isBuffer = nativeIsBuffer || stubFalse;
 
   /** Used as references for various `Number` constants. */
   var MAX_SAFE_INTEGER$1 = 9007199254740991;
-  /** Used to detect unsigned integer values. */
 
+  /** Used to detect unsigned integer values. */
   var reIsUint = /^(?:0|[1-9]\d*)$/;
+
   /**
    * Checks if `value` is a valid array-like index.
    *
@@ -722,15 +702,17 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
    * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
    */
-
   function isIndex(value, length) {
     var type = typeof value;
     length = length == null ? MAX_SAFE_INTEGER$1 : length;
-    return !!length && (type == 'number' || type != 'symbol' && reIsUint.test(value)) && value > -1 && value % 1 == 0 && value < length;
+
+    return !!length &&
+      (type == 'number' ||
+        (type != 'symbol' && reIsUint.test(value))) &&
+          (value > -1 && value % 1 == 0 && value < length);
   }
 
   /** `Object#toString` result references. */
-
   var argsTag$1 = '[object Arguments]',
       arrayTag = '[object Array]',
       boolTag = '[object Boolean]',
@@ -744,6 +726,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
       setTag = '[object Set]',
       stringTag$1 = '[object String]',
       weakMapTag = '[object WeakMap]';
+
   var arrayBufferTag = '[object ArrayBuffer]',
       dataViewTag = '[object DataView]',
       float32Tag = '[object Float32Array]',
@@ -755,11 +738,23 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
       uint8ClampedTag = '[object Uint8ClampedArray]',
       uint16Tag = '[object Uint16Array]',
       uint32Tag = '[object Uint32Array]';
-  /** Used to identify `toStringTag` values of typed arrays. */
 
+  /** Used to identify `toStringTag` values of typed arrays. */
   var typedArrayTags = {};
-  typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
-  typedArrayTags[argsTag$1] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag$1] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag$1] = typedArrayTags[weakMapTag] = false;
+  typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
+  typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+  typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+  typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+  typedArrayTags[uint32Tag] = true;
+  typedArrayTags[argsTag$1] = typedArrayTags[arrayTag] =
+  typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+  typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
+  typedArrayTags[errorTag] = typedArrayTags[funcTag$1] =
+  typedArrayTags[mapTag] = typedArrayTags[numberTag] =
+  typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
+  typedArrayTags[setTag] = typedArrayTags[stringTag$1] =
+  typedArrayTags[weakMapTag] = false;
+
   /**
    * The base implementation of `_.isTypedArray` without Node.js optimizations.
    *
@@ -767,9 +762,9 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to check.
    * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
    */
-
   function baseIsTypedArray(value) {
-    return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+    return isObjectLike(value) &&
+      isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
   }
 
   /**
@@ -780,42 +775,41 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {Function} Returns the new capped function.
    */
   function baseUnary(func) {
-    return function (value) {
+    return function(value) {
       return func(value);
     };
   }
 
   /** Detect free variable `exports`. */
-
   var freeExports$1 = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
   /** Detect free variable `module`. */
-
   var freeModule$1 = freeExports$1 && typeof module == 'object' && module && !module.nodeType && module;
+
   /** Detect the popular CommonJS extension `module.exports`. */
-
   var moduleExports$1 = freeModule$1 && freeModule$1.exports === freeExports$1;
+
   /** Detect free variable `process` from Node.js. */
-
   var freeProcess = moduleExports$1 && freeGlobal.process;
-  /** Used to access faster Node.js helpers. */
 
-  var nodeUtil = function () {
+  /** Used to access faster Node.js helpers. */
+  var nodeUtil = (function() {
     try {
       // Use `util.types` for Node.js 10+.
       var types = freeModule$1 && freeModule$1.require && freeModule$1.require('util').types;
 
       if (types) {
         return types;
-      } // Legacy `process.binding('util')` for Node.js < 10.
+      }
 
-
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
-  }();
+  }());
 
   /* Node.js helper references. */
-
   var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+
   /**
    * Checks if `value` is classified as a typed array.
    *
@@ -833,15 +827,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.isTypedArray([]);
    * // => false
    */
-
   var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
 
   /** Used for built-in method references. */
-
   var objectProto$3 = Object.prototype;
-  /** Used to check objects for own properties. */
 
+  /** Used to check objects for own properties. */
   var hasOwnProperty$2 = objectProto$3.hasOwnProperty;
+
   /**
    * Creates an array of the enumerable property names of the array-like `value`.
    *
@@ -850,7 +843,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {boolean} inherited Specify returning inherited property names.
    * @returns {Array} Returns the array of property names.
    */
-
   function arrayLikeKeys(value, inherited) {
     var isArr = isArray(value),
         isArg = !isArr && isArguments(value),
@@ -861,20 +853,26 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
         length = result.length;
 
     for (var key in value) {
-      if ((inherited || hasOwnProperty$2.call(value, key)) && !(skipIndexes && ( // Safari 9 has enumerable `arguments.length` in strict mode.
-      key == 'length' || // Node.js 0.10 has enumerable non-index properties on buffers.
-      isBuff && (key == 'offset' || key == 'parent') || // PhantomJS 2 has enumerable non-index properties on typed arrays.
-      isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset') || // Skip index properties.
-      isIndex(key, length)))) {
+      if ((inherited || hasOwnProperty$2.call(value, key)) &&
+          !(skipIndexes && (
+             // Safari 9 has enumerable `arguments.length` in strict mode.
+             key == 'length' ||
+             // Node.js 0.10 has enumerable non-index properties on buffers.
+             (isBuff && (key == 'offset' || key == 'parent')) ||
+             // PhantomJS 2 has enumerable non-index properties on typed arrays.
+             (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+             // Skip index properties.
+             isIndex(key, length)
+          ))) {
         result.push(key);
       }
     }
-
     return result;
   }
 
   /** Used for built-in method references. */
   var objectProto$4 = Object.prototype;
+
   /**
    * Checks if `value` is likely a prototype object.
    *
@@ -882,10 +880,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to check.
    * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
    */
-
   function isPrototype(value) {
     var Ctor = value && value.constructor,
-        proto = typeof Ctor == 'function' && Ctor.prototype || objectProto$4;
+        proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$4;
+
     return value === proto;
   }
 
@@ -898,21 +896,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {Function} Returns the new function.
    */
   function overArg(func, transform) {
-    return function (arg) {
+    return function(arg) {
       return func(transform(arg));
     };
   }
 
   /* Built-in method references for those with the same name as other `lodash` methods. */
-
   var nativeKeys = overArg(Object.keys, Object);
 
   /** Used for built-in method references. */
-
   var objectProto$5 = Object.prototype;
-  /** Used to check objects for own properties. */
 
+  /** Used to check objects for own properties. */
   var hasOwnProperty$3 = objectProto$5.hasOwnProperty;
+
   /**
    * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
    *
@@ -920,20 +917,16 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} object The object to query.
    * @returns {Array} Returns the array of property names.
    */
-
   function baseKeys(object) {
     if (!isPrototype(object)) {
       return nativeKeys(object);
     }
-
     var result = [];
-
     for (var key in Object(object)) {
       if (hasOwnProperty$3.call(object, key) && key != 'constructor') {
         result.push(key);
       }
     }
-
     return result;
   }
 
@@ -965,7 +958,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.keys('hi');
    * // => ['0', '1']
    */
-
   function keys(object) {
     return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
   }
@@ -996,14 +988,13 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.values('hi');
    * // => ['h', 'i']
    */
-
   function values(object) {
     return object == null ? [] : baseValues(object, keys(object));
   }
 
   /* Built-in method references for those with the same name as other `lodash` methods. */
-
   var nativeMax = Math.max;
+
   /**
    * Checks if `value` is in `collection`. If `collection` is a string, it's
    * checked for a substring of `value`, otherwise
@@ -1034,17 +1025,17 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.includes('abcd', 'bc');
    * // => true
    */
-
   function includes(collection, value, fromIndex, guard) {
     collection = isArrayLike(collection) ? collection : values(collection);
-    fromIndex = fromIndex && !guard ? toInteger(fromIndex) : 0;
-    var length = collection.length;
+    fromIndex = (fromIndex && !guard) ? toInteger(fromIndex) : 0;
 
+    var length = collection.length;
     if (fromIndex < 0) {
       fromIndex = nativeMax(length + fromIndex, 0);
     }
-
-    return isString(collection) ? fromIndex <= length && collection.indexOf(value, fromIndex) > -1 : !!length && baseIndexOf(collection, value, fromIndex) > -1;
+    return isString(collection)
+      ? (fromIndex <= length && collection.indexOf(value, fromIndex) > -1)
+      : (!!length && baseIndexOf(collection, value, fromIndex) > -1);
   }
 
   /*jslint node: true */
@@ -1217,7 +1208,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
         break;
       }
     }
-
     return array;
   }
 
@@ -1229,7 +1219,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {Function} Returns the new base function.
    */
   function createBaseFor(fromRight) {
-    return function (object, iteratee, keysFunc) {
+    return function(object, iteratee, keysFunc) {
       var index = -1,
           iterable = Object(object),
           props = keysFunc(object),
@@ -1237,12 +1227,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
 
       while (length--) {
         var key = props[fromRight ? length : ++index];
-
         if (iteratee(iterable[key], key, iterable) === false) {
           break;
         }
       }
-
       return object;
     };
   }
@@ -1258,7 +1246,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} keysFunc The function to get the keys of `object`.
    * @returns {Object} Returns `object`.
    */
-
   var baseFor = createBaseFor();
 
   /**
@@ -1269,7 +1256,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} iteratee The function invoked per iteration.
    * @returns {Object} Returns `object`.
    */
-
   function baseForOwn(object, iteratee) {
     return object && baseFor(object, iteratee, keys);
   }
@@ -1282,27 +1268,23 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {boolean} [fromRight] Specify iterating from right to left.
    * @returns {Function} Returns the new base function.
    */
-
   function createBaseEach(eachFunc, fromRight) {
-    return function (collection, iteratee) {
+    return function(collection, iteratee) {
       if (collection == null) {
         return collection;
       }
-
       if (!isArrayLike(collection)) {
         return eachFunc(collection, iteratee);
       }
-
       var length = collection.length,
           index = fromRight ? length : -1,
           iterable = Object(collection);
 
-      while (fromRight ? index-- : ++index < length) {
+      while ((fromRight ? index-- : ++index < length)) {
         if (iteratee(iterable[index], index, iterable) === false) {
           break;
         }
       }
-
       return collection;
     };
   }
@@ -1315,7 +1297,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} iteratee The function invoked per iteration.
    * @returns {Array|Object} Returns `collection`.
    */
-
   var baseEach = createBaseEach(baseForOwn);
 
   /**
@@ -1345,7 +1326,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to inspect.
    * @returns {Function} Returns cast function.
    */
-
   function castFunction(value) {
     return typeof value == 'function' ? value : identity;
   }
@@ -1380,7 +1360,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * });
    * // => Logs 'a' then 'b' (iteration order is not guaranteed).
    */
-
   function forEach(collection, iteratee) {
     var func = isArray(collection) ? arrayEach : baseEach;
     return func(collection, castFunction(iteratee));
@@ -1405,7 +1384,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
         return true;
       }
     }
-
     return false;
   }
 
@@ -1454,7 +1432,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * // => true
    */
   function eq(value, other) {
-    return value === other || value !== value && other !== other;
+    return value === other || (value !== value && other !== other);
   }
 
   /**
@@ -1465,25 +1443,22 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} key The key to search for.
    * @returns {number} Returns the index of the matched value, else `-1`.
    */
-
   function assocIndexOf(array, key) {
     var length = array.length;
-
     while (length--) {
       if (eq(array[length][0], key)) {
         return length;
       }
     }
-
     return -1;
   }
 
   /** Used for built-in method references. */
-
   var arrayProto = Array.prototype;
-  /** Built-in value references. */
 
+  /** Built-in value references. */
   var splice = arrayProto.splice;
+
   /**
    * Removes `key` and its value from the list cache.
    *
@@ -1493,7 +1468,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the value to remove.
    * @returns {boolean} Returns `true` if the entry was removed, else `false`.
    */
-
   function listCacheDelete(key) {
     var data = this.__data__,
         index = assocIndexOf(data, key);
@@ -1501,15 +1475,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     if (index < 0) {
       return false;
     }
-
     var lastIndex = data.length - 1;
-
     if (index == lastIndex) {
       data.pop();
     } else {
       splice.call(data, index, 1);
     }
-
     --this.size;
     return true;
   }
@@ -1523,10 +1494,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the value to get.
    * @returns {*} Returns the entry value.
    */
-
   function listCacheGet(key) {
     var data = this.__data__,
         index = assocIndexOf(data, key);
+
     return index < 0 ? undefined : data[index][1];
   }
 
@@ -1539,7 +1510,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the entry to check.
    * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
    */
-
   function listCacheHas(key) {
     return assocIndexOf(this.__data__, key) > -1;
   }
@@ -1554,7 +1524,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to set.
    * @returns {Object} Returns the list cache instance.
    */
-
   function listCacheSet(key, value) {
     var data = this.__data__,
         index = assocIndexOf(data, key);
@@ -1565,7 +1534,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     } else {
       data[index][1] = value;
     }
-
     return this;
   }
 
@@ -1576,19 +1544,18 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-
   function ListCache(entries) {
     var index = -1,
         length = entries == null ? 0 : entries.length;
-    this.clear();
 
+    this.clear();
     while (++index < length) {
       var entry = entries[index];
       this.set(entry[0], entry[1]);
     }
-  } // Add methods to `ListCache`.
+  }
 
-
+  // Add methods to `ListCache`.
   ListCache.prototype.clear = listCacheClear;
   ListCache.prototype['delete'] = listCacheDelete;
   ListCache.prototype.get = listCacheGet;
@@ -1602,9 +1569,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @name clear
    * @memberOf Stack
    */
-
   function stackClear() {
-    this.__data__ = new ListCache();
+    this.__data__ = new ListCache;
     this.size = 0;
   }
 
@@ -1620,6 +1586,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   function stackDelete(key) {
     var data = this.__data__,
         result = data['delete'](key);
+
     this.size = data.size;
     return result;
   }
@@ -1651,15 +1618,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** Used to detect overreaching core-js shims. */
-
   var coreJsData = root['__core-js_shared__'];
 
   /** Used to detect methods masquerading as native. */
-
-  var maskSrcKey = function () {
+  var maskSrcKey = (function() {
     var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-    return uid ? 'Symbol(src)_1.' + uid : '';
-  }();
+    return uid ? ('Symbol(src)_1.' + uid) : '';
+  }());
+
   /**
    * Checks if `func` has its source masked.
    *
@@ -1667,17 +1633,16 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} func The function to check.
    * @returns {boolean} Returns `true` if `func` is masked, else `false`.
    */
-
-
   function isMasked(func) {
-    return !!maskSrcKey && maskSrcKey in func;
+    return !!maskSrcKey && (maskSrcKey in func);
   }
 
   /** Used for built-in method references. */
   var funcProto = Function.prototype;
-  /** Used to resolve the decompiled source of functions. */
 
+  /** Used to resolve the decompiled source of functions. */
   var funcToString = funcProto.toString;
+
   /**
    * Converts `func` to its source code.
    *
@@ -1685,18 +1650,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} func The function to convert.
    * @returns {string} Returns the source code.
    */
-
   function toSource(func) {
     if (func != null) {
       try {
         return funcToString.call(func);
       } catch (e) {}
-
       try {
-        return func + '';
+        return (func + '');
       } catch (e) {}
     }
-
     return '';
   }
 
@@ -1704,24 +1666,27 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * Used to match `RegExp`
    * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
    */
-
   var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+
   /** Used to detect host constructors (Safari). */
-
   var reIsHostCtor = /^\[object .+?Constructor\]$/;
-  /** Used for built-in method references. */
 
+  /** Used for built-in method references. */
   var funcProto$1 = Function.prototype,
       objectProto$6 = Object.prototype;
+
   /** Used to resolve the decompiled source of functions. */
-
   var funcToString$1 = funcProto$1.toString;
+
   /** Used to check objects for own properties. */
-
   var hasOwnProperty$4 = objectProto$6.hasOwnProperty;
-  /** Used to detect if a method is native. */
 
-  var reIsNative = RegExp('^' + funcToString$1.call(hasOwnProperty$4).replace(reRegExpChar, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+  /** Used to detect if a method is native. */
+  var reIsNative = RegExp('^' +
+    funcToString$1.call(hasOwnProperty$4).replace(reRegExpChar, '\\$&')
+    .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+  );
+
   /**
    * The base implementation of `_.isNative` without bad shim checks.
    *
@@ -1730,12 +1695,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {boolean} Returns `true` if `value` is a native function,
    *  else `false`.
    */
-
   function baseIsNative(value) {
     if (!isObject(value) || isMasked(value)) {
       return false;
     }
-
     var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
     return pattern.test(toSource(value));
   }
@@ -1760,18 +1723,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the method to get.
    * @returns {*} Returns the function if it's native, else `undefined`.
    */
-
   function getNative(object, key) {
     var value = getValue(object, key);
     return baseIsNative(value) ? value : undefined;
   }
 
   /* Built-in method references that are verified to be native. */
-
   var Map = getNative(root, 'Map');
 
   /* Built-in method references that are verified to be native. */
-
   var nativeCreate = getNative(Object, 'create');
 
   /**
@@ -1781,7 +1741,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @name clear
    * @memberOf Hash
    */
-
   function hashClear() {
     this.__data__ = nativeCreate ? nativeCreate(null) : {};
     this.size = 0;
@@ -1804,14 +1763,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** Used to stand-in for `undefined` hash values. */
-
   var HASH_UNDEFINED = '__lodash_hash_undefined__';
+
   /** Used for built-in method references. */
-
   var objectProto$7 = Object.prototype;
-  /** Used to check objects for own properties. */
 
+  /** Used to check objects for own properties. */
   var hasOwnProperty$5 = objectProto$7.hasOwnProperty;
+
   /**
    * Gets the hash value for `key`.
    *
@@ -1821,24 +1780,21 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the value to get.
    * @returns {*} Returns the entry value.
    */
-
   function hashGet(key) {
     var data = this.__data__;
-
     if (nativeCreate) {
       var result = data[key];
       return result === HASH_UNDEFINED ? undefined : result;
     }
-
     return hasOwnProperty$5.call(data, key) ? data[key] : undefined;
   }
 
   /** Used for built-in method references. */
-
   var objectProto$8 = Object.prototype;
-  /** Used to check objects for own properties. */
 
+  /** Used to check objects for own properties. */
   var hasOwnProperty$6 = objectProto$8.hasOwnProperty;
+
   /**
    * Checks if a hash value for `key` exists.
    *
@@ -1848,15 +1804,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the entry to check.
    * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
    */
-
   function hashHas(key) {
     var data = this.__data__;
-    return nativeCreate ? data[key] !== undefined : hasOwnProperty$6.call(data, key);
+    return nativeCreate ? (data[key] !== undefined) : hasOwnProperty$6.call(data, key);
   }
 
   /** Used to stand-in for `undefined` hash values. */
-
   var HASH_UNDEFINED$1 = '__lodash_hash_undefined__';
+
   /**
    * Sets the hash `key` to `value`.
    *
@@ -1867,11 +1822,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to set.
    * @returns {Object} Returns the hash instance.
    */
-
   function hashSet(key, value) {
     var data = this.__data__;
     this.size += this.has(key) ? 0 : 1;
-    data[key] = nativeCreate && value === undefined ? HASH_UNDEFINED$1 : value;
+    data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED$1 : value;
     return this;
   }
 
@@ -1882,19 +1836,18 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-
   function Hash(entries) {
     var index = -1,
         length = entries == null ? 0 : entries.length;
-    this.clear();
 
+    this.clear();
     while (++index < length) {
       var entry = entries[index];
       this.set(entry[0], entry[1]);
     }
-  } // Add methods to `Hash`.
+  }
 
-
+  // Add methods to `Hash`.
   Hash.prototype.clear = hashClear;
   Hash.prototype['delete'] = hashDelete;
   Hash.prototype.get = hashGet;
@@ -1908,13 +1861,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @name clear
    * @memberOf MapCache
    */
-
   function mapCacheClear() {
     this.size = 0;
     this.__data__ = {
-      'hash': new Hash(),
-      'map': new (Map || ListCache)(),
-      'string': new Hash()
+      'hash': new Hash,
+      'map': new (Map || ListCache),
+      'string': new Hash
     };
   }
 
@@ -1927,7 +1879,9 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    */
   function isKeyable(value) {
     var type = typeof value;
-    return type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean' ? value !== '__proto__' : value === null;
+    return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
+      ? (value !== '__proto__')
+      : (value === null);
   }
 
   /**
@@ -1938,10 +1892,11 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The reference key.
    * @returns {*} Returns the map data.
    */
-
   function getMapData(map, key) {
     var data = map.__data__;
-    return isKeyable(key) ? data[typeof key == 'string' ? 'string' : 'hash'] : data.map;
+    return isKeyable(key)
+      ? data[typeof key == 'string' ? 'string' : 'hash']
+      : data.map;
   }
 
   /**
@@ -1953,7 +1908,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the value to remove.
    * @returns {boolean} Returns `true` if the entry was removed, else `false`.
    */
-
   function mapCacheDelete(key) {
     var result = getMapData(this, key)['delete'](key);
     this.size -= result ? 1 : 0;
@@ -1969,7 +1923,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the value to get.
    * @returns {*} Returns the entry value.
    */
-
   function mapCacheGet(key) {
     return getMapData(this, key).get(key);
   }
@@ -1983,7 +1936,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} key The key of the entry to check.
    * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
    */
-
   function mapCacheHas(key) {
     return getMapData(this, key).has(key);
   }
@@ -1998,10 +1950,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to set.
    * @returns {Object} Returns the map cache instance.
    */
-
   function mapCacheSet(key, value) {
     var data = getMapData(this, key),
         size = data.size;
+
     data.set(key, value);
     this.size += data.size == size ? 0 : 1;
     return this;
@@ -2014,19 +1966,18 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-
   function MapCache(entries) {
     var index = -1,
         length = entries == null ? 0 : entries.length;
-    this.clear();
 
+    this.clear();
     while (++index < length) {
       var entry = entries[index];
       this.set(entry[0], entry[1]);
     }
-  } // Add methods to `MapCache`.
+  }
 
-
+  // Add methods to `MapCache`.
   MapCache.prototype.clear = mapCacheClear;
   MapCache.prototype['delete'] = mapCacheDelete;
   MapCache.prototype.get = mapCacheGet;
@@ -2034,8 +1985,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   MapCache.prototype.set = mapCacheSet;
 
   /** Used as the size to enable large array optimizations. */
-
   var LARGE_ARRAY_SIZE = 200;
+
   /**
    * Sets the stack `key` to `value`.
    *
@@ -2046,22 +1997,17 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to set.
    * @returns {Object} Returns the stack cache instance.
    */
-
   function stackSet(key, value) {
     var data = this.__data__;
-
     if (data instanceof ListCache) {
       var pairs = data.__data__;
-
-      if (!Map || pairs.length < LARGE_ARRAY_SIZE - 1) {
+      if (!Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
         pairs.push([key, value]);
         this.size = ++data.size;
         return this;
       }
-
       data = this.__data__ = new MapCache(pairs);
     }
-
     data.set(key, value);
     this.size = data.size;
     return this;
@@ -2074,13 +2020,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-
   function Stack(entries) {
     var data = this.__data__ = new ListCache(entries);
     this.size = data.size;
-  } // Add methods to `Stack`.
+  }
 
-
+  // Add methods to `Stack`.
   Stack.prototype.clear = stackClear;
   Stack.prototype['delete'] = stackDelete;
   Stack.prototype.get = stackGet;
@@ -2089,6 +2034,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
 
   /** Used to stand-in for `undefined` hash values. */
   var HASH_UNDEFINED$2 = '__lodash_hash_undefined__';
+
   /**
    * Adds `value` to the array cache.
    *
@@ -2099,10 +2045,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to cache.
    * @returns {Object} Returns the cache instance.
    */
-
   function setCacheAdd(value) {
     this.__data__.set(value, HASH_UNDEFINED$2);
-
     return this;
   }
 
@@ -2127,18 +2071,17 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @constructor
    * @param {Array} [values] The values to cache.
    */
-
   function SetCache(values) {
     var index = -1,
         length = values == null ? 0 : values.length;
-    this.__data__ = new MapCache();
 
+    this.__data__ = new MapCache;
     while (++index < length) {
       this.add(values[index]);
     }
-  } // Add methods to `SetCache`.
+  }
 
-
+  // Add methods to `SetCache`.
   SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
   SetCache.prototype.has = setCacheHas;
 
@@ -2155,9 +2098,9 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** Used to compose bitmasks for value comparisons. */
-
   var COMPARE_PARTIAL_FLAG = 1,
       COMPARE_UNORDERED_FLAG = 2;
+
   /**
    * A specialized version of `baseIsEqualDeep` for arrays with support for
    * partial deep comparisons.
@@ -2171,7 +2114,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} stack Tracks traversed `array` and `other` objects.
    * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
    */
-
   function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
     var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
         arrLength = array.length,
@@ -2179,61 +2121,61 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
 
     if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
       return false;
-    } // Assume cyclic values are equal.
-
-
+    }
+    // Assume cyclic values are equal.
     var stacked = stack.get(array);
-
     if (stacked && stack.get(other)) {
       return stacked == other;
     }
-
     var index = -1,
         result = true,
-        seen = bitmask & COMPARE_UNORDERED_FLAG ? new SetCache() : undefined;
-    stack.set(array, other);
-    stack.set(other, array); // Ignore non-index properties.
+        seen = (bitmask & COMPARE_UNORDERED_FLAG) ? new SetCache : undefined;
 
+    stack.set(array, other);
+    stack.set(other, array);
+
+    // Ignore non-index properties.
     while (++index < arrLength) {
       var arrValue = array[index],
           othValue = other[index];
 
       if (customizer) {
-        var compared = isPartial ? customizer(othValue, arrValue, index, other, array, stack) : customizer(arrValue, othValue, index, array, other, stack);
+        var compared = isPartial
+          ? customizer(othValue, arrValue, index, other, array, stack)
+          : customizer(arrValue, othValue, index, array, other, stack);
       }
-
       if (compared !== undefined) {
         if (compared) {
           continue;
         }
-
         result = false;
         break;
-      } // Recursively compare arrays (susceptible to call stack limits).
-
-
+      }
+      // Recursively compare arrays (susceptible to call stack limits).
       if (seen) {
-        if (!arraySome(other, function (othValue, othIndex) {
-          if (!cacheHas(seen, othIndex) && (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
-            return seen.push(othIndex);
-          }
-        })) {
+        if (!arraySome(other, function(othValue, othIndex) {
+              if (!cacheHas(seen, othIndex) &&
+                  (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+                return seen.push(othIndex);
+              }
+            })) {
           result = false;
           break;
         }
-      } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+      } else if (!(
+            arrValue === othValue ||
+              equalFunc(arrValue, othValue, bitmask, customizer, stack)
+          )) {
         result = false;
         break;
       }
     }
-
     stack['delete'](array);
     stack['delete'](other);
     return result;
   }
 
   /** Built-in value references. */
-
   var Uint8Array = root.Uint8Array;
 
   /**
@@ -2246,7 +2188,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   function mapToArray(map) {
     var index = -1,
         result = Array(map.size);
-    map.forEach(function (value, key) {
+
+    map.forEach(function(value, key) {
       result[++index] = [key, value];
     });
     return result;
@@ -2262,18 +2205,18 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   function setToArray(set) {
     var index = -1,
         result = Array(set.size);
-    set.forEach(function (value) {
+
+    set.forEach(function(value) {
       result[++index] = value;
     });
     return result;
   }
 
   /** Used to compose bitmasks for value comparisons. */
-
   var COMPARE_PARTIAL_FLAG$1 = 1,
       COMPARE_UNORDERED_FLAG$1 = 2;
-  /** `Object#toString` result references. */
 
+  /** `Object#toString` result references. */
   var boolTag$1 = '[object Boolean]',
       dateTag$1 = '[object Date]',
       errorTag$1 = '[object Error]',
@@ -2283,12 +2226,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
       setTag$1 = '[object Set]',
       stringTag$2 = '[object String]',
       symbolTag$1 = '[object Symbol]';
+
   var arrayBufferTag$1 = '[object ArrayBuffer]',
       dataViewTag$1 = '[object DataView]';
-  /** Used to convert symbols to primitives and strings. */
 
+  /** Used to convert symbols to primitives and strings. */
   var symbolProto = Symbol ? Symbol.prototype : undefined,
       symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
+
   /**
    * A specialized version of `baseIsEqualDeep` for comparing objects of
    * the same `toStringTag`.
@@ -2306,22 +2251,21 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} stack Tracks traversed `object` and `other` objects.
    * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
    */
-
   function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
     switch (tag) {
       case dataViewTag$1:
-        if (object.byteLength != other.byteLength || object.byteOffset != other.byteOffset) {
+        if ((object.byteLength != other.byteLength) ||
+            (object.byteOffset != other.byteOffset)) {
           return false;
         }
-
         object = object.buffer;
         other = other.buffer;
 
       case arrayBufferTag$1:
-        if (object.byteLength != other.byteLength || !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
+        if ((object.byteLength != other.byteLength) ||
+            !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
           return false;
         }
-
         return true;
 
       case boolTag$1:
@@ -2339,7 +2283,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
         // Coerce regexes to strings and treat strings, primitives and objects,
         // as equal. See http://www.ecma-international.org/ecma-262/7.0/#sec-regexp.prototype.tostring
         // for more details.
-        return object == other + '';
+        return object == (other + '');
 
       case mapTag$1:
         var convert = mapToArray;
@@ -2350,17 +2294,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
 
         if (object.size != other.size && !isPartial) {
           return false;
-        } // Assume cyclic values are equal.
-
-
+        }
+        // Assume cyclic values are equal.
         var stacked = stack.get(object);
-
         if (stacked) {
           return stacked == other;
         }
+        bitmask |= COMPARE_UNORDERED_FLAG$1;
 
-        bitmask |= COMPARE_UNORDERED_FLAG$1; // Recursively compare objects (susceptible to call stack limits).
-
+        // Recursively compare objects (susceptible to call stack limits).
         stack.set(object, other);
         var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
         stack['delete'](object);
@@ -2370,9 +2312,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
         if (symbolValueOf) {
           return symbolValueOf.call(object) == symbolValueOf.call(other);
         }
-
     }
-
     return false;
   }
 
@@ -2392,7 +2332,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     while (++index < length) {
       array[offset + index] = values[index];
     }
-
     return array;
   }
 
@@ -2407,7 +2346,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} symbolsFunc The function to get the symbols of `object`.
    * @returns {Array} Returns the array of property names and symbols.
    */
-
   function baseGetAllKeys(object, keysFunc, symbolsFunc) {
     var result = keysFunc(object);
     return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
@@ -2430,12 +2368,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
 
     while (++index < length) {
       var value = array[index];
-
       if (predicate(value, index, array)) {
         result[resIndex++] = value;
       }
     }
-
     return result;
   }
 
@@ -2462,14 +2398,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   }
 
   /** Used for built-in method references. */
-
   var objectProto$9 = Object.prototype;
+
   /** Built-in value references. */
-
   var propertyIsEnumerable$1 = objectProto$9.propertyIsEnumerable;
-  /* Built-in method references for those with the same name as other `lodash` methods. */
 
+  /* Built-in method references for those with the same name as other `lodash` methods. */
   var nativeGetSymbols = Object.getOwnPropertySymbols;
+
   /**
    * Creates an array of the own enumerable symbols of `object`.
    *
@@ -2477,14 +2413,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} object The object to query.
    * @returns {Array} Returns the array of symbols.
    */
-
-  var getSymbols = !nativeGetSymbols ? stubArray : function (object) {
+  var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
     if (object == null) {
       return [];
     }
-
     object = Object(object);
-    return arrayFilter(nativeGetSymbols(object), function (symbol) {
+    return arrayFilter(nativeGetSymbols(object), function(symbol) {
       return propertyIsEnumerable$1.call(object, symbol);
     });
   };
@@ -2496,20 +2430,19 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} object The object to query.
    * @returns {Array} Returns the array of property names and symbols.
    */
-
   function getAllKeys(object) {
     return baseGetAllKeys(object, keys, getSymbols);
   }
 
   /** Used to compose bitmasks for value comparisons. */
-
   var COMPARE_PARTIAL_FLAG$2 = 1;
+
   /** Used for built-in method references. */
+  var objectProto$10 = Object.prototype;
 
-  var objectProto$a = Object.prototype;
   /** Used to check objects for own properties. */
+  var hasOwnProperty$7 = objectProto$10.hasOwnProperty;
 
-  var hasOwnProperty$7 = objectProto$a.hasOwnProperty;
   /**
    * A specialized version of `baseIsEqualDeep` for objects with support for
    * partial deep comparisons.
@@ -2523,7 +2456,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} stack Tracks traversed `object` and `other` objects.
    * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
    */
-
   function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
     var isPartial = bitmask & COMPARE_PARTIAL_FLAG$2,
         objProps = getAllKeys(object),
@@ -2534,92 +2466,88 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     if (objLength != othLength && !isPartial) {
       return false;
     }
-
     var index = objLength;
-
     while (index--) {
       var key = objProps[index];
-
       if (!(isPartial ? key in other : hasOwnProperty$7.call(other, key))) {
         return false;
       }
-    } // Assume cyclic values are equal.
-
-
+    }
+    // Assume cyclic values are equal.
     var stacked = stack.get(object);
-
     if (stacked && stack.get(other)) {
       return stacked == other;
     }
-
     var result = true;
     stack.set(object, other);
     stack.set(other, object);
-    var skipCtor = isPartial;
 
+    var skipCtor = isPartial;
     while (++index < objLength) {
       key = objProps[index];
       var objValue = object[key],
           othValue = other[key];
 
       if (customizer) {
-        var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
-      } // Recursively compare objects (susceptible to call stack limits).
-
-
-      if (!(compared === undefined ? objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack) : compared)) {
+        var compared = isPartial
+          ? customizer(othValue, objValue, key, other, object, stack)
+          : customizer(objValue, othValue, key, object, other, stack);
+      }
+      // Recursively compare objects (susceptible to call stack limits).
+      if (!(compared === undefined
+            ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
+            : compared
+          )) {
         result = false;
         break;
       }
-
       skipCtor || (skipCtor = key == 'constructor');
     }
-
     if (result && !skipCtor) {
       var objCtor = object.constructor,
-          othCtor = other.constructor; // Non `Object` object instances with different constructors are not equal.
+          othCtor = other.constructor;
 
-      if (objCtor != othCtor && 'constructor' in object && 'constructor' in other && !(typeof objCtor == 'function' && objCtor instanceof objCtor && typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+      // Non `Object` object instances with different constructors are not equal.
+      if (objCtor != othCtor &&
+          ('constructor' in object && 'constructor' in other) &&
+          !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
+            typeof othCtor == 'function' && othCtor instanceof othCtor)) {
         result = false;
       }
     }
-
     stack['delete'](object);
     stack['delete'](other);
     return result;
   }
 
   /* Built-in method references that are verified to be native. */
-
   var DataView = getNative(root, 'DataView');
 
   /* Built-in method references that are verified to be native. */
-
   var Promise = getNative(root, 'Promise');
 
   /* Built-in method references that are verified to be native. */
-
   var Set = getNative(root, 'Set');
 
   /* Built-in method references that are verified to be native. */
-
   var WeakMap = getNative(root, 'WeakMap');
 
   /** `Object#toString` result references. */
-
   var mapTag$2 = '[object Map]',
       objectTag$1 = '[object Object]',
       promiseTag = '[object Promise]',
       setTag$2 = '[object Set]',
       weakMapTag$1 = '[object WeakMap]';
-  var dataViewTag$2 = '[object DataView]';
-  /** Used to detect maps, sets, and weakmaps. */
 
+  var dataViewTag$2 = '[object DataView]';
+
+  /** Used to detect maps, sets, and weakmaps. */
   var dataViewCtorString = toSource(DataView),
       mapCtorString = toSource(Map),
       promiseCtorString = toSource(Promise),
       setCtorString = toSource(Set),
       weakMapCtorString = toSource(WeakMap);
+
   /**
    * Gets the `toStringTag` of `value`.
    *
@@ -2627,34 +2555,28 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to query.
    * @returns {string} Returns the `toStringTag`.
    */
+  var getTag = baseGetTag;
 
-  var getTag = baseGetTag; // Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
-
-  if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag$2 || Map && getTag(new Map()) != mapTag$2 || Promise && getTag(Promise.resolve()) != promiseTag || Set && getTag(new Set()) != setTag$2 || WeakMap && getTag(new WeakMap()) != weakMapTag$1) {
-    getTag = function (value) {
+  // Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
+  if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag$2) ||
+      (Map && getTag(new Map) != mapTag$2) ||
+      (Promise && getTag(Promise.resolve()) != promiseTag) ||
+      (Set && getTag(new Set) != setTag$2) ||
+      (WeakMap && getTag(new WeakMap) != weakMapTag$1)) {
+    getTag = function(value) {
       var result = baseGetTag(value),
           Ctor = result == objectTag$1 ? value.constructor : undefined,
           ctorString = Ctor ? toSource(Ctor) : '';
 
       if (ctorString) {
         switch (ctorString) {
-          case dataViewCtorString:
-            return dataViewTag$2;
-
-          case mapCtorString:
-            return mapTag$2;
-
-          case promiseCtorString:
-            return promiseTag;
-
-          case setCtorString:
-            return setTag$2;
-
-          case weakMapCtorString:
-            return weakMapTag$1;
+          case dataViewCtorString: return dataViewTag$2;
+          case mapCtorString: return mapTag$2;
+          case promiseCtorString: return promiseTag;
+          case setCtorString: return setTag$2;
+          case weakMapCtorString: return weakMapTag$1;
         }
       }
-
       return result;
     };
   }
@@ -2662,19 +2584,19 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
   var getTag$1 = getTag;
 
   /** Used to compose bitmasks for value comparisons. */
-
   var COMPARE_PARTIAL_FLAG$3 = 1;
-  /** `Object#toString` result references. */
 
+  /** `Object#toString` result references. */
   var argsTag$2 = '[object Arguments]',
       arrayTag$1 = '[object Array]',
       objectTag$2 = '[object Object]';
+
   /** Used for built-in method references. */
+  var objectProto$11 = Object.prototype;
 
-  var objectProto$b = Object.prototype;
   /** Used to check objects for own properties. */
+  var hasOwnProperty$8 = objectProto$11.hasOwnProperty;
 
-  var hasOwnProperty$8 = objectProto$b.hasOwnProperty;
   /**
    * A specialized version of `baseIsEqual` for arrays and objects which performs
    * deep comparisons and tracks traversed objects enabling objects with circular
@@ -2689,14 +2611,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} [stack] Tracks traversed `object` and `other` objects.
    * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
    */
-
   function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
     var objIsArr = isArray(object),
         othIsArr = isArray(other),
         objTag = objIsArr ? arrayTag$1 : getTag$1(object),
         othTag = othIsArr ? arrayTag$1 : getTag$1(other);
+
     objTag = objTag == argsTag$2 ? objectTag$2 : objTag;
     othTag = othTag == argsTag$2 ? objectTag$2 : othTag;
+
     var objIsObj = objTag == objectTag$2,
         othIsObj = othTag == objectTag$2,
         isSameTag = objTag == othTag;
@@ -2705,16 +2628,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
       if (!isBuffer(other)) {
         return false;
       }
-
       objIsArr = true;
       objIsObj = false;
     }
-
     if (isSameTag && !objIsObj) {
-      stack || (stack = new Stack());
-      return objIsArr || isTypedArray(object) ? equalArrays(object, other, bitmask, customizer, equalFunc, stack) : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+      stack || (stack = new Stack);
+      return (objIsArr || isTypedArray(object))
+        ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+        : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
     }
-
     if (!(bitmask & COMPARE_PARTIAL_FLAG$3)) {
       var objIsWrapped = objIsObj && hasOwnProperty$8.call(object, '__wrapped__'),
           othIsWrapped = othIsObj && hasOwnProperty$8.call(other, '__wrapped__');
@@ -2722,16 +2644,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
       if (objIsWrapped || othIsWrapped) {
         var objUnwrapped = objIsWrapped ? object.value() : object,
             othUnwrapped = othIsWrapped ? other.value() : other;
-        stack || (stack = new Stack());
+
+        stack || (stack = new Stack);
         return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
       }
     }
-
     if (!isSameTag) {
       return false;
     }
-
-    stack || (stack = new Stack());
+    stack || (stack = new Stack);
     return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
   }
 
@@ -2749,23 +2670,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} [stack] Tracks traversed `value` and `other` objects.
    * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
    */
-
   function baseIsEqual(value, other, bitmask, customizer, stack) {
     if (value === other) {
       return true;
     }
-
-    if (value == null || other == null || !isObjectLike(value) && !isObjectLike(other)) {
+    if (value == null || other == null || (!isObjectLike(value) && !isObjectLike(other))) {
       return value !== value && other !== other;
     }
-
     return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
   }
 
   /** Used to compose bitmasks for value comparisons. */
-
   var COMPARE_PARTIAL_FLAG$4 = 1,
       COMPARE_UNORDERED_FLAG$2 = 2;
+
   /**
    * The base implementation of `_.isMatch` without support for iteratee shorthands.
    *
@@ -2776,7 +2694,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} [customizer] The function to customize comparisons.
    * @returns {boolean} Returns `true` if `object` is a match, else `false`.
    */
-
   function baseIsMatch(object, source, matchData, customizer) {
     var index = matchData.length,
         length = index,
@@ -2785,17 +2702,16 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     if (object == null) {
       return !length;
     }
-
     object = Object(object);
-
     while (index--) {
       var data = matchData[index];
-
-      if (noCustomizer && data[2] ? data[1] !== object[data[0]] : !(data[0] in object)) {
+      if ((noCustomizer && data[2])
+            ? data[1] !== object[data[0]]
+            : !(data[0] in object)
+          ) {
         return false;
       }
     }
-
     while (++index < length) {
       data = matchData[index];
       var key = data[0],
@@ -2807,18 +2723,18 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
           return false;
         }
       } else {
-        var stack = new Stack();
-
+        var stack = new Stack;
         if (customizer) {
           var result = customizer(objValue, srcValue, key, object, source, stack);
         }
-
-        if (!(result === undefined ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG$4 | COMPARE_UNORDERED_FLAG$2, customizer, stack) : result)) {
+        if (!(result === undefined
+              ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG$4 | COMPARE_UNORDERED_FLAG$2, customizer, stack)
+              : result
+            )) {
           return false;
         }
       }
     }
-
     return true;
   }
 
@@ -2830,7 +2746,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {boolean} Returns `true` if `value` if suitable for strict
    *  equality comparisons, else `false`.
    */
-
   function isStrictComparable(value) {
     return value === value && !isObject(value);
   }
@@ -2842,7 +2757,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} object The object to query.
    * @returns {Array} Returns the match data of `object`.
    */
-
   function getMatchData(object) {
     var result = keys(object),
         length = result.length;
@@ -2850,9 +2764,9 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
     while (length--) {
       var key = result[length],
           value = object[key];
+
       result[length] = [key, value, isStrictComparable(value)];
     }
-
     return result;
   }
 
@@ -2866,12 +2780,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {Function} Returns the new spec function.
    */
   function matchesStrictComparable(key, srcValue) {
-    return function (object) {
+    return function(object) {
       if (object == null) {
         return false;
       }
-
-      return object[key] === srcValue && (srcValue !== undefined || key in Object(object));
+      return object[key] === srcValue &&
+        (srcValue !== undefined || (key in Object(object)));
     };
   }
 
@@ -2882,23 +2796,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} source The object of property values to match.
    * @returns {Function} Returns the new spec function.
    */
-
   function baseMatches(source) {
     var matchData = getMatchData(source);
-
     if (matchData.length == 1 && matchData[0][2]) {
       return matchesStrictComparable(matchData[0][0], matchData[0][1]);
     }
-
-    return function (object) {
+    return function(object) {
       return object === source || baseIsMatch(object, source, matchData);
     };
   }
 
   /** Used to match property names within property paths. */
-
   var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
       reIsPlainProp = /^\w*$/;
+
   /**
    * Checks if `value` is a property name and not a property path.
    *
@@ -2907,24 +2818,22 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} [object] The object to query keys on.
    * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
    */
-
   function isKey(value, object) {
     if (isArray(value)) {
       return false;
     }
-
     var type = typeof value;
-
-    if (type == 'number' || type == 'symbol' || type == 'boolean' || value == null || isSymbol(value)) {
+    if (type == 'number' || type == 'symbol' || type == 'boolean' ||
+        value == null || isSymbol(value)) {
       return true;
     }
-
-    return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object);
+    return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+      (object != null && value in Object(object));
   }
 
   /** Error message constants. */
-
   var FUNC_ERROR_TEXT = 'Expected a function';
+
   /**
    * Creates a function that memoizes the result of `func`. If `resolver` is
    * provided, it determines the cache key for storing the result based on the
@@ -2969,13 +2878,11 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * // Replace `_.memoize.Cache`.
    * _.memoize.Cache = WeakMap;
    */
-
   function memoize(func, resolver) {
-    if (typeof func != 'function' || resolver != null && typeof resolver != 'function') {
+    if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
       throw new TypeError(FUNC_ERROR_TEXT);
     }
-
-    var memoized = function () {
+    var memoized = function() {
       var args = arguments,
           key = resolver ? resolver.apply(this, args) : args[0],
           cache = memoized.cache;
@@ -2983,22 +2890,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
       if (cache.has(key)) {
         return cache.get(key);
       }
-
       var result = func.apply(this, args);
       memoized.cache = cache.set(key, result) || cache;
       return result;
     };
-
-    memoized.cache = new (memoize.Cache || MapCache)();
+    memoized.cache = new (memoize.Cache || MapCache);
     return memoized;
-  } // Expose `MapCache`.
+  }
 
-
+  // Expose `MapCache`.
   memoize.Cache = MapCache;
 
   /** Used as the maximum memoize cache size. */
-
   var MAX_MEMOIZE_SIZE = 500;
+
   /**
    * A specialized version of `_.memoize` which clears the memoized function's
    * cache when it exceeds `MAX_MEMOIZE_SIZE`.
@@ -3007,25 +2912,24 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} func The function to have its output memoized.
    * @returns {Function} Returns the new memoized function.
    */
-
   function memoizeCapped(func) {
-    var result = memoize(func, function (key) {
+    var result = memoize(func, function(key) {
       if (cache.size === MAX_MEMOIZE_SIZE) {
         cache.clear();
       }
-
       return key;
     });
+
     var cache = result.cache;
     return result;
   }
 
   /** Used to match property names within property paths. */
-
   var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
-  /** Used to match backslashes in property paths. */
 
+  /** Used to match backslashes in property paths. */
   var reEscapeChar = /\\(\\)?/g;
+
   /**
    * Converts `string` to a property path array.
    *
@@ -3033,29 +2937,24 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {string} string The string to convert.
    * @returns {Array} Returns the property path array.
    */
-
-  var stringToPath = memoizeCapped(function (string) {
+  var stringToPath = memoizeCapped(function(string) {
     var result = [];
-
-    if (string.charCodeAt(0) === 46
-    /* . */
-    ) {
-        result.push('');
-      }
-
-    string.replace(rePropName, function (match, number, quote, subString) {
-      result.push(quote ? subString.replace(reEscapeChar, '$1') : number || match);
+    if (string.charCodeAt(0) === 46 /* . */) {
+      result.push('');
+    }
+    string.replace(rePropName, function(match, number, quote, subString) {
+      result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
     });
     return result;
   });
 
   /** Used as references for various `Number` constants. */
-
   var INFINITY$1 = 1 / 0;
-  /** Used to convert symbols to primitives and strings. */
 
+  /** Used to convert symbols to primitives and strings. */
   var symbolProto$1 = Symbol ? Symbol.prototype : undefined,
       symbolToString = symbolProto$1 ? symbolProto$1.toString : undefined;
+
   /**
    * The base implementation of `_.toString` which doesn't convert nullish
    * values to empty strings.
@@ -3064,24 +2963,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to process.
    * @returns {string} Returns the string.
    */
-
   function baseToString(value) {
     // Exit early for strings to avoid a performance hit in some environments.
     if (typeof value == 'string') {
       return value;
     }
-
     if (isArray(value)) {
       // Recursively convert values (susceptible to call stack limits).
       return arrayMap(value, baseToString) + '';
     }
-
     if (isSymbol(value)) {
       return symbolToString ? symbolToString.call(value) : '';
     }
-
-    var result = value + '';
-    return result == '0' && 1 / value == -INFINITY$1 ? '-0' : result;
+    var result = (value + '');
+    return (result == '0' && (1 / value) == -INFINITY$1) ? '-0' : result;
   }
 
   /**
@@ -3105,7 +3000,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.toString([1, 2, 3]);
    * // => '1,2,3'
    */
-
   function toString(value) {
     return value == null ? '' : baseToString(value);
   }
@@ -3118,18 +3012,16 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Object} [object] The object to query keys on.
    * @returns {Array} Returns the cast property path array.
    */
-
   function castPath(value, object) {
     if (isArray(value)) {
       return value;
     }
-
     return isKey(value, object) ? [value] : stringToPath(toString(value));
   }
 
   /** Used as references for various `Number` constants. */
-
   var INFINITY$2 = 1 / 0;
+
   /**
    * Converts `value` to a string key if it's not a string or symbol.
    *
@@ -3137,14 +3029,12 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} value The value to inspect.
    * @returns {string|symbol} Returns the key.
    */
-
   function toKey(value) {
     if (typeof value == 'string' || isSymbol(value)) {
       return value;
     }
-
-    var result = value + '';
-    return result == '0' && 1 / value == -INFINITY$2 ? '-0' : result;
+    var result = (value + '');
+    return (result == '0' && (1 / value) == -INFINITY$2) ? '-0' : result;
   }
 
   /**
@@ -3155,17 +3045,16 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Array|string} path The path of the property to get.
    * @returns {*} Returns the resolved value.
    */
-
   function baseGet(object, path) {
     path = castPath(path, object);
+
     var index = 0,
         length = path.length;
 
     while (object != null && index < length) {
       object = object[toKey(path[index++])];
     }
-
-    return index && index == length ? object : undefined;
+    return (index && index == length) ? object : undefined;
   }
 
   /**
@@ -3193,7 +3082,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.get(object, 'a.b.c', 'default');
    * // => 'default'
    */
-
   function get(object, path, defaultValue) {
     var result = object == null ? undefined : baseGet(object, path);
     return result === undefined ? defaultValue : result;
@@ -3220,29 +3108,26 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Function} hasFunc The function to check properties.
    * @returns {boolean} Returns `true` if `path` exists, else `false`.
    */
-
   function hasPath(object, path, hasFunc) {
     path = castPath(path, object);
+
     var index = -1,
         length = path.length,
         result = false;
 
     while (++index < length) {
       var key = toKey(path[index]);
-
       if (!(result = object != null && hasFunc(object, key))) {
         break;
       }
-
       object = object[key];
     }
-
     if (result || ++index != length) {
       return result;
     }
-
     length = object == null ? 0 : object.length;
-    return !!length && isLength(length) && isIndex(key, length) && (isArray(object) || isArguments(object));
+    return !!length && isLength(length) && isIndex(key, length) &&
+      (isArray(object) || isArguments(object));
   }
 
   /**
@@ -3271,15 +3156,14 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.hasIn(object, 'b');
    * // => false
    */
-
   function hasIn(object, path) {
     return object != null && hasPath(object, path, baseHasIn);
   }
 
   /** Used to compose bitmasks for value comparisons. */
-
   var COMPARE_PARTIAL_FLAG$5 = 1,
       COMPARE_UNORDERED_FLAG$3 = 2;
+
   /**
    * The base implementation of `_.matchesProperty` which doesn't clone `srcValue`.
    *
@@ -3288,15 +3172,15 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} srcValue The value to match.
    * @returns {Function} Returns the new spec function.
    */
-
   function baseMatchesProperty(path, srcValue) {
     if (isKey(path) && isStrictComparable(srcValue)) {
       return matchesStrictComparable(toKey(path), srcValue);
     }
-
-    return function (object) {
+    return function(object) {
       var objValue = get(object, path);
-      return objValue === undefined && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG$5 | COMPARE_UNORDERED_FLAG$3);
+      return (objValue === undefined && objValue === srcValue)
+        ? hasIn(object, path)
+        : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG$5 | COMPARE_UNORDERED_FLAG$3);
     };
   }
 
@@ -3308,7 +3192,7 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {Function} Returns the new accessor function.
    */
   function baseProperty(key) {
-    return function (object) {
+    return function(object) {
       return object == null ? undefined : object[key];
     };
   }
@@ -3320,9 +3204,8 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {Array|string} path The path of the property to get.
    * @returns {Function} Returns the new accessor function.
    */
-
   function basePropertyDeep(path) {
-    return function (object) {
+    return function(object) {
       return baseGet(object, path);
     };
   }
@@ -3349,7 +3232,6 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.map(_.sortBy(objects, _.property(['a', 'b'])), 'a.b');
    * // => [1, 2]
    */
-
   function property(path) {
     return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
   }
@@ -3361,22 +3243,20 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @param {*} [value=_.identity] The value to convert to an iteratee.
    * @returns {Function} Returns the iteratee.
    */
-
   function baseIteratee(value) {
     // Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
     // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
     if (typeof value == 'function') {
       return value;
     }
-
     if (value == null) {
       return identity;
     }
-
     if (typeof value == 'object') {
-      return isArray(value) ? baseMatchesProperty(value[0], value[1]) : baseMatches(value);
+      return isArray(value)
+        ? baseMatchesProperty(value[0], value[1])
+        : baseMatches(value);
     }
-
     return property(value);
   }
 
@@ -3389,10 +3269,10 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {boolean} Returns `true` if any element passes the predicate check,
    *  else `false`.
    */
-
   function baseSome(collection, predicate) {
     var result;
-    baseEach(collection, function (value, index, collection) {
+
+    baseEach(collection, function(value, index, collection) {
       result = predicate(value, index, collection);
       return !result;
     });
@@ -3409,18 +3289,17 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
    *  else `false`.
    */
-
   function isIterateeCall(value, index, object) {
     if (!isObject(object)) {
       return false;
     }
-
     var type = typeof index;
-
-    if (type == 'number' ? isArrayLike(object) && isIndex(index, object.length) : type == 'string' && index in object) {
+    if (type == 'number'
+          ? (isArrayLike(object) && isIndex(index, object.length))
+          : (type == 'string' && index in object)
+        ) {
       return eq(object[index], value);
     }
-
     return false;
   }
 
@@ -3460,14 +3339,11 @@ var wc = (function (exports,d3,ProtvistaZoomable) {
    * _.some(users, 'active');
    * // => true
    */
-
   function some(collection, predicate, guard) {
     var func = isArray(collection) ? arraySome : baseSome;
-
     if (guard && isIterateeCall(collection, predicate, guard)) {
       predicate = undefined;
     }
-
     return func(collection, baseIteratee(predicate, 3));
   }
 

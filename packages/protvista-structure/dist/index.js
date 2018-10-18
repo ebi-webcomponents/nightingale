@@ -4,7 +4,7 @@
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function unwrapExports (x) {
-		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
 	}
 
 	function createCommonjsModule(fn, module) {
@@ -81880,7 +81880,7 @@
 	  }
 	}
 
-	var css = ":root {\n    --blue: 0, 112, 155;\n    /* --width: 100%; */\n}\n\nprotvista-structure h4 {\n    display: inline;\n    margin-right: 1em;\n}\n\n.main-container {\n    display: flex;\n}\n\n.litemol-container,\n.table-container {\n    width: 50%;\n    height: 480px;\n    position: relative;\n}\n\n.table-container table {\n    display: flex;\n    flex-flow: column;\n    width: 100%;\n    height: 480px;\n    border-collapse: collapse;\n}\n\n.table-container thead {\n    min-height: 3em;\n    flex: 0 0 auto;\n    width: 100%;\n}\n\n.table-container tbody {\n    flex: 1 1 auto;\n    display: block;\n    overflow-y: scroll;\n    border: none;\n}\n\n.table-container tbody tr {\n    width: 100%;\n}\n\n.table-container tbody tr.pdb-row {\n    color: #727376;\n}\n\n.table-container tbody tr.pdb-row-clickable {\n    cursor: pointer;\n}\n\n.table-container tbody tr td {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.table-container thead,\n.table-container tbody tr {\n    display: table;\n    table-layout: fixed;\n}\n\n.table-container tbody tr.pdb-row-clickable:hover {\n    background-color: rgba(0, 112, 155, 0.15);\n    ;\n}\n\n.table-container tr.active {\n    background-color: rgba(0, 112, 155, 0.3);\n    ;\n}";
+	var css = ":root {\r\n    --blue: 0, 112, 155;\r\n    /* --width: 100%; */\r\n}\r\n\r\nprotvista-structure h4 {\r\n    display: inline;\r\n    margin-right: 1em;\r\n}\r\n\r\n.main-container {\r\n    display: flex;\r\n}\r\n\r\n.litemol-container,\r\n.table-container {\r\n    width: 50%;\r\n    height: 480px;\r\n    position: relative;\r\n}\r\n\r\n.table-container table {\r\n    display: flex;\r\n    flex-flow: column;\r\n    width: 100%;\r\n    height: 480px;\r\n    border-collapse: collapse;\r\n}\r\n\r\n.table-container thead {\r\n    min-height: 3em;\r\n    flex: 0 0 auto;\r\n    width: 100%;\r\n}\r\n\r\n.table-container tbody {\r\n    flex: 1 1 auto;\r\n    display: block;\r\n    overflow-y: scroll;\r\n    border: none;\r\n}\r\n\r\n.table-container tbody tr {\r\n    width: 100%;\r\n}\r\n\r\n.table-container tbody tr.pdb-row {\r\n    color: #727376;\r\n}\r\n\r\n.table-container tbody tr.pdb-row-clickable {\r\n    cursor: pointer;\r\n}\r\n\r\n.table-container tbody tr td {\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n}\r\n\r\n.table-container thead,\r\n.table-container tbody tr {\r\n    display: table;\r\n    table-layout: fixed;\r\n}\r\n\r\n.table-container tbody tr.pdb-row-clickable:hover {\r\n    background-color: rgba(0, 112, 155, 0.15);\r\n    ;\r\n}\r\n\r\n.table-container tr.active {\r\n    background-color: rgba(0, 112, 155, 0.3);\r\n    ;\r\n}";
 	styleInject(css);
 
 	// import 'litemol/dist/css/LiteMol-plugin.css';Styles rely on fonts being ../fonts

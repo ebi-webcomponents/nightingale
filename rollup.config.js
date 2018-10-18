@@ -19,7 +19,7 @@ export default {
             'resize-observer-polyfill': 'ResizeObserver'
         }
     },
-    external: ['protvista-zoomable', 'protvista-track', 'protvista-uniprot-entry-adapter', 'd3'],
+    external: ['protvista-zoomable', 'protvista-track', 'd3', 'protvista-uniprot-entry-adapter'],
     plugins: [
         postcss({
             extensions: ['.css'],
