@@ -2,15 +2,7 @@
   "name": "interaction-viewer",
   "version": "1.0.5",
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
-  "main": "src/main.js",
-  "scripts": {
-    "build": "rollup -c",
-    "rollup-watch": "rollup -cw",
-    "test": "mocha",
-    "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "test-watch": "mocha -w"
-  },
+  "main": "src/index.js",
   "keywords": [
     "interaction",
     "visualization",
@@ -21,26 +13,6 @@
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.12",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-custom-element-classes": "^0.1.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-es2015-rollup": "^3.0.0",
-    "babel-preset-es2016": "^6.24.1",
-    "browser-sync": "^2.12.5",
-    "chai": "^3.5.0",
-    "cssnano": "^3.10.0",
-    "mocha": "^3.3.0",
-    "rollup": "^0.49.3",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-babel-minify": "^3.1.2",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-postcss": "^0.5.5",
     "whatwg-fetch": "^2.0.3"
-  },
-  "dependencies": {
-    "d3": "^4.10.2",
-    "lodash-es": "^4.17.4"
   }
 }
