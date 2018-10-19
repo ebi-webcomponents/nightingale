@@ -10,6 +10,6 @@
         ]
     ],
     "plugins": [
-        "external-helpers"
+        "@babel/plugin-external-helpers"
     ]
 }

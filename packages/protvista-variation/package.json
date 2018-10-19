@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation",
-  "version": "0.0.9",
+  "version": "1.0.1-alpha.0",
   "description": "Variation viewer for the ProtVista tool",
   "files": [
     "dist",
@@ -15,5 +15,9 @@
   },
   "keywords": [],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-  "license": "MIT"
+  "license": "MIT",
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
 }
