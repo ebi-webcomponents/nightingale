@@ -1,6 +1,6 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "0.0.5",
+  "version": "1.0.1-alpha.0",
   "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
   "files": [
     "dist",
@@ -20,5 +20,9 @@
     "protein-feature"
   ],
   "author": "ljgarcia",
-  "license": "MIT"
+  "license": "MIT",
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
 }

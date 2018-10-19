@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "0.1.1",
+  "version": "1.0.1-alpha.0",
   "description": "Sequence component for the ProtVista tool",
   "files": [
     "dist",
@@ -10,5 +10,9 @@
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "ISC"
+  "license": "ISC",
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
 }

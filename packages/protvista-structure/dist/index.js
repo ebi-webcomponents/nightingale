@@ -4,7 +4,7 @@
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function unwrapExports (x) {
-		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
 	}
 
 	function createCommonjsModule(fn, module) {
@@ -82034,7 +82034,7 @@
                             <td>${d.properties.chains.map(chain => `<div>${chain.start}-${chain.end}</div>`).join('')}</td>
                             <td>
                                 <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${d.id}">PDBe</a><br> 
-                                <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${d.id}">RCSB PDBi</a><br>
+                                <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${d.id}">RCSB PDB</a><br>
                                 <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${d.id}">PDBj</a><br>
                                 <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${d.id}">PDBsum</a>
                             </td>

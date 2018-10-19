@@ -1,9 +1,13 @@
 {
     "name": "protvista-variation-filter",
     "description": "Filters for variation track",
-    "version": "0.0.0",
+    "version": "1.0.1-alpha.0",
     "main": "dist/index.js",
     "keywords": [],
     "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-    "license": "MIT"
+    "license": "MIT",
+    "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+    "devDependencies": {
+        "browser-sync": "^2.26.3"
+    }
 }

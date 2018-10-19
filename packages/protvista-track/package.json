@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "0.1.2",
+  "version": "1.0.1-alpha.0",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -14,5 +14,9 @@
     "url": "https://github.com/ebi-ppf/protvista-track"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "MIT"
+  "license": "MIT",
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
 }

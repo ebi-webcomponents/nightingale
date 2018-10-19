@@ -7,7 +7,8 @@
     "build": "lerna exec --parallel -- rollup --config ../../rollup.config.js",
     "watch": "lerna exec --parallel -- rollup -c ../../rollup.config.js -w",
     "clean": "lerna exec --parallel -- rimraf .jshint .eslint",
-    "test": ""
+    "test": "",
+    "browser-sync": "browser-sync start --server"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",
