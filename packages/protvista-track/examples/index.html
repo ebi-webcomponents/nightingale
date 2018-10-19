@@ -1,126 +1,135 @@
 <!doctype html>
 <html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>protvista-track-demo</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory -->
-        <style>
-        svg {
-          background: #def;
-        }
-        div.rule {
-          display: flex;
-          justify-content: space-evenly;
-        }
-        div.rule div{
-          background: #ccc;
-          flex-grow: 1;
-          text-align: center;
-        }
-        div.rule div:nth-child(even){
-          background: #eee;
-        }
-        </style>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>protvista-track-demo</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    </head>
-    <body>
-      <table>
-        <tr>
-          <th>FROM</th><th>Track</th><th>TO</th>
-        </tr>
-        <tr>
-        <tr>
-          <td>1</td>
-          <td width="100%">
-            <protvista-track
-              id= "track5"
-              length="3"
-              displaystart="1" displayend="3"
-              highlightstart="2" highlightend="2"
-              layout="non-overlapping"
-              shape="roundRectangle"
-              height="420px">
-            </protvista-track>
-            <div class="rule">
-              <div>1</div>
-              <div>2</div>
-              <div>3</div>
-            </div>
-          </td>
-          <td>3</td>
-        </tr>
-      </table>
-      <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Place favicon.ico in the root directory -->
+  <style>
+    svg {
+      background: #def;
+    }
 
-      <!-- Web component polyfill (only loads what it needs) -->
-      <script src="../../../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
-      <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-      <script src="../../../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+    div.rule {
+      display: flex;
+      justify-content: space-evenly;
+    }
 
-      <script src="../../protvista-zoomable/dist/index.js" charset="utf-8" defer></script>
-      <script src="../dist/index.js" charset="utf-8" defer></script>
+    div.rule div {
+      background: #ccc;
+      flex-grow: 1;
+      text-align: center;
+    }
 
-      <script>
-      window.onload = () => {
-        const data = [
-          {accession:'feature1', start: 10, end: 40, color: '#342ea2'},
-          {accession:'feature2', locations: [{ fragments:[{start: 50, end: 160}]}], color: '#A42ea2'},
-          {accession:'feature3', locations: [{
-            fragments:[{start: 155, end: 155}]},
-            {fragments:[{start: 158, end: 158}]}
-          ], color: '#A4Aea2'},
-          {accession:'feature4', locations: [
-            { fragments:[
-              {start: 200, end: 204},
-              {start: 206, end: 210}
-            ]}
-          ]},
-        ];
-        // document.querySelector("#track1").data = data;
-        // document.querySelector("#track1b").data = data;
-        // document.querySelector("#track1c").data = data;
-        // document.querySelector("#track2").data = data;
-        // document.querySelector("#track3").data = data;
-        // document.querySelector("#track4").data = [
-        //   {accession:'feature1', start: 1, end: 2, color: '#3e3'},
-        //   {accession:'feature1', start: 2, end: 3, color: '#e33'},
-        // ];
-        document.querySelector("#track5").data = [
-          {accession:'feature1', start: 1, end: 1, color: '#339'},
-          {accession:'feature2', start: 2, end: 2, color: '#33d'},
-          {accession:'feature3', start: 3, end: 3, color: '#336'},
-          {accession:'feature4', start: 1, end: 2, color: '#73d'},
-          {accession:'feature5', start: 2, end: 3, color: '#63e'},
-          {accession:'feature6', start: 2, end: 2, color: '#35d', shape: 'rectangle'},
-          {accession:'feature7', start: 2, end: 2, color: '#3a3', shape: 'bridge'},
-          {accession:'feature8', start: 1, end: 2, color: '#3a3', shape: 'bridge'},
-          {accession:'feature9', start: 2, end: 2, color: '#33d', shape: 'diamond'},
-          {accession:'feature10', start: 2, end: 3, color: '#33d', shape: 'diamond'},
-          {accession:'feature11', start: 2, end: 2, color: '#3a3', shape: 'chevron'},
-          {accession:'feature12', start: 1, end: 2, color: '#3a3', shape: 'chevron'},
-          {accession:'feature13', start: 2, end: 2, color: '#d3d', shape: 'catFace'},
-          {accession:'feature14', start: 2, end: 3, color: '#d3d', shape: 'catFace'},
-          {accession:'feature15', start: 2, end: 2, color: '#3a3', shape: 'triangle'},
-          {accession:'feature16', start: 1, end: 2, color: '#3a3', shape: 'triangle'},
-          {accession:'feature17', start: 2, end: 2, color: '#d3d', shape: 'wave'},
-          {accession:'feature18', start: 2, end: 3, color: '#d3d', shape: 'wave'},
-          {accession:'feature15', start: 2, end: 2, color: '#3a3', shape: 'hexagon'},
-          {accession:'feature16', start: 1, end: 2, color: '#3a3', shape: 'hexagon'},
-          {accession:'feature17', start: 2, end: 2, color: '#d3d', shape: 'pentagon'},
-          {accession:'feature18', start: 2, end: 3, color: '#d3d', shape: 'pentagon'},
-          {accession:'feature19', start: 2, end: 2, color: '#3a3', shape: 'circle'},
-          {accession:'feature20', start: 1, end: 2, color: '#3a3', shape: 'circle'},
-          {accession:'feature21', start: 2, end: 2, color: '#d3d', shape: 'arrow'},
-          {accession:'feature22', start: 2, end: 3, color: '#d3d', shape: 'arrow'},
-          {accession:'feature19', start: 2, end: 2, color: '#3a3', shape: 'doubleBar'},
-          {accession:'feature20', start: 1, end: 2, color: '#3a3', shape: 'doubleBar'},
-        ];
-      }
-      </script>
-    </body>
+    div.rule div:nth-child(even) {
+      background: #eee;
+    }
+  </style>
+
+</head>
+
+<body>
+  <table>
+    <tr>
+      <th>FROM</th>
+      <th>Track</th>
+      <th>TO</th>
+    </tr>
+    <tr>
+    <tr>
+      <td>1</td>
+      <td width="100%">
+        <protvista-track id="track5" length="3" displaystart="1" displayend="3" highlightstart="2" highlightend="2"
+          layout="non-overlapping" shape="roundRectangle" height="420px">
+        </protvista-track>
+        <div class="rule">
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+        </div>
+      </td>
+      <td>3</td>
+    </tr>
+  </table>
+  <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+
+  <!-- Web component polyfill (only loads what it needs) -->
+  <script src="../../../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+  <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+  <script src="../../../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+
+  <script src="../../protvista-zoomable/dist/protvista-zoomable.js" charset="utf-8" defer></script>
+  <script src="../dist/protvista-track.js" charset="utf-8" defer></script>
+
+  <script>
+    window.onload = () => {
+      const data = [
+        { accession: 'feature1', start: 10, end: 40, color: '#342ea2' },
+        { accession: 'feature2', locations: [{ fragments: [{ start: 50, end: 160 }] }], color: '#A42ea2' },
+        {
+          accession: 'feature3', locations: [{
+            fragments: [{ start: 155, end: 155 }]
+          },
+          { fragments: [{ start: 158, end: 158 }] }
+          ], color: '#A4Aea2'
+        },
+        {
+          accession: 'feature4', locations: [
+            {
+              fragments: [
+                { start: 200, end: 204 },
+                { start: 206, end: 210 }
+              ]
+            }
+          ]
+        },
+      ];
+      // document.querySelector("#track1").data = data;
+      // document.querySelector("#track1b").data = data;
+      // document.querySelector("#track1c").data = data;
+      // document.querySelector("#track2").data = data;
+      // document.querySelector("#track3").data = data;
+      // document.querySelector("#track4").data = [
+      //   {accession:'feature1', start: 1, end: 2, color: '#3e3'},
+      //   {accession:'feature1', start: 2, end: 3, color: '#e33'},
+      // ];
+      document.querySelector("#track5").data = [
+        { accession: 'feature1', start: 1, end: 1, color: '#339' },
+        { accession: 'feature2', start: 2, end: 2, color: '#33d' },
+        { accession: 'feature3', start: 3, end: 3, color: '#336' },
+        { accession: 'feature4', start: 1, end: 2, color: '#73d' },
+        { accession: 'feature5', start: 2, end: 3, color: '#63e' },
+        { accession: 'feature6', start: 2, end: 2, color: '#35d', shape: 'rectangle' },
+        { accession: 'feature7', start: 2, end: 2, color: '#3a3', shape: 'bridge' },
+        { accession: 'feature8', start: 1, end: 2, color: '#3a3', shape: 'bridge' },
+        { accession: 'feature9', start: 2, end: 2, color: '#33d', shape: 'diamond' },
+        { accession: 'feature10', start: 2, end: 3, color: '#33d', shape: 'diamond' },
+        { accession: 'feature11', start: 2, end: 2, color: '#3a3', shape: 'chevron' },
+        { accession: 'feature12', start: 1, end: 2, color: '#3a3', shape: 'chevron' },
+        { accession: 'feature13', start: 2, end: 2, color: '#d3d', shape: 'catFace' },
+        { accession: 'feature14', start: 2, end: 3, color: '#d3d', shape: 'catFace' },
+        { accession: 'feature15', start: 2, end: 2, color: '#3a3', shape: 'triangle' },
+        { accession: 'feature16', start: 1, end: 2, color: '#3a3', shape: 'triangle' },
+        { accession: 'feature17', start: 2, end: 2, color: '#d3d', shape: 'wave' },
+        { accession: 'feature18', start: 2, end: 3, color: '#d3d', shape: 'wave' },
+        { accession: 'feature15', start: 2, end: 2, color: '#3a3', shape: 'hexagon' },
+        { accession: 'feature16', start: 1, end: 2, color: '#3a3', shape: 'hexagon' },
+        { accession: 'feature17', start: 2, end: 2, color: '#d3d', shape: 'pentagon' },
+        { accession: 'feature18', start: 2, end: 3, color: '#d3d', shape: 'pentagon' },
+        { accession: 'feature19', start: 2, end: 2, color: '#3a3', shape: 'circle' },
+        { accession: 'feature20', start: 1, end: 2, color: '#3a3', shape: 'circle' },
+        { accession: 'feature21', start: 2, end: 2, color: '#d3d', shape: 'arrow' },
+        { accession: 'feature22', start: 2, end: 3, color: '#d3d', shape: 'arrow' },
+        { accession: 'feature19', start: 2, end: 2, color: '#3a3', shape: 'doubleBar' },
+        { accession: 'feature20', start: 1, end: 2, color: '#3a3', shape: 'doubleBar' },
+      ];
+    }
+  </script>
+</body>
+
 </html>
