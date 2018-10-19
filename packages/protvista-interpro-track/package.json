@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-track",
-  "version": "0.1.4",
+  "version": "1.0.1-alpha.0",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",

@@ -1,6 +1,6 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "0.0.5",
+  "version": "1.0.1-alpha.0",
   "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
   "files": [
     "dist",
