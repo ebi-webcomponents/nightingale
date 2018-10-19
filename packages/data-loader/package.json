@@ -1,6 +1,6 @@
 {
   "name": "data-loader",
-  "version": "0.3.3",
+  "version": "1.0.1-alpha.0",
   "description": "data-loader Custom Element to load data declaratively",
   "files": [
     "dist",
@@ -19,5 +19,9 @@
     "webcomponents",
     "customelements",
     "data"
-  ]
+  ],
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
 }

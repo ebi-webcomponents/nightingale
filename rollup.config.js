@@ -3,13 +3,18 @@ import nodeResolve from "rollup-plugin-node-resolve";
 import postcss from "rollup-plugin-postcss";
 import postcssInlineSvg from "postcss-inline-svg";
 import commonjs from "rollup-plugin-commonjs";
+import path from "path";
+import camelCase from "camelcase";
+
+const PACKAGE_ROOT_PATH = process.cwd();
+const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, "package.json"));
 
 export default {
   input: "src/index.js",
   output: {
-    file: "dist/index.js",
+    file: "dist/" + PKG_JSON.name + ".js",
     format: "iife",
-    name: "wc",
+    name: camelCase(PKG_JSON.name, { pascalCase: true }),
     sourcemap: true,
     globals: {
       "uniprot-entry-data-adapter": "UniProtEntryDataAdapter",

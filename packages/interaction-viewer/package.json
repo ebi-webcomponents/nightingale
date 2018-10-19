@@ -1,16 +1,8 @@
 {
   "name": "interaction-viewer",
-  "version": "1.0.5",
+  "version": "1.0.1-alpha.0",
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
-  "main": "src/main.js",
-  "scripts": {
-    "build": "rollup -c",
-    "rollup-watch": "rollup -cw",
-    "test": "mocha",
-    "browser-sync": "browser-sync start --server -f dist/**/*.*",
-    "serve": "npm run rollup-watch & npm run browser-sync",
-    "test-watch": "mocha -w"
-  },
+  "main": "src/index.js",
   "keywords": [
     "interaction",
     "visualization",
