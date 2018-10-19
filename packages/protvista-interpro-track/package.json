@@ -14,5 +14,9 @@
     "url": "https://github.com/ebi-ppf/protvista-interpro-track"
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "ISC"
+  "license": "ISC",
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
 }
