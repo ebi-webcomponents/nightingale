@@ -20,15 +20,18 @@
             </data-loader>    
         </protvista-variation-adapter>
     </div>
-  
-    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
-    <!-- Web component polyfill (only loads what it needs) -->
-    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8" defer></script>
-    <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
 
-    <script src="../node_modules/protvista-uniprot-entry-adapter/dist/ProtVistaUniProtEntryAdapter.js" charset="utf-8" defer></script>
-    <script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+    <!-- Required for IE11 -->
+    <script src="../../../node_modules/@babel/polyfill/dist/polyfill.min.js"></script>
+    <!-- Web component polyfill (only loads what it needs) -->
+    <script src="../../../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+    <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+    <script src="../../../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+
+    <script src="../../data-loader/dist/data-loader.js" charset="utf-8" defer></script>
+
+    <!-- TODO: Change for a local-->
+    <script src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter/dist/ProtVistaUniProtEntryAdapter.js" charset="utf-8" defer></script>
 
     <script src="../dist/protvista-variation-adapter.js" charset="utf-8" defer></script>
 

@@ -15,8 +15,5 @@
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
-  "devDependencies": {
-    "browser-sync": "^2.26.3"
-  }
+  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8"
 }

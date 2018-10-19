@@ -12,8 +12,7 @@
   ],
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
-  "devDependencies": {
-    "browser-sync": "^2.26.3",
+  "dependencies": {
     "whatwg-fetch": "^2.0.3"
   },
   "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8"

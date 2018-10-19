@@ -13,18 +13,17 @@
     </data-loader>
 </protvista-feature-adapter>
 
-
 <!-- Required for IE11 -->
-<script src="../node_modules/babel-polyfill/dist/polyfill.min.js"></script>
+<script src="../../../node_modules/@babel/polyfill/dist/polyfill.min.js"></script>
 <!-- Web component polyfill (only loads what it needs) -->
-<script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+<script src="../../../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
 <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-<script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+<script src="../../../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
 
-<script src="../node_modules/protvista-uniprot-entry-adapter/dist/ProtVistaUniProtEntryAdapter.js" charset="utf-8" defer></script>
-<script src="../node_modules/data-loader/dist/index.js" charset="utf-8" defer></script>
+<script src="../../uniprot-entry-data-adapter/dist/protvista-uniprot-entry-adapter.js" charset="utf-8" defer></script>
+<script src="../../data-loader/dist/data-loader.js" charset="utf-8" defer></script>
 
-<script src="../dist/ProtVistaFeatureAdapter.js" charset="utf-8" defer></script>
+<script src="../dist/protvista-feature-adapter.js" charset="utf-8" defer></script>
 
 <script>
     for (const adapter of document.querySelectorAll('protvista-feature-adapter')) {
