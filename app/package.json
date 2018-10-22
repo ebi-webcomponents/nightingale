@@ -1,0 +1,18 @@
+{
+  "name": "nightingale-showcase-app",
+  "version": "1.0.1-alpha.0",
+  "description": "A website to showcase all nightingale components",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "src/index.jsx",
+  "module": "src/index.jsx",
+  "author": "xwatkins",
+  "license": "MIT",
+  "dependencies": {
+    "data-loader": "^1.0.1-alpha.0",
+    "protvista-track": "^1.0.1-alpha.0",
+    "protvista-variation": "^1.0.1-alpha.0"
+  }
+}

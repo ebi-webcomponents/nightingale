@@ -1,13 +1,11 @@
 import React, { Fragment } from "react";
 
-import DataLoader from "../../../packages/data-loader/src/data-loader";
-import ProtvistaTooltip from "../../../packages/protvista-tooltip/src/protvista-tooltip";
-import ProtvistaZoomable from "../../../packages/protvista-zoomable/src/protvista-zoomable";
-import ProtvistaTrack from "../../../packages/protvista-track/src/protvista-track";
-import ProtvistaVariation from "../../../packages/protvista-variation/src/protvista-variation";
+import DataLoader from "data-loader";
+import ProtvistaVariation from "protvista-variation";
 
 const ProtvistaVariationWrapper = props => {
-  window.ProtvistaZoomable = ProtvistaZoomable;
+  window.customElements.define("protvista-variation", ProtvistaVariation);
+  window.customElements.define("data-loader", DataLoader);
   return (
     <Fragment>
       <protvista-variation length="770">

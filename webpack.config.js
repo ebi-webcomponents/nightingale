@@ -2,8 +2,6 @@ const webpack = require("webpack");
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-  .BundleAnalyzerPlugin;
 
 module.exports = {
   mode: "development",
@@ -60,8 +58,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       d3: "d3"
-    }),
-    new BundleAnalyzerPlugin()
+    })
   ],
   devServer: {
     contentBase: path.join(__dirname, "build"),
