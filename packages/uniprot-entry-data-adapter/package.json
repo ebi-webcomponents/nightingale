@@ -1,6 +1,6 @@
 {
   "name": "protvista-uniprot-entry-adapter",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.3-alpha.0",
   "description": "A generic/abstract adapter for services retrieving UniProt entries by accession",
   "files": [
     "dist",
@@ -24,8 +24,5 @@
   "bugs": {
     "url": "https://github.com/ebi-uniprot/protvista-uniprot-entry-adapter/issues"
   },
-  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
-  "devDependencies": {
-    "browser-sync": "^2.26.3"
-  }
+  "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217"
 }

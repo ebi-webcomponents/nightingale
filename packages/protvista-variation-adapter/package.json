@@ -1,18 +1,14 @@
 {
-  "name": "protvista-variation-adapter",
-  "version": "1.0.1-alpha.0",
-  "description": "Data adapter for variation data",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "main": "dist/index.js",
-  "module": "src/protvista-variation-adapter.js",
-  "keywords": [],
-  "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-  "license": "MIT",
-  "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
-  "devDependencies": {
-    "browser-sync": "^2.26.3"
-  }
+    "name": "protvista-variation-adapter",
+    "version": "1.0.3-alpha.0",
+    "description": "Data adapter for variation data",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "main": "dist/index.js",
+    "keywords": [],
+    "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
+    "license": "MIT",
+    "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217"
 }
