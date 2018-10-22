@@ -9,29 +9,62 @@ import "../styles/main.css";
 let filters = [];
 let nodes;
 
-function render({ el = required("el"), accession = "P05067" }) {
-  el.style.display = "block";
-  el.style.minHeight = "6em";
+class InteractionViewer extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-  // clear all previous vis
-  select(el)
-    .select(".interaction-title")
-    .remove();
-  select(el)
-    .select("svg")
-    .remove();
-  select(el)
-    .select(".interaction-tooltip")
-    .remove();
+  connectedCallback() {
+    this._accession = this.getAttribute("accession");
+    this.render();
+  }
 
-  // show spinner until data is loaded
-  select(el)
-    .append("div")
-    .attr("class", "loader");
+  static get observedAttributes() {
+    return ["accession"];
+  }
 
-  load(accession).then(data => {
-    draw(el, accession, data);
-  });
+  attributeChangedCallback(attrName, oldVal, newVal) {
+    if (attrName === "accession" && oldVal != null && oldVal != newVal) {
+      this._accession = newVal;
+      this.render();
+    }
+  }
+
+  set accession(accession) {
+    this._accession = accession;
+  }
+
+  get accession() {
+    return this._accession;
+  }
+
+  render() {
+    if (!this._accession) {
+      return;
+    }
+    this.style.display = "block";
+    this.style.minHeight = "6em";
+
+    // clear all previous vis
+    select(this)
+      .select(".interaction-title")
+      .remove();
+    select(this)
+      .select("svg")
+      .remove();
+    select(this)
+      .select(".interaction-tooltip")
+      .remove();
+
+    // show spinner until data is loaded
+    select(this)
+      .append("div")
+      .attr("class", "loader");
+
+    load(this._accession).then(data => {
+      draw(this, this._accession, data);
+    });
+  }
 }
 
 function formatDiseaseInfo(data, acc) {
@@ -533,4 +566,4 @@ function required(name) {
   throw Error(`missing option: ${name}`);
 }
 
-export { render };
+export default InteractionViewer;

@@ -2,7 +2,8 @@
   "name": "interaction-viewer",
   "version": "1.0.3-alpha.0",
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
-  "main": "src/index.js",
+  "main": "dist/interaction-viewer.js",
+  "module": "src/interaction-viewer.js",
   "keywords": [
     "interaction",
     "visualization",

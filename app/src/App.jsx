@@ -9,6 +9,7 @@ import ProtvistaVariation from "./components/ProtvistaVariation";
 import ProtvistaStructure from "./components/ProtvistaStructure";
 import ProtvistaNavigation from "./components/ProtvistaNavigation";
 import ProtvistaManager from "./components/ProtvistaManager";
+import InteractionViewer from "./components/InteractionViewer";
 
 import "./App.css";
 
@@ -39,6 +40,9 @@ const App = () => (
             <li>
               <Link to="/manager">Manager</Link>
             </li>
+            <li>
+              <Link to="/interaction-viewer">Interaction viewer</Link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -50,6 +54,7 @@ const App = () => (
         <Route path="/structure" component={ProtvistaStructure} />
         <Route path="/navigation" component={ProtvistaNavigation} />
         <Route path="/manager" component={ProtvistaManager} />
+        <Route path="/interaction-viewer" component={InteractionViewer} />
       </div>
     </div>
   </Router>
