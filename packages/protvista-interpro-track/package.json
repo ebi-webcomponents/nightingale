@@ -17,7 +17,6 @@
   "license": "ISC",
   "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217",
   "dependencies": {
-    "protvista-track": "^1.0.1-alpha.0"
+    "protvista-track": "^1.0.3-alpha.0"
   }
-
 }
