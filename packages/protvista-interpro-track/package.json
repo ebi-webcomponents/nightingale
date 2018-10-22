@@ -18,5 +18,8 @@
   "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
   "devDependencies": {
     "browser-sync": "^2.26.3"
+  },
+  "dependencies": {
+    "protvista-track": "^1.0.1-alpha.0"
   }
 }
