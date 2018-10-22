@@ -3,6 +3,7 @@
   "version": "1.0.1-alpha.0",
   "description": "A custom element wrapper for LiteMol",
   "main": "dist/index.js",
+  "module": "src/protvista-structure.js",
   "files": [
     "dist",
     "src"

@@ -4,9 +4,9 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prewatch": "npm run bootstrap",
-    "build": "lerna exec --parallel -- rollup --config ../../rollup.config.js",
-    "watch": "lerna exec --parallel -- rollup -c ../../rollup.config.js -w",
-    "clean": "lerna exec --parallel -- rimraf .jshint .eslint",
+    "build": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup --config ../../rollup.config.js",
+    "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup -c ../../rollup.config.js -w",
+    "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
     "start": "webpack-dev-server --mode development --open",
     "test": ""
   },
@@ -27,8 +27,6 @@
     "eslint": "^4.12.0",
     "lerna": "^3.3.2",
     "postcss-inline-svg": "^3.1.1",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
     "rollup": "^0.65.2",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-commonjs": "^9.1.6",

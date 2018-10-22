@@ -7,8 +7,7 @@
     "src"
   ],
   "main": "dist/ProtVistaFeatureAdapter.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
+  "module": "src/ProtVistaFeatureAdapter.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ebi-uniprot/protvista-feature-adapter.git"
@@ -24,5 +23,8 @@
   "gitHead": "99d27a5c058ae991eeecb6246669fc76be42e7a8",
   "devDependencies": {
     "browser-sync": "^2.26.3"
+  },
+  "dependencies": {
+    "protvista-uniprot-entry-adapter": "^1.0.1-alpha.0"
   }
 }

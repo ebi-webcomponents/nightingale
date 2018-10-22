@@ -1,0 +1,27 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.logo {
+  margin: 0 2rem;
+}
+
+.main-nav__list {
+  margin: 0;
+  list-style: none;
+  display: flex;
+}
+
+.main-nav__list li a {
+  margin: 0 0.3rem;
+  color: #61dafb;
+}
+
+.main-content {
+  margin: 1rem 2rem;
+}

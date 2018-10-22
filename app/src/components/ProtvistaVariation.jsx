@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-
 import DataLoader from "data-loader";
 import ProtvistaVariation from "protvista-variation";
+import loadWebComponent from "../utils/load-web-component";
 
 const ProtvistaVariationWrapper = props => {
-  window.customElements.define("protvista-variation", ProtvistaVariation);
-  window.customElements.define("data-loader", DataLoader);
+  loadWebComponent("protvista-variation", ProtvistaVariation);
+  loadWebComponent("data-loader", DataLoader);
   return (
     <Fragment>
       <protvista-variation length="770">
