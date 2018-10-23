@@ -1,27 +1,54 @@
 .App-header {
-  background-color: #282c34;
+  background-color: #013859;
   min-height: 10vh;
   display: flex;
   align-items: center;
   font-size: 1.2rem;
-  color: white;
+  color: #fffff8;
 }
 
 .logo {
-  margin: 0 2rem;
+  margin: 0 1rem;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 12% auto;
+}
+
+.main-nav {
+  padding-top: 1rem;
+  height: 90vh;
+  /* padding-top: 1.5rem; */
+}
+
+.active {
+  font-weight: bold;
 }
 
 .main-nav__list {
   margin: 0;
+  padding: 0;
   list-style: none;
   display: flex;
+  flex-direction: column;
 }
 
 .main-nav__list li a {
-  margin: 0 0.3rem;
-  color: #61dafb;
+  display: block;
+  padding-left: 1rem;
+  width: 100%;
+  line-height: 2.5rem;
+  color: #333333;
+  text-decoration: none;
+}
+
+.main-nav__list li a:hover {
+  background-color: #dbdbdb;
+  color: #000000;
 }
 
 .main-content {
-  margin: 1rem 2rem;
+  background-color: #fafaff;
+  padding: 1rem;
 }
