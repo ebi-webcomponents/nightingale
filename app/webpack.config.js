@@ -3,10 +3,12 @@ const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
+console.log(__dirname);
+
 module.exports = {
   mode: "development",
   name: "site",
-  entry: ["@babel/polyfill", path.resolve(__dirname, "app/src/index.jsx")],
+  entry: ["@babel/polyfill", path.resolve(__dirname, "src/index.jsx")],
   resolve: {
     extensions: [".jsx", ".js"]
   },
@@ -14,11 +16,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        include: [
-          path.resolve(__dirname, "app/src"),
-          path.resolve(__dirname, "node_modules/d3"),
-          /packages\/.*\/dist/
-        ],
+        include: [path.resolve(__dirname, "src")],
         use: {
           loader: "babel-loader",
           options: {
@@ -55,9 +53,6 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: `${__dirname}/index.html`,
       filename: "index.html"
-    }),
-    new webpack.ProvidePlugin({
-      d3: "d3"
     })
   ],
   devServer: {
