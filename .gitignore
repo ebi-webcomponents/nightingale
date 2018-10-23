@@ -1,9 +1,9 @@
 node_modules
 dist
 .idea
-./**/dist/*
+package-lock.json
 *.log
 *.lock
 *.bak
-.idea/
 *.iml
+*.tgz
