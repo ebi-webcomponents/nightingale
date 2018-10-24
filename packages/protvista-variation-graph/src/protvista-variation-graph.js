@@ -1,4 +1,4 @@
-import ProtVistaTrack from "protvista-track";
+import ProtvistaTrack from "protvista-track";
 import {
   scaleLinear,
   scalePoint,
@@ -12,7 +12,7 @@ import {
   curveBasis
 } from "d3";
 
-class ProtvistaVariationGraph extends ProtVistaTrack {
+class ProtvistaVariationGraph extends ProtvistaTrack {
   constructor() {
     super();
   }

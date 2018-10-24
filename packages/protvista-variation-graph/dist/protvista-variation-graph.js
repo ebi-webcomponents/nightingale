@@ -1,7 +1,7 @@
-var ProtvistaVariationGraph = (function (ProtVistaTrack,d3) {
+var ProtvistaVariationGraph = (function (ProtvistaTrack,d3) {
   'use strict';
 
-  ProtVistaTrack = ProtVistaTrack && ProtVistaTrack.hasOwnProperty('default') ? ProtVistaTrack['default'] : ProtVistaTrack;
+  ProtvistaTrack = ProtvistaTrack && ProtvistaTrack.hasOwnProperty('default') ? ProtvistaTrack['default'] : ProtvistaTrack;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -169,8 +169,8 @@ var ProtvistaVariationGraph = (function (ProtVistaTrack,d3) {
 
   var ProtvistaVariationGraph =
   /*#__PURE__*/
-  function (_ProtVistaTrack) {
-    _inherits(ProtvistaVariationGraph, _ProtVistaTrack);
+  function (_ProtvistaTrack) {
+    _inherits(ProtvistaVariationGraph, _ProtvistaTrack);
 
     function ProtvistaVariationGraph() {
       _classCallCheck(this, ProtvistaVariationGraph);
@@ -312,7 +312,7 @@ var ProtvistaVariationGraph = (function (ProtVistaTrack,d3) {
     }]);
 
     return ProtvistaVariationGraph;
-  }(ProtVistaTrack);
+  }(ProtvistaTrack);
 
   var loadComponent = function loadComponent() {
     customElements.define("protvista-variation-graph", ProtvistaVariationGraph);

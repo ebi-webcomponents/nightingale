@@ -1,16 +1,16 @@
-import ProtVistaTrack from './protvista-track';
+import ProtvistaTrack from "./protvista-track";
 
 const loadComponent = function() {
-    customElements.define('protvista-track', ProtVistaTrack);
+  customElements.define("protvista-track", ProtvistaTrack);
 };
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document.addEventListener('WebComponentsReady', function() {
-        loadComponent();
-    });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
 
-export { default as DefaultLayout } from './DefaultLayout';
-export default ProtVistaTrack;
+export { default as DefaultLayout } from "./DefaultLayout";
+export default ProtvistaTrack;
