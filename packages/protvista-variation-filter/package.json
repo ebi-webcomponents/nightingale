@@ -1,7 +1,7 @@
 {
   "name": "protvista-variation-filter",
   "description": "Filters for variation track",
-  "version": "1.0.7-alpha.0",
+  "version": "1.0.8-alpha.0",
   "main": "dist/index.js",
   "keywords": [],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
