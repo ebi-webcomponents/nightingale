@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
-  "gitHead": "d5fdb4e055cba31f7f8a42dc0cdc0a83c1f08b82",
+  "gitHead": "69ef2e5ce4407dba89db37dbfb06ed79d86902f5",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }
