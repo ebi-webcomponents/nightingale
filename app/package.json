@@ -9,7 +9,8 @@
   "main": "src/index.jsx",
   "module": "src/index.jsx",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open"
+    "start": "webpack-dev-server --mode development --config webpack.dev.js --open",
+    "build-site": "webpack --mode production --config webpack.prod.js"
   },
   "author": "xwatkins",
   "license": "MIT",
@@ -27,19 +28,19 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "webpack-merge": "^4.1.4"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
-    "postcss-inline-svg": "^3.1.1",
     "webpack": "^4.21.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0"
+    "webpack-dev-server": "^3.1.9"
   }
 }

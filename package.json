@@ -8,6 +8,7 @@
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup -c ../../rollup.config.js -w",
     "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
     "start": "lerna run start --npm-client=yarn --stream",
+    "build-site": "lerna run build-site --npm-client=yarn --stream",
     "test": ""
   },
   "devDependencies": {
@@ -22,8 +23,8 @@
     "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.26.3",
     "camelcase": "^5.0.0",
-    "d3": "^5.7.0",
     "eslint": "^4.12.0",
+    "postcss-inline-svg": "^3.1.1",
     "lerna": "^3.3.2",
     "rollup": "^0.65.2",
     "rollup-plugin-babel": "^4.0.3",
