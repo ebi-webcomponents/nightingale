@@ -7,8 +7,8 @@
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup --config ../../rollup.config.js",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup -c ../../rollup.config.js -w",
     "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
-    "start": "lerna run start --npm-client=yarn --stream",
-    "build-site": "lerna run build-site --npm-client=yarn --stream",
+    "start": "lerna run start --stream",
+    "build-site": "lerna run build-site --stream",
     "test": ""
   },
   "devDependencies": {
