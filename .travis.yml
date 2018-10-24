@@ -4,7 +4,7 @@ node_js:
 before_script:
   - npm i app
 script:
-  - npm run build-site
+  - cd app; npm run build-site
 deploy:
   provider: pages
   skip-cleanup: true
