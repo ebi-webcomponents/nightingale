@@ -1,14 +1,20 @@
 # nightingale
+Nightingale is a monorepo containing visualisation web components to use with biological data. You can see them in action here: https://ebi-webcomponents.github.io/nightingale
 
-!! Under development
+## Installing
+Nightingale uses [Lerna](https://lernajs.io/) to manage its packages.
 
-## building
+First run `yarn` to install root packages. Then run `yarn bootstrap` to install remaining modules and link dependencies.
 
-First install all of the packages:
-`yarn`
+## Building the componens
+Run `yarn build`
 
-Then run bootstrap:
-`yarn bootstrap`
+## Showcase application
+### Locally
+Run `yarn start` to run the application locally.
 
-Then run:
-`yarn build`
+### Build
+Run `yarn build` to build the application ready for deployment.
+
+## Components
+TOTO: link to every component readme.
