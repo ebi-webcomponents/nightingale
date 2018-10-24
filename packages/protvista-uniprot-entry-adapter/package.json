@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/ebi-uniprot/protvista-uniprot-entry-adapter/issues"
   },
-  "gitHead": "cb31c5e905758eb5ee2646fa7a48176a32888254",
+  "gitHead": "d5fdb4e055cba31f7f8a42dc0cdc0a83c1f08b82",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }
