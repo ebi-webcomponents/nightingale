@@ -17,6 +17,13 @@
   "license": "MIT",
   "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217",
   "dependencies": {
+    "lodash-es": "^4.17.11",
     "protvista-zoomable": "^1.0.3-alpha.0"
+  },
+  "devDependencies": {
+    "d3": "^4.13.0"
+  },
+  "peerDependencies": {
+    "d3": "4.X"
   }
 }

@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "litemol": "github:dsehnal/LiteMol",
+    "lodash-es": "^4.17.11",
     "whatwg-fetch": "^3.0.0"
   },
   "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217"

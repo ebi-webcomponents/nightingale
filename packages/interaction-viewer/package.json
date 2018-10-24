@@ -14,7 +14,14 @@
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
   "dependencies": {
-    "whatwg-fetch": "^2.0.3"
+    "lodash-es": "^4.17.11",
+    "whatwg-fetch": "^3.0.0"
   },
-  "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217"
+  "gitHead": "1a687b226d495b1d864be2a9b41cc2823485d217",
+  "devDependencies": {
+    "d3": "^4.13.0"
+  },
+  "peerDependencies": {
+    "d3": "4.X"
+  }
 }

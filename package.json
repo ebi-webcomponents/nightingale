@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --hoist",
     "prewatch": "npm run bootstrap",
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup --config ../../rollup.config.js",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup -c ../../rollup.config.js -w",
@@ -31,11 +31,5 @@
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-postcss": "^1.6.2"
-  },
-  "dependencies": {
-    "lodash-es": "^4.17.11"
-  },
-  "peerDependencies": {
-    "d3": "4.X"
   }
 }

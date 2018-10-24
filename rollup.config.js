@@ -41,8 +41,8 @@ export default {
     }),
     //Required for LiteMol
     commonjs({
-      include: "node_modules/**",
-      exclude: "node_modules/style-inject/**"
+      include: "../../node_modules/**",
+      exclude: "../../node_modules/style-inject/**"
     }),
     babel({
       babelrc: false,

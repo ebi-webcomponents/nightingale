@@ -3,6 +3,7 @@ node_js:
   - "node"
 before_deploy:
   - npm run build
+  - npm run build-site
 deploy:
   provider: pages
   skip-cleanup: true
