@@ -15,7 +15,6 @@
   "author": "xwatkins",
   "license": "MIT",
   "dependencies": {
-    "d3": "^5.7.0",
     "data-loader": "^1.0.5-alpha.0",
     "interaction-viewer": "^1.0.5-alpha.0",
     "protvista-feature-adapter": "^1.0.5-alpha.0",
@@ -35,7 +34,6 @@
     "@babel/preset-react": "^7.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
-    "d3": "^4.13.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
