@@ -5,8 +5,5 @@ package-lock.json
 *.log
 *.lock
 *.bak
-<<<<<<< HEAD
-=======
 *.iml
->>>>>>> origin/master
 *.tgz
