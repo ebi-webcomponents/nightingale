@@ -7,3 +7,4 @@ package-lock.json
 *.bak
 *.iml
 *.tgz
+.DS_Store
