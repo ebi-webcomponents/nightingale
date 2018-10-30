@@ -247,6 +247,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   createTooltip(e, d, closeable = false) {
+    if (!d.feature || !d.feature.tooltipContent) {
+      return;
+    }
     this.removeAllTooltips();
     const tooltip = document.createElement("protvista-tooltip");
     tooltip.top = e.clientY + 3;
