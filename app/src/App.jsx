@@ -70,7 +70,7 @@ const App = () => (
           </nav>
         </div>
         <div className="main-content">
-          <Redirect from="/" to="/track" />
+          {/* <Redirect from="/" to="/track" /> */}
           <Route path="/track" component={ProtvistaTrack} />
           <Route path="/sequence" component={ProtvistaSequence} />
           <Route path="/variation" component={ProtvistaVariation} />
