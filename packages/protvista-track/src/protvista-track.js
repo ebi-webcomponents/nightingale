@@ -7,11 +7,6 @@ import ProtvistaZoomable from "protvista-zoomable";
 import { config } from "./config";
 import ConfigHelper from "./ConfigHelper";
 
-const margin = {
-  top: 10,
-  bottom: 10
-};
-
 class ProtvistaTrack extends ProtvistaZoomable {
   getLayout(data) {
     if (String(this.getAttribute("layout")).toLowerCase() === "non-overlapping")
@@ -139,7 +134,13 @@ class ProtvistaTrack extends ProtvistaZoomable {
       // .attr('stroke', 'black')
       .attr("height", this._height);
 
-    this.seq_g = this.svg.append("g").attr("class", "sequence-features");
+    this.seq_g = this.svg
+      .append("g")
+      .attr("class", "sequence-features")
+      .attr(
+        "transform",
+        "translate(" + this.margin.left + "," + this.margin.top + ")"
+      );
 
     this._createFeatures();
     this.refresh();
@@ -194,7 +195,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
           "translate(" +
           this.xScale(f.start) +
           "," +
-          (margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
+          (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
           ")"
       )
       .attr("fill", f => this._getFeatureColor(f.feature))
@@ -313,7 +314,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
             "translate(" +
             this.xScale(f.start) +
             "," +
-            (margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
+            (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
             ")"
         );
       this._updateHighlight();
