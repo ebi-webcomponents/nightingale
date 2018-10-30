@@ -1,25 +1,29 @@
 protvista-variation {
-    display:flex;            
-    width:100%;
+  display: flex;
+  width: 100%;
 }
 
-.protvista-sidebar-container {
-    flex: 0.2;
+svg {
+  background-color: #fff;
 }
 
-.protvista-visualisation-container {
-    flex: 1;   
-}
 circle {
-    opacity: 0.6;
+  opacity: 0.6;
 }
 circle:hover {
-    opacity: 0.9;
+  opacity: 0.9;
 }
-.tick line, .axis path {
-    opacity: 0.1;
+.tick line,
+.axis path {
+  opacity: 0.1;
 }
 
 .protvista-highlight {
-    fill: #FFE999;
+  fill: #ffe999;
+}
+
+.variation-y-right line,
+.axis path {
+  fill: none;
+  stroke: none;
 }
