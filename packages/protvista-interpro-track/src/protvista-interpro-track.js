@@ -10,7 +10,7 @@ const height = 44,
     left: 10
   };
 
-class ProtVistaInterproTrack extends ProtvistaTrack {
+class ProtvistaInterproTrack extends ProtvistaTrack {
   _createTrack() {
     this._layoutObj.expanded = this._expanded;
     super._createTrack();
@@ -405,4 +405,4 @@ class ProtVistaInterproTrack extends ProtvistaTrack {
     }
   }
 }
-export default ProtVistaInterproTrack;
+export default ProtvistaInterproTrack;

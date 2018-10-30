@@ -1,16 +1,16 @@
-import ProtVistaInterproTrack from './protvista-interpro-track';
+import ProtvistaInterproTrack from "./protvista-interpro-track";
 
 const loadComponent = function() {
-    customElements.define('protvista-interpro-track', ProtVistaInterproTrack);
+  customElements.define("protvista-interpro-track", ProtvistaInterproTrack);
 };
 
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document.addEventListener('WebComponentsReady', function() {
-        loadComponent();
-    });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
 
-export default ProtVistaInterproTrack;
+export default ProtvistaInterproTrack;
