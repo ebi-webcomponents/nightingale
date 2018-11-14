@@ -1,24 +1,31 @@
-import React, { Fragment } from "react";
+import React, { Fragment, Suspense, lazy } from "react";
 import {
   HashRouter as Router,
   Route,
   NavLink,
-  Redirect
+  Redirect,
+  Switch
 } from "react-router-dom";
 import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
 
-import ProtvistaTrack from "./components/ProtvistaTrack";
-import ProtvistaSequence from "./components/ProtvistaSequence";
-import ProtvistaVariation from "./components/ProtvistaVariation";
-import ProtvistaStructure from "./components/ProtvistaStructure";
-import ProtvistaNavigation from "./components/ProtvistaNavigation";
-import ProtvistaManager from "./components/ProtvistaManager";
-import InteractionViewer from "./components/InteractionViewer";
+const ProtvistaTrack = lazy(() => import("./components/ProtvistaTrack"));
+const ProtvistaSequence = lazy(() => import("./components/ProtvistaSequence"));
+const ProtvistaVariation = lazy(() =>
+  import("./components/ProtvistaVariation")
+);
+const ProtvistaStructure = lazy(() =>
+  import("./components/ProtvistaStructure")
+);
+const ProtvistaNavigation = lazy(() =>
+  import("./components/ProtvistaNavigation")
+);
+const ProtvistaManager = lazy(() => import("./components/ProtvistaManager"));
+const InteractionViewer = lazy(() => import("./components/InteractionViewer"));
 import pkg from "../package.json";
 
 import "./App.css";
 
-const App = () => (
+const App = (component = ProtvistaNavigation) => (
   <Router>
     <div className="App">
       <div className="App-header">
@@ -71,13 +78,17 @@ const App = () => (
         </div>
         <div className="main-content">
           <Redirect from="/" to="/track" />
-          <Route path="/track" component={ProtvistaTrack} />
-          <Route path="/sequence" component={ProtvistaSequence} />
-          <Route path="/variation" component={ProtvistaVariation} />
-          <Route path="/structure" component={ProtvistaStructure} />
-          <Route path="/navigation" component={ProtvistaNavigation} />
-          <Route path="/manager" component={ProtvistaManager} />
-          <Route path="/interaction-viewer" component={InteractionViewer} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route path="/track" component={ProtvistaTrack} />
+              <Route path="/sequence" component={ProtvistaSequence} />
+              <Route path="/variation" component={ProtvistaVariation} />
+              <Route path="/structure" component={ProtvistaStructure} />
+              <Route path="/navigation" component={component} />
+              <Route path="/manager" component={ProtvistaManager} />
+              <Route path="/interaction-viewer" component={InteractionViewer} />
+            </Switch>
+          </Suspense>
         </div>
       </div>
     </div>
