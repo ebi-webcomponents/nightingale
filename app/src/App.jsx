@@ -21,6 +21,7 @@ const ProtvistaNavigation = lazy(() =>
 );
 const ProtvistaManager = lazy(() => import("./components/ProtvistaManager"));
 const InteractionViewer = lazy(() => import("./components/InteractionViewer"));
+const Playground = lazy(() => import("./components/Playground"));
 import pkg from "../package.json";
 
 import "./App.css";
@@ -74,10 +75,15 @@ const App = (component = ProtvistaNavigation) => (
                 <NavLink to="/interaction-viewer">Interaction viewer</NavLink>
               </li>
             </ul>
+            <ul className="main-nav__list">
+              <li>
+                <NavLink to="/playground">Playground Area</NavLink>
+              </li>
+            </ul>
           </nav>
         </div>
         <div className="main-content">
-          <Redirect from="/" to="/track" />
+          {/*<Redirect from="/" to="/track" />*/}
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path="/track" component={ProtvistaTrack} />
@@ -87,6 +93,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/navigation" component={component} />
               <Route path="/manager" component={ProtvistaManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
+              <Route path="/playground" component={Playground} />
             </Switch>
           </Suspense>
         </div>
