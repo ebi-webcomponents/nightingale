@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import loadWebComponent from "../utils/load-web-component";
-import data from "../mocks/features.json";
-import sanitize from "sanitize-html";
+import elements from "./examples";
 
 import DataLoader from "data-loader";
 import ProtvistaTrack from "protvista-track";
@@ -15,57 +14,6 @@ const styleTextArea = {
   width: "50vh",
   backgroundColor: "#444",
   color: "#eee"
-};
-const elements = {
-  clear: {
-    name: "clear",
-    codeSample: "",
-    dataSample: ""
-  },
-  "protvista-navigation": {
-    name: "protvista-navigation",
-    codeSample: `
-      <protvista-navigation 
-          id="protvista-navigation" 
-          width="1020" 
-          length="223" 
-          displaystart="1" 
-          displayend="223" 
-      />`
-  },
-  "protvista-track": {
-    name: "protvista-track",
-    codeSample: `
-      <protvista-track 
-          id="protvista-track" 
-          width="1020" 
-          length="223" 
-          displaystart="1" 
-          displayend="223" 
-          highlightstart="23" 
-          highlightend="45"
-          color="red"
-          style="width: 100%;" 
-      />`,
-    dataType: "json",
-    dataSample: data
-  },
-  "protvista-sequence": {
-    name: "protvista-sequence",
-    codeSample: `
-      <protvista-sequence 
-          id="protvista-sequence" 
-          width="1020" 
-          length="223" 
-          displaystart="1" 
-          displayend="223" 
-          highlightstart="23" 
-          highlightend="45"
-       />`,
-    dataType: "string",
-    dataSample:
-      "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP"
-  }
 };
 
 const ExampleSelector = ({ changeHandler }) => (
@@ -131,12 +79,7 @@ const string2data = (text, example) => {
 };
 
 const checkHTML = html => {
-  if (typeof html !== "string" || html.toLowerCase().indexOf("<script") !== -1)
-    return false;
-
-  var clean = sanitize(html);
-  console.log(clean);
-  return true;
+  return !(typeof html !== "string" || html.toLowerCase().indexOf("<script") !== -1);
 };
 
 const data2string = (data, example) => {
