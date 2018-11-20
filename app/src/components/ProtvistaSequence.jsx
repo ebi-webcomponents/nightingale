@@ -10,6 +10,7 @@ class ProtvistaSequenceWrapper extends Component {
     document.querySelector("#seq2").data = data;
     document.querySelector("#seq3").data = data;
     document.querySelector("#seq4").data = data;
+    document.querySelector("#seq5").data = data;
   }
 
   render() {

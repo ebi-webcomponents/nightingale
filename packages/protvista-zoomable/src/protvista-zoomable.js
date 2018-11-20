@@ -116,7 +116,8 @@ class ProtvistaZoomable extends HTMLElement {
 
   updateScaleDomain() {
     this.xScale = scaleLinear()
-      .domain([1, this._length])
+      // The max width should match the start of the n+1 AA
+      .domain([1, this._length + 1])
       .range([0, this.getWidthWithMargins()]);
   }
 
@@ -166,9 +167,14 @@ class ProtvistaZoomable extends HTMLElement {
     if (!this.svg || !this._originXScale) return;
     const k = Math.max(
       1,
-      this.length / (this._displayend - this._displaystart)
+      // +1 because the original scale has that extra AA and display end should be included
+      (this.length) / (1 + this._displayend - this._displaystart)
     );
     const dx = -this._originXScale(this._displaystart);
+    // console.log(this._originXScale.range());
+    // console.log(this._originXScale.domain());
+    // console.log('k',k)
+    // console.log('dx',dx)
     this.dontDispatch = true;
     this.svg.call(this.zoom.transform, zoomIdentity.scale(k).translate(dx, 0));
     this.dontDispatch = false;
@@ -192,6 +198,9 @@ class ProtvistaZoomable extends HTMLElement {
     // transitions too
     this._ro = new ResizeObserver(this._onResize);
     this._ro.observe(this);
+  }
+  getXFromSeqPosition(position){
+    return this.margin.left + this.xScale(position)
   }
 }
 
