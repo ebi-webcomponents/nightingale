@@ -23,8 +23,8 @@ class ProtvistaZoomable extends HTMLElement {
         this._applyZoomTranslation();
       });
     };
-    this._onResize = this._onResize.bind(this);
-    this.listenForResize = this.listenForResize.bind(this);
+    // this._onResize = this._onResize.bind(this);
+    // this.listenForResize = this.listenForResize.bind(this);
   }
 
   connectedCallback() {
@@ -45,7 +45,7 @@ class ProtvistaZoomable extends HTMLElement {
     this.updateScaleDomain();
     this._originXScale = this.xScale.copy();
     this.initZoom();
-    this.listenForResize();
+    // this.listenForResize();
     this.addEventListener("error", e => {
       throw e;
     });
@@ -146,11 +146,16 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   zoomed() {
+    // console.log("XOOM", this.dontDispatch)
+    // console.log(this.xScale.domain());
+    // console.log(d3Event.transform);
     this.xScale = d3Event.transform.rescaleX(this._originXScale);
+    // console.log(this.xScale.domain());
 
     // If the source event is null the zoom wasn't initiated by this component, don't send event
     if (this.dontDispatch) return;
     let [start, end] = this.xScale.domain();
+    end--; // the end coordinate is 1 less than the max domain
     this.dispatchEvent(
       new CustomEvent("change", {
         detail: {
@@ -168,7 +173,7 @@ class ProtvistaZoomable extends HTMLElement {
     const k = Math.max(
       1,
       // +1 because the original scale has that extra AA and display end should be included
-      (this.length) / (1 + this._displayend - this._displaystart)
+      (this.length) / (1+this._displayend - this._displaystart)
     );
     const dx = -this._originXScale(this._displaystart);
     // console.log(this._originXScale.range());
