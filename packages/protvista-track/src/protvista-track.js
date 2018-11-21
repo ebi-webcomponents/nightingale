@@ -139,7 +139,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("class", "sequence-features")
       .attr(
         "transform",
-        "translate(" + this.margin.left + "," + this.margin.top + ")"
+        "translate(0 ," + this.margin.top + ")"
       );
 
     this._createFeatures();
@@ -183,7 +183,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("tooltip-trigger", "true")
       .attr("d", f =>
         this._featureShape.getFeatureShape(
-          this.xScale(2) - this.xScale(1),
+          this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(f),
           f.end ? f.end - f.start + 1 : 1,
           this._getShape(f.feature)
@@ -193,7 +193,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
         "transform",
         f =>
           "translate(" +
-          this.xScale(f.start) +
+          this.getXFromSeqPosition(f.start) +
           "," +
           (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
           ")"
@@ -305,7 +305,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       this.features
         .attr("d", f =>
           this._featureShape.getFeatureShape(
-            this.xScale(2) - this.xScale(1),
+            this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
             f.end ? f.end - f.start + 1 : 1,
             this._getShape(f.feature)
@@ -315,7 +315,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
           "transform",
           f =>
             "translate(" +
-            this.xScale(f.start) +
+            this.getXFromSeqPosition(f.start) +
             "," +
             (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
             ")"
@@ -329,12 +329,10 @@ class ProtvistaTrack extends ProtvistaZoomable {
       Number.isInteger(this._highlightend)
     ) {
       this.highlighted
-        .attr("x", this.xScale(this._highlightstart))
+        .attr("x", this.getXFromSeqPosition(this._highlightstart))
         .style("opacity", 0.3)
         .attr(
-          "width",
-          this.xScale(this._highlightend - this._highlightstart + 1) -
-            this.xScale(0)
+          "width", this.getSingleBaseWidth() * (this._highlightend - this._highlightstart + 1)
         );
     } else {
       this.highlighted.style("opacity", 0);

@@ -73,8 +73,8 @@ class ProtVistaSequence extends ProtvistaZoomable {
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - this.chWidth;
       const half = ftWidth / 2;
-      const first = Math.max(0, this._displaystart-2);
-      const last = Math.min(this.sequence.length, this._displayend+1);
+      const first = Math.round(Math.max(0, this._displaystart-2));
+      const last = Math.round(Math.min(this.sequence.length, this._displayend+1));
       const bases = space<0 ? [] : this.sequence
         .slice(first, last)
         .split("")

@@ -112,7 +112,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .attr("class", "feature")
       .attr("d", (f, j) =>
         this._featureShape.getFeatureShape(
-          this.xScale(2) - this.xScale(1),
+          this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(
             `${f.accession}_${f.k}_${f.i}_${f.j}`
           ),
@@ -124,7 +124,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         "transform",
         f =>
           "translate(" +
-          this.xScale(f.start) +
+          this.getXFromSeqPosition(f.start) +
           "," +
           (padding.top +
             this._layoutObj.getFeatureYPos(
@@ -140,7 +140,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     baseG
       .attr("d", f =>
         this._featureShape.getFeatureShape(
-          this.xScale(2) - this.xScale(1),
+          this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(
             `${f.accession}_${f.k}_${f.i}_${f.j}`
           ),
@@ -152,7 +152,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         "transform",
         f =>
           "translate(" +
-          this.xScale(f.start) +
+          this.getXFromSeqPosition(f.start) +
           "," +
           (padding.top +
             this._layoutObj.getFeatureYPos(
@@ -336,7 +336,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     base
       .attr("d", f =>
         this._featureShape.getFeatureShape(
-          this.xScale(2) - this.xScale(1),
+          this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(f.feature),
           f.end ? f.end - f.start + 1 : 1,
           this._getShape(f.shape ? f : f.feature)
@@ -348,7 +348,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         "transform",
         f =>
           "translate(" +
-          this.xScale(f.start) +
+          this.getXFromSeqPosition(f.start) +
           "," +
           (padding.top + this._layoutObj.getFeatureYPos(f.feature)) +
           ")"
@@ -356,8 +356,8 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
   }
   _refreshCoverLine(base) {
     base
-      .attr("x1", f => this.xScale(f.start))
-      .attr("x2", f => this.xScale(f.end + 1))
+      .attr("x1", f => this.getXFromSeqPosition(f.start))
+      .attr("x2", f => this.getXFromSeqPosition(f.end + 1))
       .attr(
         "y1",
         f =>

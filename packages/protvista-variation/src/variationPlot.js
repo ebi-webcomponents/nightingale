@@ -44,7 +44,7 @@ class VariationPlot {
         .attr("title", d => d.start)
         .attr("r", d => (d.size ? d.size : 5))
         .attr("cx", d => {
-          return element._xScale(d.start);
+          return element.getXFromSeqPosition(d.start);
         })
         .attr("cy", d => {
           return element._yScale(d.variant.charAt(0));
