@@ -90,7 +90,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/sequence" component={ProtvistaSequence} />
               <Route path="/variation" component={ProtvistaVariation} />
               <Route path="/structure" component={ProtvistaStructure} />
-              <Route path="/navigation" component={component} />
+              <Route path="/navigation" component={ProtvistaNavigation} />
               <Route path="/manager" component={ProtvistaManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
               <Route path="/playground" component={Playground} />
