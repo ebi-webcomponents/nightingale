@@ -10,6 +10,8 @@ class VariationPlot {
   }
 
   drawVariationPlot(selection, element) {
+    const ftWidth = element.getSingleBaseWidth();
+    const half = ftWidth / 2;
     // Iterate over data
     selection.each((data, i, nodes) => {
       // Generate chart
@@ -44,7 +46,7 @@ class VariationPlot {
         .attr("title", d => d.start)
         .attr("r", d => (d.size ? d.size : 5))
         .attr("cx", d => {
-          return element.getXFromSeqPosition(d.start);
+          return element.getXFromSeqPosition(d.start) + half;
         })
         .attr("cy", d => {
           return element._yScale(d.variant.charAt(0));

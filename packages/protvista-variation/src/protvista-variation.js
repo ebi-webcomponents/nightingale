@@ -111,6 +111,7 @@ class ProtvistaVariation extends ProtvistaTrack {
 
     this._axisLeft
       .attr("class", "variation-y-left axis")
+      .attr("transform", `translate(${this.margin.left},0)`)
       .call(this._yAxisLScale);
 
     this._axisRight
