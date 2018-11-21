@@ -15,6 +15,7 @@
   "author": "xwatkins",
   "license": "MIT",
   "dependencies": {
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "data-loader": "^1.0.8-alpha.0",
     "interaction-viewer": "^1.0.8-alpha.0",
     "protvista-feature-adapter": "^1.0.8-alpha.0",
@@ -25,8 +26,8 @@
     "protvista-structure": "^1.0.8-alpha.0",
     "protvista-track": "^1.0.8-alpha.0",
     "protvista-variation": "^1.0.8-alpha.0",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
+    "react": "^16.7.0-alpha.0",
+    "react-dom": "^16.7.0-alpha.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "webpack-merge": "^4.1.4"
