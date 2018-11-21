@@ -13,6 +13,12 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this._createSequence();
     }
   }
+  static get observedAttributes() {
+    return ProtvistaZoomable.observedAttributes.concat(
+      "highlightstart",
+      "highlightend",
+    );
+  }
 
   get data() {
     return this.sequence;
@@ -73,10 +79,6 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .slice(first, last)
         .split("")
         .map((aa, i) => [1 + first + i, aa]);
-      // console.log(this._displaystart, this._displayend);
-      // console.log(bases);
-      // console.log(this.xScale.range());
-      // console.log(this.xScale.domain());
 
       this.xAxis = axisBottom(this.xScale).tickFormat(
         d => (Number.isInteger(d) ? d : "")
@@ -110,13 +112,13 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .enter()
         .append("rect")
         .attr("class", "base_bg")
-        .attr("fill", ([pos]) => (pos % 2 ? "#ccc" : "#eee"))
         .attr("height", height)
-        .attr("width", ftWidth)
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
-      this.background
-        .attr("width", ftWidth)
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
+        .merge(this.background)
+          .attr("width", ftWidth)
+          .attr("fill", ([pos]) => {
+            return (Math.round(pos) % 2 ? "#ccc" : "#eee")
+          })
+          .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
       this.background.exit().remove();
 
       this.seq_g.style("opacity", Math.min(1, space));

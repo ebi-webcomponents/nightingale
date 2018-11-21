@@ -2,7 +2,8 @@
 A custom element to be inherited from if a Nithingale component needs zooming/panning capabilities that are compatible with `protvista-manager`.
 
 ## Usage
-```html
+Extend from `ProtvistaZoomable` instead of `HTMLElement` to have a protvista zoom-compatible object.
+```javascript
 class YourComponent extends ProtvistaZoomable {
     // Here Your Code
     
@@ -31,12 +32,12 @@ The code should be something like:
 
 *HTML:*
 ```html
-        <protvista-sequence
-          id="seq1"
-          length="10"
-          displaystart="3"
-          displayend="5"
-        />
+<protvista-sequence
+  id="seq1"
+  length="10"
+  displaystart="3"
+  displayend="5"
+/>
 ```
 
 *JavaScript:*
@@ -73,12 +74,81 @@ In conclusion, if a component makes sure to be drawn following these rules withi
 all zooming and padding should work if the component inherits from `ProtvistaZoomable`, 
 and the component is a DOM descendent of `protvista-manager`.    
 
+## How does it work?
+We use the _D3_ module `scaleLinear` to calculate the positions,
+and connect the _D3_ `zoom` handler to the `svg`.
+
+The interaction with a `zoomable` component has 2 parts:
+
+1. The observed attributes of `protvista-zoomable` are: `["displaystart", "displayend", "length"]`.
+   If any of these attributes changes, the scale gets updated to match the new start/end coordinates and the `refresh` method is called.
+    
+2. When a zooming event is trigger, the scale gets updated by scaling the current values. 
+   A `change` event is dispatched, notifying the new `displaystart` and `displayend` values.   
+   If there is a `protvista-manager` listening to this event, it will propagate the new values to all its registered children, which will trigger the case 1, for any `zoomable` component in there. 
+
+  
+
 ## API Reference
 
 ### Properties
-#### `name: type`
-A property.
+#### `name: length` `Number`
+Number of bases of the sequence to be displayed.
+
+#### `name: displaystart` `Number`
+First base to be displayed.
+
+#### `name: displayend` `Number`
+Last base to be displayed.
+
+
+### Methods
+#### `constructor()`
+The constructor of this class, initialises the zoom, bind some of its methods, and start listening for resizing events.
+
+#### `connectedCallback()`
+- Calculates the width of the component.
+- Makes sure the observable attributes get assigned as floats. 
+- Updates the scale, re-initialises the zoom and the resizing observer.
+
+*Note*: If you are overwriting this method in your component, make sure to call it as `super.connectedCallback();` 
+inside your method or the zooming functionality might be compromised.
+
+#### `disconnectedCallback()`
+Disconnects the resize observer.
+
+#### `observedAttributes()`
+The observed attributes are: `["displaystart", "displayend", "length"]`.
+
+*Note*: If you are overwriting this method in your component, make sure to include those defined here,
+ otherwise the zooming functionality might be compromised. For example:
+ ```javascript
+  static get observedAttributes() {
+    return ProtvistaZoomable.observedAttributes.concat(
+      "highlightstart",
+      "highlightend",
+    );
+  }
+```
+#### `attributeChangedCallback(name, oldValue, newValue)`
+- Makes sure the observable attributes get assigned as floats. 
+- Triggers the re-calculation of the scale.
+ 
+*Note*: If you are overwriting this method in your component, make sure to call it as 
+        `super.attributeChangedCallback(name, oldValue, newValue);` inside your method or the zooming functionality 
+        might be compromised.
+
 
 ### Events
-#### `my-event`
-An event that does things.
+
+#### `change`
+It reports a change in the coordinates, which most likely have been caused by a zoom/panning event.
+The detail of the event includes the new coordinates. For example:
+```json5
+{
+  detail: {
+    displaystart: 3,
+    displayend: 5
+  }
+}
+``` 
