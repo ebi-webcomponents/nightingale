@@ -7,11 +7,6 @@ import ProtvistaZoomable from "protvista-zoomable";
 import { config } from "./config";
 import ConfigHelper from "./ConfigHelper";
 
-const margin = {
-  top: 10,
-  bottom: 10
-};
-
 class ProtvistaTrack extends ProtvistaZoomable {
   getLayout(data) {
     if (String(this.getAttribute("layout")).toLowerCase() === "non-overlapping")
@@ -139,7 +134,13 @@ class ProtvistaTrack extends ProtvistaZoomable {
       // .attr('stroke', 'black')
       .attr("height", this._height);
 
-    this.seq_g = this.svg.append("g").attr("class", "sequence-features");
+    this.seq_g = this.svg
+      .append("g")
+      .attr("class", "sequence-features")
+      .attr(
+        "transform",
+        "translate(0 ," + this.margin.top + ")"
+      );
 
     this._createFeatures();
     this.refresh();
@@ -182,7 +183,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("tooltip-trigger", "true")
       .attr("d", f =>
         this._featureShape.getFeatureShape(
-          this.xScale(2) - this.xScale(1),
+          this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(f),
           f.end ? f.end - f.start + 1 : 1,
           this._getShape(f.feature)
@@ -192,9 +193,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
         "transform",
         f =>
           "translate(" +
-          this.xScale(f.start) +
+          this.getXFromSeqPosition(f.start) +
           "," +
-          (margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
+          (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
           ")"
       )
       .attr("fill", f => this._getFeatureColor(f.feature))
@@ -246,6 +247,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   createTooltip(e, d, closeable = false) {
+    if (!d.feature || !d.feature.tooltipContent) {
+      return;
+    }
     this.removeAllTooltips();
     const tooltip = document.createElement("protvista-tooltip");
     tooltip.top = e.clientY + 3;
@@ -301,7 +305,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       this.features
         .attr("d", f =>
           this._featureShape.getFeatureShape(
-            this.xScale(2) - this.xScale(1),
+            this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
             f.end ? f.end - f.start + 1 : 1,
             this._getShape(f.feature)
@@ -311,9 +315,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
           "transform",
           f =>
             "translate(" +
-            this.xScale(f.start) +
+            this.getXFromSeqPosition(f.start) +
             "," +
-            (margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
+            (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
             ")"
         );
       this._updateHighlight();
@@ -325,12 +329,10 @@ class ProtvistaTrack extends ProtvistaZoomable {
       Number.isInteger(this._highlightend)
     ) {
       this.highlighted
-        .attr("x", this.xScale(this._highlightstart))
+        .attr("x", this.getXFromSeqPosition(this._highlightstart))
         .style("opacity", 0.3)
         .attr(
-          "width",
-          this.xScale(this._highlightend - this._highlightstart + 1) -
-            this.xScale(0)
+          "width", this.getSingleBaseWidth() * (this._highlightend - this._highlightstart + 1)
         );
     } else {
       this.highlighted.style("opacity", 0);

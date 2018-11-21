@@ -7,11 +7,8 @@ import {
   select,
   event as d3Event
 } from "d3";
-import { processVariants } from "./dataTransformer";
+import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
-import { getFiltersFromAttribute } from "./filters";
-import cloneDeep from "lodash-es/cloneDeep";
-import union from "lodash-es/union";
 import "../style/protvista-variation.css";
 
 const aaList = [
@@ -40,10 +37,6 @@ const aaList = [
 ];
 
 class ProtvistaVariation extends ProtvistaTrack {
-  static get observedAttributes() {
-    return ProtvistaTrack.observedAttributes.concat(["variantfilters"]);
-  }
-
   connectedCallback() {
     super.connectedCallback();
     this._accession = this.getAttribute("accession");
@@ -51,18 +44,11 @@ class ProtvistaVariation extends ProtvistaTrack {
       ? parseInt(this.getAttribute("height"))
       : 430;
     this._width = this._width ? this._width : 0;
-    this._selectedFilters = getFiltersFromAttribute(
-      this.getAttribute("variantfilters")
-    );
-    this._margin = {
-      top: 20,
-      bottom: 10
-    };
     this._yScale = scaleLinear();
     // scale for Amino Acids
     this._yScale = scalePoint()
       .domain(aaList)
-      .range([0, this._height - this._margin.top - this._margin.bottom]);
+      .range([0, this._height - this.margin.top - this.margin.bottom]);
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
@@ -70,29 +56,17 @@ class ProtvistaVariation extends ProtvistaTrack {
     if (!super.svg) {
       return;
     }
-    switch (attrName) {
-      case "variantfilters":
-        if (newVal !== oldVal) {
-          this._selectedFilters = getFiltersFromAttribute(
-            this.getAttribute("variantfilters")
-          );
-          this.applyFilters();
-        }
-    }
   }
 
   set data(data) {
-    this._data = processVariants(data.features, data.sequence);
+    this._data = processVariants(data);
     this._createTrack();
-    if (this._selectedFilters) this.applyFilters();
   }
 
   _createFeatures() {
     this._variationPlot = new VariationPlot();
     // Group for the main chart
-    const mainChart = super.svg
-      .append("g")
-      .attr("transform", "translate(0," + this._margin.top + ")");
+    const mainChart = super.svg.select("g");
 
     // clip path prevents drawing outside of it
     const chartArea = mainChart
@@ -103,9 +77,9 @@ class ProtvistaVariation extends ProtvistaTrack {
       .append("clipPath")
       .attr("id", "plotAreaClip")
       .append("rect")
-      .attr("width", this._width)
+      .attr("width", this.getWidthWithMargins())
       .attr("height", this._height)
-      .attr("transform", "translate(10, -10)");
+      .attr("transform", `translate(0, -${this.margin.top})`);
 
     // This is calling the data series render code for each of the items in the data
     this._series = chartArea.datum(this._data);
@@ -115,16 +89,13 @@ class ProtvistaVariation extends ProtvistaTrack {
     this._axisRight = mainChart.append("g");
 
     this.updateScale();
-    // ??? fv.globalContainer.selectAll('g.variation-y g.tick').attr('class',
-    // function(d) {     return 'tick up_pftv_aa_' + (d === '*' ? 'loss' : d ===
-    // 'del' ? 'deletion' : d); });
   }
 
   // Calling render again
   refresh() {
     if (this._series) {
       // this._variationPlot.xScale = super.xScale;
-      this._clipPath.attr("width", this._width);
+      this._clipPath.attr("width", this.getWidthWithMargins());
       this.updateScale();
       this._series.call(this._variationPlot.drawVariationPlot, this);
       this._updateHighlight();
@@ -134,18 +105,21 @@ class ProtvistaVariation extends ProtvistaTrack {
   updateScale() {
     this._yAxisLScale = axisLeft()
       .scale(this._yScale)
-      .tickSize(-this._width);
+      .tickSize(-this.getWidthWithMargins());
 
     this._yAxisRScale = axisRight().scale(this._yScale);
 
     this._axisLeft
-      .attr("transform", "translate(12 ,0)")
-      .attr("class", "variation-y axis")
+      .attr("class", "variation-y-left axis")
+      .attr("transform", `translate(${this.margin.left},0)`)
       .call(this._yAxisLScale);
 
     this._axisRight
-      .attr("transform", "translate(" + (this._width - 18) + ", 0)")
-      .attr("class", "variation-y axis")
+      .attr(
+        "transform",
+        `translate(${this.getWidthWithMargins() - this.margin.right + 2}, 0)`
+      )
+      .attr("class", "variation-y-right axis")
       .call(this._yAxisRScale);
   }
 
@@ -159,18 +133,6 @@ class ProtvistaVariation extends ProtvistaTrack {
 
   reset() {
     // reset zoom, filter and any selections
-  }
-
-  applyFilters() {
-    let filteredData = [];
-    if (this._selectedFilters.length <= 0) {
-      this.updateData(this._data);
-      return;
-    }
-    this._selectedFilters.forEach(f => {
-      filteredData = union(f.applyFilter(this._data), filteredData);
-    });
-    this.updateData(filteredData);
   }
 }
 
