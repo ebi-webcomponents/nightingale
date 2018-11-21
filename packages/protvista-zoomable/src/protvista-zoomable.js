@@ -10,11 +10,14 @@ class ProtvistaZoomable extends HTMLElement {
   constructor() {
     super();
 
-    this.updateScaleDomain = this.updateScaleDomain.bind(this);
-    this.initZoom = this.initZoom.bind(this);
+    this._updateScaleDomain = this._updateScaleDomain.bind(this);
+    this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
     this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
     let aboutToApply = false;
+    // Postponing the zoom translation to the next frame.
+    // This helps in case several attributes are changed almost at the same time,
+    // in this way, only one refresh will be called.
     this.applyZoomTranslation = () => {
       if (aboutToApply) return;
       aboutToApply = true;
@@ -24,7 +27,7 @@ class ProtvistaZoomable extends HTMLElement {
       });
     };
     this._onResize = this._onResize.bind(this);
-    this.listenForResize = this.listenForResize.bind(this);
+    this._listenForResize = this._listenForResize.bind(this);
   }
 
   connectedCallback() {
@@ -42,10 +45,12 @@ class ProtvistaZoomable extends HTMLElement {
     this._displayend = this.getAttribute("displayend")
       ? parseFloat(this.getAttribute("displayend"))
       : this.width;
-    this.updateScaleDomain();
+    this._updateScaleDomain();
+    // The _originXScale is a way to mantain all the future transformations over the same original scale.
+    // It only gets redefined if the size of the component, or the length of the sequence changes.
     this._originXScale = this.xScale.copy();
-    this.initZoom();
-    this.listenForResize();
+    this._initZoom();
+    this._listenForResize();
     this.addEventListener("error", e => {
       throw e;
     });
@@ -114,14 +119,14 @@ class ProtvistaZoomable extends HTMLElement {
     return this.width - this.margin.left - this.margin.right;
   }
 
-  updateScaleDomain() {
+  _updateScaleDomain() {
     this.xScale = scaleLinear()
-      // The max width should match the start of the n+1 AA
+      // The max width should match the start of the n+1 base
       .domain([1, this._length + 1])
       .range([0, this.getWidthWithMargins()]);
   }
 
-  initZoom() {
+  _initZoom() {
     this._zoom = d3zoom()
       .scaleExtent([1, Infinity])
       .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]])
@@ -138,21 +143,23 @@ class ProtvistaZoomable extends HTMLElement {
       this[`_${name}`] = isNaN(value) ? newValue : value;
 
       if (name === "length") {
-        this.updateScaleDomain();
+        this._updateScaleDomain();
         this._originXScale = this.xScale.copy();
       }
+      // One of the observable attributes changed, so the scale needs to be redefined.
       this.applyZoomTranslation();
     }
   }
 
   zoomed() {
+    // Redefines the xScale using the original scale and transform it with the captured event data.
     this.xScale = d3Event.transform.rescaleX(this._originXScale);
 
     // If the source event is null the zoom wasn't initiated by this component, don't send event
     if (this.dontDispatch) return;
-    let [start, end] = this.xScale.domain();
+    let [start, end] = this.xScale.domain(); // New positions based in the updated scale
     end--; // the end coordinate is 1 less than the max domain
-    this.dispatchEvent(
+    this.dispatchEvent( // Dispatches the event so the manager can propagate this changes to other  components
       new CustomEvent("change", {
         detail: {
           displaystart: Math.max(1, start),
@@ -166,21 +173,28 @@ class ProtvistaZoomable extends HTMLElement {
 
   applyZoomTranslation() {
     if (!this.svg || !this._originXScale) return;
+    // Calculating the scale factor based in the current start/end coordinates and the length of the sequence.
     const k = Math.max(
       1,
-      // +1 because the enddisplay base should be included
+      // +1 because the displayend base should be included
       (this.length) / (1+this._displayend - this._displaystart)
     );
+    // The deltaX gets calculated using the position of the first base to display in original scale
     const dx = -this._originXScale(this._displaystart);
-    this.dontDispatch = true;
-    this.svg.call(this.zoom.transform, zoomIdentity.scale(k).translate(dx, 0));
+    this.dontDispatch = true; // This is to avoid infinite loops
+    this.svg.call( // We trigger a zoom action
+      this.zoom.transform,
+      zoomIdentity        // Identity transformation
+        .scale(k)         // Scaled by our scaled factor
+        .translate(dx, 0) // Translated by the delta
+    );
     this.dontDispatch = false;
     this.refresh();
   }
 
   _onResize() {
     this.width = this.offsetWidth;
-    this.updateScaleDomain();
+    this._updateScaleDomain();
     this._originXScale = this.xScale.copy();
     if (this.svg) this.svg.attr("width", this.width);
     this._zoom
@@ -190,7 +204,7 @@ class ProtvistaZoomable extends HTMLElement {
     this.applyZoomTranslation();
   }
 
-  listenForResize() {
+  _listenForResize() {
     // TODO add sleep to make transition appear smoother. Could experiment with CSS3
     // transitions too
     this._ro = new ResizeObserver(this._onResize);
@@ -198,6 +212,9 @@ class ProtvistaZoomable extends HTMLElement {
   }
   getXFromSeqPosition(position){
     return this.margin.left + this.xScale(position)
+  }
+  getSingleBaseWidth(){
+    return this.xScale(2) - this.xScale(1);
   }
 }
 

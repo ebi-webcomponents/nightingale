@@ -15,6 +15,11 @@ class YourComponent extends ProtvistaZoomable {
 }
 ```
 
+*Note*: The `svg` DOM element of your component needs to be assigned to `this.svg` whenever you create it. 
+        It is in this point that `zoomable` attach the listeners of zoom/pan events.
+
+
+
 ## Base coordinates and Seq positions
 
 In this section I'll try to explain the coordinate system for _Nightingale_ components.
@@ -130,6 +135,7 @@ The observed attributes are: `["displaystart", "displayend", "length"]`.
     );
   }
 ```
+
 #### `attributeChangedCallback(name, oldValue, newValue)`
 - Makes sure the observable attributes get assigned as floats. 
 - Triggers the re-calculation of the scale.
@@ -137,6 +143,27 @@ The observed attributes are: `["displaystart", "displayend", "length"]`.
 *Note*: If you are overwriting this method in your component, make sure to call it as 
         `super.attributeChangedCallback(name, oldValue, newValue);` inside your method or the zooming functionality 
         might be compromised.
+
+#### `get margin()`
+Returns the default values of the margin. you should overwrite this to define your own margins. The default values are:
+```json5
+{
+  top: 10,
+  right: 10,
+  bottom: 10,
+  left: 10
+}
+``` 
+
+#### `getWidthWithMargins()`
+Returns the current available width, excluding the margins.
+
+#### `getXFromSeqPosition(position)`
+Returns X coordinate in pixels for a given position. 
+The position should be a number between `1` and the length of the sequence.  
+
+#### `getSingleBaseWidth()`
+Returns the width of a single base using the current scale.
 
 
 ### Events

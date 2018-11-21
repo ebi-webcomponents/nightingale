@@ -70,7 +70,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
 
   refresh() {
     if (this.axis) {
-      const ftWidth = this.getXFromSeqPosition(2) - this.getXFromSeqPosition(1);
+      const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - this.chWidth;
       const half = ftWidth / 2;
       const first = Math.max(0, this._displaystart-2);
