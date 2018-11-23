@@ -22,14 +22,16 @@ export default {
       d3: "d3",
       "protvista-zoomable": "ProtvistaZoomable",
       "protvista-track": "ProtvistaTrack",
-      "resize-observer-polyfill": "ResizeObserver"
+      "resize-observer-polyfill": "ResizeObserver",
+      litemol: "Litemol"
     }
   },
   external: [
     "protvista-zoomable",
     "protvista-track",
     "protvista-uniprot-entry-adapter",
-    "d3"
+    "d3",
+    "litemol"
   ],
   plugins: [
     postcss({
@@ -38,11 +40,6 @@ export default {
     }),
     nodeResolve({
       jsnext: true
-    }),
-    //Required for LiteMol
-    commonjs({
-      include: "../../node_modules/**",
-      exclude: "../../node_modules/style-inject/**"
     }),
     babel({
       babelrc: false,

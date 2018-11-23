@@ -1,7 +1,5 @@
-// import 'litemol/dist/css/LiteMol-plugin.css';Styles rely on fonts being ../fonts
 import LiteMol from 'litemol';
 import 'whatwg-fetch';
-import '../style/style.css';
 
 class ProtvistaStructure extends HTMLElement {
     constructor() {
