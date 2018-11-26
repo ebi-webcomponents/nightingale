@@ -9,6 +9,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
     super.connectedCallback();
     this._highlightstart = parseInt(this.getAttribute("highlightstart"));
     this._highlightend = parseInt(this.getAttribute("highlightend"));
+    this.sequence = this.getAttribute("sequence");
     if (this.sequence) {
       this._createSequence();
     }
@@ -16,7 +17,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat(
       "highlightstart",
-      "highlightend",
+      "highlightend"
     );
   }
 
@@ -29,10 +30,9 @@ class ProtVistaSequence extends ProtvistaZoomable {
     else if ("sequence" in data) this.sequence = data.sequence;
     if (this.sequence && !super.svg) {
       this._createSequence();
-    }else{
+    } else {
       this.refresh();
     }
-
   }
 
   _createSequence() {
@@ -53,12 +53,16 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .attr("class", "sequence")
       .attr("transform", `translate(0,${0.75 * height})`);
 
-      this.seq_g.append("text").attr("class", "base").text("T");
-      this.chWidth = this.seq_g.select("text.base")
+    this.seq_g
+      .append("text")
+      .attr("class", "base")
+      .text("T");
+    this.chWidth =
+      this.seq_g
+        .select("text.base")
         .node()
-        .getBBox().width *
-        0.8;
-      this.seq_g.select("text.base").remove();
+        .getBBox().width * 0.8;
+    this.seq_g.select("text.base").remove();
     this.highlighted = super.svg
       .append("rect")
       .attr("class", "highlighted")
@@ -73,15 +77,20 @@ class ProtVistaSequence extends ProtvistaZoomable {
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - this.chWidth;
       const half = ftWidth / 2;
-      const first = Math.round(Math.max(0, this._displaystart-2));
-      const last = Math.round(Math.min(this.sequence.length, this._displayend+1));
-      const bases = space<0 ? [] : this.sequence
-        .slice(first, last)
-        .split("")
-        .map((aa, i) => [1 + first + i, aa]);
+      const first = Math.round(Math.max(0, this._displaystart - 2));
+      const last = Math.round(
+        Math.min(this.sequence.length, this._displayend + 1)
+      );
+      const bases =
+        space < 0
+          ? []
+          : this.sequence
+              .slice(first, last)
+              .split("")
+              .map((aa, i) => [1 + first + i, aa]);
 
-      this.xAxis = axisBottom(this.xScale).tickFormat(
-        d => (Number.isInteger(d) ? d : "")
+      this.xAxis = axisBottom(this.xScale).tickFormat(d =>
+        Number.isInteger(d) ? d : ""
       );
       this.axis.call(this.xAxis);
 
@@ -89,9 +98,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this.axis.select(".domain").remove();
       this.axis.selectAll(".tick line").remove();
 
-      this.bases = this.seq_g
-        .selectAll("text.base")
-        .data(bases, d => d[0]);
+      this.bases = this.seq_g.selectAll("text.base").data(bases, d => d[0]);
       this.bases
         .enter()
         .append("text")
@@ -114,11 +121,11 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .attr("class", "base_bg")
         .attr("height", height)
         .merge(this.background)
-          .attr("width", ftWidth)
-          .attr("fill", ([pos]) => {
-            return (Math.round(pos) % 2 ? "#ccc" : "#eee")
-          })
-          .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
+        .attr("width", ftWidth)
+        .attr("fill", ([pos]) => {
+          return Math.round(pos) % 2 ? "#ccc" : "#eee";
+        })
+        .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
       this.background.exit().remove();
 
       this.seq_g.style("opacity", Math.min(1, space));

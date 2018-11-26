@@ -10,7 +10,6 @@ class ProtvistaSequenceWrapper extends Component {
     document.querySelector("#seq2").data = data;
     document.querySelector("#seq3").data = data;
     document.querySelector("#seq4").data = data;
-    document.querySelector("#seq5").data = data;
   }
 
   render() {
@@ -50,7 +49,7 @@ class ProtvistaSequenceWrapper extends Component {
           highlightEnd="45"
         />
         <protvista-sequence
-          id="seq5"
+          sequence="MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP"
           length="223"
           displaystart="1"
           displayend="4"
