@@ -1,6 +1,6 @@
 const loadComponent = function(name, className) {
-  if (!customElements.get(name)) {
-    customElements.define(name, className);
+  if (!window.customElements.get(name)) {
+    window.customElements.define(name, className);
   }
 };
 

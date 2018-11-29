@@ -1,16 +1,5 @@
 import { categories } from "./categories";
 import { html, render } from "lit-html";
-// import ProtvistaVariation from "protvista-variation";
-// "protvista-feature-adapter": "^1.0.8-alpha.0",
-// "protvista-proteomics-adapter": "^1.0.8-alpha.0",
-// "protvista-structure-adapter": "^1.0.8-alpha.0",
-// "protvista-tooltip": "^1.0.8-alpha.0",
-// "protvista-uniprot-entry-adapter": "^1.0.8-alpha.0",
-// "protvista-variation": "^1.0.8-alpha.0",
-// "protvista-variation-adapter": "^1.0.8-alpha.0",
-// "protvista-variation-filter": "^1.0.8-alpha.0",
-// "protvista-variation-graph": "^1.0.8-alpha.0",
-// "protvista-zoomable": "^1.0.8-alpha.0"
 
 import "../styles/protvista-uniprot.css";
 
