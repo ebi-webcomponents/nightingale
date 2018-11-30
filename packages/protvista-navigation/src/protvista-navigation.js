@@ -144,7 +144,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._viewport.extent([
         [padding.left, 0],
         [(this.width - padding.right), height*0.51]
-      ])
+      ]);
     this._brushG.call(this._viewport);
     this._updateNavRuler();
   }

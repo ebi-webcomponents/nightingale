@@ -12,7 +12,7 @@
     "build-prod": "NODE_ENV=production rollup -c",
     "rollup-watch": "rollup -cw",
     "test": "mocha",
-    "browser-sync": "browser-sync start --server '.' '../../node_modules/' -f dist/**/*.*",
+    "browser-sync": "browser-sync start --server -f dist/**/*.*",
     "serve": "npm run rollup-watch & npm run browser-sync"
   },
   "keywords": [],

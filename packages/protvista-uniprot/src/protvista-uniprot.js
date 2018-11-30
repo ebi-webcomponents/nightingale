@@ -34,6 +34,10 @@ class ProtvistaUniprot extends HTMLElement {
         attributes="length displaystart displayend highlightstart highlightend variantfilters"
         additionalsubscribers="uuw-litemol-component"
       >
+        <div style="text-align: right; display: inline-block">
+          <button class="up_pftv_icon-reset">Reset</button>
+          <button class="up_pftv_icon-zoom-in-out">Zoom in</button>
+        </div>
         <protvista-navigation
           length="${this._sequenceLength}"
         ></protvista-navigation>
@@ -106,6 +110,28 @@ class ProtvistaUniprot extends HTMLElement {
         this.handleCategoryClick(e);
       });
     });
+    this.querySelector(".up_pftv_icon-reset").addEventListener("click", e => {
+      this._resetZoomAndSelection(e);
+    });
+    this.querySelector(".up_pftv_icon-zoom-in-out").addEventListener("click", e => {
+      this._zoomInOut(e);
+    });
+    let manager = this.getElementsByTagName("protvista-manager").item(0);
+    console.log(manager.protvistaElements);
+  }
+
+  _resetZoomAndSelection() {
+    console.log('_resetZoomAndSelection');
+  }
+
+  _zoomInOut(e) {
+    if (e.target.innerText === 'Zoom in') {
+      //zoom in
+        e.target.innerText = 'Zoom out';
+    } else {
+      //zoom out
+        e.target.innerText = 'Zoom in';
+    }
   }
 
   handleCategoryClick(e) {
