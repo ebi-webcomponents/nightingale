@@ -115,13 +115,13 @@ class ProtvistaUniprot extends HTMLElement {
     });
     this.querySelector(".up_pftv_icon-zoom-in-out").addEventListener("click", e => {
       this._zoomInOut(e);
-    });
-    let manager = this.getElementsByTagName("protvista-manager").item(0);
-    console.log(manager.protvistaElements);
+    });    
+    this._manager = this.getElementsByTagName("protvista-manager").item(0);
   }
 
   _resetZoomAndSelection() {
-    console.log('_resetZoomAndSelection');
+    this._manager.setAttribute('displaystart', 1);
+    this._manager.setAttribute('displayend', this._sequenceLength);
   }
 
   _zoomInOut(e) {
