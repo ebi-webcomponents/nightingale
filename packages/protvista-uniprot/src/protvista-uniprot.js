@@ -7,6 +7,7 @@ class ProtvistaUniprot extends HTMLElement {
   constructor() {
     super();
     this._accession = this.getAttribute("accession");
+    this._sequenceZoomValue = 30;
     // get properties here
   }
 
@@ -113,24 +114,29 @@ class ProtvistaUniprot extends HTMLElement {
     this.querySelector(".up_pftv_icon-reset").addEventListener("click", e => {
       this._resetZoomAndSelection(e);
     });
-    this.querySelector(".up_pftv_icon-zoom-in-out").addEventListener("click", e => {
+    this._zoomInOutButton = this.querySelector(".up_pftv_icon-zoom-in-out");
+    this._zoomInOutButton.addEventListener("click", e => {
       this._zoomInOut(e);
     });    
     this._manager = this.getElementsByTagName("protvista-manager").item(0);
   }
 
   _resetZoomAndSelection() {
+    //TODO no selection yet active, later to be added
     this._manager.setAttribute('displaystart', 1);
     this._manager.setAttribute('displayend', this._sequenceLength);
+    this._zoomInOutButton.innerText = 'Zoom in';  
   }
 
   _zoomInOut(e) {
-    if (e.target.innerText === 'Zoom in') {
-      //zoom in
-        e.target.innerText = 'Zoom out';
-    } else {
-      //zoom out
-        e.target.innerText = 'Zoom in';
+    if (e.target.innerText === 'Zoom in') {      
+      this._manager.setAttribute('displaystart', 1);
+      this._manager.setAttribute('displayend', this._sequenceZoomValue);
+      e.target.innerText = 'Zoom out';
+    } else {      
+      this._manager.setAttribute('displaystart', 1);
+      this._manager.setAttribute('displayend', this._sequenceLength);
+      e.target.innerText = 'Zoom in';      
     }
   }
 
