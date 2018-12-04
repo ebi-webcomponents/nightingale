@@ -198,6 +198,14 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         );
       });
   }
+  get margin() {
+    return {
+      top: 0,
+      right: 10,
+      bottom: 0,
+      left: 10,
+    };
+  }
 
   _createFeatures() {
     this._layoutObj.init(this._data, this._contributors);
