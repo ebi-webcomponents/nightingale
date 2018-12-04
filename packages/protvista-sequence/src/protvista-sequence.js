@@ -3,6 +3,7 @@ import { axisBottom, select } from "d3";
 import ProtvistaZoomable from "protvista-zoomable";
 
 const height = 40;
+const NUMBER_OF_TICKS = 3;
 
 class ProtVistaSequence extends ProtvistaZoomable {
   connectedCallback() {
@@ -89,9 +90,11 @@ class ProtVistaSequence extends ProtvistaZoomable {
               .split("")
               .map((aa, i) => [1 + first + i, aa]);
 
-      this.xAxis = axisBottom(this.xScale).tickFormat(d =>
-        Number.isInteger(d) ? d : ""
-      );
+      this.xAxis = axisBottom(this.xScale)
+        .tickFormat(d =>
+          Number.isInteger(d) ? d : ""
+        )
+        .ticks(NUMBER_OF_TICKS, "s");
       this.axis.call(this.xAxis);
 
       this.axis.attr("transform", `translate(${this.margin.left + half},0)`);
