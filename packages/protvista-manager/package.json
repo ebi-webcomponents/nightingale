@@ -15,7 +15,7 @@
   "jsnext:main": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "69ef2e5ce4407dba89db37dbfb06ed79d86902f5",
+  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }

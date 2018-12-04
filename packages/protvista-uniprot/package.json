@@ -28,5 +28,6 @@
     "protvista-variation-filter": "^1.0.0-beta.2",
     "protvista-variation-graph": "^1.0.0-beta.2",
     "protvista-zoomable": "^1.0.0-beta.2"
-  }
+  },
+  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb"
 }
