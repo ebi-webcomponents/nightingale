@@ -19,9 +19,9 @@
   },
   "gitHead": "69ef2e5ce4407dba89db37dbfb06ed79d86902f5",
   "devDependencies": {
-    "d3": "^4.13.0"
+    "d3": "^5.7.0"
   },
   "peerDependencies": {
-    "d3": "4.X"
+    "d3": "5.X"
   }
 }

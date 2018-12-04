@@ -20,9 +20,9 @@
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
-    "d3": "^4.13.0"
+    "d3": "^5.7.0"
   },
   "peerDependencies": {
-    "d3": "4.X"
+    "d3": "5.X"
   }
 }
