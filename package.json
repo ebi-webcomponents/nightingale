@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --concurrency=1 --mutex network --hoist",
+    "bootstrap": "lerna bootstrap --hoist",
     "prewatch": "npm run bootstrap",
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup --config ../../rollup.config.js",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- rollup -c ../../rollup.config.js -w",
