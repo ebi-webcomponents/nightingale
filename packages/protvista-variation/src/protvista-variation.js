@@ -7,6 +7,7 @@ import {
   select,
   event as d3Event
 } from "d3";
+import _includes from "lodash-es/includes";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
 import "../style/protvista-variation.css";
@@ -49,6 +50,11 @@ class ProtvistaVariation extends ProtvistaTrack {
     this._yScale = scalePoint()
       .domain(aaList)
       .range([0, this._height - this.margin.top - this.margin.bottom]);
+    this.addEventListener("load", e => {
+      if (_includes(this.children, e.target)) {
+        this.data = e.detail.payload;
+      }
+    });
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {

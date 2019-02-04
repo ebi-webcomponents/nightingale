@@ -15,8 +15,10 @@ function processVariants(data) {
     });
   }
   variants.forEach(variant => {
-    variant.end = variant.end ? +variant.end : variant.start;
-    mutationArray[variant.start - 1].variants.push(variant);
+    if (mutationArray[variant.start - 1]) {
+      //Currently not dealing with variants outside of sequence
+      mutationArray[variant.start - 1].variants.push(variant);
+    }
   });
   return mutationArray;
 }
