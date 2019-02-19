@@ -1,7 +1,7 @@
 {
   "name": "protvista-uniprot",
   "description": "ProtVista tool for the UniProt website",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "files": [
     "dist",
     "src"
@@ -13,19 +13,19 @@
   "dependencies": {
     "data-loader": "^1.0.0-beta.4",
     "lit-html": "^0.7.1",
-    "protvista-feature-adapter": "^1.0.0-beta.4",
+    "protvista-feature-adapter": "^1.0.0-beta.5",
     "protvista-manager": "^1.0.0-beta.4",
     "protvista-navigation": "^1.0.0-beta.4",
-    "protvista-proteomics-adapter": "^1.0.0-beta.4",
+    "protvista-proteomics-adapter": "^1.0.0-beta.5",
     "protvista-sequence": "^1.0.0-beta.4",
-    "protvista-structure-adapter": "^1.0.0-beta.4",
+    "protvista-structure-adapter": "^1.0.0-beta.5",
     "protvista-tooltip": "^1.0.0-beta.4",
     "protvista-track": "^1.0.0-beta.4",
-    "protvista-uniprot-entry-adapter": "^1.0.0-beta.4",
+    "protvista-uniprot-entry-adapter": "^1.0.0-beta.5",
     "protvista-variation": "^1.0.0-beta.4",
-    "protvista-variation-adapter": "^1.0.0-beta.4",
-    "protvista-variation-filter": "^1.0.0-beta.4",
-    "protvista-variation-graph": "^1.0.0-beta.4",
+    "protvista-variation-adapter": "^1.0.0-beta.5",
+    "protvista-variation-filter": "^1.0.0-beta.5",
+    "protvista-variation-graph": "^1.0.0-beta.5",
     "protvista-zoomable": "^1.0.0-beta.4"
   },
   "devDependencies": {
