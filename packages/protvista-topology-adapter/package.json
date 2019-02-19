@@ -10,5 +10,8 @@
     "topology"
   ],
   "version": "1.0.0-beta.4",
-  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb"
+  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
+  "dependencies": {
+    "lodash-es": "^4.17.11"
+  }
 }

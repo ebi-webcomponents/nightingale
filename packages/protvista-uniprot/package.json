@@ -11,7 +11,6 @@
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
   "dependencies": {
-    "d3": "^5.7.0",
     "data-loader": "^1.0.0-beta.4",
     "lit-html": "^0.7.1",
     "protvista-feature-adapter": "^1.0.0-beta.4",
@@ -28,6 +27,12 @@
     "protvista-variation-filter": "^1.0.0-beta.4",
     "protvista-variation-graph": "^1.0.0-beta.4",
     "protvista-zoomable": "^1.0.0-beta.4"
+  },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
   },
   "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb"
 }

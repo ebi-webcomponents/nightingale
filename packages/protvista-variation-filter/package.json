@@ -8,6 +8,7 @@
   "license": "MIT",
   "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
   "dependencies": {
+    "lit-element": "^2.0.1",
     "lit-html": "^0.7.1",
     "lodash-es": "^4.17.11"
   }

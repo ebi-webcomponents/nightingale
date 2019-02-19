@@ -6,7 +6,7 @@
     "dist",
     "src"
   ],
-  "main": "dist/ProtVistaFeatureAdapter.js",
+  "main": "dist/protvista-feature-adapter.js",
   "module": "src/ProtVistaFeatureAdapter.js",
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
 import groupBy from "lodash-es/groupBy";
-import ProtVistaUniProtEntryAdapter from "protvista-uniprot-entry-adapter";
+import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import getColor from "./variantColour";
-export default class ProtvistaVariationAdapter extends ProtVistaUniProtEntryAdapter {
+export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
   constructor() {
     super();
   }

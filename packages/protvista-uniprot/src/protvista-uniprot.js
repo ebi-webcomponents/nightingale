@@ -1,16 +1,5 @@
 import { categories } from "./categories";
 import { html, render } from "lit-html";
-// import ProtvistaVariation from "protvista-variation";
-// "protvista-feature-adapter": "^1.0.8-alpha.0",
-// "protvista-proteomics-adapter": "^1.0.8-alpha.0",
-// "protvista-structure-adapter": "^1.0.8-alpha.0",
-// "protvista-tooltip": "^1.0.8-alpha.0",
-// "protvista-uniprot-entry-adapter": "^1.0.8-alpha.0",
-// "protvista-variation": "^1.0.8-alpha.0",
-// "protvista-variation-adapter": "^1.0.8-alpha.0",
-// "protvista-variation-filter": "^1.0.8-alpha.0",
-// "protvista-variation-graph": "^1.0.8-alpha.0",
-// "protvista-zoomable": "^1.0.8-alpha.0"
 
 import "../styles/protvista-uniprot.css";
 
@@ -51,57 +40,47 @@ class ProtvistaUniprot extends HTMLElement {
         <protvista-sequence
           length="${this._sequenceLength}"
         ></protvista-sequence>
-        ${
-          categories.map(
-            category =>
-              html`
-                <div
-                  class="category-label"
-                  data-category-toggle="${category.name}"
-                >
-                  ${category.label}
-                </div>
-                <div
-                  class="aggregate-track-content"
-                  data-toggle-aggregate="${category.name}"
-                >
-                  ${
-                    this.getTrack(
-                      category.trackType,
+        ${categories.map(
+          category =>
+            html`
+              <div
+                class="category-label"
+                data-category-toggle="${category.name}"
+              >
+                ${category.label}
+              </div>
+              <div
+                class="aggregate-track-content"
+                data-toggle-aggregate="${category.name}"
+              >
+                ${this.getTrack(
+                  category.trackType,
+                  category.adapter,
+                  category.url,
+                  this.getCategoryTypesAsString(category.tracks),
+                  "non-overlapping"
+                )}
+              </div>
+              ${category.tracks.map(
+                track => html`
+                  <div class="track-label" data-toggle="${category.name}">
+                    ${track.label
+                      ? track.label
+                      : this.getLabelComponent(track.labelComponent)}
+                  </div>
+                  <div class="track-content" data-toggle="${category.name}">
+                    ${this.getTrack(
+                      track.trackType,
                       category.adapter,
                       category.url,
-                      this.getCategoryTypesAsString(category.tracks),
+                      track.filter,
                       "non-overlapping"
-                    )
-                  }
-                </div>
-                ${
-                  category.tracks.map(
-                    track => html`
-                      <div class="track-label" data-toggle="${category.name}">
-                        ${
-                          track.label
-                            ? track.label
-                            : this.getLabelComponent(track.labelComponent)
-                        }
-                      </div>
-                      <div class="track-content" data-toggle="${category.name}">
-                        ${
-                          this.getTrack(
-                            track.trackType,
-                            category.adapter,
-                            category.url,
-                            track.filter,
-                            "non-overlapping"
-                          )
-                        }
-                      </div>
-                    `
-                  )
-                }
-              `
-          )
-        }
+                    )}
+                  </div>
+                `
+              )}
+            `
+        )}
         <protvista-sequence
           id="seq1"
           length="${this._sequenceLength}"

@@ -1,7 +1,10 @@
-import ProtVistaUniProtEntryAdapter from './ProtVistaUniProtEntryAdapter';
+import ProtvistaUniprotEntryAdapter from "./ProtvistaUniprotEntryAdapter";
 
 if (window.customElements) {
-    customElements.define('protvista-uniprot-entry-adapter', ProtVistaUniProtEntryAdapter);
+  customElements.define(
+    "protvista-uniprot-entry-adapter",
+    ProtvistaUniprotEntryAdapter
+  );
 }
 
-export default ProtVistaUniProtEntryAdapter;
+export default ProtvistaUniprotEntryAdapter;
