@@ -11,14 +11,14 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
     if (!sequence) return;
 
     const variants = features.map(variant => {
-      // "color": "orange"
       return {
         accession: variant.genomicLocation,
         variant: variant.alternativeSequence,
         start: variant.begin,
         end: variant.end,
         tooltip: this.formatTooltip(variant),
-        color: getColor(variant)
+        color: getColor(variant),
+        association: variant.association
       };
     });
 
