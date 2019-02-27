@@ -16,7 +16,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         variant: variant.alternativeSequence,
         start: variant.begin,
         end: variant.end,
-        tooltip: this.formatTooltip(variant),
+        tooltipContent: this.formatTooltip(variant),
         color: getColor(variant),
         association: variant.association
       };
