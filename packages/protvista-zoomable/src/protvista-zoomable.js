@@ -116,7 +116,7 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   getWidthWithMargins() {
-    return this.width - this.margin.left - this.margin.right;
+    return this.width ? this.width - this.margin.left - this.margin.right : 0;
   }
 
   _updateScaleDomain() {
@@ -159,7 +159,8 @@ class ProtvistaZoomable extends HTMLElement {
     if (this.dontDispatch) return;
     let [start, end] = this.xScale.domain(); // New positions based in the updated scale
     end--; // the end coordinate is 1 less than the max domain
-    this.dispatchEvent( // Dispatches the event so the manager can propagate this changes to other  components
+    this.dispatchEvent(
+      // Dispatches the event so the manager can propagate this changes to other  components
       new CustomEvent("change", {
         detail: {
           displaystart: Math.max(1, start),
@@ -177,15 +178,16 @@ class ProtvistaZoomable extends HTMLElement {
     const k = Math.max(
       1,
       // +1 because the displayend base should be included
-      (this.length) / (1+this._displayend - this._displaystart)
+      this.length / (1 + this._displayend - this._displaystart)
     );
     // The deltaX gets calculated using the position of the first base to display in original scale
     const dx = -this._originXScale(this._displaystart);
     this.dontDispatch = true; // This is to avoid infinite loops
-    this.svg.call( // We trigger a zoom action
+    this.svg.call(
+      // We trigger a zoom action
       this.zoom.transform,
-      zoomIdentity        // Identity transformation
-        .scale(k)         // Scaled by our scaled factor
+      zoomIdentity // Identity transformation
+        .scale(k) // Scaled by our scaled factor
         .translate(dx, 0) // Translated by the delta
     );
     this.dontDispatch = false;
@@ -210,10 +212,10 @@ class ProtvistaZoomable extends HTMLElement {
     this._ro = new ResizeObserver(this._onResize);
     this._ro.observe(this);
   }
-  getXFromSeqPosition(position){
-    return this.margin.left + this.xScale(position)
+  getXFromSeqPosition(position) {
+    return this.margin.left + this.xScale(position);
   }
-  getSingleBaseWidth(){
+  getSingleBaseWidth() {
     return this.xScale(2) - this.xScale(1);
   }
 }
