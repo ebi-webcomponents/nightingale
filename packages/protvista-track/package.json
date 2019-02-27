@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.7",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -18,7 +18,7 @@
   "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-zoomable": "^1.0.0-beta.4"
+    "protvista-zoomable": "^1.0.0-beta.7"
   },
   "devDependencies": {
     "d3": "^5.7.0"
