@@ -1,14 +1,17 @@
-import lodashGet from 'lodash-es/get';
-import RequestManager from './request-manager';
+import lodashGet from "lodash-es/get";
+import RequestManager from "./request-manager";
 
-const getSourceData = (...children) => children.filter(
-  child => child.matches('source[src], script[type="application/json"]')
-);
+const getSourceData = (...children) =>
+  children.filter(child =>
+    child.matches('source[src], script[type="application/json"]')
+  );
 
 class DataLoader extends HTMLElement {
-  static get is () { return 'data-loader' }
+  static get is() {
+    return "data-loader";
+  }
 
-  async fetch () {
+  async fetch() {
     // get all the potentials sources elements
     const sources = getSourceData(...this.children);
     // if nothing there, bails
@@ -35,14 +38,22 @@ class DataLoader extends HTMLElement {
 
     if (!detail) {
       this._errors = errors;
-      this.dispatchEvent(
-        new CustomEvent('error', {detail: errors, bubbles: true, cancelable: true})
-      );
+      try {
+        this.dispatchEvent(
+          new CustomEvent("error", {
+            detail: errors,
+            bubbles: true,
+            cancelable: true
+          })
+        );
+      } catch (e) {
+        console.error(e);
+      }
       return;
     }
 
     // apply selector to retrieved data
-    if (typeof this.selector === 'string') {
+    if (typeof this.selector === "string") {
       this._data = lodashGet(detail.payload, this.selector);
     } else {
       this._data = this.selector(detail.payload);
@@ -50,44 +61,44 @@ class DataLoader extends HTMLElement {
     detail.payload = this.data;
 
     this.dispatchEvent(
-      new CustomEvent('load', {detail, bubbles: true, cancelable: true})
+      new CustomEvent("load", { detail, bubbles: true, cancelable: true })
     );
     return detail;
   }
 
   // Getters/Setters
   // data
-  get data () {
+  get data() {
     return this._data;
   }
 
   // loaded
-  get loaded () {
+  get loaded() {
     return !!this.data;
   }
 
   // errors
-  get errors () {
+  get errors() {
     return this._errors;
   }
 
   // loaded
-  get selector () {
+  get selector() {
     return this._selector;
   }
 
-  set selector (value) {
+  set selector(value) {
     this._selector = value;
   }
 
   // Custom element reactions
-  constructor () {
+  constructor() {
     super();
     this._data = null;
-    this.selector = (this.getAttribute('selector') || '').trim() || (d => d);
+    this.selector = (this.getAttribute("selector") || "").trim() || (d => d);
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.fetch();
   }
 }

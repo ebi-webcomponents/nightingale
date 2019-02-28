@@ -24,7 +24,6 @@ const config = {
     d3: "d3",
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
-    "resize-observer-polyfill": "ResizeObserver",
     litemol: "Litemol"
   },
   plugins: [new CleanWebpackPlugin([path.join(PACKAGE_ROOT_PATH, "dist")])],
