@@ -21,6 +21,7 @@ const ProtvistaNavigation = lazy(() =>
 );
 const ProtvistaManager = lazy(() => import("./components/ProtvistaManager"));
 const InteractionViewer = lazy(() => import("./components/InteractionViewer"));
+const ProtvistaFilter = lazy(() => import("./components/ProtvistaFilter"));
 const Playground = lazy(() => import("./components/Playground"));
 import pkg from "../package.json";
 
@@ -74,6 +75,9 @@ const App = (component = ProtvistaNavigation) => (
               <li>
                 <NavLink to="/interaction-viewer">Interaction viewer</NavLink>
               </li>
+              <li>
+                <NavLink to="/filter">Filter</NavLink>
+              </li>
             </ul>
             <ul className="main-nav__list">
               <li>
@@ -93,6 +97,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/navigation" component={ProtvistaNavigation} />
               <Route path="/manager" component={ProtvistaManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
+              <Route path="/filter" component={ProtvistaFilter} />
               <Route path="/playground" component={Playground} />
             </Switch>
           </Suspense>
