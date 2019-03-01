@@ -12,7 +12,7 @@ class ProtvistaUniprot extends HTMLElement {
 
   connectedCallback() {
     this.loadEntry(this._accession).then(entryData => {
-      this._sequenceLength = entryData.sequence.sequence.length;
+      this._sequence = entryData.sequence.sequence;
       // We need to get the length of the protein before rendering it
       this._render();
     });
@@ -35,10 +35,11 @@ class ProtvistaUniprot extends HTMLElement {
         additionalsubscribers="uuw-litemol-component"
       >
         <protvista-navigation
-          length="${this._sequenceLength}"
+          length="${this._sequence.length}"
         ></protvista-navigation>
         <protvista-sequence
-          length="${this._sequenceLength}"
+          length="${this._sequence.length}"
+          sequence="${this._sequence}"
         ></protvista-sequence>
         ${categories.map(
           category =>
@@ -82,8 +83,8 @@ class ProtvistaUniprot extends HTMLElement {
             `
         )}
         <protvista-sequence
-          id="seq1"
-          length="${this._sequenceLength}"
+          length="${this._sequence.length}"
+          sequence="${this._sequence}"
         ></protvista-sequence>
         <uuw-litemol-component
           accession="${this._accession}"
@@ -187,7 +188,7 @@ class ProtvistaUniprot extends HTMLElement {
       case "protvista-track":
         return html`
           <protvista-track
-            length="${this._sequenceLength}"
+            length="${this._sequence.length}"
             tooltip-event="click"
             layout="${layout}"
           >
@@ -197,7 +198,7 @@ class ProtvistaUniprot extends HTMLElement {
       case "protvista-variation":
         return html`
           <protvista-variation
-            length="${this._sequenceLength}"
+            length="${this._sequence.length}"
             tooltip-event="click"
           >
             ${this.getAdapter(adapter, url, trackTypes)}
@@ -206,7 +207,7 @@ class ProtvistaUniprot extends HTMLElement {
       case "protvista-variation-graph":
         return html`
           <protvista-variation-graph
-            length="${this._sequenceLength}"
+            length="${this._sequence.length}"
             tooltip-event="click"
           >
             ${this.getAdapter(adapter, url, trackTypes)}

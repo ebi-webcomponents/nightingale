@@ -72,7 +72,15 @@ class VariationPlot {
           );
         })
         .on("click", d => {
-          element.createTooltip(d3Event, d, true);
+          const tooltipData = {
+            start: d.start,
+            end: d.end,
+            feature: {
+              ...d,
+              type: "Variant"
+            }
+          };
+          element.createTooltip(d3Event, tooltipData, true);
         });
     });
   }

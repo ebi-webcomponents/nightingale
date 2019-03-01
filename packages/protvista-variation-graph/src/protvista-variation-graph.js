@@ -55,30 +55,27 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
   set data(data) {
     this._data = data;
 
-    this._data.forEach(m => {
-      if (0 >= m.variants.length) {
-        return;
+    if (this._data.variants.length <= 0) {
+      return;
+    }
+
+    this._data.variants.forEach(v => {
+      if ("undefined" === typeof this._totals_dataset[v.start]) {
+        this._totals_dataset[v.start] = 0;
       }
 
-      m.variants.forEach(v => {
-        if ("undefined" === typeof this._totals_dataset[v.begin]) {
-          this._totals_dataset[v.begin] = 0;
-        }
+      if ("undefined" === typeof this._disease_dataset[v.start]) {
+        this._disease_dataset[v.start] = 0;
+      }
 
-        if ("undefined" === typeof this._disease_dataset[v.begin]) {
-          this._disease_dataset[v.begin] = 0;
-        }
-
-        this._totals_dataset[v.begin]++;
-
-        if ("undefined" !== typeof v.association) {
-          v.association.forEach(a => {
-            if (true === a.disease) {
-              this._disease_dataset[v.begin]++;
-            }
-          });
-        }
-      });
+      this._totals_dataset[v.start]++;
+      if ("undefined" !== typeof v.association) {
+        v.association.forEach(a => {
+          if (true === a.disease) {
+            this._disease_dataset[v.start]++;
+          }
+        });
+      }
     });
 
     this._totals_dataset = this._emptyFillMissingRecords(this._totals_dataset);
