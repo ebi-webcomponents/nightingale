@@ -76,5 +76,5 @@ class ProtvistaCheckbox extends HTMLElement {
     }));
   }
 }
-customElements.define('protvista-checkbox', ProtvistaCheckbox);
 
+customElements.define('protvista-checkbox', ProtvistaCheckbox);

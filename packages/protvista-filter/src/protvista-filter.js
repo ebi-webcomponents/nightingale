@@ -1,4 +1,5 @@
 import { html, render } from "lit-html";
+import groupBy from 'lodash-es/groupBy';
 
 import './style.css';
 import './checkbox.js';
@@ -6,59 +7,73 @@ import './checkbox.js';
 const filters = [
     {
         name: 'disease',
-        type: 'consequence',
-        selected: true,
+        type: {
+          name: 'consequence',
+          text: 'Filter Consequence'
+        },
         options: {
           labels: ['Likely disease'],
           colors: ['#990000']
         }
     }, {
         name: 'predicted',
-        type: 'consequence',
-        selected: false,
+        type: {
+          name: 'consequence',
+          text: 'Filter Consequence'
+        },
         options: {
           labels: ['Predicted (deleterious/benign)', 'Bar'],
-          colors: ['#002594', '#8FE3FF']
+          colors: ['#002594', '#8FE3FF'],
         }
     }, {
         name: 'nonDisease',
-        type: 'consequence',
-        selected: false,
+        type: {
+          name: 'consequence',
+          text: 'Filter Consequence'
+        },
         options: {
           labels: ['Likely benign'],
-          colors: ['#99cc00']
+          colors: ['#99cc00'],
         }
     }, {
         name: 'uncertain',
-        type: 'consequence',
-        selected: false,
+        type: {
+          name: 'consequence',
+          text: 'Filter Consequence'
+        },
         options: {
           labels: ['Uncertain'],
-          colors: ['#FFCC00']
+          colors: ['#FFCC00'],
         }
     }, {
         name: 'UniProt',
-        type: 'provenance',
-        selected: false,
+        type: {
+          name: 'provenance',
+          text: 'Filter Provenance'
+        },
         options: {
           labels: ['UniProt reviewed'],
-          colors: ['#e5e5e5']
+          colors: ['#e5e5e5'],
         }
     }, {
         name: 'ClinVar',
-        type: 'provenance',
-        selected: false,
+        type: {
+          name: 'provenance',
+          text: 'Filter Provenance'
+        },
         options: {
           labels: ['ClinVar reviewed'],
-          colors: ['#e5e5e5']
+          colors: ['#e5e5e5'],
         }
     }, {
         name: 'LSS',
-        type: 'provenance',
-        selected: false,
+        type: {
+          name: 'provenance',
+          text: 'Filter Provenance'
+        },
         options: {
           labels: ['Large scale studies'],
-          colors: ['#e5e5e5']
+          colors: ['#e5e5e5'],
         }
     }
 ];
@@ -96,26 +111,34 @@ class ProtvistaFilter extends HTMLElement {
   }
 
   renderFilters() {
-    const provenances  = filters.filter(f => f.type === 'provenance');
-    const consequences = filters.filter(f => f.type === 'consequence');
+    const groupByType = groupBy(filters, (f) => {
+      return f.type.text;
+    });
 
-    const template = () => html`
-      <h5>Filter Consequence</h5>
+    const flexColumn = (children) => html `
       <div style="display: flex; flex-direction: column;">
-        ${consequences.map(({name, selected, options}) => {
-          return html`
-            <protvista-checkbox value="${name}" .options="${options}" disabled></protvista-checkbox>`;
-        })}
-      </div>
-      <h5>Filter Data Provenance</h5>
-      <div style="display: flex; flex-direction: column;">
-        ${provenances.map(({name, selected, options}) => {
-          return html`
-            <protvista-checkbox value="${name}" .options="${options}" checked></protvista-checkbox>`;
-        })}
+        ${children}
       </div>
     `;
-    render(template(), this);
+
+    const header = (text) => html `
+      <h5>${text}</h5>
+    `;
+
+    const content = html`
+      ${Object.keys(groupByType).map((type) => {
+        return html `
+          ${header(type)}
+          ${flexColumn(
+            groupByType[type].map(({name, options}) => {
+              return html`
+                <protvista-checkbox value="${name}" .options="${options}"></protvista-checkbox>`;
+            })
+          )}
+        `;
+      })}
+    `;
+    render(flexColumn(content), this);
   }
 }
 

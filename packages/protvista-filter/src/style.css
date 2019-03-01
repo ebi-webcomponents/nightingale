@@ -11,6 +11,7 @@ protvista-checkbox[disabled] {
   margin-top: 10px;
   line-height: 24px;
   outline: none;
+  font-size: 1em;
 }
 
 .protvista_checkbox_input {
