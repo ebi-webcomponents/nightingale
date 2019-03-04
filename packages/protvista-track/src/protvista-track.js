@@ -116,9 +116,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
     this._layoutObj.init(this._data);
 
     select(this)
-      .selectAll("*")
+      .selectAll("svg")
       .remove();
-    select(this).html("");
 
     this.svg = select(this)
       .append("div")
@@ -137,10 +136,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
     this.seq_g = this.svg
       .append("g")
       .attr("class", "sequence-features")
-      .attr(
-        "transform",
-        "translate(0 ," + this.margin.top + ")"
-      );
+      .attr("transform", "translate(0 ," + this.margin.top + ")");
 
     this._createFeatures();
     this.refresh();
@@ -332,7 +328,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
         .attr("x", this.getXFromSeqPosition(this._highlightstart))
         .style("opacity", 0.3)
         .attr(
-          "width", this.getSingleBaseWidth() * (this._highlightend - this._highlightstart + 1)
+          "width",
+          this.getSingleBaseWidth() *
+            (this._highlightend - this._highlightstart + 1)
         );
     } else {
       this.highlighted.style("opacity", 0);
