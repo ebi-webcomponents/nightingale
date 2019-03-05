@@ -28,7 +28,7 @@ const filters = [
         text: 'Filter Consequence'
       },
       options: {
-        labels: ['Predicted (deleterious/benign)', 'Bar'],
+        labels: ['Predicted deleterious', 'Predicted benign'],
         colors: ['#002594', '#8FE3FF'],
         selected: true,
         applyFilter: data => {
