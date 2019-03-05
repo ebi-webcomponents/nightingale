@@ -56,8 +56,6 @@ class ProtVistaManager extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener("change", this.onChange);
-
     this._registerProtvistaDescendents(this);
     this.addListeners();
     var that = this;
