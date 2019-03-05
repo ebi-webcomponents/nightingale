@@ -38,12 +38,11 @@ const config = {
       },
       {
         test: /\.(js)$/,
-        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
             babelrc: false,
-            exclude: "node_modules/**",
+            include: ["src", "../../node_modules/lit-html"],
             presets: [
               [
                 "@babel/preset-env",

@@ -27,7 +27,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
       this._fireEvent('load', sequence, variants);
     }
     else if (oldValue !== newValue) {
-      const filteredVariants = names
+      const filteredVariants = newValue
         .split(',')
         .map(name => getFilter(name))
         .map(f => f.applyFilter(variants))

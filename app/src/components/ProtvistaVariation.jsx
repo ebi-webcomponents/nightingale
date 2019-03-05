@@ -20,18 +20,16 @@ class ProtvistaVariationWrapper extends Component {
     loadWebComponent(ProtvistaFilter.tagName, ProtvistaFilter);
     return (
       <Fragment>
-        <protvista-manager attributes="filters" id="example">
+        <protvista-manager attributes="filters">
           <protvista-variation id="track1" length="770" />
-          <div>
-            <protvista-variation>
-              <protvista-variation-adapter>
-                <data-loader>
-                  <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-                </data-loader>
-              </protvista-variation-adapter>
-            </protvista-variation>
-            <protvista-filter></protvista-filter>
-          </div>
+          <protvista-variation>
+            <protvista-variation-adapter>
+              <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+              </data-loader>
+            </protvista-variation-adapter>
+          </protvista-variation>
+          <protvista-filter></protvista-filter>
         </protvista-manager>
       </Fragment>
     );

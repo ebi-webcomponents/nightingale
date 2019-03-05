@@ -13,7 +13,15 @@
 
   <body>
     <div><protvista-uniprot accession="P05067"></protvista-uniprot></div>
-
+    <script
+      src="http://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.js"
+      defer
+    ></script>
+    <script src="https://unpkg.com/unfetch/polyfill" defer></script>
+    <script
+      src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"
+      defer
+    ></script>
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
 
     <script
@@ -43,11 +51,6 @@
     ></script>
     <script
       src="../packages/protvista-variation/dist/protvista-variation.js"
-      charset="utf-8"
-      defer
-    ></script>
-    <script
-      src="../packages/protvista-variation-filter/dist/protvista-variation-filter.js"
       charset="utf-8"
       defer
     ></script>
