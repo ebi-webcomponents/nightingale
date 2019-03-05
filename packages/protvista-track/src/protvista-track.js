@@ -46,6 +46,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
     if (this._data) this._createTrack();
 
     this.addEventListener("load", e => {
+      this.data = e.detail.payload;
       if (_includes(this.children, e.target)) {
         this.data = e.detail.payload;
       }
@@ -116,9 +117,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
     this._layoutObj.init(this._data);
 
     select(this)
-      .selectAll("*")
+      .selectAll("svg")
       .remove();
-    select(this).html("");
+    //select(this).html("");
 
     this.svg = select(this)
       .append("div")

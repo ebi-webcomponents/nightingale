@@ -1,9 +1,40 @@
 import groupBy from "lodash-es/groupBy";
+import flow from 'lodash-es/flow';
+import flatten from 'lodash-es/flatten';
+
 import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import getColor from "./variantColour";
+import getFilter from './filters';
+
+
 export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
   constructor() {
     super();
+  }
+
+  static get observedAttributes() {
+    return ['filters'];
+  }
+
+  get isManaged() {
+    return true;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    const { sequence, variants } = this._adaptedData;
+    newValue = newValue.trim();
+    if (!newValue) {
+      this._fireEvent('load', sequence, variants);
+    }
+    else if (oldValue !== newValue) {
+      const filteredVariants = names
+        .split(',')
+        .map(name => getFilter(name))
+        .map(f => f.applyFilter(variants))
+        .flat();
+
+      this._fireEvent('load', sequence, filteredVariants);
+    }
   }
 
   parseEntry(data) {
@@ -18,7 +49,9 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         end: variant.end,
         tooltipContent: this.formatTooltip(variant),
         color: getColor(variant),
-        association: variant.association
+        association: variant.association,
+        sourceType: variant.sourceType,
+        xrefNames: this.getSourceType(variant.xrefs, variant.sourceType)
       };
     });
 
@@ -73,21 +106,21 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
                         variant.consequenceType
                       }</td></tr>`
                     : ``
-                }            
+                }
                 ${
                   variant.somaticStatus
                     ? `<tr><td>Somatic</td><td>${
                         variant.somaticStatus === 0 ? "No" : "Yes"
                       }</td></tr>`
                     : ``
-                }            
+                }
                 ${
                   variant.genomicLocation
                     ? `<tr><td>Location</td><td>${
                         variant.genomicLocation
                       }</td></tr>`
                     : ``
-                }            
+                }
                 ${
                   variant.sourceType === "UniProt" ||
                   variant.sourceType === "mixed"
@@ -181,6 +214,18 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         }</a> (${evidence.source.name})</td></tr>
         `
       )
+    );
+  }
+
+  _fireEvent(name, sequence, variants) {
+    this.dispatchEvent(
+      new CustomEvent(name, {
+        detail: {
+          payload: { sequence, variants }
+        },
+        bubbles: true,
+        cancelable: true
+      })
     );
   }
 

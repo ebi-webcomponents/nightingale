@@ -33,8 +33,9 @@ class ProtVistaManager extends HTMLElement {
 
   _registerProtvistaDescendents(element) {
     for (const child of element.children) {
-      if (child.isManaged)
+      if (child.isManaged) {
         this.protvistaElements.add(child);
+      }
       this._registerProtvistaDescendents(child);
     }
   }
@@ -55,6 +56,8 @@ class ProtVistaManager extends HTMLElement {
   }
 
   connectedCallback() {
+    this.addEventListener("change", this.onChange);
+
     this._registerProtvistaDescendents(this);
     this.addListeners();
     var that = this;

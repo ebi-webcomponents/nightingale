@@ -1,3 +1,7 @@
+protvista-checkbox {
+  font-size: 12px;
+}
+
 protvista-checkbox[disabled] {
   opacity: 0.50;
 }

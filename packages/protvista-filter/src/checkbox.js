@@ -4,6 +4,10 @@ import './style.css';
 
 
 class ProtvistaCheckbox extends HTMLElement {
+  static get tagName() {
+    return 'protvista-checkbox';
+  }
+
   constructor() {
     super();
     this._toggleChecked = this._toggleChecked.bind(this);
@@ -20,7 +24,7 @@ class ProtvistaCheckbox extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case 'checked':
-        this.checked = true;
+        this.checked  = true;
         break;
       case 'disabled':
         this.disabled = true;
@@ -47,7 +51,7 @@ class ProtvistaCheckbox extends HTMLElement {
              tabindex="0">
         <input type="checkbox"
               class="protvista_checkbox_input"
-              ?checked="${checked}"
+              .checked="${checked}"
               ?disabled="${disabled}"
               .value="${value}"
               @change="${this._toggleChecked}">
@@ -60,14 +64,14 @@ class ProtvistaCheckbox extends HTMLElement {
 
   _toggleChecked(event) {
     event.stopPropagation();
-    this.checked  = !this.checked;
+    this.checked = !this.checked;
     this._fireEvent();
     this._render();
   }
 
   _fireEvent(checked, value) {
-    this.dispatchEvent(new CustomEvent('change', {
-      bubbles:  true,
+    this.dispatchEvent(new CustomEvent('filter-change', {
+      bubbles: true,
       composed: true,
       detail: {
         checked: this.checked,
@@ -77,4 +81,4 @@ class ProtvistaCheckbox extends HTMLElement {
   }
 }
 
-customElements.define('protvista-checkbox', ProtvistaCheckbox);
+customElements.define(ProtvistaCheckbox.tagName, ProtvistaCheckbox);

@@ -1,7 +1,7 @@
 import ProtvistaFilter from './protvista-filter';
 
 var loadComponent = function () {
-  customElements.define('protvista-filter', ProtvistaFilter);
+  customElements.define(ProtvistaFilter.tagName, ProtvistaFilter);
 }
 
 // Conditional loading of polyfill

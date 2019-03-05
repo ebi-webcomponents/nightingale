@@ -13,7 +13,6 @@
   "author": "Vivek Poddar",
   "license": "MIT",
   "dependencies": {
-    "lit-element": "^2.0.1",
     "lit-html": "^0.14.0",
     "lodash-es": "^4.17.11"
   }
