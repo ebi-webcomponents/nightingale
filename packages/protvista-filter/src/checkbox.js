@@ -70,7 +70,7 @@ class ProtvistaCheckbox extends HTMLElement {
   }
 
   _fireEvent(checked, value) {
-    this.dispatchEvent(new CustomEvent('filter-change', {
+    this.dispatchEvent(new CustomEvent('filterChange', {
       bubbles: true,
       composed: true,
       detail: {

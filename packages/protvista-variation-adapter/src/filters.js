@@ -4,7 +4,6 @@ const filters = [{
   name: 'disease',
   applyFilter: (variants=[]) => {
     const clonedVariants = cloneDeep(variants);
-    console.log('disease');
     return clonedVariants.filter(variant =>
         (variant.association && variant.association.some(d => d.disease)) ||
         (variant.clinicalSignificances && variant.clinicalSignificances === 'disease'));
@@ -13,7 +12,6 @@ const filters = [{
   name: 'predicted',
   applyFilter: (variants=[]) => {
     const clonedVariants = cloneDeep(variants);
-    console.log('Predicted');
     return clonedVariants.filter(variant => variant.sourceType === 'large_scale_study');
   }
 }, {

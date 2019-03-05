@@ -16,21 +16,25 @@ class ProtvistaFilter extends HTMLElement {
     this._selectedFilters = new Set();
   }
 
+  get isManaged() {
+    return true;
+  }
+
   connectedCallback() {
     filters.forEach(({name, options}) => {
       if (options.selected) {
         this._selectedFilters.add(name);
       }
     });
-    this.renderFilters();
-    this.addEventListener('filter-change', this._onFilterChange);
+    this._renderFilters();
+    this.addEventListener('filterChange', this._onFilterChange);
   }
 
   disconnectedCallback() {
-    this.removeEventListener('filter-change', this._onFilterChange);
+    this.removeEventListener('filterChange', this._onFilterChange);
   }
 
-  renderFilters() {
+  _renderFilters() {
     const groupByType = groupBy(filters, (f) => {
       return f.type.text;
     });
@@ -51,7 +55,7 @@ class ProtvistaFilter extends HTMLElement {
       <h5>${text}</h5>
     `;
 
-    const filter = html `
+    const content = html `
       ${flexColumn(Object.keys(groupByType).map((type) =>
         html `
           ${header(type)}
@@ -60,15 +64,11 @@ class ProtvistaFilter extends HTMLElement {
               <protvista-checkbox
                   value="${name}"
                   .options="${options}"
-                  ?checked="${options.selected}"></protvista-checkbox>`
+                  checked="${options.selected}"></protvista-checkbox>`
             )
           )}
         `
       ))}
-    `;
-
-    const content = html`
-      ${filter}
     `;
 
     render(flexRow(content), this);
@@ -89,20 +89,6 @@ class ProtvistaFilter extends HTMLElement {
         value: [...this._selectedFilters]
       }
     }));
-    //console.log('On filter change', this._selectedFilters);
-  }
-
-  get isManaged() {
-    return true;
-  }
-
-  _onLoadData(event) {
-    //console.log("In filter", event.detail.payload);
-    //console.log("In filter", getFilter('disease'));
-    const filteredData = getFilter('disease').forEach(f => {
-      return f.options.applyFilter(event.detail.payload);
-    });
-    //console.log(filteredData);
   }
 
   _fireEvent(event) {
