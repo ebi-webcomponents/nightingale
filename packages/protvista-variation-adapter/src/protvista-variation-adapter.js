@@ -21,6 +21,9 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    if (name !== 'filters') {
+      return;
+    }
     const { sequence, variants } = this._adaptedData;
     newValue = newValue.trim();
     if (!newValue) {
