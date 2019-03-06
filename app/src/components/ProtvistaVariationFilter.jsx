@@ -15,9 +15,9 @@ class ProtvistaVariationFilterWrapper extends Component {
     loadWebComponent(ProtvistaFilter.tagName, ProtvistaFilter);
     return (
       <Fragment>
-        <protvista-manager attributes="filters" style={{ display: 'flex' }}>
-          <protvista-filter style={{ minWidth: '20%' }}></protvista-filter>
-          <protvista-variation>
+        <protvista-manager attributes="filters" style={{ display: "flex" }}>
+          <protvista-filter style={{ minWidth: "20%" }} />
+          <protvista-variation length="770">
             <protvista-variation-adapter>
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
@@ -31,4 +31,3 @@ class ProtvistaVariationFilterWrapper extends Component {
 }
 
 export default ProtvistaVariationFilterWrapper;
-

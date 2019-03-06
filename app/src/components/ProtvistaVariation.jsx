@@ -17,7 +17,7 @@ class ProtvistaVariationWrapper extends Component {
     return (
       <Fragment>
         <protvista-variation id="track1" length="770" />
-        <protvista-variation>
+        <protvista-variation length="770">
           <protvista-variation-adapter>
             <data-loader>
               <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
