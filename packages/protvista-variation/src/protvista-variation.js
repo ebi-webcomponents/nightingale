@@ -50,11 +50,6 @@ class ProtvistaVariation extends ProtvistaTrack {
     this._yScale = scalePoint()
       .domain(aaList)
       .range([0, this._height - this.margin.top - this.margin.bottom]);
-    this.addEventListener("load", e => {
-      if (_includes(this.children, e.target)) {
-        this.data = e.detail.payload;
-      }
-    });
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
@@ -100,7 +95,6 @@ class ProtvistaVariation extends ProtvistaTrack {
   // Calling render again
   refresh() {
     if (this._series) {
-      // this._variationPlot.xScale = super.xScale;
       this._clipPath.attr("width", this.getWidthWithMargins());
       this.updateScale();
       this._series.call(this._variationPlot.drawVariationPlot, this);
@@ -129,11 +123,9 @@ class ProtvistaVariation extends ProtvistaTrack {
       .call(this._yAxisRScale);
   }
 
-  // Calling render again with new data (after filter was used)
   updateData(data) {
     if (this._series) {
       this._series.datum(data);
-      this.refresh();
     }
   }
 
