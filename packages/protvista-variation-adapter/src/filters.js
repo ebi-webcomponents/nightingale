@@ -128,9 +128,14 @@ const filters = [{
   }
 }];
 
+const identity = (variants) => variants;
+
 export const getFilter = (name) => {
-  // TODO(vpoddar): handle invalid filter name
-  return filters.find(f => name === f.name);
+  const filterFunction = filters.find(f => name === f.name);
+  if (!filterFunction) {
+    console.error(`No filter found for: ${name}`);
+  }
+  return filterFunction ? filterFunction : identity;
 };
 
 export default filterData;

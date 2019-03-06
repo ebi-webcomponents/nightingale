@@ -1,8 +1,9 @@
 {
   "name": "protvista-filter",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.10",
   "description": "Filter component for variants",
   "files": [
+    "dist",
     "src"
   ],
   "main": "dist/protvista-filter.js",

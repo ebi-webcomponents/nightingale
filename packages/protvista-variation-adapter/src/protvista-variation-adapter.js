@@ -1,11 +1,15 @@
 import groupBy from "lodash-es/groupBy";
-import flow from 'lodash-es/flow';
 import flatten from 'lodash-es/flatten';
+import uniqBy from 'lodash-es/uniqBy';
 
 import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import getColor from "./variantColour";
 import filters, { getFilter } from './filters';
 
+
+const filterVariants = (filterName, variants) => {
+  return getFilter(filterName).applyFilter(variants);
+};
 
 export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
   constructor() {
@@ -31,12 +35,11 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         this._fireEvent('load', { payload: {sequence, variants: []} });
         return;
       }
-      const filteredVariants = newValue
+      let filteredVariants = flatten(newValue
         .split(',')
-        .map(name => getFilter(name))
-        .map(f => f.applyFilter(variants))
-        .flat();
+        .map((name) => filterVariants(name, variants)));
 
+      filteredVariants = uniqBy(filteredVariants, 'accession');
       this._fireEvent('load', { payload: {sequence, variants: filteredVariants} });
     }
   }
