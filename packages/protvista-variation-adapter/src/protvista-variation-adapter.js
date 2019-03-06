@@ -4,7 +4,7 @@ import flatten from 'lodash-es/flatten';
 
 import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import getColor from "./variantColour";
-import getFilter from './filters';
+import filters, { getFilter } from './filters';
 
 
 export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
@@ -13,7 +13,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
   }
 
   static get observedAttributes() {
-    return ['filters'];
+    return ['activefilters'];
   }
 
   get isManaged() {
@@ -22,13 +22,13 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
-      if (name !== 'filters') {
+      if (name !== 'activefilters') {
         return;
       }
       const { sequence, variants } = this._adaptedData;
       newValue = newValue.trim();
       if (!newValue) {
-        this._fireEvent('load', sequence, variants);
+        this._fireEvent('load', { payload: {sequence, variants: []} });
         return;
       }
       const filteredVariants = newValue
@@ -37,8 +37,16 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         .map(f => f.applyFilter(variants))
         .flat();
 
-      this._fireEvent('load', sequence, filteredVariants);
+      this._fireEvent('load', { payload: {sequence, variants: filteredVariants} });
     }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._fireEvent('change', {
+      type: 'filters',
+      value: JSON.stringify(filters),
+    });
   }
 
   parseEntry(data) {
@@ -221,12 +229,10 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
     );
   }
 
-  _fireEvent(name, sequence, variants) {
+  _fireEvent(name, detail) {
     this.dispatchEvent(
       new CustomEvent(name, {
-        detail: {
-          payload: { sequence, variants }
-        },
+        detail: detail,
         bubbles: true,
         cancelable: true
       })

@@ -15,7 +15,7 @@ class ProtvistaVariationFilterWrapper extends Component {
     loadWebComponent(ProtvistaFilter.tagName, ProtvistaFilter);
     return (
       <Fragment>
-        <protvista-manager attributes="filters" style={{ display: "flex" }}>
+        <protvista-manager attributes="activefilters filters" style={{ display: "flex" }}>
           <protvista-filter style={{ minWidth: "20%" }} />
           <protvista-variation length="770">
             <protvista-variation-adapter>

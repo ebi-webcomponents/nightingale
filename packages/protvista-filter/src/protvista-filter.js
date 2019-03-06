@@ -3,7 +3,6 @@ import groupBy from 'lodash-es/groupBy';
 
 import './style.css';
 import './checkbox.js';
-import filters, { getFilter } from './filters';
 
 
 class ProtvistaFilter extends HTMLElement {
@@ -13,6 +12,7 @@ class ProtvistaFilter extends HTMLElement {
 
   constructor() {
     super();
+    this._filters = [];
     this._selectedFilters = new Set();
   }
 
@@ -20,12 +20,26 @@ class ProtvistaFilter extends HTMLElement {
     return true;
   }
 
-  connectedCallback() {
-    filters.forEach(({name, options}) => {
-      if (options.selected) {
-        this._selectedFilters.add(name);
+  static get observedAttributes() {
+    return ['filters'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      if (name !== 'filters') {
+        return;
       }
-    });
+      this._filters = JSON.parse(newValue);
+      this._filters.forEach(({name, options}) => {
+        if (options.selected) {
+          this._selectedFilters.add(name);
+        }
+      });
+      this._renderFilters();
+    }
+  }
+
+  connectedCallback() {
     this._renderFilters();
     this.addEventListener('filterChange', this._onFilterChange);
   }
@@ -35,7 +49,7 @@ class ProtvistaFilter extends HTMLElement {
   }
 
   _renderFilters() {
-    const groupByType = groupBy(filters, (f) => {
+    const groupByType = groupBy(this._filters, (f) => {
       return f.type.text;
     });
 
@@ -85,7 +99,7 @@ class ProtvistaFilter extends HTMLElement {
       bubbles: true,
       composed: true,
       detail: {
-        type: 'filters',
+        type: 'activefilters',
         value: [...this._selectedFilters]
       }
     }));
