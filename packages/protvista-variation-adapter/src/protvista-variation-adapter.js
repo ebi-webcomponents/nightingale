@@ -42,7 +42,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
       const { sequence, variants } = this._adaptedData;
       newValue = newValue.trim();
       if (!newValue) {
-        this._fireEvent('load', { payload: {sequence, variants: []} });
+        this._fireEvent('load', { payload: {sequence, variants} });
         return;
       }
       const filterNames = newValue.split(',');
