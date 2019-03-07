@@ -9,8 +9,7 @@ const filterData = [
     },
     options: {
       labels: ['Likely disease'],
-      colors: ['#990000'],
-      selected: true,
+      colors: ['#990000']
     }
   }, {
     name: 'predicted',
@@ -20,8 +19,7 @@ const filterData = [
     },
     options: {
       labels: ['Predicted deleterious', 'Predicted benign'],
-      colors: ['#002594', '#8FE3FF'],
-      selected: true,
+      colors: ['#002594', '#8FE3FF']
     }
   }, {
     name: 'nonDisease',
@@ -32,7 +30,6 @@ const filterData = [
     options: {
       labels: ['Likely benign'],
       colors: ['#99cc00'],
-      selected: true,
     }
   }, {
     name: 'uncertain',
@@ -42,8 +39,7 @@ const filterData = [
     },
     options: {
       labels: ['Uncertain'],
-      colors: ['#FFCC00'],
-      selected: true
+      colors: ['#FFCC00']
     }
   }, {
     name: 'UniProt',
@@ -53,8 +49,7 @@ const filterData = [
     },
     options: {
       labels: ['UniProt reviewed'],
-      colors: ['#e5e5e5'],
-      selected: true
+      colors: ['#e5e5e5']
     }
   }, {
     name: 'ClinVar',
@@ -64,8 +59,7 @@ const filterData = [
     },
     options: {
       labels: ['ClinVar reviewed'],
-      colors: ['#e5e5e5'],
-      selected: true,
+      colors: ['#e5e5e5']
     }
   }, {
     name: 'LSS',
@@ -75,8 +69,7 @@ const filterData = [
     },
     options: {
       labels: ['Large scale studies'],
-      colors: ['#e5e5e5'],
-      selected: true
+      colors: ['#e5e5e5']
     }
   }
 ];
@@ -101,7 +94,8 @@ const filters = [{
     const clonedVariants = cloneDeep(variants) || [];
     return clonedVariants.filter(variant =>
       (variant.association && variant.association.some(d => !d.disease)) ||
-      (variant.clinicalSignificances && variant.clinicalSignificances === 'likely benign'));
+      (variant.clinicalSignificances &&
+        (variant.clinicalSignificances === 'likely benign'|| variant.clinicalSignificances === 'Likely benign')));
   }
 }, {
   name: 'uncertain',
@@ -110,13 +104,17 @@ const filters = [{
   name: 'UniProt',
   applyFilter: (variants=[]) => {
     const clonedVariants = cloneDeep(variants);
-    return clonedVariants.filter(variant => variant.xrefNames && variant.xrefNames.includes('uniprot'));
+    return clonedVariants.filter(variant =>
+      variant.xrefNames &&
+      (variant.xrefNames.includes('uniprot') || variant.xrefNames.includes('UniProt')));
   }
 }, {
   name: 'ClinVar',
   applyFilter: (variants=[]) => {
     const clonedVariants = cloneDeep(variants);
-    return clonedVariants.filter(variant => variant.xrefNames && variant.xrefNames.includes('clinvar'));
+    return clonedVariants.filter(variant =>
+      variant.xrefNames &&
+      (variant.xrefNames.includes('ClinVar') || variant.xrefNames.includes('clinvar')));
   }
 }, {
   name: 'LSS',
@@ -131,11 +129,11 @@ const filters = [{
 const identity = (variants) => variants;
 
 export const getFilter = (name) => {
-  const filterFunction = filters.find(f => name === f.name);
-  if (!filterFunction) {
+  const filter = filters.find(f => name === f.name);
+  if (!filter) {
     console.error(`No filter found for: ${name}`);
   }
-  return filterFunction ? filterFunction : identity;
+  return filter ? filter : {applyFilter: identity};
 };
 
 export default filterData;
