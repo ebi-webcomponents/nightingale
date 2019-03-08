@@ -16,5 +16,6 @@
   "dependencies": {
     "lit-html": "^0.14.0",
     "lodash-es": "^4.17.11"
-  }
+  },
+  "gitHead": "fc36e5648fc850fe7c6e5262499429d55a8b2898"
 }
