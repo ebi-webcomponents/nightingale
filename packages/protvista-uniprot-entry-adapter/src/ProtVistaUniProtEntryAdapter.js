@@ -23,7 +23,7 @@ export default class ProtvistaUniprotEntryAdapter extends HTMLElement {
   }
 
   filterData() {
-    if (this._filters.length > 0) {
+    if (Array.isArray(this._adaptedData) && this._filters.length > 0) {
       this._adaptedData = this._adaptedData.filter(d => {
         return this._filters.includes(d.type);
       });

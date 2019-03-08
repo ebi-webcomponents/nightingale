@@ -17,16 +17,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     super();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    this._data = undefined;
-
-    this._height = parseInt(this.getAttribute("height")) || 40;
-    this._yScale = scaleLinear();
-    this._xExtent;
-    this._yExtent;
-
+  init() {
     this._totals_line = line()
       .x(d => this.xScale(d.x))
       .y(d => this._yScale(d.y))
@@ -44,6 +35,18 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     this._disease_feature = undefined;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    this._data = undefined;
+
+    this._height = parseInt(this.getAttribute("height")) || 40;
+    this._yScale = scaleLinear();
+    this._xExtent;
+    this._yExtent;
+    this.init();
+  }
+
   attributeChangedCallback(attrName, oldVal, newVal) {
     super.attributeChangedCallback(attrName, oldVal, newVal);
 
@@ -54,6 +57,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
   set data(data) {
     this._data = data;
+    this.init();
 
     if (this._data.variants.length <= 0) {
       return;
@@ -109,6 +113,9 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
   }
 
   _createTrack() {
+    select(this)
+      .selectAll("svg")
+      .remove();
     super.svg = select(this)
       .append("svg")
       .attr("width", this.width)

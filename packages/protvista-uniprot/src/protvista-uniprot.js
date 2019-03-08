@@ -31,7 +31,7 @@ class ProtvistaUniprot extends HTMLElement {
   _render() {
     const mainHtml = () => html`
       <protvista-manager
-        attributes="length displaystart displayend highlightstart highlightend variantfilters"
+        attributes="length displaystart displayend highlightstart highlightend activefilters filters"
         additionalsubscribers="uuw-litemol-component"
       >
         <protvista-navigation
@@ -175,9 +175,9 @@ class ProtvistaUniprot extends HTMLElement {
 
   getLabelComponent(name) {
     switch (name) {
-      case "protvista-variation-filter":
+      case "protvista-filter":
         return html`
-          <protvista-variation-filter></protvista-variation-filter>
+          <protvista-filter style="minWidth: 20%"></protvista-filter>
         `;
     }
   }
