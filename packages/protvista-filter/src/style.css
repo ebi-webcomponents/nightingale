@@ -1,0 +1,46 @@
+protvista-checkbox {
+  font-size: 12px;
+}
+
+protvista-checkbox[disabled] {
+  opacity: 0.50;
+}
+
+.protvista_checkbox {
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  line-height: 24px;
+  outline: none;
+  font-size: 1em;
+}
+
+.protvista_checkbox_input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.protvista_checkbox_label {
+  display: flex;
+  flex-direction: column;
+  text-indent: 1em;
+  margin-left: 16px;
+}
+
+.protvista_checkbox_input + .protvista_checkbox_label::before {
+  content: "";
+  width:  24px;
+  position: absolute;
+  left: 0;
+  top:  0;
+  bottom: 0;
+  border-radius: 4px;
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid #bdc3c7;
+}

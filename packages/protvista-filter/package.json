@@ -1,0 +1,21 @@
+{
+  "name": "protvista-filter",
+  "version": "1.0.1",
+  "description": "Filter component for variants",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/protvista-filter.js",
+  "module": "src/protvista-filter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vivek Poddar",
+  "license": "MIT",
+  "dependencies": {
+    "lit-html": "^0.14.0",
+    "lodash-es": "^4.17.11"
+  },
+  "gitHead": "9b02efb9e65398fc818a29f3021710dca1916e93"
+}

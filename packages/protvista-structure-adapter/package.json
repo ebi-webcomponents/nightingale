@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure-adapter",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.1",
   "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
   "main": "src/ProtVistaStructureAdapter",
   "module": "src/index.js",
@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/ebi-uniprot/protvista-structure-adapter/issues"
   },
-  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
+  "gitHead": "9b02efb9e65398fc818a29f3021710dca1916e93",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }

@@ -8,23 +8,23 @@ import {
 } from "react-router-dom";
 import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
 
-const ProtvistaTrack = lazy(() => import("./components/ProtvistaTrack"));
-const ProtvistaSequence = lazy(() => import("./components/ProtvistaSequence"));
-const ProtvistaVariation = lazy(() =>
-  import("./components/ProtvistaVariation")
-);
-const ProtvistaStructure = lazy(() =>
-  import("./components/ProtvistaStructure")
-);
-const ProtvistaNavigation = lazy(() =>
-  import("./components/ProtvistaNavigation")
-);
-const ProtvistaManager = lazy(() => import("./components/ProtvistaManager"));
-const InteractionViewer = lazy(() => import("./components/InteractionViewer"));
-const Playground = lazy(() => import("./components/Playground"));
 import pkg from "../package.json";
 
 import "./App.css";
+const ProtvistaTrack = lazyImport('ProtvistaTrack');
+const ProtvistaSequence = lazyImport('ProtvistaSequence');
+const ProtvistaVariation = lazyImport('ProtvistaVariation');
+const ProtvistaStructure = lazyImport('ProtvistaStructure');
+const ProtvistaNavigation = lazyImport('ProtvistaNavigation');
+const ProtvistaManager = lazyImport('ProtvistaManager');
+const InteractionViewer = lazyImport('InteractionViewer');
+const ProtvistaFilter = lazyImport('ProtvistaFilter');
+const ProtvistaVariationFilter = lazyImport('ProtvistaVariationFilter');
+const Playground = lazyImport('Playground');
+
+function lazyImport(name) {
+  return lazy(() => import(`./components/${name}`));
+}
 
 const App = (component = ProtvistaNavigation) => (
   <Router>
@@ -74,6 +74,12 @@ const App = (component = ProtvistaNavigation) => (
               <li>
                 <NavLink to="/interaction-viewer">Interaction viewer</NavLink>
               </li>
+              <li>
+                <NavLink to="/variation-filter">Variation Filter</NavLink>
+              </li>
+              <li>
+                <NavLink to="/filter">Filter</NavLink>
+              </li>
             </ul>
             <ul className="main-nav__list">
               <li>
@@ -93,6 +99,8 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/navigation" component={ProtvistaNavigation} />
               <Route path="/manager" component={ProtvistaManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
+              <Route path="/filter" component={ProtvistaFilter} />
+              <Route path="/variation-filter" component={ProtvistaVariationFilter} />
               <Route path="/playground" component={Playground} />
             </Switch>
           </Suspense>

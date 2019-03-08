@@ -9,8 +9,8 @@
     "parser",
     "topology"
   ],
-  "version": "1.0.0-beta.5",
-  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
+  "version": "1.0.1",
+  "gitHead": "9b02efb9e65398fc818a29f3021710dca1916e93",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }

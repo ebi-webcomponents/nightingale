@@ -1,9 +1,74 @@
 import groupBy from "lodash-es/groupBy";
+import flatten from 'lodash-es/flatten';
+import uniqBy from 'lodash-es/uniqBy';
+import forOwn from 'lodash-es/forOwn';
+import unionBy from 'lodash-es/unionBy';
+import intersectionBy from 'lodash-es/intersectionBy';
+
 import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import getColor from "./variantColour";
+import filters, { getFilter } from './filters';
+
+
+const filterVariants = (filterName, variants) =>
+  getFilter(filterName).applyFilter(variants);
+
+const _union = (variants, filterNames, key) => {
+  return uniqBy(flatten(
+    filterNames
+      .map(name => name.split(':')[1])
+      .map(name => filterVariants(name, variants))),
+    v => v[key]);
+};
+
 export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
   constructor() {
     super();
+  }
+
+  static get observedAttributes() {
+    return ['activefilters'];
+  }
+
+  get isManaged() {
+    return true;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      if (name !== 'activefilters') {
+        return;
+      }
+      const { sequence, variants } = this._adaptedData;
+      newValue = newValue.trim();
+      if (!newValue) {
+        this._fireEvent('load', { payload: {sequence, variants} });
+        return;
+      }
+      const filterNames = newValue.split(',');
+      const groupByFilterCategory = groupBy(filterNames, (name) => {
+        return name.split(':')[0];
+      });
+
+      let filteredVariants = [];
+      forOwn(groupByFilterCategory, (filterNames) => {
+        const filteredValuesByCategory = _union(variants, filterNames, 'accession');
+        filteredVariants.push(filteredValuesByCategory);
+      });
+      filteredVariants = flatten(
+        intersectionBy(...filteredVariants, variant => variant.accession));
+
+      filteredVariants = uniqBy(filteredVariants, 'accession');
+      this._fireEvent('load', { payload: {sequence, variants: filteredVariants} });
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._fireEvent('change', {
+      type: 'filters',
+      value: JSON.stringify(filters),
+    });
   }
 
   parseEntry(data) {
@@ -18,7 +83,10 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         end: variant.end,
         tooltipContent: this.formatTooltip(variant),
         color: getColor(variant),
-        association: variant.association
+        association: variant.association,
+        sourceType: variant.sourceType,
+        xrefNames: this.getSourceType(variant.xrefs, variant.sourceType),
+        clinicalSignificances: variant.clinicalSignificances
       };
     });
 
@@ -73,21 +141,21 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
                         variant.consequenceType
                       }</td></tr>`
                     : ``
-                }            
+                }
                 ${
                   variant.somaticStatus
                     ? `<tr><td>Somatic</td><td>${
                         variant.somaticStatus === 0 ? "No" : "Yes"
                       }</td></tr>`
                     : ``
-                }            
+                }
                 ${
                   variant.genomicLocation
                     ? `<tr><td>Location</td><td>${
                         variant.genomicLocation
                       }</td></tr>`
                     : ``
-                }            
+                }
                 ${
                   variant.sourceType === "UniProt" ||
                   variant.sourceType === "mixed"
@@ -181,6 +249,16 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         }</a> (${evidence.source.name})</td></tr>
         `
       )
+    );
+  }
+
+  _fireEvent(name, detail) {
+    this.dispatchEvent(
+      new CustomEvent(name, {
+        detail: detail,
+        bubbles: true,
+        cancelable: true
+      })
     );
   }
 
