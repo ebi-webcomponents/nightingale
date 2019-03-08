@@ -7,6 +7,6 @@
   ],
   "main": "dist/protvista-variation-graph.js",
   "module": "src/protvista-variation-graph.js",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0",
   "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb"
 }
