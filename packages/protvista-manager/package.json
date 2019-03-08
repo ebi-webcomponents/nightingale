@@ -1,6 +1,6 @@
 {
   "name": "protvista-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manager component for the ProtVista tool",
   "files": [
     "dist",

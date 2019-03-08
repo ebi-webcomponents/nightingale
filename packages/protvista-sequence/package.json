@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sequence component for the ProtVista tool",
   "files": [
     "dist",
@@ -14,7 +14,7 @@
   "gitHead": "fc36e5648fc850fe7c6e5262499429d55a8b2898",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-zoomable": "^1.0.0"
+    "protvista-zoomable": "^1.0.1"
   },
   "devDependencies": {
     "d3": "^5.7.0"
