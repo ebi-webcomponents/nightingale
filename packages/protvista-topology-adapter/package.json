@@ -9,7 +9,7 @@
     "parser",
     "topology"
   ],
-  "version": "1.0.2",
+  "version": "2.0.0",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "lodash-es": "^4.17.11"
