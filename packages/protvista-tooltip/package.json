@@ -15,7 +15,7 @@
   ],
   "author": "ljgarcia@ebi.ac.uk",
   "license": "MIT",
-  "gitHead": "f223ccb30925fd0307783ce60af40fc9cd3a40bb",
+  "gitHead": "9b02efb9e65398fc818a29f3021710dca1916e93",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }

@@ -15,7 +15,7 @@
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "fc36e5648fc850fe7c6e5262499429d55a8b2898",
+  "gitHead": "9b02efb9e65398fc818a29f3021710dca1916e93",
   "dependencies": {
     "lodash-es": "^4.17.11",
     "protvista-track": "^1.0.1"
