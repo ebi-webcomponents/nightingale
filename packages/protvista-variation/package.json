@@ -4,6 +4,7 @@
   "description": "Variation viewer for the ProtVista tool",
   "files": [
     "dist",
+    "style",
     "src"
   ],
   "main": "dist/protvista-variation.js",

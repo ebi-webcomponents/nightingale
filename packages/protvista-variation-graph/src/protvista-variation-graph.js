@@ -11,21 +11,14 @@ import {
 class ProtvistaVariationGraph extends ProtvistaTrack {
   constructor() {
     super();
+    this._line = line()
+      .x(d => this.xScale(d.x))
+      .y(d => this._yScale(d.y));
   }
 
   init() {
-    this._totals_line = line()
-      .x(d => this.xScale(d.x))
-      .y(d => this._yScale(d.y))
-      .curve(curveBasis);
-
     this._totals_dataset = {};
     this._totals_feature = undefined;
-
-    this._disease_line = line()
-      .x(d => this.xScale(d.x))
-      .y(d => this._yScale(d.y))
-      .curve(curveBasis);
 
     this._disease_dataset = {};
     this._disease_feature = undefined;
@@ -113,7 +106,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     super.svg.selectAll("path").remove();
     this._disease_feature = super.svg
       .append("path")
-      .attr("d", this._disease_line(this._disease_dataset))
+      .attr("d", this._line(this._disease_dataset))
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-width", "1.5px")
@@ -121,7 +114,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("transform", "translate(0,0)");
     this._totals_feature = super.svg
       .append("path")
-      .attr("d", this._totals_line(this._totals_dataset))
+      .attr("d", this._line(this._totals_dataset))
       .attr("fill", "none")
       .attr("stroke", "darkgrey")
       .attr("stroke-width", "1px")
