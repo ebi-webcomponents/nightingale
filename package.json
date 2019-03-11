@@ -32,5 +32,10 @@
     "pretty-quick": "^1.10.0",
     "webpack": "4.28.4",
     "webpack-cli": "^3.2.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

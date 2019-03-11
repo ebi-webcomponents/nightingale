@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`region encoding encode empty region 1`] = `
+Array [
+  Object {
+    "end": Infinity,
+    "start": -Infinity,
+  },
+]
+`;
+
+exports[`region encoding encode multiple and complex region 1`] = `
+Array [
+  Object {
+    "end": 100,
+    "start": 1,
+  },
+  Object {
+    "end": 20,
+    "start": 1,
+  },
+  Object {
+    "end": 100,
+    "start": 30,
+  },
+  Object {
+    "end": 100,
+    "start": 50,
+  },
+  Object {
+    "end": 100,
+    "start": 1,
+  },
+  Object {
+    "end": 100,
+    "start": 1,
+  },
+]
+`;
+
+exports[`region encoding encode multiple region 1`] = `
+Array [
+  Object {
+    "end": 5,
+    "start": 1,
+  },
+  Object {
+    "end": 20,
+    "start": 10,
+  },
+  Object {
+    "end": 50,
+    "start": 30,
+  },
+  Object {
+    "end": 100,
+    "start": 50,
+  },
+]
+`;
+
+exports[`region encoding encode simple region 1`] = `
+Array [
+  Object {
+    "end": 10,
+    "start": 2,
+  },
+]
+`;
