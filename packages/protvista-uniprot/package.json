@@ -1,7 +1,7 @@
 {
   "name": "protvista-uniprot",
   "description": "ProtVista tool for the UniProt website",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "files": [
     "dist",
     "src"
@@ -23,9 +23,9 @@
     "protvista-tooltip": "^2.0.0",
     "protvista-track": "^2.0.0",
     "protvista-uniprot-entry-adapter": "^2.0.0",
-    "protvista-variation": "^2.0.0",
+    "protvista-variation": "^2.0.2",
     "protvista-variation-adapter": "^2.0.0",
-    "protvista-variation-graph": "^2.0.1",
+    "protvista-variation-graph": "^2.0.2",
     "protvista-zoomable": "^2.0.0"
   },
   "devDependencies": {
