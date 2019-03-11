@@ -45,7 +45,16 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .attr("width", this.width)
       .attr("height", height);
 
-    this.seq_bg = super.svg.append("g").attr("class", "background");
+    this.seq_bg = super.svg.append("g").attr("class", "background")
+      .on("mouseout", () => {
+        this.dispatchEvent(
+          new CustomEvent("change", {
+            detail: {highlightend: null, highlightstart: null, type: 'sequence'},
+            bubbles: true,
+            cancelable: true
+          })
+        );
+      });
 
     this.axis = super.svg.append("g").attr("class", "x axis");
 
@@ -68,7 +77,9 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .append("rect")
       .attr("class", "highlighted")
       .attr("fill", "yellow")
-      .attr("height", height);
+      .attr("height", height)
+      .style("pointer-events", "none")
+    ;
 
     this.refresh();
   }
@@ -109,7 +120,17 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .attr("text-anchor", "middle")
         .attr("x", ([pos]) => this.getXFromSeqPosition(pos) + half)
         .text(([_, d]) => d)
-        .attr("style", "font-family:monospace");
+        .attr("style", "font-family:monospace")
+        .on("mouseover", ([pos]) => {
+          this.dispatchEvent(
+            new CustomEvent("change", {
+              detail: {highlightend: pos, highlightstart: pos, type:'sequence'},
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        })
+      ;
 
       this.bases.exit().remove();
 
