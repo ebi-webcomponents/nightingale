@@ -11,16 +11,17 @@ import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
 import pkg from "../package.json";
 
 import "./App.css";
-const ProtvistaTrack = lazyImport('ProtvistaTrack');
-const ProtvistaSequence = lazyImport('ProtvistaSequence');
-const ProtvistaVariation = lazyImport('ProtvistaVariation');
-const ProtvistaStructure = lazyImport('ProtvistaStructure');
-const ProtvistaNavigation = lazyImport('ProtvistaNavigation');
-const ProtvistaManager = lazyImport('ProtvistaManager');
-const InteractionViewer = lazyImport('InteractionViewer');
-const ProtvistaFilter = lazyImport('ProtvistaFilter');
-const ProtvistaVariationFilter = lazyImport('ProtvistaVariationFilter');
-const Playground = lazyImport('Playground');
+const ProtvistaTrack = lazyImport("ProtvistaTrack");
+const ProtvistaSequence = lazyImport("ProtvistaSequence");
+const ProtvistaVariation = lazyImport("ProtvistaVariation");
+const ProtvistaStructure = lazyImport("ProtvistaStructure");
+const ProtvistaNavigation = lazyImport("ProtvistaNavigation");
+const ProtvistaManager = lazyImport("ProtvistaManager");
+const InteractionViewer = lazyImport("InteractionViewer");
+const ProtvistaFilter = lazyImport("ProtvistaFilter");
+const ProtvistaVariationFilter = lazyImport("ProtvistaVariationFilter");
+const Playground = lazyImport("Playground");
+const ProtvistaVariationGraph = lazyImport("ProtvistaVariationGraph");
 
 function lazyImport(name) {
   return lazy(() => import(`./components/${name}`));
@@ -80,6 +81,9 @@ const App = (component = ProtvistaNavigation) => (
               <li>
                 <NavLink to="/filter">Filter</NavLink>
               </li>
+              <li>
+                <NavLink to="/graph">Variation Graph</NavLink>
+              </li>
             </ul>
             <ul className="main-nav__list">
               <li>
@@ -100,7 +104,11 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/manager" component={ProtvistaManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
               <Route path="/filter" component={ProtvistaFilter} />
-              <Route path="/variation-filter" component={ProtvistaVariationFilter} />
+              <Route
+                path="/variation-filter"
+                component={ProtvistaVariationFilter}
+              />
+              <Route path="/graph" component={ProtvistaVariationGraph} />
               <Route path="/playground" component={Playground} />
             </Switch>
           </Suspense>

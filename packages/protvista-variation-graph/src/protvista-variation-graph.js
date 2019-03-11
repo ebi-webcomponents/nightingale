@@ -1,35 +1,24 @@
 import ProtvistaTrack from "protvista-track";
 import {
   scaleLinear,
-  scalePoint,
-  axisLeft,
-  axisRight,
   select,
   event as d3Event,
   line,
   extent,
-  max,
   curveBasis
 } from "d3";
 
 class ProtvistaVariationGraph extends ProtvistaTrack {
   constructor() {
     super();
+    this._line = line()
+      .x(d => this.xScale(d.x))
+      .y(d => this._yScale(d.y));
   }
 
   init() {
-    this._totals_line = line()
-      .x(d => this.xScale(d.x))
-      .y(d => this._yScale(d.y))
-      .curve(curveBasis);
-
     this._totals_dataset = {};
     this._totals_feature = undefined;
-
-    this._disease_line = line()
-      .x(d => this.xScale(d.x))
-      .y(d => this._yScale(d.y))
-      .curve(curveBasis);
 
     this._disease_dataset = {};
     this._disease_feature = undefined;
@@ -49,7 +38,6 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
   attributeChangedCallback(attrName, oldVal, newVal) {
     super.attributeChangedCallback(attrName, oldVal, newVal);
-
     if (!super.svg) {
       return;
     }
@@ -58,58 +46,36 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
   set data(data) {
     this._data = data;
     this.init();
-
     if (this._data.variants.length <= 0) {
       return;
     }
 
+    let totalMap = {};
+    let diseaseMap = {};
+
     this._data.variants.forEach(v => {
-      if ("undefined" === typeof this._totals_dataset[v.start]) {
-        this._totals_dataset[v.start] = 0;
+      if ("undefined" === typeof totalMap[v.start]) {
+        totalMap[v.start] = 0;
       }
-
-      if ("undefined" === typeof this._disease_dataset[v.start]) {
-        this._disease_dataset[v.start] = 0;
+      if ("undefined" === typeof diseaseMap[v.start]) {
+        diseaseMap[v.start] = 0;
       }
-
-      this._totals_dataset[v.start]++;
+      totalMap[v.start]++;
       if ("undefined" !== typeof v.association) {
         v.association.forEach(a => {
           if (true === a.disease) {
-            this._disease_dataset[v.start]++;
+            diseaseMap[v.start]++;
           }
         });
       }
     });
-
-    this._totals_dataset = this._emptyFillMissingRecords(this._totals_dataset);
-    this._disease_dataset = this._emptyFillMissingRecords(
-      this._disease_dataset
-    );
-
+    this._totals_dataset = Object.keys(totalMap).map(d => {
+      return { x: d, y: totalMap[d] };
+    });
+    this._disease_dataset = Object.keys(diseaseMap).map(d => {
+      return { x: d, y: diseaseMap[d] };
+    });
     this._createTrack();
-  }
-
-  _emptyFillMissingRecords(dataset) {
-    const sortedTotalsKeys = Object.keys(dataset).sort(
-      (a, b) => parseInt(a) - parseInt(b)
-    );
-
-    const totalsMin = sortedTotalsKeys[0];
-    const totalsMax = sortedTotalsKeys[sortedTotalsKeys.length - 1];
-
-    for (let i = totalsMin; i < totalsMax; i++) {
-      if ("undefined" === typeof dataset[i]) {
-        dataset[i] = 0;
-      }
-    }
-
-    return Object.keys(dataset)
-      .sort((a, b) => parseInt(a) - parseInt(b))
-      .map(k => ({
-        x: k,
-        y: dataset[k]
-      }));
   }
 
   _createTrack() {
@@ -120,7 +86,6 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .append("svg")
       .attr("width", this.width)
       .attr("height", this._height);
-
     // Create the visualisation here
     this._createFeatures();
     this.refresh();
@@ -139,25 +104,21 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
   refresh() {
     super.svg.selectAll("path").remove();
-
     this._disease_feature = super.svg
       .append("path")
-      .data([this._disease_dataset])
+      .attr("d", this._line(this._disease_dataset))
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-width", "1.5px")
       .attr("stroke-dasharray", "0")
-      .attr("d", this._disease_line)
       .attr("transform", "translate(0,0)");
-
     this._totals_feature = super.svg
       .append("path")
-      .data([this._totals_dataset])
+      .attr("d", this._line(this._totals_dataset))
       .attr("fill", "none")
       .attr("stroke", "darkgrey")
       .attr("stroke-width", "1px")
       .attr("stroke-dasharray", ".5")
-      .attr("d", this._totals_line)
       .attr("transform", "translate(0,0)");
   }
 }
