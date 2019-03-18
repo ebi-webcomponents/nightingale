@@ -1,14 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`region encoding encode empty region 1`] = `
-Array [
-  Object {
-    "end": Infinity,
-    "start": -Infinity,
-  },
-]
-`;
-
 exports[`region encoding encode multiple and complex region 1`] = `
 Array [
   Object {
@@ -64,6 +55,15 @@ Array [
   Object {
     "end": 10,
     "start": 2,
+  },
+]
+`;
+
+exports[`region encoding encode whole region 1`] = `
+Array [
+  Object {
+    "end": Infinity,
+    "start": -Infinity,
   },
 ]
 `;

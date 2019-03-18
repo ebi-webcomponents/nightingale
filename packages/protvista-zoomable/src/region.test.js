@@ -3,10 +3,16 @@ import Region from "./Region";
 describe("region encoding", () => {
   test("encode empty region", () => {
     const region = new Region();
-    region.decode("");
+    expect(region.segments).toEqual([]);
+    expect(region.encode(true)).toEqual("");
+    expect(region.encode(false)).toEqual("");
+  });
+  test("encode whole region", () => {
+    const region = new Region();
+    region.decode(":");
     expect(region.segments).toMatchSnapshot();
     expect(region.encode(true)).toEqual("-Infinity:Infinity");
-    expect(region.encode(false)).toEqual("");
+    expect(region.encode(false)).toEqual(":");
   });
   test("encode simple region", () => {
     const region = new Region();
@@ -28,7 +34,7 @@ describe("region encoding", () => {
     region.decode(":,:20,30:,50:100,,0:200");
     expect(region.segments).toMatchSnapshot();
     expect(region.encode(true)).toEqual("1:100,1:20,30:100,50:100,1:100,1:100");
-    expect(region.encode()).toEqual(",:20,30:,50:,,");
+    expect(region.encode()).toEqual(":,:20,30:,50:,:,:");
   });
 });
 
@@ -38,6 +44,13 @@ describe("region decoding", () => {
     expect(region.segments).toEqual([]);
     expect(region.max).toEqual(Infinity);
     expect(region.min).toEqual(-Infinity);
+
+    region.decode(null);
+    expect(region.segments).toEqual([]);
+    region.decode();
+    expect(region.segments).toEqual([]);
+    region.decode(undefined);
+    expect(region.segments).toEqual([]);
   });
 
   test("decode simple region", () => {

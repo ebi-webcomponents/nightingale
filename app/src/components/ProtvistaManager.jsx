@@ -32,7 +32,7 @@ class ProtvistaManagerWrapper extends Component {
     return (
       <Fragment>
         <protvista-manager
-          attributes="length displaystart displayend highlightstart highlightend variantfilters"
+          attributes="length displaystart displayend highlightstart highlightend variantfilters highlight"
           id="example"
         >
           <protvista-navigation length="770" />

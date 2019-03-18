@@ -11,13 +11,16 @@ export default class Region {
         else {
           const s = start === this.min ? "" : start;
           const e = end === this.max ? "" : end;
-          if (s === "" && e === "") return "";
           return `${s}:${e}`;
         }
       })
       .join(",");
   }
   decode(regionString) {
+    if (!regionString) {
+      this.segments = [];
+      return;
+    }
     this.segments = regionString.split(",").map(region => {
       const [_start, _end, _] = region.split(":");
       if (typeof _ !== "undefined")

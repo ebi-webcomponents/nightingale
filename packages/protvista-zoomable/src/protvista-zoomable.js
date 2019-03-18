@@ -4,6 +4,8 @@ import {
   zoomIdentity,
   event as d3Event
 } from "d3";
+import Region from "./Region";
+
 import ResizeObserver from "resize-observer-polyfill";
 
 class ProtvistaZoomable extends HTMLElement {
@@ -28,6 +30,7 @@ class ProtvistaZoomable extends HTMLElement {
     };
     this._onResize = this._onResize.bind(this);
     this._listenForResize = this._listenForResize.bind(this);
+    this.highlightRegion = new Region({ min: 1 });
   }
 
   connectedCallback() {
@@ -45,6 +48,24 @@ class ProtvistaZoomable extends HTMLElement {
     this._displayend = this.getAttribute("displayend")
       ? parseFloat(this.getAttribute("displayend"))
       : this.width;
+    this.highlightRegion.decode(this.getAttribute("highlight"));
+    if (this.highlightRegion.segments.length === 0) {
+      this._highlightstart = parseInt(this.getAttribute("highlightstart"));
+      this._highlightend = parseInt(this.getAttribute("highlightend"));
+      if (
+        this._highlightstart !== null &&
+        this._highlightend !== null &&
+        !isNaN(this._highlightstart) &&
+        !isNaN(this._highlightend)
+      ) {
+        this.highlightRegion.segments = [
+          {
+            start: this._highlightstart,
+            end: this._highlightend
+          }
+        ];
+      }
+    }
     this._updateScaleDomain();
     // The _originXScale is a way to mantain all the future transformations over the same original scale.
     // It only gets redefined if the size of the component, or the length of the sequence changes.
@@ -74,6 +95,7 @@ class ProtvistaZoomable extends HTMLElement {
 
   set length(length) {
     this._length = length;
+    this.highlightRegion.max = length;
   }
 
   get length() {
@@ -134,13 +156,50 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["displaystart", "displayend", "length"];
+    return ["displaystart", "displayend", "length", "highlight"];
+  }
+
+  setFloatAttribute(name, strValue) {
+    const value = parseFloat(strValue);
+    this[`_${name}`] = isNaN(value) ? strValue : value;
+  }
+  highlightChangedCallBack(name, newValue) {
+    switch (name) {
+      case "highlightstart":
+      case "highlightend":
+        this.setFloatAttribute(name, newValue);
+        this.highlightRegion.segments =
+          isNaN(this._highlightstart) ||
+          isNaN(this._highlightend) ||
+          this._highlightstart === null ||
+          this._highlightend === null
+            ? []
+            : [
+                {
+                  start: Math.max(
+                    this.highlightRegion.min,
+                    this._highlightstart
+                  ),
+                  end: Math.min(this.highlightRegion.max, this._highlightend)
+                }
+              ];
+
+        break;
+      default:
+        this.highlightRegion.decode(newValue);
+    }
+    this.refresh();
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    //TODO: support highlight
+    if (newValue === "null") newValue = null;
     if (oldValue !== newValue) {
-      const value = parseFloat(newValue);
-      this[`_${name}`] = isNaN(value) ? newValue : value;
+      if (name.startsWith("highlight")) {
+        this.highlightChangedCallBack(name, newValue);
+        return;
+      }
+      this.setFloatAttribute(name, newValue);
 
       if (name === "length") {
         this._updateScaleDomain();

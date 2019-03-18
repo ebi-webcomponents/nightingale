@@ -28,8 +28,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   connectedCallback() {
     super.connectedCallback();
-    this._highlightstart = parseInt(this.getAttribute("highlightstart"));
-    this._highlightend = parseInt(this.getAttribute("highlightend"));
     this._height = this.getAttribute("height")
       ? parseInt(this.getAttribute("height"))
       : 44;
@@ -77,16 +75,13 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   static get observedAttributes() {
-    return [
-      "length",
-      "displaystart",
-      "displayend",
+    return ProtvistaZoomable.observedAttributes.concat([
       "highlightstart",
       "highlightend",
       "color",
       "shape",
       "layout"
-    ];
+    ]);
   }
   _getFeatureColor(f) {
     if (f.color) {
@@ -127,11 +122,11 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("height", this._height);
 
     this.highlighted = this.svg
-      .append("rect")
-      .attr("class", "highlighted")
-      .attr("fill", "rgba(255, 235, 59, 0.8)")
-      // .attr('stroke', 'black')
-      .attr("height", this._height);
+      .append("g")
+      // .append("rect")
+      .attr("class", "highlighted");
+    // .attr("fill", "rgba(255, 235, 59, 0.8)")
+    // .attr("height", this._height);
 
     this.seq_g = this.svg
       .append("g")
@@ -209,7 +204,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
           new CustomEvent("change", {
             detail: {
               highlightend: f.end,
-              highlightstart: f.start
+              highlightstart: f.start,
+              highlight: `${f.start}:${f.end}`
             },
             bubbles: true,
             cancelable: true
@@ -228,7 +224,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
           new CustomEvent("change", {
             detail: {
               highlightend: null,
-              highlightstart: null
+              highlightstart: null,
+              highlight: null
             },
             bubbles: true,
             cancelable: true
@@ -320,21 +317,19 @@ class ProtvistaTrack extends ProtvistaZoomable {
     }
   }
   _updateHighlight() {
-    if (
-      Number.isInteger(this._highlightstart) &&
-      Number.isInteger(this._highlightend)
-    ) {
-      this.highlighted
-        .attr("x", this.getXFromSeqPosition(this._highlightstart))
-        .style("opacity", 0.3)
-        .attr(
-          "width",
-          this.getSingleBaseWidth() *
-            (this._highlightend - this._highlightstart + 1)
-        );
-    } else {
-      this.highlighted.style("opacity", 0);
-    }
+    const highlighs = this.highlighted
+      .selectAll("rect")
+      .data(this.highlightRegion.segments);
+    highlighs
+      .enter()
+      .append("rect")
+      .style("opacity", 0.3)
+      .attr("fill", "rgba(255, 235, 59, 0.8)")
+      .attr("height", this._height)
+      .merge(highlighs)
+      .attr("x", d => this.getXFromSeqPosition(d.start))
+      .attr("width", d => this.getSingleBaseWidth() * (d.end - d.start + 1));
+    highlighs.exit().remove();
   }
 }
 
