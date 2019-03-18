@@ -18,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.11",
+    "protvista-utils": "2.0.0",
     "resize-observer-polyfill": "^1.5.0"
   },
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",

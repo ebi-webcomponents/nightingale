@@ -4,7 +4,7 @@ import {
   zoomIdentity,
   event as d3Event
 } from "d3";
-import Region from "./Region";
+import { Region } from "protvista-utils";
 
 import ResizeObserver from "resize-observer-polyfill";
 
@@ -48,6 +48,11 @@ class ProtvistaZoomable extends HTMLElement {
     this._displayend = this.getAttribute("displayend")
       ? parseFloat(this.getAttribute("displayend"))
       : this.width;
+
+    this._height = this.getAttribute("height")
+      ? parseInt(this.getAttribute("height"))
+      : 44;
+
     this.highlightRegion.decode(this.getAttribute("highlight"));
     if (this.highlightRegion.segments.length === 0) {
       this._highlightstart = parseInt(this.getAttribute("highlightstart"));
@@ -91,6 +96,14 @@ class ProtvistaZoomable extends HTMLElement {
 
   set width(width) {
     this._width = width;
+  }
+
+  set height(height) {
+    this._height = height;
+  }
+
+  get height() {
+    return this._height;
   }
 
   set length(length) {

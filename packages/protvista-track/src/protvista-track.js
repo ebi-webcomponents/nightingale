@@ -18,19 +18,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
     });
   }
 
-  set height(height) {
-    this._height = height;
-  }
-
-  get height() {
-    return this._height;
-  }
-
   connectedCallback() {
     super.connectedCallback();
-    this._height = this.getAttribute("height")
-      ? parseInt(this.getAttribute("height"))
-      : 44;
     this._tooltipEvent = this.getAttribute("tooltip-event")
       ? this.getAttribute("tooltip-event")
       : "mouseover";
@@ -121,12 +110,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("width", this.width)
       .attr("height", this._height);
 
-    this.highlighted = this.svg
-      .append("g")
-      // .append("rect")
-      .attr("class", "highlighted");
-    // .attr("fill", "rgba(255, 235, 59, 0.8)")
-    // .attr("height", this._height);
+    this.highlighted = this.svg.append("g").attr("class", "highlighted");
 
     this.seq_g = this.svg
       .append("g")
