@@ -192,7 +192,10 @@ class ProtvistaZoomable extends HTMLElement {
       new CustomEvent("change", {
         detail: {
           displaystart: Math.max(1, start),
-          displayend: Math.min(this.length, end)
+          displayend: Math.min(
+            this.length,
+            Math.max(end, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
+          )
         },
         bubbles: true,
         cancelable: true
