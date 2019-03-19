@@ -110,7 +110,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("width", this.width)
       .attr("height", this._height);
 
-    this.highlighted = this.svg.append("g").attr("class", "highlighted");
+    this.trackHighlighter.appendHighlightTo(this.svg);
 
     this.seq_g = this.svg
       .append("g")
@@ -297,23 +297,11 @@ class ProtvistaTrack extends ProtvistaZoomable {
             (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
             ")"
         );
-      this._updateHighlight();
+      this.trackHighlighter.updateHighlight();
     }
   }
   _updateHighlight() {
-    const highlighs = this.highlighted
-      .selectAll("rect")
-      .data(this.highlightRegion.segments);
-    highlighs
-      .enter()
-      .append("rect")
-      .style("opacity", 0.3)
-      .attr("fill", "rgba(255, 235, 59, 0.8)")
-      .attr("height", this._height)
-      .merge(highlighs)
-      .attr("x", d => this.getXFromSeqPosition(d.start))
-      .attr("width", d => this.getSingleBaseWidth() * (d.end - d.start + 1));
-    highlighs.exit().remove();
+    this.trackHighlighter.updateHighlight();
   }
 }
 

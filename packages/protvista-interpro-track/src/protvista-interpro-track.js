@@ -1,14 +1,12 @@
 import ProtvistaTrack from "protvista-track";
 import InterproEntryLayout from "./InterproEntryLayout";
 
-const height = 44,
-  // width = 760,
-  padding = {
-    top: 2,
-    right: 10,
-    bottom: 2,
-    left: 10
-  };
+const padding = {
+  top: 2,
+  right: 10,
+  bottom: 2,
+  left: 10
+};
 
 class ProtvistaInterproTrack extends ProtvistaTrack {
   _createTrack() {
@@ -44,7 +42,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
   getLayout(data) {
     return new InterproEntryLayout({
-      layoutHeight: height,
+      layoutHeight: this._height,
       expanded: this._expanded,
       padding: 2
     });
@@ -63,13 +61,10 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
   _createResidueGroup(baseG) {
     return baseG
       .selectAll("g.residues-group")
-      .data(
-        d =>
-          d.residues
-            ? d.residues.map((r, i) =>
-                Object.assign({}, r, { feature: d, i: i })
-              )
-            : []
+      .data(d =>
+        d.residues
+          ? d.residues.map((r, i) => Object.assign({}, r, { feature: d, i: i }))
+          : []
       )
       .enter()
       .append("g")
@@ -203,7 +198,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       top: 0,
       right: 10,
       bottom: 0,
-      left: 10,
+      left: 10
     };
   }
 
@@ -387,6 +382,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     if (this._haveCreatedFeatures) {
       this._layoutObj.expanded = this._expanded;
       this._layoutObj.init(this._data, this._contributors);
+      this.height = this._layoutObj.maxYPos;
 
       this._refreshCoverLine(this.coverLines);
       this._refreshFeatures(this.features);
@@ -401,15 +397,13 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         );
         this._refreshCoverLine(this.coverLinesChildren);
         this._refreshFeatures(this.featureChildren);
-        this.child_residues_g.attr(
-          "visibility",
-          d => (d.feature.expanded ? "visible" : "hidden")
+        this.child_residues_g.attr("visibility", d =>
+          d.feature.expanded ? "visible" : "hidden"
         );
         this._refreshResiduePaths(this.child_residues_loc);
       }
       this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);
-      this.highlighted.attr("height", this._layoutObj.maxYPos);
     }
   }
 }

@@ -7,8 +7,6 @@ const NUMBER_OF_TICKS = 3;
 class ProtVistaSequence extends ProtvistaZoomable {
   connectedCallback() {
     super.connectedCallback();
-    // this._highlightstart = parseInt(this.getAttribute("highlightstart"));
-    // this._highlightend = parseInt(this.getAttribute("highlightend"));
     this.sequence = this.getAttribute("sequence");
     if (this.sequence) {
       this._createSequence();
@@ -79,13 +77,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .getBBox().width * 0.8;
     this.seq_g.select("text.base").remove();
 
-    this.highlighted = this.svg.append("g").attr("class", "highlighted");
-    // this.highlighted = super.svg
-    //   .append("rect")
-    //   .attr("class", "highlighted")
-    //   .attr("fill", "yellow")
-    //   .attr("height", height)
-    //   .style("pointer-events", "none")
+    this.trackHighlighter.appendHighlightTo(this.svg);
     this.refresh();
   }
 
@@ -130,6 +122,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
               detail: {
                 highlightend: pos,
                 highlightstart: pos,
+                highlight: `${pos}:${pos}`,
                 type: "sequence"
               },
               bubbles: true,
@@ -162,37 +155,10 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this.background.style("opacity", Math.min(1, space));
 
       this._updateHighlight();
-      // if (
-      //   Number.isInteger(this._highlightstart) &&
-      //   Number.isInteger(this._highlightend)
-      // ) {
-      //   this.highlighted
-      //     .attr("x", super.getXFromSeqPosition(this._highlightstart))
-      //     .style("opacity", 0.3)
-      //     .attr(
-      //       "width",
-      //       ftWidth * (this._highlightend - this._highlightstart + 1)
-      //     );
-      // } else {
-      //   this.highlighted.style("opacity", 0);
-      // }
     }
   }
   _updateHighlight() {
-    const highlighs = this.highlighted
-      .selectAll("rect")
-      .data(this.highlightRegion.segments);
-    highlighs
-      .enter()
-      .append("rect")
-      .style("opacity", 0.3)
-      .attr("fill", "rgba(255, 235, 59, 0.8)")
-      .attr("height", this._height)
-      .style("pointer-events", "none")
-      .merge(highlighs)
-      .attr("x", d => this.getXFromSeqPosition(d.start))
-      .attr("width", d => this.getSingleBaseWidth() * (d.end - d.start + 1));
-    highlighs.exit().remove();
+    this.trackHighlighter.updateHighlight();
   }
 }
 
