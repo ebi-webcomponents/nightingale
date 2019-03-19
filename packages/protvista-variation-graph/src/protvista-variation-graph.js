@@ -86,6 +86,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .append("svg")
       .attr("width", this.width)
       .attr("height", this._height);
+    this.trackHighlighter.appendHighlightTo(this.svg);
     // Create the visualisation here
     this._createFeatures();
     this.refresh();
@@ -120,6 +121,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("stroke-width", "1px")
       .attr("stroke-dasharray", ".5")
       .attr("transform", "translate(0,0)");
+    this._updateHighlight();
   }
 }
 

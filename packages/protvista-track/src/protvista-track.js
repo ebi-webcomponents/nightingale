@@ -297,7 +297,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
             (this.margin.top + this._layoutObj.getFeatureYPos(f.feature)) +
             ")"
         );
-      this.trackHighlighter.updateHighlight();
+      this._updateHighlight();
     }
   }
   _updateHighlight() {

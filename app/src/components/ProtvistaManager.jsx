@@ -6,6 +6,8 @@ import ProtvistaTrack from "protvista-track";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaSequence from "protvista-sequence";
 import ProtvistaVariation from "protvista-variation";
+import ProtvistaVariationGraph from "protvista-variation-graph";
+import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaInterproTrack from "protvista-interpro-track";
 import loadWebComponent from "../utils/load-web-component";
 import variantData from "../mocks/variants.json";
@@ -28,7 +30,9 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-sequence", ProtvistaSequence);
     loadWebComponent("protvista-interpro-track", ProtvistaInterproTrack);
     loadWebComponent("protvista-variation", ProtvistaVariation);
+    loadWebComponent("protvista-variation-graph", ProtvistaVariationGraph);
     loadWebComponent("data-loader", DataLoader);
+    loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     return (
       <Fragment>
         <protvista-manager
@@ -57,6 +61,13 @@ class ProtvistaManagerWrapper extends Component {
             shape="roundRectangle"
             expanded
           />
+          <protvista-variation-graph length="770">
+            <protvista-variation-adapter>
+              <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+              </data-loader>
+            </protvista-variation-adapter>
+          </protvista-variation-graph>
           <protvista-variation id="variation-track" length="770" />
         </protvista-manager>
       </Fragment>
