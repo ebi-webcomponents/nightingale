@@ -67,7 +67,7 @@ class ProtvistaVariation extends ProtvistaTrack {
   _createFeatures() {
     this._variationPlot = new VariationPlot();
     // Group for the main chart
-    const mainChart = super.svg.select("g");
+    const mainChart = super.svg.select("g.sequence-features");
 
     // clip path prevents drawing outside of it
     const chartArea = mainChart
