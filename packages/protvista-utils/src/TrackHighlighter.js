@@ -1,9 +1,15 @@
 import Region from "./Region";
 
+const combineRegions = (region1, region2) => {
+  if (!region1) return region2;
+  if (!region2) return region1;
+  return `${region1},${region2}`;
+};
 export default class TrackHighlighter {
   constructor({ element, min, max }) {
     this.element = element;
     this.region = new Region({ min, max });
+    this.fixedHighlight = null;
   }
   set max(max) {
     this.region.max = max;
@@ -23,12 +29,12 @@ export default class TrackHighlighter {
         !isNaN(this.element._highlightstart) &&
         !isNaN(this.element._highlightend)
       ) {
-        this.region.segments = [
-          {
-            start: this.element._highlightstart,
-            end: this.element._highlightend
-          }
-        ];
+        this.element._highlight = `${this.element._highlightstart}:${
+          this.element._highlightend
+        }`;
+        this.region.decode(
+          combineRegions(this.fixedHighlight, this.element._highlight)
+        );
       }
     }
   }
@@ -42,26 +48,28 @@ export default class TrackHighlighter {
       case "highlightstart":
       case "highlightend":
         this.setFloatAttribute(name, newValue);
-        this.region.segments =
+        this.element._highlight =
           isNaN(this.element._highlightstart) ||
           isNaN(this.element._highlightend) ||
           this.element._highlightstart === null ||
           this.element._highlightend === null
-            ? []
-            : [
-                {
-                  start: Math.max(
-                    this.region.min,
-                    this.element._highlightstart
-                  ),
-                  end: Math.min(this.region.max, this.element._highlightend)
-                }
-              ];
-
+            ? ""
+            : `${Math.max(
+                this.region.min,
+                this.element._highlightstart
+              )}:${Math.min(this.region.max, this.element._highlightend)}`;
         break;
       default:
-        this.region.decode(newValue);
+        this.element._highlight = newValue;
     }
+    this.region.decode(
+      combineRegions(this.fixedHighlight, this.element._highlight)
+    );
+    this.element.refresh();
+  }
+  setFixedHighlight(region) {
+    this.fixedHighlight = region;
+    this.region.decode(combineRegions(region, this.element._highlight));
     this.element.refresh();
   }
   appendHighlightTo(svg) {

@@ -20,6 +20,12 @@ class ProtvistaManagerWrapper extends Component {
     document.querySelector("#interpro-track").data = dataIPR;
     document.querySelector("#interpro-track").contributors = signatures;
     document.querySelector("#sequence-track").data = sequence;
+    document.querySelector("#sequence-track").fixedHighlight = "400:600";
+    document.querySelector("#track1").fixedHighlight = "400:600";
+    document.querySelector("#track2").fixedHighlight = "400:600";
+    document.querySelector("#interpro-track").fixedHighlight = "400:600";
+    document.querySelector("#variation-track").fixedHighlight = "400:600";
+    document.querySelector("#variation-graph").fixedHighlight = "400:600";
   }
 
   render() {
@@ -36,7 +42,7 @@ class ProtvistaManagerWrapper extends Component {
     return (
       <Fragment>
         <protvista-manager
-          attributes="length displaystart displayend highlightstart highlightend variantfilters highlight"
+          attributes="length displaystart displayend variantfilters highlight"
           id="example"
         >
           <protvista-navigation length="770" />
@@ -48,7 +54,7 @@ class ProtvistaManagerWrapper extends Component {
               </data-loader>
             </protvista-feature-adapter>
           </protvista-track>
-          <protvista-track id="track1" length="770" layout="non-overlapping">
+          <protvista-track id="track2" length="770" layout="non-overlapping">
             <protvista-feature-adapter id="adapter1">
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
@@ -61,7 +67,7 @@ class ProtvistaManagerWrapper extends Component {
             shape="roundRectangle"
             expanded
           />
-          <protvista-variation-graph length="770">
+          <protvista-variation-graph id="variation-graph" length="770">
             <protvista-variation-adapter>
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />

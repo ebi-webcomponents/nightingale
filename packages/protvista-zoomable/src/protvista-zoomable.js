@@ -133,6 +133,9 @@ class ProtvistaZoomable extends HTMLElement {
       left: 10
     };
   }
+  set fixedHighlight(region) {
+    this.trackHighlighter.setFixedHighlight(region);
+  }
 
   getWidthWithMargins() {
     return this.width ? this.width - this.margin.left - this.margin.right : 0;

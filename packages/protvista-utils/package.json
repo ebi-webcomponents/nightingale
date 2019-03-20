@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale"
   },
-  "main": "dist/protvista-utils.js",
+  "main": "src/index.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",

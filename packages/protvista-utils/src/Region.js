@@ -3,6 +3,7 @@ export default class Region {
     this.segments = [];
     this.max = max;
     this.min = min;
+    this.regionString = null;
   }
   encode(full = false) {
     return this.segments
@@ -17,11 +18,12 @@ export default class Region {
       .join(",");
   }
   decode(regionString) {
-    if (!regionString) {
+    if (typeof regionString !== "undefined") this.regionString = regionString;
+    if (!this.regionString) {
       this.segments = [];
       return;
     }
-    this.segments = regionString.split(",").map(region => {
+    this.segments = this.regionString.split(",").map(region => {
       const [_start, _end, _] = region.split(":");
       if (typeof _ !== "undefined")
         throw new Error(

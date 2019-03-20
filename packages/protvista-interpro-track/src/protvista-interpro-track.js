@@ -163,7 +163,12 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .on("mouseover", (f, i, d) => {
         this.dispatchEvent(
           new CustomEvent("change", {
-            detail: { highlightend: f.end, highlightstart: f.start, type },
+            detail: {
+              highlightend: f.end,
+              highlightstart: f.start,
+              type,
+              highlight: `${f.start}:${f.end}`
+            },
             bubbles: true,
             cancelable: true
           })
@@ -179,7 +184,12 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .on("mouseout", (f, i, d) => {
         this.dispatchEvent(
           new CustomEvent("change", {
-            detail: { highlightend: null, highlightstart: null, type },
+            detail: {
+              highlightend: null,
+              highlightstart: null,
+              highlight: null,
+              type
+            },
             bubbles: true,
             cancelable: true
           })
