@@ -32,13 +32,13 @@ Run `yarn build` to build the application ready for deployment.
 
 [protvista-track](packages/protvista-track): The base component to render features. Responds to zoom and allows highlights. Extends `protvista-zoomable`.
 
-[protvista-navigation](packages/protvista-sequence): The main navigation component, allows zooming and shows the position of the visible window along the sequence.
+[protvista-navigation](packages/protvista-navigation): The main navigation component, allows zooming and shows the position of the visible window along the sequence.
 
 [protvista-sequence](packages/protvista-sequence): Displays the amino-acid sequence. Responds to zoom and allows highlights. Extends `protvista-zoomable`.
 
 [protvista-variation](packages/protvista-variation): An adjacency graph to represent variation data, mapping amino-acids to position. Extends `protvista-track`.
 
-[protvista-variation-graph](packages/protvista-variation-graph: a graph representing the number of variants at a given position. Extends `protvista-track`.
+[protvista-variation-graph](packages/protvista-variation-graph): a graph representing the number of variants at a given position. Extends `protvista-track`.
 
 [protvista-uniprot](packages/protvista-uniprot): A "super-component" using all components to build UniProt's ProtVista tool.
 
