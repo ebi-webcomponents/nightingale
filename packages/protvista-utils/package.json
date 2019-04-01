@@ -1,0 +1,18 @@
+{
+  "name": "protvista-utils",
+  "version": "2.0.0",
+  "description": "Collection of utilities for ProtVista components",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale"
+  },
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "ISC"
+}

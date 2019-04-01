@@ -41,9 +41,8 @@ class ProtvistaTrackWrapper extends Component {
           length="223"
           displaystart="1"
           displayend="223"
-          highlightstart="23"
-          highlightend="45"
           color="red"
+          highlight="20:50,40:80"
         />
         <protvista-track
           id="track2"

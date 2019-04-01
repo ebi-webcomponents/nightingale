@@ -36,13 +36,6 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     this.init();
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
-    super.attributeChangedCallback(attrName, oldVal, newVal);
-    if (!super.svg) {
-      return;
-    }
-  }
-
   set data(data) {
     this._data = data;
     this.init();
@@ -82,10 +75,11 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     select(this)
       .selectAll("svg")
       .remove();
-    super.svg = select(this)
+    this.svg = select(this)
       .append("svg")
       .attr("width", this.width)
       .attr("height", this._height);
+    this.trackHighlighter.appendHighlightTo(this.svg);
     // Create the visualisation here
     this._createFeatures();
     this.refresh();
@@ -103,8 +97,9 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
   }
 
   refresh() {
-    super.svg.selectAll("path").remove();
-    this._disease_feature = super.svg
+    if (!this.svg) return;
+    this.svg.selectAll("path").remove();
+    this._disease_feature = this.svg
       .append("path")
       .attr("d", this._line(this._disease_dataset))
       .attr("fill", "none")
@@ -112,7 +107,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("stroke-width", "1.5px")
       .attr("stroke-dasharray", "0")
       .attr("transform", "translate(0,0)");
-    this._totals_feature = super.svg
+    this._totals_feature = this.svg
       .append("path")
       .attr("d", this._line(this._totals_dataset))
       .attr("fill", "none")
@@ -120,6 +115,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("stroke-width", "1px")
       .attr("stroke-dasharray", ".5")
       .attr("transform", "translate(0,0)");
+    this._updateHighlight();
   }
 }
 
