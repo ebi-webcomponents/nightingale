@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-ppf/protvista-manager"
+    "url": "https://github.com/ebi-webcomponents/nightingale"
   },
   "main": "dist/protvista-manager.js",
   "module": "src/protvista-manager.js",

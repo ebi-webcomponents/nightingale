@@ -2,14 +2,11 @@ import { axisBottom, select } from "d3";
 
 import ProtvistaZoomable from "protvista-zoomable";
 
-const height = 40;
 const NUMBER_OF_TICKS = 3;
 
 class ProtVistaSequence extends ProtvistaZoomable {
   connectedCallback() {
     super.connectedCallback();
-    this._highlightstart = parseInt(this.getAttribute("highlightstart"));
-    this._highlightend = parseInt(this.getAttribute("highlightend"));
     this.sequence = this.getAttribute("sequence");
     if (this.sequence) {
       this._createSequence();
@@ -43,16 +40,31 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .append("svg")
       .attr("id", "")
       .attr("width", this.width)
-      .attr("height", height);
+      .attr("height", this._height);
 
-    this.seq_bg = super.svg.append("g").attr("class", "background");
+    this.seq_bg = super.svg
+      .append("g")
+      .attr("class", "background")
+      .on("mouseout", () => {
+        this.dispatchEvent(
+          new CustomEvent("change", {
+            detail: {
+              highlightend: null,
+              highlightstart: null,
+              type: "sequence"
+            },
+            bubbles: true,
+            cancelable: true
+          })
+        );
+      });
 
     this.axis = super.svg.append("g").attr("class", "x axis");
 
     this.seq_g = super.svg
       .append("g")
       .attr("class", "sequence")
-      .attr("transform", `translate(0,${0.75 * height})`);
+      .attr("transform", `translate(0,${0.75 * this._height})`);
 
     this.seq_g
       .append("text")
@@ -64,12 +76,8 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .node()
         .getBBox().width * 0.8;
     this.seq_g.select("text.base").remove();
-    this.highlighted = super.svg
-      .append("rect")
-      .attr("class", "highlighted")
-      .attr("fill", "yellow")
-      .attr("height", height);
 
+    this.trackHighlighter.appendHighlightTo(this.svg);
     this.refresh();
   }
 
@@ -91,9 +99,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
               .map((aa, i) => [1 + first + i, aa]);
 
       this.xAxis = axisBottom(this.xScale)
-        .tickFormat(d =>
-          Number.isInteger(d) ? d : ""
-        )
+        .tickFormat(d => (Number.isInteger(d) ? d : ""))
         .ticks(NUMBER_OF_TICKS, "s");
       this.axis.call(this.xAxis);
 
@@ -109,7 +115,21 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .attr("text-anchor", "middle")
         .attr("x", ([pos]) => this.getXFromSeqPosition(pos) + half)
         .text(([_, d]) => d)
-        .attr("style", "font-family:monospace");
+        .attr("style", "font-family:monospace")
+        .on("mouseover", ([pos]) => {
+          this.dispatchEvent(
+            new CustomEvent("change", {
+              detail: {
+                highlightend: pos,
+                highlightstart: pos,
+                highlight: `${pos}:${pos}`,
+                type: "sequence"
+              },
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        });
 
       this.bases.exit().remove();
 
@@ -122,7 +142,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .enter()
         .append("rect")
         .attr("class", "base_bg")
-        .attr("height", height)
+        .attr("height", this._height)
         .merge(this.background)
         .attr("width", ftWidth)
         .attr("fill", ([pos]) => {
@@ -134,21 +154,11 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this.seq_g.style("opacity", Math.min(1, space));
       this.background.style("opacity", Math.min(1, space));
 
-      if (
-        Number.isInteger(this._highlightstart) &&
-        Number.isInteger(this._highlightend)
-      ) {
-        this.highlighted
-          .attr("x", super.getXFromSeqPosition(this._highlightstart))
-          .style("opacity", 0.3)
-          .attr(
-            "width",
-            ftWidth * (this._highlightend - this._highlightstart + 1)
-          );
-      } else {
-        this.highlighted.style("opacity", 0);
-      }
+      this._updateHighlight();
     }
+  }
+  _updateHighlight() {
+    this.trackHighlighter.updateHighlight();
   }
 }
 

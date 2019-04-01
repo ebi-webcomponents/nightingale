@@ -21,8 +21,7 @@ class ProtvistaSequenceWrapper extends Component {
           length="223"
           displaystart="1"
           displayend="223"
-          highlightStart="23"
-          highlightEnd="45"
+          highlight="23:45"
         />
         <protvista-sequence
           id="seq2"
