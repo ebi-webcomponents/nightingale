@@ -46,6 +46,7 @@ Run `yarn build` to build the application ready for deployment.
 
 
 #### Data loading and adapters
+Most components use the [Proteins API](https://www.ebi.ac.uk/proteins/api/doc/)
 
 [data-loader](packages/data-loader): this component can load json data given a url. It caches the results in the window so multiple calls 
 
