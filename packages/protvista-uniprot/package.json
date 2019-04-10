@@ -1,7 +1,7 @@
 {
   "name": "protvista-uniprot",
   "description": "ProtVista tool for the UniProt website",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "files": [
     "dist",
     "src"
@@ -15,18 +15,18 @@
     "lit-html": "^0.7.1",
     "protvista-feature-adapter": "^2.0.0",
     "protvista-filter": "^2.0.0",
-    "protvista-manager": "^2.0.0",
+    "protvista-manager": "^2.0.3",
     "protvista-navigation": "^2.0.0",
     "protvista-proteomics-adapter": "^2.0.0",
-    "protvista-sequence": "^2.0.0",
+    "protvista-sequence": "^2.0.3",
     "protvista-structure-adapter": "^2.0.0",
     "protvista-tooltip": "^2.0.0",
-    "protvista-track": "^2.0.0",
+    "protvista-track": "^2.0.3",
     "protvista-uniprot-entry-adapter": "^2.0.0",
-    "protvista-variation": "^2.0.2",
+    "protvista-variation": "^2.0.3",
     "protvista-variation-adapter": "^2.0.0",
-    "protvista-variation-graph": "^2.0.2",
-    "protvista-zoomable": "^2.0.0"
+    "protvista-variation-graph": "^2.0.3",
+    "protvista-zoomable": "^2.0.3"
   },
   "devDependencies": {
     "d3": "^5.7.0"
