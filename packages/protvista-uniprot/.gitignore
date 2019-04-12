@@ -1,8 +1,0 @@
-.vscode
-.DS_Store
-.idea/
-*.iml
-build/
-dist/
-node_modules/
-*.log

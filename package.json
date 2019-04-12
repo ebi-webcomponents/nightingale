@@ -9,8 +9,7 @@
     "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
-    "test": "jest",
-    "browser-sync": "browser-sync start --server --index public/index.html --files packages/**/dist/*.*"
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
