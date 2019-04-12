@@ -42,22 +42,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .attr("width", this.width)
       .attr("height", this._height);
 
-    this.seq_bg = super.svg
-      .append("g")
-      .attr("class", "background")
-      .on("mouseout", () => {
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              highlightend: null,
-              highlightstart: null,
-              type: "sequence"
-            },
-            bubbles: true,
-            cancelable: true
-          })
-        );
-      });
+    this.seq_bg = super.svg.append("g").attr("class", "background");
 
     this.axis = super.svg.append("g").attr("class", "x axis");
 
@@ -115,21 +100,8 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .attr("text-anchor", "middle")
         .attr("x", ([pos]) => this.getXFromSeqPosition(pos) + half)
         .text(([_, d]) => d)
-        .attr("style", "font-family:monospace")
-        .on("mouseover", ([pos]) => {
-          this.dispatchEvent(
-            new CustomEvent("change", {
-              detail: {
-                highlightend: pos,
-                highlightstart: pos,
-                highlight: `${pos}:${pos}`,
-                type: "sequence"
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        });
+        .style("pointer-events", "none")
+        .style("font-family", "monospace");
 
       this.bases.exit().remove();
 
@@ -148,7 +120,35 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .attr("fill", ([pos]) => {
           return Math.round(pos) % 2 ? "#ccc" : "#eee";
         })
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
+        .attr("x", ([pos]) => this.getXFromSeqPosition(pos))
+        .on("mouseover", ([pos]) => {
+          this.dispatchEvent(
+            new CustomEvent("change", {
+              detail: {
+                highlightend: pos,
+                highlightstart: pos,
+                highlight: `${pos}:${pos}`,
+                type: "sequence"
+              },
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        })
+        .on("mouseout", () => {
+          this.dispatchEvent(
+            new CustomEvent("change", {
+              detail: {
+                highlightend: null,
+                highlightstart: null,
+                highlight: null,
+                type: "sequence"
+              },
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        });
       this.background.exit().remove();
 
       this.seq_g.style("opacity", Math.min(1, space));
