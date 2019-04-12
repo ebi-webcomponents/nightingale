@@ -11,7 +11,7 @@ following the strategy documented here: http://sangsoonam.github.io/2019/02/08/u
 
 If you want to deploy it this way the easiest way is to create the empty dir `app/dist` and add it as a worktree of the `gh-pages` branch.
 
-```bash
+```console
 ✔ nightingale [master|✔] $ mkdir app/dist
 ✔ nightingale [master|✔] $ git worktree add app/dist/ gh-pages
 Preparing worktree (checking out 'gh-pages')
@@ -28,7 +28,7 @@ You can reinstall it using 'npm install husky --save-dev' or delete this hook
 With this configuration, you can build the the app. The files that will be created in the `app/dist` folder.
 And if you go to that folder you will be in the `gh-pages` branch where you can commit and push the changes. For example:
 
-```bash
+```console
 ✔ nightingale [master|✔] $ yarn build-site
 yarn run v1.10.1
 $ lerna run build-site --stream
