@@ -30,9 +30,15 @@ class ProtvistaDatatable extends LitElement {
       data: { type: Array },
       highlight: {
         converter: (value, type) => {
-          return value.split(":");
+          if (value && value !== "null") {
+            return value.split(":").map(d => parseInt(d));
+          } else {
+            return null;
+          }
         }
-      }
+      },
+      displayStart: { type: Number },
+      displayEnd: { type: Number }
     };
   }
 
@@ -47,11 +53,20 @@ class ProtvistaDatatable extends LitElement {
       th {
         text-align: left;
       }
+      tr:hover {
+        background-color: var(--protvista-datatable__hover, #c0c0c0);
+      }
       td {
         cursor: pointer;
       }
       .active {
-        background: yellow;
+        background-color: var(--protvista-datatable__active, yellow);
+      }
+      .active-clicked {
+        background-color: var(--protvista-datatable__active--clicked, yellow);
+      }
+      .hidden {
+        opacity: 0.2;
       }
     `;
   }
@@ -64,8 +79,8 @@ class ProtvistaDatatable extends LitElement {
     return data.sort((a, b) => a.start - b.start);
   }
 
-  isWithinRange(highlight, start, end) {
-    return highlight[0] <= start && highlight[1] >= end;
+  isWithinRange(rangeStart, rangeEnd, start, end) {
+    return rangeStart >= end || rangeEnd <= start;
   }
 
   handleClick(start, end) {
@@ -78,6 +93,24 @@ class ProtvistaDatatable extends LitElement {
         cancelable: true
       })
     );
+  }
+
+  getStyleClass(start, end) {
+    let className = "";
+    if (
+      this.displayStart &&
+      this.displayEnd &&
+      this.isWithinRange(this.displayStart, this.displayEnd, start, end)
+    ) {
+      className = `${className} hidden`;
+    }
+    if (
+      this.highlight &&
+      !this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
+    ) {
+      className = `${className} active`;
+    }
+    return className;
   }
 
   render() {
@@ -102,10 +135,7 @@ class ProtvistaDatatable extends LitElement {
             row =>
               html`
                 <tr
-                  class=${this.highlight &&
-                  this.isWithinRange(this.highlight, row.start, row.end)
-                    ? "active"
-                    : ""}
+                  class=${this.getStyleClass(row.start, row.end)}
                   @click="${() => this.handleClick(row.start, row.end)}"
                 >
                   ${Object.keys(columnConfig).map(
