@@ -8,6 +8,14 @@ Use this component to display table of features alongside a track. Wrapping it w
 <protvista-datatable />
 ```
 
+## Styling
+
+`--protvista-datatable__hover`: the background color of a row on mouse over
+
+`--protvista-datatable__active`: the background color of a row within a highlighted region
+
+`--protvista-datatable__active--clicked`: the background color of a clicked row
+
 ## API Reference
 
 ### Properties
@@ -53,11 +61,3 @@ Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]
 #### Emits
 
 `change` event with highlight start and end in the payload
-
-### Styling
-
-`--protvista-datatable__hover`: the background color of a row on mouse over
-
-`--protvista-datatable__active`: the background color of a row within a highlighted region
-
-`--protvista-datatable__active--clicked`: the background color of a clicked row
