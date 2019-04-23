@@ -5,7 +5,7 @@ Use this component to display table of features alongside a track. Wrapping it w
 ## Usage
 
 ```html
-<protvista-datatable length="456" start="34" end="400"></protvista-datatable>
+<protvista-datatable />
 ```
 
 ## API Reference
