@@ -5,6 +5,7 @@ import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import ProtvistaTrack from "protvista-track";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaSequence from "protvista-sequence";
+import ProtvistaColouredSequence from "protvista-coloured-sequence";
 import ProtvistaVariation from "protvista-variation";
 import ProtvistaVariationGraph from "protvista-variation-graph";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
@@ -21,6 +22,9 @@ class ProtvistaManagerWrapper extends Component {
     document.querySelector("#interpro-track").contributors = signatures;
     document.querySelector("#sequence-track").data = sequence;
     document.querySelector("#sequence-track").fixedHighlight = "400:600";
+    document.querySelector("#sequence-coloured-track").data = sequence;
+    document.querySelector("#sequence-coloured-track").fixedHighlight =
+      "400:600";
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
     document.querySelector("#interpro-track").fixedHighlight = "400:600";
@@ -34,6 +38,7 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-track", ProtvistaTrack);
     loadWebComponent("protvista-navigation", ProtvistaNavigation);
     loadWebComponent("protvista-sequence", ProtvistaSequence);
+    loadWebComponent("protvista-coloured-sequence", ProtvistaColouredSequence);
     loadWebComponent("protvista-interpro-track", ProtvistaInterproTrack);
     loadWebComponent("protvista-variation", ProtvistaVariation);
     loadWebComponent("protvista-variation-graph", ProtvistaVariationGraph);
@@ -48,6 +53,12 @@ class ProtvistaManagerWrapper extends Component {
         >
           <protvista-navigation length="770" />
           <protvista-sequence length="770" id="sequence-track" />
+          <protvista-coloured-sequence
+            length="770"
+            id="sequence-coloured-track"
+            scale="hydrophobicity-interface-scale"
+            height="10"
+          />
           <protvista-track id="track1" length="770">
             <protvista-feature-adapter id="adapter1">
               <data-loader>

@@ -33,6 +33,18 @@ class ProtVistaSequence extends ProtvistaZoomable {
     }
   }
 
+  _getCharWidth() {
+    this.seq_g
+      .append("text")
+      .attr("class", "base")
+      .text("T");
+    this.chWidth =
+      this.seq_g
+        .select("text.base")
+        .node()
+        .getBBox().width * 0.8;
+    this.seq_g.select("text.base").remove();
+  }
   _createSequence() {
     super.svg = select(this)
       .append("div")
@@ -51,17 +63,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .attr("class", "sequence")
       .attr("transform", `translate(0,${0.75 * this._height})`);
 
-    this.seq_g
-      .append("text")
-      .attr("class", "base")
-      .text("T");
-    this.chWidth =
-      this.seq_g
-        .select("text.base")
-        .node()
-        .getBBox().width * 0.8;
-    this.seq_g.select("text.base").remove();
-
+    this._getCharWidth();
     this.trackHighlighter.appendHighlightTo(this.svg);
     this.refresh();
   }

@@ -1,11 +1,5 @@
-import React, { Fragment, Suspense, lazy } from "react";
-import {
-  HashRouter as Router,
-  Route,
-  NavLink,
-  Redirect,
-  Switch
-} from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+import { HashRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
 
 import pkg from "../package.json";
@@ -13,6 +7,7 @@ import pkg from "../package.json";
 import "./App.css";
 const ProtvistaTrack = lazyImport("ProtvistaTrack");
 const ProtvistaSequence = lazyImport("ProtvistaSequence");
+const ProtvistaColouredSequence = lazyImport("ProtvistaColouredSequence");
 const ProtvistaVariation = lazyImport("ProtvistaVariation");
 const ProtvistaStructure = lazyImport("ProtvistaStructure");
 const ProtvistaNavigation = lazyImport("ProtvistaNavigation");
@@ -50,6 +45,11 @@ const App = (component = ProtvistaNavigation) => (
               <li>
                 <NavLink to="/sequence" activeClassName="active">
                   Sequence
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/coloured-sequence" activeClassName="active">
+                  Coloured Sequence
                 </NavLink>
               </li>
               <li>
@@ -98,6 +98,10 @@ const App = (component = ProtvistaNavigation) => (
             <Switch>
               <Route path="/track" component={ProtvistaTrack} />
               <Route path="/sequence" component={ProtvistaSequence} />
+              <Route
+                path="/coloured-sequence"
+                component={ProtvistaColouredSequence}
+              />
               <Route path="/variation" component={ProtvistaVariation} />
               <Route path="/structure" component={ProtvistaStructure} />
               <Route path="/navigation" component={ProtvistaNavigation} />
