@@ -16,6 +16,7 @@
     "data"
   ],
   "dependencies": {
-    "lit-element": "^2.1.0"
+    "lit-element": "^2.1.0",
+    "uuid": "^3.3.2"
   }
 }

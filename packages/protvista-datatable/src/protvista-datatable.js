@@ -1,35 +1,39 @@
 import { LitElement, html, css } from "lit-element";
-
-const columnConfig = {
-  type: {
-    label: "Feature key"
-  },
-  description: {
-    label: "Description"
-  },
-  start: {
-    label: "Start"
-  },
-  end: {
-    label: "End"
-  }
-};
+import { v1 } from "uuid";
 
 class ProtvistaDatatable extends LitElement {
+  constructor() {
+    super();
+    this.eventHandler = this.eventHandler.bind(this);
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("load", e => {
       if (Array.from(this.children).includes(e.target)) {
-        this.data = e.detail.payload;
+        this.data = this.processData(e.detail.payload.features);
       }
     });
+    document.addEventListener("click", this.eventHandler);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("click", this.eventHandler);
+    console.log("removed");
+  }
+
+  eventHandler(e) {
+    if (!e.target.closest("protvista-datatable")) {
+      this.clickedRowId = null;
+    }
   }
 
   static get properties() {
     return {
-      data: { type: Array },
+      data: { type: Object },
       highlight: {
-        converter: (value, type) => {
+        converter: value => {
           if (value && value !== "null") {
             return value.split(":").map(d => parseInt(d));
           } else {
@@ -37,8 +41,10 @@ class ProtvistaDatatable extends LitElement {
           }
         }
       },
+      columns: { type: Object },
       displayStart: { type: Number },
-      displayEnd: { type: Number }
+      displayEnd: { type: Number },
+      clickedRowId: { type: String }
     };
   }
 
@@ -53,17 +59,23 @@ class ProtvistaDatatable extends LitElement {
       th {
         text-align: left;
       }
-      tr:hover {
+      tbody tr:hover {
         background-color: var(--protvista-datatable__hover, #c0c0c0);
       }
       td {
         cursor: pointer;
       }
       .active {
-        background-color: var(--protvista-datatable__active, yellow);
+        background-color: var(
+          --protvista-datatable__active,
+          rgba(255, 235, 59, 0.3)
+        );
       }
       .active-clicked {
-        background-color: var(--protvista-datatable__active--clicked, yellow);
+        background-color: var(
+          --protvista-datatable__active--clicked,
+          rgba(255, 235, 59, 0.8)
+        );
       }
       .hidden {
         opacity: 0.2;
@@ -76,14 +88,19 @@ class ProtvistaDatatable extends LitElement {
   }
 
   processData(data) {
-    return data.sort((a, b) => a.start - b.start);
+    return data
+      .sort((a, b) => a.start - b.start)
+      .map(d => {
+        return { ...d, id: v1() };
+      });
   }
 
   isWithinRange(rangeStart, rangeEnd, start, end) {
     return rangeStart >= end || rangeEnd <= start;
   }
 
-  handleClick(start, end) {
+  handleClick(e, start, end) {
+    this.clickedRowId = e.target.parentNode.dataset.uuid;
     this.dispatchEvent(
       new CustomEvent("change", {
         detail: {
@@ -95,8 +112,11 @@ class ProtvistaDatatable extends LitElement {
     );
   }
 
-  getStyleClass(start, end) {
+  getStyleClass(id, start, end) {
     let className = "";
+    if (this.clickedRowId && this.clickedRowId === id) {
+      className = `${className} active-clicked`;
+    }
     if (
       this.displayStart &&
       this.displayEnd &&
@@ -114,15 +134,14 @@ class ProtvistaDatatable extends LitElement {
   }
 
   render() {
-    if (!this.data) {
+    if (!this.data || !this.columns) {
       return null;
     }
-    const processedData = this.processData(this.data.features);
     return html`
       <table>
         <thead>
           <tr>
-            ${Object.values(columnConfig).map(
+            ${Object.values(this.columns).map(
               column =>
                 html`
                   <th>${column.label}</th>
@@ -131,17 +150,18 @@ class ProtvistaDatatable extends LitElement {
           </tr>
         </thead>
         <tbody>
-          ${processedData.map(
+          ${this.data.map(
             row =>
               html`
                 <tr
-                  class=${this.getStyleClass(row.start, row.end)}
-                  @click="${() => this.handleClick(row.start, row.end)}"
+                  data-uuid=${row.id}
+                  class=${this.getStyleClass(row.id, row.start, row.end)}
+                  @click="${e => this.handleClick(e, row.start, row.end)}"
                 >
-                  ${Object.keys(columnConfig).map(
+                  ${Object.keys(this.columns).map(
                     column =>
                       html`
-                        <td>${row[column]}</td>
+                        <td>${this.columns[column].resolver(row)}</td>
                       `
                   )}
                 </tr>
