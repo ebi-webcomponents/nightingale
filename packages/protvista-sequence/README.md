@@ -12,6 +12,10 @@ See it running [Here](https://ebi-webcomponents.github.io/protvista-sequence/).
 ## API Reference
 
 ### Properties
+
+### `sequence: string`
+The sequence to display
+
 #### `length: number`
 The protein or nucleic acid sequence length.
 
