@@ -17,6 +17,20 @@ See it running [Here](https://ebi-webcomponents.github.io/protvista-track/).
 
 The protein or nucleic acid sequence length.
 
+#### `data: Array`
+
+Array items take the following shape:
+```
+{
+    accession: String,
+    start: Number,
+    end: Number,
+    color?: String,
+    shape?: rectangle|bridge|diamnond|chevron|catFace|triangle|wave|hexagon|pentagon|circle|arrow|doubleBar,
+    tooltipContent?: String
+}
+```
+
 #### `start: number (optional)`
 
 The start position of the selected region.
