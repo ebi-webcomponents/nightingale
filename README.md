@@ -44,6 +44,7 @@ Run `yarn build` to build the application ready for deployment.
 
 [protvista-interpro-track](packages/protvista-interpro-track): A specialisation of `protvista-track` to use in InterPro. Extends `protvista-track`.
 
+[protvista-datatable]((packages/protvista-datatable): an interactive table view of features. Can highlight/be highlighted by features from the `protvista-track`
 
 #### Data loading and adapters
 Most components use the [Proteins API](https://www.ebi.ac.uk/proteins/api/doc/)
