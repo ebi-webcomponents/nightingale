@@ -1,0 +1,22 @@
+{
+  "name": "protvista-datatable",
+  "version": "1.0.0",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "module": "src/protvista-datatable.js",
+  "jsnext:main": "src/protvista-datatable.js",
+  "license": "Apache-2.0",
+  "author": "Xavier Watkins <xwatkins@ebi.ac.uk> (https://github.com/xwatkins)",
+  "keywords": [
+    "webcomponents",
+    "customelements",
+    "data"
+  ],
+  "dependencies": {
+    "lit-element": "^2.1.0",
+    "uuid": "^3.3.2"
+  }
+}
