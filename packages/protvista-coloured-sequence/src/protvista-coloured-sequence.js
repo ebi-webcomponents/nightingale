@@ -47,12 +47,12 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
       .append("defs")
       .append("linearGradient")
       .attr("id", "scale-gradient-" + this.uniqueID);
-    // .attr("gradientUnits", "userSpaceOnUse")
-    // .attr("x1", 0).attr("y1", y(50))
-    // .attr("x2", 0).attr("y2", y(60))
 
     this.seq_g = this.svg.append("g").attr("class", "background");
-    this.seq_greadient = this.svg.append("rect").attr("class", "seq-gradient");
+    this.seq_greadient = this.svg
+      .append("rect")
+      .attr("class", "seq-gradient")
+      .style("pointer-events", "none");
 
     this._getCharWidth();
 
@@ -134,7 +134,35 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
             base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0 // if the base is not in the given scale
           );
         })
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
+        .attr("x", ([pos]) => this.getXFromSeqPosition(pos))
+        .on("mouseover", ([pos]) => {
+          this.dispatchEvent(
+            new CustomEvent("change", {
+              detail: {
+                highlightend: pos,
+                highlightstart: pos,
+                highlight: `${pos}:${pos}`,
+                type: "sequence"
+              },
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        })
+        .on("mouseout", () => {
+          this.dispatchEvent(
+            new CustomEvent("change", {
+              detail: {
+                highlightend: null,
+                highlightstart: null,
+                highlight: null,
+                type: "sequence"
+              },
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        });
 
       this.residues.exit().remove();
 
