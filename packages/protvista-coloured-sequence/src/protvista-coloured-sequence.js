@@ -3,14 +3,16 @@ import { select, scaleLinear } from "d3";
 import hydroInterfaceScale from "./hydrophobicity-interface-scale.json";
 import hydroOctanoleScale from "./hydrophobicity-octanol-scale.json";
 import hydroScale from "./hydrophobicity-scale.json";
+import isoelectricPointScale from "./isoelectric-point-scale.json";
 
 import ProtVistaSequence from "protvista-sequence";
-import { ColorScaleParser } from "protvista-utils";
+import { ColorScaleParser, String2Object } from "protvista-utils";
 
 const supportedScales = [
   "hydrophobicity-interface-scale",
   "hydrophobicity-octanol-scale",
-  "hydrophobicity-scale"
+  "hydrophobicity-scale",
+  "isoelectric-point-scale"
 ];
 
 const defaultScale = {
@@ -65,11 +67,26 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
           return hydroScale;
         case "hydrophobicity-interface-scale":
           return hydroInterfaceScale;
+        case "isoelectric-point-scale":
+          return isoelectricPointScale;
         case "hydrophobicity-octanol-scale":
           return hydroOctanoleScale;
       }
     }
-    // TODO: parse scale
+    if (
+      /([ILFVMPWHTEQCYASNDRGK]:-?\d+\.?\d*)(,[ILFVMPWHTEQCYASNDRGK]:-?\d+\.?\d*)*/.test(
+        this._scale
+      )
+    ) {
+      try {
+        scale = String2Object(this._scale, {
+          keyFormatter: x => x.toUpperCase(),
+          valueFormatter: x => parseFloat(x)
+        });
+      } catch {
+        console.error(`Couldn't parse the given scale ${this._scale}`, error);
+      }
+    }
     return scale;
   }
   refresh() {
@@ -80,7 +97,6 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         return;
       }
       const ftWidth = this.getSingleBaseWidth();
-      // const space = ftWidth - this.chWidth;
       const first = Math.round(Math.max(0, this._displaystart - 2));
       const last = Math.round(
         Math.min(this.sequence.length, this._displayend + 1)
@@ -114,9 +130,9 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         .merge(this.residues)
         .attr("width", ftWidth)
         .attr("fill", ([pos, base]) => {
-          return base.toUpperCase() in scale
-            ? colorScale(scale[base.toUpperCase()])
-            : "red";
+          return colorScale(
+            base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0 // if the base is not in the given scale
+          );
         })
         .attr("x", ([pos]) => this.getXFromSeqPosition(pos));
 
@@ -131,9 +147,9 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         .merge(stops)
         .attr("offset", (_, pos) => (pos + 0.5) / this.sequence.length)
         .attr("stop-color", base => {
-          return base.toUpperCase() in scale
-            ? colorScale(scale[base.toUpperCase()])
-            : "red";
+          return colorScale(
+            base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0 // if the base is not in the given scale
+          );
         });
       this.gradient.exit().remove();
 

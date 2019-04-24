@@ -95,6 +95,24 @@ class ProtvistaColouredSequenceWrapper extends Component {
           displayend="100"
           scale="hydrophobicity-octanol-scale"
         />
+        <h5>isoelectric-point-scale</h5>
+        <protvista-coloured-sequence
+          sequence={data}
+          length="223"
+          displaystart="1"
+          displayend="100"
+          scale="isoelectric-point-scale"
+          color_range="white:0,dodgerblue:11"
+        />
+        <h5>custom-scale</h5>
+        <pre>"T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2"</pre>
+        <protvista-coloured-sequence
+          sequence={data}
+          length="223"
+          displaystart="1"
+          displayend="100"
+          scale="T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2"
+        />
         <h4>Testing other colors</h4>
         <h5>hydrophobicity-scale - same colors on a wider scale</h5>
         <protvista-coloured-sequence

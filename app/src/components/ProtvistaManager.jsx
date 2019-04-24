@@ -25,6 +25,9 @@ class ProtvistaManagerWrapper extends Component {
     document.querySelector("#sequence-coloured-track").data = sequence;
     document.querySelector("#sequence-coloured-track").fixedHighlight =
       "400:600";
+    document.querySelector("#sequence-coloured-track-iso").data = sequence;
+    document.querySelector("#sequence-coloured-track-iso").fixedHighlight =
+      "400:600";
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
     document.querySelector("#interpro-track").fixedHighlight = "400:600";
@@ -57,6 +60,13 @@ class ProtvistaManagerWrapper extends Component {
             length="770"
             id="sequence-coloured-track"
             scale="hydrophobicity-interface-scale"
+            height="10"
+          />
+          <protvista-coloured-sequence
+            length="770"
+            id="sequence-coloured-track-iso"
+            scale="isoelectric-point-scale"
+            color_range="white:0,dodgerblue:11"
             height="10"
           />
           <protvista-track id="track1" length="770">
