@@ -46,10 +46,13 @@ Run `yarn build` to build the application ready for deployment.
 
 [protvista-datatable](packages/protvista-datatable): an interactive table view of features. Can highlight/be highlighted by features from the `protvista-track`
 
+[protvista-coloured-sequence](packages/protvista-coloured-sequence): Track that uses the sequence to paint a color depending on each residue. Extends `protvista-sequence`.
+
 #### Data loading and adapters
+
 Most components use the [Proteins API](https://www.ebi.ac.uk/proteins/api/doc/)
 
-[data-loader](packages/data-loader): this component can load json data given a url. It caches the results in the window so multiple calls 
+[data-loader](packages/data-loader): this component can load json data given a url. It caches the results in the window so multiple calls
 
 [protvista-uniprot-entry-adapter](packages/protvista-uniprot-entry-adapter): a superclass providing basic functionality for data transformation and handling of events.
 
@@ -64,6 +67,7 @@ Most components use the [Proteins API](https://www.ebi.ac.uk/proteins/api/doc/)
 [protvista-topology-adapter](packages/protvista-topology-adapter) this component transforms topological data returned by the Proteins API Features service so it can be displayed by the `protvista-track` component. Extends `protvista-uniprot-entry-adapter`.
 
 #### Utilities
+
 [protvista-manager](packages/protvista-manager): this component works as an event bus, propagating events emited by its children to specified children as attributes.
 
 [protvista-filter](packages/protvista-filter): this component interacts with data adapters to allow filtering of the data which is displayed.
@@ -73,8 +77,9 @@ Most components use the [Proteins API](https://www.ebi.ac.uk/proteins/api/doc/)
 [protvista-utils](packages/protvista-utils): collection of util functions
 
 ### Interaction viewer
+
 [interaction-viewer](packages/interaction-viewer): The UniProt interaction viewer
 
 ### 3D structure viewer
-[protvista-structure](packages/protvista-structure): A wrapper around the LiteMol component used in UniProt.
 
+[protvista-structure](packages/protvista-structure): A wrapper around the LiteMol component used in UniProt.

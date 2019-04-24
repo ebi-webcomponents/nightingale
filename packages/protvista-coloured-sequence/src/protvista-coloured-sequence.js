@@ -25,7 +25,7 @@ const MIN_BASE_SIZE = 8;
 class ProtVistaColouredSequence extends ProtVistaSequence {
   static get observedAttributes() {
     return ProtVistaSequence.observedAttributes.concat(
-      "scale", // One of the supported scales. TBD: a format for the scale, e.g. A:0.5,M:-3,P:3
+      "scale", // One of the supported scales. Ora custom scale given in the following format. e.g. A:0.5,M:-3,P:3
       "color_range" // Color values per point to define a colorScale. Default: #ffdd00:-2,#0000FF:2
     );
   }
