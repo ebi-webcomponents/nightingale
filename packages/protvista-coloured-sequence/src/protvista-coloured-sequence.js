@@ -135,14 +135,20 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
           );
         })
         .attr("x", ([pos]) => this.getXFromSeqPosition(pos))
-        .on("mouseover", ([pos]) => {
+        .on("mouseover", ([pos, base]) => {
           this.dispatchEvent(
             new CustomEvent("change", {
               detail: {
                 highlightend: pos,
                 highlightstart: pos,
                 highlight: `${pos}:${pos}`,
-                type: "sequence"
+                type: "sequence",
+                metadata: {
+                  position: pos,
+                  residue: base,
+                  value:
+                    base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0
+                }
               },
               bubbles: true,
               cancelable: true
