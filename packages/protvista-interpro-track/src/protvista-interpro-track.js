@@ -167,7 +167,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
               highlightend: f.end,
               highlightstart: f.start,
               type,
-              highlight: `${f.start}:${f.end}`
+              highlight: f.fragments
+                ? f.fragments.map(fr => `${fr.start}:${fr.end}`).join(",")
+                : `${f.start}:${f.end}`
             },
             bubbles: true,
             cancelable: true
@@ -249,7 +251,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     this.features = this.locations
       .selectAll("path.feature")
       .data(d =>
-        d.fragments.map(loc => Object.assign({}, loc, { feature: d.feature }))
+        d.fragments.map(loc =>
+          Object.assign({}, loc, { feature: d.feature, fragments: d.fragments })
+        )
       )
       .enter()
       .append("path")
@@ -284,7 +288,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         .attr("visibility", this._expanded ? "visible" : "hidden");
       this.childGroup = this.childrenGroup
         .selectAll("g.child-group")
-        .data(d => this._contributors)
+        .data(this._contributors)
         .enter()
         .append("g")
         .attr("class", "child-group");
@@ -296,7 +300,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         })
         .enter()
         .append("g")
-        .attr("class", "child-location-group");
+        .attr("class", (_, i) => `child-location-group clg-${i}`);
 
       this.coverLinesChildren = locationChildrenG
         .selectAll("line.cover")
@@ -318,7 +322,10 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         .selectAll("path.child-fragment")
         .data(d =>
           d.fragments.map(fragment =>
-            Object.assign({}, fragment, { feature: d.feature })
+            Object.assign({}, fragment, {
+              feature: d.feature,
+              fragments: d.fragments
+            })
           )
         )
         .enter()

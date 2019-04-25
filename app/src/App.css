@@ -52,3 +52,30 @@
   background-color: #fafaff;
   padding: 1rem;
 }
+
+/********************/
+/** InterPro Track **/
+/********************/
+
+.child-location-group path {
+  stroke-width: 1px;
+}
+
+.child-location-group.clg-0 path {
+  stroke: #aed0e4;
+}
+.child-location-group.clg-1 path {
+  stroke: #1ba3b6;
+}
+.child-location-group.clg-2 path {
+  stroke: #d0aee4;
+}
+.child-location-group.clg-3 path {
+  stroke: #a31bb6;
+}
+.child-location-group.clg-4 path {
+  stroke: #e4d0ae;
+}
+.child-location-group.clg-5 path {
+  stroke: #b6a31b;
+}

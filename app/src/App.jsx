@@ -6,6 +6,7 @@ import pkg from "../package.json";
 
 import "./App.css";
 const ProtvistaTrack = lazyImport("ProtvistaTrack");
+const ProtvistaInterProTrack = lazyImport("ProtvistaInterProTrack");
 const ProtvistaSequence = lazyImport("ProtvistaSequence");
 const ProtvistaColouredSequence = lazyImport("ProtvistaColouredSequence");
 const ProtvistaVariation = lazyImport("ProtvistaVariation");
@@ -41,6 +42,11 @@ const App = (component = ProtvistaNavigation) => (
               <li>
                 <NavLink to="/track" activeClassName="active">
                   Track
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/interpro-track" activeClassName="active">
+                  InterPro Track
                 </NavLink>
               </li>
               <li>
@@ -101,6 +107,10 @@ const App = (component = ProtvistaNavigation) => (
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path="/track" component={ProtvistaTrack} />
+              <Route
+                path="/interpro-track"
+                component={ProtvistaInterProTrack}
+              />
               <Route path="/sequence" component={ProtvistaSequence} />
               <Route
                 path="/coloured-sequence"
