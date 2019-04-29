@@ -20,7 +20,17 @@ class ProtvistaDatatable extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener("click", this.eventHandler);
-    console.log("removed");
+  }
+
+  // Implement our own accessors as we need to transform the data
+  set data(value) {
+    let oldValue = this._data;
+    this._data = this.processData(value);
+    this.requestUpdate("data", oldValue);
+  }
+
+  get data() {
+    return this._data;
   }
 
   eventHandler(e) {
