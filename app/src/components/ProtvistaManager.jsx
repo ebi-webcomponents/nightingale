@@ -69,7 +69,11 @@ class ProtvistaManagerWrapper extends Component {
             color_range="white:0,dodgerblue:11"
             height="10"
           />
-          <protvista-track id="track1" length="770">
+          <protvista-track
+            id="track1"
+            length="770"
+            highlight-event="onmouseover"
+          >
             <protvista-feature-adapter id="adapter1">
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
