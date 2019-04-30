@@ -1,15 +1,16 @@
-import ProtvistaTooltip from './protvista-tooltip'
+import ProtvistaTooltip from "./protvista-tooltip";
 
-const loadComponent = function () {
-    customElements.define('protvista-tooltip', ProtvistaTooltip);
-}
+const loadComponent = function() {
+  customElements.define("protvista-tooltip", ProtvistaTooltip);
+};
 
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document
-        .addEventListener('WebComponentsReady', function () {
-            loadComponent();
-        });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
+
+export default ProtvistaTooltip;
