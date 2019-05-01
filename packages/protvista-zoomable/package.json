@@ -6,9 +6,9 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
+  "main": "dist/protvista-zoomable.js",
+  "module": "src/protvista-zoomable.js",
+  "jsnext:main": "src/protvista-zoomable.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-ppf/protvista-zoomable"
