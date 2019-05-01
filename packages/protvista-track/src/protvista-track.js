@@ -210,12 +210,12 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   _getCoords() {
-    if (!event) {
+    if (!d3Event) {
       return null;
     }
     // const boundingRect = this.querySelector("svg").getBoundingClientRect();
     // Note: it would be nice to also return the position of the bottom left of the feature
-    return [event.pageX, event.pageY];
+    return [d3Event.pageX, d3Event.pageY];
   }
 
   _createEvent(type, feature = null, withHighlight = false) {
