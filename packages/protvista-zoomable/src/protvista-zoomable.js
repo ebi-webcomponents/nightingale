@@ -12,10 +12,15 @@ class ProtvistaZoomable extends HTMLElement {
   constructor() {
     super();
 
+    this._highlightEvent = this.getAttribute("highlight-event")
+      ? this.getAttribute("highlight-event")
+      : "onclick";
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
     this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
+    this._resetEventHandler = this._resetEventHandler.bind(this);
+    // this.bindEvents = this.bindEvents(this);
     let aboutToApply = false;
     // Postponing the zoom translation to the next frame.
     // This helps in case several attributes are changed almost at the same time,
@@ -64,14 +69,17 @@ class ProtvistaZoomable extends HTMLElement {
     this.addEventListener("error", e => {
       throw e;
     });
+    window.addEventListener("click", this._resetEventHandler);
   }
 
   disconnectedCallback() {
+    super.disconnectedCallback();
     if (this._ro) {
       this._ro.unobserve(this);
     } else {
       window.removeEventListener("resize", this._onResize);
     }
+    window.removeEventListener("click", this._resetEventHandler);
   }
 
   get width() {
@@ -246,11 +254,73 @@ class ProtvistaZoomable extends HTMLElement {
     this._ro = new ResizeObserver(this._onResize);
     this._ro.observe(this);
   }
+
+  _resetEventHandler(e) {
+    if (!e.target.closest(".feature")) {
+      this.dispatchEvent(this.createEvent("reset", null, true));
+    }
+  }
+
   getXFromSeqPosition(position) {
     return this.margin.left + this.xScale(position);
   }
   getSingleBaseWidth() {
     return this.xScale(2) - this.xScale(1);
+  }
+
+  _getClickCoords() {
+    if (!d3Event) {
+      return null;
+    }
+    // const boundingRect = this.querySelector("svg").getBoundingClientRect();
+    // Note: it would be nice to also return the position of the bottom left of the feature
+    return [d3Event.pageX, d3Event.pageY];
+  }
+
+  createEvent(type, feature = null, withHighlight = false, start, end) {
+    const detail = {
+      eventtype: type,
+      coords: this._getClickCoords(),
+      feature: feature
+    };
+    if (withHighlight) {
+      detail.highlight = start && end ? `${start}:${end}` : null;
+    }
+    return new CustomEvent("change", {
+      detail: detail,
+      bubbles: true,
+      cancelable: true
+    });
+  }
+
+  bindEvents(d, el) {
+    d.on("mouseover", f => {
+      el.dispatchEvent(
+        el.createEvent(
+          "mouseover",
+          f,
+          el._highlightEvent === "onmouseover",
+          f.start,
+          f.end
+        )
+      );
+    })
+      .on("mouseout", f => {
+        el.dispatchEvent(
+          el.createEvent("mouseout", null, el._highlightEvent === "onmouseover")
+        );
+      })
+      .on("click", f => {
+        el.dispatchEvent(
+          el.createEvent(
+            "click",
+            f,
+            el._highlightEvent === "onclick",
+            f.start,
+            f.end
+          )
+        );
+      });
   }
 }
 

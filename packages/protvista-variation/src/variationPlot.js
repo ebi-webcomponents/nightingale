@@ -39,10 +39,7 @@ class VariationPlot {
         .enter()
         .append("circle")
         .merge(circle)
-        .attr("class", function(d) {
-          // if (d === fv.selectedFeature) {     return 'up_pftv_variant
-          // up_pftv_activeFeature'; } else {     return 'up_pftv_variant'; }
-        })
+        .attr("class", "feature")
         .attr("title", d => d.start)
         .attr("r", d => (d.size ? d.size : 5))
         .attr("cx", d => {
@@ -58,30 +55,7 @@ class VariationPlot {
           return d.internalId;
         })
         .attr("fill", d => d.color)
-        .attr("tooltip-trigger", "true")
-        .on("mouseover", f => {
-          element.dispatchEvent(
-            new CustomEvent("change", {
-              detail: {
-                highlightend: f.end,
-                highlightstart: f.start
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        })
-        .on("click", d => {
-          const tooltipData = {
-            start: d.start,
-            end: d.end,
-            feature: {
-              ...d,
-              type: "Variant"
-            }
-          };
-          element.createTooltip(d3Event, tooltipData, true);
-        });
+        .call(element.bindEvents, element);
     });
   }
 }

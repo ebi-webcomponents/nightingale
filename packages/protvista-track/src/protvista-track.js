@@ -20,9 +20,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   connectedCallback() {
     super.connectedCallback();
-    this._highlightEvent = this.getAttribute("highlight-event")
-      ? this.getAttribute("highlight-event")
-      : "onclick";
     this._color = this.getAttribute("color");
     this._shape = this.getAttribute("shape");
     this._featureShape = new FeatureShape();
@@ -31,19 +28,11 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
     if (this._data) this._createTrack();
 
-    this._resetEventHandler = this._resetEventHandler.bind(this);
-
     this.addEventListener("load", e => {
       if (_includes(this.children, e.target)) {
         this.data = e.detail.payload;
       }
     });
-    document.addEventListener("click", this._resetEventHandler);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener("click", this._resetEventHandler);
   }
 
   normalizeLocations(data) {
@@ -77,12 +66,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
       "color",
       "shape"
     ]);
-  }
-
-  _resetEventHandler(e) {
-    if (!e.target.closest(".feature")) {
-      this.dispatchEvent(this._createEvent("reset", null, true));
-    }
   }
 
   _getFeatureColor(f) {
@@ -184,54 +167,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .attr("fill", f => this._getFeatureColor(f.feature))
       .attr("stroke", f => this._getFeatureColor(f.feature))
-      .on("mouseover", f => {
-        this.dispatchEvent(
-          this._createEvent(
-            "mouseover",
-            f,
-            this._highlightEvent === "onmouseover"
-          )
-        );
-      })
-      .on("mouseout", f => {
-        this.dispatchEvent(
-          this._createEvent(
-            "mouseout",
-            null,
-            this._highlightEvent === "onmouseover"
-          )
-        );
-      })
-      .on("click", f => {
-        this.dispatchEvent(
-          this._createEvent("click", f, this._highlightEvent === "onclick")
-        );
-      });
-  }
-
-  _getCoords() {
-    if (!d3Event) {
-      return null;
-    }
-    // const boundingRect = this.querySelector("svg").getBoundingClientRect();
-    // Note: it would be nice to also return the position of the bottom left of the feature
-    return [d3Event.pageX, d3Event.pageY];
-  }
-
-  _createEvent(type, feature = null, withHighlight = false) {
-    const detail = {
-      eventtype: type,
-      coords: this._getCoords(),
-      feature: feature
-    };
-    if (withHighlight) {
-      detail.highlight = feature ? `${feature.start}:${feature.end}` : null;
-    }
-    return new CustomEvent("change", {
-      detail: detail,
-      bubbles: true,
-      cancelable: true
-    });
+      .call(this.bindEvents, this);
   }
 
   refresh() {
