@@ -293,29 +293,34 @@ class ProtvistaZoomable extends HTMLElement {
     });
   }
 
-  bindEvents(d, el) {
-    d.on("mouseover", f => {
-      el.dispatchEvent(
-        el.createEvent(
-          "mouseover",
-          f,
-          el._highlightEvent === "onmouseover",
-          f.start,
-          f.end
-        )
-      );
-    })
+  bindEvents(feature, element) {
+    feature
+      .on("mouseover", f => {
+        element.dispatchEvent(
+          element.createEvent(
+            "mouseover",
+            f,
+            element._highlightEvent === "onmouseover",
+            f.start,
+            f.end
+          )
+        );
+      })
       .on("mouseout", f => {
-        el.dispatchEvent(
-          el.createEvent("mouseout", null, el._highlightEvent === "onmouseover")
+        element.dispatchEvent(
+          element.createEvent(
+            "mouseout",
+            null,
+            element._highlightEvent === "onmouseover"
+          )
         );
       })
       .on("click", f => {
-        el.dispatchEvent(
-          el.createEvent(
+        element.dispatchEvent(
+          element.createEvent(
             "click",
             f,
-            el._highlightEvent === "onclick",
+            element._highlightEvent === "onclick",
             f.start,
             f.end
           )
