@@ -12,9 +12,6 @@ class ProtvistaZoomable extends HTMLElement {
   constructor() {
     super();
 
-    this._highlightEvent = this.getAttribute("highlight-event")
-      ? this.getAttribute("highlight-event")
-      : "onclick";
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
@@ -57,6 +54,9 @@ class ProtvistaZoomable extends HTMLElement {
     this._height = this.getAttribute("height")
       ? parseInt(this.getAttribute("height"))
       : 44;
+    this._highlightEvent = this.getAttribute("highlight-event")
+      ? this.getAttribute("highlight-event")
+      : "onclick";
 
     this.trackHighlighter.setAttributesInElement(this);
 
