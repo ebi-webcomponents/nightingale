@@ -1,125 +1,130 @@
-import '../style/protvista-tooltip.css';
+import "../style/protvista-tooltip.css";
 
 class ProtvistaTooltip extends HTMLElement {
-    constructor() {
-        super();
-        this._top = parseInt(this.getAttribute("top"));
-        this._left = parseInt(this.getAttribute("left"));
-        this._content = this.getAttribute("content");
-        this._title = this.getAttribute("title");
-        this._mirror = undefined;
-    }
-    
-    set top(top) {
-        this._top = top;
-    }
+  constructor() {
+    super();
+    this._top = parseInt(this.getAttribute("top"));
+    this._left = parseInt(this.getAttribute("left"));
+    this._content = this.getAttribute("content");
+    this._title = this.getAttribute("title");
+    this._visible = this.getAttribute("visible")
+      ? this.getAttribute("visible")
+      : false;
+    this._mirror = undefined;
+  }
 
-    get top() {
-        return this._top;
-    }
+  set top(top) {
+    this._top = top;
+  }
 
-    set left(left) {
-        this._left = left;
-    }
+  get top() {
+    return this._top;
+  }
 
-    get left() {
-        return this._left;
-    }
+  set left(left) {
+    this._left = left;
+  }
 
-    set content(content) {
-        this._content = content;
-    }
+  get left() {
+    return this._left;
+  }
 
-    get content() {
-        return this._content;
-    }
+  set content(content) {
+    this._content = content;
+  }
 
-    set title(title) {
-        this._title = title;
-    }
+  get content() {
+    return this._content;
+  }
 
-    get title() {
-        return this._title;
-    }
+  set title(title) {
+    this._title = title;
+  }
 
-    set closeable(isCloseable) {
-        if(isCloseable) {
-            this.setAttribute('closeable', '');
-        } else {
-            this.removeAttribute('closeable');
-        }
-    }
+  get title() {
+    return this._title;
+  }
 
-    get closeable() {
-        return this.hasAttribute('closeable');
-    }
+  set visible(visible) {
+    this._visible = visible;
+  }
 
-    get mirror() {
-        return this._mirror;
-    }
+  get visible() {
+    return this._visible;
+  }
 
-    set mirror(orientation) {
-        this.setAttribute('mirror', orientation);
+  set closeable(isCloseable) {
+    if (isCloseable) {
+      this.setAttribute("closeable", "");
+    } else {
+      this.removeAttribute("closeable");
     }
+  }
 
-    static get observedAttributes() {
-        return ['top', 'left', 'mirror'];
-    }
+  get closeable() {
+    return this.hasAttribute("closeable");
+  }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if(oldValue != newValue) {
-            if(name === 'top' || name === 'left' ) {
-                this[`_${name}`] = this.getAttribute(name);
-                this._updatePosition();
-            } else {
-                this.render();
-            }
-        }
-    }
+  get mirror() {
+    return this._mirror;
+  }
 
-    connectedCallback() {
-        this.render();
-        document.getElementsByTagName('body')[0].addEventListener('click', e => {
-            // TODO if another tooltip-trigger than the one for that feature is selected, remove the other tooltip(s)
-            if((this.hasTooltipParent(e.target) && !e.target.classList.contains('tooltip-close'))
-                || e.target.getAttribute('tooltip-trigger') !== null) {
-                return;
-            }
-            this.remove();
-        });
-    }
+  set mirror(orientation) {
+    this.setAttribute("mirror", orientation);
+  }
 
-    hasTooltipParent(el) {
-        if(!el.parentElement || el.parentElement.tagName === 'body') {
-            return false;
-        } else if(el.parentElement.tagName === 'PROTVISTA-TOOLTIP')
-            return true;
-        else {
-            return this.hasTooltipParent(el.parentElement);
-        }
-    }
+  static get observedAttributes() {
+    return ["top", "left", "mirror", "title", "content"];
+  }
 
-    _updatePosition() {
-        this.style.top = `${this._top}px`;
-        this.style.left = `${this._left}px`;
-    }
-
-    render() {
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue != newValue) {
+      if (name === "top" || name === "left") {
+        this[`_${name}`] = this.getAttribute(name);
         this._updatePosition();
+      } else {
+        this.render();
+      }
+    }
+  }
 
-        if ('undefined' !== typeof this.mirror) {
-            this.mirror = this.mirror;
-        }
+  connectedCallback() {
+    this.render();
+  }
 
-        let html = `<div class="tooltip-header">`;
-        if(this.closeable) {
-            html = `${html}<span class="tooltip-close"></span>`
-        }
-        html = `${html}<span class="tooltip-header-title">${this._title}</span></div>
-        <div class="tooltip-body">${this._content}</div>`;
-        this.innerHTML = html;
+  hasTooltipParent(el) {
+    if (!el.parentElement || el.parentElement.tagName === "body") {
+      return false;
+    } else if (el.parentElement.tagName === "PROTVISTA-TOOLTIP") return true;
+    else {
+      return this.hasTooltipParent(el.parentElement);
+    }
+  }
+
+  _updatePosition() {
+    this.style.top = `${this._top}px`;
+    this.style.left = `${this._left}px`;
+  }
+
+  render() {
+    this._updatePosition();
+
+    if ("undefined" !== typeof this.mirror) {
+      this.mirror = this.mirror;
     }
 
+    this.style.display = this._visible ? "block" : "none";
+
+    let html = `<div class="tooltip-header">`;
+    if (this.closeable) {
+      html = `${html}<span class="tooltip-close"></span>`;
+    }
+    html = `${html}<span class="tooltip-header-title">${
+      this._title
+    }</span></div>
+        <div class="tooltip-body">${this._content}</div>`;
+    this.innerHTML = html;
+  }
 }
 
 export default ProtvistaTooltip;

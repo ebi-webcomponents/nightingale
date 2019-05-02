@@ -30,11 +30,6 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  set data(data) {
-    this._data = this.normalizeLocations(data);
-    this._createTrack();
-  }
-
   set contributors(contributors) {
     this._contributors = this.normalizeLocations(contributors);
     if (this._data) this._createTrack();
@@ -128,7 +123,8 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
           ")"
       )
       .attr("fill", f => this._getFeatureColor(f))
-      .attr("stroke", "transparent");
+      .attr("stroke", "transparent")
+      .call(this.bindEvents, this);
   }
 
   _refreshResiduePaths(baseG) {
@@ -158,53 +154,6 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .attr("fill", f => this._getFeatureColor(f));
   }
 
-  _addHoverEvents(features, type = "entry") {
-    features
-      .on("mouseover", (f, i, d) => {
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              highlightend: f.end,
-              highlightstart: f.start,
-              type,
-              highlight: f.fragments
-                ? f.fragments.map(fr => `${fr.start}:${fr.end}`).join(",")
-                : `${f.start}:${f.end}`
-            },
-            bubbles: true,
-            cancelable: true
-          })
-        );
-        this.dispatchEvent(
-          new CustomEvent("entrymouseover", {
-            detail: Object.assign(f, { target: d[i], type }),
-            bubbles: true,
-            cancelable: true
-          })
-        );
-      })
-      .on("mouseout", (f, i, d) => {
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              highlightend: null,
-              highlightstart: null,
-              highlight: null,
-              type
-            },
-            bubbles: true,
-            cancelable: true
-          })
-        );
-        this.dispatchEvent(
-          new CustomEvent("entrymouseout", {
-            detail: Object.assign(f, { type }),
-            bubbles: true,
-            cancelable: true
-          })
-        );
-      });
-  }
   get margin() {
     return {
       top: 0,
@@ -258,22 +207,14 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .enter()
       .append("path")
       .attr("class", "feature")
-      .on("click", (f, i, d) => {
+      .on("click.expanded", (f, i, d) => {
         if (this._expanded) this.removeAttribute("expanded");
         else this.setAttribute("expanded", "expanded");
-        this.dispatchEvent(
-          new CustomEvent("entryclick", {
-            detail: Object.assign(f, { target: d[i] }),
-            bubbles: true,
-            cancelable: true
-          })
-        );
-      });
+      })
+      .call(this.bindEvents, this);
 
-    this._addHoverEvents(this.features);
     this.residues_g = this._createResidueGroup(this.featuresG);
     this.residues_loc = this._createResiduePaths(this.residues_g);
-    this._addHoverEvents(this.residues_loc, "residue");
 
     if (this._contributors) {
       this._contributors.forEach((d, i) => (d.k = i));
@@ -330,23 +271,15 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         )
         .enter()
         .append("path")
-        .attr("class", "child-fragment")
-        .on("click", (f, i, d) => {
+        .attr("class", "child-fragment feature")
+        .call(this.bindEvents, this)
+        .on("click.expanded", (f, i, d) => {
           f.feature.expanded = !f.feature.expanded;
           this.refresh();
-          this.dispatchEvent(
-            new CustomEvent("entryclick", {
-              detail: Object.assign(f, { target: d[i] }),
-              bubbles: true,
-              cancelable: true
-            })
-          );
         });
-      this._addHoverEvents(this.featureChildren);
 
       this.child_residues_g = this._createResidueGroup(this.childGroup);
       this.child_residues_loc = this._createResiduePaths(this.child_residues_g);
-      this._addHoverEvents(this.child_residues_loc, "residue");
     }
     this.svg.attr("height", this._layoutObj.maxYPos);
     this._haveCreatedFeatures = true;

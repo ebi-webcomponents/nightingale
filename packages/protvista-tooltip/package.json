@@ -6,7 +6,8 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.js",
+  "main": "dist/protvista-tooltip.js",
+  "module": "src/index.js",
   "keywords": [
     "protvista",
     "webcomponents",

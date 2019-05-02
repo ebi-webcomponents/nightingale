@@ -83,7 +83,9 @@ class ProtVistaSequence extends ProtvistaZoomable {
           : this.sequence
               .slice(first, last)
               .split("")
-              .map((aa, i) => [1 + first + i, aa]);
+              .map((aa, i) => {
+                return { start: 1 + first + i, end: 1 + first + i, aa: aa };
+              });
 
       this.xAxis = axisBottom(this.xScale)
         .tickFormat(d => (Number.isInteger(d) ? d : ""))
@@ -94,63 +96,36 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this.axis.select(".domain").remove();
       this.axis.selectAll(".tick line").remove();
 
-      this.bases = this.seq_g.selectAll("text.base").data(bases, d => d[0]);
+      this.bases = this.seq_g.selectAll("text.base").data(bases, d => d.start);
       this.bases
         .enter()
         .append("text")
         .attr("class", "base")
         .attr("text-anchor", "middle")
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos) + half)
-        .text(([_, d]) => d)
+        .attr("x", d => this.getXFromSeqPosition(d.start) + half)
+        .text(d => d.aa)
         .style("pointer-events", "none")
         .style("font-family", "monospace");
 
       this.bases.exit().remove();
 
-      this.bases.attr("x", ([pos]) => this.getXFromSeqPosition(pos) + half);
+      this.bases.attr("x", d => this.getXFromSeqPosition(d.start) + half);
 
       this.background = this.seq_bg
         .selectAll("rect.base_bg")
-        .data(bases, d => d[0]);
+        .data(bases, d => d.start);
       this.background
         .enter()
         .append("rect")
-        .attr("class", "base_bg")
+        .attr("class", "base_bg feature")
         .attr("height", this._height)
         .merge(this.background)
         .attr("width", ftWidth)
-        .attr("fill", ([pos]) => {
-          return Math.round(pos) % 2 ? "#ccc" : "#eee";
+        .attr("fill", d => {
+          return Math.round(d.start) % 2 ? "#ccc" : "#eee";
         })
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos))
-        .on("mouseover", ([pos]) => {
-          this.dispatchEvent(
-            new CustomEvent("change", {
-              detail: {
-                highlightend: pos,
-                highlightstart: pos,
-                highlight: `${pos}:${pos}`,
-                type: "sequence"
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        })
-        .on("mouseout", () => {
-          this.dispatchEvent(
-            new CustomEvent("change", {
-              detail: {
-                highlightend: null,
-                highlightstart: null,
-                highlight: null,
-                type: "sequence"
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        });
+        .attr("x", d => this.getXFromSeqPosition(d.start))
+        .call(this.bindEvents, this);
       this.background.exit().remove();
 
       this.seq_g.style("opacity", Math.min(1, space));

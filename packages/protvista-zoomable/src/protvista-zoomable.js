@@ -16,6 +16,8 @@ class ProtvistaZoomable extends HTMLElement {
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
     this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
+    this._resetEventHandler = this._resetEventHandler.bind(this);
+    // this.bindEvents = this.bindEvents(this);
     let aboutToApply = false;
     // Postponing the zoom translation to the next frame.
     // This helps in case several attributes are changed almost at the same time,
@@ -52,6 +54,9 @@ class ProtvistaZoomable extends HTMLElement {
     this._height = this.getAttribute("height")
       ? parseInt(this.getAttribute("height"))
       : 44;
+    this._highlightEvent = this.getAttribute("highlight-event")
+      ? this.getAttribute("highlight-event")
+      : "onclick";
 
     this.trackHighlighter.setAttributesInElement(this);
 
@@ -64,14 +69,17 @@ class ProtvistaZoomable extends HTMLElement {
     this.addEventListener("error", e => {
       throw e;
     });
+    window.addEventListener("click", this._resetEventHandler);
   }
 
   disconnectedCallback() {
+    super.disconnectedCallback();
     if (this._ro) {
       this._ro.unobserve(this);
     } else {
       window.removeEventListener("resize", this._onResize);
     }
+    window.removeEventListener("click", this._resetEventHandler);
   }
 
   get width() {
@@ -246,11 +254,84 @@ class ProtvistaZoomable extends HTMLElement {
     this._ro = new ResizeObserver(this._onResize);
     this._ro.observe(this);
   }
+
+  _resetEventHandler(e) {
+    if (!e.target.closest(".feature")) {
+      this.dispatchEvent(this.createEvent("reset", null, true));
+    }
+  }
+
   getXFromSeqPosition(position) {
     return this.margin.left + this.xScale(position);
   }
   getSingleBaseWidth() {
     return this.xScale(2) - this.xScale(1);
+  }
+
+  _getClickCoords() {
+    if (!d3Event) {
+      return null;
+    }
+    // const boundingRect = this.querySelector("svg").getBoundingClientRect();
+    // Note: it would be nice to also return the position of the bottom left of the feature
+    return [d3Event.pageX, d3Event.pageY];
+  }
+
+  createEvent(type, feature = null, withHighlight = false, start, end) {
+    const detail = {
+      eventtype: type,
+      coords: this._getClickCoords(),
+      feature: feature
+    };
+    if (withHighlight) {
+      if (feature && feature.fragments) {
+        detail.highlight = feature.fragments
+          .map(fr => `${fr.start}:${fr.end}`)
+          .join(",");
+      } else {
+        detail.highlight = start && end ? `${start}:${end}` : null;
+      }
+    }
+    return new CustomEvent("change", {
+      detail: detail,
+      bubbles: true,
+      cancelable: true
+    });
+  }
+
+  bindEvents(feature, element) {
+    feature
+      .on("mouseover", f => {
+        element.dispatchEvent(
+          element.createEvent(
+            "mouseover",
+            f,
+            element._highlightEvent === "onmouseover",
+            f.start,
+            f.end
+          )
+        );
+      })
+      .on("mouseout", f => {
+        element.dispatchEvent(
+          element.createEvent(
+            "mouseout",
+            null,
+            element._highlightEvent === "onmouseover"
+          )
+        );
+      })
+      .on("click", f => {
+        element.dispatchEvent(
+          element.createEvent(
+            "click",
+            f,
+            element._highlightEvent === "onclick",
+            f.start,
+            f.end
+          )
+        );
+      });
   }
 }
 

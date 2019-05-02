@@ -20,15 +20,11 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   connectedCallback() {
     super.connectedCallback();
-    this._tooltipEvent = this.getAttribute("tooltip-event")
-      ? this.getAttribute("tooltip-event")
-      : "mouseover";
     this._color = this.getAttribute("color");
     this._shape = this.getAttribute("shape");
     this._featureShape = new FeatureShape();
     this._layoutObj = this.getLayout();
     this._config = new ConfigHelper(config);
-    this.createTooltip = this.createTooltip.bind(this);
 
     if (this._data) this._createTrack();
 
@@ -38,6 +34,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       }
     });
   }
+
   normalizeLocations(data) {
     return data.map(obj => {
       const { locations, start, end } = obj;
@@ -65,13 +62,12 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat([
-      "highlightstart",
-      "highlightend",
+      "highlight",
       "color",
-      "shape",
-      "layout"
+      "shape"
     ]);
   }
+
   _getFeatureColor(f) {
     if (f.color) {
       return f.color;
@@ -118,7 +114,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("transform", "translate(0 ," + this.margin.top + ")");
 
     this._createFeatures();
-    this.refresh();
   }
 
   _createFeatures() {
@@ -137,7 +132,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
           })
         )
       )
-      // .data(d => d.locations.map((loc) => ({ feature: d, ...l })))
       .enter()
       .append("g")
       .attr("class", "location-group");
@@ -151,11 +145,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
           })
         )
       )
-      // .data(d => d.fragments.map(({ ...l }) => ({ feature: d.feature, ...l })))
       .enter()
       .append("path")
       .attr("class", "feature")
-      .attr("tooltip-trigger", "true")
       .attr("d", f =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
@@ -175,87 +167,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .attr("fill", f => this._getFeatureColor(f.feature))
       .attr("stroke", f => this._getFeatureColor(f.feature))
-      .on("mouseover", f => {
-        var self = this;
-        var e = d3Event;
-
-        if (this._tooltipEvent === "mouseover") {
-          window.setTimeout(function() {
-            self.createTooltip(e, f);
-          }, 50);
-        }
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              highlightend: f.end,
-              highlightstart: f.start,
-              highlight: `${f.start}:${f.end}`
-            },
-            bubbles: true,
-            cancelable: true
-          })
-        );
-      })
-      .on("mouseout", () => {
-        var self = this;
-
-        if (this._tooltipEvent === "mouseover") {
-          window.setTimeout(function() {
-            self.removeAllTooltips();
-          }, 50);
-        }
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              highlightend: null,
-              highlightstart: null,
-              highlight: null
-            },
-            bubbles: true,
-            cancelable: true
-          })
-        );
-      })
-      .on("click", d => {
-        if (this._tooltipEvent === "click") {
-          this.createTooltip(d3Event, d, true);
-        }
-      });
-  }
-
-  createTooltip(e, d, closeable = false) {
-    if (!d.feature || !d.feature.tooltipContent) {
-      return;
-    }
-    this.removeAllTooltips();
-    const tooltip = document.createElement("protvista-tooltip");
-    tooltip.top = e.clientY + 3;
-    tooltip.left = e.clientX + 2;
-    tooltip.title = `${d.feature.type} ${d.start}-${d.end}`;
-    tooltip.closeable = closeable;
-    // Passing the content as a property as it can contain HTML
-    tooltip.content = d.feature.tooltipContent;
-    this.appendChild(tooltip);
-
-    const parentWidth = this.svg._groups[0][0].clientWidth;
-    const tooltipPosition = select(tooltip)
-      .node()
-      .getBoundingClientRect();
-
-    if (tooltipPosition.width + tooltipPosition.x > parentWidth) {
-      this.removeChild(tooltip);
-
-      tooltip.left = parentWidth - tooltipPosition.width;
-      tooltip.mirror = "H";
-
-      this.appendChild(tooltip);
-    }
-  }
-
-  removeAllTooltips() {
-    document
-      .querySelectorAll("protvista-tooltip")
-      .forEach(tooltip => tooltip.remove());
+      .call(this.bindEvents, this);
   }
 
   refresh() {

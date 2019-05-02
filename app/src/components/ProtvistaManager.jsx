@@ -13,11 +13,12 @@ import ProtvistaInterproTrack from "protvista-interpro-track";
 import loadWebComponent from "../utils/load-web-component";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
-import { dataIPR, signatures } from "../mocks/interpro";
+import { dataIPR, signatures, withResidues } from "../mocks/interpro";
 
 class ProtvistaManagerWrapper extends Component {
   componentDidMount() {
     document.querySelector("#variation-track").data = variantData;
+    document.querySelector("#interpro-track-residues").data = withResidues;
     document.querySelector("#interpro-track").data = dataIPR;
     document.querySelector("#interpro-track").contributors = signatures;
     document.querySelector("#sequence-track").data = sequence;
@@ -31,6 +32,8 @@ class ProtvistaManagerWrapper extends Component {
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
     document.querySelector("#interpro-track").fixedHighlight = "400:600";
+    document.querySelector("#interpro-track-residues").fixedHighlight =
+      "400:600";
     document.querySelector("#variation-track").fixedHighlight = "400:600";
     document.querySelector("#variation-graph").fixedHighlight = "400:600";
   }
@@ -55,12 +58,17 @@ class ProtvistaManagerWrapper extends Component {
           id="example"
         >
           <protvista-navigation length="770" />
-          <protvista-sequence length="770" id="sequence-track" />
+          <protvista-sequence
+            length="770"
+            id="sequence-track"
+            highlight-event="onmouseover"
+          />
           <protvista-coloured-sequence
             length="770"
             id="sequence-coloured-track"
             scale="hydrophobicity-interface-scale"
             height="10"
+            highlight-event="onmouseover"
           />
           <protvista-coloured-sequence
             length="770"
@@ -87,6 +95,14 @@ class ProtvistaManagerWrapper extends Component {
             id="interpro-track"
             length="770"
             shape="roundRectangle"
+            highlight-event="onmouseover"
+            expanded
+          />
+          <protvista-interpro-track
+            id="interpro-track-residues"
+            length="770"
+            shape="roundRectangle"
+            highlight-event="onmouseover"
             expanded
           />
           <protvista-variation-graph id="variation-graph" length="770">
