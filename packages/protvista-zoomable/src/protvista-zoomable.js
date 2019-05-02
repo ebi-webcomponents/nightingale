@@ -73,7 +73,6 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback();
     if (this._ro) {
       this._ro.unobserve(this);
     } else {
