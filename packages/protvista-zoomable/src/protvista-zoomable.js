@@ -284,7 +284,13 @@ class ProtvistaZoomable extends HTMLElement {
       feature: feature
     };
     if (withHighlight) {
-      detail.highlight = start && end ? `${start}:${end}` : null;
+      if (feature && feature.fragments) {
+        detail.highlight = feature.fragments
+          .map(fr => `${fr.start}:${fr.end}`)
+          .join(",");
+      } else {
+        detail.highlight = start && end ? `${start}:${end}` : null;
+      }
     }
     return new CustomEvent("change", {
       detail: detail,
