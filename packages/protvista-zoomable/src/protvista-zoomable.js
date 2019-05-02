@@ -277,11 +277,12 @@ class ProtvistaZoomable extends HTMLElement {
     return [d3Event.pageX, d3Event.pageY];
   }
 
-  createEvent(type, feature = null, withHighlight = false, start, end) {
+  createEvent(type, feature = null, withHighlight = false, start, end, target) {
     const detail = {
       eventtype: type,
       coords: this._getClickCoords(),
-      feature: feature
+      feature,
+      target
     };
     if (withHighlight) {
       if (feature && feature.fragments) {
@@ -301,14 +302,15 @@ class ProtvistaZoomable extends HTMLElement {
 
   bindEvents(feature, element) {
     feature
-      .on("mouseover", f => {
+      .on("mouseover", (f, i, group) => {
         element.dispatchEvent(
           element.createEvent(
             "mouseover",
             f,
             element._highlightEvent === "onmouseover",
             f.start,
-            f.end
+            f.end,
+            group[i]
           )
         );
       })
@@ -321,14 +323,15 @@ class ProtvistaZoomable extends HTMLElement {
           )
         );
       })
-      .on("click", f => {
+      .on("click", (f, i, group) => {
         element.dispatchEvent(
           element.createEvent(
             "click",
             f,
             element._highlightEvent === "onclick",
             f.start,
-            f.end
+            f.end,
+            group[i]
           )
         );
       });
