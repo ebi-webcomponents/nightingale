@@ -15,6 +15,7 @@ class ProtvistaDatatable extends LitElement {
       }
     });
     document.addEventListener("click", this.eventHandler);
+    this.classList.add("feature"); //this makes sure the protvista-zoomable event listener doesn't reset
   }
 
   disconnectedCallback() {
@@ -109,6 +110,10 @@ class ProtvistaDatatable extends LitElement {
     return rangeStart >= end || rangeEnd <= start;
   }
 
+  isOutside(rangeStart, rangeEnd, start, end) {
+    return rangeStart > end || rangeEnd < start;
+  }
+
   handleClick(e, start, end) {
     this.clickedRowId = e.target.parentNode.dataset.uuid;
     this.dispatchEvent(
@@ -130,7 +135,7 @@ class ProtvistaDatatable extends LitElement {
     if (
       this.displayStart &&
       this.displayEnd &&
-      this.isWithinRange(this.displayStart, this.displayEnd, start, end)
+      this.isOutside(this.displayStart, this.displayEnd, start, end)
     ) {
       className = `${className} hidden`;
     }
@@ -148,7 +153,7 @@ class ProtvistaDatatable extends LitElement {
       return null;
     }
     return html`
-      <table>
+      <table class="feature">
         <thead>
           <tr>
             ${Object.values(this.columns).map(
@@ -171,7 +176,9 @@ class ProtvistaDatatable extends LitElement {
                   ${Object.keys(this.columns).map(
                     column =>
                       html`
-                        <td>${this.columns[column].resolver(row)}</td>
+                        <td>
+                          ${this.columns[column].resolver(row)}
+                        </td>
                       `
                   )}
                 </tr>

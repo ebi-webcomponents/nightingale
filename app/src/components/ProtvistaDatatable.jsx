@@ -2,6 +2,7 @@ import React, { Fragment, Component } from "react";
 import ProtvistaDatatable from "protvista-datatable";
 import ProtvistaTrack from "protvista-track";
 import ProtvistaManager from "protvista-manager";
+import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import DataLoader from "data-loader";
 import loadWebComponent from "../utils/load-web-component";
@@ -32,11 +33,13 @@ class ProtvistaDatatableWrapper extends Component {
     loadWebComponent("protvista-datatable", ProtvistaDatatable);
     loadWebComponent("protvista-manager", ProtvistaManager);
     loadWebComponent("protvista-track", ProtvistaTrack);
+    loadWebComponent("protvista-navigation", ProtvistaNavigation);
     loadWebComponent("protvista-feature-adapter", ProtvistaFeatureAdapter);
     return (
       <Fragment>
         <h2>Track with data-loader</h2>
         <protvista-manager attributes="length displaystart displayend variantfilters highlight">
+          <protvista-navigation length="770" />
           <protvista-track length="770" layout="non-overlapping">
             <protvista-feature-adapter>
               <data-loader>
