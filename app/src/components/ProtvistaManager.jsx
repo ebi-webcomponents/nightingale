@@ -55,12 +55,17 @@ class ProtvistaManagerWrapper extends Component {
           id="example"
         >
           <protvista-navigation length="770" />
-          <protvista-sequence length="770" id="sequence-track" />
+          <protvista-sequence
+            length="770"
+            id="sequence-track"
+            highlight-event="onmouseover"
+          />
           <protvista-coloured-sequence
             length="770"
             id="sequence-coloured-track"
             scale="hydrophobicity-interface-scale"
             height="10"
+            highlight-event="onmouseover"
           />
           <protvista-coloured-sequence
             length="770"
@@ -69,11 +74,7 @@ class ProtvistaManagerWrapper extends Component {
             color_range="white:0,dodgerblue:11"
             height="10"
           />
-          <protvista-track
-            id="track1"
-            length="770"
-            highlight-event="onmouseover"
-          >
+          <protvista-track id="track1" length="770">
             <protvista-feature-adapter id="adapter1">
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />

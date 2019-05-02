@@ -104,11 +104,13 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
       const bases = this.sequence
         .slice(first, last)
         .split("")
-        .map((aa, i) => [1 + first + i, aa]);
+        .map((aa, i) => {
+          return { start: 1 + first + i, end: 1 + first + i, aa: aa };
+        });
 
       this.residues = this.seq_g
         .selectAll("rect.base_bg")
-        .data(ftWidth < MIN_BASE_SIZE ? [] : bases, d => d[0]);
+        .data(ftWidth < MIN_BASE_SIZE ? [] : bases, d => d.start);
 
       const colorScale = scaleLinear();
       if (this._color_range) {
@@ -123,52 +125,19 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
       this.residues
         .enter()
         .append("rect")
-        .attr("class", "base_bg")
-        .attr("data-base", ([pos, base]) => base)
-        .attr("data-pos", ([pos, base]) => pos)
+        .attr("class", "base_bg feature")
+        .attr("data-base", ({ aa }) => aa)
+        .attr("data-pos", ({ start }) => start)
         .attr("height", this._height)
         .merge(this.residues)
         .attr("width", ftWidth)
-        .attr("fill", ([pos, base]) => {
+        .attr("fill", ({ aa }) => {
           return colorScale(
-            base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0 // if the base is not in the given scale
+            aa.toUpperCase() in scale ? scale[aa.toUpperCase()] : 0 // if the base is not in the given scale
           );
         })
-        .attr("x", ([pos]) => this.getXFromSeqPosition(pos))
-        .on("mouseover", ([pos, base]) => {
-          this.dispatchEvent(
-            new CustomEvent("change", {
-              detail: {
-                highlightend: pos,
-                highlightstart: pos,
-                highlight: `${pos}:${pos}`,
-                type: "sequence",
-                metadata: {
-                  position: pos,
-                  residue: base,
-                  value:
-                    base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0
-                }
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        })
-        .on("mouseout", () => {
-          this.dispatchEvent(
-            new CustomEvent("change", {
-              detail: {
-                highlightend: null,
-                highlightstart: null,
-                highlight: null,
-                type: "sequence"
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        });
+        .attr("x", ({ start }) => this.getXFromSeqPosition(start))
+        .call(this.bindEvents, this);
 
       this.residues.exit().remove();
 
