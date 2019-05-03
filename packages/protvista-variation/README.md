@@ -4,6 +4,8 @@
 
 This custom element displays a matrix of amino-acid changes at a given position on the protein sequence. The advantage of a matrix-based approach is that even with a large number of variants (every single amino-acid change per location) the space taken by the visualisation on the screen doesn't change.
 
+[Demo](https://ebi-webcomponents.github.io/nightingale/#/variation)
+
 ## Usage
 ```html
 <protvista-variation length="270"></protvista-variation>
