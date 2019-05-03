@@ -1,6 +1,10 @@
 language: node_js
 node_js:
   - "10"
+branches:
+  only:
+    - master
+    - gh-pages
 install:
   - yarn global add lerna jest
   - yarn
@@ -12,3 +16,6 @@ script:
   - yarn build-site
   - cd app/dist/
   - git status
+env:
+  global:
+    secure: czmMz6ckkZKjT6nF3ThWIFLgonv/k7gmK7Zdvd+l3+FCzbTaGPQ+b5cJuAfmAlas8SgminZgRLQeRsF/YbVjNl6Cvn0cEHRbA8pe+ux8mWzrdwJ8qHfuO5oVy/0qVZ8u/f2kFWhvfItFeV4PLWSVoLeAiE3lhKpcQYqZvO3v4RvvdAROT6QtIB9d4NEJ2sCrFGAnzu2vnbeJ4mrQf945Vs2Fn0jN0wzWAWzeG7Eue/tmF+VAFIQDAiEJ8GhVXGvkncq56jjsjsIIaUO48iEi7wqzn+lnW6nLGrhNqKCI8Do0UzBINcX2lm7uRFgVmynaeFVuNPeFdwNv1jwf1DctsSmt6hgU4hZ0bwku6UbW4qwkoTo8KUdZUxRNCwE3Lo7LDNbm4ydhwUTeDWzKi8jhNbGoVBemHyrCxagd7AA8GUnxHjbdcIJ/xshNRlv1HCDHlcXE8Nc+TuitFUMHO7bgNiyt6YRH96okYKiRg9ersMnXsLkiDVn3gFcV7AsbWqF/8P4BBM+ECJsAPrB+6+Gcc1axWatQXh2PsCtrT8ugJr90icuO+fs2mv9FW3P9KraK7IVYRcTKB0x54nR+mn0X5HcwfsOUDZW7PQyEFgqgLYuqQ3areDbYDF0KZ1ZGKx7/50/hjb1GO9lgf8qWJPACSveTAbpaljFTMhoj5pshW/4=
