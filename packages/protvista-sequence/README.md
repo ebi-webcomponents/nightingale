@@ -19,16 +19,4 @@ The sequence to display
 #### `length: number`
 The protein or nucleic acid sequence length.
 
-#### `start: number (optional)`
-The start position of the selected region.
-
-#### `end: number (optional)`
-The end position of the selected region.
-
-#### `highlightStart: number (optional)`
-The start position of the highlighted region.
-
-#### `highlightEnd: number (optional)`
-The end position of the highlighted region.
-
-### Events
+#### also see [protvista-track](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
