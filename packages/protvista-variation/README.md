@@ -4,17 +4,10 @@
 ```
 
 ## API Reference
-### Attributes
-#### `accession: string`
-The UniProt accession number for which to load the data.
-
-#### `width: number (optional)`
-The width of the viewer. If ommited the viewer will take up the width of its container.
-
 ### Properties
 
-#### `width: number`
-The width of the viewer.
+#### `length: number`
+The width of the viewer. If ommited the viewer will take up the width of its container.
 
 #### `displaystart: number (optional)`
 The zoomed view starting point.
