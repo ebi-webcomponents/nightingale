@@ -15,7 +15,6 @@ const ProtvistaNavigation = lazyImport("ProtvistaNavigation");
 const ProtvistaManager = lazyImport("ProtvistaManager");
 const InteractionViewer = lazyImport("InteractionViewer");
 const ProtvistaFilter = lazyImport("ProtvistaFilter");
-const ProtvistaVariationFilter = lazyImport("ProtvistaVariationFilter");
 const ProtvistaDatatable = lazyImport("ProtvistaDatatable");
 const Playground = lazyImport("Playground");
 const ProtvistaVariationGraph = lazyImport("ProtvistaVariationGraph");
@@ -83,9 +82,6 @@ const App = (component = ProtvistaNavigation) => (
                 <NavLink to="/interaction-viewer">Interaction viewer</NavLink>
               </li>
               <li>
-                <NavLink to="/variation-filter">Variation Filter</NavLink>
-              </li>
-              <li>
                 <NavLink to="/filter">Filter</NavLink>
               </li>
               <li>
@@ -122,10 +118,6 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/manager" component={ProtvistaManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
               <Route path="/filter" component={ProtvistaFilter} />
-              <Route
-                path="/variation-filter"
-                component={ProtvistaVariationFilter}
-              />
               <Route path="/graph" component={ProtvistaVariationGraph} />
               <Route path="/datatable" component={ProtvistaDatatable} />
               <Route path="/playground" component={Playground} />

@@ -42,7 +42,11 @@ const config = {
           loader: "babel-loader",
           options: {
             babelrc: false,
-            include: ["src", "../../node_modules/lit-html"],
+            include: [
+              "src",
+              "../../node_modules/lit-html",
+              "../../node_modules/lit-element"
+            ],
             presets: [
               [
                 "@babel/preset-env",
