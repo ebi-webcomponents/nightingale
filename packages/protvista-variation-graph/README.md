@@ -9,9 +9,5 @@ A custom element allowing to navigate a protein/nucleic sequence.
 ## API Reference
 
 ### Properties
-#### `name: type`
-A property.
 
-### Events
-#### `my-event`
-An event that does things.
+#### also see [protvista-track](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-track/README.md#properties)
