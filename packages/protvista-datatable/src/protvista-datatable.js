@@ -16,6 +16,7 @@ class ProtvistaDatatable extends LitElement {
     });
     document.addEventListener("click", this.eventHandler);
     this.classList.add("feature"); //this makes sure the protvista-zoomable event listener doesn't reset
+    window.addEventListener("resize", this.updateHeaderColumnSizes.bind(this));
   }
 
   disconnectedCallback() {
@@ -66,16 +67,44 @@ class ProtvistaDatatable extends LitElement {
       }
       table {
         width: 100%;
+        padding: 0;
+        margin: 0;
+        border-spacing: 0;
       }
+
       th {
         text-align: left;
+        color: var(--protvista-datable__header-color, #393b42);
+        text-overflow: ellipsis;
       }
-      tbody tr:hover {
-        background-color: var(--protvista-datatable__hover, #c0c0c0);
+
+      td,
+      th {
+        padding: 1rem;
+        border-bottom: 1px solid #c2c4c4;
       }
+
+      thead {
+        display: block;
+      }
+
+      tbody {
+        display: block;
+        width: 100%;
+        height: 15rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      tr:hover {
+        background-color: var(--protvista-datatable__hover, #f1f1f1);
+      }
+
       td {
         cursor: pointer;
+        width: 20%;
       }
+
       .active {
         background-color: var(
           --protvista-datatable__active,
@@ -148,12 +177,28 @@ class ProtvistaDatatable extends LitElement {
     return className;
   }
 
+  updateHeaderColumnSizes() {
+    // Calculate column widths to apply to header
+    const firstRow = this.shadowRoot.querySelectorAll("table > tbody > tr")[0];
+    const columnWidths = [...firstRow.children].map(
+      el => el.getBoundingClientRect().width
+    );
+    const header = this.shadowRoot.querySelector("table > thead > tr");
+    [...header.children].forEach((el, i) => {
+      el.style.width = `${columnWidths[i]}px`;
+    });
+  }
+
+  updated() {
+    this.updateHeaderColumnSizes();
+  }
+
   render() {
     if (!this.data || !this.columns) {
       return null;
     }
     return html`
-      <table class="feature">
+      <table>
         <thead>
           <tr>
             ${Object.values(this.columns).map(
