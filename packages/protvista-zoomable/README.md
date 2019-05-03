@@ -181,4 +181,4 @@ The detail of the event includes the new coordinates. For example:
 ```
 
 ### Events bound to track features
-By default, `onmouseover`, `onmouseout` and `onclick` events are attached to *features*. They trigger a change event, which is used to update the highlight, but you can also use them to display things like tooltips, as the event payload will contain the data point as well as `x` and `y` coordinates of the click event.
+By default, `onmouseover`, `onmouseout` and `onclick` events are attached to *features*. They trigger a `change` event, which is used to update the highlight, but you can also use them to display things like tooltips, as the event payload will contain the data point as well as `x` and `y` coordinates of the click event.
