@@ -1,6 +1,12 @@
-# `<protvista-datatable>`
+[![Published on NPM](https://img.shields.io/npm/v/protvista-datatable.svg)](https://www.npmjs.com/package/protvista-datatable)
 
-Use this component to display table of features alongside a track. Wrapping it within `<protvista-manager>` will allow highlighting of features as well as hidding features which are out of the display when zooming.
+## &lt;protvista-datatable&gt;
+
+This component can be used to display a table of features.
+
+Wrapping it within `<protvista-manager>` will allow highlighting of features as well as hidding features which are out of the display when zooming.
+
+[Demo](https://ebi-webcomponents.github.io/nightingale/#/datatable)
 
 ## Usage
 
@@ -38,11 +44,11 @@ The definition used to display columns. It takes the following form:
 }
 ```
 
-#### `start: number (optional)`
+#### `displaystart: number (optional)`
 
 The start position of the selected region.
 
-#### `end: number (optional)`
+#### `displayend: number (optional)`
 
 The end position of the selected region.
 
@@ -51,13 +57,3 @@ The end position of the selected region.
 A comma separated list of regions to highlight.
 
 Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
-
-### Events
-
-#### Listens to
-
-`protvista-datatable` listens to the `load` event so can be used with `data-loader` or protvista dataloaders.
-
-#### Emits
-
-`change` event with highlight start and end in the payload
