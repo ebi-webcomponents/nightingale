@@ -8,7 +8,7 @@ This custom element can be used to zoom and navigate along the sequence displaye
 
 ## Usage
 ```html
-      <protvista-navigation length="456"/>
+<protvista-navigation length="456"/>
 ```
 
 ## API Reference
