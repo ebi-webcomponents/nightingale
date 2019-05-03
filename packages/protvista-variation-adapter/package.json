@@ -15,5 +15,11 @@
   "dependencies": {
     "lodash-es": "^4.17.11",
     "protvista-uniprot-entry-adapter": "^2.0.4"
+  },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
   }
 }

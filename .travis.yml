@@ -4,7 +4,7 @@ node_js:
 install:
   - yarn global add lerna jest
   - yarn
-  - lerna bootstrap
+  - yarn bootstrap
 script:
   - yarn test
   - yarn build-site
