@@ -9,11 +9,4 @@
 #### `length: number`
 The width of the viewer. If ommited the viewer will take up the width of its container.
 
-#### `displaystart: number (optional)`
-The zoomed view starting point.
-
-#### `displayend: number (optional)`
-The zoomed view ending point.
-
-#### `highlights: string (optional)`
-A comma separated list of regions to highlight.
+#### also see [protvista-track](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-track/README.md#properties)
