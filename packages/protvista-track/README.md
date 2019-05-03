@@ -33,4 +33,4 @@ Array items take the following shape:
 #### `layout: overlapping(default)|non-overlapping(optional)`
 The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
 
-#### also see [protvista-track](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
+#### also see [protvista-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
