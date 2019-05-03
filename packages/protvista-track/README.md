@@ -1,12 +1,11 @@
 # `<protvista-track>`
 
 Basic track type of the viewer
-See it running [Here](https://ebi-webcomponents.github.io/protvista-track/).
 
 ## Usage
 
 ```html
-<protvista-track length="456" start="34" end="400"></protvista-track>
+<protvista-track length="456" displaystart="34" displayend="400"></protvista-track>
 ```
 
 ## API Reference
@@ -34,11 +33,11 @@ Array items take the following shape:
 #### `layout: overlapping(default)|non-overlapping(optional)`
 The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
 
-#### `start: number (optional)`
+#### `displaystart: number (optional)`
 
 The start position of the selected region.
 
-#### `end: number (optional)`
+#### `displayend: number (optional)`
 
 The end position of the selected region.
 
@@ -55,15 +54,3 @@ Examples:
 - `:20` Highlight from the first base (1) to 20.
 - `10:` Highlight from base 10 to the end of the sequence.
 - `:` Highlight the whole sequence.
-
-#### `highlightStart: number (optional)` **[DEPRECATED]**
-
-The start position of the highlighted region.
-Deprecated: Use `highlight` instead.
-
-#### `highlightEnd: number (optional)` **[DEPRECATED]**
-
-The end position of the highlighted region.
-Deprecated: Use `highlight` instead.
-
-### Events
