@@ -106,6 +106,20 @@ First base to be displayed.
 #### `name: displayend` `Number`
 Last base to be displayed.
 
+#### `highlight: string (optional)`
+
+A comma separated list of regions to highlight.
+
+Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
+
+Examples:
+
+- `10:20` Highlight from base 10 to 20 including both.
+- `10:20,30:40` Highlight from base 10 to 20, and from 30 to 40.
+- `:20` Highlight from the first base (1) to 20.
+- `10:` Highlight from base 10 to the end of the sequence.
+- `:` Highlight the whole sequence.
+
 
 ### Methods
 #### `constructor()`

@@ -48,9 +48,6 @@ Run `yarn build` to build the application ready for deployment.
 [protvista-variation-graph](packages/protvista-variation-graph): a graph representing the number of variants at a given position. Extends `protvista-track`.
 [![npm version](https://badge.fury.io/js/protvista-variation-graph.svg)](https://badge.fury.io/js/protvista-variation-graph)
 
-[protvista-uniprot](packages/protvista-uniprot): A "super-component" using all components to build UniProt's ProtVista tool.
-[![npm version](https://badge.fury.io/js/protvista-uniprot.svg)](https://badge.fury.io/js/protvista-uniprot)
-
 [protvista-interpro-track](packages/protvista-interpro-track): A specialisation of `protvista-track` to use in InterPro. Extends `protvista-track`.
 [![npm version](https://badge.fury.io/js/protvista-interpro-track.svg)](https://badge.fury.io/js/protvista-interpro-track)
 
