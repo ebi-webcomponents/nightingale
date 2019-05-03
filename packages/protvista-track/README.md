@@ -19,6 +19,22 @@ There are two types of display available for `protvista-track`:
 ```html
 <protvista-track length="456" />
 ```
+#### Setting the data through property
+```
+const track = document.querySelector('#my-track-id');
+track.data = myDataObject
+```
+
+#### Setting data through &lt;data-loader&gt;
+```
+<protvista-track length="770">
+    <protvista-feature-adapter id="adapter1">
+        <data-loader>
+          <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+        </data-loader>
+    </protvista-feature-adapter>
+</protvista-track>
+```
 
 ## API Reference
 
