@@ -1,8 +1,7 @@
 [![Published on NPM](https://img.shields.io/npm/v/protvista-sequence.svg)](https://www.npmjs.com/package/protvista-sequence)
 ## &lt;protvista-sequence&gt;
 
-Displays the sequence in the selected region if there is enough space for the characters.
-Displays the axis legend of the selected region.
+This custom element displays the sequence in the selected region if the zoom level allows it, otherwise it displays the axis legend of the selected region. As it inherits from <protvista-zoomable>, it supports highlighting.
 
 [Demo](https://ebi-webcomponents.github.io/nightingale/#/sequence)
 
