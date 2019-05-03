@@ -1,11 +1,23 @@
-# `<protvista-track>`
+[![Published on NPM](https://img.shields.io/npm/v/protvista-track.svg)](https://www.npmjs.com/package/protvista-track)
 
-Basic track type of the viewer
+## &lt;protvista-track&gt;
+
+The `protvista-track` component is used to display protein features. These features have `start` and `end` positions (these can be the same if the feature only spans one amino-acid), a specific shape (rectangle is the default) and a colour. Features are passed through the `data` property. You can specify shapes and colours at an instance level (through a property) or individually in the feature `data` (see `data` below). In order to establish the scale, it is necessary to set the `length` property (length of the protein sequence in amino-acids).
+
+As `protvista-track` inherits from `protvista-zoomable`, it will respond to zooming changes, highlight events and emit events when interacting with features (helpful if you want to display tooltips).
+
+Loading data can be done directly through the `data` property, or through the use of a `load` event emitted by one of `protvista-track`'s children (e.g. a data adapter with `data-loader`).
+
+There are two types of display available for `protvista-track`:
+ * overlapping will display all the features on one single line. This means that if a feature overlaps another one, it will be indistinguishable. This layout can be useful to display an overview, or when the data is very dense.
+ * non-overlapping will calculate the best vertical positions for each feature so that they don't overlap.
+
+[Demo](https://ebi-webcomponents.github.io/nightingale/#/track)
 
 ## Usage
 
 ```html
-<protvista-track length="456" displaystart="34" displayend="400"></protvista-track>
+<protvista-track length="456" />
 ```
 
 ## API Reference
@@ -30,7 +42,13 @@ Array items take the following shape:
 }
 ```
 
-#### `layout: overlapping(default)|non-overlapping(optional)`
+#### `layout?: overlapping(default)|non-overlapping(optional)`
 The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
+
+#### `shape?: see above`
+Shape of all features within the track
+
+#### `color?: see above`
+Colour of all features within the track
 
 #### also see [protvista-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
