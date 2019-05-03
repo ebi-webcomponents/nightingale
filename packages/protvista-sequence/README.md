@@ -1,19 +1,33 @@
-# `<protvista-sequence>`
+[![Published on NPM](https://img.shields.io/npm/v/protvista-sequence.svg)](https://www.npmjs.com/package/protvista-sequence)
+## &lt;protvista-sequence&gt;
+
 Displays the sequence in the selected region if there is enough space for the characters.
 Displays the axis legend of the selected region.
-See it running [Here](https://ebi-webcomponents.github.io/protvista-sequence/).
+
+[Demo](https://ebi-webcomponents.github.io/nightingale/#/sequence)
 
 
 ## Usage
+
+#### Setting sequence through property
 ```html
-      <protvista-sequence length="456" start="34" end="400"></protvista-sequence>
+<protvista-sequence length="456" />
+```
+```
+const protvistaSequence = document.querySelectAll('#my-protvista-sequence-id');
+protvistaSequence.sequence = proteinSequence;
+```
+
+#### Setting sequence through attribute
+```html
+<protvista-sequence length="456" sequence="RFQAEGSLKK..."/>
 ```
 
 ## API Reference
 
 ### Properties
 
-### `sequence: string`
+#### `sequence: string`
 The sequence to display
 
 #### `length: number`
