@@ -1,4 +1,4 @@
-import ProtvistaUniprotEntryAdapter from "./ProtvistaUniprotEntryAdapter";
+import ProtvistaUniprotEntryAdapter from "./ProtVistaUniProtEntryAdapter";
 
 if (window.customElements) {
   customElements.define(
