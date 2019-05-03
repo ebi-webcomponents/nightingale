@@ -1,8 +1,10 @@
 language: node_js
 node_js:
   - "10"
-before_script:
-  - yarn bootstrap
+install:
+  - yarn global add lerna jest
+  - yarn
+  - lerna bootstrap
 script:
   - yarn test
   - yarn build-site
