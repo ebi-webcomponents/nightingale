@@ -3,7 +3,6 @@ dist
 .idea
 package-lock.json
 *.log
-*.lock
 *.bak
 *.iml
 *.tgz
