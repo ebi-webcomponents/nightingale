@@ -11,7 +11,7 @@ install:
   - lerna bootstrap
 script:
   - yarn test
-  - git clone --branch=gh-pages https://github.com/ebi-webcomponents/nightingale.git app/dist
+  - git clone --branch=gh-pages https://gustavo-salazar:${GH_TOKEN}@github.com/ebi-webcomponents/nightingale.git app/dist
   - yarn build-site
   - cd app/dist/
   - git add --all
