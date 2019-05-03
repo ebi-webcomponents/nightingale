@@ -19,4 +19,4 @@ The sequence to display
 #### `length: number`
 The protein or nucleic acid sequence length.
 
-#### also see [protvista-track](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
+#### also see [protvista-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
