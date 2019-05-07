@@ -96,22 +96,6 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         console.error("The attribute scale is not valid.");
         return;
       }
-      const ftWidth = this.getSingleBaseWidth();
-      const first = Math.round(Math.max(0, this._displaystart - 2));
-      const last = Math.round(
-        Math.min(this.sequence.length, this._displayend + 1)
-      );
-      const bases = this.sequence
-        .slice(first, last)
-        .split("")
-        .map((aa, i) => {
-          return { start: 1 + first + i, end: 1 + first + i, aa: aa };
-        });
-
-      this.residues = this.seq_g
-        .selectAll("rect.base_bg")
-        .data(ftWidth < MIN_BASE_SIZE ? [] : bases, d => d.start);
-
       const colorScale = scaleLinear();
       if (this._color_range) {
         const customColorScale = ColorScaleParser(this._color_range);
@@ -122,6 +106,30 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         colorScale.domain(defaultScale.domain).range(defaultScale.range);
       }
 
+      const ftWidth = this.getSingleBaseWidth();
+      const first = Math.round(Math.max(0, this._displaystart - 2));
+      const last = Math.round(
+        Math.min(this.sequence.length, this._displayend + 1)
+      );
+      const bases = this.sequence
+        .slice(first, last)
+        .split("")
+        .map((aa, i) => {
+          // use 0 if the base is not in the given scale
+          const value = aa.toUpperCase() in scale ? scale[aa.toUpperCase()] : 0;
+          return {
+            start: 1 + first + i,
+            end: 1 + first + i,
+            aa,
+            value,
+            colour: colorScale(value)
+          };
+        });
+
+      this.residues = this.seq_g
+        .selectAll("rect.base_bg")
+        .data(ftWidth < MIN_BASE_SIZE ? [] : bases, d => d.start);
+
       this.residues
         .enter()
         .append("rect")
@@ -131,11 +139,7 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         .attr("height", this._height)
         .merge(this.residues)
         .attr("width", ftWidth)
-        .attr("fill", ({ aa }) => {
-          return colorScale(
-            aa.toUpperCase() in scale ? scale[aa.toUpperCase()] : 0 // if the base is not in the given scale
-          );
-        })
+        .attr("fill", ({ colour }) => colour)
         .attr("x", ({ start }) => this.getXFromSeqPosition(start))
         .call(this.bindEvents, this);
 
