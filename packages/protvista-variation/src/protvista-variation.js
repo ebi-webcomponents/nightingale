@@ -40,7 +40,6 @@ const aaList = [
 class ProtvistaVariation extends ProtvistaTrack {
   connectedCallback() {
     super.connectedCallback();
-    this._accession = this.getAttribute("accession");
     this._height = parseInt(this.getAttribute("height"))
       ? parseInt(this.getAttribute("height"))
       : 430;
