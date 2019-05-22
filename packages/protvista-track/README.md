@@ -67,13 +67,13 @@ Array items take the following shape:
     ]
 }
 ```
-**Note**: `locations` is an alternative to `start`-`stop` attributes, that expresses that a feature can appear in several locations, and also supports the idea of discontinuos features, by allowing to have `fragments`.
+**Note**: `locations` is an alternative to `start`-`stop` attributes, that expresses that a feature can appear in several locations, and also supports the idea of discontinuous features, by allowing to have `fragments`.
 
-So for example a single continuos feature, that only appears once can be represented in 2 ways. The classic `{accession:'X', start:2, end:4}` or a more verbose version: `{accession:'X', locations: [{fragments: [{start:2, end:4}]}]}` an both should generate a track like this:
+So for example a single continuous feature, that only appears once can be represented in 2 ways. The classic `{accession:'X', start:2, end:4}` or a more verbose version: `{accession:'X', locations: [{fragments: [{start:2, end:4}]}]}` an both should generate a track like this:
 ```
 -XXX------
 ```
-If the same feature appears in 2 places in the sequence, it cannot be represented with old format, however using locations will be something like:
+If the same feature appears in 2 places in the sequence, it can be represented using `locations`:
 ```javascript
 {
     accession: 'Y', 
@@ -87,7 +87,7 @@ To generate a track like
 ```
 -YYY--YYY-
 ```
-Finally a feature now can be discontinuos, to repesent this in our data we use `fragments`:
+Finally a feature can also be discontinuous, to repesent this in our data we use `fragments`:
 ```javascript
 {
     accession: 'Z', 
