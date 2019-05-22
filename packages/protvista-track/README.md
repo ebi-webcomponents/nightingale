@@ -55,8 +55,19 @@ Array items take the following shape:
     color?: String,
     shape?: rectangle|bridge|diamond|chevron|catFace|triangle|wave|hexagon|pentagon|circle|arrow|doubleBar,
     tooltipContent?: String
+    locations: [
+        {
+            fragments: [
+                {
+                    start: Number, 
+                    end: Number
+                }
+            ]
+        }
+    ]
 }
 ```
+*Note*: `locations` is an alternative to `start`-`stop` attributes, that expresses that a feature can appear in several locations, and also supports the idea of discontinuos features, by the introduccion of the concept `fragment`
 
 #### `layout?: overlapping(default)|non-overlapping(optional)`
 The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
