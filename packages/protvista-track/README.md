@@ -47,7 +47,7 @@ The protein or nucleic acid sequence length.
 #### `data: Array`
 
 Array items take the following shape:
-```
+```javascript
 {
     accession: String,
     start: Number,
@@ -67,7 +67,44 @@ Array items take the following shape:
     ]
 }
 ```
-*Note*: `locations` is an alternative to `start`-`stop` attributes, that expresses that a feature can appear in several locations, and also supports the idea of discontinuos features, by the introduccion of the concept `fragment`
+**Note**: `locations` is an alternative to `start`-`stop` attributes, that expresses that a feature can appear in several locations, and also supports the idea of discontinuos features, by allowing to have `fragments`.
+
+So for example a single continuos feature, that only appears once can be represented in 2 ways. The classic `{accession:'X', start:2, end:4}` or a more verbose version: `{accession:'X', locations: [{fragments: [{start:2, end:4}]}]}` an both should generate a track like this:
+```
+-XXX------
+```
+If the same feature appears in 2 places in the sequence, it cannot be represented with old format, however using locations will be something like:
+```javascript
+{
+    accession: 'Y', 
+    locations: [
+        {fragments: [{start:2, end:4}]},
+        {fragments: [{start:7, end:9}]}
+    ]
+}
+```
+To generate a track like
+```
+-YYY--YYY-
+```
+Finally a feature now can be discontinuos, to repesent this in our data we use `fragments`:
+```javascript
+{
+    accession: 'Z', 
+    locations: [
+        {fragments: [
+            {start:2, end:4},
+            {start:7, end:9}]
+        }
+    ]
+}
+```
+This expresses that the same instance of the feature Z is split in 2 fragments, from 2 to 4 and from 7 to 9. Which could be represented as
+```
+-ZZZ==ZZZ-
+```
+
+
 
 #### `layout?: overlapping(default)|non-overlapping(optional)`
 The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
