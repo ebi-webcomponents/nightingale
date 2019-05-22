@@ -53,7 +53,7 @@ Array items take the following shape:
     start: Number,
     end: Number,
     color?: String,
-    shape?: rectangle|bridge|diamnond|chevron|catFace|triangle|wave|hexagon|pentagon|circle|arrow|doubleBar,
+    shape?: rectangle|bridge|diamond|chevron|catFace|triangle|wave|hexagon|pentagon|circle|arrow|doubleBar,
     tooltipContent?: String
 }
 ```
