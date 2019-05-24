@@ -82,7 +82,7 @@ export default class TrackHighlighter {
     highlighs
       .enter()
       .append("rect")
-      .style("opacity", 0.3)
+      .style("opacity", 0.5)
       .attr("fill", "rgba(255, 235, 59, 0.8)")
       .style("pointer-events", "none")
       .merge(highlighs)

@@ -138,7 +138,11 @@ class ProtvistaDatatable extends LitElement {
   }
 
   isWithinRange(rangeStart, rangeEnd, start, end) {
-    return rangeStart >= end || rangeEnd <= start;
+    return (
+      (!start && rangeEnd === parseInt(end)) ||
+      (!end && rangeStart === parseInt(start)) ||
+      (rangeStart <= start && rangeEnd >= end)
+    );
   }
 
   isOutside(rangeStart, rangeEnd, start, end) {
@@ -172,7 +176,7 @@ class ProtvistaDatatable extends LitElement {
     }
     if (
       this.highlight &&
-      !this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
+      this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
     ) {
       className = `${className} active`;
     }
