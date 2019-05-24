@@ -1,6 +1,6 @@
 {
   "name": "protvista-datatable",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "files": [
     "dist",
     "src"
