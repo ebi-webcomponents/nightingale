@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap",
     "prewatch": "npm run bootstrap",
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=production",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=development -w",
@@ -11,6 +11,10 @@
     "build-site": "lerna run build-site --stream",
     "test": "jest"
   },
+  "workspaces": [
+    "app",
+    "packages/*"
+  ],
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
