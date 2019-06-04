@@ -1,6 +1,6 @@
 {
   "name": "protvista-utils",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Collection of utilities for ProtVista components",
   "files": [
     "dist",
