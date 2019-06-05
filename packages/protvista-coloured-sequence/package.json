@@ -1,6 +1,6 @@
 {
   "name": "protvista-coloured-sequence",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Track that colors each base by a given function. The default funcion is hidrophobicity",
   "files": [
     "dist",

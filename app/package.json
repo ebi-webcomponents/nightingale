@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "A website to showcase all nightingale components",
   "files": [
     "dist",
@@ -19,7 +19,7 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "data-loader": "^2.0.4",
     "interaction-viewer": "^2.0.4",
-    "protvista-coloured-sequence": "^2.1.4",
+    "protvista-coloured-sequence": "^2.1.5",
     "protvista-datatable": "^2.1.4",
     "protvista-feature-adapter": "^2.1.0",
     "protvista-filter": "^2.1.2",
