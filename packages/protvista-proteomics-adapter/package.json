@@ -2,7 +2,7 @@
   "name": "protvista-proteomics-adapter",
   "description": "A dataloader and parser (ProtVista compliant) for proteomics/peptide data imported in UniProt",
   "main": "dist/protvista-proteomics-adapter",
-  "module": "src/ProtVistaProteomicsAdapter.js",
+  "module": "src/ProtvistaProteomicsAdapter.js",
   "keywords": [
     "ProtVista",
     "dataloader",

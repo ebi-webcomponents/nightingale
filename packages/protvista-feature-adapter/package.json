@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/protvista-feature-adapter.js",
-  "module": "src/ProtVistaFeatureAdapter.js",
+  "module": "src/ProtvistaFeatureAdapter.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ebi-uniprot/protvista-feature-adapter.git"
