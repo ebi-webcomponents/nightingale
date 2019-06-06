@@ -1,7 +1,7 @@
-import ProtVistaFeatureAdapter from './ProtVistaFeatureAdapter';
+import ProtvistaFeatureAdapter from "./ProtVistaFeatureAdapter";
 
 if (window.customElements) {
-    customElements.define('protvista-feature-adapter', ProtVistaFeatureAdapter);
+  customElements.define("protvista-feature-adapter", ProtvistaFeatureAdapter);
 }
 
-export default ProtVistaFeatureAdapter;
+export default ProtvistaFeatureAdapter;

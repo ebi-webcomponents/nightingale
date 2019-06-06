@@ -1,6 +1,6 @@
 import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 
-export default class ProtVistaFeatureAdapter extends ProtvistaUniprotEntryAdapter {
+export default class ProtvistaFeatureAdapter extends ProtvistaUniprotEntryAdapter {
   constructor() {
     super();
   }
