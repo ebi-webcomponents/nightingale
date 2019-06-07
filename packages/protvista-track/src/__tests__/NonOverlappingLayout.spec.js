@@ -45,7 +45,7 @@ describe("Layout bumping", () => {
     expect(layout.getFeatureYPos(features[2])).toEqual(2);
   });
 
-  test("should be back on first row", () => {
+  test("should be back on third row", () => {
     expect(layout.getFeatureYPos(features[3])).toEqual(14);
   });
 
