@@ -7,6 +7,7 @@
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=production",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=development -w",
     "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
+    "link-all": "lerna exec --ignore nightingale-showcase-app --parallel yarn link",
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
     "test": "jest"
