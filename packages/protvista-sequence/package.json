@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "2.1.0",
+  "version": "2.1.6",
   "description": "Sequence component for the ProtVista tool",
   "files": [
     "dist",
@@ -11,10 +11,10 @@
   "jsnext:main": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-zoomable": "^2.1.0"
+    "protvista-zoomable": "^2.1.6"
   },
   "devDependencies": {
     "d3": "^5.7.0"

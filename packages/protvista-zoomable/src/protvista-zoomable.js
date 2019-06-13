@@ -69,7 +69,10 @@ class ProtvistaZoomable extends HTMLElement {
     this.addEventListener("error", e => {
       throw e;
     });
-    window.addEventListener("click", this._resetEventHandler);
+    if (!window.hasProtvistaReset) {
+      window.addEventListener("click", this._resetEventHandler);
+      window.hasProtvistaReset = true;
+    }
   }
 
   disconnectedCallback() {

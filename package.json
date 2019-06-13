@@ -7,10 +7,15 @@
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=production",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=development -w",
     "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
+    "link-all": "lerna exec --ignore nightingale-showcase-app --parallel yarn link",
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
     "test": "jest"
   },
+  "workspaces": [
+    "app",
+    "packages/*"
+  ],
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.3.4",

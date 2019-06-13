@@ -97,14 +97,11 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         return;
       }
       const colorScale = scaleLinear();
+      this.colorScale = defaultScale;
       if (this._color_range) {
-        const customColorScale = ColorScaleParser(this._color_range);
-        colorScale
-          .domain(customColorScale.domain)
-          .range(customColorScale.range);
-      } else {
-        colorScale.domain(defaultScale.domain).range(defaultScale.range);
+        this._colorScale = ColorScaleParser(this._color_range);
       }
+      colorScale.domain(this.colorScale.domain).range(this.colorScale.range);
 
       const ftWidth = this.getSingleBaseWidth();
       const first = Math.round(Math.max(0, this._displaystart - 2));

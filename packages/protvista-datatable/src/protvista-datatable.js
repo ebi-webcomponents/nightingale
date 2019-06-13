@@ -4,6 +4,7 @@ import { v1 } from "uuid";
 class ProtvistaDatatable extends LitElement {
   constructor() {
     super();
+    this.height = 15;
     this.eventHandler = this.eventHandler.bind(this);
   }
 
@@ -53,6 +54,7 @@ class ProtvistaDatatable extends LitElement {
           }
         }
       },
+      height: { type: Number },
       columns: { type: Object },
       displayStart: { type: Number },
       displayEnd: { type: Number },
@@ -74,7 +76,8 @@ class ProtvistaDatatable extends LitElement {
 
       th {
         text-align: left;
-        color: var(--protvista-datable__header-color, #393b42);
+        background-color: var(--protvista-datable__header-background, #fff);
+        color: var(--protvista-datable__header-text, #393b42);
         text-overflow: ellipsis;
       }
 
@@ -91,7 +94,6 @@ class ProtvistaDatatable extends LitElement {
       tbody {
         display: block;
         width: 100%;
-        height: 15rem;
         overflow-y: auto;
         overflow-x: hidden;
       }
@@ -136,7 +138,11 @@ class ProtvistaDatatable extends LitElement {
   }
 
   isWithinRange(rangeStart, rangeEnd, start, end) {
-    return rangeStart >= end || rangeEnd <= start;
+    return (
+      (!start && rangeEnd === parseInt(end)) ||
+      (!end && rangeStart === parseInt(start)) ||
+      (rangeStart <= start && rangeEnd >= end)
+    );
   }
 
   isOutside(rangeStart, rangeEnd, start, end) {
@@ -170,7 +176,7 @@ class ProtvistaDatatable extends LitElement {
     }
     if (
       this.highlight &&
-      !this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
+      this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
     ) {
       className = `${className} active`;
     }
@@ -209,7 +215,7 @@ class ProtvistaDatatable extends LitElement {
             )}
           </tr>
         </thead>
-        <tbody>
+        <tbody style="height:${this.height}rem">
           ${this.data.map(
             row =>
               html`
