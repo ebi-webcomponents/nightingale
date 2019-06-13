@@ -164,5 +164,20 @@
     "end": 2,
     "color": "#3a3",
     "shape": "doubleBar"
+  },
+  {
+    "accession": "feature21",
+    "start": 1,
+    "end": 2,
+    "color": "#f06",
+    "shape": "helix",
+    "fill": "transparent"
+  },
+  {
+    "accession": "feature22",
+    "start": 2,
+    "end": 2,
+    "color": "#fc0",
+    "shape": "strand"
   }
 ]

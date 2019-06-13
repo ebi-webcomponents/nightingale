@@ -6,6 +6,7 @@ import loadWebComponent from "../utils/load-web-component";
 
 import data from "../mocks/features.json";
 import data2 from "../mocks/features2.json";
+import data3 from "../mocks/interpro-secondary-structure.json";
 
 class ProtvistaTrackWrapper extends Component {
   componentDidMount() {
@@ -13,6 +14,7 @@ class ProtvistaTrackWrapper extends Component {
     document.querySelector("#track2").data = data;
     document.querySelector("#track3").data = data;
     document.querySelector("#track4").data = data2;
+    document.querySelector("#track5").data = data3;
   }
 
   render() {
@@ -73,7 +75,16 @@ class ProtvistaTrackWrapper extends Component {
           highlightend="2"
           layout="non-overlapping"
           shape="roundRectangle"
-          height="420px"
+          height="460px"
+        />
+        <protvista-track
+          id="track5"
+          length="100"
+          width="1020"
+          height="100"
+          displaystart="1"
+          displayend="80"
+          layout="non-overlapping"
         />
       </Fragment>
     );
