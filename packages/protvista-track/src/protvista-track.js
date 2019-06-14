@@ -71,22 +71,40 @@ class ProtvistaTrack extends ProtvistaZoomable {
   _getFeatureColor(f) {
     if (f.color) {
       return f.color;
+    } else if (f.feature && f.feature.color) {
+      return f.feature.color;
     } else if (this._color) {
       return this._color;
     } else if (f.type) {
       return this._config.getColorByType(f.type);
+    } else if (f.feature && f.feature.type) {
+      return this._config.getColorByType(f.feature.type);
     } else {
       return "black";
+    }
+  }
+
+  _getFeatureFillColor(f) {
+    if (f.fill) {
+      return f.fill;
+    } else if (f.feature && f.feature.fill) {
+      return f.feature.fill;
+    } else {
+      return this._getFeatureColor(f);
     }
   }
 
   _getShape(f) {
     if (f.shape) {
       return f.shape;
+    } else if (f.feature && f.feature.shape) {
+      return f.feature.shape;
     } else if (this._shape) {
       return this._shape;
     } else if (f.type) {
       return this._config.getShapeByType(f.type);
+    } else if (f.feature && f.feature.type) {
+      return this._config.getShapeByType(f.feature.type);
     } else {
       return "rectangle";
     }
@@ -150,7 +168,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
           this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(f),
           f.end ? f.end - f.start + 1 : 1,
-          this._getShape(f.feature)
+          this._getShape(f)
         )
       )
       .attr(
@@ -162,8 +180,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
           this._layoutObj.getFeatureYPos(f.feature) +
           ")"
       )
-      .attr("fill", f => this._getFeatureColor(f.feature))
-      .attr("stroke", f => this._getFeatureColor(f.feature))
+      .attr("fill", f => this._getFeatureFillColor(f))
+      .attr("stroke", f => this._getFeatureColor(f))
       .style("fill-opacity", 0.9)
       .call(this.bindEvents, this);
   }
@@ -195,7 +213,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
             this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
             f.end ? f.end - f.start + 1 : 1,
-            this._getShape(f.feature)
+            this._getShape(f)
           )
         )
         .attr(

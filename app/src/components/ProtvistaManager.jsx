@@ -14,6 +14,7 @@ import loadWebComponent from "../utils/load-web-component";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
+import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
 
 class ProtvistaManagerWrapper extends Component {
   componentDidMount() {
@@ -31,6 +32,8 @@ class ProtvistaManagerWrapper extends Component {
       "400:600";
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
+    document.querySelector("#track3").data = secondaryStructureData;
+    document.querySelector("#track3").fixedHighlight = "400:600";
     document.querySelector("#interpro-track").fixedHighlight = "400:600";
     document.querySelector("#interpro-track-residues").fixedHighlight =
       "400:600";
@@ -91,6 +94,14 @@ class ProtvistaManagerWrapper extends Component {
               </data-loader>
             </protvista-feature-adapter>
           </protvista-track>
+          <protvista-track
+            id="track3"
+            length="770"
+            height="85"
+            displaystart="1"
+            displayend="80"
+            layout="non-overlapping"
+          />
           <protvista-interpro-track
             id="interpro-track"
             length="770"

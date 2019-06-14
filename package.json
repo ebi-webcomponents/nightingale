@@ -12,10 +12,6 @@
     "build-site": "lerna run build-site --stream",
     "test": "jest"
   },
-  "workspaces": [
-    "app",
-    "packages/*"
-  ],
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
@@ -41,5 +37,9 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  }
+  },
+  "workspaces": [
+    "app",
+    "packages/*"
+  ]
 }
