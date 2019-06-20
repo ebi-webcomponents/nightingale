@@ -9,7 +9,7 @@ module.exports = merge(common, {
     contentBase: path.join(__dirname, "build"),
     compress: true,
     host: "localhost",
-    port: 39093,
+    port: 39095,
     historyApiFallback: true
   }
 });
