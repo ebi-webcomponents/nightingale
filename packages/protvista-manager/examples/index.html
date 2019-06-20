@@ -60,18 +60,7 @@
         highlightstart="10"
         highlightend="45"
       ></protvista-interpro-track>
-      <protvista-variation
-        filters="disease"
-        length="223"
-        displaystart="1"
-        displayend="158"
-        highlightstart="10"
-        highlightend="45"
-      >
-        <data-loader>
-          <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-        </data-loader>
-      </protvista-variation>
+      <protvista-tooltip id="my_tooltip" />
     </protvista-manager>
 
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -115,11 +104,6 @@
       defer
     ></script>
     <script
-      src="../../protvista-variation/dist/protvista-variation.js"
-      charset="utf-8"
-      defer
-    ></script>
-    <script
       src="../../protvista-tooltip/dist/protvista-tooltip.js"
       charset="utf-8"
       defer
@@ -130,7 +114,7 @@
       defer
     ></script>
     <script
-      src="../../uniprot-entry-data-adapter/dist/protvista-uniprot-entry-adapter.js"
+      src="../../protvista-uniprot-entry-adapter/dist/protvista-uniprot-entry-adapter.js"
       charset="utf-8"
       defer
     ></script>
@@ -244,6 +228,20 @@
 
         document.querySelector("#track3").data = data;
         document.querySelector("#track3").contributors = contributors;
+
+        document.addEventListener("change", e => {
+          const { detail } = e;
+          const tooltip = document.getElementById("my_tooltip");
+          if (detail.eventtype === "click") {
+            tooltip.left = detail.coords[0]; //This is the x coordinate from the click on the svg element
+            tooltip.top = detail.coords[1]; // y coordinate
+            tooltip.title = "My awesome tooltip";
+            tooltip.innerHTML = `<em>${detail.feature.feature.category}</em>`; //Any HTML can go here
+            tooltip.visible = true;
+          } else if (detail.eventtype === "reset") {
+            tooltip.visible = false;
+          }
+        });
       };
     </script>
   </body>

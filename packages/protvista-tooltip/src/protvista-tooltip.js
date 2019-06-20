@@ -1,129 +1,108 @@
-import "../style/protvista-tooltip.css";
+import { LitElement, html, css } from "lit-element";
 
-class ProtvistaTooltip extends HTMLElement {
-  constructor() {
-    super();
-    this._top = parseInt(this.getAttribute("top"));
-    this._left = parseInt(this.getAttribute("left"));
-    this._content = this.getAttribute("content");
-    this._title = this.getAttribute("title");
-    this._visible = this.getAttribute("visible")
-      ? this.getAttribute("visible")
-      : false;
-    this._mirror = undefined;
-  }
-
-  set top(top) {
-    this._top = top;
-  }
-
-  get top() {
-    return this._top;
-  }
-
-  set left(left) {
-    this._left = left;
-  }
-
-  get left() {
-    return this._left;
-  }
-
-  set content(content) {
-    this._content = content;
-  }
-
-  get content() {
-    return this._content;
-  }
-
-  set title(title) {
-    this._title = title;
-  }
-
-  get title() {
-    return this._title;
-  }
-
-  set visible(visible) {
-    this._visible = visible;
-  }
-
-  get visible() {
-    return this._visible;
-  }
-
-  set closeable(isCloseable) {
-    if (isCloseable) {
-      this.setAttribute("closeable", "");
-    } else {
-      this.removeAttribute("closeable");
-    }
-  }
-
-  get closeable() {
-    return this.hasAttribute("closeable");
-  }
-
-  get mirror() {
-    return this._mirror;
-  }
-
-  set mirror(orientation) {
-    this.setAttribute("mirror", orientation);
-  }
-
-  static get observedAttributes() {
-    return ["top", "left", "mirror", "title", "content"];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue != newValue) {
-      if (name === "top" || name === "left") {
-        this[`_${name}`] = this.getAttribute(name);
-        this._updatePosition();
-      } else {
-        this.render();
+class ProtvistaTooltip extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        font-family: Roboto, Arial, sans-serif;
+        z-index: 50000;
+        position: absolute;
+        min-width: 220px;
+        margin-top: 20px;
+        margin-left: -20px;
+        -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        opacity: 0.9;
       }
-    }
+
+      .tooltip-header .tooltip-header-title,
+      .tooltip-body,
+      a,
+      a:link,
+      a:hover,
+      a:active,
+      a:visited {
+        color: #ffffff;
+      }
+
+      .tooltip-header {
+        background-color: #000000;
+        line-height: 3em;
+      }
+
+      .tooltip-header::before {
+        content: " ";
+        position: absolute;
+        bottom: 100%;
+        left: 20px;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
+
+      .tooltip-header::before {
+        left: 20px;
+      }
+
+      .tooltip-header .tooltip-header-title {
+        background-color: #000000;
+        font-weight: 700;
+        line-height: 1em;
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 0.4em;
+      }
+
+      .tooltip-body {
+        padding: 1em;
+        background: #616161;
+        font-weight: normal;
+      }
+
+      table td {
+        padding: 0.5em 0.5em;
+        vertical-align: top;
+      }
+
+      table td:first-child {
+        font-weight: 600;
+        text-align: right;
+      }
+
+      table td p {
+        margin-top: 0;
+      }
+    `;
   }
 
-  connectedCallback() {
-    this.render();
-  }
-
-  hasTooltipParent(el) {
-    if (!el.parentElement || el.parentElement.tagName === "body") {
-      return false;
-    } else if (el.parentElement.tagName === "PROTVISTA-TOOLTIP") return true;
-    else {
-      return this.hasTooltipParent(el.parentElement);
-    }
+  static get properties() {
+    return {
+      top: { type: Number },
+      left: { type: Number },
+      title: { type: String },
+      visible: { type: Boolean }
+    };
   }
 
   _updatePosition() {
-    this.style.top = `${this._top}px`;
-    this.style.left = `${this._left}px`;
+    this.style.top = `${this.top}px`;
+    this.style.left = `${this.left}px`;
   }
 
   render() {
     this._updatePosition();
 
-    if ("undefined" !== typeof this.mirror) {
-      this.mirror = this.mirror;
-    }
+    this.style.display = this.visible ? "block" : "none";
 
-    this.style.display = this._visible ? "block" : "none";
-
-    let html = `<div class="tooltip-header">`;
-    if (this.closeable) {
-      html = `${html}<span class="tooltip-close"></span>`;
-    }
-    html = `${html}<span class="tooltip-header-title">${
-      this._title
-    }</span></div>
-        <div class="tooltip-body">${this._content}</div>`;
-    this.innerHTML = html;
+    return html`
+      ${this.title && html``}
+      <div class="tooltip-header">
+        <span class="tooltip-header-title">${this.title}</span>
+      </div>
+      <div class="tooltip-body"><slot></slot></div>
+    `;
   }
 }
 

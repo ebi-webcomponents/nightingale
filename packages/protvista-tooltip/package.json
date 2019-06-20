@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/protvista-tooltip.js",
-  "module": "src/index.js",
+  "module": "src/protvista-tooltip.js",
   "keywords": [
     "protvista",
     "webcomponents",
@@ -18,6 +18,7 @@
   "license": "MIT",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
+    "lit-element": "^2.2.0",
     "lodash-es": "^4.17.11"
   }
 }
