@@ -6,9 +6,8 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.js",
+  "main": "dist/data-loader.js",
   "module": "src/data-loader.js",
-  "jsnext:main": "src/data-loader.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/data-loader.git"

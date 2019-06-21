@@ -11,6 +11,10 @@
     "uniprot",
     "ebi"
   ],
+  "files": [
+    "src",
+    "dist"
+  ],
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
   "dependencies": {

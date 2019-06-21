@@ -1,16 +1,16 @@
-import ProtvistaZoomable from './protvista-zoomable';
+import ProtvistaZoomable from "./protvista-zoomable";
 
 const loadComponent = function() {
-    customElements.define('protvista-zoomable', ProtvistaZoomable);
+  customElements.define("protvista-zoomable", ProtvistaZoomable);
 };
 
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document.addEventListener('WebComponentsReady', function() {
-        loadComponent();
-    });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
 
 export default ProtvistaZoomable;

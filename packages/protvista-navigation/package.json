@@ -10,9 +10,8 @@
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/protvista-navigation"
   },
-  "main": "dist/protvista-track.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
+  "main": "dist/protvista-navigation.js",
+  "module": "src/protvista-navigation.js",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "ISC",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",

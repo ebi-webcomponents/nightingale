@@ -6,9 +6,8 @@
     "dist",
     "src"
   ],
-  "main": "dist/ protvista-coloured-sequence@.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
+  "main": "dist/protvista-coloured-sequence.js",
+  "module": "src/protvista-coloured-sequence.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {

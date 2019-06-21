@@ -12,5 +12,3 @@ if (window.customElements) {
     loadComponent();
   });
 }
-
-export default ProtvistaVariationGraph;

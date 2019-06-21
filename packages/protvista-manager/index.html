@@ -12,15 +12,13 @@
   </head>
   <body>
     <protvista-manager
-      attributes="length displaystart displayend highlightstart highlightend variantfilters"
+      attributes="length displaystart displayend highlight"
       id="example"
     >
       <protvista-navigation
         length="223"
         displaystart="1"
         displayend="158"
-        highlightStart="10"
-        highlightEnd="45"
       ></protvista-navigation>
       <protvista-sequence
         id="seq1"
@@ -49,8 +47,6 @@
         length="223"
         displaystart="1"
         displayend="158"
-        highlightstart="10"
-        highlightend="45"
         layout="non-overlapping"
       ></protvista-track>
       <protvista-interpro-track
@@ -58,20 +54,7 @@
         length="223"
         displaystart="1"
         displayend="158"
-        highlightstart="10"
-        highlightend="45"
       ></protvista-interpro-track>
-      <protvista-variation
-        length="223"
-        displaystart="1"
-        displayend="158"
-        highlightstart="10"
-        highlightend="45"
-      >
-        <data-loader>
-          <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-        </data-loader>
-      </protvista-variation>
     </protvista-manager>
 
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
@@ -100,7 +83,7 @@
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-tooltip/dist/protvista-tooltip.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-tooltip@latest/dist/protvista-tooltip.js"
       charset="utf-8"
       defer
     ></script>
@@ -120,22 +103,17 @@
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-variation@latest/dist/protvista-variation.js"
-      charset="utf-8"
-      defer
-    ></script>
-    <script
       src="https://cdn.jsdelivr.net/npm/data-loader/dist/index.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter/dist/ProtVistaUniProtEntryAdapter.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter@latest/dist/protvista-uniprot-entry-adapter.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter/dist/ProtVistaFeatureAdapter.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter/dist/protvista-feature-adapter.js"
       charset="utf-8"
       defer
     ></script>

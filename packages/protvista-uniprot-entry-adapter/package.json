@@ -7,8 +7,7 @@
     "src"
   ],
   "main": "dist/protvista-uniprot-entry-adapter.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
+  "module": "src/ProtVistaUniProtEntryAdapter.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ebi-uniprot/protvista-uniprot-entry-adapter.git"

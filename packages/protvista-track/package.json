@@ -7,8 +7,8 @@
     "src"
   ],
   "main": "dist/protvista-track.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
+  "module": "src/protvista-track.js",
+  "jsnext:main": "src/protvista-track.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-ppf/protvista-track"

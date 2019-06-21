@@ -1,15 +1,14 @@
-import ProtvistaVariation from './protvista-variation';
+import ProtvistaVariation from "./protvista-variation";
 
-var loadComponent = function () {
-    customElements.define('protvista-variation', ProtvistaVariation);
-}
+var loadComponent = function() {
+  customElements.define("protvista-variation", ProtvistaVariation);
+};
 
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document
-        .addEventListener('WebComponentsReady', function () {
-            loadComponent();
-        });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
