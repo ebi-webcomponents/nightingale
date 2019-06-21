@@ -6,7 +6,8 @@
   "module": "src/protvista-structure.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "style"
   ],
   "keywords": [],
   "author": "xwatkins@ebi.ac.uk",
