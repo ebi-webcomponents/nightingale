@@ -1,10 +1,10 @@
 import React, { Suspense, lazy } from "react";
 import { HashRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
-
 import pkg from "../package.json";
-
 import "./App.css";
+import GettingStarted from "./tutorial/GettingStarted";
+
 const ProtvistaTrack = lazyImport("ProtvistaTrack");
 const ProtvistaInterProTrack = lazyImport("ProtvistaInterProTrack");
 const ProtvistaSequence = lazyImport("ProtvistaSequence");
@@ -37,6 +37,7 @@ const App = (component = ProtvistaNavigation) => (
       <div className="main">
         <div>
           <nav className="main-nav">
+            <h4>Components</h4>
             <ul className="main-nav__list">
               <li>
                 <NavLink to="/track" activeClassName="active">
@@ -102,6 +103,7 @@ const App = (component = ProtvistaNavigation) => (
           {/*<Redirect from="/" to="/track" />*/}
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
+              <Route path="/" component={GettingStarted} />
               <Route path="/track" component={ProtvistaTrack} />
               <Route
                 path="/interpro-track"
