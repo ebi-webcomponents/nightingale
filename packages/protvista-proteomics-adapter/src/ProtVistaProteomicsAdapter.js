@@ -4,7 +4,7 @@
 import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import ProteomicsDataParser from "./ProteomicsDataParser";
 
-export default class ProtVistaProteomicsAdapter extends ProtvistaUniprotEntryAdapter {
+class ProtVistaProteomicsAdapter extends ProtvistaUniprotEntryAdapter {
   constructor() {
     super();
     this._parser = new ProteomicsDataParser();
@@ -23,3 +23,5 @@ export default class ProtVistaProteomicsAdapter extends ProtvistaUniprotEntryAda
     return this._adaptedData;
   }
 }
+
+export default ProtVistaProteomicsAdapter;

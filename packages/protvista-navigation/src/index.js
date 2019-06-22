@@ -1,16 +1,14 @@
-import ProtVistaNavigation from './protvista-navigation';
+import ProtVistaNavigation from "./protvista-navigation";
 
 const loadComponent = function() {
-  customElements.define('protvista-navigation', ProtVistaNavigation);
+  customElements.define("protvista-navigation", ProtVistaNavigation);
 };
 
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document.addEventListener('WebComponentsReady', function() {
-        loadComponent();
-    });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
-
-export default ProtVistaNavigation;

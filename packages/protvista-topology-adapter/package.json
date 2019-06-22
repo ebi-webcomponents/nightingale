@@ -3,6 +3,10 @@
   "description": "A dataloader and parser (ProtVista compliant) for topological features in UniProt",
   "main": "dist/protvista-topology-adapter.js",
   "module": "src/ProtVistaTopologyAdapter.js",
+  "files": [
+    "src",
+    "dist"
+  ],
   "keywords": [
     "ProtVista",
     "dataloader",

@@ -1,16 +1,14 @@
-import ProtVistaManager from './protvista-manager';
+import ProtVistaManager from "./protvista-manager";
 
 const loadComponent = function() {
-  customElements.define('protvista-manager', ProtVistaManager);
+  customElements.define("protvista-manager", ProtVistaManager);
 };
 
 // Conditional loading of polyfill
 if (window.customElements) {
-    loadComponent();
+  loadComponent();
 } else {
-    document.addEventListener('WebComponentsReady', function() {
-        loadComponent();
-    });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }
-
-export default ProtVistaManager;

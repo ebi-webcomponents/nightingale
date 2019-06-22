@@ -1,6 +1,6 @@
 import BasicHelper from "./BasicHelper";
 
-export default class ProtvistaUniprotEntryAdapter extends HTMLElement {
+class ProtvistaUniprotEntryAdapter extends HTMLElement {
   constructor() {
     super();
     this._adaptedData = [];
@@ -91,3 +91,5 @@ export default class ProtvistaUniprotEntryAdapter extends HTMLElement {
     });
   }
 }
+
+export default ProtvistaUniprotEntryAdapter;

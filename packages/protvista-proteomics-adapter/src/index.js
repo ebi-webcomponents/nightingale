@@ -1,7 +1,8 @@
-import ProtVistaProteomicsAdapter from './ProtVistaProteomicsAdapter';
+import ProtVistaProteomicsAdapter from "./ProtVistaProteomicsAdapter";
 
 if (window.customElements) {
-    customElements.define('protvista-proteomics-adapter', ProtVistaProteomicsAdapter);
+  customElements.define(
+    "protvista-proteomics-adapter",
+    ProtVistaProteomicsAdapter
+  );
 }
-
-export default ProtVistaProteomicsAdapter;
