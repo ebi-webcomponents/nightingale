@@ -1,6 +1,6 @@
 {
   "name": "protvista-uniprot-entry-adapter",
-  "version": "2.1.0",
+  "version": "2.1.12",
   "description": "A generic/abstract adapter for services retrieving UniProt entries by accession",
   "files": [
     "dist",

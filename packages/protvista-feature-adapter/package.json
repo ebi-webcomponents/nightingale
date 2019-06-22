@@ -1,6 +1,6 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "2.1.7",
+  "version": "2.1.12",
   "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
   "files": [
     "dist",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-uniprot-entry-adapter": "^2.1.0"
+    "protvista-uniprot-entry-adapter": "^2.1.12"
   },
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178"
 }
