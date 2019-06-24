@@ -34,6 +34,10 @@
   flex-direction: column;
 }
 
+.main-nav__list li {
+  margin-left: 0.3rem;
+}
+
 .main-nav__list li a {
   display: block;
   padding-left: 1rem;
@@ -46,6 +50,11 @@
 .main-nav__list li a:hover {
   background-color: #dbdbdb;
   color: #000000;
+}
+
+.main-nav__list li h3 {
+  margin-left: 1rem;
+  margin-bottom: 0.7rem;
 }
 
 .main-content {

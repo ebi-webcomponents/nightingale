@@ -37,70 +37,80 @@ const App = (component = ProtvistaNavigation) => (
       <div className="main">
         <div>
           <nav className="main-nav">
-            <h4>Components</h4>
             <ul className="main-nav__list">
               <li>
-                <NavLink to="/track" activeClassName="active">
-                  Track
+                <NavLink to="/" exact activeClassName="active">
+                  Getting started
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/interpro-track" activeClassName="active">
-                  InterPro Track
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/sequence" activeClassName="active">
-                  Sequence
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/coloured-sequence" activeClassName="active">
-                  Coloured Sequence
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/variation" activeClassName="active">
-                  Variation
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/structure" activeClassName="active">
-                  Structure
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/navigation" activeClassName="active">
-                  Navigation
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/manager" activeClassName="active">
-                  Manager
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/interaction-viewer">Interaction viewer</NavLink>
-              </li>
-              <li>
-                <NavLink to="/filter">Filter</NavLink>
-              </li>
-              <li>
-                <NavLink to="/graph">Variation Graph</NavLink>
-              </li>
-              <li>
-                <NavLink to="/datatable">Data table</NavLink>
-              </li>
-            </ul>
-            <ul className="main-nav__list">
-              <li>
-                <NavLink to="/playground">Playground Area</NavLink>
+                <h3>Components</h3>
+                <ul className="main-nav__list">
+                  <li>
+                    <NavLink to="/track" activeClassName="active">
+                      Track
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/interpro-track" activeClassName="active">
+                      InterPro Track
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/sequence" activeClassName="active">
+                      Sequence
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/coloured-sequence" activeClassName="active">
+                      Coloured Sequence
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/variation" activeClassName="active">
+                      Variation
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/structure" activeClassName="active">
+                      Structure
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/navigation" activeClassName="active">
+                      Navigation
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/manager" activeClassName="active">
+                      Manager
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/interaction-viewer">
+                      Interaction viewer
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/filter">Filter</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/graph">Variation Graph</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/datatable">Data table</NavLink>
+                  </li>
+                </ul>
+                <ul className="main-nav__list">
+                  <li>
+                    <NavLink to="/playground">Playground Area</NavLink>
+                  </li>
+                </ul>
               </li>
             </ul>
           </nav>
         </div>
         <div className="main-content">
-          {/*<Redirect from="/" to="/track" />*/}
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path="/track" component={ProtvistaTrack} />
