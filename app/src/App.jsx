@@ -103,7 +103,6 @@ const App = (component = ProtvistaNavigation) => (
           {/*<Redirect from="/" to="/track" />*/}
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
-              <Route path="/" component={GettingStarted} />
               <Route path="/track" component={ProtvistaTrack} />
               <Route
                 path="/interpro-track"
@@ -123,6 +122,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/graph" component={ProtvistaVariationGraph} />
               <Route path="/datatable" component={ProtvistaDatatable} />
               <Route path="/playground" component={Playground} />
+              <Route path="/" component={GettingStarted} />
             </Switch>
           </Suspense>
         </div>
