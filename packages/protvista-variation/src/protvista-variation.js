@@ -4,7 +4,6 @@ import {
   scalePoint,
   axisLeft,
   axisRight,
-  select,
   event as d3Event
 } from "d3";
 import _includes from "lodash-es/includes";
@@ -38,6 +37,13 @@ const aaList = [
 ];
 
 class ProtvistaVariation extends ProtvistaTrack {
+  constructor() {
+    super();
+    const styleElt = document.createElement("style");
+    styleElt.innerHTML = ProtvistaVariation.css;
+    this.appendChild(styleElt);
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this._height = parseInt(this.getAttribute("height"))
@@ -61,6 +67,43 @@ class ProtvistaVariation extends ProtvistaTrack {
   set data(data) {
     this._data = processVariants(data);
     this._createTrack();
+  }
+
+  static get css() {
+    return `
+    <style>
+    protvista-variation {
+      display: flex;
+      width: 100%;
+    }
+    
+    svg {
+      background-color: #fff;
+    }
+    
+    circle {
+      opacity: 0.6;
+    }
+    circle:hover {
+      opacity: 0.9;
+    }
+    .tick line,
+    .axis path {
+      opacity: 0.1;
+    }
+    
+    .protvista-highlight {
+      fill: #ffe999;
+    }
+    
+    .variation-y-right line,
+    .axis path {
+      fill: none;
+      stroke: none;
+    }
+    
+    </style>
+    `;
   }
 
   _createFeatures() {
