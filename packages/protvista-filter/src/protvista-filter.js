@@ -1,9 +1,6 @@
 import { html, render } from "lit-html";
 import groupBy from "lodash-es/groupBy";
 
-import "./style.css";
-import "./checkbox.js";
-
 class ProtvistaFilter extends HTMLElement {
   static get tagName() {
     return "protvista-filter";
@@ -134,3 +131,4 @@ class ProtvistaFilter extends HTMLElement {
 }
 
 export default ProtvistaFilter;
+export { ProtvistaCheckbox } from "./checkbox";

@@ -1,15 +1,15 @@
-import ProtvistaFilter from './protvista-filter';
+import ProtvistaFilter, { ProtvistaCheckbox } from "./protvista-filter";
 
-var loadComponent = function () {
-  customElements.define(ProtvistaFilter.tagName, ProtvistaFilter);
-}
+var loadComponent = function() {
+  customElements.define("protvista-checkbox", ProtvistaCheckbox);
+  customElements.define("protvista-filter", ProtvistaFilter);
+};
 
 // Conditional loading of polyfill
 if (window.customElements) {
   loadComponent();
 } else {
-  document
-    .addEventListener('WebComponentsReady', function () {
-      loadComponent();
-    });
+  document.addEventListener("WebComponentsReady", function() {
+    loadComponent();
+  });
 }

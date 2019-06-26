@@ -1,39 +1,84 @@
-import { html, render } from "lit-html";
+import { html, css, LitElement, unsafeCSS } from "lit-element";
 
-import "./style.css";
-
-class ProtvistaCheckbox extends HTMLElement {
-  static get tagName() {
-    return "protvista-checkbox";
-  }
-
+class ProtvistaCheckbox extends LitElement {
   constructor() {
     super();
     this._toggleChecked = this._toggleChecked.bind(this);
   }
 
   connectedCallback() {
-    this._render();
+    super.connectedCallback();
+    const styleElement = document.createElement("style");
+    styleElement.innerHTML = this.css;
+    this.appendChild(styleElement);
   }
 
-  static get observedAttributes() {
-    return ["checked", "disabled", "value"];
+  static get styles() {
+    return css`
+      :host {
+        font-size: 12px;
+      }
+
+      :host[disabled] {
+        opacity: 0.5;
+      }
+
+      .protvista_checkbox {
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        line-height: 24px;
+        outline: none;
+      }
+
+      label
+        .protvista_checkbox_input:checked
+        + .protvista_checkbox_label::before {
+        opacity: 1;
+      }
+
+      .protvista_checkbox_input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        margin: 0;
+      }
+
+      .protvista_checkbox_label {
+        display: flex;
+        flex-direction: column;
+        text-indent: 1em;
+        margin-left: 16px;
+      }
+
+      .protvista_checkbox_input + .protvista_checkbox_label::before {
+        content: "";
+        width: 24px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 4px;
+        display: block;
+        box-sizing: border-box;
+        border: 1px solid #bdc3c7;
+      }
+    `;
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    switch (name) {
-      case "checked":
-        this.checked = true;
-        break;
-      case "disabled":
-        this.disabled = true;
-        break;
-      case "value":
-        this.value = newValue;
-    }
+  static get properties() {
+    return {
+      checked: { type: Boolean },
+      disabled: { type: Boolean },
+      value: { type: String },
+      options: { type: Object }
+    };
   }
 
-  _render() {
+  render() {
     let {
       value,
       options: { labels, colors },
@@ -43,61 +88,49 @@ class ProtvistaCheckbox extends HTMLElement {
     if (colors.length == null) {
       colors = [colors];
     }
-    value = `filter-${value.split(":")[1]}`;
-    const cssId = value.replace(/[\s,\(\)']/g, "");
-    const isCompound = colors.length > 1;
-    render(
-      html`
-        <style>
-          #${cssId}
-            .protvista_checkbox_input
-            + .protvista_checkbox_label::before {
-            background: ${isCompound
-              ? html`
-                  linear-gradient(${colors[0]}, ${colors[1]})
-                `
-              : colors[0]};
-            opacity: 0.4;
-          }
+    const isCompound = this.options.colors.length > 1;
 
-          #${cssId}
-            .protvista_checkbox_input:checked
-            + .protvista_checkbox_label::before {
-            opacity: 1;
-          }
-        </style>
-        <label
-          id="${cssId}"
-          class="protvista_checkbox ${isCompound ? "compound" : ""}"
-          tabindex="0"
-        >
-          <input
-            type="checkbox"
-            class="protvista_checkbox_input"
-            ?checked="${checked}"
-            ?disabled="${disabled}"
-            .value="${value}"
-            @change="${this._toggleChecked}"
-          />
-          <span class="protvista_checkbox_label">
-            ${labels.map(
-              l =>
-                html`
-                  <span>${l}</span>
-                `
-            )}
-          </span>
-        </label>
-      `,
-      this
-    );
+    value = `filter-${value.split(":")[1]}`;
+    return html`
+      <style>
+        label .protvista_checkbox_input + .protvista_checkbox_label::before {
+          background: ${isCompound
+            ? `
+              linear-gradient(${this.options.colors[0]},
+              ${this.options.colors[1]})
+            `
+            : this.options.colors[0]};
+          opacity: 0.4;
+        }
+      </style>
+      <label
+        class="protvista_checkbox ${isCompound ? "compound" : ""}"
+        tabindex="0"
+      >
+        <input
+          type="checkbox"
+          class="protvista_checkbox_input"
+          ?checked="${checked}"
+          ?disabled="${disabled}"
+          .value="${value}"
+          @change="${this._toggleChecked}"
+        />
+        <span class="protvista_checkbox_label">
+          ${labels.map(
+            l =>
+              html`
+                <span>${l}</span>
+              `
+          )}
+        </span>
+      </label>
+    `;
   }
 
   _toggleChecked(event) {
     event.stopPropagation();
     this.checked = !this.checked;
     this._fireEvent();
-    this._render();
   }
 
   _fireEvent() {
@@ -114,4 +147,4 @@ class ProtvistaCheckbox extends HTMLElement {
   }
 }
 
-customElements.define(ProtvistaCheckbox.tagName, ProtvistaCheckbox);
+export { ProtvistaCheckbox };

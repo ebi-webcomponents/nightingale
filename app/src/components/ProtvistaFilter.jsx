@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import DataLoader from "data-loader";
 import ProtvistaVariation from "protvista-variation";
-import ProtvistaFilter from "protvista-filter";
+import ProtvistaFilter, { ProtvistaCheckbox } from "protvista-filter";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
@@ -12,7 +12,8 @@ class ProtvistaFilterWrapper extends Component {
     loadWebComponent("data-loader", DataLoader);
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     loadWebComponent("protvista-manager", ProtvistaManager);
-    loadWebComponent(ProtvistaFilter.tagName, ProtvistaFilter);
+    loadWebComponent("protvista-filter", ProtvistaFilter);
+    loadWebComponent("protvista-checkbox", ProtvistaCheckbox);
     return (
       <Fragment>
         <protvista-manager

@@ -9,7 +9,6 @@ import {
 import _includes from "lodash-es/includes";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
-import "../style/protvista-variation.css";
 
 const aaList = [
   "G",
@@ -39,13 +38,13 @@ const aaList = [
 class ProtvistaVariation extends ProtvistaTrack {
   constructor() {
     super();
-    const styleElt = document.createElement("style");
-    styleElt.innerHTML = ProtvistaVariation.css;
-    this.appendChild(styleElt);
   }
 
   connectedCallback() {
     super.connectedCallback();
+    const styleElt = document.createElement("style");
+    styleElt.innerHTML = ProtvistaVariation.css;
+    this.appendChild(styleElt);
     this._height = parseInt(this.getAttribute("height"))
       ? parseInt(this.getAttribute("height"))
       : 430;
