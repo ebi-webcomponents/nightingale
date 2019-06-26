@@ -112,6 +112,7 @@ class ProtvistaVariation extends ProtvistaTrack {
 
     // clip path prevents drawing outside of it
     const chartArea = mainChart
+      .attr("transform", `translate(0, ${this.margin.top})`)
       .append("g")
       .attr("clip-path", "url(#plotAreaClip)");
 
