@@ -279,6 +279,10 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   createEvent(type, feature = null, withHighlight = false, start, end, target) {
+    // Variation features have a different shape
+    if (feature) {
+      feature = feature.feature ? feature.feature : feature;
+    }
     const detail = {
       eventtype: type,
       coords: this._getClickCoords(),
