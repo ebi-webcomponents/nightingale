@@ -162,6 +162,7 @@ class ProtvistaZoomable extends HTMLElement {
     this._zoom = d3zoom()
       .scaleExtent([1, Infinity])
       .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]])
+      .extent([[0, 0], [this.getWidthWithMargins(), 0]])
       .on("zoom", this.zoomed);
   }
 
@@ -195,7 +196,6 @@ class ProtvistaZoomable extends HTMLElement {
   zoomed() {
     // Redefines the xScale using the original scale and transform it with the captured event data.
     this.xScale = d3Event.transform.rescaleX(this._originXScale);
-
     // If the source event is null the zoom wasn't initiated by this component, don't send event
     if (this.dontDispatch) return;
     let [start, end] = this.xScale.domain(); // New positions based in the updated scale
@@ -246,7 +246,6 @@ class ProtvistaZoomable extends HTMLElement {
     this._zoom
       .scaleExtent([1, Infinity])
       .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]]);
-
     this.applyZoomTranslation();
   }
 
