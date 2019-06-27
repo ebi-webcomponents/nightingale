@@ -1,4 +1,4 @@
-import { html, css, LitElement, unsafeCSS } from "lit-element";
+import { html, css, LitElement } from "lit-element";
 
 class ProtvistaCheckbox extends LitElement {
   constructor() {
