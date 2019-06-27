@@ -11,7 +11,6 @@ import ResizeObserver from "resize-observer-polyfill";
 class ProtvistaZoomable extends HTMLElement {
   constructor() {
     super();
-
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
@@ -69,10 +68,7 @@ class ProtvistaZoomable extends HTMLElement {
     this.addEventListener("error", e => {
       throw e;
     });
-    if (!window.hasProtvistaReset) {
-      window.addEventListener("click", this._resetEventHandler);
-      window.hasProtvistaReset = true;
-    }
+    this.addEventListener("click", this._resetEventHandler);
   }
 
   disconnectedCallback() {
@@ -81,7 +77,7 @@ class ProtvistaZoomable extends HTMLElement {
     } else {
       window.removeEventListener("resize", this._onResize);
     }
-    window.removeEventListener("click", this._resetEventHandler);
+    this.removeEventListener("click", this._resetEventHandler);
   }
 
   get width() {
