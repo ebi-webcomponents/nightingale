@@ -1,17 +1,98 @@
-import LiteMol from "litemol";
 import "whatwg-fetch";
-import "../style/style.css";
+import LiteMol from "litemol";
 
 class ProtvistaStructure extends HTMLElement {
   constructor() {
     super();
     this._mappings = [];
-    this._highlightstart = parseInt(this.getAttribute("highlightstart"));
-    this._highlightend = parseInt(this.getAttribute("highlightend"));
+
+    this._highlight =
+      this.getAttribute("highlight") &&
+      this._formatHighlight(this.getAttribute("highlight"));
     this.pdbId = this.getAttribute("pdbId") ? this.getAttribute("pdbId") : "";
     this.loadMolecule = this.loadMolecule.bind(this);
     this.loadStructureTable = this.loadStructureTable.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
+  }
+
+  get css() {
+    return `
+    :root {
+      --blue: 0, 112, 155;
+      /* --width: 100%; */
+  }
+  
+  protvista-structure h4 {
+      display: inline;
+      margin-right: 1em;
+  }
+  
+  .main-container {
+      display: flex;
+  }
+  
+  .litemol-container,
+  .table-container {
+      width: 50%;
+      height: 480px;
+      position: relative;
+  }
+  
+  .table-container table {
+      display: flex;
+      flex-flow: column;
+      width: 100%;
+      height: 480px;
+      border-collapse: collapse;
+  }
+  
+  .table-container thead {
+      min-height: 3em;
+      flex: 0 0 auto;
+      width: 100%;
+  }
+  
+  .table-container tbody {
+      flex: 1 1 auto;
+      display: block;
+      overflow-y: scroll;
+      border: none;
+  }
+  
+  .table-container tbody tr {
+      width: 100%;
+  }
+  
+  .table-container tbody tr.pdb-row {
+      color: #727376;
+  }
+  
+  .table-container tbody tr.pdb-row-clickable {
+      cursor: pointer;
+  }
+  
+  .table-container tbody tr td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+  
+  .table-container thead,
+  .table-container tbody tr {
+      display: table;
+      table-layout: fixed;
+  }
+  
+  .table-container tbody tr.pdb-row-clickable:hover {
+      background-color: rgba(0, 112, 155, 0.15);
+      ;
+  }
+  
+  .table-container tr.active {
+      background-color: rgba(0, 112, 155, 0.3);
+      ;
+  }
+    `;
   }
 
   get accession() {
@@ -31,6 +112,14 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   connectedCallback() {
+    const style = document.createElement("style");
+    style.innerHTML = this.css;
+    this.appendChild(style);
+    const liteMolStyle = document.createElement("link");
+    liteMolStyle.rel = "stylesheet";
+    liteMolStyle.href =
+      "../../../node_modules/litemol/dist/css/LiteMol-plugin.css";
+    this.appendChild(liteMolStyle);
     this.titleContainer = document.createElement("h4");
     const flexContainer = document.createElement("div");
     flexContainer.className = "main-container";
@@ -39,7 +128,7 @@ class ProtvistaStructure extends HTMLElement {
     this.tableDiv.className = "table-container";
     const litemolDiv = document.createElement("div");
     litemolDiv.className = "litemol-container";
-    litemolDiv.id = "app";
+    litemolDiv.id = "litemol-instance";
     this.messageContainer = document.createElement("span");
     this.appendChild(this.titleContainer);
     this.appendChild(this.messageContainer);
@@ -72,7 +161,17 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["highlightstart", "highlightend", "molecule", "highlightresidues"];
+    return ["highlight", "molecule", "highlightresidues"];
+  }
+
+  _formatHighlight(highlightString) {
+    return highlightString.split(",").map(region => {
+      const [_start, _end, _] = region.split(":");
+      return {
+        start: parseInt(_start),
+        end: parseInt(_end)
+      };
+    });
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
@@ -81,6 +180,8 @@ class ProtvistaStructure extends HTMLElement {
       this[`_${attrName}`] = isNaN(value) ? newVal : value;
       if (attrName === "molecule") {
         this.selectMolecule(newVal);
+      } else if (attrName === "highlight") {
+        this._highlight = this._formatHighlight(this.getAttribute("highlight"));
       }
       this._planHighlight(true);
     }
@@ -99,10 +200,11 @@ class ProtvistaStructure extends HTMLElement {
         return;
       }
       if (withSelection) {
-        this._selectMoleculeWithinRange(
-          this._highlightstart,
-          this._highlightend
-        ).then(() => this.highlightChain());
+        this._highlight.forEach(highlight => {
+          this._selectMoleculeWithinRange(highlight.start, highlight.end).then(
+            () => this.highlightChain()
+          );
+        });
       } else {
         this.highlightChain();
       }
@@ -256,7 +358,7 @@ class ProtvistaStructure extends HTMLElement {
     this.Context = Plugin.Components.Context;
     // Plugin.Components.Context.Log(this.Bootstrap.Components.LayoutRegion.Bottom, true);
     this._liteMol = Plugin.create({
-      target: "#app",
+      target: this.querySelector("#litemol-instance"),
       viewportBackground: "#fff",
       layoutState: {
         hideControls: true
@@ -351,10 +453,7 @@ class ProtvistaStructure extends HTMLElement {
 
   translatePositions(start, end) {
     // return if they have been set to 'undefined'
-    if (
-      "string" === typeof this._highlightend ||
-      "string" === typeof this._highlightstart
-    ) {
+    if ("string" === typeof this.highlight) {
       return;
     }
     for (const mapping of this._selectedMolecule.mappings) {
@@ -372,11 +471,7 @@ class ProtvistaStructure extends HTMLElement {
             end: end - offset
           };
         } else {
-          this.addMessage(
-            `Positions ${this._highlightstart}-${
-              this._highlightend
-            } not found in this structure`
-          );
+          this.addMessage(`Positions not found in this structure`);
         }
       } else {
         this.addMessage(
@@ -387,7 +482,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   highlightChain() {
-    if (!this._highlightstart || !this._highlightend) return;
+    if (!this._highlight) return;
     this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, void 0);
     this.Command.Tree.RemoveNode.dispatch(
       this._liteMol.context,
@@ -397,9 +492,11 @@ class ProtvistaStructure extends HTMLElement {
     const visual = this._liteMol.context.select("polymer-visual")[0];
     if (!visual) return;
 
+    // TODO deal with multiple highlights
+    const [highlightItem] = this._highlight;
     const translatedPos = this.translatePositions(
-      this._highlightstart,
-      this._highlightend
+      highlightItem.start,
+      highlightItem.end
     );
     if (!translatedPos) return;
 

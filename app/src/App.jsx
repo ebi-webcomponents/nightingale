@@ -1,7 +1,14 @@
 import React, { Suspense, lazy } from "react";
-import { HashRouter as Router, Route, NavLink, Switch } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  NavLink,
+  Switch,
+  Link
+} from "react-router-dom";
 import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
 import pkg from "../package.json";
+import logo from "../resources/nightingale_logo.svg";
 import "./App.css";
 import GettingStarted from "./tutorial/GettingStarted";
 
@@ -28,10 +35,16 @@ const App = (component = ProtvistaNavigation) => (
     <div className="App">
       <div className="App-header">
         <div className="logo">
-          <h2>
-            Nightingale&nbsp;
-            <small>{pkg.version}</small>
-          </h2>
+          <Link to="/">
+            <span
+              className="logo--container"
+              dangerouslySetInnerHTML={{ __html: logo }}
+            />
+            <span className="logo--title">Nightingale</span>
+          </Link>
+        </div>
+        <div className="header-nav">
+          <a href="//www.github.com/ebi-webcomponents/nightingale">Github</a>
         </div>
       </div>
       <div className="main">
@@ -39,6 +52,7 @@ const App = (component = ProtvistaNavigation) => (
           <nav className="main-nav">
             <ul className="main-nav__list">
               <li>
+                <h3>Tutorials</h3>
                 <NavLink to="/" exact activeClassName="active">
                   Getting started
                 </NavLink>

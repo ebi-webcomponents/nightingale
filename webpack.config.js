@@ -23,8 +23,7 @@ const config = {
     "protvista-uniprot-entry-adapter": "ProtvistaUniprotEntryAdapter",
     d3: "d3",
     "protvista-zoomable": "ProtvistaZoomable",
-    "protvista-track": "ProtvistaTrack",
-    litemol: "Litemol"
+    "protvista-track": "ProtvistaTrack"
   },
   plugins: [new CleanWebpackPlugin([path.join(PACKAGE_ROOT_PATH, "dist")])],
   module: {
@@ -32,7 +31,9 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
+          {
+            loader: "style-loader"
+          },
           { loader: "css-loader", options: { importLoaders: 1 } }
         ]
       },

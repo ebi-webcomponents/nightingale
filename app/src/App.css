@@ -1,19 +1,51 @@
 .App-header {
-  background-color: #013859;
-  min-height: 10vh;
+  position: sticky;
+  background-color: #ffffff;
+  top: 0;
+  border-bottom: 1px solid rgb(237, 237, 237);
   display: flex;
   align-items: center;
   font-size: 1.2rem;
-  color: #fffff8;
+  padding: 1rem;
+  justify-content: space-between;
+  -webkit-box-shadow: 0px 1px 0px 0px rgba(237, 237, 237, 1);
+  -moz-box-shadow: 0px 1px 0px 0px rgba(237, 237, 237, 1);
+  box-shadow: 0px 1px 0px 0px rgba(237, 237, 237, 1);
+}
+
+.App-header a {
+  font-weight: 700;
+  color: #333333;
+  text-decoration: none;
+}
+
+.App-header a:hover {
+  text-decoration: underline;
 }
 
 .logo {
+  line-height: 3rem;
+  height: 3rem;
+}
+
+.logo--container {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  vertical-align: middle;
+}
+
+.logo--title {
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: 700;
   margin: 0 1rem;
+  padding: 0;
 }
 
 .main {
   display: grid;
-  grid-template-columns: 12% auto;
+  grid-template-columns: 20vw auto;
 }
 
 .main-nav {
