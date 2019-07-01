@@ -2,6 +2,7 @@ class ProtVistaManager extends HTMLElement {
   constructor() {
     super();
     this.protvistaElements = new Set();
+    this.attributeValues = new Map();
   }
 
   static get observedAttributes() {
@@ -16,16 +17,6 @@ class ProtVistaManager extends HTMLElement {
           throw new Error("'type' can't be used as a protvista attribute");
         if (this._attributes.indexOf("value") !== -1)
           throw new Error("'value' can't be used as a protvista attribute");
-      }
-    }
-  }
-
-  _setAttributes(elements, type, value) {
-    for (const el of elements) {
-      if (value === false) {
-        el.removeAttribute(type);
-      } else {
-        el.setAttribute(type, typeof value === "boolean" ? "" : value);
       }
     }
   }
@@ -60,19 +51,28 @@ class ProtVistaManager extends HTMLElement {
     }
   }
 
+  applyAttributes() {
+    this.protvistaElements.forEach(element => {
+      this.attributeValues.forEach((value, type) => {
+        if (value === false) {
+          element.removeAttribute(type);
+        } else {
+          element.setAttribute(type, typeof value === "boolean" ? "" : value);
+        }
+      });
+    });
+  }
+
   _changeListener(e) {
     if (this._attributes.indexOf(e.detail.type) !== -1) {
-      this._setAttributes(
-        this.protvistaElements,
-        e.detail.type,
-        e.detail.value
-      );
+      this.attributeValues.set(e.detail.type, e.detail.value);
     }
     for (let key in e.detail) {
       if (this._attributes.indexOf(key) !== -1) {
-        this._setAttributes(this.protvistaElements, key, e.detail[key]);
+        this.attributeValues.set(key, e.detail[key]);
       }
     }
+    this.applyAttributes();
   }
 
   connectedCallback() {
