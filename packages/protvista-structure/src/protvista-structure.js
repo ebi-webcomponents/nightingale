@@ -103,15 +103,14 @@ class ProtvistaStructure extends HTMLElement {
     return this.setAttribute("accession", accession);
   }
 
-  get isManaged() {
-    return true;
-  }
-
   get isResidueOnlyHighlight() {
     return this.hasAttribute("highlightresidues");
   }
 
   connectedCallback() {
+    if (this.closest("protvista-manager")) {
+      this.closest("protvista-manager").register(this);
+    }
     const style = document.createElement("style");
     style.innerHTML = this.css;
     this.appendChild(style);

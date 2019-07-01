@@ -15,6 +15,9 @@ class ProtvistaDatatable extends LitElement {
         this.data = this.processData(e.detail.payload.features);
       }
     });
+    if (this.closest("protvista-manager")) {
+      this.closest("protvista-manager").register(this);
+    }
     document.addEventListener("click", this.eventHandler);
     this.classList.add("feature"); //this makes sure the protvista-zoomable event listener doesn't reset
     window.addEventListener("resize", this.updateHeaderColumnSizes.bind(this));
@@ -123,10 +126,6 @@ class ProtvistaDatatable extends LitElement {
         opacity: 0.2;
       }
     `;
-  }
-
-  get isManaged() {
-    return true;
   }
 
   processData(data) {

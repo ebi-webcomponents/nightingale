@@ -39,6 +39,10 @@ class ProtvistaZoomable extends HTMLElement {
     this.style.width = "100%";
     this.width = this.offsetWidth;
 
+    if (this.closest("protvista-manager")) {
+      this.closest("protvista-manager").register(this);
+    }
+
     this._length = this.getAttribute("length")
       ? parseFloat(this.getAttribute("length"))
       : 0;
@@ -125,10 +129,6 @@ class ProtvistaZoomable extends HTMLElement {
 
   get svg() {
     return this._svg;
-  }
-
-  get isManaged() {
-    return true;
   }
 
   get margin() {

@@ -30,10 +30,6 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
     return ["activefilters"];
   }
 
-  get isManaged() {
-    return true;
-  }
-
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       if (name !== "activefilters") {
@@ -72,6 +68,9 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
 
   connectedCallback() {
     super.connectedCallback();
+    if (this.closest("protvista-manager")) {
+      this.closest("protvista-manager").register(this);
+    }
     this._fireEvent("change", {
       type: "filters",
       value: JSON.stringify(filters)
