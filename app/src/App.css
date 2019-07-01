@@ -45,7 +45,7 @@
 
 .main {
   display: grid;
-  grid-template-columns: 20vw auto;
+  grid-template-columns: 20vw 80vw;
 }
 
 .main-nav {
