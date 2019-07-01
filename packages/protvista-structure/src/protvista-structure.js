@@ -109,7 +109,8 @@ class ProtvistaStructure extends HTMLElement {
 
   connectedCallback() {
     if (this.closest("protvista-manager")) {
-      this.closest("protvista-manager").register(this);
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
     }
     const style = document.createElement("style");
     style.innerHTML = this.css;
@@ -157,6 +158,12 @@ class ProtvistaStructure extends HTMLElement {
         this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id
       );
     });
+  }
+
+  disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
   }
 
   static get observedAttributes() {

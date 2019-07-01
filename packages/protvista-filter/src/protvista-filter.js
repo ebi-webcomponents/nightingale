@@ -49,11 +49,15 @@ class ProtvistaFilter extends HTMLElement {
     this._renderFilters();
     this.addEventListener("filterChange", this._onFilterChange);
     if (this.closest("protvista-manager")) {
-      this.closest("protvista-manager").register(this);
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
     }
   }
 
   disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
     this.removeEventListener("filterChange", this._onFilterChange);
   }
 

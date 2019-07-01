@@ -69,12 +69,19 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
   connectedCallback() {
     super.connectedCallback();
     if (this.closest("protvista-manager")) {
-      this.closest("protvista-manager").register(this);
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
     }
     this._fireEvent("change", {
       type: "filters",
       value: JSON.stringify(filters)
     });
+  }
+
+  disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
   }
 
   parseEntry(data) {

@@ -34,6 +34,10 @@ class ProtVistaManager extends HTMLElement {
     this.protvistaElements.add(element);
   }
 
+  unregister(element) {
+    this.protvistaElements.delete(element);
+  }
+
   _polyfillElementClosest() {
     // Polyfill for IE support, see
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest

@@ -40,7 +40,8 @@ class ProtvistaZoomable extends HTMLElement {
     this.width = this.offsetWidth;
 
     if (this.closest("protvista-manager")) {
-      this.closest("protvista-manager").register(this);
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
     }
 
     this._length = this.getAttribute("length")
@@ -76,6 +77,9 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
     if (this._ro) {
       this._ro.unobserve(this);
     } else {
