@@ -1,10 +1,10 @@
 /*jslint node: true */
 "use strict";
 
-import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
+import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import ProteomicsDataParser from "./ProteomicsDataParser";
 
-class ProtVistaProteomicsAdapter extends ProtvistaUniprotEntryAdapter {
+class ProtVistaProteomicsAdapter extends ProtvistaFeatureAdapter {
   constructor() {
     super();
     this._parser = new ProteomicsDataParser();

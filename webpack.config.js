@@ -19,11 +19,10 @@ const config = {
     extensions: [".js"]
   },
   externals: {
-    "uniprot-entry-data-adapter": "UniProtEntryDataAdapter",
-    "protvista-uniprot-entry-adapter": "ProtvistaUniprotEntryAdapter",
     d3: "d3",
     "protvista-zoomable": "ProtvistaZoomable",
-    "protvista-track": "ProtvistaTrack"
+    "protvista-track": "ProtvistaTrack",
+    "protvista-feature-adapter": "ProtvistaFeatureAdapter"
   },
   plugins: [new CleanWebpackPlugin([path.join(PACKAGE_ROOT_PATH, "dist")])],
   module: {
