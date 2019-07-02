@@ -4,7 +4,7 @@ import uniqBy from "lodash-es/uniqBy";
 import forOwn from "lodash-es/forOwn";
 import intersectionBy from "lodash-es/intersectionBy";
 
-import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
+import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import filters, { getFilter, getColor } from "./filters";
 
 const filterVariants = (filterName, variants) =>
@@ -21,7 +21,7 @@ const _union = (variants, filterNames, key) => {
   );
 };
 
-export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
+export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
   constructor() {
     super();
   }
