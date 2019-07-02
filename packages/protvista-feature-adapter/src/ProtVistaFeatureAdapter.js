@@ -1,4 +1,4 @@
-import BasicHelper from "./BasicHelper";
+import { BasicHelper } from "./BasicHelper";
 
 class ProtvistaFeatureAdapter extends HTMLElement {
   constructor() {

@@ -1,6 +1,6 @@
 import { ecoMap } from "./evidences";
 
-export default class BasicHelper {
+export class BasicHelper {
   static renameProperties(features) {
     features.forEach(ft => {
       if (ft.begin) {
@@ -12,15 +12,15 @@ export default class BasicHelper {
   }
 
   static formatSource(source) {
-    return source.name === "PubMed"
-      ? ` <a href='${source.url}' style="color:#FFF" target='_blank'>${
+    return source.name.toLowerCase() === "PubMed".toLowerCase()
+      ? `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${
           source.name
-        }</a> <a href='${
+        }</a>&nbsp;<a href='${
           source.alternativeUrl
         }' style="color:#FFF" target='_blank'>EuropePMC</a>`
-      : ` <a href='${source.url}' style="color:#FFF" target='_blank'>${
+      : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${
           source.id
-        }</a> (${source.name})`;
+        }</a>&nbsp;(${source.name})`;
   }
 
   static getEvidenceFromCodes(evidenceList) {
@@ -32,7 +32,7 @@ export default class BasicHelper {
           if (!ecoMatch) return;
           return `<li title='${
             ecoMatch.description
-          }' style="padding: .25rem 0">${ecoMatch.shortDescription}: ${
+          }' style="padding: .25rem 0">${ecoMatch.shortDescription}:&nbsp;${
             ev.source ? BasicHelper.formatSource(ev.source) : ""
           }</li>`;
         })
