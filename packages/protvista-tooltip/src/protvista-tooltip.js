@@ -63,12 +63,20 @@ class ProtvistaTooltip extends LitElement {
         padding: 1em;
         background: #616161;
         font-weight: normal;
+        overflow-y: auto;
+        max-height: 40vh;
+      }
+
+      ::slotted(h4) {
+        font-size: 1.2rem;
+        margin: 0 0 0.5rem 0;
+        font-weight: 600;
       }
 
       ::slotted(h5) {
         font-size: 1rem;
         margin: 0;
-        font-weight: 600;
+        font-weight: 500;
       }
 
       ::slotted(p) {
