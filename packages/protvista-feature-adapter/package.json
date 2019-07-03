@@ -6,6 +6,5 @@
     "src"
   ],
   "main": "dist/protvista-feature-adapter.js",
-  "module": "src/ProtvistaFeatureAdapter.js",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178"
+  "module": "src/ProtvistaFeatureAdapter.js"
 }
