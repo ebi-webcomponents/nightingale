@@ -3,7 +3,7 @@
 
 import ldFilter from "lodash-es/filter";
 import ldMap from "lodash-es/map";
-import ldForEach from "lodash-es/foreach";
+import ldForEach from "lodash-es/forEach";
 import ldRemove from "lodash-es/remove";
 import ParserHelper from "./ParserHelper";
 
