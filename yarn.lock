@@ -8511,6 +8511,13 @@ protoduck@^5.0.1:
   dependencies:
     genfun "^5.0.0"
 
+protvista-uniprot-entry-adapter@^2.0.0, protvista-uniprot-entry-adapter@^2.1.12:
+  version "2.1.12"
+  resolved "https://registry.yarnpkg.com/protvista-uniprot-entry-adapter/-/protvista-uniprot-entry-adapter-2.1.12.tgz#d5f3a34e213afb0daa924ef44c65137f1d6f51c3"
+  integrity sha512-4VvbbGzks+qXdj3pze/8reC2m+dPF8HFwZvlsjGh//MdTb279nLiAvGeX7Z8N0KbPhGpJPaYdJg5alOlYS/Y0A==
+  dependencies:
+    lodash-es "^4.17.11"
+
 protvista-uniprot@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/protvista-uniprot/-/protvista-uniprot-2.0.3.tgz#165c40eec877c98fbc7c7bf432a71306336862d6"

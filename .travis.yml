@@ -11,6 +11,7 @@ install:
   - lerna bootstrap
 script:
   - yarn test
+  - yarn build
   - yarn build-site
 deploy:
   provider: pages

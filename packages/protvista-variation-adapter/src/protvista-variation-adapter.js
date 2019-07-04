@@ -4,7 +4,9 @@ import uniqBy from "lodash-es/uniqBy";
 import forOwn from "lodash-es/forOwn";
 import intersectionBy from "lodash-es/intersectionBy";
 
-import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
+import ProtvistaFeatureAdapter, {
+  BasicHelper
+} from "protvista-feature-adapter";
 import filters, { getFilter, getColor } from "./filters";
 
 const filterVariants = (filterName, variants) =>
@@ -21,7 +23,7 @@ const _union = (variants, filterNames, key) => {
   );
 };
 
-export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdapter {
+export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
   constructor() {
     super();
   }
@@ -90,6 +92,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
 
     const variants = features.map(variant => {
       return {
+        type: "Variant",
         accession: variant.genomicLocation,
         variant: variant.alternativeSequence,
         start: variant.begin,
@@ -117,154 +120,116 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
   }
 
   formatTooltip(variant) {
-    // Need to inherit from protvista-feature-adapter
-    // const evidenceHTML = ParserHelper.getEvidenceFromCodes(feature.evidences);
     const evidenceHTML = "";
     if (variant.description)
       variant.descriptionArray = this.getDescriptionsAsArray(
         variant.description
       );
     return `
-            <table>
-                <tr><td>Variant</td><td>${variant.wildType} > ${
+                <h5>Variant</h5><p>${variant.wildType} > ${
       variant.alternativeSequence
-    }</td></tr>
+    }</p>
                 ${
                   variant.frequency
-                    ? `<tr><td>Frequency (MAF)</td><td>${
-                        variant.frequency
-                      }</td></tr>`
+                    ? `<h5>Frequency (MAF)</h5><p>${variant.frequency}</p>`
                     : ``
                 }
                 ${
                   variant.siftScore
-                    ? `<tr><td>SIFT</td><td>${variant.siftPrediction} ${
+                    ? `<h5>SIFT</h5><p>${variant.siftPrediction} ${
                         variant.siftScore
-                      }</td></tr>`
+                      }</p>`
                     : ``
                 }
                 ${
                   variant.polyphenScore
-                    ? `<tr><td>Polyphen</td><td>${variant.polyphenPrediction} ${
+                    ? `<h5>Polyphen</h5><p>${variant.polyphenPrediction} ${
                         variant.polyphenScore
-                      }</td></tr>`
+                      }</p>`
                     : ``
                 }
                 ${
                   variant.consequenceType
-                    ? `<tr><td>Consequence</td><td>${
-                        variant.consequenceType
-                      }</td></tr>`
+                    ? `<h5>Consequence</h5><p>${variant.consequenceType}</p>`
                     : ``
                 }
                 ${
                   variant.somaticStatus
-                    ? `<tr><td>Somatic</td><td>${
+                    ? `<h5>Somatic</h5><p>${
                         variant.somaticStatus === 0 ? "No" : "Yes"
-                      }</td></tr>`
+                      }</p>`
                     : ``
                 }
                 ${
                   variant.genomicLocation
-                    ? `<tr><td>Location</td><td>${
-                        variant.genomicLocation
-                      }</td></tr>`
+                    ? `<h5>Location</h5><p>${variant.genomicLocation}</p>`
                     : ``
                 }
                 ${
                   variant.sourceType === "UniProt" ||
                   variant.sourceType === "mixed"
-                    ? this.getUniProtHTML(variant)
+                    ? `<hr/>${this.getUniProtHTML(variant)}`
                     : ""
                 }
                 ${
                   variant.sourceType === "large_scale_study" ||
                   variant.sourceType === "mixed"
-                    ? this.getLSSHTML(variant)
+                    ? `<hr/>${this.getLSSHTML(variant)}`
                     : ""
                 }
-            </table>
         `;
   }
 
   getUniProtHTML(variant) {
-    return `<tr><td colspan="2"><h4>UniProt</h4></td></tr>
+    return `<h4>UniProt</h4>
         ${
           variant.descriptionArray && variant.descriptionArray.UP
-            ? `<tr><td>Description</td><td>${variant.descriptionArray.UP.join(
+            ? `<h5>Description</h5><p>${variant.descriptionArray.UP.join(
                 "; "
-              )}</td></tr>`
+              )}</p>`
             : ``
         }
-        ${
-          variant.ftId
-            ? `<tr><td>Feature ID</td><td>${variant.ftId}</td></tr>`
-            : ``
-        }
+        ${variant.ftId ? `<h5>Feature ID</h5><p>${variant.ftId}</p>` : ``}
         ${
           variant.association
-            ? `<tr><td colspan="2"><h5>Disease association</h5></td></tr>
-            ${this.getDiseaseAssociations(variant.association)}`
+            ? this.getDiseaseAssociations(variant.association)
             : ""
         }
         `;
   }
 
   getLSSHTML(variant) {
-    return `<tr><td colspan="2"><h4>Large scale studies</h4></td></tr>
+    return `<h4>Large scale studies</h4>
         ${
           variant.descriptionArray && variant.descriptionArray.LSS
-            ? `<tr><td>Description</td><td>${
-                variant.descriptionArray.LSS
-              }</td></tr>`
+            ? `<h5>Description</h5><p>${variant.descriptionArray.LSS}</p>`
             : ``
         }
         ${
           variant.frequency
-            ? `<tr><td>Frequency (MAF)</td><td>${variant.frequency}</td></tr>`
+            ? `<h5>Frequency (MAF)</h5><p>${variant.frequency}</p>`
             : ``
         }
-        <tr><td>Cross-references</td><td>${this.getXrefs(
-          variant.xrefs
-        )}</td></tr>
+        <h5>Cross-references</h5>${this._basicHelper.formatXrefs(variant.xrefs)}
         `;
   }
 
-  getXrefs(xrefs) {
-    return xrefs
-      .map(d => `<a href="${d.url}">${d.id}</a> (${d.name})`)
-      .join("<br>");
-  }
-
   getDiseaseAssociations(associations) {
-    return associations.map(
-      association => `
-            <tr><td>Disease</td><td>${association.name}</td></tr>
+    return associations
+      .map(
+        association => `
+            <h4>Disease association</h4><p>${association.name}</p>
             ${
               association.xrefs
-                ? `<tr><td>Cross-references</td><td>${this.getXrefs(
+                ? `<h5>Cross-references</h5>${this._basicHelper.formatXrefs(
                     association.xrefs
-                  )}</td></tr>`
+                  )}`
                 : ""
             }
-            ${this.getEvidenceFromCodes(association.evidences)}
-        `
-    );
-  }
-
-  //TODO this should be inherited from ParserHelper
-  getEvidenceFromCodes(evidences) {
-    return (
-      evidences &&
-      evidences.map(
-        evidence => `
-            <tr><td>Evidence</td><td>${evidence.code}</td></tr>
-            <tr><td>Source</td><td><a href="${evidence.source.url}">${
-          evidence.source.id
-        }</a> (${evidence.source.name})</td></tr>
+            ${this._basicHelper.getEvidenceFromCodes(association.evidences)}
         `
       )
-    );
+      .join("");
   }
 
   _fireEvent(name, detail) {
@@ -288,22 +253,9 @@ export default class ProtvistaVariationAdapter extends ProtvistaUniprotEntryAdap
         ? "LSS"
         : "UP";
     });
-    // descriptionArray.UP = descriptionArray.UP ? descriptionArray.UP.join('; ') : undefined;
     descriptionArray.LSS = descriptionArray.LSS
       ? descriptionArray.LSS.join("; ").replace(/]: /g, ": ")
       : undefined;
     return descriptionArray;
-    // if (Evidence.existAssociation(data.association)) {
-    //     _.each(data.association, function(association) {
-    //         if (association.description) {
-    //             var index = association.description.indexOf('Ftid: ');
-    //             if (index !== -1) {
-    //                 data.ftId = association.description.substr(index + 6, 10);
-    //                 association.description = (association.description.slice(0, index) +
-    //                     association.description.slice(index + 16)).trim();
-    //             }
-    //         }
-    //     });
-    // }
   }
 }

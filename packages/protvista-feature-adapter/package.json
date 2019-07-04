@@ -1,28 +1,10 @@
 {
   "name": "protvista-feature-adapter",
   "version": "2.1.12",
-  "description": "A specialization of the uniprot-entry- data-adapter for ProtVista features (regions and sites)",
   "files": [
     "dist",
     "src"
   ],
   "main": "dist/protvista-feature-adapter.js",
-  "module": "src/ProtVistaFeatureAdapter.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ebi-uniprot/protvista-feature-adapter.git"
-  },
-  "keywords": [
-    "ProtVista",
-    "dataloader",
-    "parser",
-    "protein-feature"
-  ],
-  "author": "ljgarcia",
-  "license": "MIT",
-  "dependencies": {
-    "lodash-es": "^4.17.11",
-    "protvista-uniprot-entry-adapter": "^2.1.12"
-  },
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178"
+  "module": "src/ProtvistaFeatureAdapter.js"
 }

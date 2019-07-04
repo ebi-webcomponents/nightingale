@@ -21,11 +21,14 @@ class ProtVistaNavigation extends HTMLElement {
     this._x = null;
     this.dontDispatch = false;
   }
-
-  connectedCallback() {
+  _refreshWidth() {
     this.style.display = "block";
     this.style.width = "100%";
     this.width = this.offsetWidth;
+  }
+
+  connectedCallback() {
+    this._refreshWidth();
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
@@ -159,10 +162,9 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   _onResize() {
-    this.width = this.offsetWidth;
+    this._refreshWidth();
     this._x = this._x.range([padding.left, this.width - padding.right]);
     this._svg.attr("width", this.width);
-    this._axis.call(this._xAxis);
     this._viewport.extent([
       [padding.left, 0],
       [this.width - padding.right, height * 0.51]
@@ -173,6 +175,8 @@ class ProtVistaNavigation extends HTMLElement {
 
   _updateNavRuler() {
     if (this._x) {
+      this._x.domain([1, this._length]);
+      this._axis.call(this._xAxis);
       this._updatePolygon();
       this._updateLabels();
       if (this._brushG) {

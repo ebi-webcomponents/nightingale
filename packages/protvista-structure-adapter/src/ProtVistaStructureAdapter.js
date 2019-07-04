@@ -1,10 +1,10 @@
 /*jslint node: true */
 "use strict";
 
-import ProtvistaUniprotEntryAdapter from "protvista-uniprot-entry-adapter";
 import StructureDataParser from "./StructureDataParser";
+import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 
-export default class ProtVistaStructureAdapter extends ProtvistaUniprotEntryAdapter {
+export default class ProtVistaStructureAdapter extends ProtvistaFeatureAdapter {
   constructor() {
     super();
     this._parser = new StructureDataParser();

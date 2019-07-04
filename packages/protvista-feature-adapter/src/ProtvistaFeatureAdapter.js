@@ -1,6 +1,6 @@
-import BasicHelper from "./BasicHelper";
+import { BasicHelper } from "./BasicHelper";
 
-class ProtvistaUniprotEntryAdapter extends HTMLElement {
+class ProtvistaFeatureAdapter extends HTMLElement {
   constructor() {
     super();
     this._adaptedData = [];
@@ -16,9 +16,14 @@ class ProtvistaUniprotEntryAdapter extends HTMLElement {
   }
 
   parseEntry(data) {
-    //Specialized versions of this generic adapter should implement this method so data is actually transformed
-    // and adapted.
-    this._adaptedData = data;
+    this._adaptedData = data.features;
+
+    if (this._adaptedData && this._adaptedData.length !== 0) {
+      this._adaptedData = this._basicHelper.renameProperties(this._adaptedData);
+      this._adaptedData.map(
+        d => (d.tooltipContent = this._basicHelper.formatTooltip(d))
+      );
+    }
     return this._adaptedData;
   }
 
@@ -92,4 +97,4 @@ class ProtvistaUniprotEntryAdapter extends HTMLElement {
   }
 }
 
-export default ProtvistaUniprotEntryAdapter;
+export default ProtvistaFeatureAdapter;

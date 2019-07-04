@@ -5,9 +5,11 @@ class ProtvistaTooltip extends LitElement {
     return css`
       :host {
         font-family: Roboto, Arial, sans-serif;
+        font-size: 0.9rem;
         z-index: 50000;
         position: absolute;
         min-width: 220px;
+        max-width: 300px;
         margin-top: 20px;
         margin-left: -20px;
         -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -16,13 +18,15 @@ class ProtvistaTooltip extends LitElement {
         opacity: 0.9;
       }
 
-      .tooltip-header .tooltip-header-title,
-      .tooltip-body,
-      a,
-      a:link,
-      a:hover,
-      a:active,
-      a:visited {
+      :host {
+        color: #ffffff;
+      }
+
+      :host a,
+      :host a:link,
+      :host a:active,
+      :host a:hover,
+      :host a:any-link {
         color: #ffffff;
       }
 
@@ -59,20 +63,30 @@ class ProtvistaTooltip extends LitElement {
         padding: 1em;
         background: #616161;
         font-weight: normal;
+        overflow-y: auto;
+        max-height: 40vh;
       }
 
-      table td {
-        padding: 0.5em 0.5em;
-        vertical-align: top;
-      }
-
-      table td:first-child {
+      ::slotted(h4) {
+        font-size: 1.2rem;
+        margin: 0 0 0.5rem 0;
         font-weight: 600;
-        text-align: right;
       }
 
-      table td p {
-        margin-top: 0;
+      ::slotted(h5) {
+        font-size: 1rem;
+        margin: 0;
+        font-weight: 500;
+      }
+
+      ::slotted(p) {
+        margin: 0.25rem 0 1rem 0;
+      }
+
+      ::slotted(ul) {
+        list-style: none;
+        margin: 0.25rem 0 1rem 0;
+        padding: 0;
       }
     `;
   }
