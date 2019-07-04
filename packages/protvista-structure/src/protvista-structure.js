@@ -103,15 +103,15 @@ class ProtvistaStructure extends HTMLElement {
     return this.setAttribute("accession", accession);
   }
 
-  get isManaged() {
-    return true;
-  }
-
   get isResidueOnlyHighlight() {
     return this.hasAttribute("highlightresidues");
   }
 
   connectedCallback() {
+    if (this.closest("protvista-manager")) {
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
+    }
     const style = document.createElement("style");
     style.innerHTML = this.css;
     this.appendChild(style);
@@ -158,6 +158,12 @@ class ProtvistaStructure extends HTMLElement {
         this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id
       );
     });
+  }
+
+  disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
   }
 
   static get observedAttributes() {

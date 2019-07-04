@@ -21,7 +21,6 @@ class ProtVistaNavigation extends HTMLElement {
     this._x = null;
     this.dontDispatch = false;
   }
-
   _refreshWidth() {
     this.style.display = "block";
     this.style.width = "100%";
@@ -30,6 +29,10 @@ class ProtVistaNavigation extends HTMLElement {
 
   connectedCallback() {
     this._refreshWidth();
+    if (this.closest("protvista-manager")) {
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
+    }
     this._length = parseFloat(this.getAttribute("length"));
     this._displaystart = parseFloat(this.getAttribute("displaystart")) || 1;
     this._displayend =
@@ -43,6 +46,9 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
     if (this._ro) {
       this._ro.unobserve(this);
     } else {
@@ -73,10 +79,6 @@ class ProtVistaNavigation extends HTMLElement {
 
   set width(width) {
     this._width = width;
-  }
-
-  get isManaged() {
-    return true;
   }
 
   _createNavRuler() {

@@ -32,10 +32,6 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
     return ["activefilters"];
   }
 
-  get isManaged() {
-    return true;
-  }
-
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       if (name !== "activefilters") {
@@ -74,10 +70,20 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
 
   connectedCallback() {
     super.connectedCallback();
+    if (this.closest("protvista-manager")) {
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
+    }
     this._fireEvent("change", {
       type: "filters",
       value: JSON.stringify(filters)
     });
+  }
+
+  disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
   }
 
   parseEntry(data) {

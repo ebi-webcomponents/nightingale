@@ -12,10 +12,6 @@ class ProtvistaFilter extends HTMLElement {
     this._selectedFilters = new Set();
   }
 
-  get isManaged() {
-    return true;
-  }
-
   static get observedAttributes() {
     return ["filters"];
   }
@@ -52,9 +48,16 @@ class ProtvistaFilter extends HTMLElement {
   connectedCallback() {
     this._renderFilters();
     this.addEventListener("filterChange", this._onFilterChange);
+    if (this.closest("protvista-manager")) {
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
+    }
   }
 
   disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
     this.removeEventListener("filterChange", this._onFilterChange);
   }
 

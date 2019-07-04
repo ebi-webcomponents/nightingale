@@ -39,6 +39,11 @@ class ProtvistaZoomable extends HTMLElement {
     this.style.width = "100%";
     this.width = this.offsetWidth;
 
+    if (this.closest("protvista-manager")) {
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
+    }
+
     this._length = this.getAttribute("length")
       ? parseFloat(this.getAttribute("length"))
       : 0;
@@ -72,6 +77,9 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
     if (this._ro) {
       this._ro.unobserve(this);
     } else {
@@ -125,10 +133,6 @@ class ProtvistaZoomable extends HTMLElement {
 
   get svg() {
     return this._svg;
-  }
-
-  get isManaged() {
-    return true;
   }
 
   get margin() {
