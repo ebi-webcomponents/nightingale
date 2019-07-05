@@ -99,7 +99,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       )
       .enter()
       .append("path")
-      .attr("class", "feature")
+      .attr("class", "feature rectangle")
       .attr("d", (f, j) =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
@@ -206,7 +206,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       )
       .enter()
       .append("path")
-      .attr("class", "feature")
+      .attr("class", f => this._getShape(f) + " feature")
       .on("click.expanded", (f, i, d) => {
         if (this._expanded) this.removeAttribute("expanded");
         else this.setAttribute("expanded", "expanded");
@@ -271,7 +271,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         )
         .enter()
         .append("path")
-        .attr("class", "child-fragment feature")
+        .attr("class", f => this._getShape(f) + " child-fragment feature")
         .call(this.bindEvents, this)
         .on("click.expanded", (f, i, d) => {
           f.feature.expanded = !f.feature.expanded;

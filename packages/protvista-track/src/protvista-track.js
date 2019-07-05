@@ -162,7 +162,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .enter()
       .append("path")
-      .attr("class", "feature")
+      .attr("class", f => this._getShape(f) + " feature")
       .attr("d", f =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
@@ -171,6 +171,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
           this._getShape(f)
         )
       )
+
       .attr(
         "transform",
         f =>
