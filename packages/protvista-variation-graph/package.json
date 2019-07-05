@@ -7,9 +7,9 @@
   ],
   "main": "dist/protvista-variation-graph.js",
   "module": "src/protvista-variation-graph.js",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "dependencies": {
-    "protvista-track": "^2.1.13"
+    "protvista-track": "^2.1.14"
   },
   "devDependencies": {
     "d3": "^5.7.0"
