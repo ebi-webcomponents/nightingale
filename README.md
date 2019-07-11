@@ -1,8 +1,10 @@
 [![Build Status](https://travis-ci.org/ebi-webcomponents/nightingale.svg?branch=master)](https://travis-ci.org/ebi-webcomponents/nightingale)
 
 # nightingale
+Nightingale is a monorepo containing visualisation web components to use with biological data.
 
-Nightingale is a monorepo containing visualisation web components to use with biological data. You can see them in action here: https://ebi-webcomponents.github.io/nightingale
+## Documentation
+Documentation, getting started guide and examples for each of the components are available here [https://ebi-webcomponents.github.io/nightingale](https://ebi-webcomponents.github.io/nightingale)
 
 ## Installing
 
