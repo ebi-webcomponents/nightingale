@@ -22,7 +22,9 @@ const config = {
     d3: "d3",
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
-    "protvista-feature-adapter": "ProtvistaFeatureAdapter"
+    "protvista-feature-adapter": "ProtvistaFeatureAdapter",
+    "protvista-utils": "protvista-utils",
+    "protvista-sequence": "ProtVistaSequence"
   },
   plugins: [new CleanWebpackPlugin([path.join(PACKAGE_ROOT_PATH, "dist")])],
   module: {
@@ -45,7 +47,9 @@ const config = {
             include: [
               "src",
               "../../node_modules/lit-html",
-              "../../node_modules/lit-element"
+              "../../node_modules/lit-element",
+              "../../node_modules/protvista-utils",
+              "../../node_modules/protvista-sequence"
             ],
             presets: [
               [
