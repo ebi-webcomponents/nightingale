@@ -47,9 +47,7 @@ const config = {
             include: [
               "src",
               "../../node_modules/lit-html",
-              "../../node_modules/lit-element",
-              "../../node_modules/protvista-utils",
-              "../../node_modules/protvista-sequence"
+              "../../node_modules/lit-element"
             ],
             presets: [
               [
