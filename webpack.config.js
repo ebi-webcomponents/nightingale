@@ -23,8 +23,8 @@ const config = {
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
     "protvista-feature-adapter": "ProtvistaFeatureAdapter",
-    "protvista-utils": "protvista-utils",
-    "protvista-sequence": "ProtVistaSequence"
+    "protvista-utils": "ProtvistaUtils",
+    "protvista-sequence": "ProtvistaSequence"
   },
   plugins: [new CleanWebpackPlugin([path.join(PACKAGE_ROOT_PATH, "dist")])],
   module: {
