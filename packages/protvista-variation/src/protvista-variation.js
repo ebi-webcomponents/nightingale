@@ -76,18 +76,18 @@ class ProtvistaVariation extends ProtvistaTrack {
       width: 100%;
     }
     
-    svg {
+    protvista-variation svg {
       background-color: #fff;
     }
     
-    circle {
+    protvista-variation circle {
       opacity: 0.6;
     }
-    circle:hover {
+    protvista-variation circle:hover {
       opacity: 0.9;
     }
-    .tick line,
-    .axis path {
+    protvista-variation .tick line,
+    protvista-variation .axis path {
       opacity: 0.1;
     }
     
@@ -95,8 +95,8 @@ class ProtvistaVariation extends ProtvistaTrack {
       fill: #ffe999;
     }
     
-    .variation-y-right line,
-    .axis path {
+    protvista-variation .variation-y-right line,
+    protvista-variation .axis path {
       fill: none;
       stroke: none;
     }
