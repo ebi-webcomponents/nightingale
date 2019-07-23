@@ -6,13 +6,6 @@ class ProtvistaCheckbox extends LitElement {
     this._toggleChecked = this._toggleChecked.bind(this);
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    const styleElement = document.createElement("style");
-    styleElement.innerHTML = this.css;
-    this.appendChild(styleElement);
-  }
-
   static get styles() {
     return css`
       :host {
@@ -34,37 +27,31 @@ class ProtvistaCheckbox extends LitElement {
         outline: none;
       }
 
-      label
-        .protvista_checkbox_input:checked
-        + .protvista_checkbox_label::before {
+      .protvista_checkbox_input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      .checkmark {
+        opacity: 0.4;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+        border-radius: 4px;
+        box-sizing: border-box;
+        border: 1px solid #bdc3c7;
+      }
+
+      .protvista_checkbox_input:checked ~ .checkmark {
         opacity: 1;
       }
 
-      .protvista_checkbox_input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-        margin: 0;
-      }
-
       .protvista_checkbox_label {
-        display: flex;
-        flex-direction: column;
-        text-indent: 1em;
-        margin-left: 16px;
-      }
-
-      .protvista_checkbox_input + .protvista_checkbox_label::before {
-        content: "";
-        width: 24px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        border-radius: 4px;
-        display: block;
-        box-sizing: border-box;
-        border: 1px solid #bdc3c7;
+        margin-left: 0.2rem;
+        line-height: 1rem;
       }
     `;
   }
@@ -89,20 +76,8 @@ class ProtvistaCheckbox extends LitElement {
       colors = [colors];
     }
     const isCompound = this.options.colors.length > 1;
-
     value = `filter-${value.split(":")[1]}`;
     return html`
-      <style>
-        label .protvista_checkbox_input + .protvista_checkbox_label::before {
-          background: ${isCompound
-            ? `
-              linear-gradient(${this.options.colors[0]},
-              ${this.options.colors[1]})
-            `
-            : this.options.colors[0]};
-          opacity: 0.4;
-        }
-      </style>
       <label
         class="protvista_checkbox ${isCompound ? "compound" : ""}"
         tabindex="0"
@@ -115,13 +90,19 @@ class ProtvistaCheckbox extends LitElement {
           .value="${value}"
           @change="${this._toggleChecked}"
         />
+        <span
+          class="checkmark"
+          style=${`background: ${
+            isCompound
+              ? `
+            linear-gradient(${this.options.colors[0]},
+            ${this.options.colors[1]})
+          `
+              : this.options.colors[0]
+          };`}
+        ></span>
         <span class="protvista_checkbox_label">
-          ${labels.map(
-            l =>
-              html`
-                <span>${l}</span>
-              `
-          )}
+          ${labels.join("/")}
         </span>
       </label>
     `;
