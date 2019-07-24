@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.2.0",
-    "lit-html": "^0.14.0",
+    "lit-html": "^1.1.1",
     "lodash-es": "^4.17.11"
   },
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178"
