@@ -8,6 +8,8 @@ const padding = {
   left: 10
 };
 
+const MAX_OPACITY_WHILE_COLAPSED = 0.8;
+
 class ProtvistaInterproTrack extends ProtvistaTrack {
   _createTrack() {
     this._layoutObj.expanded = this._expanded;
@@ -127,7 +129,10 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .call(this.bindEvents, this);
   }
 
-  _refreshResiduePaths(baseG) {
+  _refreshResiduePaths(baseG, expanded) {
+    const numberOfSibillings = new Set(
+      baseG.data().map(f => `${f.feature.accession}-${f.location.description}`)
+    ).size;
     baseG
       .attr("d", f =>
         this._featureShape.getFeatureShape(
@@ -151,7 +156,16 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
             )) +
           ")"
       )
-      .attr("fill", f => this._getFeatureColor(f));
+      .style("pointer-events", expanded ? "auto" : "none")
+      .style("stroke", f => (expanded ? null : "none"))
+      .style("opacity", f =>
+        expanded ? null : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
+      )
+      .attr("fill", f =>
+        expanded || (f.feature && f.feature.expanded)
+          ? this._getFeatureColor(f)
+          : "white"
+      );
   }
 
   get margin() {
@@ -225,8 +239,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
       this.childrenGroup = this.children_g
         .append("g")
-        .attr("class", "children-group")
-        .attr("visibility", this._expanded ? "visible" : "hidden");
+        .attr("class", "children-group");
       this.childGroup = this.childrenGroup
         .selectAll("g.child-group")
         .data(this._contributors)
@@ -285,18 +298,29 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     this._haveCreatedFeatures = true;
   }
 
-  _refreshFeatures(base) {
+  _refreshFeatures(base, expanded = true) {
+    const numberOfSibillings = new Set(
+      base.data().map(f => f.feature.accession)
+    ).size;
     base
       .attr("d", f =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(f.feature),
           f.end ? f.end - f.start + 1 : 1,
-          this._getShape(f.shape ? f : f.feature)
+          expanded ? this._getShape(f.shape ? f : f.feature) : "rectangle"
         )
       )
-      .attr("fill", f => this._getFeatureColor(f.feature))
-      .attr("stroke", f => this._getFeatureColor(f.feature))
+      .attr("fill", f =>
+        expanded ? this._getFeatureColor(f.feature) : "white"
+      )
+      .attr(
+        "opacity",
+        expanded ? 1 : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
+      )
+      .style("stroke", f =>
+        expanded ? this._getFeatureColor(f.feature) : "none"
+      )
       .attr(
         "transform",
         f =>
@@ -305,9 +329,10 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
           "," +
           (padding.top + this._layoutObj.getFeatureYPos(f.feature)) +
           ")"
-      );
+      )
+      .style("pointer-events", expanded ? "auto" : "none");
   }
-  _refreshCoverLine(base) {
+  _refreshCoverLine(base, expanded = true) {
     base
       .attr("x1", f => this.getXFromSeqPosition(f.start))
       .attr("x2", f => this.getXFromSeqPosition(f.end + 1))
@@ -325,7 +350,8 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
           this._layoutObj.getFeatureYPos(f.feature) +
           this._layoutObj.getFeatureHeight(f.feature) / 2
       )
-      .attr("stroke", f => this._getFeatureColor(f.feature));
+      .attr("stroke", f => this._getFeatureColor(f.feature))
+      .attr("visibility", expanded ? "visible" : "hidden");
   }
 
   refresh() {
@@ -337,19 +363,19 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       this._refreshCoverLine(this.coverLines);
       this._refreshFeatures(this.features);
 
-      this.residues_g.attr("visibility", this._expanded ? "visible" : "hidden");
-      this._refreshResiduePaths(this.residues_loc);
+      // this.residues_g.attr("visibility", this._expanded ? "visible" : "hidden");
+      this._refreshResiduePaths(this.residues_loc, this._expanded);
 
       if (this._contributors) {
-        this.childrenGroup.attr(
-          "visibility",
-          this._expanded ? "visible" : "hidden"
-        );
-        this._refreshCoverLine(this.coverLinesChildren);
-        this._refreshFeatures(this.featureChildren);
-        this.child_residues_g.attr("visibility", d =>
-          d.feature.expanded ? "visible" : "hidden"
-        );
+        // this.childrenGroup.attr(
+        //   "visibility",
+        //   this._expanded ? "visible" : "hidden"
+        // );
+        this._refreshCoverLine(this.coverLinesChildren, this._expanded);
+        this._refreshFeatures(this.featureChildren, this._expanded);
+        // this.child_residues_g.attr("visibility", d =>
+        //   d.feature.expanded ? "visible" : "hidden"
+        // );
         this._refreshResiduePaths(this.child_residues_loc);
       }
       this._updateHighlight();
