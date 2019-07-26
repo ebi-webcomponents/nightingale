@@ -11,6 +11,7 @@ export default class InterproEntryLayout extends DefaultLayout {
     this.yPos = {};
     this.maxYPos = 0;
     if (!features) return;
+    this.innerPadding = (COLLAPSED_HEIGHT - CHILD_HEIGHT) / 2;
     const residues_pos = {};
     for (let k = 0; k < features.length; k++) {
       let feature = features[k];
@@ -27,37 +28,50 @@ export default class InterproEntryLayout extends DefaultLayout {
           feature.residues,
           feature.accession,
           feature.locations,
-          yPos,
+          this.expanded ? yPos : this.yPos[feature.accession],
           k,
-          residues_pos
+          residues_pos,
+          this.expanded
         );
     }
     if (children)
       for (let k = 0; k < children.length; k++) {
         const child = children[k];
-        // for (let child of children) {
         if (!(child.accession in this.height)) {
-          this.height[child.accession] = this.expanded ? CHILD_HEIGHT : 0;
-          this.yPos[child.accession] = this.maxYPos + this._padding;
-          yPos += 2 * this._padding + this.height[child.accession];
+          this.height[child.accession] = CHILD_HEIGHT;
+          this.yPos[child.accession] =
+            (this.expanded ? this.maxYPos : this.innerPadding) + this._padding;
+          yPos +=
+            2 * this._padding +
+            (this.expanded ? this.height[child.accession] : 0);
           this.maxYPos = Math.max(this.maxYPos, yPos);
         }
         if (!(child.accession in residues_pos))
           residues_pos[child.accession] = {};
-        if (child.residues)
+        if (child.residues) {
           yPos = this._initResidues(
             child.residues,
             child.accession,
             child.locations,
-            yPos,
+            child.expanded ? yPos : this.yPos[child.accession],
             k,
-            residues_pos
+            residues_pos,
+            child.expanded
           );
+        }
       }
     this.maxYPos += this._padding;
   }
 
-  _initResidues(residues, feature_acc, locs, yPos, k, residues_pos = {}) {
+  _initResidues(
+    residues,
+    feature_acc,
+    locs,
+    yPos,
+    k,
+    residues_pos = {},
+    expanded = true
+  ) {
     for (let i = 0; i < residues.length; i++) {
       const resGroup = residues[i];
       this._filterOutResidueFragmentsOutOfLocation(resGroup, locs);
@@ -67,10 +81,14 @@ export default class InterproEntryLayout extends DefaultLayout {
         const desc = resGroup.locations[j].description;
         if (!(desc in residues_pos[feature_acc][resGroup.accession])) {
           residues_pos[feature_acc][resGroup.accession][desc] = {
-            height: this.expanded ? CHILD_HEIGHT : 0,
-            yPos: this.maxYPos + this._padding
+            height: expanded
+              ? CHILD_HEIGHT
+              : this.height[feature_acc] - 2 * this.innerPadding,
+            yPos: expanded
+              ? this.maxYPos + this._padding
+              : yPos + this.innerPadding
           };
-          yPos = this.expanded
+          yPos = expanded
             ? this.maxYPos + 2 * this._padding + CHILD_HEIGHT
             : yPos;
         }
@@ -81,7 +99,7 @@ export default class InterproEntryLayout extends DefaultLayout {
         this.maxYPos = Math.max(this.maxYPos, yPos);
       }
     }
-    return yPos;
+    return expanded ? yPos : this.maxYPos + 2 * this._padding;
   }
   _filterOutResidueFragmentsOutOfLocation(residue, feature_locations) {
     residue.locations.forEach(

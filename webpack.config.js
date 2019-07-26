@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const camelCase = require("camelcase");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const PACKAGE_ROOT_PATH = process.cwd();
 const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, "package.json"));
@@ -26,7 +26,7 @@ const config = {
     "protvista-utils": "ProtvistaUtils",
     "protvista-sequence": "ProtvistaSequence"
   },
-  plugins: [new CleanWebpackPlugin([path.join(PACKAGE_ROOT_PATH, "dist")])],
+  plugins: [new CleanWebpackPlugin()],
   module: {
     rules: [
       {
