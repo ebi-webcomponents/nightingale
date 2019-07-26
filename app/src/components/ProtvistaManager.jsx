@@ -15,6 +15,7 @@ import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
 import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
+import ProtvistaSaver from "protvista-saver";
 
 class ProtvistaManagerWrapper extends Component {
   componentDidMount() {
@@ -39,8 +40,13 @@ class ProtvistaManagerWrapper extends Component {
       "400:600";
     document.querySelector("#variation-track").fixedHighlight = "400:600";
     document.querySelector("#variation-graph").fixedHighlight = "400:600";
+    document.querySelector("#saver").preSave = () => {
+      document.querySelector("#saver").backgroundColor = "#ffffff";
+    };
+    document.querySelector("#saver").postSave = () => {
+      document.querySelector("#saver").backgroundColor = "#000000";
+    };
   }
-
   render() {
     loadWebComponent("protvista-manager", ProtvistaManager);
     loadWebComponent("protvista-feature-adapter", ProtvistaFeatureAdapter);
@@ -53,8 +59,10 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-variation-graph", ProtvistaVariationGraph);
     loadWebComponent("data-loader", DataLoader);
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
+    loadWebComponent("protvista-saver", ProtvistaSaver);
     return (
       <Fragment>
+        <protvista-saver element-id="example" id="saver" />
         <protvista-manager
           attributes="length displaystart displayend variantfilters highlight"
           displaystart="53"

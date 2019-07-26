@@ -27,6 +27,7 @@
     "protvista-interpro-track": "^2.1.15",
     "protvista-manager": "^2.1.13",
     "protvista-navigation": "^2.1.13",
+    "protvista-saver": "^2.1.13",
     "protvista-sequence": "^2.1.15",
     "protvista-structure": "^2.1.13",
     "protvista-track": "^2.1.15",
