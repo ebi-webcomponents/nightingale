@@ -40,12 +40,24 @@ class ProtvistaManagerWrapper extends Component {
       "400:600";
     document.querySelector("#variation-track").fixedHighlight = "400:600";
     document.querySelector("#variation-graph").fixedHighlight = "400:600";
+    //Includes a title in the exported file.
     document.querySelector("#saver").preSave = () => {
-      document.querySelector("#saver").backgroundColor = "#ffffff";
+      const base = document.querySelector("#example");
+      const title = document.createElement("h2");
+      title.setAttribute("id", "tmp_title_element");
+      title.innerHTML = "ProtVista Snapshot";
+      base.insertBefore(title, base.firstChild);
     };
+    //removes the title from the DOM
     document.querySelector("#saver").postSave = () => {
-      document.querySelector("#saver").backgroundColor = "#000000";
+      document
+        .querySelector("#example")
+        .removeChild(document.getElementById("tmp_title_element"));
     };
+
+    //Sets the background color of the image to save.
+    document.querySelector("#saver").backgroundColor = "#ffffff";
+    document.querySelector("#saver2").backgroundColor = "#ddddee";
   }
   render() {
     loadWebComponent("protvista-manager", ProtvistaManager);
@@ -63,67 +75,73 @@ class ProtvistaManagerWrapper extends Component {
     return (
       <Fragment>
         <protvista-saver element-id="example" id="saver" />
+        <protvista-saver element-id="just-tracks" id="saver2">
+          <button>Download Just Tracks</button>
+        </protvista-saver>
         <protvista-manager
           attributes="length displaystart displayend variantfilters highlight"
           displaystart="53"
           id="example"
         >
           <protvista-navigation length="770" />
-          <protvista-sequence
-            length="770"
-            id="sequence-track"
-            highlight-event="onmouseover"
-          />
-          <protvista-coloured-sequence
-            length="770"
-            id="sequence-coloured-track"
-            scale="hydrophobicity-interface-scale"
-            height="10"
-            highlight-event="onmouseover"
-          />
-          <protvista-coloured-sequence
-            length="770"
-            id="sequence-coloured-track-iso"
-            scale="isoelectric-point-scale"
-            color_range="white:0,dodgerblue:11"
-            height="10"
-          />
-          <protvista-track id="track1" length="770">
-            <protvista-feature-adapter id="adapter1">
-              <data-loader>
-                <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
-              </data-loader>
-            </protvista-feature-adapter>
-          </protvista-track>
-          <protvista-track id="track2" length="770" layout="non-overlapping">
-            <protvista-feature-adapter id="adapter1">
-              <data-loader>
-                <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
-              </data-loader>
-            </protvista-feature-adapter>
-          </protvista-track>
-          <protvista-track
-            id="track3"
-            length="770"
-            height="85"
-            displaystart="1"
-            displayend="80"
-            layout="non-overlapping"
-          />
-          <protvista-interpro-track
-            id="interpro-track"
-            length="770"
-            shape="roundRectangle"
-            highlight-event="onmouseover"
-            expanded
-          />
-          <protvista-interpro-track
-            id="interpro-track-residues"
-            length="770"
-            shape="roundRectangle"
-            highlight-event="onmouseover"
-            expanded
-          />
+          <div id="just-tracks">
+            <protvista-sequence
+              length="770"
+              id="sequence-track"
+              highlight-event="onmouseover"
+            />
+            <protvista-coloured-sequence
+              length="770"
+              id="sequence-coloured-track"
+              scale="hydrophobicity-interface-scale"
+              height="10"
+              highlight-event="onmouseover"
+            />
+            <protvista-coloured-sequence
+              length="770"
+              id="sequence-coloured-track-iso"
+              scale="isoelectric-point-scale"
+              color_range="white:0,dodgerblue:11"
+              height="10"
+            />
+            <protvista-track id="track1" length="770">
+              <protvista-feature-adapter id="adapter1">
+                <data-loader>
+                  <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+                </data-loader>
+              </protvista-feature-adapter>
+            </protvista-track>
+            <protvista-track id="track2" length="770" layout="non-overlapping">
+              <protvista-feature-adapter id="adapter1">
+                <data-loader>
+                  <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+                </data-loader>
+              </protvista-feature-adapter>
+            </protvista-track>
+            <protvista-track
+              id="track3"
+              length="770"
+              height="85"
+              displaystart="1"
+              displayend="80"
+              layout="non-overlapping"
+            />
+            <protvista-interpro-track
+              id="interpro-track"
+              length="770"
+              shape="roundRectangle"
+              highlight-event="onmouseover"
+              expanded
+            />
+            <protvista-interpro-track
+              id="interpro-track-residues"
+              length="770"
+              shape="roundRectangle"
+              highlight-event="onmouseover"
+              expanded
+            />
+          </div>
+
           <protvista-variation-graph id="variation-graph" length="770">
             <protvista-variation-adapter>
               <data-loader>
