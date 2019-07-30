@@ -367,15 +367,11 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       this._refreshResiduePaths(this.residues_loc, this._expanded);
 
       if (this._contributors) {
-        // this.childrenGroup.attr(
-        //   "visibility",
-        //   this._expanded ? "visible" : "hidden"
-        // );
         this._refreshCoverLine(this.coverLinesChildren, this._expanded);
         this._refreshFeatures(this.featureChildren, this._expanded);
-        // this.child_residues_g.attr("visibility", d =>
-        //   d.feature.expanded ? "visible" : "hidden"
-        // );
+        this.child_residues_g.attr("visibility", d =>
+          this._expanded ? "visible" : "hidden"
+        );
         this._refreshResiduePaths(this.child_residues_loc);
       }
       this._updateHighlight();
