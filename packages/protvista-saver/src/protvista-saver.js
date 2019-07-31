@@ -22,19 +22,22 @@ class ProtvistaSaver extends HTMLElement {
   saveSvg() {
     const _this = this.parentElement;
     const id = _this.elementId;
+    const element = document.querySelector(`#${id}`);
+    element.style.display = "block"; // In order to get the width and height of protvista manager, its display has to be set to block
+
     // PreSave function allows to do anything before actually printing on the canvas
     if (typeof _this.preSave === "function") {
       _this.preSave();
     }
     const canvas = document.createElement("canvas");
-    const width = (3 * window.innerWidth) / 4;
-    const height = (3 * window.innerHeight) / 4;
-    canvas.setAttribute("width", width.toString());
-    canvas.setAttribute("height", height.toString());
+    const width = window.getComputedStyle(element).getPropertyValue("width");
+    const height = window.getComputedStyle(element).getPropertyValue("height");
+    canvas.setAttribute("width", width);
+    canvas.setAttribute("height", height);
     if (_this.fillColor) {
       const context = canvas.getContext("2d");
       context.fillStyle = _this.fillColor;
-      context.fillRect(0, 0, width, height);
+      context.fillRect(0, 0, parseInt(width), parseInt(height));
     }
     // Rendering the Protvista svg
     rasterizeHTML
@@ -52,6 +55,7 @@ class ProtvistaSaver extends HTMLElement {
         console.log(err);
       })
       .finally(function() {
+        element.style.display = ""; // Display property is set back to its original value
         // Reverting the changes to the dom if it had been changed during the preSave
         if (typeof _this.postSave === "function") {
           _this.postSave();
