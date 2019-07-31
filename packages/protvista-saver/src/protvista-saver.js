@@ -3,8 +3,14 @@ import { html, render } from "lit-html";
 
 class ProtvistaSaver extends HTMLElement {
   connectedCallback() {
+    // Accepted file formats
+    const formats = ["png", "jpeg", "bmp", "tiff", "gif"];
     this.elementId = this.getAttribute("element-id");
     this.fillColor = this.getAttribute("background-color");
+    this.fileName = this.getAttribute("file-name") || "protvista";
+    this.fileFormat = formats.includes(this.getAttribute("file-format"))
+      ? this.getAttribute("file-format")
+      : "png";
     this.renderContent();
   }
 
@@ -21,22 +27,24 @@ class ProtvistaSaver extends HTMLElement {
       _this.preSave();
     }
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("width", "900");
-    canvas.setAttribute("height", "900");
+    const width = (3 * window.innerWidth) / 4;
+    const height = (3 * window.innerHeight) / 4;
+    canvas.setAttribute("width", width.toString());
+    canvas.setAttribute("height", height.toString());
     if (_this.fillColor) {
       const context = canvas.getContext("2d");
       context.fillStyle = _this.fillColor;
-      context.fillRect(0, 0, 900, 900);
+      context.fillRect(0, 0, width, height);
     }
     // Rendering the Protvista svg
     rasterizeHTML
       .drawHTML(document.getElementById(id).innerHTML, canvas)
       .then(function(result) {
         const image = canvas
-          .toDataURL("image/png", 1.0)
-          .replace("image/png", "image/octet-stream");
+          .toDataURL(`image/${_this.fileFormat}`, 1.0)
+          .replace(`image/${_this.fileFormat}`, "image/octet-stream");
         const link = document.createElement("a");
-        link.download = "my-image.png";
+        link.download = `${_this.fileName}.${_this.fileFormat}`;
         link.href = image;
         link.click();
       })

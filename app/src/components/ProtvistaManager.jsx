@@ -75,7 +75,12 @@ class ProtvistaManagerWrapper extends Component {
     return (
       <Fragment>
         <protvista-saver element-id="example" id="saver" />
-        <protvista-saver element-id="just-tracks" id="saver2">
+        <protvista-saver
+          element-id="just-tracks"
+          id="saver2"
+          file-name="tracks"
+          file-format="jpeg"
+        >
           <button>Download Just Tracks</button>
         </protvista-saver>
         <protvista-manager
