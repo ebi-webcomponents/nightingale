@@ -1,19 +1,30 @@
-/*jslint node: true */
-"use strict";
+import { config } from "./config";
 
-import _each from 'lodash-es/each';
-import _some from 'lodash-es/some';
+export const getShapeByType = type => {
+  if (config[type.toUpperCase()]) {
+    return config[type.toUpperCase()].shape;
+  }
+  const info = Object.values(config).find(
+    typeInfo => typeInfo.name.toUpperCase() === type.toUpperCase()
+  );
+  if (info) {
+    return info.shape;
+  }
+  return "rectangle";
+};
 
-export default class ConfigHelper {
-    constructor(config) {
-        this._config = config;
-    }
-
-    getShapeByType(type) {
-        return this._config[type.toLowerCase()] ? this._config[type.toLowerCase()].shape : 'rectangle';
-    }
-
-    getColorByType(type) {
-        return this._config[type.toLowerCase()] ? this._config[type.toLowerCase()].color : 'black';
-    }
-}
+export const getColorByType = type => {
+  if (config[type.toUpperCase()]) {
+    return config[type.toUpperCase()].color;
+  }
+  const info = Object.values(config).find(typeInfo => {
+    return typeInfo.name.toUpperCase() === type.toUpperCase();
+  });
+  if (!info) {
+    console.log(type);
+  }
+  if (info) {
+    return info.color;
+  }
+  return "black";
+};
