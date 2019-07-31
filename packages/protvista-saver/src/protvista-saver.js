@@ -27,8 +27,8 @@ class ProtvistaSaver extends HTMLElement {
       _this.preSave();
     }
     const canvas = document.createElement("canvas");
-    const width = (3 * window.innerWidth) / 4;
-    const height = (3 * window.innerHeight) / 4;
+    const width = 4 * (window.innerWidth / 5);
+    const height = 4 * (window.innerHeight / 5);
     canvas.setAttribute("width", width.toString());
     canvas.setAttribute("height", height.toString());
     if (_this.fillColor) {
