@@ -3545,6 +3545,11 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
+css-font-face-src@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/css-font-face-src/-/css-font-face-src-1.0.0.tgz#a8c6307d48d9afc84a404082cb1776cd458864b1"
+  integrity sha1-qMYwfUjZr8hKQECCyxd2zUWIZLE=
+
 css-loader@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-3.1.0.tgz#6f008b993b8ce812e6bab57f3cbfdc7a7cf28685"
@@ -5878,6 +5883,14 @@ init-package-json@^1.10.3:
     validate-npm-package-license "^3.0.1"
     validate-npm-package-name "^3.0.0"
 
+inlineresources@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/inlineresources/-/inlineresources-1.0.0.tgz#633e7d3f863a55935c110027a3541d3b56cdda08"
+  integrity sha512-lhldtEpNb9dLnuz8zkyrl6VlNweu0zb9XP1GZ6EnLb3YNxATAjoNdrYxsBiYVVKf1uQmiIOHckcH/NPVlgtRMQ==
+  dependencies:
+    css-font-face-src "^1.0.0"
+    url "~0.11.0"
+
 inquirer@^6.2.0, inquirer@^6.4.1:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-6.5.0.tgz#2303317efc9a4ea7ec2e2df6f86569b734accf42"
@@ -6917,6 +6930,11 @@ lit-element@2.2.0, lit-element@^2.1.0, lit-element@^2.2.0:
   integrity sha512-Mzs3H7IO4wAnpzqreHw6dQqp9IG+h/oN8X9pgNbMZbE7x6B0aNOwP5Nveox/5HE+65ZfW2PeULEjoHkrwpTnuQ==
   dependencies:
     lit-html "^1.0.0"
+
+lit-html@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-0.14.0.tgz#d6830e8f55fb923b0f5824decf7da082a1d22997"
+  integrity sha512-+xqUPzzJGEDqb0F5DOnMXvL0jxpkKebAMlXycKZxFtzlmD+qePEmYrEUPF9XVXcc5eYBzYXTCOUcjSCod4YvgQ==
 
 lit-html@^1.0.0, lit-html@^1.1.1:
   version "1.1.1"
@@ -8806,6 +8824,16 @@ range-parser@^1.2.1, range-parser@~1.2.0, range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
+rasterizehtml@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/rasterizehtml/-/rasterizehtml-1.3.0.tgz#65bd3dc892f880b713a5f29b063203eaec372e73"
+  integrity sha512-d2kM6o82UgdozhniyPy3Af9unN1INBd4Rp7Apu2wmblwFOlGxa9VKp0UAuvL/BTQI3/R+bSWJyNkdpN0FJ4VwA==
+  dependencies:
+    inlineresources "^1.0.0"
+    sane-domparser-error "~0.2.0"
+    url "~0.11.0"
+    xmlserializer "~0.6.0"
+
 raw-body@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.4.0.tgz#a1ce6fb9c9bc356ca52e89256ab59059e13d0332"
@@ -9404,6 +9432,11 @@ safe-regex@^1.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+sane-domparser-error@~0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sane-domparser-error/-/sane-domparser-error-0.2.0.tgz#adec5360c8a394526c204e61b00ea125f7b2b01f"
+  integrity sha1-rexTYMijlFJsIE5hsA6hJfeysB8=
 
 sane@^4.0.3:
   version "4.1.0"
@@ -10671,7 +10704,7 @@ url-template@^2.0.8:
   resolved "https://registry.yarnpkg.com/url-template/-/url-template-2.0.8.tgz#fc565a3cccbff7730c775f5641f9555791439f21"
   integrity sha1-/FZaPMy/93MMd19WQflVV5FDnyE=
 
-url@^0.11.0:
+url@^0.11.0, url@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
   integrity sha1-ODjpfPxgUh63PFJajlW/3Z4uKPE=
@@ -11174,6 +11207,11 @@ xmlhttprequest-ssl@~1.5.4:
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.5.tgz#c2876b06168aadc40e57d97e81191ac8f4398b3e"
   integrity sha1-wodrBhaKrcQOV9l+gRkayPQ5iz4=
+
+xmlserializer@~0.6.0:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/xmlserializer/-/xmlserializer-0.6.1.tgz#14099f60272e16cb608be3758992f998070cc29a"
+  integrity sha512-FNb0eEqqUUbnuvxuHqNuKH8qCGKqxu+558Zi8UzOoQk8Z9LdvpONK+v7m3gpKVHrk5Aq+0nNLsKxu/6OYh7Umw==
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.2"
