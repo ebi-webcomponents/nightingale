@@ -1,6 +1,6 @@
 {
   "name": "protvista-zoomable",
-  "version": "2.1.15",
+  "version": "2.1.17",
   "description": "A zoomable component for ProtVista",
   "files": [
     "dist",

@@ -4,8 +4,7 @@ import FeatureShape from "./FeatureShape";
 import NonOverlappingLayout from "./NonOverlappingLayout";
 import DefaultLayout from "./DefaultLayout";
 import ProtvistaZoomable from "protvista-zoomable";
-import { config } from "./config";
-import ConfigHelper from "./ConfigHelper";
+import { getShapeByType, getColorByType } from "./ConfigHelper";
 
 class ProtvistaTrack extends ProtvistaZoomable {
   getLayout(data) {
@@ -24,7 +23,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
     this._shape = this.getAttribute("shape");
     this._featureShape = new FeatureShape();
     this._layoutObj = this.getLayout();
-    this._config = new ConfigHelper(config);
 
     if (this._data) this._createTrack();
 
@@ -76,9 +74,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
     } else if (this._color) {
       return this._color;
     } else if (f.type) {
-      return this._config.getColorByType(f.type);
+      return getColorByType(f.type);
     } else if (f.feature && f.feature.type) {
-      return this._config.getColorByType(f.feature.type);
+      return getColorByType(f.feature.type);
     } else {
       return "black";
     }
@@ -102,9 +100,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
     } else if (this._shape) {
       return this._shape;
     } else if (f.type) {
-      return this._config.getShapeByType(f.type);
+      return getShapeByType(f.type);
     } else if (f.feature && f.feature.type) {
-      return this._config.getShapeByType(f.feature.type);
+      return getShapeByType(f.feature.type);
     } else {
       return "rectangle";
     }
