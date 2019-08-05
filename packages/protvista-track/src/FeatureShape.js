@@ -282,74 +282,38 @@ export default class FeatureShape {
     );
   }
   _helix() {
-    // const r = symbolSize / 4;
-    // const ry = symbolSize / 2;
-    // const nw = Math.round(this._ftWidth / symbolSize);
-    // let center1 = symbolSize / 2;
-    // let wave1 = "";
-    // for (let i = 0; i < nw; i++) {
-    //   let shape = "M" + (-symbolSize / 2 + center1) + "," + ry +
-    //       "Q" + (center1 - r) + "," + (-2 * ry) + " " + center1 + "," + ry +
-    //       "T" + (center1 + (2 * r)) + "," + ry;
-    //     // "M" + (-symbolSize / 2 + center1) + "," + ry +
-    //     // "A" + r + "," + ry + " 0 1,0 " + center1 + "," + ry +
-    //     // "A" + r + "," + ry + " 0 1,1 " + (symbolSize / 2 + center1) + "," + ry;
-    //   // To stop the curve at the exact endpoint
-    //   // if (i === nw - 1) {
-    //   //   shape =
-    //   //     "M" + (-symbolSize / 2 + center1) + "," + ry +
-    //   //     "A" + r + "," + ry + " 0 1,0 " + center1 + "," + ry;
-    //   // }
-    //   wave1 += shape;
-    //   center1 += symbolSize;
-    // }
-    // let center2 = symbolSize / 2 + 3; // Second wave starts two pixels after the first
-    // let wave2 = "";
-    // for (let i = 0; i < nw; i++) {
-    //   let shape = "M" + (-symbolSize / 2 + center2) + "," + ry +
-    //       "Q" + (center2 - r) + "," + (-2 * ry) + " " + center2 + "," + ry +
-    //       "T" + (center2 + (2 * r)) + "," + ry;
-    //     // "M" + (-symbolSize / 2 + center2) + "," + ry + "A" + r + "," + ry + " 0 1,0 " + center2 + "," + ry + "A" + r + "," + ry + " 0 1,1 " + (symbolSize / 2 + center2) + "," + ry;
-    //   // To stop the curve at the exact endpoint
-    //   // if (i === nw - 1) {
-    //   //   shape =
-    //   //     "M" + (-symbolSize / 2 + center2) + "," + ry +
-    //   //     "A" + r + "," + ry + " 0 1,0 " + center2 + "," + ry;
-    //   // }
-    //   wave2 += shape;
-    //   center2 += symbolSize;
-    // }
-    // // return wave1;
-    // return wave1 + wave2;
-
-    const r = symbolSize / 4;
-    let center = symbolSize / 2;
+    const x = symbolSize / 2; // Fitting two loops in a symbol
+    const y = symbolSize / 4;
+    let center = x / 2;
     const nw = Math.round(this._ftWidth / symbolSize);
 
-    // let loop = "";
-    // for (let i = 0; i < nw; i++) {
-      let shape = "M" + (-(symbolSize / 2) + center) + "," + symbolSize +
-          " C" + (center + r) + "," + (3 * r) + " " + ((symbolSize / 2) + center) + "," + r + " " + (center) + "," + (-symbolSize) +
-          " C" + (center - r) + "," + r + " " + (center) + "," + (3 * r) + " " + ((symbolSize / 2) + center) + "," + symbolSize;
-      //   loop += shape;
-      //   center += symbolSize;
-      // }
-    // return loop;
-    return shape;
+    let loop = "";
+    for (let i = 0; i < nw; i++) {
+      let shape = "M" + (-(x / 2) + center) + "," + symbolSize +
+          " C" + (center + y) + "," + (3 * y) + " " + ((x / 2) + center) + "," + y + " " + (center) + ", 0" +
+          " C" + (center - y) + "," + y + " " + (center) + "," + (3 * y) + " " + ((x / 2) + center) + "," + symbolSize;
+        loop += shape;
+        center += x;
+      }
+    return loop;
   }
   _strand() {
-    const qw = this._ftWidth / 5;
-    const qh = symbolSize / 4;
+    let rl = 0;
+    if (this._ftWidth > (symbolSize / 2)) {
+      rl = this._ftWidth - (symbolSize / 2);
+    }
+    // const qw = this._ftWidth / 5;
+    const qh = this._ftHeight / 4;
     const rect =
       "M0," + qh +
-      "L" + 4 * qw + "," + qh +
-      "L" + 4 * qw + "," + 3 * qh +
+      "L" + rl + "," + qh +
+      "L" + rl + "," + 3 * qh +
       "L0," + 3 * qh +
       "L0," + qh;
     const triangle =
-      "M" + 4 * qw + "," + 0 +
+      "M" + rl + "," + 0 +
       "L" + this._ftWidth + "," + 2 * qh +
-      "L" + 4 * qw + "," + symbolSize +
+      "L" + rl + "," + this._ftHeight +
       "Z";
     return rect + triangle;
   }
