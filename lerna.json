@@ -2,5 +2,5 @@
   "packages": ["app", "packages/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "2.1.17"
+  "version": "2.1.18"
 }
