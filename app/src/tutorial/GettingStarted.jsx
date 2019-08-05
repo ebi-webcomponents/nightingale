@@ -92,8 +92,10 @@ const GettingStarted = () => {
       </p>
       <SyntaxHighlighter>
         {`
+    <script src="https://cdn.jsdelivr.net/npm/protvista-utils@latest/dist/protvista-utils.js" defer ></script>
     <script src="https://cdn.jsdelivr.net/npm/data-loader@latest/dist/data-loader.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest/dist/protvista-feature-adapter.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest/dist/protvista-zoomable.js" defer ></script>
     <script src="https://cdn.jsdelivr.net/npm/protvista-track@latest/dist/protvista-track.js" defer></script>
 
     <protvista-track length="770">

@@ -1,6 +1,6 @@
 {
   "name": "protvista-zoomable",
-  "version": "2.1.13",
+  "version": "2.1.17",
   "description": "A zoomable component for ProtVista",
   "files": [
     "dist",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-utils": "^2.1.4",
+    "protvista-utils": "^2.1.15",
     "resize-observer-polyfill": "^1.5.0"
   },
   "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",

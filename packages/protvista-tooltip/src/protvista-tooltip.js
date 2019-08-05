@@ -16,17 +16,13 @@ class ProtvistaTooltip extends LitElement {
         -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
         opacity: 0.9;
-      }
-
-      :host {
         color: #ffffff;
       }
 
       :host a,
       :host a:link,
       :host a:active,
-      :host a:hover,
-      :host a:any-link {
+      :host a:hover {
         color: #ffffff;
       }
 
@@ -110,13 +106,15 @@ class ProtvistaTooltip extends LitElement {
 
     this.style.display = this.visible ? "block" : "none";
 
-    return html`
-      ${this.title && html``}
-      <div class="tooltip-header">
-        <span class="tooltip-header-title">${this.title}</span>
-      </div>
-      <div class="tooltip-body"><slot></slot></div>
-    `;
+    return (
+      this.title &&
+      html`
+        <div class="tooltip-header">
+          <span class="tooltip-header-title">${this.title}</span>
+        </div>
+        <div class="tooltip-body"><slot></slot></div>
+      `
+    );
   }
 }
 

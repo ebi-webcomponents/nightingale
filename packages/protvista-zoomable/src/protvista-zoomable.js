@@ -11,6 +11,7 @@ import ResizeObserver from "resize-observer-polyfill";
 class ProtvistaZoomable extends HTMLElement {
   constructor() {
     super();
+    this._polyfillElementClosest();
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
@@ -71,7 +72,7 @@ class ProtvistaZoomable extends HTMLElement {
     this._initZoom();
     this._listenForResize();
     this.addEventListener("error", e => {
-      throw e;
+      console.error(e);
     });
     this.addEventListener("click", this._resetEventHandler);
   }
@@ -276,6 +277,28 @@ class ProtvistaZoomable extends HTMLElement {
     // const boundingRect = this.querySelector("svg").getBoundingClientRect();
     // Note: it would be nice to also return the position of the bottom left of the feature
     return [d3Event.pageX, d3Event.pageY];
+  }
+
+  _polyfillElementClosest() {
+    // Polyfill for IE support, see
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+    if (!Element.prototype.matches) {
+      Element.prototype.matches =
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+    }
+
+    if (!Element.prototype.closest) {
+      Element.prototype.closest = function(s) {
+        var el = this;
+
+        do {
+          if (el.matches(s)) return el;
+          el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+      };
+    }
   }
 
   createEvent(type, feature = null, withHighlight = false, start, end, target) {

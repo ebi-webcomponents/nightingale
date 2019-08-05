@@ -15,6 +15,10 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     this._addLoaderListeners();
   }
 
+  set data(data) {
+    this._emitEvent(data);
+  }
+
   parseEntry(data) {
     this._adaptedData = data.features;
 
@@ -64,6 +68,20 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     }
   }
 
+  _emitEvent(data) {
+    this.parseEntry(data);
+    this.filterData();
+    this.dispatchEvent(
+      new CustomEvent("load", {
+        detail: {
+          payload: this._adaptedData
+        },
+        bubbles: true,
+        cancelable: true
+      })
+    );
+  }
+
   _addLoaderListeners() {
     this.addEventListener("load", e => {
       if (e.target !== this) {
@@ -72,17 +90,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
           if (e.detail.payload.errorMessage) {
             throw e.detail.payload.errorMessage;
           }
-          this.parseEntry(e.detail.payload);
-          this.filterData();
-          this.dispatchEvent(
-            new CustomEvent("load", {
-              detail: {
-                payload: this._adaptedData
-              },
-              bubbles: true,
-              cancelable: true
-            })
-          );
+          this._emitEvent(e.detail.payload);
         } catch (error) {
           this.dispatchEvent(
             new CustomEvent("error", {
