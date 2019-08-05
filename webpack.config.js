@@ -20,6 +20,7 @@ const config = {
   },
   externals: {
     d3: "d3",
+    litemol: "LiteMol",
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
     "protvista-feature-adapter": "ProtvistaFeatureAdapter",
