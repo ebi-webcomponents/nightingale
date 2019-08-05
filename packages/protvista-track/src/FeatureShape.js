@@ -282,44 +282,64 @@ export default class FeatureShape {
     );
   }
   _helix() {
-    const rx = symbolSize / 4;
-    const ry = symbolSize / 2;
+    // const r = symbolSize / 4;
+    // const ry = symbolSize / 2;
+    // const nw = Math.round(this._ftWidth / symbolSize);
+    // let center1 = symbolSize / 2;
+    // let wave1 = "";
+    // for (let i = 0; i < nw; i++) {
+    //   let shape = "M" + (-symbolSize / 2 + center1) + "," + ry +
+    //       "Q" + (center1 - r) + "," + (-2 * ry) + " " + center1 + "," + ry +
+    //       "T" + (center1 + (2 * r)) + "," + ry;
+    //     // "M" + (-symbolSize / 2 + center1) + "," + ry +
+    //     // "A" + r + "," + ry + " 0 1,0 " + center1 + "," + ry +
+    //     // "A" + r + "," + ry + " 0 1,1 " + (symbolSize / 2 + center1) + "," + ry;
+    //   // To stop the curve at the exact endpoint
+    //   // if (i === nw - 1) {
+    //   //   shape =
+    //   //     "M" + (-symbolSize / 2 + center1) + "," + ry +
+    //   //     "A" + r + "," + ry + " 0 1,0 " + center1 + "," + ry;
+    //   // }
+    //   wave1 += shape;
+    //   center1 += symbolSize;
+    // }
+    // let center2 = symbolSize / 2 + 3; // Second wave starts two pixels after the first
+    // let wave2 = "";
+    // for (let i = 0; i < nw; i++) {
+    //   let shape = "M" + (-symbolSize / 2 + center2) + "," + ry +
+    //       "Q" + (center2 - r) + "," + (-2 * ry) + " " + center2 + "," + ry +
+    //       "T" + (center2 + (2 * r)) + "," + ry;
+    //     // "M" + (-symbolSize / 2 + center2) + "," + ry + "A" + r + "," + ry + " 0 1,0 " + center2 + "," + ry + "A" + r + "," + ry + " 0 1,1 " + (symbolSize / 2 + center2) + "," + ry;
+    //   // To stop the curve at the exact endpoint
+    //   // if (i === nw - 1) {
+    //   //   shape =
+    //   //     "M" + (-symbolSize / 2 + center2) + "," + ry +
+    //   //     "A" + r + "," + ry + " 0 1,0 " + center2 + "," + ry;
+    //   // }
+    //   wave2 += shape;
+    //   center2 += symbolSize;
+    // }
+    // // return wave1;
+    // return wave1 + wave2;
+
+    const r = symbolSize / 4;
+    let center = symbolSize / 2;
     const nw = Math.round(this._ftWidth / symbolSize);
-    let center1 = symbolSize / 2;
-    let wave1 = "";
-    for (let i = 0; i < nw; i++) {
-      let shape =
-        "M" + (-symbolSize / 2 + center1) + "," + ry +
-        "A" + rx + "," + ry + " 0 1,0 " + center1 + "," + ry +
-        "A" + rx + "," + ry + " 0 1,1 " + (symbolSize / 2 + center1) + "," + ry;
-      // To stop the curve at the exact endpoint
-      if (i === nw - 1) {
-        shape =
-          "M" + (-symbolSize / 2 + center1) + "," + ry +
-          "A" + rx + "," + ry + " 0 1,0 " + center1 + "," + ry;
-      }
-      wave1 += shape;
-      center1 += symbolSize;
-    }
-    let center2 = symbolSize / 2 + 2; // Second wave starts two pixels after the first
-    let wave2 = "";
-    for (let i = 0; i < nw; i++) {
-      let shape =
-        "M" + (-symbolSize / 2 + center2) + "," + ry + "A" + rx + "," + ry + " 0 1,0 " + center2 + "," + ry + "A" + rx + "," + ry + " 0 1,1 " + (symbolSize / 2 + center2) + "," + ry;
-      // To stop the curve at the exact endpoint
-      if (i === nw - 1) {
-        shape =
-          "M" + (-symbolSize / 2 + center2) + "," + ry +
-          "A" + rx + "," + ry + " 0 1,0 " + center2 + "," + ry;
-      }
-      wave2 += shape;
-      center2 += symbolSize;
-    }
-    return wave1 + wave2;
+
+    // let loop = "";
+    // for (let i = 0; i < nw; i++) {
+      let shape = "M" + (-(symbolSize / 2) + center) + "," + symbolSize +
+          " C" + (center + r) + "," + (3 * r) + " " + ((symbolSize / 2) + center) + "," + r + " " + (center) + "," + (-symbolSize) +
+          " C" + (center - r) + "," + r + " " + (center) + "," + (3 * r) + " " + ((symbolSize / 2) + center) + "," + symbolSize;
+      //   loop += shape;
+      //   center += symbolSize;
+      // }
+    // return loop;
+    return shape;
   }
   _strand() {
     const qw = this._ftWidth / 5;
-    const qh = this._ftHeight / 4;
+    const qh = symbolSize / 4;
     const rect =
       "M0," + qh +
       "L" + 4 * qw + "," + qh +
@@ -329,7 +349,7 @@ export default class FeatureShape {
     const triangle =
       "M" + 4 * qw + "," + 0 +
       "L" + this._ftWidth + "," + 2 * qh +
-      "L" + 4 * qw + "," + this._ftHeight +
+      "L" + 4 * qw + "," + symbolSize +
       "Z";
     return rect + triangle;
   }
