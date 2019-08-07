@@ -1,8 +1,8 @@
 import { DefaultLayout } from "protvista-track";
 
-const COLLAPSED_HEIGHT = 16;
-const EXPANDED_HEIGHT = 14;
-const CHILD_HEIGHT = 10;
+export const COLLAPSED_HEIGHT = 16;
+export const EXPANDED_HEIGHT = 14;
+export const CHILD_HEIGHT = 10;
 
 export default class InterproEntryLayout extends DefaultLayout {
   init(features, children) {

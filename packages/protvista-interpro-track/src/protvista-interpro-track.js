@@ -1,5 +1,6 @@
 import ProtvistaTrack from "protvista-track";
-import InterproEntryLayout from "./InterproEntryLayout";
+import InterproEntryLayout, { COLLAPSED_HEIGHT } from "./InterproEntryLayout";
+import { getCoverage } from "./coverage";
 
 const padding = {
   top: 2,
@@ -34,6 +35,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
   set contributors(contributors) {
     this._contributors = this.normalizeLocations(contributors);
+    this._coverage = getCoverage(this._contributors, this._length);
     if (this._data) this._createTrack();
   }
 
@@ -293,11 +295,61 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
       this.child_residues_g = this._createResidueGroup(this.childGroup);
       this.child_residues_loc = this._createResiduePaths(this.child_residues_g);
+      if (this._coverage && this._coverage.length) this._createCoverage();
     }
     this.svg.attr("height", this._layoutObj.maxYPos);
     this._haveCreatedFeatures = true;
   }
 
+  _createCoverage() {
+    this._accession =
+      (this._data && this._data[0] && this._data[0].accession) || "_";
+
+    this.coverage_mask = this.svg
+      .append("defs")
+      .append("mask")
+      .attr("id", `mask-${this._accession}`);
+
+    this.coverageMaskFragment = this.coverage_mask
+      .selectAll("rect")
+      .data(this._coverage)
+      .enter()
+      .append("rect")
+      .attr("y", 0)
+      .attr("height", this._height);
+
+    // this.coverage_g = this.svg.append("g").attr("class", "coverage-features");
+
+    // this.coverageFragment = this.coverage_g
+    //   .selectAll("rect.coverage-fragment")
+    //   .data(this._coverage)
+    //   .enter()
+    //   .append("rect")
+    //   .attr("class", "coverage-fragment")
+    //   .attr("y", padding.top*2)
+    //   .attr("height", COLLAPSED_HEIGHT);
+  }
+  _refreshCoverage() {
+    // this.coverage_mask.attr("visibility", this._expanded ? "hidden" : "visible");
+    this.featuresG.attr(
+      "mask",
+      this._expanded ? null : `url(#mask-${this._accession})`
+    );
+    this.coverageMaskFragment
+      .attr("x", f => this.getXFromSeqPosition(f.start))
+      .attr("width", f => this.getSingleBaseWidth() * (f.end - f.start + 1))
+      .attr("fill", "white")
+      // .attr("pointer-events", "none")
+      .attr("opacity", f => f.value / this._contributors.length);
+
+    // this.coverage_g.attr("visibility", this._expanded ? "hidden" : "visible");
+    // this.coverageFragment
+    //   .attr("x", f => this.getXFromSeqPosition(f.start))
+    //   .attr("width", f => this.getSingleBaseWidth()*(f.end-f.start+1))
+    //   .attr("fill", "white")
+    //   .attr("pointer-events", "none")
+    //   .attr("opacity", f=> 1 - f.value/this._contributors.length);
+  }
   _refreshFeatures(base, expanded = true) {
     const numberOfSibillings = new Set(
       base.data().map(f => f.feature.accession)
@@ -332,6 +384,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       )
       .style("pointer-events", expanded ? "auto" : "none");
   }
+
   _refreshCoverLine(base, expanded = true) {
     base
       .attr("x1", f => this.getXFromSeqPosition(f.start))
@@ -377,6 +430,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
           this._expanded ? "visible" : "hidden"
         );
         this._refreshResiduePaths(this.child_residues_loc);
+        if (this._coverage && this._coverage.length) this._refreshCoverage();
       }
       this._updateHighlight();
       this.svg.attr("height", this._layoutObj.maxYPos);

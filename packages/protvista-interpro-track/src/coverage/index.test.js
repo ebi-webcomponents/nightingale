@@ -69,6 +69,15 @@ describe("coverage", () => {
       { start: containedFeature.end + 1, end: firstFeature.end, value: 1 }
     ]);
   });
+  test("adding the same Feature multiple times.", () => {
+    let coverage = [];
+    for (let i = 1; i <= 10; i++) {
+      coverage = addContributor(firstFeature, coverage);
+      expect(coverage).toEqual([
+        { start: firstFeature.start, end: firstFeature.end, value: i }
+      ]);
+    }
+  });
   test("adding the 4 features. ", () => {
     let coverage = [];
     const expected = [
@@ -79,10 +88,37 @@ describe("coverage", () => {
       { start: 12, end: 15, value: 3 },
       { start: 16, end: 20, value: 1 }
     ];
-    coverage = addContributor(firstFeature, coverage);
-    coverage = addContributor(featureBefore, coverage);
-    coverage = addContributor(overlapsBefore, coverage);
-    coverage = addContributor(containedFeature, coverage);
-    expect(coverage).toEqual(expected);
+    const combinations = makePermutationiterator([
+      firstFeature,
+      featureBefore,
+      containedFeature,
+      overlapsBefore
+    ]);
+
+    for (const oredererFeatures of combinations) {
+      coverage = [];
+      coverage = addContributor(oredererFeatures[0], coverage);
+      coverage = addContributor(oredererFeatures[1], coverage);
+      coverage = addContributor(oredererFeatures[2], coverage);
+      coverage = addContributor(oredererFeatures[3], coverage);
+      expect(coverage).toEqual(expected);
+    }
   });
 });
+
+function* makePermutationiterator(list = []) {
+  for (let i = 0; i < list.length; i++) {
+    const val = list[i];
+    const newList = list.slice(0, i).concat(list.slice(i + 1));
+    if (newList.length > 1) {
+      const it = makePermutationiterator(newList);
+      let permuted = it.next();
+      while (!permuted.done) {
+        yield [val, ...permuted.value];
+        permuted = it.next();
+      }
+    } else {
+      yield [val, ...newList];
+    }
+  }
+}
