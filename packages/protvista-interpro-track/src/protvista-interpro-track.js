@@ -97,7 +97,11 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         d.fragments.map(loc =>
           Object.assign({}, loc, {
             accession: d.accession,
-            feature: d.feature,
+            feature: Object.assign({}, d.feature, {
+              currentResidue: Object.assign({}, loc, {
+                description: d.location.description
+              })
+            }),
             location: d.location,
             k: d.feature.k,
             i: d.i,
