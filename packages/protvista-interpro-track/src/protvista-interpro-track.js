@@ -107,7 +107,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       )
       .enter()
       .append("path")
-      .attr("class", "feature rectangle")
+      .attr("class", "feature rectangle residue")
       .attr("d", (f, j) =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
