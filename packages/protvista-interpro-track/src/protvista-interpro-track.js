@@ -10,10 +10,10 @@ const padding = {
 };
 
 const MAX_OPACITY_WHILE_COLAPSED = 0.8;
-const MIN_OPACITY_WHILE_COLAPSED = 0.2;
+const MIN_OPACITY_WHILE_COLAPSED = 0.3;
 
 const cheapScale = x =>
-  (x + MIN_OPACITY_WHILE_COLAPSED) / (1 - MIN_OPACITY_WHILE_COLAPSED);
+  (x + MIN_OPACITY_WHILE_COLAPSED) / (1 + MIN_OPACITY_WHILE_COLAPSED);
 
 class ProtvistaInterproTrack extends ProtvistaTrack {
   _createTrack() {
