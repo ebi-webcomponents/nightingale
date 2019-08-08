@@ -372,7 +372,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         "opacity",
         expanded ? 1 : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
       )
-      .style("stroke", f =>
+      .attr("stroke", f =>
         expanded ? this._getFeatureColor(f.feature) : "none"
       )
       .attr(
