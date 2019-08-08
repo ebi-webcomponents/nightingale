@@ -10,6 +10,10 @@ const padding = {
 };
 
 const MAX_OPACITY_WHILE_COLAPSED = 0.8;
+const MIN_OPACITY_WHILE_COLAPSED = 0.2;
+
+const cheapScale = x =>
+  (x + MIN_OPACITY_WHILE_COLAPSED) / (1 - MIN_OPACITY_WHILE_COLAPSED);
 
 class ProtvistaInterproTrack extends ProtvistaTrack {
   _createTrack() {
@@ -342,7 +346,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .attr("width", f => this.getSingleBaseWidth() * (f.end - f.start + 1))
       .attr("fill", "white")
       // .attr("pointer-events", "none")
-      .attr("opacity", f => f.value / this._contributors.length);
+      .attr("opacity", f => cheapScale(f.value / this._contributors.length));
 
     // this.coverage_g.attr("visibility", this._expanded ? "hidden" : "visible");
     // this.coverageFragment
@@ -372,7 +376,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         "opacity",
         expanded ? 1 : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
       )
-      .attr("stroke", f =>
+      .style("stroke", f =>
         expanded ? this._getFeatureColor(f.feature) : "none"
       )
       .attr(
