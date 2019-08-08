@@ -158,7 +158,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
             )) +
           ")"
       )
-      .style("pointer-events", expanded ? "auto" : "none")
+      .style("pointer-events", f =>
+        expanded || (f.feature && f.feature.expanded) ? "auto" : "none"
+      )
       .style("stroke", f => (expanded ? null : "none"))
       .style("opacity", f =>
         expanded ? null : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
