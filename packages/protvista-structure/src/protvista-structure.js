@@ -115,11 +115,6 @@ class ProtvistaStructure extends HTMLElement {
     const style = document.createElement("style");
     style.innerHTML = this.css;
     this.appendChild(style);
-    const liteMolStyle = document.createElement("link");
-    liteMolStyle.rel = "stylesheet";
-    liteMolStyle.href =
-      "../../../node_modules/litemol/dist/css/LiteMol-plugin.css";
-    this.appendChild(liteMolStyle);
     this.titleContainer = document.createElement("h4");
     const flexContainer = document.createElement("div");
     flexContainer.className = "main-container";
@@ -275,9 +270,7 @@ class ProtvistaStructure extends HTMLElement {
                             <td>${d.properties.chains
                               .map(
                                 chain =>
-                                  `<div title="${chain.chains}">${
-                                    chain.chain
-                                  }</div>`
+                                  `<div title="${chain.chains}">${chain.chain}</div>`
                               )
                               .join("")}</td>
                             <td>${d.properties.chains

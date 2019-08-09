@@ -28,7 +28,6 @@ class ProtvistaTooltip extends LitElement {
 
       .tooltip-header {
         background-color: #000000;
-        line-height: 3em;
       }
 
       .tooltip-header::before {
@@ -49,10 +48,10 @@ class ProtvistaTooltip extends LitElement {
       .tooltip-header .tooltip-header-title {
         background-color: #000000;
         font-weight: 700;
-        line-height: 1em;
+        line-height: 3em;
+        height: 3rem;
         display: inline-block;
-        vertical-align: middle;
-        padding-left: 0.4em;
+        padding-left: 0.4rem;
       }
 
       .tooltip-body {
@@ -64,25 +63,27 @@ class ProtvistaTooltip extends LitElement {
       }
 
       ::slotted(h4) {
-        font-size: 1.2rem;
-        margin: 0 0 0.5rem 0;
-        font-weight: 600;
+        font-size: 1.2rem !important;
+        margin: 0 0 0.5rem 0 !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
       }
 
       ::slotted(h5) {
-        font-size: 1rem;
-        margin: 0;
-        font-weight: 500;
+        font-size: 1rem !important;
+        margin: 0 !important;
+        font-weight: 500 !important;
+        color: #ffffff !important;
       }
 
       ::slotted(p) {
-        margin: 0.25rem 0 1rem 0;
+        margin: 0.25rem 0 1rem 0 !important;
       }
 
       ::slotted(ul) {
-        list-style: none;
-        margin: 0.25rem 0 1rem 0;
-        padding: 0;
+        list-style: none !important;
+        margin: 0.25rem 0 1rem 0 !important;
+        padding: 0 !important;
       }
     `;
   }
