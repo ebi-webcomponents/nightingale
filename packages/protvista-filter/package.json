@@ -1,6 +1,6 @@
 {
   "name": "protvista-filter",
-  "version": "2.1.17",
+  "version": "2.2.0",
   "description": "Filter component for variants",
   "files": [
     "dist",
