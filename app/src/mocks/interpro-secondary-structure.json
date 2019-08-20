@@ -6,14 +6,14 @@
         "fragments": [
           {
             "start": 45,
-            "end": 49,
+            "end": 100,
             "shape": "helix",
             "fill": "transparent",
             "color": "#f06"
           },
           {
-            "start": 56,
-            "end": 77,
+            "start": 110,
+            "end": 200,
             "shape": "helix",
             "fill": "transparent",
             "color": "#f06"

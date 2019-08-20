@@ -126,7 +126,6 @@ class ProtvistaManagerWrapper extends Component {
             <protvista-track
               id="track3"
               length="770"
-              height="85"
               displaystart="1"
               displayend="80"
               layout="non-overlapping"
