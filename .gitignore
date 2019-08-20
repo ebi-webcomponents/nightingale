@@ -1,6 +1,7 @@
 node_modules
 dist
 .idea
+.vscode
 package-lock.json
 *.log
 *.bak
