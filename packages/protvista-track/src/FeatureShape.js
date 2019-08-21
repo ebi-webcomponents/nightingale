@@ -289,9 +289,9 @@ export default class FeatureShape {
 
     let loop = "";
     for (let i = 0; i < nw; i++) {
-      let shape = "M" + (-(x / 2) + center) + "," + symbolSize +
+      let shape = "M" + (-(x / 2) + center) + "," + this._ftHeight +
           " C" + (center + y) + "," + (3 * y) + " " + ((x / 2) + center) + "," + y + " " + (center) + ", 0" +
-          " C" + (center - y) + "," + y + " " + (center) + "," + (3 * y) + " " + ((x / 2) + center) + "," + symbolSize;
+          " C" + (center - y) + "," + y + " " + (center) + "," + (3 * y) + " " + ((x / 2) + center) + "," + this._ftHeight;
         loop += shape;
         center += x;
       }
@@ -302,7 +302,6 @@ export default class FeatureShape {
     if (this._ftWidth > (symbolSize / 2)) {
       rl = this._ftWidth - (symbolSize / 2);
     }
-    // const qw = this._ftWidth / 5;
     const qh = this._ftHeight / 4;
     const rect =
       "M0," + qh +
