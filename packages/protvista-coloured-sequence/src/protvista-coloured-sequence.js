@@ -99,7 +99,7 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
       const colorScale = scaleLinear();
       this.colorScale = defaultScale;
       if (this._color_range) {
-        this._colorScale = ColorScaleParser(this._color_range);
+        this.colorScale = ColorScaleParser(this._color_range);
       }
       colorScale.domain(this.colorScale.domain).range(this.colorScale.range);
 
