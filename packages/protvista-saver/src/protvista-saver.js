@@ -49,6 +49,7 @@ class ProtvistaSaver extends HTMLElement {
         const link = document.createElement("a");
         link.download = `${_this.fileName}.${_this.fileFormat}`;
         link.href = image;
+        document.body.appendChild(link);
         link.click();
       })
       .catch(function(err) {
