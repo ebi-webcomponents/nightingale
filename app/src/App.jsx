@@ -11,6 +11,8 @@ import pkg from "../package.json";
 import logo from "../resources/nightingale_logo.svg";
 import "./App.css";
 import GettingStarted from "./tutorial/GettingStarted";
+import ProtvistaTooltip from "./components/ProtvistaTooltip.jsx";
+import ProtvistaTooltipWrapper from "./components/ProtvistaTooltip.jsx";
 
 const ProtvistaTrack = lazyImport("ProtvistaTrack");
 const ProtvistaInterProTrack = lazyImport("ProtvistaInterProTrack");
@@ -114,6 +116,9 @@ const App = (component = ProtvistaNavigation) => (
                   <li>
                     <NavLink to="/datatable">Data table</NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/tooltip">Tooltip</NavLink>
+                  </li>
                 </ul>
                 <ul className="main-nav__list">
                   <li>
@@ -146,6 +151,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/graph" component={ProtvistaVariationGraph} />
               <Route path="/datatable" component={ProtvistaDatatable} />
               <Route path="/playground" component={Playground} />
+              <Route path="/tooltip" component={ProtvistaTooltipWrapper} />
               <Route path="/" component={GettingStarted} />
             </Switch>
           </Suspense>
