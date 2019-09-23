@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "description": "Variation viewer for the ProtVista tool",
   "files": [
     "dist",
@@ -19,7 +19,7 @@
   "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-track": "^2.2.2"
+    "protvista-track": "^2.2.4"
   },
   "devDependencies": {
     "d3": "^5.7.0"
