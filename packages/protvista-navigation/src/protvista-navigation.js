@@ -51,9 +51,8 @@ class ProtVistaNavigation extends HTMLElement {
     }
     if (this._ro) {
       this._ro.unobserve(this);
-    } else {
-      window.removeEventListener(this._onResize);
     }
+    window.removeEventListener(this._onResize);
   }
 
   static get observedAttributes() {
