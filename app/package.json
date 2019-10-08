@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -23,7 +23,7 @@
     "interaction-viewer": "^2.2.4",
     "protvista-coloured-sequence": "^2.2.4",
     "protvista-datatable": "^2.2.8",
-    "protvista-feature-adapter": "^2.2.9",
+    "protvista-feature-adapter": "^2.2.10",
     "protvista-filter": "^2.2.0",
     "protvista-interpro-track": "^2.2.4",
     "protvista-manager": "^2.1.13",
@@ -35,7 +35,7 @@
     "protvista-track": "^2.2.4",
     "protvista-uniprot": "^2.0.3",
     "protvista-variation": "^2.2.4",
-    "protvista-variation-adapter": "^2.1.13",
+    "protvista-variation-adapter": "^2.2.10",
     "protvista-variation-graph": "^2.2.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
