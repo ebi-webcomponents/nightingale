@@ -71,7 +71,7 @@ const filterData = [
     },
     options: {
       labels: ["UniProt reviewed"],
-      colors: ["#e5e5e5"]
+      colors: ["#9f9f9f"]
     }
   },
   {
@@ -82,7 +82,7 @@ const filterData = [
     },
     options: {
       labels: ["ClinVar reviewed"],
-      colors: ["#e5e5e5"]
+      colors: ["#9f9f9f"]
     }
   },
   {
@@ -93,7 +93,7 @@ const filterData = [
     },
     options: {
       labels: ["Large scale studies"],
-      colors: ["#e5e5e5"]
+      colors: ["#9f9f9f"]
     }
   }
 ];
