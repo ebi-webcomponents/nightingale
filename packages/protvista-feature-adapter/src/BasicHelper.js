@@ -13,14 +13,8 @@ export class BasicHelper {
 
   static formatSource(source) {
     return source.name.toLowerCase() === "PubMed".toLowerCase()
-      ? `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${
-          source.name
-        }</a>&nbsp;<a href='${
-          source.alternativeUrl
-        }' style="color:#FFF" target='_blank'>EuropePMC</a>`
-      : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${
-          source.id
-        }</a>&nbsp;(${source.name})`;
+      ? `${source.id}&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>`
+      : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.id}</a>&nbsp;(${source.name})`;
   }
 
   static getEvidenceFromCodes(evidenceList) {
@@ -44,9 +38,7 @@ export class BasicHelper {
     return `<ul>${xrefs
       .map(
         xref =>
-          `<li style="padding: .25rem 0">${xref.name} <a href="${
-            xref.url
-          }" style="color:#FFF" target="_blank">${xref.id}</a></li>`
+          `<li style="padding: .25rem 0">${xref.name} <a href="${xref.url}" style="color:#FFF" target="_blank">${xref.id}</a></li>`
       )
       .join("")}</ul>`;
   }
