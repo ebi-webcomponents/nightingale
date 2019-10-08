@@ -129,7 +129,6 @@ class ProtvistaDatatable extends LitElement {
       .hidden {
         opacity: 0.2;
       }
-      // This is taken from franklin-sites and should be imported
       .evidence-tag {
         cursor: pointer;
         font-size: 80%;
