@@ -129,6 +129,27 @@ class ProtvistaDatatable extends LitElement {
       .hidden {
         opacity: 0.2;
       }
+      // This is taken from franklin-sites and should be imported
+      .evidence-tag {
+        cursor: pointer;
+        font-size: 80%;
+        white-space: nowrap;
+        margin-left: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: #f1f1f1;
+        padding: 0.25rem 0.5rem;
+        color: #3a343a;
+      }
+      .evidence-tag__label {
+        padding-left: 0.25rem;
+        text-transform: capitalize;
+      }
+      .svg-colour-reviewed {
+        fill: #c39b00;
+      }
+      .svg-colour-unreviewed {
+        fill: #c0c0c0;
+      }
     `;
   }
 
