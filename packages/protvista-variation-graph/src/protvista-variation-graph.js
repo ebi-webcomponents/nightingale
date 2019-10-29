@@ -1,27 +1,18 @@
 import ProtvistaTrack from "protvista-track";
-import {
-  scaleLinear,
-  select,
-  event as d3Event,
-  line,
-  extent,
-  curveBasis
-} from "d3";
+import { scaleLinear, select, event as d3Event, line, extent } from "d3";
 
 class ProtvistaVariationGraph extends ProtvistaTrack {
   constructor() {
     super();
     this._line = line()
-      .x(d => this.xScale(d.x))
+      .x(d => {
+        return this.getXFromSeqPosition(d.x) - this.getSingleBaseWidth() / 2;
+      })
       .y(d => this._yScale(d.y));
   }
 
   init() {
-    this._totals_dataset = {};
-    this._totals_feature = undefined;
-
-    this._disease_dataset = {};
-    this._disease_feature = undefined;
+    this._totalsArray = null;
   }
 
   connectedCallback() {
@@ -31,42 +22,34 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
     this._height = parseInt(this.getAttribute("height")) || 40;
     this._yScale = scaleLinear();
-    this._xExtent;
-    this._yExtent;
     this.init();
   }
 
   set data(data) {
-    this._data = data;
     this.init();
-    if (this._data.variants.length <= 0) {
+    if (!data.sequence || data.variants.length <= 0) {
       return;
     }
 
-    let totalMap = {};
-    let diseaseMap = {};
+    this._totalsArray = Array(data.sequence.length)
+      .fill()
+      .map(d => {
+        return {
+          total: 0,
+          diseaseTotal: 0
+        };
+      });
 
-    this._data.variants.forEach(v => {
-      if ("undefined" === typeof totalMap[v.start]) {
-        totalMap[v.start] = 0;
+    data.variants.forEach(v => {
+      this._totalsArray[v.start].total++;
+      if (typeof v.association !== "undefined") {
+        const hasDisease = v.association.find(
+          association => association.disease === true
+        );
+        if (hasDisease) {
+          this._totalsArray[v.start].diseaseTotal++;
+        }
       }
-      if ("undefined" === typeof diseaseMap[v.start]) {
-        diseaseMap[v.start] = 0;
-      }
-      totalMap[v.start]++;
-      if ("undefined" !== typeof v.association) {
-        v.association.forEach(a => {
-          if (true === a.disease) {
-            diseaseMap[v.start]++;
-          }
-        });
-      }
-    });
-    this._totals_dataset = Object.keys(totalMap).map(d => {
-      return { x: d, y: totalMap[d] };
-    });
-    this._disease_dataset = Object.keys(diseaseMap).map(d => {
-      return { x: d, y: diseaseMap[d] };
     });
     this._createTrack();
   }
@@ -81,35 +64,50 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("height", this._height);
     this.trackHighlighter.appendHighlightTo(this.svg);
     // Create the visualisation here
-    this._createFeatures();
+    this._initYScale();
     this.refresh();
   }
 
-  _createFeatures() {
-    this._xExtent = extent(this._totals_dataset, d => parseInt(d.x));
-    this._yExtent = extent(this._totals_dataset, d => d.y);
-
-    // just a bit of padding on the top
-    this._yExtent[1] += 2;
-
-    this.xScale.domain(this._xExtent).range([0, this._width]);
-    this._yScale.domain(this._yExtent).range([this._height, 0]);
+  _initYScale() {
+    this._yScale
+      .domain([0, d3.max(this._totalsArray.map(d => d.total))])
+      .range([this._height, 0]);
   }
 
   refresh() {
     if (!this.svg) return;
     this.svg.selectAll("path").remove();
-    this._disease_feature = this.svg
+    this.svg
       .append("path")
-      .attr("d", this._line(this._disease_dataset))
+      .attr(
+        "d",
+        this._line(
+          this._totalsArray.map((d, i) => {
+            return {
+              x: i + 1,
+              y: d.diseaseTotal
+            };
+          })
+        )
+      )
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-width", "1.5px")
       .attr("stroke-dasharray", "0")
       .attr("transform", "translate(0,0)");
-    this._totals_feature = this.svg
+    this.svg
       .append("path")
-      .attr("d", this._line(this._totals_dataset))
+      .attr(
+        "d",
+        this._line(
+          this._totalsArray.map((d, i) => {
+            return {
+              x: i + 1,
+              y: d.total
+            };
+          })
+        )
+      )
       .attr("fill", "none")
       .attr("stroke", "darkgrey")
       .attr("stroke-width", "1px")
