@@ -1,5 +1,10 @@
 [
-  { "accession": "feature1", "start": 10, "end": 40, "color": "#342ea2" },
+  {
+    "accession": "feature1",
+    "start": 10,
+    "end": 40,
+    "color": "#342ea2"
+  },
   {
     "accession": "feature2",
     "locations": [{ "fragments": [{ "start": 50, "end": 160 }] }],

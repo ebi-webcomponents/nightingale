@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from "react";
+import { html } from "lit-html";
 import ProtvistaDatatable from "protvista-datatable";
 import ProtvistaTrack from "protvista-track";
 import ProtvistaManager from "protvista-manager";
@@ -6,8 +7,6 @@ import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import DataLoader from "data-loader";
 import loadWebComponent from "../utils/load-web-component";
-
-import data from "../mocks/features.json";
 
 const columnConfig = {
   type: {
@@ -21,6 +20,30 @@ const columnConfig = {
   positions: {
     label: "Positions",
     resolver: d => `${d["start"]}-${d["end"]}`
+  },
+  consequence: {
+    label: "Evidences",
+    child: true,
+    resolver: d => {
+      const evidences = d["evidences"];
+      if (evidences && evidences.length > 0) {
+        return html`
+          <ul>
+            ${evidences.map(
+              evidence =>
+                html`
+                  <li>${evidence.code}</li>
+                `
+            )}
+          </ul>
+        `;
+      }
+    }
+  },
+  ftId: {
+    label: "Feature ID",
+    child: true,
+    resolver: d => d.ftId
   }
 };
 class ProtvistaDatatableWrapper extends Component {

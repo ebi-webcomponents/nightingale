@@ -1,10 +1,15 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html } from "lit-element";
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { v1 } from "uuid";
+import styles from "./styles";
+import PlusSVG from "../resources/plus.svg";
+import MinusSVG from "../resources/minus.svg";
 
 class ProtvistaDatatable extends LitElement {
   constructor() {
     super();
-    this.height = 15;
+    this.height = 25;
+    this.visibleChildren = [];
     this.eventHandler = this.eventHandler.bind(this);
   }
 
@@ -21,7 +26,7 @@ class ProtvistaDatatable extends LitElement {
     }
     document.addEventListener("click", this.eventHandler);
     this.classList.add("feature"); //this makes sure the protvista-zoomable event listener doesn't reset
-    window.addEventListener("resize", this.updateHeaderColumnSizes.bind(this));
+    // window.addEventListener("resize", this.updateHeaderColumnSizes.bind(this));
   }
 
   disconnectedCallback() {
@@ -65,91 +70,13 @@ class ProtvistaDatatable extends LitElement {
       columns: { type: Object },
       displayStart: { type: Number },
       displayEnd: { type: Number },
-      clickedRowId: { type: String }
+      clickedRowId: { type: String },
+      visibleChildren: { type: Array }
     };
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-      table {
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        border-spacing: 0;
-      }
-
-      th {
-        text-align: left;
-        background-color: var(--protvista-datable__header-background, #fff);
-        color: var(--protvista-datable__header-text, #393b42);
-        text-overflow: ellipsis;
-      }
-
-      td,
-      th {
-        padding: 1rem;
-        border-bottom: 1px solid #c2c4c4;
-      }
-
-      thead {
-        display: block;
-      }
-
-      tbody {
-        display: block;
-        width: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-      }
-
-      tr:hover {
-        background-color: var(--protvista-datatable__hover, #f1f1f1);
-      }
-
-      td {
-        cursor: pointer;
-        width: 20%;
-      }
-
-      .active {
-        background-color: var(
-          --protvista-datatable__active,
-          rgba(255, 235, 59, 0.3)
-        );
-      }
-      .active-clicked {
-        background-color: var(
-          --protvista-datatable__active--clicked,
-          rgba(255, 235, 59, 0.8)
-        );
-      }
-      .hidden {
-        opacity: 0.2;
-      }
-      .evidence-tag {
-        cursor: pointer;
-        font-size: 80%;
-        white-space: nowrap;
-        margin-left: 0.5rem;
-        border-radius: 0.5rem;
-        background-color: #f1f1f1;
-        padding: 0.25rem 0.5rem;
-        color: #3a343a;
-      }
-      .evidence-tag__label {
-        padding-left: 0.25rem;
-        text-transform: capitalize;
-      }
-      .svg-colour-reviewed {
-        fill: #c39b00;
-      }
-      .svg-colour-unreviewed {
-        fill: #c0c0c0;
-      }
-    `;
+    return styles;
   }
 
   processData(data) {
@@ -173,6 +100,9 @@ class ProtvistaDatatable extends LitElement {
   }
 
   handleClick(e, start, end) {
+    if (!e.target.parentNode) {
+      return;
+    }
     this.clickedRowId = e.target.parentNode.dataset.uuid;
     this.dispatchEvent(
       new CustomEvent("change", {
@@ -188,7 +118,7 @@ class ProtvistaDatatable extends LitElement {
   getStyleClass(id, start, end) {
     let className = "";
     if (this.clickedRowId && this.clickedRowId === id) {
-      className = `${className} active-clicked`;
+      className = `${className} active`;
     }
     if (
       this.displayStart &&
@@ -201,65 +131,120 @@ class ProtvistaDatatable extends LitElement {
       this.highlight &&
       this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
     ) {
-      className = `${className} active`;
+      className = `${className} overlapped`;
     }
     return className;
   }
 
-  updateHeaderColumnSizes() {
-    // Calculate column widths to apply to header
-    const firstRow = this.shadowRoot.querySelectorAll("table > tbody > tr")[0];
-    const columnWidths = [...firstRow.children].map(
-      el => el.getBoundingClientRect().width
-    );
-    const header = this.shadowRoot.querySelector("table > thead > tr");
-    [...header.children].forEach((el, i) => {
-      el.style.width = `${columnWidths[i]}px`;
-    });
+  hasChildData(rowItems, row) {
+    return rowItems.some(column => this.columns[column].resolver(row));
   }
 
-  updated() {
-    this.updateHeaderColumnSizes();
+  toggleVisibleChild(rowId) {
+    if (this.visibleChildren.includes(rowId)) {
+      this.visibleChildren = this.visibleChildren.filter(
+        childId => childId !== rowId
+      );
+    } else {
+      this.visibleChildren = [...this.visibleChildren, rowId];
+    }
+  }
+
+  getChildRow(childRowItems, row) {
+    return html`
+      <tr class="child-row">
+        <td
+          colspan="${Object.values(this.columns).filter(column => !column.child)
+            .length + 1}"
+        >
+          ${childRowItems.map(column => {
+            const data = this.columns[column].resolver(row);
+            return data
+              ? html`
+                  <div class="protvista-datatable__child-item">
+                    <div class="protvista-datatable__child-item__title">
+                      ${this.columns[column].label}
+                    </div>
+                    <div class="protvista-datatable__child-item__content">
+                      ${this.columns[column].resolver(row)}
+                    </div>
+                  </div>
+                `
+              : html``;
+          })}
+        </td>
+      </tr>
+    `;
   }
 
   render() {
     if (!this.data || !this.columns) {
-      return null;
+      return html``;
     }
+    const childRowItems = Object.keys(this.columns).filter(
+      column => this.columns[column].child
+    );
     return html`
-      <table>
-        <thead>
-          <tr>
-            ${Object.values(this.columns).map(
-              column =>
-                html`
-                  <th>${column.label}</th>
-                `
-            )}
-          </tr>
-        </thead>
-        <tbody style="height:${this.height}rem">
-          ${this.data.map(
-            row =>
-              html`
+      <div
+        class="protvista-datatable-container"
+        style="height:${this.height}rem"
+      >
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              ${Object.values(this.columns)
+                .filter(column => !column.child)
+                .map(
+                  column =>
+                    html`
+                      <th>${column.label}</th>
+                    `
+                )}
+            </tr>
+          </thead>
+          <tbody>
+            ${this.data.map(row => {
+              const hasChildData = this.hasChildData(childRowItems, row);
+              return html`
                 <tr
                   data-uuid=${row.id}
                   class=${this.getStyleClass(row.id, row.start, row.end)}
                   @click="${e => this.handleClick(e, row.start, row.end)}"
                 >
-                  ${Object.keys(this.columns).map(
-                    column =>
-                      html`
-                        <td>
-                          ${this.columns[column].resolver(row)}
+                  ${hasChildData
+                    ? html`
+                        <td
+                          class="protvista-datatable__child-toggle"
+                          @click="${e => this.toggleVisibleChild(row.id)}"
+                        >
+                          ${this.visibleChildren.includes(row.id)
+                            ? unsafeHTML(MinusSVG)
+                            : unsafeHTML(PlusSVG)}
                         </td>
                       `
-                  )}
+                    : html`
+                        <td />
+                      `}
+                  ${Object.keys(this.columns)
+                    .filter(column => !this.columns[column].child)
+                    .map(
+                      (column, i) =>
+                        html`
+                          <td>
+                            ${this.columns[column].resolver(row)}
+                          </td>
+                        `
+                    )}
                 </tr>
-              `
-          )}
-        </tbody>
-      </table>
+                ${hasChildData && this.visibleChildren.includes(row.id)
+                  ? this.getChildRow(childRowItems, row)
+                  : ""}
+              `;
+            })}
+          </tbody>
+        </table>
+      </div>
     `;
   }
 }
