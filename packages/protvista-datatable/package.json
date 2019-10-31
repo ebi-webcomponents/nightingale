@@ -3,7 +3,8 @@
   "version": "2.2.12",
   "files": [
     "dist",
-    "src"
+    "src",
+    "resources"
   ],
   "main": "dist/protvista-datatable.js",
   "module": "src/protvista-datatable.js",
