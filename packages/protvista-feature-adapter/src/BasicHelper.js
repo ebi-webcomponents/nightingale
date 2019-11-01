@@ -38,7 +38,11 @@ export class BasicHelper {
     return `<ul>${xrefs
       .map(
         xref =>
-          `<li style="padding: .25rem 0">${xref.name} <a href="${xref.url}" style="color:#FFF" target="_blank">${xref.id}</a></li>`
+          `<li style="padding: .25rem 0">${xref.name} ${
+            xref.url
+              ? `<a href="${xref.url}" style="color:#FFF" target="_blank">${xref.id}</a>`
+              : `${xref.name} ${xref.id}`
+          }</li>`
       )
       .join("")}</ul>`;
   }
