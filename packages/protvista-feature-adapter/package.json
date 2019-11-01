@@ -1,6 +1,6 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "2.2.10",
+  "version": "2.2.14",
   "files": [
     "dist",
     "src"
