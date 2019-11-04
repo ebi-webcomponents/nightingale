@@ -11,7 +11,6 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     this._filters = this.getAttribute("filters")
       ? this.getAttribute("filters").split(",")
       : [];
-    this._initLoaders();
     this._addLoaderListeners();
   }
 
@@ -20,13 +19,15 @@ class ProtvistaFeatureAdapter extends HTMLElement {
   }
 
   parseEntry(data) {
-    this._adaptedData = data.features;
-
-    if (this._adaptedData && this._adaptedData.length !== 0) {
+    const { features } = data;
+    if (features && features.length > 0) {
+      this._adaptedData = features.map(feature => {
+        return {
+          ...feature,
+          tooltipContent: this._basicHelper.formatTooltip(feature)
+        };
+      });
       this._adaptedData = this._basicHelper.renameProperties(this._adaptedData);
-      this._adaptedData.map(
-        d => (d.tooltipContent = this._basicHelper.formatTooltip(d))
-      );
     }
     return this._adaptedData;
   }
@@ -45,27 +46,6 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 
   get basicHelper() {
     return this._basicHelper;
-  }
-
-  _initLoaders() {
-    const { children } = this;
-    if (this.childElementCount !== 1) {
-      this.dispatchEvent(
-        new CustomEvent("warning", {
-          detail:
-            "Only one loader OR adapter is allowed, the first one will be used, the others dismissed",
-          bubbles: true,
-          cancelable: true
-        })
-      );
-      this._removeChildrenInList(this, children, 1, this.childElementCount);
-    }
-  }
-
-  _removeChildrenInList(elem, list, start, end) {
-    for (let i = start; i < end && i < list.length; i++) {
-      elem.removeChild(list[i]);
-    }
   }
 
   _emitEvent(data) {

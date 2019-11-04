@@ -1,6 +1,7 @@
 import { html, css, LitElement } from "lit-element";
 
-class ProtvistaCheckbox extends LitElement {
+/* eslint-disable import/prefer-default-export */
+export class ProtvistaCheckbox extends LitElement {
   constructor() {
     super();
     this._toggleChecked = this._toggleChecked.bind(this);
@@ -66,11 +67,14 @@ class ProtvistaCheckbox extends LitElement {
   }
 
   render() {
-    let {
-      value,
-      options: { labels, colors },
+    const {
+      options: { labels },
       checked = false,
       disabled = false
+    } = this;
+    let {
+      value,
+      options: { colors }
     } = this;
     if (colors.length == null) {
       colors = [colors];
@@ -127,5 +131,3 @@ class ProtvistaCheckbox extends LitElement {
     );
   }
 }
-
-export { ProtvistaCheckbox };
