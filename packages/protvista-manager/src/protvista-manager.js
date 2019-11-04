@@ -39,8 +39,8 @@ class ProtVistaManager extends HTMLElement {
     }
 
     if (!Element.prototype.closest) {
-      Element.prototype.closest = function(s) {
-        var el = this;
+      Element.prototype.closest = s => {
+        let el = this;
 
         do {
           if (el.matches(s)) return el;
@@ -67,11 +67,11 @@ class ProtVistaManager extends HTMLElement {
     if (this._attributes.indexOf(e.detail.type) !== -1) {
       this.attributeValues.set(e.detail.type, e.detail.value);
     }
-    for (let key in e.detail) {
+    Object.keys(e.detail).forEach(key => {
       if (this._attributes.indexOf(key) !== -1) {
         this.attributeValues.set(key, e.detail[key]);
       }
-    }
+    });
     this.applyAttributes();
   }
 

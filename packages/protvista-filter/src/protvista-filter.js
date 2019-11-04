@@ -36,9 +36,9 @@ class ProtvistaFilter extends HTMLElement {
         return;
       }
       this._filters = JSON.parse(newValue);
-      this._filters.forEach(({ name, type, options }) => {
+      this._filters.forEach(({ filterName, type, options }) => {
         if (options.selected) {
-          this._selectedFilters.add(`${type.name}:${name}`);
+          this._selectedFilters.add(`${type.name}:${filterName}`);
         }
       });
       this._renderFilters();
@@ -90,7 +90,7 @@ class ProtvistaFilter extends HTMLElement {
               ${header(type)}
               ${flexColumn(
                 groupByType[type].map(
-                  ({ name, type, options }) => html`
+                  ({ name, options }) => html`
                     <protvista-checkbox
                       value="${type.name}:${name}"
                       .options="${options}"
@@ -108,7 +108,7 @@ class ProtvistaFilter extends HTMLElement {
   }
 
   _onFilterChange(event) {
-    let {
+    const {
       detail: { checked, value }
     } = event;
     if (checked) {

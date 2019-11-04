@@ -1,12 +1,12 @@
 import { select, scaleLinear } from "d3";
 
+import ProtVistaSequence from "protvista-sequence";
+import { ColorScaleParser, String2Object } from "protvista-utils";
+
 import hydroInterfaceScale from "./hydrophobicity-interface-scale.json";
 import hydroOctanoleScale from "./hydrophobicity-octanol-scale.json";
 import hydroScale from "./hydrophobicity-scale.json";
 import isoelectricPointScale from "./isoelectric-point-scale.json";
-
-import ProtVistaSequence from "protvista-sequence";
-import { ColorScaleParser, String2Object } from "protvista-utils";
 
 const supportedScales = [
   "hydrophobicity-interface-scale",
@@ -46,7 +46,7 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
     this.gradient = this.svg
       .append("defs")
       .append("linearGradient")
-      .attr("id", "scale-gradient-" + this.uniqueID);
+      .attr("id", `scale-gradient-${this.uniqueID}`);
 
     this.seq_g = this.svg.append("g").attr("class", "background");
     this.seq_greadient = this.svg
@@ -59,6 +59,7 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
     this.trackHighlighter.appendHighlightTo(this.svg);
     this.refresh();
   }
+
   getScaleFromAttribute() {
     let scale = null;
     if (supportedScales.indexOf(this._scale) >= 0) {
@@ -71,6 +72,8 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
           return isoelectricPointScale;
         case "hydrophobicity-octanol-scale":
           return hydroOctanoleScale;
+        default:
+          return null;
       }
     }
     if (
@@ -83,12 +86,13 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
           keyFormatter: x => x.toUpperCase(),
           valueFormatter: x => parseFloat(x)
         });
-      } catch {
+      } catch (error) {
         console.error(`Couldn't parse the given scale ${this._scale}`, error);
       }
     }
     return scale;
   }
+
   refresh() {
     if (this.seq_g) {
       const scale = this.getScaleFromAttribute();

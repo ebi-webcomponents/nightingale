@@ -1,6 +1,6 @@
 import ProtvistaDatatable from "./protvista-datatable";
 
-var loadComponent = function() {
+const loadComponent = () => {
   customElements.define(ProtvistaDatatable.tagName, ProtvistaDatatable);
 };
 
@@ -8,7 +8,7 @@ var loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }
