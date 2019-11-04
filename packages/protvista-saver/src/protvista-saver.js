@@ -42,7 +42,7 @@ class ProtvistaSaver extends HTMLElement {
     // Rendering the Protvista svg
     rasterizeHTML
       .drawHTML(document.getElementById(id).innerHTML, canvas)
-      .then(function(result) {
+      .then(() => {
         const image = canvas
           .toDataURL(`image/${_this.fileFormat}`, 1.0)
           .replace(`image/${_this.fileFormat}`, "image/octet-stream");
@@ -52,10 +52,10 @@ class ProtvistaSaver extends HTMLElement {
         document.body.appendChild(link);
         link.click();
       })
-      .catch(function(err) {
+      .catch(err => {
         console.log(err);
       })
-      .finally(function() {
+      .finally(() => {
         element.style.display = ""; // Display property is set back to its original value
         // Reverting the changes to the dom if it had been changed during the preSave
         if (typeof _this.postSave === "function") {

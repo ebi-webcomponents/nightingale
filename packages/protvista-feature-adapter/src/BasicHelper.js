@@ -1,6 +1,6 @@
-import { ecoMap } from "./evidences";
+import ecoMap from "./evidences";
 
-export class BasicHelper {
+class BasicHelper {
   static renameProperties(features) {
     features.forEach(ft => {
       if (ft.begin) {
@@ -75,3 +75,5 @@ export class BasicHelper {
         `;
   }
 }
+
+export default BasicHelper;

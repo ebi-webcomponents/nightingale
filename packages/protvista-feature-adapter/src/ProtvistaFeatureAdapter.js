@@ -1,4 +1,4 @@
-import { BasicHelper } from "./BasicHelper";
+import BasicHelper from "./BasicHelper";
 
 class ProtvistaFeatureAdapter extends HTMLElement {
   constructor() {
@@ -48,7 +48,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
   }
 
   _initLoaders() {
-    let children = this.children;
+    const { children } = this;
     if (this.childElementCount !== 1) {
       this.dispatchEvent(
         new CustomEvent("warning", {
