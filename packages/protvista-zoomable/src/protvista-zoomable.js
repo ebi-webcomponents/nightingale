@@ -11,7 +11,7 @@ import ResizeObserver from "resize-observer-polyfill";
 class ProtvistaZoomable extends HTMLElement {
   constructor() {
     super();
-    this._polyfillElementClosest();
+    ProtvistaZoomable._polyfillElementClosest();
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
@@ -57,7 +57,7 @@ class ProtvistaZoomable extends HTMLElement {
       : this.width;
 
     this._height = this.getAttribute("height")
-      ? parseInt(this.getAttribute("height"))
+      ? Number(this.getAttribute("height"))
       : 44;
     this._highlightEvent = this.getAttribute("highlight-event")
       ? this.getAttribute("highlight-event")
@@ -136,6 +136,7 @@ class ProtvistaZoomable extends HTMLElement {
     return this._svg;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   get margin() {
     return {
       top: 10,
@@ -144,6 +145,7 @@ class ProtvistaZoomable extends HTMLElement {
       left: 10
     };
   }
+
   set fixedHighlight(region) {
     this.trackHighlighter.setFixedHighlight(region);
   }
@@ -177,6 +179,7 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    // eslint-disable-next-line no-param-reassign
     if (newValue === "null") newValue = null;
     if (oldValue !== newValue) {
       if (name.startsWith("highlight")) {
@@ -199,8 +202,7 @@ class ProtvistaZoomable extends HTMLElement {
     this.xScale = d3Event.transform.rescaleX(this._originXScale);
     // If the source event is null the zoom wasn't initiated by this component, don't send event
     if (this.dontDispatch) return;
-    let [start, end] = this.xScale.domain(); // New positions based in the updated scale
-    end--; // the end coordinate is 1 less than the max domain
+    const [start, end] = this.xScale.domain(); // New positions based in the updated scale
     this.dispatchEvent(
       // Dispatches the event so the manager can propagate this changes to other  components
       new CustomEvent("change", {
@@ -208,7 +210,7 @@ class ProtvistaZoomable extends HTMLElement {
           displaystart: Math.max(1, start),
           displayend: Math.min(
             this.length,
-            Math.max(end, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
+            Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
           )
         },
         bubbles: true,
@@ -259,18 +261,19 @@ class ProtvistaZoomable extends HTMLElement {
 
   _resetEventHandler(e) {
     if (!e.target.closest(".feature")) {
-      this.dispatchEvent(this.createEvent("reset", null, true));
+      this.dispatchEvent(ProtvistaZoomable.createEvent("reset", null, true));
     }
   }
 
   getXFromSeqPosition(position) {
     return this.margin.left + this.xScale(position);
   }
+
   getSingleBaseWidth() {
     return this.xScale(2) - this.xScale(1);
   }
 
-  _getClickCoords() {
+  static _getClickCoords() {
     if (!d3Event) {
       return null;
     }
@@ -279,7 +282,7 @@ class ProtvistaZoomable extends HTMLElement {
     return [d3Event.pageX, d3Event.pageY];
   }
 
-  _polyfillElementClosest() {
+  static _polyfillElementClosest() {
     // Polyfill for IE support, see
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
     if (!Element.prototype.matches) {
@@ -289,8 +292,8 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     if (!Element.prototype.closest) {
-      Element.prototype.closest = function(s) {
-        var el = this;
+      Element.prototype.closest = s => {
+        let el = this;
 
         do {
           if (el.matches(s)) return el;
@@ -301,14 +304,22 @@ class ProtvistaZoomable extends HTMLElement {
     }
   }
 
-  createEvent(type, feature = null, withHighlight = false, start, end, target) {
+  static createEvent(
+    type,
+    feature = null,
+    withHighlight = false,
+    start,
+    end,
+    target
+  ) {
     // Variation features have a different shape
     if (feature) {
+      // eslint-disable-next-line no-param-reassign
       feature = feature.feature ? feature.feature : feature;
     }
     const detail = {
       eventtype: type,
-      coords: this._getClickCoords(),
+      coords: ProtvistaZoomable._getClickCoords(),
       feature,
       target
     };
@@ -322,12 +333,13 @@ class ProtvistaZoomable extends HTMLElement {
       }
     }
     return new CustomEvent("change", {
-      detail: detail,
+      detail,
       bubbles: true,
       cancelable: true
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   bindEvents(feature, element) {
     feature
       .on("mouseover", (f, i, group) => {
@@ -342,7 +354,7 @@ class ProtvistaZoomable extends HTMLElement {
           )
         );
       })
-      .on("mouseout", f => {
+      .on("mouseout", () => {
         element.dispatchEvent(
           element.createEvent(
             "mouseout",

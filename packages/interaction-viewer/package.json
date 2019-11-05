@@ -19,6 +19,8 @@
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
   "dependencies": {
+    "d3-scale": "^3.2.0",
+    "d3-selection": "^1.4.0",
     "lodash-es": "^4.17.11",
     "whatwg-fetch": "^3.0.0"
   },

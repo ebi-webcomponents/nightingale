@@ -1,3 +1,4 @@
+/* eslint-disable */
 import ProtvistaTrack from "protvista-track";
 import InterproEntryLayout, { COLLAPSED_HEIGHT } from "./InterproEntryLayout";
 import { getCoverage } from "./coverage";

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { addContributor } from ".";
 
 const firstFeature = { start: 10, end: 20 };

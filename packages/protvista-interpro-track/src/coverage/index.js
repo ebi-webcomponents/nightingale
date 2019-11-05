@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const addContributor = (contributor, coverage) => {
   let toContribute = { value: 1, ...contributor };
   const newCoverage = [];
