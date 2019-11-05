@@ -37,7 +37,7 @@ class ProtvistaSaver extends HTMLElement {
     if (_this.fillColor) {
       const context = canvas.getContext("2d");
       context.fillStyle = _this.fillColor;
-      context.fillRect(0, 0, parseInt(width), parseInt(height));
+      context.fillRect(0, 0, Number(width), Number(height));
     }
     // Rendering the Protvista svg
     rasterizeHTML
