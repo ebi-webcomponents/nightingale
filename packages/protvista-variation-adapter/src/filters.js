@@ -185,25 +185,27 @@ const predictionScale = scaleLinear()
   .domain([0, 1])
   .range([scaleColours.deleteriousColor, scaleColours.benignColor]);
 
-export const getColor = variant => {
-  if (filters["disease"].applyFilter([variant]).length > 0) {
-    return scaleColours.UPDiseaseColor;
-  } else if (filters["nonDisease"].applyFilter([variant]).length > 0) {
-    return scaleColours.UPNonDiseaseColor;
-  } else if (filters["uncertain"].applyFilter([variant]).length > 0) {
-    return scaleColours.othersColor;
-  } else if (filters["predicted"].applyFilter([variant]).length > 0) {
-    return getPredictionColour(variant.polyphenScore, variant.siftScore);
-  } else {
-    return scaleColours.othersColor;
-  }
-};
-
 const getPredictionColour = (polyphenScore, siftScore) => {
   return predictionScale(
-    (siftScore ? siftScore : 0 + (1 - polyphenScore ? polyphenScore : 1)) /
+    (siftScore || 0 + (1 - polyphenScore ? polyphenScore : 1)) /
       (polyphenScore && siftScore ? 2 : 1)
   );
+};
+
+export const getColor = variant => {
+  if (filters.disease.applyFilter([variant]).length > 0) {
+    return scaleColours.UPDiseaseColor;
+  }
+  if (filters.nonDisease.applyFilter([variant]).length > 0) {
+    return scaleColours.UPNonDiseaseColor;
+  }
+  if (filters.uncertain.applyFilter([variant]).length > 0) {
+    return scaleColours.othersColor;
+  }
+  if (filters.predicted.applyFilter([variant]).length > 0) {
+    return getPredictionColour(variant.polyphenScore, variant.siftScore);
+  }
+  return scaleColours.othersColor;
 };
 
 const identity = variants => variants;
@@ -213,7 +215,7 @@ export const getFilter = name => {
   if (!filter) {
     console.error(`No filter found for: ${name}`);
   }
-  return filter ? filter : { applyFilter: identity };
+  return filter || { applyFilter: identity };
 };
 
 export default filterData;

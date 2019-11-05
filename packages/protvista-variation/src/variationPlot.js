@@ -1,4 +1,5 @@
-import { select, scalePow, event as d3Event } from "d3";
+import { select, scalePow } from "d3";
+
 class VariationPlot {
   constructor() {
     this._frequency = scalePow()
@@ -9,6 +10,7 @@ class VariationPlot {
     this.drawVariationPlot = this.drawVariationPlot.bind(this);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   drawVariationPlot(selection, element) {
     const ftWidth = element.getSingleBaseWidth();
     const half = ftWidth / 2;
@@ -49,9 +51,10 @@ class VariationPlot {
           return element._yScale(d.variant.charAt(0));
         })
         .attr("name", d => {
-          var mutation =
+          const mutation =
             d.alternativeSequence === "*" ? "STOP" : d.alternativeSequence;
-          d.internalId = "var_" + d.wildType + d.start + mutation;
+          // eslint-disable-next-line no-param-reassign
+          d.internalId = `var_${d.wildType}${d.start}${mutation}`;
           return d.internalId;
         })
         .attr("fill", d => d.color)

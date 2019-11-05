@@ -1,6 +1,6 @@
 import ProtvistaVariationGraph from "./protvista-variation-graph";
 
-const loadComponent = function() {
+const loadComponent = () => {
   customElements.define("protvista-variation-graph", ProtvistaVariationGraph);
 };
 
@@ -8,7 +8,7 @@ const loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }

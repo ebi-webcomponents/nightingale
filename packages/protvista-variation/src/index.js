@@ -1,6 +1,6 @@
 import ProtvistaVariation from "./protvista-variation";
 
-var loadComponent = function() {
+const loadComponent = () => {
   customElements.define("protvista-variation", ProtvistaVariation);
 };
 
@@ -8,7 +8,7 @@ var loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }
