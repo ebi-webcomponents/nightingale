@@ -9,7 +9,7 @@ export default (
   if (string && string.trim() !== "") {
     const blocks = string.split(",").map(bl => bl.split(":"));
     const obj = {};
-    for (let bl of blocks) {
+    blocks.forEach(bl => {
       if (bl.length !== 2)
         throw new Error(
           `Bad block: ${bl.join(
@@ -17,7 +17,7 @@ export default (
           )}\n The blocks of the string should follow the format KEY:VALUE`
         );
       obj[keyFormatter(bl[0])] = valueFormatter(bl[1]);
-    }
+    });
     return obj;
   }
   return {};

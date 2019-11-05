@@ -173,7 +173,7 @@ class ProtvistaZoomable extends HTMLElement {
 
   setFloatAttribute(name, strValue) {
     const value = parseFloat(strValue);
-    this[`_${name}`] = isNaN(value) ? strValue : value;
+    this[`_${name}`] = Number.isNaN(value) ? strValue : value;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

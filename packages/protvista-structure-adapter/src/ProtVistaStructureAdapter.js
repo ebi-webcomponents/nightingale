@@ -1,8 +1,5 @@
-/*jslint node: true */
-"use strict";
-
-import StructureDataParser from "./StructureDataParser";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
+import StructureDataParser from "./StructureDataParser";
 
 export default class ProtVistaStructureAdapter extends ProtvistaFeatureAdapter {
   constructor() {
@@ -14,10 +11,10 @@ export default class ProtVistaStructureAdapter extends ProtvistaFeatureAdapter {
     this._adaptedData = [];
     if (data && data.length !== 0) {
       this._adaptedData = this._parser.parseEntry(data);
-      this._adaptedData.map(
-        feature =>
-          (feature.tooltipContent = this._parser.formatTooltip(feature))
-      );
+      this._adaptedData.forEach(feature => {
+        /* eslint-disable no-param-reassign */
+        feature.tooltipContent = this._parser.formatTooltip(feature);
+      });
     }
     return this._adaptedData;
   }

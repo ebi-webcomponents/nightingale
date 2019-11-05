@@ -21,10 +21,10 @@ describe("color range parsing", () => {
   });
   test("Should not create a scale without blocks KEY:VALUE", () => {
     const strings2parse = ["X", "X:Y,Z", "X:X,R,Y:Z", "X,Y:Z", "X:Y:Z"];
-    for (let str of strings2parse) {
+    strings2parse.forEach(str => {
       const fn1 = () => string2object(str);
       expect(fn1).toThrow();
-    }
+    });
   });
   test("parsing a valid 2 points string", () => {
     const obj = string2object("x:1,y:2");
