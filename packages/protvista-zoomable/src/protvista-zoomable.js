@@ -261,7 +261,7 @@ class ProtvistaZoomable extends HTMLElement {
 
   _resetEventHandler(e) {
     if (!e.target.closest(".feature")) {
-      this.dispatchEvent(ProtvistaZoomable.createEvent("reset", null, true));
+      this.dispatchEvent(this.createEvent("reset", null, true));
     }
   }
 
@@ -304,14 +304,8 @@ class ProtvistaZoomable extends HTMLElement {
     }
   }
 
-  static createEvent(
-    type,
-    feature = null,
-    withHighlight = false,
-    start,
-    end,
-    target
-  ) {
+  // eslint-disable-next-line class-methods-use-this
+  createEvent(type, feature = null, withHighlight = false, start, end, target) {
     // Variation features have a different shape
     if (feature) {
       // eslint-disable-next-line no-param-reassign

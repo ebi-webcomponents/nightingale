@@ -13,7 +13,7 @@ export default class ProtVistaStructureAdapter extends ProtvistaFeatureAdapter {
       this._adaptedData = this._parser.parseEntry(data);
       this._adaptedData.forEach(feature => {
         /* eslint-disable no-param-reassign */
-        feature.tooltipContent = this._parser.formatTooltip(feature);
+        feature.tooltipContent = StructureDataParser.formatTooltip(feature);
       });
     }
     return this._adaptedData;
