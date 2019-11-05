@@ -6,7 +6,7 @@ export default class ParserHelper {
   static getDescription(properties) {
     return Object.keys(properties).reduce(
       (accumulator, propertyKey) =>
-        `${accumulator}${ParserHelper.capitalizeFirstLetter(propertyKey)}:${
+        `${accumulator}${ParserHelper.capitalizeFirstLetter(propertyKey)}: ${
           properties[propertyKey]
         }. `,
       ""
