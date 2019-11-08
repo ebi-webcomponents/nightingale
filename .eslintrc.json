@@ -11,6 +11,15 @@
   },
   "rules": {
     "no-underscore-dangle": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "prefer-object-spread": "off",
+    "no-plusplus": "off",
+    "no-return-assign": [1, "except-parens"],
+    "no-restricted-syntax": [
+      "error",
+      "ForInStatement",
+      "LabeledStatement",
+      "WithStatement"
+    ]
   }
 }

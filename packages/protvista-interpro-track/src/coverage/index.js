@@ -1,4 +1,3 @@
-/* eslint-disable */
 export const addContributor = (contributor, coverage) => {
   let toContribute = { value: 1, ...contributor };
   const newCoverage = [];
@@ -125,7 +124,9 @@ export const getCoverage = (
   }
   contributors.forEach(f =>
     f.locations.forEach(loc =>
-      loc.fragments.forEach(fr => (coverage = addContributor(fr, coverage)))
+      loc.fragments.forEach(fr => {
+        coverage = addContributor(fr, coverage);
+      })
     )
   );
   return coverage;

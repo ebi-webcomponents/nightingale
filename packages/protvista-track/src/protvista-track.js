@@ -1,13 +1,14 @@
-import { select, event as d3Event } from "d3";
+import { select } from "d3";
 import _includes from "lodash-es/includes";
+
+import ProtvistaZoomable from "protvista-zoomable";
 import FeatureShape from "./FeatureShape";
 import NonOverlappingLayout from "./NonOverlappingLayout";
 import DefaultLayout from "./DefaultLayout";
-import ProtvistaZoomable from "protvista-zoomable";
 import { getShapeByType, getColorByType } from "./ConfigHelper";
 
 class ProtvistaTrack extends ProtvistaZoomable {
-  getLayout(data) {
+  getLayout() {
     if (String(this.getAttribute("layout")).toLowerCase() === "non-overlapping")
       return new NonOverlappingLayout({
         layoutHeight: this._height
@@ -33,7 +34,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
     });
   }
 
-  normalizeLocations(data) {
+  static normalizeLocations(data) {
     return data.map(obj => {
       const { locations, start, end } = obj;
       return locations
@@ -69,43 +70,49 @@ class ProtvistaTrack extends ProtvistaZoomable {
   _getFeatureColor(f) {
     if (f.color) {
       return f.color;
-    } else if (f.feature && f.feature.color) {
-      return f.feature.color;
-    } else if (this._color) {
-      return this._color;
-    } else if (f.type) {
-      return getColorByType(f.type);
-    } else if (f.feature && f.feature.type) {
-      return getColorByType(f.feature.type);
-    } else {
-      return "black";
     }
+    if (f.feature && f.feature.color) {
+      return f.feature.color;
+    }
+    if (this._color) {
+      return this._color;
+    }
+    if (f.type) {
+      return getColorByType(f.type);
+    }
+    if (f.feature && f.feature.type) {
+      return getColorByType(f.feature.type);
+    }
+    return "black";
   }
 
   _getFeatureFillColor(f) {
     if (f.fill) {
       return f.fill;
-    } else if (f.feature && f.feature.fill) {
-      return f.feature.fill;
-    } else {
-      return this._getFeatureColor(f);
     }
+    if (f.feature && f.feature.fill) {
+      return f.feature.fill;
+    }
+    return this._getFeatureColor(f);
   }
 
   _getShape(f) {
     if (f.shape) {
       return f.shape;
-    } else if (f.feature && f.feature.shape) {
-      return f.feature.shape;
-    } else if (this._shape) {
-      return this._shape;
-    } else if (f.type) {
-      return getShapeByType(f.type);
-    } else if (f.feature && f.feature.type) {
-      return getShapeByType(f.feature.type);
-    } else {
-      return "rectangle";
     }
+    if (f.feature && f.feature.shape) {
+      return f.feature.shape;
+    }
+    if (this._shape) {
+      return this._shape;
+    }
+    if (f.type) {
+      return getShapeByType(f.type);
+    }
+    if (f.feature && f.feature.type) {
+      return getShapeByType(f.feature.type);
+    }
+    return "rectangle";
   }
 
   _createTrack() {
@@ -170,7 +177,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .enter()
       .append("path")
-      .attr("class", f => this._getShape(f) + " feature")
+      .attr("class", f => `${this._getShape(f)} feature`)
       .attr("d", f =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
@@ -183,11 +190,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr(
         "transform",
         f =>
-          "translate(" +
-          this.getXFromSeqPosition(f.start) +
-          "," +
-          this._layoutObj.getFeatureYPos(f.feature) +
-          ")"
+          `translate(${this.getXFromSeqPosition(
+            f.start
+          )},${this._layoutObj.getFeatureYPos(f.feature)})`
       )
       .attr("fill", f => this._getFeatureFillColor(f))
       .attr("stroke", f => this._getFeatureColor(f))
@@ -228,16 +233,15 @@ class ProtvistaTrack extends ProtvistaZoomable {
         .attr(
           "transform",
           f =>
-            "translate(" +
-            this.getXFromSeqPosition(f.start) +
-            "," +
-            this._layoutObj.getFeatureYPos(f.feature) +
-            ")"
+            `translate(${this.getXFromSeqPosition(
+              f.start
+            )},${this._layoutObj.getFeatureYPos(f.feature)})`
         );
       this._updateHighlight();
       this._clipPath.attr("width", this.getWidthWithMargins());
     }
   }
+
   _updateHighlight() {
     this.trackHighlighter.updateHighlight();
   }

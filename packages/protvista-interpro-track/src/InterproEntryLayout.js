@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { DefaultLayout } from "protvista-track";
 
 export const COLLAPSED_HEIGHT = 16;
@@ -12,17 +13,17 @@ export default class InterproEntryLayout extends DefaultLayout {
     this.maxYPos = 0;
     if (!features) return;
     this.innerPadding = (COLLAPSED_HEIGHT - CHILD_HEIGHT) / 2;
-    const residues_pos = {};
+    const residuesPos = {};
     for (let k = 0; k < features.length; k++) {
-      let feature = features[k];
+      const feature = features[k];
       this.height[feature.accession] = this.expanded
         ? EXPANDED_HEIGHT
         : COLLAPSED_HEIGHT;
       this.yPos[feature.accession] = this._padding;
       yPos = this.height[feature.accession] + 2 * this._padding;
       this.maxYPos = Math.max(this.maxYPos, yPos);
-      if (!(feature.accession in residues_pos))
-        residues_pos[feature.accession] = {};
+      if (!(feature.accession in residuesPos))
+        residuesPos[feature.accession] = {};
       if (feature.residues)
         yPos = this._initResidues(
           feature.residues,
@@ -30,7 +31,7 @@ export default class InterproEntryLayout extends DefaultLayout {
           feature.locations,
           this.expanded ? yPos : this.yPos[feature.accession],
           k,
-          residues_pos,
+          residuesPos,
           this.expanded
         );
     }
@@ -46,8 +47,8 @@ export default class InterproEntryLayout extends DefaultLayout {
             (this.expanded ? this.height[child.accession] : 0);
           this.maxYPos = Math.max(this.maxYPos, yPos);
         }
-        if (!(child.accession in residues_pos))
-          residues_pos[child.accession] = {};
+        if (!(child.accession in residuesPos))
+          residuesPos[child.accession] = {};
         if (child.residues) {
           yPos = this._initResidues(
             child.residues,
@@ -55,7 +56,7 @@ export default class InterproEntryLayout extends DefaultLayout {
             child.locations,
             child.expanded ? yPos : this.yPos[child.accession],
             k,
-            residues_pos,
+            residuesPos,
             child.expanded
           );
         }
@@ -65,25 +66,25 @@ export default class InterproEntryLayout extends DefaultLayout {
 
   _initResidues(
     residues,
-    feature_acc,
+    featureAcc,
     locs,
     yPos,
     k,
-    residues_pos = {},
+    residuesPos = {},
     expanded = true
   ) {
     for (let i = 0; i < residues.length; i++) {
       const resGroup = residues[i];
       this._filterOutResidueFragmentsOutOfLocation(resGroup, locs);
-      if (!(resGroup.accession in residues_pos[feature_acc]))
-        residues_pos[feature_acc][resGroup.accession] = {};
+      if (!(resGroup.accession in residuesPos[featureAcc]))
+        residuesPos[featureAcc][resGroup.accession] = {};
       for (let j = 0; j < resGroup.locations.length; j++) {
         const desc = resGroup.locations[j].description;
-        if (!(desc in residues_pos[feature_acc][resGroup.accession])) {
-          residues_pos[feature_acc][resGroup.accession][desc] = {
+        if (!(desc in residuesPos[featureAcc][resGroup.accession])) {
+          residuesPos[featureAcc][resGroup.accession][desc] = {
             height: expanded
               ? CHILD_HEIGHT
-              : this.height[feature_acc] - 2 * this.innerPadding,
+              : this.height[featureAcc] - 2 * this.innerPadding,
             yPos: expanded
               ? this.maxYPos + this._padding
               : yPos + this.innerPadding
@@ -93,30 +94,32 @@ export default class InterproEntryLayout extends DefaultLayout {
             : yPos;
         }
         this.height[`${resGroup.accession}_${k}_${i}_${j}`] =
-          residues_pos[feature_acc][resGroup.accession][desc].height;
+          residuesPos[featureAcc][resGroup.accession][desc].height;
         this.yPos[`${resGroup.accession}_${k}_${i}_${j}`] =
-          residues_pos[feature_acc][resGroup.accession][desc].yPos;
+          residuesPos[featureAcc][resGroup.accession][desc].yPos;
         this.maxYPos = Math.max(this.maxYPos, yPos);
       }
     }
     return expanded ? yPos : this.maxYPos + 2 * this._padding;
   }
-  _filterOutResidueFragmentsOutOfLocation(residue, feature_locations) {
+
+  static _filterOutResidueFragmentsOutOfLocation(residue, featureLocations) {
     residue.locations.forEach(
-      loc_res =>
-        (loc_res.fragments = loc_res.fragments.filter(frag_res =>
-          feature_locations.some(loc =>
+      locRes =>
+        (locRes.fragments = locRes.fragments.filter(fragRes =>
+          featureLocations.some(loc =>
             loc.fragments.some(
-              frag => frag_res.start >= frag.start && frag_res.end <= frag.end
+              frag => fragRes.start >= frag.start && fragRes.end <= frag.end
             )
           )
         ))
     );
     residue.locations = residue.locations.filter(
-      loc_res => loc_res.fragments.length
+      locRes => locRes.fragments.length
     );
   }
-  _getAccFromFeature(feature) {
+
+  static _getAccFromFeature(feature) {
     let acc = "";
     if (typeof feature === "string") {
       acc = feature;
@@ -125,10 +128,12 @@ export default class InterproEntryLayout extends DefaultLayout {
     }
     return acc;
   }
+
   getFeatureYPos(feature) {
     const acc = this._getAccFromFeature(feature);
     return acc in this.yPos ? this.yPos[acc] : 0;
   }
+
   getFeatureHeight(feature) {
     const acc = this._getAccFromFeature(feature);
     return acc in this.height ? this.height[acc] : 0;
