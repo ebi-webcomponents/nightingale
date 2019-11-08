@@ -10,8 +10,8 @@ const styles = css`
   }
 
   .protvista-datatable__child-toggle svg {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.1rem;
+    height: 1.1rem;
   }
 
   table {
