@@ -4,13 +4,16 @@ export default class DefaultLayout {
     this._minHeight = minHeight;
     this._layoutHeight = layoutHeight;
   }
+
   init(features) {
     this._features = features;
   }
-  getFeatureYPos(feature) {
+
+  getFeatureYPos() {
     return Math.min(this._layoutHeight, this._minHeight) + this._padding;
   }
-  getFeatureHeight(feature) {
+
+  getFeatureHeight() {
     return Math.min(this._layoutHeight, this._minHeight) - this._padding;
   }
 }

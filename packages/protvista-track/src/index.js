@@ -1,13 +1,13 @@
 import ProtvistaTrack from "./protvista-track";
 
-const loadComponent = function() {
+const loadComponent = () => {
   customElements.define("protvista-track", ProtvistaTrack);
 };
 // Conditional loading of polyfill
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }

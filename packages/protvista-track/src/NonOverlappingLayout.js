@@ -16,12 +16,11 @@ export default class NonOverlappingLayout extends DefaultLayout {
     super(options);
     this.featuresMap = new Map();
     this._rowHeight = 0;
-    this._rows = new Array();
+    this._rows = [];
     this._minHeight = 15;
   }
 
   init(features) {
-    const rows = new Array();
     features.forEach(feature => {
       const rowIndex = this._rows.findIndex(
         row => !featureOvelapsInRow(feature, row)
