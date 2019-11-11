@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prewatch": "npm run bootstrap",
-    "lint": "lerna exec --ignore nightingale-showcase-app --parallel -- eslint -c ../../.eslintrc.json src/**/*.js ../../.eslintrc.json src/*.js",
+    "lint": "lerna exec --ignore nightingale-showcase-app --parallel -- eslint -c ../../.eslintrc.json src/*.js src/**/*.js",
     "build": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=production",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=development -w",
     "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint",
