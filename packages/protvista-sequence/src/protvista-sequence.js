@@ -12,6 +12,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this._createSequence();
     }
   }
+
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat(
       "highlightstart",
@@ -45,6 +46,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .getBBox().width * 0.8;
     this.seq_g.select("text.base").remove();
   }
+
   _createSequence() {
     super.svg = select(this)
       .append("div")
@@ -84,7 +86,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
               .slice(first, last)
               .split("")
               .map((aa, i) => {
-                return { start: 1 + first + i, end: 1 + first + i, aa: aa };
+                return { start: 1 + first + i, end: 1 + first + i, aa };
               });
 
       this.xAxis = axisBottom(this.xScale)
@@ -134,6 +136,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this._updateHighlight();
     }
   }
+
   _updateHighlight() {
     this.trackHighlighter.updateHighlight();
   }

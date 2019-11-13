@@ -25,8 +25,10 @@ export default (text = null) => {
     });
     domain = blocks.map((bl, i) => {
       const number = parseFloat(bl[1]);
-      if (isNaN(number))
-        throw `The second part of every point should be a number. Error in point ${i}: ${bl}`;
+      if (Number.isNaN(number))
+        throw new Error(
+          `The second part of every point should be a number. Error in point ${i}: ${bl}`
+        );
       return number;
     });
   }

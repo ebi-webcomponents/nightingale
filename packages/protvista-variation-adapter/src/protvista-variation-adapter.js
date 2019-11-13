@@ -1,13 +1,11 @@
+import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import groupBy from "lodash-es/groupBy";
 import flatten from "lodash-es/flatten";
 import uniqBy from "lodash-es/uniqBy";
 import forOwn from "lodash-es/forOwn";
 import intersectionBy from "lodash-es/intersectionBy";
 
-import ProtvistaFeatureAdapter, {
-  BasicHelper
-} from "protvista-feature-adapter";
-import filters, { getFilter, getColor } from "./filters";
+import filterData, { getFilter, getColor } from "./filters";
 
 const filterVariants = (filterName, variants) =>
   getFilter(filterName).applyFilter(variants);
@@ -24,10 +22,6 @@ const _union = (variants, filterNames, key) => {
 };
 
 export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
-  constructor() {
-    super();
-  }
-
   static get observedAttributes() {
     return ["activefilters"];
   }
@@ -38,21 +32,22 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
         return;
       }
       const { sequence, variants } = this._adaptedData;
+      // eslint-disable-next-line no-param-reassign
       newValue = newValue.trim();
       if (!newValue) {
         this._fireEvent("load", { payload: { sequence, variants } });
         return;
       }
       const filterNames = newValue.split(",");
-      const groupByFilterCategory = groupBy(filterNames, name => {
-        return name.split(":")[0];
+      const groupByFilterCategory = groupBy(filterNames, groupFilterName => {
+        return groupFilterName.split(":")[0];
       });
 
       let filteredVariants = [];
-      forOwn(groupByFilterCategory, filterNames => {
+      forOwn(groupByFilterCategory, groupFilterNames => {
         const filteredValuesByCategory = _union(
           variants,
-          filterNames,
+          groupFilterNames,
           "accession"
         );
         filteredVariants.push(filteredValuesByCategory);
@@ -76,7 +71,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
     }
     this._fireEvent("change", {
       type: "filters",
-      value: JSON.stringify(filters)
+      value: JSON.stringify(filterData)
     });
   }
 
@@ -101,7 +96,10 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
         color: getColor(variant),
         association: variant.association,
         sourceType: variant.sourceType,
-        xrefNames: this.getSourceType(variant.xrefs, variant.sourceType),
+        xrefNames: ProtvistaVariationAdapter.getSourceType(
+          variant.xrefs,
+          variant.sourceType
+        ),
         clinicalSignificances: variant.clinicalSignificances,
         polyphenScore: variant.polyphenScore,
         siftScore: variant.siftScore
@@ -111,7 +109,7 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
     this._adaptedData = { sequence, variants };
   }
 
-  getSourceType(xrefs, sourceType) {
+  static getSourceType(xrefs, sourceType) {
     const xrefNames = xrefs.map(ref => ref.name);
     if (sourceType === "uniprot" || sourceType === "mixed") {
       xrefNames.push("uniprot");
@@ -120,9 +118,9 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
   }
 
   formatTooltip(variant) {
-    const evidenceHTML = "";
     if (variant.description)
-      variant.descriptionArray = this.getDescriptionsAsArray(
+      // eslint-disable-next-line no-param-reassign
+      variant.descriptionArray = ProtvistaVariationAdapter.getDescriptionsAsArray(
         variant.description
       );
     return `
@@ -136,16 +134,12 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
                 }
                 ${
                   variant.siftScore
-                    ? `<h5>SIFT</h5><p>${variant.siftPrediction} ${
-                        variant.siftScore
-                      }</p>`
+                    ? `<h5>SIFT</h5><p>${variant.siftPrediction} ${variant.siftScore}</p>`
                     : ``
                 }
                 ${
                   variant.polyphenScore
-                    ? `<h5>Polyphen</h5><p>${variant.polyphenPrediction} ${
-                        variant.polyphenScore
-                      }</p>`
+                    ? `<h5>Polyphen</h5><p>${variant.polyphenPrediction} ${variant.polyphenScore}</p>`
                     : ``
                 }
                 ${
@@ -235,23 +229,25 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
   _fireEvent(name, detail) {
     this.dispatchEvent(
       new CustomEvent(name, {
-        detail: detail,
+        detail,
         bubbles: true,
         cancelable: true
       })
     );
   }
 
-  //TODO this is horrible. Jie is looking into changing the API so Xrefs
-  //have a description attribute, so we won't have to use concat.
-  getDescriptionsAsArray(description) {
-    var descriptionArray = description.split(/\[LSS_|\[SWP]: /g);
-    descriptionArray = groupBy(descriptionArray, function(desc) {
-      return desc.length === 0
-        ? "NOTHING"
-        : desc.indexOf("]: ") !== -1
-        ? "LSS"
-        : "UP";
+  // TODO this is horrible. Jie is looking into changing the API so Xrefs
+  // have a description attribute, so we won't have to use concat.
+  static getDescriptionsAsArray(description) {
+    let descriptionArray = description.split(/\[LSS_|\[SWP]: /g);
+    descriptionArray = groupBy(descriptionArray, desc => {
+      if (desc.length === 0) {
+        return "NOTHING";
+      }
+      if (desc.indexOf("]: ") !== -1) {
+        return "LSS";
+      }
+      return "UP";
     });
     descriptionArray.LSS = descriptionArray.LSS
       ? descriptionArray.LSS.join("; ").replace(/]: /g, ": ")

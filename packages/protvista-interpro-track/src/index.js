@@ -1,6 +1,6 @@
 import ProtvistaInterproTrack from "./protvista-interpro-track";
 
-const loadComponent = function() {
+const loadComponent = () => {
   customElements.define("protvista-interpro-track", ProtvistaInterproTrack);
 };
 
@@ -8,7 +8,7 @@ const loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }

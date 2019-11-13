@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit-element";
+/* eslint-disable import/extensions, import/no-extraneous-dependencies */
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { v1 } from "uuid";
 import styles from "./styles";
@@ -17,7 +18,7 @@ class ProtvistaDatatable extends LitElement {
     super.connectedCallback();
     this.addEventListener("load", e => {
       if (Array.from(this.children).includes(e.target)) {
-        this.data = this.processData(e.detail.payload.features);
+        this.data = ProtvistaDatatable.processData(e.detail.payload.features);
       }
     });
     if (this.closest("protvista-manager")) {
@@ -25,7 +26,8 @@ class ProtvistaDatatable extends LitElement {
       this.manager.register(this);
     }
     document.addEventListener("click", this.eventHandler);
-    this.classList.add("feature"); //this makes sure the protvista-zoomable event listener doesn't reset
+    // this makes sure the protvista-zoomable event listener doesn't reset
+    this.classList.add("feature");
     // window.addEventListener("resize", this.updateHeaderColumnSizes.bind(this));
   }
 
@@ -39,8 +41,8 @@ class ProtvistaDatatable extends LitElement {
 
   // Implement our own accessors as we need to transform the data
   set data(value) {
-    let oldValue = this._data;
-    this._data = this.processData(value);
+    const oldValue = this._data;
+    this._data = ProtvistaDatatable.processData(value);
     this.requestUpdate("data", oldValue);
   }
 
@@ -60,10 +62,9 @@ class ProtvistaDatatable extends LitElement {
       highlight: {
         converter: value => {
           if (value && value !== "null") {
-            return value.split(":").map(d => parseInt(d));
-          } else {
-            return null;
+            return value.split(":").map(d => Number(d));
           }
+          return null;
         }
       },
       height: { type: Number },
@@ -79,7 +80,7 @@ class ProtvistaDatatable extends LitElement {
     return styles;
   }
 
-  processData(data) {
+  static processData(data) {
     return data
       .map(d => {
         return {
@@ -93,15 +94,15 @@ class ProtvistaDatatable extends LitElement {
       });
   }
 
-  isWithinRange(rangeStart, rangeEnd, start, end) {
+  static isWithinRange(rangeStart, rangeEnd, start, end) {
     return (
-      (!start && rangeEnd === parseInt(end)) ||
-      (!end && rangeStart === parseInt(start)) ||
+      (!start && rangeEnd === Number(end)) ||
+      (!end && rangeStart === Number(start)) ||
       (rangeStart <= start && rangeEnd >= end)
     );
   }
 
-  isOutside(rangeStart, rangeEnd, start, end) {
+  static isOutside(rangeStart, rangeEnd, start, end) {
     return rangeStart > end || rangeEnd < start;
   }
 
@@ -129,13 +130,23 @@ class ProtvistaDatatable extends LitElement {
     if (
       this.displayStart &&
       this.displayEnd &&
-      this.isOutside(this.displayStart, this.displayEnd, start, end)
+      ProtvistaDatatable.isOutside(
+        this.displayStart,
+        this.displayEnd,
+        start,
+        end
+      )
     ) {
       className = `${className} hidden`;
     }
     if (
       this.highlight &&
-      this.isWithinRange(this.highlight[0], this.highlight[1], start, end)
+      ProtvistaDatatable.isWithinRange(
+        this.highlight[0],
+        this.highlight[1],
+        start,
+        end
+      )
     ) {
       className = `${className} overlapped`;
     }
@@ -222,7 +233,7 @@ class ProtvistaDatatable extends LitElement {
                     ? html`
                         <td
                           class="protvista-datatable__child-toggle"
-                          @click="${e => this.toggleVisibleChild(row.id)}"
+                          @click="${() => this.toggleVisibleChild(row.id)}"
                         >
                           ${this.visibleChildren.includes(row.id)
                             ? unsafeHTML(MinusSVG)
@@ -235,7 +246,7 @@ class ProtvistaDatatable extends LitElement {
                   ${Object.keys(this.columns)
                     .filter(column => !this.columns[column].child)
                     .map(
-                      (column, i) =>
+                      column =>
                         html`
                           <td>
                             ${this.columns[column].resolver(row)}

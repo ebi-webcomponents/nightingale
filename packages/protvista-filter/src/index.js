@@ -1,6 +1,6 @@
 import ProtvistaFilter, { ProtvistaCheckbox } from "./protvista-filter";
 
-var loadComponent = function() {
+const loadComponent = () => {
   customElements.define("protvista-checkbox", ProtvistaCheckbox);
   customElements.define("protvista-filter", ProtvistaFilter);
 };
@@ -9,7 +9,7 @@ var loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }

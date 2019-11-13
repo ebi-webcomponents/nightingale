@@ -1,5 +1,5 @@
 import ProtvistaTrack from "protvista-track";
-import InterproEntryLayout, { COLLAPSED_HEIGHT } from "./InterproEntryLayout";
+import InterproEntryLayout from "./InterproEntryLayout";
 import { getCoverage } from "./coverage";
 
 const padding = {
@@ -30,7 +30,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "expanded" && oldValue !== newValue && this._contributors) {
-      for (let c of this._contributors) {
+      for (const c of this._contributors) {
         c.expanded = !oldValue;
       }
     }
@@ -43,7 +43,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     if (this._data) this._createTrack();
   }
 
-  getLayout(data) {
+  getLayout() {
     return new InterproEntryLayout({
       layoutHeight: this._height,
       expanded: this._expanded,
@@ -54,6 +54,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
   static get observedAttributes() {
     return ProtvistaTrack.observedAttributes.concat(["expanded", "color"]);
   }
+
   set color(value) {
     if (this._color !== value) {
       this._color = value;
@@ -61,29 +62,26 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     }
   }
 
-  _createResidueGroup(baseG) {
+  static _createResidueGroup(baseG) {
     return baseG
       .selectAll("g.residues-group")
       .data(d =>
-        d.residues
-          ? d.residues.map((r, i) => Object.assign({}, r, { feature: d, i: i }))
-          : []
+        d.residues ? d.residues.map((r, i) => ({ ...r, feature: d, i })) : []
       )
       .enter()
       .append("g")
       .attr("class", "residues-group")
       .selectAll("g.residues-locations")
       .data(d =>
-        d.locations.map((loc, j) =>
-          Object.assign({}, loc, {
-            accession: d.accession,
-            feature: d.feature,
-            location: loc,
-            i: d.i,
-            j: j
-            // expended: true
-          })
-        )
+        d.locations.map((loc, j) => ({
+          ...loc,
+          accession: d.accession,
+          feature: d.feature,
+          location: loc,
+          i: d.i,
+          j
+          // expended: true
+        }))
       )
       .enter()
       .append("g")
@@ -94,25 +92,23 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     return baseG
       .selectAll("g.residue")
       .data(d =>
-        d.fragments.map(loc =>
-          Object.assign({}, loc, {
-            accession: d.accession,
-            feature: Object.assign({}, d.feature, {
-              currentResidue: Object.assign({}, loc, {
-                description: d.location.description
-              })
-            }),
-            location: d.location,
-            k: d.feature.k,
-            i: d.i,
-            j: d.j
-          })
-        )
+        d.fragments.map(loc => ({
+          ...loc,
+          accession: d.accession,
+          feature: {
+            ...d.feature,
+            currentResidue: { ...loc, description: d.location.description }
+          },
+          location: d.location,
+          k: d.feature.k,
+          i: d.i,
+          j: d.j
+        }))
       )
       .enter()
       .append("path")
       .attr("class", "feature rectangle residue")
-      .attr("d", (f, j) =>
+      .attr("d", f =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(
@@ -125,14 +121,10 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .attr(
         "transform",
         f =>
-          "translate(" +
-          this.getXFromSeqPosition(f.start) +
-          "," +
-          (padding.top +
+          `translate(${this.getXFromSeqPosition(f.start)},${padding.top +
             this._layoutObj.getFeatureYPos(
               `${f.accession}_${f.k}_${f.i}_${f.j}`
-            )) +
-          ")"
+            )})`
       )
       .attr("fill", f => this._getFeatureColor(f))
       .attr("stroke", "transparent")
@@ -157,20 +149,16 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .attr(
         "transform",
         f =>
-          "translate(" +
-          this.getXFromSeqPosition(f.start) +
-          "," +
-          (padding.top +
+          `translate(${this.getXFromSeqPosition(f.start)},${padding.top +
             this._layoutObj.getFeatureYPos(
               `${f.accession}_${f.k}_${f.i}_${f.j}`
-            )) +
-          ")"
+            )})`
       )
       .style("pointer-events", f =>
         expanded || (f.feature && f.feature.expanded) ? "auto" : "none"
       )
-      .style("stroke", f => (expanded ? null : "none"))
-      .style("opacity", f =>
+      .style("stroke", () => (expanded ? null : "none"))
+      .style("opacity", () =>
         expanded ? null : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
       )
       .attr("fill", f =>
@@ -180,7 +168,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       );
   }
 
-  get margin() {
+  static get margin() {
     return {
       top: 0,
       right: 10,
@@ -191,6 +179,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
   _createFeatures() {
     this._layoutObj.init(this._data, this._contributors);
+    // eslint-disable-next-line
     this._data.forEach((d, i) => (d.k = i));
     this.featuresG = this.seq_g
       .selectAll("g.feature-group")
@@ -202,7 +191,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
 
     this.locations = this.featuresG
       .selectAll("g.location-group")
-      .data(d => d.locations.map(loc => Object.assign({}, loc, { feature: d })))
+      .data(d => d.locations.map(loc => ({ ...loc, feature: d })))
       .enter()
       .append("g")
       .attr("class", "location-group");
@@ -226,14 +215,16 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     this.features = this.locations
       .selectAll("path.feature")
       .data(d =>
-        d.fragments.map(loc =>
-          Object.assign({}, loc, { feature: d.feature, fragments: d.fragments })
-        )
+        d.fragments.map(loc => ({
+          ...loc,
+          feature: d.feature,
+          fragments: d.fragments
+        }))
       )
       .enter()
       .append("path")
-      .attr("class", f => this._getShape(f) + " feature")
-      .on("click.expanded", (f, i, d) => {
+      .attr("class", f => `${this._getShape(f)} feature`)
+      .on("click.expanded", () => {
         if (this._expanded) this.removeAttribute("expanded");
         else this.setAttribute("expanded", "expanded");
       })
@@ -243,6 +234,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     this.residues_loc = this._createResiduePaths(this.residues_g);
 
     if (this._contributors) {
+      // eslint-disable-next-line
       this._contributors.forEach((d, i) => (d.k = i));
       if (!this.children_g)
         this.children_g = this.svg
@@ -261,8 +253,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       const locationChildrenG = this.childGroup
         .selectAll("g.child-location-group")
         .data(d => {
+          // eslint-disable-next-line
           d.expanded = this._expanded;
-          return d.locations.map(loc => Object.assign({}, loc, { feature: d }));
+          return d.locations.map(loc => ({ ...loc, feature: d }));
         })
         .enter()
         .append("g")
@@ -287,18 +280,18 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       this.featureChildren = locationChildrenG
         .selectAll("path.child-fragment")
         .data(d =>
-          d.fragments.map(fragment =>
-            Object.assign({}, fragment, {
-              feature: d.feature,
-              fragments: d.fragments
-            })
-          )
+          d.fragments.map(fragment => ({
+            ...fragment,
+            feature: d.feature,
+            fragments: d.fragments
+          }))
         )
         .enter()
         .append("path")
-        .attr("class", f => this._getShape(f) + " child-fragment feature")
+        .attr("class", f => `${this._getShape(f)} child-fragment feature`)
         .call(this.bindEvents, this)
-        .on("click.expanded", (f, i, d) => {
+        .on("click.expanded", f => {
+          // eslint-disable-next-line
           f.feature.expanded = !f.feature.expanded;
           this.refresh();
         });
@@ -339,6 +332,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     //   .attr("y", padding.top*2)
     //   .attr("height", COLLAPSED_HEIGHT);
   }
+
   _refreshCoverage() {
     // this.coverage_mask.attr("visibility", this._expanded ? "hidden" : "visible");
     this.featuresG.attr(
@@ -360,6 +354,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
     //   .attr("pointer-events", "none")
     //   .attr("opacity", f=> 1 - f.value/this._contributors.length);
   }
+
   _refreshFeatures(base, expanded = true) {
     const numberOfSibillings = new Set(
       base.data().map(f => f.feature.accession)
@@ -386,11 +381,8 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       .attr(
         "transform",
         f =>
-          "translate(" +
-          this.getXFromSeqPosition(f.start) +
-          "," +
-          (padding.top + this._layoutObj.getFeatureYPos(f.feature)) +
-          ")"
+          `translate(${this.getXFromSeqPosition(f.start)},${padding.top +
+            this._layoutObj.getFeatureYPos(f.feature)})`
       )
       .style("pointer-events", expanded ? "auto" : "none");
   }
@@ -436,7 +428,7 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
         );
         this._refreshCoverLine(this.coverLinesChildren, this._expanded);
         this._refreshFeatures(this.featureChildren, this._expanded);
-        this.child_residues_g.attr("visibility", d =>
+        this.child_residues_g.attr("visibility", () =>
           this._expanded ? "visible" : "hidden"
         );
         this._refreshResiduePaths(this.child_residues_loc);

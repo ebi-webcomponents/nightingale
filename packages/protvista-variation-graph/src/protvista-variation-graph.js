@@ -1,5 +1,5 @@
 import ProtvistaTrack from "protvista-track";
-import { scaleLinear, select, event as d3Event, line, extent } from "d3";
+import { scaleLinear, select, line, max } from "d3";
 
 class ProtvistaVariationGraph extends ProtvistaTrack {
   constructor() {
@@ -20,7 +20,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
     this._data = undefined;
 
-    this._height = parseInt(this.getAttribute("height")) || 40;
+    this._height = Number(this.getAttribute("height")) || 40;
     this._yScale = scaleLinear();
     this.init();
   }
@@ -33,7 +33,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
     this._totalsArray = Array(data.sequence.length)
       .fill()
-      .map(d => {
+      .map(() => {
         return {
           total: 0,
           diseaseTotal: 0
@@ -41,12 +41,14 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       });
 
     data.variants.forEach(v => {
+      // eslint-disable-next-line no-plusplus
       this._totalsArray[v.start].total++;
       if (typeof v.association !== "undefined") {
         const hasDisease = v.association.find(
           association => association.disease === true
         );
         if (hasDisease) {
+          // eslint-disable-next-line no-plusplus
           this._totalsArray[v.start].diseaseTotal++;
         }
       }
@@ -70,7 +72,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
   _initYScale() {
     this._yScale
-      .domain([0, d3.max(this._totalsArray.map(d => d.total))])
+      .domain([0, max(this._totalsArray.map(d => d.total))])
       .range([this._height, 0]);
   }
 

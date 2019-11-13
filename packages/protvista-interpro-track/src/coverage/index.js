@@ -124,7 +124,9 @@ export const getCoverage = (
   }
   contributors.forEach(f =>
     f.locations.forEach(loc =>
-      loc.fragments.forEach(fr => (coverage = addContributor(fr, coverage)))
+      loc.fragments.forEach(fr => {
+        coverage = addContributor(fr, coverage);
+      })
     )
   );
   return coverage;

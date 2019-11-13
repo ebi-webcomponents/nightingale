@@ -7,13 +7,13 @@ import {
   event as d3Event
 } from "d3";
 
-const height = 40,
-  padding = {
-    top: 10,
-    right: 10,
-    bottom: 10,
-    left: 10
-  };
+const height = 40;
+const padding = {
+  top: 10,
+  right: 10,
+  bottom: 10,
+  left: 10
+};
 
 class ProtVistaNavigation extends HTMLElement {
   constructor() {
@@ -21,6 +21,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._x = null;
     this.dontDispatch = false;
   }
+
   _refreshWidth() {
     this.style.display = "block";
     this.style.width = "100%";
@@ -72,6 +73,7 @@ class ProtVistaNavigation extends HTMLElement {
       this._updateNavRuler();
     }
   }
+
   get width() {
     return this._width;
   }
@@ -188,12 +190,14 @@ class ProtVistaNavigation extends HTMLElement {
       }
     }
   }
+
   _updateLabels() {
     if (this._displaystartLabel)
       this._displaystartLabel.text(this._displaystart);
     if (this._displayendLabel)
       this._displayendLabel.attr("x", this.width).text(this._displayend);
   }
+
   _updatePolygon() {
     if (this.polygon)
       this.polygon.attr(

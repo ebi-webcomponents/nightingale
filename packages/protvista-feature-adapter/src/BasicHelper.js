@@ -1,14 +1,18 @@
-import { ecoMap } from "./evidences";
+import ecoMap from "./evidences";
 
-export class BasicHelper {
+class BasicHelper {
+  // TODO this would be better done in the data setter?
   static renameProperties(features) {
-    features.forEach(ft => {
+    return features.map(ft => {
+      const obj = {};
       if (ft.begin) {
-        ft.start = ft.begin;
-        delete ft.begin;
+        obj.start = ft.begin;
       }
+      return {
+        ...ft,
+        ...obj
+      };
     });
-    return features;
   }
 
   static formatSource(source) {
@@ -18,12 +22,12 @@ export class BasicHelper {
   }
 
   static getEvidenceFromCodes(evidenceList) {
-    if (!evidenceList) return;
+    if (!evidenceList) return ``;
     return `
       <ul>${evidenceList
         .map(ev => {
           const ecoMatch = ecoMap.find(eco => eco.name === ev.code);
-          if (!ecoMatch) return;
+          if (!ecoMatch) return ``;
           return `<li title='${
             ecoMatch.description
           }' style="padding: .25rem 0">${ecoMatch.shortDescription}:&nbsp;${
@@ -75,3 +79,5 @@ export class BasicHelper {
         `;
   }
 }
+
+export default BasicHelper;

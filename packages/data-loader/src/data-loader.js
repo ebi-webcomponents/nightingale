@@ -19,12 +19,14 @@ class DataLoader extends HTMLElement {
       return;
     }
 
-    let errors = [];
+    const errors = [];
     let detail;
 
     // go over all the potential sources to try to load data from it
+    /* eslint-disable no-restricted-syntax */
     for (const source of sources) {
       try {
+        /* eslint-disable no-await-in-loop */
         detail = await RequestManager.fetch(source);
         detail.srcElement = source;
         detail.src = source.src;
@@ -63,7 +65,6 @@ class DataLoader extends HTMLElement {
     this.dispatchEvent(
       new CustomEvent("load", { detail, bubbles: true, cancelable: true })
     );
-    return detail;
   }
 
   // Getters/Setters

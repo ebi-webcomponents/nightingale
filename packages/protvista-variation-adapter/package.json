@@ -13,11 +13,18 @@
   "license": "MIT",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
+    "d3-scale": "^3.2.0",
     "lodash-es": "^4.17.11",
+    "protvista-feature-adapter": "^2.2.14",
     "protvista-uniprot-entry-adapter": "^2.1.12"
   },
   "devDependencies": {
-    "d3": "^5.7.0"
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier-eslint": "^9.0.0"
   },
   "peerDependencies": {
     "d3": "5.X"

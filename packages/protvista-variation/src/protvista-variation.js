@@ -1,12 +1,5 @@
 import ProtvistaTrack from "protvista-track";
-import {
-  scaleLinear,
-  scalePoint,
-  axisLeft,
-  axisRight,
-  event as d3Event
-} from "d3";
-import _includes from "lodash-es/includes";
+import { scaleLinear, scalePoint, axisLeft, axisRight } from "d3";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
 
@@ -36,17 +29,13 @@ const aaList = [
 ];
 
 class ProtvistaVariation extends ProtvistaTrack {
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     super.connectedCallback();
     const styleElt = document.createElement("style");
     styleElt.innerHTML = ProtvistaVariation.css;
     this.appendChild(styleElt);
-    this._height = parseInt(this.getAttribute("height"))
-      ? parseInt(this.getAttribute("height"))
+    this._height = Number(this.getAttribute("height"))
+      ? Number(this.getAttribute("height"))
       : 430;
     this._width = this._width ? this._width : 0;
     this._yScale = scaleLinear();
@@ -58,9 +47,6 @@ class ProtvistaVariation extends ProtvistaTrack {
 
   attributeChangedCallback(attrName, oldVal, newVal) {
     super.attributeChangedCallback(attrName, oldVal, newVal);
-    if (!super.svg) {
-      return;
-    }
   }
 
   set data(data) {
@@ -169,10 +155,6 @@ class ProtvistaVariation extends ProtvistaTrack {
     if (this._series) {
       this._series.datum(data);
     }
-  }
-
-  reset() {
-    // reset zoom, filter and any selections
   }
 }
 

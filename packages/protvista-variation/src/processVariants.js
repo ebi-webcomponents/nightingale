@@ -1,22 +1,24 @@
 function processVariants(data) {
   const { variants, sequence } = data;
 
-  if (!sequence || !variants) return;
+  if (!sequence || !variants) return null;
 
-  const mutationArray = [];
+  // const mutationArray = [];
 
   const seq = sequence.split("");
-  for (let i in seq) {
-    mutationArray.push({
+
+  const mutationArray = seq.map((aa, i) => {
+    return {
       type: "VARIANT",
-      normal: seq[i],
+      normal: aa,
       pos: i + 1,
       variants: []
-    });
-  }
+    };
+  });
+
   variants.forEach(variant => {
     if (mutationArray[variant.start - 1]) {
-      //Currently not dealing with variants outside of sequence
+      // Currently not dealing with variants outside of sequence
       mutationArray[variant.start - 1].variants.push(variant);
     }
   });

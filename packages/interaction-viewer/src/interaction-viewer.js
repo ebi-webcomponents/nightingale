@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { select, selectAll, mouse } from "d3-selection";
 import { scaleBand, scaleLinear } from "d3-scale";
 import _union from "lodash-es/union";
@@ -73,9 +74,7 @@ function formatDiseaseInfo(data, acc) {
     for (var disease of data) {
       if (disease.dbReference) {
         //Some have only text
-        formatedString += `<p><a href="//www.uniprot.org/uniprot/${acc}#${
-          disease.acronym
-        }" target="_blank">${disease.diseaseId}</a></p>`;
+        formatedString += `<p><a href="//www.uniprot.org/uniprot/${acc}#${disease.acronym}" target="_blank">${disease.diseaseId}</a></p>`;
       }
     }
     return formatedString;
@@ -100,9 +99,7 @@ function formatSubcellularLocationInfo(data) {
     traverseTree(
       tree,
       d =>
-        (formatedString += `<li style="margin-left:${d.depth}em">${
-          d.name
-        }</li>`)
+        (formatedString += `<li style="margin-left:${d.depth}em">${d.name}</li>`)
     );
     return `${formatedString}</ul>`;
   } else {
@@ -191,9 +188,8 @@ function draw(el, accession, data) {
     .text((d, i) => {
       return nodes[i].name;
     })
-    .attr(
-      "class",
-      (d, i) => (nodes[i].accession === accession ? "main-accession" : "")
+    .attr("class", (d, i) =>
+      nodes[i].accession === accession ? "main-accession" : ""
     );
 
   const column = svg
@@ -219,9 +215,8 @@ function draw(el, accession, data) {
     .attr("dy", ".32em")
     .attr("text-anchor", "start")
     .text((d, i) => nodes[i].name)
-    .attr(
-      "class",
-      (d, i) => (nodes[i].accession === accession ? "main-accession" : "")
+    .attr("class", (d, i) =>
+      nodes[i].accession === accession ? "main-accession" : ""
     );
 
   var points = `${x(nodes[1].accession)} 0,${x(

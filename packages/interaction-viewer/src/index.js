@@ -1,6 +1,6 @@
 import InteractionViewer from "./interaction-viewer";
 
-var loadComponent = function() {
+const loadComponent = () => {
   customElements.define("interaction-viewer", InteractionViewer);
 };
 
@@ -8,7 +8,7 @@ var loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     console.log("Loaded with polyfill.");
     loadComponent();
   });

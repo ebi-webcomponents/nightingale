@@ -1,6 +1,6 @@
 import ProtVistaColouredSequence from "./protvista-coloured-sequence";
 
-const loadComponent = function() {
+const loadComponent = () => {
   customElements.define(
     "protvista-coloured-sequence",
     ProtVistaColouredSequence
@@ -11,7 +11,7 @@ const loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }

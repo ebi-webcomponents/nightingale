@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html } from "lit-element";
 
 class ProtvistaTooltip extends LitElement {
   static get properties() {

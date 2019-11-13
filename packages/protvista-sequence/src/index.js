@@ -1,6 +1,6 @@
 import ProtVistaSequence from "./protvista-sequence";
 
-const loadComponent = function() {
+const loadComponent = () => {
   customElements.define("protvista-sequence", ProtVistaSequence);
 };
 
@@ -8,7 +8,7 @@ const loadComponent = function() {
 if (window.customElements) {
   loadComponent();
 } else {
-  document.addEventListener("WebComponentsReady", function() {
+  document.addEventListener("WebComponentsReady", () => {
     loadComponent();
   });
 }

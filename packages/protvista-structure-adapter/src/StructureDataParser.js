@@ -1,6 +1,3 @@
-/*jslint node: true */
-"use strict";
-
 import ldFilter from "lodash-es/filter";
 import ldMap from "lodash-es/map";
 import ldForEach from "lodash-es/forEach";
@@ -16,7 +13,6 @@ export default class StructureDataParser {
   }
 
   parseEntry(data) {
-    this._validateEntry(data);
     this._parseValidEntry(data);
     return this._pdbFeatures;
   }
@@ -25,22 +21,7 @@ export default class StructureDataParser {
     return this._pdbFeatures;
   }
 
-  _validateEntry(data) {
-    if (!data.sequence && !data.sequence.sequence) {
-      throw "No sequence retrieved";
-    }
-    if (!data.dbReferences || data.dbReferences.length === 0) {
-      throw "No references retrieved";
-    }
-    const structures = ldFilter(data.dbReferences, reference => {
-      return reference.type === "PDB";
-    });
-    if (structures.length === 0) {
-      throw "No structural references reported for this accession";
-    }
-  }
-
-  _getAllFeatureStructures(data) {
+  static _getAllFeatureStructures(data) {
     let allFeatureStructures = [];
     const structures = ldFilter(data.dbReferences, reference => {
       return reference.type === "PDB";
@@ -59,7 +40,7 @@ export default class StructureDataParser {
             end: beginEnd.end,
             source: {
               id: structure.id,
-              url: "http://www.ebi.ac.uk/pdbe-srv/view/entry/" + structure.id
+              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structure.id}`
             }
           }
         ],
@@ -80,11 +61,13 @@ export default class StructureDataParser {
         (ftStructure.start <= ftCoverage.end &&
           ftCoverage.end <= ftStructure.end)
       ) {
+        /* eslint-disable no-param-reassign */
         startEnd.minStart = Math.min(
           startEnd.minStart,
           ftStructure.start,
           ftCoverage.start
         );
+        /* eslint-disable no-param-reassign */
         startEnd.maxEnd = Math.max(
           startEnd.maxEnd,
           ftStructure.end,
@@ -99,7 +82,9 @@ export default class StructureDataParser {
 
   _parseValidEntry(data) {
     this._pdbFeatures = [];
-    const allFeatureStructures = this._getAllFeatureStructures(data);
+    const allFeatureStructures = StructureDataParser._getAllFeatureStructures(
+      data
+    );
 
     ldForEach(allFeatureStructures, ftStructure => {
       const startEnd = { minStart: Number.MAX_SAFE_INTEGER, maxEnd: 1 };
@@ -119,13 +104,11 @@ export default class StructureDataParser {
     });
   }
 
-  _getStructuresHTML(structureList) {
+  static _getStructuresHTML(structureList) {
     return `<ul>
             ${structureList
               .map(
-                structure => `<li style="margin: 0.25rem 0"><a style="color:#FFF" href='${
-                  structure.source.url
-                }' target='_blank'>
+                structure => `<li style="margin: 0.25rem 0"><a style="color:#FFF" href='${structure.source.url}' target='_blank'>
             ${structure.source.id}
         </a> (${structure.start}-${structure.end})</li>`
               )
@@ -133,8 +116,10 @@ export default class StructureDataParser {
         </ul>`;
   }
 
-  formatTooltip(feature) {
-    const structuresHTML = this._getStructuresHTML(feature.structures);
+  static formatTooltip(feature) {
+    const structuresHTML = StructureDataParser._getStructuresHTML(
+      feature.structures
+    );
     return `${structuresHTML ? `<h5>Structures</h5>${structuresHTML}` : ``}`;
   }
 }
