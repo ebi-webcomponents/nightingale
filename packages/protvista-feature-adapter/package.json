@@ -6,13 +6,5 @@
     "src"
   ],
   "main": "dist/protvista-feature-adapter.js",
-  "module": "src/ProtvistaFeatureAdapter.js",
-  "devDependencies": {
-    "eslint": "^6.6.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "prettier-eslint": "^9.0.0"
-  }
+  "module": "src/ProtvistaFeatureAdapter.js"
 }

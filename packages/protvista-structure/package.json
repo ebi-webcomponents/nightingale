@@ -19,13 +19,5 @@
   "peerDependencies": {
     "litemol": "^2.4.2"
   },
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
-  "devDependencies": {
-    "eslint": "^6.6.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "prettier-eslint": "^9.0.0"
-  }
+  "gitHead": "5a756316482fa31d085602d46438861fb45e5178"
 }

@@ -20,13 +20,5 @@
   "dependencies": {
     "lit-element": "^2.2.0",
     "lodash-es": "^4.17.11"
-  },
-  "devDependencies": {
-    "eslint": "^6.6.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "prettier-eslint": "^9.0.0"
   }
 }
