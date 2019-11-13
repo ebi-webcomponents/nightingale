@@ -75,7 +75,10 @@ export default class InterproEntryLayout extends DefaultLayout {
   ) {
     for (let i = 0; i < residues.length; i++) {
       const resGroup = residues[i];
-      this._filterOutResidueFragmentsOutOfLocation(resGroup, locs);
+      InterproEntryLayout._filterOutResidueFragmentsOutOfLocation(
+        resGroup,
+        locs
+      );
       if (!(resGroup.accession in residuesPos[featureAcc]))
         residuesPos[featureAcc][resGroup.accession] = {};
       for (let j = 0; j < resGroup.locations.length; j++) {
@@ -130,12 +133,12 @@ export default class InterproEntryLayout extends DefaultLayout {
   }
 
   getFeatureYPos(feature) {
-    const acc = this._getAccFromFeature(feature);
+    const acc = InterproEntryLayout._getAccFromFeature(feature);
     return acc in this.yPos ? this.yPos[acc] : 0;
   }
 
   getFeatureHeight(feature) {
-    const acc = this._getAccFromFeature(feature);
+    const acc = InterproEntryLayout._getAccFromFeature(feature);
     return acc in this.height ? this.height[acc] : 0;
   }
 }

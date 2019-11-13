@@ -50,8 +50,8 @@ export default class TrackHighlighter {
       case "highlightend":
         this.setFloatAttribute(name, newValue);
         this.element._highlight =
-          Number.isNaN(this.element._highlightstart) ||
-          Number.isNaN(this.element._highlightend) ||
+          !Number.isNaN(this.element._highlightstart) ||
+          !Number.isNaN(this.element._highlightend) ||
           this.element._highlightstart === null ||
           this.element._highlightend === null
             ? ""

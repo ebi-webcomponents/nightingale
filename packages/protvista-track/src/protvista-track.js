@@ -55,7 +55,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   set data(data) {
-    this._data = this.normalizeLocations(data);
+    this._data = ProtvistaTrack.normalizeLocations(data);
     this._createTrack();
   }
 

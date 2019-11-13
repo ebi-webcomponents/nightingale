@@ -75,7 +75,7 @@ class ProtvistaTrackWrapper extends Component {
           highlightend="2"
           layout="non-overlapping"
           shape="roundRectangle"
-          height="460px"
+          height="460"
         />
         <protvista-track
           id="track5"

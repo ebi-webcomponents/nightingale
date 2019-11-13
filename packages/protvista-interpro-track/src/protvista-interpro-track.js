@@ -38,7 +38,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
   }
 
   set contributors(contributors) {
-    this._contributors = this.normalizeLocations(contributors);
+    this._contributors = ProtvistaInterproTrack.normalizeLocations(
+      contributors
+    );
     this._coverage = getCoverage(this._contributors, this._length);
     if (this._data) this._createTrack();
   }
@@ -230,7 +232,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
       })
       .call(this.bindEvents, this);
 
-    this.residues_g = this._createResidueGroup(this.featuresG);
+    this.residues_g = ProtvistaInterproTrack._createResidueGroup(
+      this.featuresG
+    );
     this.residues_loc = this._createResiduePaths(this.residues_g);
 
     if (this._contributors) {
@@ -296,7 +300,9 @@ class ProtvistaInterproTrack extends ProtvistaTrack {
           this.refresh();
         });
 
-      this.child_residues_g = this._createResidueGroup(this.childGroup);
+      this.child_residues_g = ProtvistaInterproTrack._createResidueGroup(
+        this.childGroup
+      );
       this.child_residues_loc = this._createResiduePaths(this.child_residues_g);
       if (this._coverage && this._coverage.length) this._createCoverage();
     }
