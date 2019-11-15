@@ -1,7 +1,7 @@
 # Contributing to Nightingale
 
 ## Bug reports/Suggesting enhancements
-Before submitting a bug report or suggesting an enhancement, check [this list](https://github.com/ebi-webcomponents/nightingale/issues) to see if a similar issue already exists. If you need to create a new issue, use a descriptive title and include as many details as possible, following [this template](link to template).
+Before submitting a bug report or suggesting an enhancement, check [this list](https://github.com/ebi-webcomponents/nightingale/issues) to see if a similar issue already exists. If you need to create a new issue, use a descriptive title and include as many details as possible, following the corresponding [template](https://github.com/ebi-webcomponents/nightingale/issues/new/choose).
 
 ## Code contribution
 If you want to contribute to Nightingale by fixing issues or adding new components, you can do by submitting a pull request. You need to follow the template, make sure [naming conventions](#naming-conventions) and the [coding style](#styleguide) is respected.
@@ -26,7 +26,7 @@ Why pull requests?
  - Disseminate knowledge
  - Catch potential issues early
  
-Before you submit a pull request, please ensure your code comforms to the [styleguide](#styleguide), that the tests are passing and follow instructions in [the template](link to template).
+Before you submit a pull request, please ensure your code comforms to the [styleguide](#styleguide), that the tests are passing and follow instructions in [the template](https://github.com/ebi-webcomponents/protvista-uniprot/blob/master/pull_request_template.md).
 
 ### Styleguide
 We follow [airbnb-base](https://github.com/airbnb/javascript) and [prettier](https://github.com/prettier/prettier-eslint). Run `yarn lint` to run the linter in all packages.
