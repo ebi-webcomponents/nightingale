@@ -29,7 +29,44 @@ const GettingStarted = () => {
         <a href="#using_the_cdn">Using the CDN</a>) or with a framework like
         React (<a href="#using_modules">Using modules</a>).
       </p>
-      <h2 id="using_the_cdn">1. Using the CDN</h2>
+      <h2 id="using_modules">1. Using modules</h2>
+      <p>All components are exported as modules. This means you can import them as any other ES6 module in your application:</p>
+      <SyntaxHighlighter>
+        {`import ProtvistaTrack from "protvista-track";`}
+      </SyntaxHighlighter>
+      <p>You then need to register them as custom elements:</p>
+      <SyntaxHighlighter>
+        {`window.customElements.define('protvista-track', ProtvistaTrack);`}
+      </SyntaxHighlighter>
+      <p>If you use a lot of components, it might be worth defining a function to do this:</p>
+      <SyntaxHighlighter>
+        {`export default (name, className) => {
+  if (!window.customElements.get(name)) {
+    window.customElements.define(name, className);
+  }
+}
+`}
+      </SyntaxHighlighter>
+      <p>You can now use the component directly in your application as you would any other html component.</p>
+      <h3>Usage with React</h3>
+      <p>If you decide to use your own data loaders, the recommended way is to use `refs` so you can then use the component's API to deal with asynchronicity:</p>
+      <SyntaxHighlighter>
+        {`
+        ...
+        const trackContainer = useRef(null);
+
+        useEffect(()=> {
+          if(trackContainer) {
+            trackContainer.current.data = data;
+          }
+        },[data]);
+
+
+        return (<protvista-track ref={trackContainer}/>)
+        ...
+        `}
+      </SyntaxHighlighter>
+      <h2 id="using_the_cdn">2. Using the CDN</h2>
       <p>
         All the components are compiled down to ES5 before being distributed
         via&nbsp;
@@ -108,7 +145,6 @@ const GettingStarted = () => {
 
     `}
       </SyntaxHighlighter>
-      <h2 id="using_modules">2. Using modules</h2>
     </Fragment>
   );
 };
