@@ -4,9 +4,13 @@
 
 Nightingale is a monorepo containing visualisation web components to use with biological data.
 
-## Documentation
+## Documentation/Getting started
 
 Documentation, getting started guide and examples for each of the components are available here [https://ebi-webcomponents.github.io/nightingale](https://ebi-webcomponents.github.io/nightingale)
+
+## Contributing
+
+Read our guide [here](/CONTRIBUTING.md) as well as our [code of conduct](/CODE_OF_CONDUCT.md)
 
 ## Installing
 
