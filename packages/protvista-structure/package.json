@@ -9,7 +9,19 @@
     "src",
     "style"
   ],
-  "keywords": [],
+  "keywords": [
+    "nightingale",
+    "customelements",
+    "webcomponents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "xwatkins@ebi.ac.uk",
   "license": "MIT",
   "dependencies": {

@@ -10,19 +10,27 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ebi-uniprot/protvista-structure-adapter.git"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
   },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "keywords": [
     "ProtVista",
     "dataloader",
     "parser",
-    "protein-structure"
+    "protein-structure",
+    "structure",
+    "3d",
+    "pdb",
+    "pdbe",
+    "nightingale",
+    "webcomponents",
+    "customelements"
   ],
   "author": "ljgarcia",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/ebi-uniprot/protvista-structure-adapter/issues"
-  },
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "lodash-es": "^4.17.11",

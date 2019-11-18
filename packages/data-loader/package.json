@@ -10,15 +10,24 @@
   "module": "src/data-loader.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-webcomponents/data-loader.git"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "license": "Apache-2.0",
   "author": "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l)",
   "keywords": [
     "webcomponents",
     "customelements",
-    "data"
+    "data",
+    "data-loader",
+    "dataloader",
+    "loader",
+    "nightingale",
+    "protvista"
   ],
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "lodash-es": "^4.17.11"

@@ -10,9 +10,17 @@
   "module": "src/protvista-zoomable.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-ppf/protvista-zoomable"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
   },
-  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
   "dependencies": {

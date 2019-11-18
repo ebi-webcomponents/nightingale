@@ -9,10 +9,19 @@
   "main": "dist/protvista-track.js",
   "module": "src/protvista-track.js",
   "jsnext:main": "src/protvista-track.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-ppf/protvista-track"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
   },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "MIT",
   "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",

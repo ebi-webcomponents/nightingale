@@ -11,9 +11,18 @@
   "module": "src/protvista-variation.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-webcomponents/protvista-variation"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
   },
-  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "variation"
+  ],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
   "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",

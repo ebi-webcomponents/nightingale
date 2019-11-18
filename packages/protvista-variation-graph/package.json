@@ -8,6 +8,21 @@
   "main": "dist/protvista-variation-graph.js",
   "module": "src/protvista-variation-graph.js",
   "version": "2.2.11",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "variation",
+    "graph"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "protvista-track": "^2.2.4"
   },

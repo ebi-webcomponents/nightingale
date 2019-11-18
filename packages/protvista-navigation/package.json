@@ -6,10 +6,19 @@
     "dist",
     "src"
   ],
+  "keywords": [
+    "nightingale",
+    "customelements",
+    "webcomponents"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-webcomponents/protvista-navigation"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
   },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "main": "dist/protvista-navigation.js",
   "module": "src/protvista-navigation.js",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",

@@ -11,9 +11,20 @@
   "keywords": [
     "protvista",
     "webcomponents",
+    "customelements",
     "protein sequence",
-    "protein annotation"
+    "protein annotation",
+    "nightingale",
+    "tooltip"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "xwatkins@ebi.ac.uk",
   "license": "MIT",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",

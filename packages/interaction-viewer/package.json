@@ -5,6 +5,9 @@
   "main": "dist/interaction-viewer.js",
   "module": "src/interaction-viewer.js",
   "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
     "interaction",
     "visualization",
     "biojs",
@@ -16,6 +19,14 @@
     "styles",
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
   "dependencies": {

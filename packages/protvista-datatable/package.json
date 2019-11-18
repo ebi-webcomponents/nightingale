@@ -13,8 +13,18 @@
   "keywords": [
     "webcomponents",
     "customelements",
-    "data"
+    "data",
+    "datatable",
+    "nightingale"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "lit-element": "^2.1.0",
     "uuid": "^3.3.2"

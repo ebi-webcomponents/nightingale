@@ -11,6 +11,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "exporter",
+    "image"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Swaathi Kandasaamy",
   "license": "MIT",
   "dependencies": {

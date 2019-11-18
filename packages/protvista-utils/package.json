@@ -6,10 +6,22 @@
     "dist",
     "src"
   ],
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "utils",
+    "utilities",
+    "utility"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebi-webcomponents/nightingale"
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
   },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "main": "dist/protvista-utils.js",
   "module": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
