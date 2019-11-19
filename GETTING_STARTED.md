@@ -167,3 +167,9 @@ useEffect(()=> {
 return <protvista-track ref={trackContainer}/>;
 ...
 ```
+
+Or you can decided to use a helper component that would bridge the gap between
+the React way of doing things and the standard Custom Element's:
+
+- [`<ReactPropertySetter />` to set properties on elements (instead of just the attribute as React does)](https://www.npmjs.com/package/react-property-setter)
+- [`<ReactEventEmitter />` to emit events from data in React](https://www.npmjs.com/package/react-event-emitter)
