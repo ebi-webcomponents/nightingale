@@ -223,15 +223,15 @@ class ProtvistaTrack extends ProtvistaZoomable {
         )
       );
       this.features
-        .attr("d", f =>{
+        .attr("d", f => {
           console.log(this._layoutObj.getFeatureHeight(f));
           return this._featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
             f.end ? f.end - f.start + 1 : 1,
             this._getShape(f)
-          )}
-        )
+          );
+        })
         .attr(
           "transform",
           f =>
