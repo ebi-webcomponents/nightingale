@@ -86,4 +86,9 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 }
 
 export default ProtvistaFeatureAdapter;
-export { formatTooltip, renameProperties } from "./BasicHelper";
+export {
+  formatTooltip,
+  renameProperties,
+  formatXrefs,
+  getEvidenceFromCodes
+} from "./BasicHelper";

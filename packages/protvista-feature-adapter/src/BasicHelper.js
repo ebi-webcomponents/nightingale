@@ -19,7 +19,7 @@ const formatSource = source => {
     : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.id}</a>&nbsp;(${source.name})`;
 };
 
-const getEvidenceFromCodes = evidenceList => {
+export const getEvidenceFromCodes = evidenceList => {
   if (!evidenceList) return ``;
   return `
       <ul>${evidenceList
@@ -36,7 +36,7 @@ const getEvidenceFromCodes = evidenceList => {
     `;
 };
 
-const formatXrefs = xrefs => {
+export const formatXrefs = xrefs => {
   return `<ul>${xrefs
     .map(
       xref =>
