@@ -56,6 +56,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   set data(data) {
     this._data = ProtvistaTrack.normalizeLocations(data);
+    this._layoutObj = this.getLayout();
     this._createTrack();
   }
 
@@ -222,13 +223,14 @@ class ProtvistaTrack extends ProtvistaZoomable {
         )
       );
       this.features
-        .attr("d", f =>
-          this._featureShape.getFeatureShape(
+        .attr("d", f =>{
+          console.log(this._layoutObj.getFeatureHeight(f));
+          return this._featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
             f.end ? f.end - f.start + 1 : 1,
             this._getShape(f)
-          )
+          )}
         )
         .attr(
           "transform",

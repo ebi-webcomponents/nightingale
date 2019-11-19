@@ -14,6 +14,7 @@ export default class DefaultLayout {
   }
 
   getFeatureHeight() {
+    console.log(this._layoutHeight, this._minHeight, this._padding);
     return Math.min(this._layoutHeight, this._minHeight) - this._padding;
   }
 }
