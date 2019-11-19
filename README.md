@@ -2,21 +2,26 @@
 
 # nightingale
 
-Nightingale is a monorepo containing visualisation web components to use with biological data.
+Nightingale is a monorepo containing visualisation web components to use with
+biological data.
 
 ## Documentation/Getting started
 
-Documentation, getting started guide and examples for each of the components are available here [https://ebi-webcomponents.github.io/nightingale](https://ebi-webcomponents.github.io/nightingale)
+Documentation, getting started guide and examples for each of the components are
+available here
+[https://ebi-webcomponents.github.io/nightingale](https://ebi-webcomponents.github.io/nightingale)
 
 ## Contributing
 
-Read our guide [here](/CONTRIBUTING.md) as well as our [code of conduct](/CODE_OF_CONDUCT.md)
+Read our guide [here](/CONTRIBUTING.md) as well as our
+[code of conduct](/CODE_OF_CONDUCT.md)
 
 ## Installing
 
 Nightingale uses [Lerna](https://lernajs.io/) to manage its packages.
 
-First run `yarn` to install root packages. Then run `yarn bootstrap` to install remaining modules and link dependencies.
+First run `yarn` to install root packages. Then run `yarn bootstrap` to install
+remaining modules and link dependencies.
 
 ## Building the components
 

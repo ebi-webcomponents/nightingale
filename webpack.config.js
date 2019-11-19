@@ -11,7 +11,7 @@ const config = {
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
     library: camelCase(PKG_JSON.name, { pascalCase: true }),
-    filename: PKG_JSON.name + ".js"
+    filename: `${PKG_JSON.name}.js`
   },
   target: "web",
   devtool: "source-map",
@@ -33,14 +33,12 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          {
-            loader: "style-loader"
-          },
+          { loader: "style-loader" },
           { loader: "css-loader", options: { importLoaders: 1 } }
         ]
       },
       {
-        test: /\.(js)$/,
+        test: /\.js$/,
         use: {
           loader: "babel-loader",
           options: {

@@ -33,7 +33,11 @@ module.exports = {
         ]
       },
       {
-        test: /\.(css)$/,
+        test: /\.md$/,
+        use: [{ loader: "text-loader" }, { loader: "markdown-loader" }]
+      },
+      {
+        test: /\.css$/,
         use: [
           {
             loader: "style-loader" // creates style nodes from JS strings

@@ -50,5 +50,6 @@
   "workspaces": [
     "app",
     "packages/*"
-  ]
+  ],
+  "dependencies": {}
 }
