@@ -18,15 +18,15 @@ describe("ParserHelper", () => {
   });
 
   it("should get a begin-end from a value", () => {
-    const expectedBeginEnd = { begin: 287, end: 344 };
-    const beginEnd = ParserHelper.getBeginEnd(properties.chains);
+    const expectedBeginEnd = { start: 287, end: 344 };
+    const beginEnd = ParserHelper.parseChainString(properties.chains);
     expect(beginEnd.begin).toEqual(expectedBeginEnd.begin);
     expect(beginEnd.end).toEqual(expectedBeginEnd.end);
   });
 
   it("should get a default begin-end from a value", () => {
-    const expectedBeginEnd = { begin: 0, end: 0 };
-    const beginEnd = ParserHelper.getBeginEnd("");
+    const expectedBeginEnd = { start: 0, end: 0 };
+    const beginEnd = ParserHelper.parseChainString("");
     expect(beginEnd.begin).toEqual(expectedBeginEnd.begin);
     expect(beginEnd.end).toEqual(expectedBeginEnd.end);
   });

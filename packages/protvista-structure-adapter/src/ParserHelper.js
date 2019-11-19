@@ -13,14 +13,14 @@ export default class ParserHelper {
     );
   }
 
-  static getBeginEnd(value) {
+  static parseChainString(value) {
     const posEqual = value.indexOf("=");
     const posDash = value.indexOf("-");
     if (posEqual === -1 || posDash === -1) {
-      return { begin: 0, end: 0 };
+      return { start: 0, end: 0 };
     }
     return {
-      begin: +value.slice(posEqual + 1, posDash),
+      start: +value.slice(posEqual + 1, posDash),
       end: +value.slice(posDash + 1)
     };
   }

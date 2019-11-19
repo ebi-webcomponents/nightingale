@@ -1,7 +1,3 @@
-import ldFilter from "lodash-es/filter";
-import ldMap from "lodash-es/map";
-import ldForEach from "lodash-es/forEach";
-import ldRemove from "lodash-es/remove";
 import ParserHelper from "./ParserHelper";
 
 const featureType = "PDBE_COVER";
@@ -21,87 +17,74 @@ export default class StructureDataParser {
     return this._pdbFeatures;
   }
 
+  // Iterate over references and extract chain start and end
   static _getAllFeatureStructures(data) {
-    let allFeatureStructures = [];
-    const structures = ldFilter(data.dbReferences, reference => {
-      return reference.type === "PDB";
-    });
-    allFeatureStructures = ldMap(structures, structure => {
-      const beginEnd = structure.properties.chains
-        ? ParserHelper.getBeginEnd(structure.properties.chains)
-        : { start: 0, end: 0 };
-      return {
-        type: featureType,
-        category: featureCategory,
-        structures: [
-          {
-            description: ParserHelper.getDescription(structure.properties),
-            start: beginEnd.begin,
-            end: beginEnd.end,
-            source: {
-              id: structure.id,
-              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structure.id}`
+    return data.dbReferences
+      .filter(reference => {
+        return reference.type === "PDB";
+      })
+      .map(structureReference => {
+        const parsedChain = structureReference.properties.chains
+          ? ParserHelper.parseChainString(structureReference.properties.chains)
+          : { start: 0, end: 0 };
+        return {
+          type: featureType,
+          category: featureCategory,
+          structures: [
+            {
+              description: ParserHelper.getDescription(
+                structureReference.properties
+              ),
+              start: parsedChain.start,
+              end: parsedChain.end,
+              source: {
+                id: structureReference.id,
+                url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structureReference.id}`
+              }
             }
-          }
-        ],
-        start: beginEnd.begin,
-        end: beginEnd.end
-      };
-    });
-    return allFeatureStructures;
+          ],
+          start: parsedChain.start,
+          end: parsedChain.end
+        };
+      });
   }
 
-  _getOverlapping(ftStructure, startEnd) {
-    const overlapping = ldRemove(this._pdbFeatures, ftCoverage => {
+  static mergeOverlappingIntervals(structures) {
+    if (!structures || structures.length <= 0) {
+      return [];
+    }
+    // Sort by start position
+    const sortedStructures = structures.sort((a, b) => a.start - b.start);
+    const mergedIntervals = [];
+    sortedStructures.forEach(structure => {
+      const lastItem = mergedIntervals[mergedIntervals.length - 1];
+      // If item doesn't overlap, push it
       if (
-        (ftCoverage.start <= ftStructure.start &&
-          ftStructure.start <= ftCoverage.end) ||
-        (ftCoverage.start <= ftStructure.end &&
-          ftStructure.end <= ftCoverage.end) ||
-        (ftStructure.start <= ftCoverage.end &&
-          ftCoverage.end <= ftStructure.end)
+        !lastItem ||
+        (lastItem.start < structure.start && lastItem.end < structure.end)
       ) {
-        /* eslint-disable no-param-reassign */
-        startEnd.minStart = Math.min(
-          startEnd.minStart,
-          ftStructure.start,
-          ftCoverage.start
-        );
-        /* eslint-disable no-param-reassign */
-        startEnd.maxEnd = Math.max(
-          startEnd.maxEnd,
-          ftStructure.end,
-          ftCoverage.end
-        );
-        return true;
+        mergedIntervals.push(structure);
       }
-      return false;
+      // If the end is bigger update the last one
+      else if (lastItem.end < structure.end) {
+        lastItem.end = structure.end;
+        lastItem.structures.push(structure.structures[0]);
+      }
+      // Otherwise just add to last item
+      else {
+        lastItem.structures.push(structure.structures[0]);
+      }
     });
-    return overlapping;
+    return mergedIntervals;
   }
 
   _parseValidEntry(data) {
-    this._pdbFeatures = [];
     const allFeatureStructures = StructureDataParser._getAllFeatureStructures(
       data
     );
-
-    ldForEach(allFeatureStructures, ftStructure => {
-      const startEnd = { minStart: Number.MAX_SAFE_INTEGER, maxEnd: 1 };
-      const overlapping = this._getOverlapping(ftStructure, startEnd);
-      if (overlapping.length === 0) {
-        this._pdbFeatures.push(ftStructure);
-      } else {
-        ftStructure.start = startEnd.minStart;
-        ftStructure.end = startEnd.maxEnd;
-        ldForEach(overlapping, overlap => {
-          ftStructure.structures = ftStructure.structures.concat(
-            overlap.structures
-          );
-        });
-        this._pdbFeatures.push(ftStructure);
-      }
-    });
+    this._pdbFeatures = StructureDataParser.mergeOverlappingIntervals(
+      allFeatureStructures
+    );
   }
 
   static _getStructuresHTML(structureList) {
