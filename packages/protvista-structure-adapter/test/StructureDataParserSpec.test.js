@@ -1,20 +1,20 @@
-import StructureDataParser from "../src/StructureDataParser";
+import {
+  getAllFeatureStructures,
+  mergeOverlappingIntervals
+} from "../src/StructureDataParser";
 import { getEntryTestData } from "./UniProtEntryData";
 
 describe("StructureDataParser", () => {
-  it("should pass", () => {
-    expect(true).toEqual(true);
-  });
-
-  it("should create a parser", () => {
-    const aParser = new StructureDataParser();
-    expect(aParser).toBeInstanceOf(StructureDataParser);
-  });
-
-  it("should parse mocked data", () => {
-    const aParser = new StructureDataParser("P01234");
+  it("should turn structures into features", () => {
     const entryData = getEntryTestData();
-    aParser.parseEntry(entryData);
-    expect(JSON.stringify(aParser.pdbFeatures)).toMatchSnapshot();
+    const features = getAllFeatureStructures(entryData);
+    expect(features).toMatchSnapshot();
+  });
+
+  it("should merge Overlapping Intervals", () => {
+    const entryData = getEntryTestData();
+    const features = getAllFeatureStructures(entryData);
+    const overlapping = mergeOverlappingIntervals(features);
+    expect(overlapping).toMatchSnapshot();
   });
 });
