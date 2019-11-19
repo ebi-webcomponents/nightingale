@@ -119,7 +119,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
     this._layoutObj.init(this._data);
 
     select(this)
-      .selectAll("svg")
+      .selectAll("div")
       .remove();
 
     this.svg = select(this)
