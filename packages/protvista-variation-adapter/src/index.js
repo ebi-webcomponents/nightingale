@@ -1,4 +1,4 @@
-import ProtvistaVariationAdapter from "./protvista-variation-adapter";
+import ProtvistaVariationAdapter from "./ProtvistaVariationAdapter";
 
 const loadComponent = () => {
   customElements.define(
