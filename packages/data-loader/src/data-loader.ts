@@ -1,14 +1,47 @@
 import lodashGet from "lodash-es/get";
-import RequestManager from "./request-manager";
 
-const getSourceData = (...children: Element[]) =>
-  children.filter(child =>
+type Selector = string | ((data: any) => any);
+type Data = { payload: any; headers: Headers };
+
+const store: Map<string, Promise<Data>> = new Map();
+
+export const load = (
+  url: string,
+  headers: Headers = new Headers({ accept: "application/json" })
+) => {
+  const cached = store.get(url);
+  if (cached) return cached;
+
+  const promise = (async () => {
+    const response = await window.fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(
+        `Request Failed: Status = ${
+          response.status
+        }; URI = ${url}; Time = ${new Date()}`
+      );
+    }
+    const payload = await response.json();
+    return { payload, headers: response.headers };
+  })();
+
+  store.set(url, promise);
+
+  promise.catch(() => store.delete(url));
+
+  return promise;
+};
+
+const getSourceData = (children: HTMLCollection) =>
+  Array.from(children).filter(child =>
     child.matches('source[src], script[type="application/json"]')
   );
 
-type Selector = string | ((data: any) => any);
+export abstract class NightingaleElement {
+  static readonly is: string;
+}
 
-class DataLoader extends HTMLElement {
+class DataLoader extends HTMLElement implements NightingaleElement {
   private _errors: Error[];
   private _data: any;
   private _selector: Selector;
@@ -19,23 +52,29 @@ class DataLoader extends HTMLElement {
 
   async fetch() {
     // get all the potentials sources elements
-    const sources = getSourceData(...this.children);
+    const sources = getSourceData(this.children);
     // if nothing there, bails
-    if (!sources.length) {
-      return;
-    }
+    if (!sources.length) return;
 
     const errors = [];
-    let detail;
+    let detail: { [k: string]: any };
 
     // go over all the potential sources to try to load data from it
     /* eslint-disable no-restricted-syntax */
     for (const source of sources) {
       try {
-        /* eslint-disable no-await-in-loop */
-        detail = await RequestManager.fetch(source);
-        detail.srcElement = source;
-        detail.src = (<HTMLSourceElement>source).src;
+        if (source instanceof HTMLSourceElement) {
+          detail = {
+            /* eslint-disable no-await-in-loop */
+            ...(await load(source.src)),
+            srcElement: source,
+            src: (<HTMLSourceElement>source).src
+          };
+        } else {
+          detail = {
+            payload: JSON.parse(source.textContent)
+          };
+        }
 
         // if we're here, we have data, go out of the loop
         break;
