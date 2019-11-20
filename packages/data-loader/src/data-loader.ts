@@ -1,12 +1,18 @@
 import lodashGet from "lodash-es/get";
 import RequestManager from "./request-manager";
 
-const getSourceData = (...children) =>
+const getSourceData = (...children: Element[]) =>
   children.filter(child =>
     child.matches('source[src], script[type="application/json"]')
   );
 
+type Selector = string | ((data: any) => any);
+
 class DataLoader extends HTMLElement {
+  private _errors: Error[];
+  private _data: any;
+  private _selector: Selector;
+
   static get is() {
     return "data-loader";
   }
@@ -29,7 +35,7 @@ class DataLoader extends HTMLElement {
         /* eslint-disable no-await-in-loop */
         detail = await RequestManager.fetch(source);
         detail.srcElement = source;
-        detail.src = source.src;
+        detail.src = (<HTMLSourceElement>source).src;
 
         // if we're here, we have data, go out of the loop
         break;
@@ -69,26 +75,26 @@ class DataLoader extends HTMLElement {
 
   // Getters/Setters
   // data
-  get data() {
+  get data(): any {
     return this._data;
   }
 
   // loaded
-  get loaded() {
+  get loaded(): boolean {
     return !!this.data;
   }
 
   // errors
-  get errors() {
+  get errors(): Error[] {
     return this._errors;
   }
 
   // loaded
-  get selector() {
+  get selector(): Selector {
     return this._selector;
   }
 
-  set selector(value) {
+  set selector(value: Selector) {
     this._selector = value;
   }
 
@@ -96,15 +102,13 @@ class DataLoader extends HTMLElement {
   constructor() {
     super();
     this._data = null;
-    this.selector = (this.getAttribute("selector") || "").trim() || (d => d);
+    this.selector =
+      (this.getAttribute("selector") || "").trim() || ((d: any) => d);
   }
 
   connectedCallback() {
     this.fetch();
   }
 }
-
-// Expose this in case user wants to use custom fetching logic
-DataLoader.fetch = window.fetch.bind(window);
 
 export default DataLoader;

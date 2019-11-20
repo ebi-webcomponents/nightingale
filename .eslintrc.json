@@ -12,6 +12,7 @@
   "rules": {
     "no-underscore-dangle": "off",
     "no-console": "off",
+    "no-shadow": "off",
     "prefer-object-spread": "off",
     "no-plusplus": "off",
     "no-return-assign": [1, "except-parens"],
