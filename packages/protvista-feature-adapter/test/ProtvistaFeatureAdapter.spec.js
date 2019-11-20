@@ -1,4 +1,7 @@
-import { renameProperties, formatTooltip } from "../src/BasicHelper";
+import {
+  renameProperties,
+  formatTooltip
+} from "../src/ProtvistaFeatureAdapter";
 
 const feature = {
   type: "SIGNAL",

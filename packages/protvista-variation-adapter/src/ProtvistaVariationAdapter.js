@@ -1,4 +1,5 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
+import groupBy from "lodash-es/groupBy";
 import flatten from "lodash-es/flatten";
 import uniqBy from "lodash-es/uniqBy";
 import forOwn from "lodash-es/forOwn";
@@ -6,6 +7,8 @@ import intersectionBy from "lodash-es/intersectionBy";
 
 import filterData, { getFilter, getColor } from "./filters";
 import formatTooltip from "./tooltipGenerators";
+
+// throw new Error(JSON.stringify(Object.entries(ProtvistaFeatureAdapter)));
 
 const getSourceType = (xrefs, sourceType) => {
   const xrefNames = xrefs.map(ref => ref.name);
@@ -50,7 +53,7 @@ const _union = (variants, filterNames, key) => {
   );
 };
 
-export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
+class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
   static get observedAttributes() {
     return ["activefilters"];
   }
@@ -124,3 +127,5 @@ export default class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
     );
   }
 }
+
+export default ProtvistaVariationAdapter;
