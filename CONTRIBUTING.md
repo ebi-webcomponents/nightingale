@@ -19,6 +19,7 @@ packages/my-component/package.json # contains the package definition
  - If your component is for ProtVista (the protein features visualisation tool) it should have the `protvista-` prefix.
  - the file in which your main component is defined should have the same name as your package (in kebab-case).
  - your main component should have the same name as your package, but in PascalCase.
+ - Documentation, comments, and more importantly code, should all use American English. For example, use `color` and not ~`colour`~
 
 ### Pull requests
 Why pull requests?
