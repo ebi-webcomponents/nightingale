@@ -1,52 +1,23 @@
-import { html, render } from "lit-html";
+import { LitElement, html, css } from "lit-element";
 import groupBy from "lodash-es/groupBy";
 
-class ProtvistaFilter extends HTMLElement {
-  static get tagName() {
-    return "protvista-filter";
+class ProtvistaFilter extends LitElement {
+  static get properties() {
+    return {
+      filters: { type: Array },
+      selectedFilters: { type: Set },
+      for: { type: String }
+    };
   }
 
   constructor() {
     super();
-    this._filters = [];
-    this._selectedFilters = new Set();
-  }
-
-  static get observedAttributes() {
-    return ["filters"];
-  }
-
-  set filters(filters) {
-    this._filters = filters;
-    this._filters.forEach(({ name, type, options }) => {
-      if (options.selected) {
-        this._selectedFilters.add(`${type.name}:${name}`);
-      }
-    });
-    this._renderFilters();
-  }
-
-  get filters() {
-    return this._filters;
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      if (name !== "filters") {
-        return;
-      }
-      this._filters = JSON.parse(newValue);
-      this._filters.forEach(({ filterName, type, options }) => {
-        if (options.selected) {
-          this._selectedFilters.add(`${type.name}:${filterName}`);
-        }
-      });
-      this._renderFilters();
-    }
+    this.filters = [];
+    this.selectedFilters = new Set();
   }
 
   connectedCallback() {
-    this._renderFilters();
+    super.connectedCallback();
     this.addEventListener("filterChange", this._onFilterChange);
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
@@ -55,83 +26,145 @@ class ProtvistaFilter extends HTMLElement {
   }
 
   disconnectedCallback() {
+    super.disconnectedCallback();
     if (this.manager) {
       this.manager.unregister(this);
     }
     this.removeEventListener("filterChange", this._onFilterChange);
   }
 
-  _renderFilters() {
-    const groupByType = groupBy(this._filters, f => {
+  static get styles() {
+    return css`
+      :host {
+        font-size: 0.7rem;
+      }
+
+      :host[disabled] {
+        opacity: 0.5;
+      }
+
+      .protvista_checkbox {
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        line-height: 24px;
+        outline: none;
+      }
+
+      .protvista_checkbox_input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      .checkmark {
+        opacity: 0.4;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+        border-radius: 4px;
+        box-sizing: border-box;
+        border: 1px solid #bdc3c7;
+      }
+
+      .protvista_checkbox_input:checked ~ .checkmark {
+        opacity: 1;
+      }
+
+      .protvista_checkbox_label {
+        margin-left: 0.2rem;
+        line-height: 1rem;
+      }
+    `;
+  }
+
+  render() {
+    const groupByType = groupBy(this.filters, f => {
       return f.type.text;
     });
 
-    const flexColumn = children => html`
-      <div style="display: flex; flex-direction: column;">
-        ${children}
-      </div>
-    `;
-
-    const flexRow = children => html`
-      <div style="display: flex;">
-        ${children}
-      </div>
-    `;
-
-    const header = text => html`
-      <h5>${text}</h5>
-    `;
-
-    const content = html`
-      ${flexColumn(
-        Object.keys(groupByType).map(
-          type =>
-            html`
-              ${header(type)}
-              ${flexColumn(
-                groupByType[type].map(
-                  ({ name, options }) => html`
-                    <protvista-checkbox
-                      value="${type.name}:${name}"
-                      .options="${options}"
-                      ?checked="${options.selected}"
-                    ></protvista-checkbox>
+    return html`
+      ${Object.keys(groupByType).map(
+        type =>
+          html`
+            <h5>${type}</h5>
+            <div>
+              ${groupByType[type].map(
+                filterItem =>
+                  html`
+                    ${this.getCheckBox(filterItem)}
                   `
-                )
               )}
-            `
-        )
+            </div>
+          `
       )}
     `;
-
-    render(flexRow(content), this);
   }
 
-  _onFilterChange(event) {
-    const {
-      detail: { checked, value }
-    } = event;
-    if (checked) {
-      this._selectedFilters.add(value);
+  getCheckBox(filterItem) {
+    const { name, options } = filterItem;
+    const { labels } = options;
+
+    if (options.colors.length == null) {
+      options.colors = [options.colors];
+    }
+    const isCompound = options.colors.length > 1;
+    return html`
+      <label
+        class="protvista_checkbox ${isCompound ? "compound" : ""}"
+        tabindex="0"
+      >
+        <input
+          type="checkbox"
+          class="protvista_checkbox_input"
+          ?checked="true"
+          .value="${name}"
+          @change="${() => this.toggleFilter(name)}"
+        />
+        <span
+          class="checkmark"
+          style=${`background: ${
+            isCompound
+              ? `
+            linear-gradient(${options.colors[0]},
+            ${options.colors[1]})
+          `
+              : options.colors[0]
+          };`}
+        ></span>
+        <span class="protvista_checkbox_label">
+          ${labels.join("/")}
+        </span>
+      </label>
+    `;
+  }
+
+  toggleFilter(name) {
+    if (!this.selectedFilters.has(name)) {
+      this.selectedFilters.add(name);
     } else {
-      this._selectedFilters.delete(value);
+      this.selectedFilters.delete(name);
     }
     this.dispatchEvent(
       new CustomEvent("change", {
         bubbles: true,
         composed: true,
         detail: {
-          type: "activefilters",
-          value: [...this._selectedFilters]
+          type: "filters",
+          handler: "property",
+          for: this.for,
+          value: this.filters
+            .filter(filter => this.selectedFilters.has(filter.name))
+            .map(filter => filter.filter)
         }
       })
     );
   }
-
-  _fireEvent(event) {
-    this.dispatchEvent(event);
-  }
 }
 
 export default ProtvistaFilter;
-export { ProtvistaCheckbox } from "./checkbox";

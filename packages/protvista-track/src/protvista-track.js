@@ -54,17 +54,29 @@ class ProtvistaTrack extends ProtvistaZoomable {
     });
   }
 
+  processData(data) {
+    this._originalData = ProtvistaTrack.normalizeLocations(data);
+  }
+
   set data(data) {
-    this._data = ProtvistaTrack.normalizeLocations(data);
+    this.processData(data);
+    this._applyFilters();
     this._layoutObj = this.getLayout();
     this._createTrack();
+  }
+
+  set filters(filters) {
+    this._filters = filters;
+    this._applyFilters();
+    this.refresh();
   }
 
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat([
       "highlight",
       "color",
-      "shape"
+      "shape",
+      "filters"
     ]);
   }
 
@@ -201,6 +213,18 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .call(this.bindEvents, this);
   }
 
+  _applyFilters() {
+    if (!this._filters || this._filters.length <= 0) {
+      this._data = this._originalData;
+      return;
+    }
+    let filteredData = this._data;
+    this._filters.forEach(filter => {
+      filteredData = filter(filteredData);
+    });
+    this._data = filteredData;
+  }
+
   refresh() {
     if (this.xScale && this.seq_g) {
       this.features = this.seq_g.selectAll("path.feature").data(
@@ -224,7 +248,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
       );
       this.features
         .attr("d", f => {
-          console.log(this._layoutObj.getFeatureHeight(f));
           return this._featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),

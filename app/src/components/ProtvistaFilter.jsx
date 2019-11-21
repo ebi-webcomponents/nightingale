@@ -1,27 +1,35 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment, useRef, useEffect } from "react";
 import DataLoader from "data-loader";
 import ProtvistaVariation from "protvista-variation";
-import ProtvistaFilter, { ProtvistaCheckbox } from "protvista-filter";
+import ProtvistaFilter from "protvista-filter";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
+import filters from "../mocks/filterConfig";
 
-class ProtvistaFilterWrapper extends Component {
-  render() {
+const ProtvistaFilterWrapper = () =>  {
     loadWebComponent("protvista-variation", ProtvistaVariation);
     loadWebComponent("data-loader", DataLoader);
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     loadWebComponent("protvista-manager", ProtvistaManager);
     loadWebComponent("protvista-filter", ProtvistaFilter);
-    loadWebComponent("protvista-checkbox", ProtvistaCheckbox);
+
+    const ref = useRef(null);
+
+    useEffect(() => {
+      if(ref!==null) {
+        ref.current.filters=filters;
+      }
+    })
+
     return (
       <Fragment>
         <protvista-manager
           attributes="activefilters filters"
           style={{ display: "flex" }}
         >
-          <protvista-filter style={{ minWidth: "20%" }} />
-          <protvista-variation length="770">
+          <protvista-filter style={{ minWidth: "20%" }} for="my-variation-track" ref={ref} />
+          <protvista-variation length="770" id="my-variation-track">
             <protvista-variation-adapter>
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
@@ -32,6 +40,5 @@ class ProtvistaFilterWrapper extends Component {
       </Fragment>
     );
   }
-}
 
 export default ProtvistaFilterWrapper;
