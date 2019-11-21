@@ -1,56 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="no-js" lang="">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>protvista-structure-adapter-demo</title>
-
-</head>
-<body>
-<protvista-structure-adapter id="adapter1">
-    <data-loader id="loader1">
+  </head>
+  <body>
+    <protvista-structure-adapter id="adapter1">
+      <data-loader id="loader1">
         <source src="https://www.ebi.ac.uk/proteins/api/proteins/P05067" />
-    </data-loader>
-</protvista-structure-adapter>
+      </data-loader>
+    </protvista-structure-adapter>
 
-<button onclick="
+    <button
+      onclick="
   var elem = document.getElementById('loader1');
   elem.accession = 'P04637';
   console.log(elem);
-">Retrieve P04637 for loader 1</button>
+"
+    >
+      Retrieve P04637 for loader 1
+    </button>
 
-<!-- Required for IE11 -->
-<script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
-<!-- Web component polyfill (only loads what it needs) -->
-<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
-<!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js" charset="utf-8"></script>
+    <!-- Required for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
+    <!-- Web component polyfill (only loads what it needs) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js"
+      charset="utf-8"
+    ></script>
+    <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+      charset="utf-8"
+    ></script>
 
-<script src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter/dist/ProtVistaUniProtEntryAdapter.js" charset="utf-8" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/data-loader@latest/dist/index.js" charset="utf-8" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/protvista-structure-adapter/dist/ProtVistaStructureAdapter.js" charset="utf-8" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter@latest"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/data-loader@latest"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/protvista-structure-adapter@latest"
+      charset="utf-8"
+      defer
+    ></script>
 
-
-<script>
-    for (const adapter of document.querySelectorAll('protvista-structure-adapter')) {
-      adapter.addEventListener(
-        'load',
-        e => {
-          console.log('Data loaded');
+    <script>
+      for (const adapter of document.querySelectorAll(
+        "protvista-structure-adapter"
+      )) {
+        adapter.addEventListener("load", e => {
+          console.log("Data loaded");
           console.log(e.target);
           console.log(e.detail);
-        }
-      );
-      adapter.addEventListener(
-        'error',
-        e => {
-          console.log('error');
+        });
+        adapter.addEventListener("error", e => {
+          console.log("error");
           console.log(e.target);
           console.log(e.detail);
-        }
-      );
-    }
-</script>
-
-</body>
+        });
+      }
+    </script>
+  </body>
 </html>
