@@ -1,0 +1,23 @@
+{
+  "name": "protvista-interpro-adapter",
+  "version": "2.2.14",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/protvista-interpro-adapter.js",
+  "module": "src/ProtvistaInterproAdapter.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+}
