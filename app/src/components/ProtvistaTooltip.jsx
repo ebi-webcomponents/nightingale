@@ -1,6 +1,8 @@
 import React, { Fragment, useEffect } from "react";
 import ProtvistaTooltip from "protvista-tooltip";
 import loadWebComponent from "../utils/load-web-component";
+import Readme from './Readme';
+import readmeContent from '../../../packages/protvista-tooltip/README.md'
 
 const ProtvistaTooltipWrapper = () => {
   useEffect(() => {
@@ -17,6 +19,7 @@ const ProtvistaTooltipWrapper = () => {
 
   return (
     <Fragment>
+      <Readme content={readmeContent}/>
       <protvista-tooltip />
     </Fragment>
   );

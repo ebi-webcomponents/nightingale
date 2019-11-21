@@ -16,6 +16,8 @@ import sequence from "../mocks/sequence.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
 import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
 import ProtvistaSaver from "protvista-saver";
+import Readme from './Readme';
+import readmeContent from '../../../packages/protvista-manager/README.md'
 
 class ProtvistaManagerWrapper extends Component {
   componentDidMount() {
@@ -74,6 +76,7 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-saver", ProtvistaSaver);
     return (
       <Fragment>
+        <Readme content={readmeContent} />
         <protvista-saver element-id="example" id="saver" />
         <protvista-saver
           element-id="just-tracks"

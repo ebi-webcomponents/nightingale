@@ -1,6 +1,9 @@
 import React, { Fragment, Component } from "react";
 import ProtvistaColouredSequence from "protvista-coloured-sequence";
 import loadWebComponent from "../utils/load-web-component";
+import readmeContent from '../../../packages/protvista-coloured-sequence/README.md'
+import Readme from "./Readme";
+
 const data =
   "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
 
@@ -17,6 +20,7 @@ class ProtvistaColouredSequenceWrapper extends Component {
     loadWebComponent("protvista-coloured-sequence", ProtvistaColouredSequence);
     return (
       <Fragment>
+        <Readme content={readmeContent} />
         <h4>Same Scale - different levels of zoom</h4>
 
         <protvista-coloured-sequence

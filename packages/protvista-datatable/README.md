@@ -35,13 +35,12 @@ The data to display.
 The definition used to display columns. It takes the following form:
 
 ```Javascript
-{
+const columns = {
   column1: {
     label: "My first column",
     resolver: d => d["column_name"] //this is used to resolve what to display in the column
-  },
-  ...
-}
+  }
+};
 ```
 
 #### `displaystart: number (optional)`
