@@ -126,6 +126,10 @@ class ProtvistaVariation extends ProtvistaTrack {
     this._colorConfig = colorConfig;
   }
 
+  get colorConfig() {
+    return this._colorConfig;
+  }
+
   // Calling render again
   refresh() {
     if (this._series) {
