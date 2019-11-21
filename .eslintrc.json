@@ -6,7 +6,9 @@
     "browser": true,
     "jest": true
   },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "rules": {
@@ -22,5 +24,12 @@
       "LabeledStatement",
       "WithStatement"
     ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    }
   }
 }

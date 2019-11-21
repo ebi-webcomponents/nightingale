@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prewatch": "npm run bootstrap",
-    "lint": "lerna exec --ignore nightingale-showcase-app --parallel -- eslint -c ../../.eslintrc.json src/*.js src/**/*.js",
+    "lint": "lerna exec --ignore nightingale-showcase-app --parallel -- eslint -c ../../.eslintrc.json src --ext .js --ext .ts",
     "build": "npm run build:cjs && npm run build:es",
     "build:cjs": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=production",
     "build:es": "lerna run build:es",
@@ -50,6 +50,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@typescript-eslint/parser": "2.8.0",
     "ts-loader": "6.2.1",
     "typescript": "3.7.2"
   }

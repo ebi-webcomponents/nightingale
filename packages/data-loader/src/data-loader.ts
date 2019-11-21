@@ -1,4 +1,6 @@
 import lodashGet from "lodash-es/get";
+/* eslint-disable-next-line no-unused-vars */
+import { NightingaleElement } from "../../../definitions";
 
 type Selector = string | ((data: any) => any);
 type Data = { payload: any; headers: Headers };
@@ -43,13 +45,11 @@ const getSourceData = (children: HTMLCollection) =>
     child.matches('source[src], script[type="application/json"]')
   );
 
-export abstract class NightingaleElement {
-  static readonly is: string;
-}
-
 class DataLoader extends HTMLElement implements NightingaleElement {
   private _errors: Error[];
+
   private _data: any;
+
   private _selector: Selector;
 
   static get is() {
