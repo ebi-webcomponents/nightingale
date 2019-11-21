@@ -497,7 +497,7 @@ export default class FeatureShape {
     const x = symbolSize / 2; // Fitting two loops in a symbol
     const y = symbolSize / 4;
     let center = x / 2;
-    const nw = Math.round(this._ftWidth / symbolSize);
+    const nw = Math.round(this._ftWidth / x);
 
     let loop = "";
     for (let i = 0; i < nw; i++) {
