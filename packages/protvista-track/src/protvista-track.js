@@ -151,16 +151,16 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   _createFeatures() {
     this.featuresG = this.seq_g
-      .attr("clip-path", "url(#trackClip)")
+      // .attr("clip-path", "url(#trackClip)")
       .selectAll("g.feature-group")
       .data(this._data);
 
-    this._clipPath = this.svg
-      .append("clipPath")
-      .attr("id", "trackClip")
-      .append("rect")
-      .attr("width", this.getWidthWithMargins())
-      .attr("height", this._height);
+    // this._clipPath = this.svg
+    //   .append("clipPath")
+    //   .attr("id", "trackClip")
+    //   .append("rect")
+    //   .attr("width", this.getWidthWithMargins())
+    //   .attr("height", this._height);
 
     this.locations = this.featuresG
       .enter()
@@ -247,14 +247,14 @@ class ProtvistaTrack extends ProtvistaZoomable {
         )
       );
       this.features
-        .attr("d", f => {
-          return this._featureShape.getFeatureShape(
+        .attr("d", f =>
+          this._featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
             f.end ? f.end - f.start + 1 : 1,
             this._getShape(f)
-          );
-        })
+          )
+        )
         .attr(
           "transform",
           f =>
@@ -263,7 +263,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
             )},${this._layoutObj.getFeatureYPos(f.feature)})`
         );
       this._updateHighlight();
-      this._clipPath.attr("width", this.getWidthWithMargins());
+      // this._clipPath.attr("width", this.getWidthWithMargins());
     }
   }
 
