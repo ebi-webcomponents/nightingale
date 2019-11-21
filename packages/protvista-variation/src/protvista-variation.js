@@ -45,10 +45,6 @@ class ProtvistaVariation extends ProtvistaTrack {
       .range([0, this._height - this.margin.top - this.margin.bottom]);
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
-    super.attributeChangedCallback(attrName, oldVal, newVal);
-  }
-
   processData(data) {
     this._originalData = processVariants(data);
   }
@@ -124,6 +120,10 @@ class ProtvistaVariation extends ProtvistaTrack {
     super.filters = filters;
     this.updateData(this._data);
     this.refresh();
+  }
+
+  set colourConfig(colourConfig) {
+    this._colourConfig = colourConfig;
   }
 
   // Calling render again

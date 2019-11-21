@@ -160,7 +160,7 @@ class ProtvistaFilter extends LitElement {
           for: this.for,
           value: this.filters
             .filter(filter => this.selectedFilters.has(filter.name))
-            .map(filter => filter.filter)
+            .map(filter => filter.filterData)
         }
       })
     );

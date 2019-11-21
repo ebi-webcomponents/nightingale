@@ -1,6 +1,5 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 
-import { getColor } from "./filters";
 import formatTooltip from "./tooltipGenerators";
 
 const getSourceType = (xrefs, sourceType) => {
@@ -20,7 +19,6 @@ export const transformData = data => {
     start: variant.begin,
     end: variant.end,
     tooltipContent: formatTooltip(variant),
-    color: getColor(variant),
     association: variant.association,
     sourceType: variant.sourceType,
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),

@@ -219,8 +219,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
       return;
     }
     let filteredData = this._data;
-    this._filters.forEach(filter => {
-      filteredData = filter(filteredData);
+    this._filters.forEach(filterData => {
+      filteredData = filterData(filteredData);
     });
     this._data = filteredData;
   }
