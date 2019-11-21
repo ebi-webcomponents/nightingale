@@ -6,7 +6,7 @@ import "highlight.js/styles/github.css";
 
 import "./GettingStarted.css";
 
-import htmlContent from "../../../GETTING_STARTED.md";
+import htmlContent from "../../../documentation/GETTING_STARTED.md";
 
 hljs.registerLanguage("javascript", javascript);
 
