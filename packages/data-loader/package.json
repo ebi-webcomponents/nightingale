@@ -7,10 +7,11 @@
     "src"
   ],
   "scripts": {
-    "build:types": "tsc"
+    "build:es": "tsc"
   },
   "main": "dist/data-loader.js",
-  "module": "src/data-loader.js",
+  "module": "dist/es/data-loader.js",
+  "types": "dist/es/data-loader.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"

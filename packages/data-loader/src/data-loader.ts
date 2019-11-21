@@ -2,6 +2,12 @@ import lodashGet from "lodash-es/get";
 
 type Selector = string | ((data: any) => any);
 type Data = { payload: any; headers: Headers };
+type LoadEventData = {
+  payload: any;
+  headers?: Headers;
+  srcElement?: HTMLSourceElement;
+  src?: string;
+};
 
 const store: Map<string, Promise<Data>> = new Map();
 
@@ -57,7 +63,7 @@ class DataLoader extends HTMLElement implements NightingaleElement {
     if (!sources.length) return;
 
     const errors = [];
-    let detail: { [k: string]: any };
+    let detail: LoadEventData;
 
     // go over all the potential sources to try to load data from it
     /* eslint-disable no-restricted-syntax */
