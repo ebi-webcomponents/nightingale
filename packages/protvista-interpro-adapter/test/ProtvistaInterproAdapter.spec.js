@@ -70,5 +70,4 @@ describe("ProtvistaFeatureAdapter tests", () => {
     const transformedData = transformData(payload);
     expect(transformedData).toMatchSnapshot();
   });
-
 });
