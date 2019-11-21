@@ -6,6 +6,18 @@ const getSourceData = (...children) =>
     child.matches('source[src], script[type="application/json"]')
   );
 
+export const load = async url => {
+  const response = await window.fetch(url);
+  if (!response.ok) {
+    throw new Error(
+      `Request Failed: Status = ${
+        response.status
+      }; URI = ${url}; Time = ${new Date()}`
+    );
+  }
+  const payload = await response.json();
+  return { payload, headers: response.headers };
+};
 class DataLoader extends HTMLElement {
   static get is() {
     return "data-loader";
