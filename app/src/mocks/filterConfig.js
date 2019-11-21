@@ -176,17 +176,33 @@ const getPredictionColour = (polyphenScore, siftScore) => {
 };
 
 export const colourConfig = variant => {
-  const variantWrapper = [{variants:[variant]}];
-  if (filterConfig.find(filter => filter.name === 'disease').filterData(variantWrapper)[0].variants.length > 0) {
+  const variantWrapper = [{ variants: [variant] }];
+  if (
+    filterConfig
+      .find(filter => filter.name === "disease")
+      .filterData(variantWrapper)[0].variants.length > 0
+  ) {
     return scaleColours.UPDiseaseColor;
   }
-  if (filterConfig.find(filter => filter.name === 'nonDisease').filterData(variantWrapper)[0].variants.length > 0) {
+  if (
+    filterConfig
+      .find(filter => filter.name === "nonDisease")
+      .filterData(variantWrapper)[0].variants.length > 0
+  ) {
     return scaleColours.UPNonDiseaseColor;
   }
-  if (filterConfig.find(filter => filter.name === 'uncertain').filterData(variantWrapper)[0].variants.length > 0){
+  if (
+    filterConfig
+      .find(filter => filter.name === "uncertain")
+      .filterData(variantWrapper)[0].variants.length > 0
+  ) {
     return scaleColours.othersColor;
   }
-  if (filterConfig.find(filter => filter.name === 'predicted').filterData(variantWrapper)[0].variants.length > 0){
+  if (
+    filterConfig
+      .find(filter => filter.name === "predicted")
+      .filterData(variantWrapper)[0].variants.length > 0
+  ) {
     return getPredictionColour(variant.polyphenScore, variant.siftScore);
   }
   return scaleColours.othersColor;

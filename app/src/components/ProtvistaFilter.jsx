@@ -5,7 +5,7 @@ import ProtvistaFilter from "protvista-filter";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
-import filters, {colourConfig} from "../mocks/filterConfig";
+import filters, { colourConfig } from "../mocks/filterConfig";
 
 const ProtvistaFilterWrapper = () => {
   loadWebComponent("protvista-variation", ProtvistaVariation);
@@ -21,7 +21,7 @@ const ProtvistaFilterWrapper = () => {
     if (ref !== null) {
       ref.current.filters = filters;
     }
-    if(variationRef !== null) {
+    if (variationRef !== null) {
       variationRef.current.colourConfig = colourConfig;
     }
   });
@@ -37,7 +37,11 @@ const ProtvistaFilterWrapper = () => {
           for="my-variation-track"
           ref={ref}
         />
-        <protvista-variation length="770" id="my-variation-track" ref={variationRef}>
+        <protvista-variation
+          length="770"
+          id="my-variation-track"
+          ref={variationRef}
+        >
           <protvista-variation-adapter>
             <data-loader>
               <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
