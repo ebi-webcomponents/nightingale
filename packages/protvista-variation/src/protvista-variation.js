@@ -122,8 +122,8 @@ class ProtvistaVariation extends ProtvistaTrack {
     this.refresh();
   }
 
-  set colourConfig(colourConfig) {
-    this._colourConfig = colourConfig;
+  set colorConfig(colorConfig) {
+    this._colorConfig = colorConfig;
   }
 
   // Calling render again

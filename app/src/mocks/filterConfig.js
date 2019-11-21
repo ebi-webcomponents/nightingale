@@ -1,6 +1,6 @@
 import { scaleLinear } from "d3-scale";
 
-const scaleColours = {
+const scaleColors = {
   UPDiseaseColor: "#990000",
   UPNonDiseaseColor: "#99cc00",
   deleteriousColor: "#002594",
@@ -37,7 +37,7 @@ const filterConfig = [
     },
     options: {
       labels: ["Likely disease"],
-      colors: [scaleColours.UPDiseaseColor]
+      colors: [scaleColors.UPDiseaseColor]
     },
     filterData: variants =>
       getFilteredVariants(variants, variantPos =>
@@ -55,7 +55,7 @@ const filterConfig = [
     },
     options: {
       labels: ["Predicted deleterious", "Predicted benign"],
-      colors: [scaleColours.deleteriousColor, scaleColours.benignColor]
+      colors: [scaleColors.deleteriousColor, scaleColors.benignColor]
     },
     filterData: variants =>
       getFilteredVariants(
@@ -73,7 +73,7 @@ const filterConfig = [
     },
     options: {
       labels: ["Likely benign"],
-      colors: [scaleColours.UPNonDiseaseColor]
+      colors: [scaleColors.UPNonDiseaseColor]
     },
     filterData: variants =>
       getFilteredVariants(variants, variantPos =>
@@ -91,7 +91,7 @@ const filterConfig = [
     },
     options: {
       labels: ["Uncertain"],
-      colors: [scaleColours.othersColor]
+      colors: [scaleColors.othersColor]
     },
     filterData: variants =>
       getFilteredVariants(
@@ -166,46 +166,46 @@ const filterConfig = [
 
 const predictionScale = scaleLinear()
   .domain([0, 1])
-  .range([scaleColours.deleteriousColor, scaleColours.benignColor]);
+  .range([scaleColors.deleteriousColor, scaleColors.benignColor]);
 
-const getPredictionColour = (polyphenScore, siftScore) => {
+const getPredictionColor = (polyphenScore, siftScore) => {
   return predictionScale(
     (siftScore || 0 + (1 - polyphenScore ? polyphenScore : 1)) /
       (polyphenScore && siftScore ? 2 : 1)
   );
 };
 
-export const colourConfig = variant => {
+export const colorConfig = variant => {
   const variantWrapper = [{ variants: [variant] }];
   if (
     filterConfig
       .find(filter => filter.name === "disease")
       .filterData(variantWrapper)[0].variants.length > 0
   ) {
-    return scaleColours.UPDiseaseColor;
+    return scaleColors.UPDiseaseColor;
   }
   if (
     filterConfig
       .find(filter => filter.name === "nonDisease")
       .filterData(variantWrapper)[0].variants.length > 0
   ) {
-    return scaleColours.UPNonDiseaseColor;
+    return scaleColors.UPNonDiseaseColor;
   }
   if (
     filterConfig
       .find(filter => filter.name === "uncertain")
       .filterData(variantWrapper)[0].variants.length > 0
   ) {
-    return scaleColours.othersColor;
+    return scaleColors.othersColor;
   }
   if (
     filterConfig
       .find(filter => filter.name === "predicted")
       .filterData(variantWrapper)[0].variants.length > 0
   ) {
-    return getPredictionColour(variant.polyphenScore, variant.siftScore);
+    return getPredictionColor(variant.polyphenScore, variant.siftScore);
   }
-  return scaleColours.othersColor;
+  return scaleColors.othersColor;
 };
 
 export default filterConfig;

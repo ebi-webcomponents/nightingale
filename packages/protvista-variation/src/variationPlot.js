@@ -58,7 +58,7 @@ class VariationPlot {
           return d.internalId;
         })
         .attr("fill", d =>
-          element._colourConfig ? element._colourConfig(d) : d.color
+          element._colorConfig ? element._colorConfig(d) : d.color
         )
         .call(element.bindEvents, element);
     });

@@ -5,7 +5,7 @@ import ProtvistaFilter from "protvista-filter";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
-import filters, { colourConfig } from "../mocks/filterConfig";
+import filters, { colorConfig } from "../mocks/filterConfig";
 
 const ProtvistaFilterWrapper = () => {
   loadWebComponent("protvista-variation", ProtvistaVariation);
@@ -22,7 +22,7 @@ const ProtvistaFilterWrapper = () => {
       ref.current.filters = filters;
     }
     if (variationRef !== null) {
-      variationRef.current.colourConfig = colourConfig;
+      variationRef.current.colorConfig = colorConfig;
     }
   });
 
