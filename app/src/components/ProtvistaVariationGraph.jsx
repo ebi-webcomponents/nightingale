@@ -3,8 +3,8 @@ import DataLoader from "data-loader";
 import ProtvistaVariationGraph from "protvista-variation-graph";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import loadWebComponent from "../utils/load-web-component";
-import Readme from './Readme';
-import readmeContent from '../../../packages/protvista-variation-graph/README.md'
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-variation-graph/README.md";
 
 class ProtvistaVariationWrapper extends Component {
   render() {
@@ -13,7 +13,7 @@ class ProtvistaVariationWrapper extends Component {
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     return (
       <Fragment>
-        <Readme content={readmeContent}/>
+        <Readme content={readmeContent} />
         <protvista-variation-graph length="770">
           <protvista-variation-adapter>
             <data-loader>

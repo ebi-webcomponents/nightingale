@@ -1,8 +1,8 @@
 import React, { Fragment, Component } from "react";
 import ProtvistaSequence from "protvista-sequence";
 import loadWebComponent from "../utils/load-web-component";
-import Readme from './Readme';
-import readmeContent from '../../../packages/protvista-sequence/README.md'
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-sequence/README.md";
 
 class ProtvistaSequenceWrapper extends Component {
   componentDidMount() {
@@ -18,7 +18,7 @@ class ProtvistaSequenceWrapper extends Component {
     loadWebComponent("protvista-sequence", ProtvistaSequence);
     return (
       <Fragment>
-        <Readme content={readmeContent}/>
+        <Readme content={readmeContent} />
         <protvista-sequence
           id="seq1"
           length="223"

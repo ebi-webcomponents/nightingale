@@ -3,8 +3,8 @@ import DataLoader from "data-loader";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import ProtvistaTrack from "protvista-track";
 import loadWebComponent from "../utils/load-web-component";
-import Readme from './Readme';
-import readmeContent from '../../../packages/protvista-track/README.md'
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-track/README.md";
 
 import data from "../mocks/features.json";
 import data2 from "../mocks/features2.json";

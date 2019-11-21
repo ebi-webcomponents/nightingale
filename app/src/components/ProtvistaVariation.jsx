@@ -4,8 +4,8 @@ import ProtvistaVariation from "protvista-variation";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import loadWebComponent from "../utils/load-web-component";
 import data from "../mocks/variants.json";
-import Readme from './Readme';
-import readmeContent from '../../../packages/protvista-variation/README.md'
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-variation/README.md";
 
 class ProtvistaVariationWrapper extends Component {
   componentDidMount() {
@@ -18,7 +18,7 @@ class ProtvistaVariationWrapper extends Component {
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     return (
       <Fragment>
-        <Readme content={readmeContent}/>
+        <Readme content={readmeContent} />
         <protvista-variation id="track1" length="770" />
         <protvista-variation length="770">
           <protvista-variation-adapter>

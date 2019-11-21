@@ -7,7 +7,7 @@ import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import DataLoader from "data-loader";
 import loadWebComponent from "../utils/load-web-component";
-import readmeContent from '../../../packages/protvista-datatable/README.md'
+import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
 
 const columnConfig = {

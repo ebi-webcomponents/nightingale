@@ -3,8 +3,8 @@ import DataLoader from "data-loader";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import ProtvistaInterProTrack from "protvista-interpro-track";
 import loadWebComponent from "../utils/load-web-component";
-import Readme from './Readme';
-import readmeContent from '../../../packages/protvista-interpro-track/README.md'
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-interpro-track/README.md";
 
 import data from "../mocks/interpro-IPR016039.json";
 import contributors from "../mocks/interpro-contributors.json";

@@ -5,8 +5,8 @@ import ProtvistaFilter, { ProtvistaCheckbox } from "protvista-filter";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
-import Readme from './Readme';
-import readmeContent from '../../../packages/protvista-filter/README.md'
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-filter/README.md";
 
 class ProtvistaFilterWrapper extends Component {
   render() {
@@ -18,7 +18,7 @@ class ProtvistaFilterWrapper extends Component {
     loadWebComponent("protvista-checkbox", ProtvistaCheckbox);
     return (
       <Fragment>
-        <Readme content={readmeContent}/>
+        <Readme content={readmeContent} />
         <protvista-manager
           attributes="activefilters filters"
           style={{ display: "flex" }}

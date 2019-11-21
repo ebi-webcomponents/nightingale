@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from "react";
 import ProtvistaColouredSequence from "protvista-coloured-sequence";
 import loadWebComponent from "../utils/load-web-component";
-import readmeContent from '../../../packages/protvista-coloured-sequence/README.md'
+import readmeContent from "../../../packages/protvista-coloured-sequence/README.md";
 import Readme from "./Readme";
 
 const data =
