@@ -2,7 +2,7 @@
 
 This document lists the required steps to create a new component of the type **adapter**.
 
-If you want to visualise your data, it is possible that an existing component offers the visualizartion you need, and you just need to transform your data into the required format of the component.
+If you want to visualise your data, it is possible that an existing component offers the visualization you need, and you only need to transform your data into the required format of the component.
 The rest of the examples in this page are oriented to create an adaptor for the `protein-track` component.
 
 Adapters are components that are used to trasform data into the format of an specific track.
@@ -17,6 +17,7 @@ There are 2 ways of using an adaptor:
     </my-adapter>
   </my-component>
   ```
+  
 - Calling directly the `transformData`, useful when an app already has the data and wants to inject the data programatically. Example:
 
 ```javascript
@@ -57,7 +58,7 @@ myProtvistaComponent.data = dataForComponent;
    }
    ```
 
-3. Create the `src/index.js` file which will be thhe entry point for webpack when bundling, and which function is to register the web component to teh browser. Example:
+3. Create the `src/index.js` file which will be the entry point for webpack when bundling, and which function is to register the web component to the browser. Example:
 
    ```javascript
    import ProtvistaMyAdapter from "./ProtvistaMyAdapter";
@@ -69,7 +70,7 @@ myProtvistaComponent.data = dataForComponent;
    export default ProtvistaMyAdapter;
    ```
 
-4. Create the function `transformData()` in the file that has been declared in both `src/index.js` and `package.json`. In the current example would be `src/ProtvistaMyAdapter.js`. So for example imagine you have a server which responses are CSV files, whit columns (accession, start, end):
+4. Create the function `transformData()` in the file that has been declared in both `src/index.js` and `package.json`. In the current example would be `src/ProtvistaMyAdapter.js`. So for example imagine you have a server which responses are CSV files, with columns (accession, start, end):
    ```csv
    feature1, 20, 50
    feature2, 60, 70
@@ -97,7 +98,7 @@ export const transformData = data =>
       class ProtvistaFeatureAdapter extends HTMLElement {}
       ```
 
-   2. If somebody sets the parameter data of the adapter, we should transform the data and trigger a `load` event, so the parent component can use it.
+   2. If somebody sets the parameter `data` of the adapter, we should transform the data and trigger a `load` event, so the parent component can use it.
       ```javascript
       class ProtvistaFeatureAdapter extends HTMLElement {
         set data(data) {
@@ -148,7 +149,7 @@ export const transformData = data =>
    ```
 
 6. Create a test that checks your functionality. The name of the test file should have the double extension `.spec.js`, and in this way the tests will be included when running the whole test suite.
-   We are using [jest](https://jestjs.io/) in our prject, so a very basic test for the developed component, is to have some data, transformed and save the snapshot. For example
+   We are using [jest](https://jestjs.io/) in our project, so a very basic test for the developed component is to have some data transformed and save the snapshot. For example
 
    ```javascript
    import { transformData } from "../src/ProtvistaMyAdapter";
