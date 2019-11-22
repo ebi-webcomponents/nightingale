@@ -45,13 +45,8 @@ class ProtvistaVariation extends ProtvistaTrack {
       .range([0, this._height - this.margin.top - this.margin.bottom]);
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
-    super.attributeChangedCallback(attrName, oldVal, newVal);
-  }
-
-  set data(data) {
-    this._data = processVariants(data);
-    this._createTrack();
+  processData(data) {
+    this._originalData = processVariants(data);
   }
 
   static get css() {
@@ -118,6 +113,21 @@ class ProtvistaVariation extends ProtvistaTrack {
     this._axisRight = mainChart.append("g");
 
     this.updateScale();
+  }
+
+  // Overwrite filters setters as we use updateData instead of refresh
+  set filters(filters) {
+    super.filters = filters;
+    this.updateData(this._data);
+    this.refresh();
+  }
+
+  set colorConfig(colorConfig) {
+    this._colorConfig = colorConfig;
+  }
+
+  get colorConfig() {
+    return this._colorConfig;
   }
 
   // Calling render again

@@ -57,7 +57,9 @@ class VariationPlot {
           d.internalId = `var_${d.wildType}${d.start}${mutation}`;
           return d.internalId;
         })
-        .attr("fill", d => d.color)
+        .attr("fill", d =>
+          element._colorConfig ? element._colorConfig(d) : d.color
+        )
         .call(element.bindEvents, element);
     });
   }

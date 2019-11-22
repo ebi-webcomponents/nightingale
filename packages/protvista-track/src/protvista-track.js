@@ -54,17 +54,29 @@ class ProtvistaTrack extends ProtvistaZoomable {
     });
   }
 
+  processData(data) {
+    this._originalData = ProtvistaTrack.normalizeLocations(data);
+  }
+
   set data(data) {
-    this._data = ProtvistaTrack.normalizeLocations(data);
+    this.processData(data);
+    this._applyFilters();
     this._layoutObj = this.getLayout();
     this._createTrack();
+  }
+
+  set filters(filters) {
+    this._filters = filters;
+    this._applyFilters();
+    this.refresh();
   }
 
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat([
       "highlight",
       "color",
-      "shape"
+      "shape",
+      "filters"
     ]);
   }
 
@@ -199,6 +211,18 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("stroke", f => this._getFeatureColor(f))
       .style("fill-opacity", 0.9)
       .call(this.bindEvents, this);
+  }
+
+  _applyFilters() {
+    if (!this._filters || this._filters.length <= 0) {
+      this._data = this._originalData;
+      return;
+    }
+    let filteredData = this._data;
+    this._filters.forEach(filterData => {
+      filteredData = filterData(filteredData);
+    });
+    this._data = filteredData;
   }
 
   refresh() {
