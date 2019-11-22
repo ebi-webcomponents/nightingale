@@ -7,6 +7,8 @@ import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import DataLoader from "data-loader";
 import loadWebComponent from "../utils/load-web-component";
+import readmeContent from "../../../packages/protvista-datatable/README.md";
+import Readme from "./Readme";
 
 const columnConfig = {
   type: {
@@ -60,6 +62,7 @@ class ProtvistaDatatableWrapper extends Component {
     loadWebComponent("protvista-feature-adapter", ProtvistaFeatureAdapter);
     return (
       <Fragment>
+        <Readme content={readmeContent} />
         <h2>Track with data-loader</h2>
         <protvista-manager attributes="length displaystart displayend variantfilters highlight">
           <protvista-navigation length="770" />
