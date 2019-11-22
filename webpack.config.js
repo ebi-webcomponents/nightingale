@@ -51,12 +51,7 @@ const config = {
         ]
       },
       {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        use: [{ loader: "ts-loader" }]
-      },
-      {
-        test: /\.js$/,
+        test: /\.(js|ts)$/,
         use: {
           loader: "babel-loader",
           options: {
@@ -76,7 +71,8 @@ const config = {
                   },
                   modules: false
                 }
-              ]
+              ],
+              ["@babel/preset-typescript"]
             ],
             plugins: [
               [
