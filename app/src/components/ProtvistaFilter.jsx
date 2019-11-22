@@ -5,6 +5,8 @@ import ProtvistaFilter from "protvista-filter";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-filter/README.md";
 import filters, { colorConfig } from "../mocks/filterConfig";
 
 const ProtvistaFilterWrapper = () => {
@@ -28,6 +30,7 @@ const ProtvistaFilterWrapper = () => {
 
   return (
     <Fragment>
+      <Readme content={readmeContent} />
       <protvista-manager
         attributes="activefilters filters"
         style={{ display: "flex" }}

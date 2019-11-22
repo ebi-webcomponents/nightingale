@@ -1,9 +1,13 @@
-# `<protvista-variation-graph>`
+# protvista-variation-graph
+
+[![Published on NPM](https://img.shields.io/npm/v/protvista-variation-graph.svg)](https://www.npmjs.com/package/protvista-variation-graph)
+
 A graph to display the number of variants.
 
 ## Usage
+
 ```html
-      <protvista-variation-graph></protvista-variation-graph>
+<protvista-variation-graph></protvista-variation-graph>
 ```
 
 ## API Reference
