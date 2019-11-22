@@ -1,6 +1,11 @@
+/* eslint-disable max-classes-per-file */
 import lodashGet from "lodash-es/get";
-/* eslint-disable-next-line no-unused-vars */
-import { NightingaleElement } from "../../../definitions";
+
+// TODO: move that at a common place in the nightingale repo to be reused
+// Watch out for the generated file structure when that is moved up in the repo
+export abstract class NightingaleElement {
+  static readonly is: string;
+}
 
 type Selector = string | ((data: any) => any);
 type Data = { payload: any; headers: Headers };
