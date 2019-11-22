@@ -1,6 +1,9 @@
 # HOW TO CREATE AN ADAPTER FOR NIGHTINGALE
 
-This document lists thhe required steps to create a new component of the type **adapter**.
+This document lists the required steps to create a new component of the type **adapter**.
+
+If you want to visualise your data, it is possible that an existing component offers the visualizartion you need, and you just need to transform your data into the required format of the component. 
+The rest of the examples in this page are oriented to create an adaptor for the `protein-track` component.
 
 Adapters are components that are used to trasform data into the format of an specific track.
 
@@ -143,5 +146,22 @@ export const transformData = data =>
      }
    }
    ```
+6. Create a test that checks your functionality. The name of the test file should have the double extension `.spec.js`, and in this way the tests will be included when running the whole test suite.
+   We are using [jest](https://jestjs.io/) in our prject, so a very basic test for the developed component, is to have some data, transformed and save the snapshot. For example 
 
-   As a reference you can check the code of the `protvista-interpro-adapter` component [Here](https://github.com/ebi-webcomponents/nightingale/tree/master/packages/protvista-interpro-adapter), which was developed following this steps.
+   ```javascript
+   import { transformData } from "../src/ProtvistaMyAdapter";
+
+   const data = `feature1, 20, 50
+   feature2, 60, 70
+   feature3, 80, 100`;
+
+   describe("ProtvistaMyAdapter tests", () => {
+     it("should transform the data correctly", () => {
+       const transformedData = transformData(data);
+       expect(transformedData).toMatchSnapshot();
+     });
+   });
+  ```
+
+As a reference you can check the code of the `protvista-interpro-adapter` component [Here](https://github.com/ebi-webcomponents/nightingale/tree/master/packages/protvista-interpro-adapter), which was developed following this steps.
