@@ -1,7 +1,4 @@
-data-loader
-===========
-
-_in development_
+# data-loader
 
 A standard Custom Element fetching data declaratively.
 
@@ -16,11 +13,13 @@ It can also parse JSON from the content of a script tag of type
 ## Usage
 
 ### Example
+
 ```html
 <data-loader>
-  <source src="https://www.example.com/some/data">
+  <source src="https://www.example.com/some/data" />
 </data-loader>
 ```
+
 See it running [Here](https://ebi-ppf.github.io/data-loader/).
 
 ### Use with custom namespace
@@ -29,17 +28,17 @@ Only needed if the `data-loader` name clashes with an other existing
 Custom Element.
 
 ```js
-import DataLoader from 'data-loader';
+import DataLoader from "data-loader";
 
 // Register the Custom Elements
-customElements.define('namespaced-data-loader', DataLoader);
+customElements.define("namespaced-data-loader", DataLoader);
 ```
 
 And then in the HTML, use like so:
 
 ```html
 <namespaced-data-loader>
-  <source src="https://www.example.com/some/data">
+  <source src="https://www.example.com/some/data" />
 </namespaced-data-loader>
 ```
 
@@ -60,26 +59,15 @@ To be completed
 
 ### Properties
 
-
-|name|default value|information|DOM attribute|writable|
-|----|-------------|-----------|-------------|--------|
-|`data`|`null`|data loaded by the component (same than the data dispatched in the `load` event)|no|no|
-|`loaded`|`false`|flag informing if data is currently loaded|no|no|
-|`selector`|`null`|selector to extract data from the payload (see [lodash.get documentation](https://lodash.com/docs#get))|yes|no|
+| name       | default value | information                                                                                             | DOM attribute | writable |
+| ---------- | ------------- | ------------------------------------------------------------------------------------------------------- | ------------- | -------- |
+| `data`     | `null`        | data loaded by the component (same than the data dispatched in the `load` event)                        | no            | no       |
+| `loaded`   | `false`       | flag informing if data is currently loaded                                                              | no            | no       |
+| `selector` | `null`        | selector to extract data from the payload (see [lodash.get documentation](https://lodash.com/docs#get)) | yes           | no       |
 
 ### Events
 
-|event name|information|
-|----------|-----------|
-|`error`|Fired when none of the URL defined in the `source` elements is reachable nor returns a valid response|
-|`load`|Fired when a URL returns a valid response, contains the data loaded (same as `data` property)|
-
-
-## To-do
-
- - [ ] Finish writing README.md
- - [ ] Handle change in source (new `load` event emitted on change)
- - [ ] Implement some cache, or at least shareable payload for multiple use of same data in same page
- - [ ] Add tests
- - [ ] Add continuous integration
- - [ ] Add bundle in `dist` folder for older browsers (but not before what is supported by the webcomponentjs polyfill)
+| event name | information                                                                                           |
+| ---------- | ----------------------------------------------------------------------------------------------------- |
+| `error`    | Fired when none of the URL defined in the `source` elements is reachable nor returns a valid response |
+| `load`     | Fired when a URL returns a valid response, contains the data loaded (same as `data` property)         |

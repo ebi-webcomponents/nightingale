@@ -1,6 +1,6 @@
-[![Published on NPM](https://img.shields.io/npm/v/protvista-datatable.svg)](https://www.npmjs.com/package/protvista-datatable)
+# protvista-datatable
 
-## &lt;protvista-datatable&gt;
+[![Published on NPM](https://img.shields.io/npm/v/protvista-datatable.svg)](https://www.npmjs.com/package/protvista-datatable)
 
 This component can be used to display a table of features.
 

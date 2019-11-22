@@ -1,4 +1,6 @@
-# `<protvista-coloured-sequence>`
+# protvista-coloured-sequence
+
+[![Published on NPM](https://img.shields.io/npm/v/protvista-coloured-sequence.svg)](https://www.npmjs.com/package/protvista-coloured-sequence)
 
 Use this component to paint a track that uses the sequence to paint a color depending on each residue.
 
