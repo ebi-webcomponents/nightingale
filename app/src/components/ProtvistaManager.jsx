@@ -97,6 +97,7 @@ class ProtvistaManagerWrapper extends Component {
               length="770"
               id="sequence-track"
               highlight-event="onmouseover"
+              use-shift-to-zoom
             />
             <protvista-coloured-sequence
               length="770"
@@ -104,6 +105,7 @@ class ProtvistaManagerWrapper extends Component {
               scale="hydrophobicity-interface-scale"
               height="10"
               highlight-event="onmouseover"
+              use-shift-to-zoom
             />
             <protvista-coloured-sequence
               length="770"
@@ -111,6 +113,7 @@ class ProtvistaManagerWrapper extends Component {
               scale="isoelectric-point-scale"
               color_range="white:0,dodgerblue:11"
               height="10"
+              use-shift-to-zoom
             />
             <protvista-track id="track1" length="770">
               <protvista-feature-adapter id="adapter1">
