@@ -1,5 +1,8 @@
 import { select } from "d3";
 import _includes from "lodash-es/includes";
+import _groupBy from "lodash-es/groupBy";
+import _union from "lodash-es/union";
+import _intersection from "lodash-es/intersection";
 
 import ProtvistaZoomable from "protvista-zoomable";
 import FeatureShape from "./FeatureShape";
@@ -68,7 +71,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
   set filters(filters) {
     this._filters = filters;
     this._applyFilters();
-    this.refresh();
+    this._createTrack();
   }
 
   static get observedAttributes() {
@@ -218,11 +221,16 @@ class ProtvistaTrack extends ProtvistaZoomable {
       this._data = this._originalData;
       return;
     }
-    let filteredData = this._data;
-    this._filters.forEach(filterData => {
-      filteredData = filterData(filteredData);
+    // Filters are OR-ed within a category and AND-ed between categories
+    const groupedFilters = _groupBy(this._filters, "category");
+    const filteredGroups = Object.values(groupedFilters).map(filterGroup => {
+      const filteredData = filterGroup.map(filterItem =>
+        filterItem.filterFn(this._originalData)
+      );
+      return _union(...filteredData);
     });
-    this._data = filteredData;
+    const intersection = _intersection(...filteredGroups);
+    this._data = intersection;
   }
 
   refresh() {
