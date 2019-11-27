@@ -12,7 +12,6 @@ import readmeContent from "../../../packages/protvista-filter/README.md";
 import variantFilters, { colorConfig } from "../mocks/filterConfig";
 import featureFilters from "../mocks/filterFeaturesConfig";
 
-
 const ProtvistaFilterWrapper = () => {
   loadWebComponent("protvista-variation", ProtvistaVariation);
   loadWebComponent("data-loader", DataLoader);
@@ -40,47 +39,45 @@ const ProtvistaFilterWrapper = () => {
   return (
     <Fragment>
       <Readme content={readmeContent} />
-      <protvista-manager
-        attributes="activefilters filters"
-      >
+      <protvista-manager attributes="activefilters filters">
         <h3>Track Filter</h3>
-        <div style={{ display: "flex"}}>
-        <protvista-filter
-          style={{ minWidth: "20%" }}
-          for="my-track"
-          ref={featureFilterRef}
-        />
-        <protvista-track
-          style={{ minWidth: "70%" }}
-          length="770"
-          id="my-track"
-        >
-          <protvista-feature-adapter id="adapter1">
-            <data-loader>
-              <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
-            </data-loader>
-          </protvista-feature-adapter>
-        </protvista-track>
+        <div style={{ display: "flex" }}>
+          <protvista-filter
+            style={{ minWidth: "20%" }}
+            for="my-track"
+            ref={featureFilterRef}
+          />
+          <protvista-track
+            style={{ minWidth: "70%" }}
+            length="770"
+            id="my-track"
+          >
+            <protvista-feature-adapter id="adapter1">
+              <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
+              </data-loader>
+            </protvista-feature-adapter>
+          </protvista-track>
         </div>
         <h3>Variation filter</h3>
-        <div style={{ display: "flex"}}>
-        <protvista-filter
-          style={{ minWidth: "20%" }}
-          for="my-variation-track"
-          ref={variantFilterRef}
-        />
-        <protvista-variation
-          length="770"
-          style={{ minWidth: "70%" }}
-          id="my-variation-track"
-          ref={variationRef}
-        >
-          <protvista-variation-adapter>
-            <data-loader>
-              <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-            </data-loader>
-          </protvista-variation-adapter>
-        </protvista-variation>
+        <div style={{ display: "flex" }}>
+          <protvista-filter
+            style={{ minWidth: "20%" }}
+            for="my-variation-track"
+            ref={variantFilterRef}
+          />
+          <protvista-variation
+            length="770"
+            style={{ minWidth: "70%" }}
+            id="my-variation-track"
+            ref={variationRef}
+          >
+            <protvista-variation-adapter>
+              <data-loader>
+                <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+              </data-loader>
+            </protvista-variation-adapter>
+          </protvista-variation>
         </div>
       </protvista-manager>
     </Fragment>

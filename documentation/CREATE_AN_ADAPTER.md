@@ -10,6 +10,7 @@ Adapters are components that are used to trasform data into the format of an spe
 There are 2 ways of using an adaptor:
 
 - As a web component that wraps a `data-loader`, useful whhen the data is been loaded from the bottom-up. Example:
+
   ```html
   <my-component>
     <my-adapter>
@@ -17,7 +18,7 @@ There are 2 ways of using an adaptor:
     </my-adapter>
   </my-component>
   ```
-  
+
 - Calling directly the `transformData`, useful when an app already has the data and wants to inject the data programatically. Example:
 
 ```javascript
