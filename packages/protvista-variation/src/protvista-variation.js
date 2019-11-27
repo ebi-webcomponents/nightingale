@@ -1,5 +1,8 @@
 import ProtvistaTrack from "protvista-track";
 import { scaleLinear, scalePoint, axisLeft, axisRight } from "d3";
+import _union from "lodash-es/union";
+import _intersection from "lodash-es/intersection";
+import _groupBy from "lodash-es/groupBy";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
 
@@ -27,6 +30,20 @@ const aaList = [
   "d",
   "*"
 ];
+
+const deepArrayOperation = (arrays, operation) => {
+  if (!arrays || arrays.length <= 0) {
+    return null;
+  }
+  const firstArray = arrays[0];
+  // Iterate over positions
+  firstArray.forEach((position, i) => {
+    const filteredVariants = arrays.map(array => array[i].variants);
+    /* eslint-disable no-param-reassign */
+    position.variants = operation(...filteredVariants);
+  });
+  return firstArray;
+};
 
 class ProtvistaVariation extends ProtvistaTrack {
   connectedCallback() {
@@ -120,6 +137,26 @@ class ProtvistaVariation extends ProtvistaTrack {
     super.filters = filters;
     this.updateData(this._data);
     this.refresh();
+  }
+
+  /*
+   * We have to overwrite this function as variants are in arrays
+   * of arrays so the regular union/intersection won't work
+   */
+  _applyFilters() {
+    if (!this._filters || this._filters.length <= 0) {
+      this._data = this._originalData;
+      return;
+    }
+    const groupedFilters = _groupBy(this._filters, "category");
+    const filteredGroups = Object.values(groupedFilters).map(filterGroup => {
+      const filteredData = filterGroup.map(filterItem =>
+        filterItem.filterFn(this._originalData)
+      );
+      return deepArrayOperation(filteredData, _union);
+    });
+
+    this._data = deepArrayOperation(filteredGroups, _intersection);
   }
 
   set colorConfig(colorConfig) {

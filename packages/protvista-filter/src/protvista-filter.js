@@ -36,7 +36,7 @@ class ProtvistaFilter extends LitElement {
   static get styles() {
     return css`
       :host {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
       }
 
       :host[disabled] {
@@ -87,12 +87,11 @@ class ProtvistaFilter extends LitElement {
     const groupByType = groupBy(this.filters, f => {
       return f.type.text;
     });
-
     return html`
       ${Object.keys(groupByType).map(
         type =>
           html`
-            <h5>${type}</h5>
+            <h4>${type}</h4>
             <div>
               ${groupByType[type].map(
                 filterItem =>
@@ -160,7 +159,10 @@ class ProtvistaFilter extends LitElement {
           for: this.for,
           value: this.filters
             .filter(filter => this.selectedFilters.has(filter.name))
-            .map(filter => filter.filterData)
+            .map(filter => ({
+              category: filter.type.name,
+              filterFn: filter.filterData
+            }))
         }
       })
     );
