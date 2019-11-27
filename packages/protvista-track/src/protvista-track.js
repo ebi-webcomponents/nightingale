@@ -150,9 +150,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   _createFeatures() {
-    this.featuresG = this.seq_g
-      .selectAll("g.feature-group")
-      .data(this._data);
+    this.featuresG = this.seq_g.selectAll("g.feature-group").data(this._data);
 
     this.locations = this.featuresG
       .enter()

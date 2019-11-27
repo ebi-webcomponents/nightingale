@@ -164,9 +164,15 @@ class ProtvistaZoomable extends HTMLElement {
   _initZoom() {
     this._zoom = d3zoom()
       .scaleExtent([1, Infinity])
-      .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]])
-      .extent([[0, 0], [this.getWidthWithMargins(), 0]])
-      .filter(()=>!this.hasAttribute("use-shift-to-zoom") || d3Event.shiftKey)
+      .translateExtent([
+        [0, 0],
+        [this.getWidthWithMargins(), 0]
+      ])
+      .extent([
+        [0, 0],
+        [this.getWidthWithMargins(), 0]
+      ])
+      .filter(() => !this.hasAttribute("use-shift-to-zoom") || d3Event.shiftKey)
       .on("zoom", this.zoomed);
   }
 
@@ -247,9 +253,10 @@ class ProtvistaZoomable extends HTMLElement {
     this._updateScaleDomain();
     this._originXScale = this.xScale.copy();
     if (this.svg) this.svg.attr("width", this.width);
-    this._zoom
-      .scaleExtent([1, Infinity])
-      .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]]);
+    this._zoom.scaleExtent([1, Infinity]).translateExtent([
+      [0, 0],
+      [this.getWidthWithMargins(), 0]
+    ]);
     this.applyZoomTranslation();
   }
 
