@@ -1,4 +1,3 @@
-
 class ProtvistaOverlay extends HTMLElement {
   connectedCallback() {
     this.render();
