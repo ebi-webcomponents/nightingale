@@ -88,7 +88,7 @@ class ProtvistaManagerWrapper extends Component {
         >
           <button>Download Just Tracks</button>
         </protvista-saver>
-        <protvista-overlay />
+        <protvista-overlay for="just-tracks" />
         <protvista-manager
           attributes="length displaystart displayend variantfilters highlight"
           displaystart="53"
@@ -100,7 +100,7 @@ class ProtvistaManagerWrapper extends Component {
               length="770"
               id="sequence-track"
               highlight-event="onmouseover"
-              use-shift-to-zoom
+              use-ctrl-to-zoom
             />
             <protvista-coloured-sequence
               length="770"
@@ -108,7 +108,7 @@ class ProtvistaManagerWrapper extends Component {
               scale="hydrophobicity-interface-scale"
               height="10"
               highlight-event="onmouseover"
-              use-shift-to-zoom
+              use-ctrl-to-zoom
             />
             <protvista-coloured-sequence
               length="770"
@@ -116,16 +116,21 @@ class ProtvistaManagerWrapper extends Component {
               scale="isoelectric-point-scale"
               color_range="white:0,dodgerblue:11"
               height="10"
-              use-shift-to-zoom
+              use-ctrl-to-zoom
             />
-            <protvista-track id="track1" length="770">
+            <protvista-track id="track1" length="770" use-ctrl-to-zoom>
               <protvista-feature-adapter id="adapter1">
                 <data-loader>
                   <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
                 </data-loader>
               </protvista-feature-adapter>
             </protvista-track>
-            <protvista-track id="track2" length="770" layout="non-overlapping">
+            <protvista-track
+              id="track2"
+              length="770"
+              layout="non-overlapping"
+              use-ctrl-to-zoom
+            >
               <protvista-feature-adapter id="adapter1">
                 <data-loader>
                   <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
@@ -138,6 +143,7 @@ class ProtvistaManagerWrapper extends Component {
               displaystart="1"
               displayend="80"
               layout="non-overlapping"
+              use-ctrl-to-zoom
             />
             <protvista-interpro-track
               id="interpro-track"
@@ -145,6 +151,7 @@ class ProtvistaManagerWrapper extends Component {
               shape="roundRectangle"
               highlight-event="onmouseover"
               expanded
+              use-ctrl-to-zoom
             />
             <protvista-interpro-track
               id="interpro-track-residues"
@@ -152,17 +159,26 @@ class ProtvistaManagerWrapper extends Component {
               shape="roundRectangle"
               highlight-event="onmouseover"
               expanded
+              use-ctrl-to-zoom
+            />
+
+            <protvista-variation-graph
+              id="variation-graph"
+              length="770"
+              use-ctrl-to-zoom
+            >
+              <protvista-variation-adapter>
+                <data-loader>
+                  <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+                </data-loader>
+              </protvista-variation-adapter>
+            </protvista-variation-graph>
+            <protvista-variation
+              id="variation-track"
+              length="770"
+              use-ctrl-to-zoom
             />
           </div>
-
-          <protvista-variation-graph id="variation-graph" length="770">
-            <protvista-variation-adapter>
-              <data-loader>
-                <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-              </data-loader>
-            </protvista-variation-adapter>
-          </protvista-variation-graph>
-          <protvista-variation id="variation-track" length="770" />
         </protvista-manager>
       </Fragment>
     );

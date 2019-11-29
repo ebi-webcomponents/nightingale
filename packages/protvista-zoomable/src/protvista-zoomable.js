@@ -172,7 +172,7 @@ class ProtvistaZoomable extends HTMLElement {
         [0, 0],
         [this.getWidthWithMargins(), 0]
       ])
-      .filter(() => !this.hasAttribute("use-shift-to-zoom") || d3Event.shiftKey)
+      .filter(() => !this.hasAttribute("use-ctrl-to-zoom") || d3Event.ctrlKey)
       .on("zoom", this.zoomed);
   }
 
