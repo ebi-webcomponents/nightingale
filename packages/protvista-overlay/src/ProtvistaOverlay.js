@@ -69,7 +69,9 @@ class ProtvistaOverlay extends HTMLElement {
       const { height, width } = target.getBoundingClientRect();
       html = `
       <div style="
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: absolute;
         top: ${target.offsetTop}px;
         left: ${target.offsetLeft}px;
@@ -84,7 +86,6 @@ class ProtvistaOverlay extends HTMLElement {
           color: white;
           font-size: 1.3em;
           text-shadow: 1px 1px 1px darkslategrey;
-          padding-top: 5%;
         ">
           Use [CTRL] + scroll to zoom
         </header>
