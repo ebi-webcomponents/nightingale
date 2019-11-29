@@ -63,13 +63,13 @@ This document documents the cration of a basic Nightingale component.
 
       Here are some notes of this code:
 
-      - A very similar code up to this point can be seen in this [commit](8f23f1fe159052598fe59b0aba1f413fcc47bac3), for the `<protvista-overlay>` component.
+      - A very similar code up to this point can be seen in this [commit](https://github.com/ebi-webcomponents/nightingale/commit/8f23f1fe159052598fe59b0aba1f413fcc47bac3), for the `<protvista-overlay>` component.
       - Nightingale components follow the Custom element standard of [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), hence the class ineriting from `HTMLElement`.
       - The method `connectedCallback()` is part of the API of custom elements, and is invoked when the component is mounted in the DOM.
       - The mothod `render()` has not especial meaning in the API and in this case is only called by `connectedCallback()`.
       - Other components (e.g. `<protvista-saver>`) use [lit-html](https://lit-html.polymer-project.org/), in which case `render()` has an especial meaning.
 
-   2. You can try out the new component by including it in the logic of the showcase app for nightingale. See below the diff of the file that includes `<protvista-overlay>` as an example, or you can check the [commit in GitHub](16d2e9cbf778c590566518c862bddc959ae4d716).
+   2. You can try out the new component by including it in the logic of the showcase app for nightingale. See below the diff of the file that includes `<protvista-overlay>` as an example, or you can check the [commit in GitHub](https://github.com/ebi-webcomponents/nightingale/commit/16d2e9cbf778c590566518c862bddc959ae4d716).
 
       ```diff
       diff --git a/app/src/components/ProtvistaManager.jsx b/app/src/components/ProtvistaManager.jsx
