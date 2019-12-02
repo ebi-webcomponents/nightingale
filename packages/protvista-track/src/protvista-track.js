@@ -153,17 +153,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   _createFeatures() {
-    this.featuresG = this.seq_g
-      // .attr("clip-path", "url(#trackClip)")
-      .selectAll("g.feature-group")
-      .data(this._data);
-
-    // this._clipPath = this.svg
-    //   .append("clipPath")
-    //   .attr("id", "trackClip")
-    //   .append("rect")
-    //   .attr("width", this.getWidthWithMargins())
-    //   .attr("height", this._height);
+    this.featuresG = this.seq_g.selectAll("g.feature-group").data(this._data);
 
     this.locations = this.featuresG
       .enter()
@@ -271,7 +261,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
             )},${this._layoutObj.getFeatureYPos(f.feature)})`
         );
       this._updateHighlight();
-      // this._clipPath.attr("width", this.getWidthWithMargins());
     }
   }
 

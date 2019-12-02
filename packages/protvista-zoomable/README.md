@@ -96,6 +96,10 @@ The interaction with a `zoomable` component has 2 parts:
 
 ### Properties
 
+#### `name: use-shift-to-zoom` `Boolean`
+
+If this attribute is present, the zooming only works while the [Shift] key is pressed.
+
 #### `name: length` `Number`
 
 Number of bases of the sequence to be displayed.
