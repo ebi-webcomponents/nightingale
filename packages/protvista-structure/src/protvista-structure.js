@@ -192,7 +192,6 @@ class ProtvistaStructure extends HTMLElement {
 
   attributeChangedCallback(attrName, oldVal, newVal) {
     if (oldVal !== newVal) {
-console.log(">> attr change:", attrName, oldVal, newVal);
       const value = parseFloat(newVal);
       this[`_${attrName}`] = typeof value === "number" ? newVal : value;
       if (attrName === "molecule") {
@@ -354,7 +353,6 @@ console.log(">> attr change:", attrName, oldVal, newVal);
   async selectMolecule(id) {
     const pdbEntry = await this.loadPDBEntry(id);
     const mappings = this.processMapping(pdbEntry);
-console.log("mol id:", id);
     if (!this.hideTable) {
       this.querySelectorAll(".active").forEach(row =>
         row.classList.remove("active")

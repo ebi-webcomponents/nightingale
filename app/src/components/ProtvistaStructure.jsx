@@ -7,7 +7,10 @@ const ProtvistaStructureWrapper = props => {
   loadWebComponent("protvista-structure", ProtvistaStructure);
   return (
     <Fragment>
-      <protvista-structure accession="P06493" highlight="209:220" molecule={molId} />
+      <protvista-structure
+        accession="P06493"
+        highlight="209:220"
+      />
     </Fragment>
   );
 };
