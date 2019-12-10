@@ -107,7 +107,11 @@ class ProtvistaStructure extends HTMLElement {
     return this.hasAttribute("highlightresidues");
   }
 
-  connectedCallback() {
+  get hideTable() {
+    return this.getAttribute('hide-table');
+  }
+
+  connectedCallback() {    
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
@@ -119,8 +123,6 @@ class ProtvistaStructure extends HTMLElement {
     const flexContainer = document.createElement("div");
     flexContainer.className = "main-container";
     this.titleContainer.id = "litemol-title";
-    this.tableDiv = document.createElement("div");
-    this.tableDiv.className = "table-container";
     const litemolDiv = document.createElement("div");
     litemolDiv.className = "litemol-container";
     litemolDiv.id = "litemol-instance";
@@ -129,7 +131,11 @@ class ProtvistaStructure extends HTMLElement {
     this.appendChild(this.messageContainer);
     this.appendChild(flexContainer);
     flexContainer.appendChild(litemolDiv);
-    flexContainer.appendChild(this.tableDiv);
+    if (!this.hideTable) {
+      this.tableDiv = document.createElement("div");
+      this.tableDiv.className = "table-container";
+      flexContainer.appendChild(this.tableDiv);
+    }
     this.loadLiteMol();
     this.loadUniProtEntry().then(entry => {
       this._pdbEntries = entry.dbReferences
@@ -241,75 +247,77 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   loadStructureTable() {
-    const html = `
-            <table>
-                <thead>
-                    <th>PDB Entry</th>
-                    <th>Method</th>
-                    <th>Resolution</th>
-                    <th>Chain</th>
-                    <th>Positions</th>
-                    <th>Links</th>
-                </thead>
-                <tbody>
-                    ${this._pdbEntries
-                      .map(
-                        d => `
-                        <tr id="entry_${d.id}" class="${
-                          d.properties.method === "Model"
-                            ? "pdb-row"
-                            : "pdb-row-clickable"
-                        }" title="${
-                          d.properties.method === "Model"
-                            ? "No structure available for this model"
-                            : ""
-                        }">
-                            <td>
-                            <strong>${d.id}</strong><br/>
-                            </td>
-                            <td title="${d.properties.method}">${
-                          d.properties.method
-                        }</td>
-                            <td>${d.properties.resolution}</td>
-                            <td>${d.properties.chains
-                              .map(
-                                chain =>
-                                  `<div title="${chain.chains}">${chain.chain}</div>`
-                              )
-                              .join("")}</td>
-                            <td>${d.properties.chains
-                              .map(
-                                chain =>
-                                  `<div>${chain.start}-${chain.end}</div>`
-                              )
-                              .join("")}</td>
-                            <td>
-                                <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
-                                  d.id
-                                }">PDBe</a><br> 
-                                <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
-                                  d.id
-                                }">RCSB PDB</a><br>
-                                <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${
-                                  d.id
-                                }">PDBj</a><br>
-                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${
-                                  d.id
-                                }">PDBsum</a>
-                            </td>
-                        </tr>
-                    `
-                      )
-                      .join("")}
-                </tbody>
-            </table>
-        `;
-    this.tableDiv.innerHTML = html;
-    this.querySelectorAll(".pdb-row-clickable").forEach(row =>
-      row.addEventListener("click", () =>
-        this.selectMolecule(row.id.replace("entry_", ""))
-      )
-    );
+    if (!this.hideTable) {
+      const html = `
+              <table>
+                  <thead>
+                      <th>PDB Entry</th>
+                      <th>Method</th>
+                      <th>Resolution</th>
+                      <th>Chain</th>
+                      <th>Positions</th>
+                      <th>Links</th>
+                  </thead>
+                  <tbody>
+                      ${this._pdbEntries
+                        .map(
+                          d => `
+                          <tr id="entry_${d.id}" class="${
+                            d.properties.method === "Model"
+                              ? "pdb-row"
+                              : "pdb-row-clickable"
+                          }" title="${
+                            d.properties.method === "Model"
+                              ? "No structure available for this model"
+                              : ""
+                          }">
+                              <td>
+                              <strong>${d.id}</strong><br/>
+                              </td>
+                              <td title="${d.properties.method}">${
+                            d.properties.method
+                          }</td>
+                              <td>${d.properties.resolution}</td>
+                              <td>${d.properties.chains
+                                .map(
+                                  chain =>
+                                    `<div title="${chain.chains}">${chain.chain}</div>`
+                                )
+                                .join("")}</td>
+                              <td>${d.properties.chains
+                                .map(
+                                  chain =>
+                                    `<div>${chain.start}-${chain.end}</div>`
+                                )
+                                .join("")}</td>
+                              <td>
+                                  <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
+                                    d.id
+                                  }">PDBe</a><br> 
+                                  <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
+                                    d.id
+                                  }">RCSB PDB</a><br>
+                                  <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${
+                                    d.id
+                                  }">PDBj</a><br>
+                                  <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${
+                                    d.id
+                                  }">PDBsum</a>
+                              </td>
+                          </tr>
+                      `
+                        )
+                        .join("")}
+                  </tbody>
+              </table>
+          `;
+      this.tableDiv.innerHTML = html;
+      this.querySelectorAll(".pdb-row-clickable").forEach(row =>
+        row.addEventListener("click", () =>
+          this.selectMolecule(row.id.replace("entry_", ""))
+        )
+      );
+    }
   }
 
   static getChains(chains) {
@@ -335,10 +343,14 @@ class ProtvistaStructure extends HTMLElement {
   async selectMolecule(id) {
     const pdbEntry = await this.loadPDBEntry(id);
     const mappings = this.processMapping(pdbEntry);
-    this.querySelectorAll(".active").forEach(row =>
-      row.classList.remove("active")
-    );
-    this.querySelector(`#entry_${id}`).classList.add("active");
+
+    if (!this.hideTable) {
+      this.querySelectorAll(".active")
+        .forEach(row => row.classList.remove("active"));
+
+      this.querySelector(`#entry_${id}`).classList.add("active");
+    }
+
     await this.loadMolecule(id);
     this._selectedMolecule = {
       id,
