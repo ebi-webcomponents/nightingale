@@ -108,10 +108,14 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   get hideTable() {
-    return this.getAttribute('hide-table');
+    return this.getAttribute("hide-table");
   }
 
-  connectedCallback() {    
+  get molecule() {
+    return this.getAttribute("molecule");
+  }
+
+  connectedCallback() {
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
@@ -157,9 +161,12 @@ class ProtvistaStructure extends HTMLElement {
         return;
       }
       this.loadStructureTable();
-      this.selectMolecule(
-        this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id
-      );
+
+      const moleculeId = this.molecule
+        ? this.molecule
+        : this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id;
+
+      this.selectMolecule(moleculeId);
     });
   }
 
@@ -185,6 +192,7 @@ class ProtvistaStructure extends HTMLElement {
 
   attributeChangedCallback(attrName, oldVal, newVal) {
     if (oldVal !== newVal) {
+console.log(">> attr change:", attrName, oldVal, newVal);
       const value = parseFloat(newVal);
       this[`_${attrName}`] = typeof value === "number" ? newVal : value;
       if (attrName === "molecule") {
@@ -212,9 +220,10 @@ class ProtvistaStructure extends HTMLElement {
       }
       if (withSelection) {
         this._highlight.forEach(highlight => {
-          this._selectMoleculeWithinRange(highlight.start, highlight.end).then(
-            () => this.highlightChain()
-          );
+          this._selectMoleculeWithinRange(
+            highlight.start,
+            highlight.end
+          ).then(() => this.highlightChain());
         });
       } else {
         this.highlightChain();
@@ -225,9 +234,11 @@ class ProtvistaStructure extends HTMLElement {
 
   async loadUniProtEntry() {
     try {
-      return await (await fetch(
-        `https://www.ebi.ac.uk/proteins/api/proteins/${this.accession}`
-      )).json();
+      return await (
+        await fetch(
+          `https://www.ebi.ac.uk/proteins/api/proteins/${this.accession}`
+        )
+      ).json();
     } catch (e) {
       this.addMessage(`Couldn't load UniProt entry`);
       throw new Error(e);
@@ -343,10 +354,11 @@ class ProtvistaStructure extends HTMLElement {
   async selectMolecule(id) {
     const pdbEntry = await this.loadPDBEntry(id);
     const mappings = this.processMapping(pdbEntry);
-
+console.log("mol id:", id);
     if (!this.hideTable) {
-      this.querySelectorAll(".active")
-        .forEach(row => row.classList.remove("active"));
+      this.querySelectorAll(".active").forEach(row =>
+        row.classList.remove("active")
+      );
 
       this.querySelector(`#entry_${id}`).classList.add("active");
     }
