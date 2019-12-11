@@ -116,9 +116,11 @@ class ProtvistaStructure extends HTMLElement {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
     }
+
     const style = document.createElement("style");
     style.innerHTML = ProtvistaStructure.css;
     this.appendChild(style);
+
     this.titleContainer = document.createElement("h4");
     const flexContainer = document.createElement("div");
     flexContainer.className = "main-container";
@@ -131,11 +133,13 @@ class ProtvistaStructure extends HTMLElement {
     this.appendChild(this.messageContainer);
     this.appendChild(flexContainer);
     flexContainer.appendChild(litemolDiv);
+
     if (!this.hideTable) {
       this.tableDiv = document.createElement("div");
       this.tableDiv.className = "table-container";
       flexContainer.appendChild(this.tableDiv);
     }
+
     this.loadLiteMol();
 
     if (!this.hideTable || !this.molecule) {
@@ -148,9 +152,7 @@ class ProtvistaStructure extends HTMLElement {
               properties: {
                 method: ProtvistaStructure.formatMethod(d.properties.method),
                 chains: ProtvistaStructure.getChains(d.properties.chains),
-                resolution: ProtvistaStructure.formatAngstrom(
-                  d.properties.resolution
-                )
+                resolution: ProtvistaStructure.formatAngstrom(d.properties.resolution),
               }
             };
           });
@@ -169,7 +171,7 @@ class ProtvistaStructure extends HTMLElement {
           : this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id;
 
         this.selectMolecule(moleculeId);
-      });      
+      });
     }
 
     if (this.molecule && this.hideTable) {
@@ -188,49 +190,66 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static _formatHighlight(highlightString) {
-    return highlightString.split(",").map(region => {
-      const [_start, _end] = region.split(":");
-      return {
-        start: Number(_start),
-        end: Number(_end)
-      };
-    });
+    return highlightString
+      .split(",")
+      .map(region => {
+        const [_start, _end] = region.split(":");
+        return {
+          start: Number(_start),
+          end: Number(_end),
+        };
+      });
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
     if (oldVal !== newVal) {
       const value = parseFloat(newVal);
-      this[`_${attrName}`] = typeof value === "number" ? newVal : value;
-      if (attrName === "molecule") {
-        if (this.hideTable || (this._pdbEntries && this._pdbEntries.length > 0)) {
-          this.selectMolecule(newVal);
-        }
-      } else if (attrName === "highlight") {
-        this._highlight = ProtvistaStructure._formatHighlight(
-          this.getAttribute("highlight")
-        );
+      this[`_${attrName}`] = (typeof value === "number")
+        ? newVal
+        : value;
+
+      switch (attrName) {
+        case "molecule":
+            if (
+              this.hideTable ||
+              (this._pdbEntries && this._pdbEntries.length > 0)
+            ) {
+              this.selectMolecule(newVal);
+            }
+          break;
+
+        case "highlight":
+            this._highlight = ProtvistaStructure
+              ._formatHighlight(this.getAttribute("highlight"));
+          break;
+
+        default: break;
       }
+
       this._planHighlight(true);
     }
   }
 
   _planHighlight(withSelection = false) {
-    // console.log('planning highlighting');
     // If rendering is already planned, skip the rest
-    if (this._plannedRender) return;
+    if (this._plannedRender) {
+      return;
+    }
     // Set a flag and _planRender at the next frame
     this._plannedRender = true;
     requestAnimationFrame(() => {
       // Removes the planned rendering flag
       this._plannedRender = false;
+
       if (!this._selectedMolecule) {
         return;
       }
+
       if (withSelection) {
         this._highlight.forEach(highlight => {
           this._selectMoleculeWithinRange(
             highlight.start,
-            highlight.end
+            highlight.end,
           ).then(() => this.highlightChain());
         });
       } else {
@@ -337,14 +356,16 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static getChains(chains) {
-    return chains.split(",").map(chain => {
-      const split = chain.trim().split("=");
-      return {
-        chain: split[0],
-        start: split[1].split("-")[0],
-        end: split[1].split("-")[1]
-      };
-    });
+    return chains
+      .split(",")
+      .map(chain => {
+        const split = chain.trim().split("=");
+        return {
+          chain: split[0],
+          start: split[1].split("-")[0],
+          end: split[1].split("-")[1],
+        };
+      });
   }
 
   static formatMethod(method) {
@@ -359,10 +380,10 @@ class ProtvistaStructure extends HTMLElement {
   async selectMolecule(id) {
     const pdbEntry = await this.loadPDBEntry(id);
     const mappings = this.processMapping(pdbEntry);
+
     if (!this.hideTable) {
-      this.querySelectorAll(".active").forEach(row =>
-        row.classList.remove("active")
-      );
+      this.querySelectorAll(".active")
+        .forEach(row => row.classList.remove("active"));
 
       this.querySelector(`#entry_${id}`).classList.add("active");
     }
@@ -370,7 +391,7 @@ class ProtvistaStructure extends HTMLElement {
     await this.loadMolecule(id);
     this._selectedMolecule = {
       id,
-      mappings
+      mappings,
     };
     this._planHighlight();
   }
@@ -387,20 +408,15 @@ class ProtvistaStructure extends HTMLElement {
     this.Visualization = this.Bootstrap.Visualization;
     this.Event = this.Bootstrap.Event;
     this.Context = Plugin.Components.Context;
-    // Plugin.Components.Context.Log(this.Bootstrap.Components.LayoutRegion.Bottom, true);
+
     this._liteMol = Plugin.create({
       target: this.querySelector("#litemol-instance"),
       viewportBackground: "#fff",
       layoutState: {
-        hideControls: true
+        hideControls: true,
       },
-      allowAnalytics: false
+      allowAnalytics: false,
     });
-
-    // This is triggered on highlight
-    // this._liteMol.context.highlight.addProvider(info => {
-    //   console.log(info);
-    // });
   }
 
   loadMolecule(_id) {
@@ -468,18 +484,21 @@ class ProtvistaStructure extends HTMLElement {
     this._liteMol.command(this.Bootstrap.Command.Toast.Show, {
       key: "UPMessage",
       message,
-      timeoutMs: 30 * 1000
+      timeoutMs: 30 * 1000,
     });
   }
 
   removeMessage() {
     this._liteMol.command(this.Bootstrap.Command.Toast.Hide, {
-      key: "UPMessage"
+      key: "UPMessage",
     });
   }
 
   processMapping(mappingData) {
-    if (!Object.values(mappingData)[0].UniProt[this.accession]) return null;
+    if (!Object.values(mappingData)[0].UniProt[this.accession]) {
+      return null;
+    }
+
     return Object.values(mappingData)[0].UniProt[this.accession].mappings;
   }
 
@@ -501,13 +520,13 @@ class ProtvistaStructure extends HTMLElement {
             entity: mapping.entity_id,
             chain: mapping.chain_id,
             start: start - offset,
-            end: end - offset
+            end: end - offset,
           };
         }
         this.addMessage(`Positions not found in this structure`);
       } else {
         this.addMessage(
-          "Mismatch between protein sequence and structure residues"
+          "Mismatch between protein sequence and structure residues",
         );
       }
     }
@@ -515,32 +534,41 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   highlightChain() {
-    if (!this._highlight) return;
+    if (!this._highlight) {
+      return;
+    }
+
     this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, undefined);
     this.Command.Tree.RemoveNode.dispatch(
       this._liteMol.context,
-      "sequence-selection"
+      "sequence-selection",
     );
 
     const visual = this._liteMol.context.select("polymer-visual")[0];
-    if (!visual) return;
+
+    if (!visual) {
+      return;
+    }
 
     // TODO deal with multiple highlights
     const [highlightItem] = this._highlight;
     const translatedPos = this.translatePositions(
       highlightItem.start,
-      highlightItem.end
+      highlightItem.end,
     );
-    if (!translatedPos) return;
+
+    if (!translatedPos) {
+      return;
+    }
 
     const query = this.Query.sequence(
       translatedPos.entity.toString(),
       translatedPos.chain,
       {
-        seqNumber: translatedPos.start
+        seqNumber: translatedPos.start,
       },
       {
-        seqNumber: translatedPos.end
+        seqNumber: translatedPos.end,
       }
     );
 
@@ -551,22 +579,18 @@ class ProtvistaStructure extends HTMLElement {
       this.Transformer.Molecule.CreateSelectionFromQuery,
       {
         query,
-        name: "My name"
+        name: "My name",
       },
       {
-        ref: "sequence-selection"
+        ref: "sequence-selection",
       }
     );
 
     this._liteMol.applyTransform(action).then(() => {
       this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
         visual,
-        theme
+        theme,
       });
-      // this.Command.Entity.Focus.dispatch(
-      //     this._liteMol.context,
-      //     this._liteMol.context.select('sequence-selection')
-      // );
     });
     this.removeMessage();
   }
@@ -575,6 +599,7 @@ class ProtvistaStructure extends HTMLElement {
     if (!this._pdbEntries) {
       return;
     }
+
     const matches = this._pdbEntries.filter(d => {
       return (
         d.properties.method !== "Model" &&
@@ -583,6 +608,7 @@ class ProtvistaStructure extends HTMLElement {
         }).length > 0
       );
     });
+
     if (this._selectedMolecule) {
       if (
         this._selectedMolecule.mappings.filter(
@@ -592,14 +618,16 @@ class ProtvistaStructure extends HTMLElement {
         return;
       }
     }
+
     if (matches && matches.length > 0) {
       await this.selectMolecule(matches[0].id);
     }
   }
 
   static formatAngstrom(val) {
-    if (!val) return "";
-    return val.replace("A", "&#8491;");
+    return (!val)
+      ? ""
+      : val.replace("A", "&#8491;");
   }
 }
 
