@@ -103,10 +103,6 @@ class ProtvistaStructure extends HTMLElement {
     return this.setAttribute("accession", accession);
   }
 
-  get isResidueOnlyHighlight() {
-    return this.hasAttribute("highlightresidues");
-  }
-
   get hideTable() {
     return this.getAttribute("hide-table");
   }
@@ -141,33 +137,44 @@ class ProtvistaStructure extends HTMLElement {
       flexContainer.appendChild(this.tableDiv);
     }
     this.loadLiteMol();
-    this.loadUniProtEntry().then(entry => {
-      this._pdbEntries = entry.dbReferences
-        .filter(dbref => dbref.type === "PDB")
-        .map(d => {
-          return {
-            id: d.id,
-            properties: {
-              method: ProtvistaStructure.formatMethod(d.properties.method),
-              chains: ProtvistaStructure.getChains(d.properties.chains),
-              resolution: ProtvistaStructure.formatAngstrom(
-                d.properties.resolution
-              )
-            }
-          };
-        });
-      if (this._pdbEntries.length <= 0) {
-        this.style.display = "none";
-        return;
-      }
-      this.loadStructureTable();
 
-      const moleculeId = this.molecule
-        ? this.molecule
-        : this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id;
+    if (!this.hideTable || !this.molecule) {
+      this.loadUniProtEntry().then(entry => {
+        this._pdbEntries = entry.dbReferences
+          .filter(dbref => dbref.type === "PDB")
+          .map(d => {
+            return {
+              id: d.id,
+              properties: {
+                method: ProtvistaStructure.formatMethod(d.properties.method),
+                chains: ProtvistaStructure.getChains(d.properties.chains),
+                resolution: ProtvistaStructure.formatAngstrom(
+                  d.properties.resolution
+                )
+              }
+            };
+          });
 
-      this.selectMolecule(moleculeId);
-    });
+        if (this._pdbEntries.length <= 0) {
+          this.style.display = "none";
+          return;
+        }
+
+        if (!this.hideTable) {
+          this.loadStructureTable();
+        }
+
+        const moleculeId = this.molecule
+          ? this.molecule
+          : this._pdbEntries.filter(d => d.properties.method !== "Model")[0].id;
+
+        this.selectMolecule(moleculeId);
+      });      
+    }
+
+    if (this.molecule && this.hideTable) {
+      this.selectMolecule(this.molecule);
+    }
   }
 
   disconnectedCallback() {
@@ -177,7 +184,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["highlight", "molecule", "highlightresidues"];
+    return ["highlight", "molecule"];
   }
 
   static _formatHighlight(highlightString) {
@@ -195,7 +202,9 @@ class ProtvistaStructure extends HTMLElement {
       const value = parseFloat(newVal);
       this[`_${attrName}`] = typeof value === "number" ? newVal : value;
       if (attrName === "molecule") {
-        this.selectMolecule(newVal);
+        if (this.hideTable || (this._pdbEntries && this._pdbEntries.length > 0)) {
+          this.selectMolecule(newVal);
+        }
       } else if (attrName === "highlight") {
         this._highlight = ProtvistaStructure._formatHighlight(
           this.getAttribute("highlight")
@@ -227,7 +236,6 @@ class ProtvistaStructure extends HTMLElement {
       } else {
         this.highlightChain();
       }
-      // console.log('highlight called');
     });
   }
 
@@ -257,77 +265,75 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   loadStructureTable() {
-    if (!this.hideTable) {
-      const html = `
-              <table>
-                  <thead>
-                      <th>PDB Entry</th>
-                      <th>Method</th>
-                      <th>Resolution</th>
-                      <th>Chain</th>
-                      <th>Positions</th>
-                      <th>Links</th>
-                  </thead>
-                  <tbody>
-                      ${this._pdbEntries
-                        .map(
-                          d => `
-                          <tr id="entry_${d.id}" class="${
-                            d.properties.method === "Model"
-                              ? "pdb-row"
-                              : "pdb-row-clickable"
-                          }" title="${
-                            d.properties.method === "Model"
-                              ? "No structure available for this model"
-                              : ""
-                          }">
-                              <td>
-                              <strong>${d.id}</strong><br/>
-                              </td>
-                              <td title="${d.properties.method}">${
-                            d.properties.method
-                          }</td>
-                              <td>${d.properties.resolution}</td>
-                              <td>${d.properties.chains
-                                .map(
-                                  chain =>
-                                    `<div title="${chain.chains}">${chain.chain}</div>`
-                                )
-                                .join("")}</td>
-                              <td>${d.properties.chains
-                                .map(
-                                  chain =>
-                                    `<div>${chain.start}-${chain.end}</div>`
-                                )
-                                .join("")}</td>
-                              <td>
-                                  <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
-                                    d.id
-                                  }">PDBe</a><br> 
-                                  <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
-                                    d.id
-                                  }">RCSB PDB</a><br>
-                                  <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${
-                                    d.id
-                                  }">PDBj</a><br>
-                                  <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${
-                                    d.id
-                                  }">PDBsum</a>
-                              </td>
-                          </tr>
-                      `
-                        )
-                        .join("")}
-                  </tbody>
-              </table>
-          `;
-      this.tableDiv.innerHTML = html;
-      this.querySelectorAll(".pdb-row-clickable").forEach(row =>
-        row.addEventListener("click", () =>
-          this.selectMolecule(row.id.replace("entry_", ""))
-        )
-      );
-    }
+    const html = `
+            <table>
+                <thead>
+                    <th>PDB Entry</th>
+                    <th>Method</th>
+                    <th>Resolution</th>
+                    <th>Chain</th>
+                    <th>Positions</th>
+                    <th>Links</th>
+                </thead>
+                <tbody>
+                    ${this._pdbEntries
+                      .map(
+                        d => `
+                        <tr id="entry_${d.id}" class="${
+                          d.properties.method === "Model"
+                            ? "pdb-row"
+                            : "pdb-row-clickable"
+                        }" title="${
+                          d.properties.method === "Model"
+                            ? "No structure available for this model"
+                            : ""
+                        }">
+                            <td>
+                            <strong>${d.id}</strong><br/>
+                            </td>
+                            <td title="${d.properties.method}">${
+                          d.properties.method
+                        }</td>
+                            <td>${d.properties.resolution}</td>
+                            <td>${d.properties.chains
+                              .map(
+                                chain =>
+                                  `<div title="${chain.chains}">${chain.chain}</div>`
+                              )
+                              .join("")}</td>
+                            <td>${d.properties.chains
+                              .map(
+                                chain =>
+                                  `<div>${chain.start}-${chain.end}</div>`
+                              )
+                              .join("")}</td>
+                            <td>
+                                <a target="_blank" title="Protein Data Bank Europe" href="//www.ebi.ac.uk/pdbe/entry/pdb/${
+                                  d.id
+                                }">PDBe</a><br> 
+                                <a target="_blank" title="Protein Data Bank RCSB" href="//www.rcsb.org/pdb/explore/explore.do?pdbId=${
+                                  d.id
+                                }">RCSB PDB</a><br>
+                                <a target="_blank" title="Protein Data Bank Japan" href="//pdbj.org/mine/summary/${
+                                  d.id
+                                }">PDBj</a><br>
+                                <a target="_blank" href="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=${
+                                  d.id
+                                }">PDBsum</a>
+                            </td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </tbody>
+            </table>
+        `;
+    this.tableDiv.innerHTML = html;
+    this.querySelectorAll(".pdb-row-clickable").forEach(row =>
+      row.addEventListener("click", () =>
+        this.selectMolecule(row.id.replace("entry_", ""))
+      )
+    );
   }
 
   static getChains(chains) {
@@ -527,31 +533,16 @@ class ProtvistaStructure extends HTMLElement {
     );
     if (!translatedPos) return;
 
-    let query = null;
-
-    if (this.isResidueOnlyHighlight) {
-      query = this.Query.residues(
-        {
-          entityId: translatedPos.entity.toString(),
-          seqNumber: translatedPos.start
-        },
-        {
-          entityId: translatedPos.entity.toString(),
-          seqNumber: translatedPos.end
-        }
-      );
-    } else {
-      query = this.Query.sequence(
-        translatedPos.entity.toString(),
-        translatedPos.chain,
-        {
-          seqNumber: translatedPos.start
-        },
-        {
-          seqNumber: translatedPos.end
-        }
-      );
-    }
+    const query = this.Query.sequence(
+      translatedPos.entity.toString(),
+      translatedPos.chain,
+      {
+        seqNumber: translatedPos.start
+      },
+      {
+        seqNumber: translatedPos.end
+      }
+    );
 
     const theme = this.getTheme();
 

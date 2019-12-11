@@ -1,3 +1,4 @@
+
 # `<protvista-structure>`
 
 In progress - A native web component wrapper around LiteMol
@@ -5,8 +6,6 @@ In progress - A native web component wrapper around LiteMol
 ## Usage
 
 ```html
-<!-- Basic usage -->
-<protvista-structure id="1AAP" />
 <!-- With UniProt Accession -->
 <protvista-structure accession="P06493" />
 <!-- To highlight a position/range -->
@@ -28,9 +27,9 @@ In progress - A native web component wrapper around LiteMol
 
 A protein accession
 
-#### `highlightresidues`
+#### `highlight: A numrical range, represented as a string e.g. "10-20"`
 
-By default highlights are applied to sequences. This attribute, when available, switches to highlight only the residues.
+It will highlight all the residues corresponding to the given sequence positions.
 
 #### `hide-table`
 
