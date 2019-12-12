@@ -1,3 +1,4 @@
+
 # `<protvista-structure>`
 
 In progress - A native web component wrapper around LiteMol
@@ -22,18 +23,22 @@ In progress - A native web component wrapper around LiteMol
 
 ### Properties
 
-#### `accession: UniProt accession`
+#### `accession`
 
-A protein accession
+A UniProt protein accession.
 
-#### `highlight: A numrical range, represented as a string e.g. "10-20"`
+#### `highlight`
 
-It will highlight all the residues corresponding to the given sequence positions.
+This is a numerical range, represented as a string e.g. "10-20". When available, it will highlight all the residues corresponding to the given sequence positions.
 
 #### `hide-table`
 
 It will prevent the PDBe entries table to render next to the 3D structure.
 
-#### `molecule: A PDBe entry ID`
+#### `molecule`
 
 When available this PDBe structure will be selected, otherwise the first structure in the entry list that its `properties.method !== "Model"` will be selected and displayed.
+
+#### `height`
+
+The optional height of both table -- if visible, and the 3D structure. By default the value is set to `480px`. This should be a string value, representing a valid CSS value for an element's height property.
