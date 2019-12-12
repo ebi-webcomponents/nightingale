@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure-adapter",
-  "version": "2.1.13",
+  "version": "2.3.0",
   "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
   "main": "dist/protvista-structure-adapter.js",
   "module": "src/ProtVistaStructureAdapter.js",
@@ -33,6 +33,6 @@
   "license": "Apache-2.0",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
-    "protvista-feature-adapter": "^2.2.14"
+    "protvista-feature-adapter": "^2.3.0"
   }
 }
