@@ -54,13 +54,10 @@ for information on how to add polyfill, or simply add the following lines
 to your HTML file:
 
 ```html
-<script
-  src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"
-  defer
-></script>
+<script src="https://cdn.jsdelivr.net/npm/babel-polyfill" defer></script>
 <!-- Web component polyfill (only loads what it needs) -->
 <script
-  src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest/custom-elements.min.js"
+  src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest"
   defer
 ></script>
 <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
@@ -75,10 +72,7 @@ we thought it would be better to load it separately, so you will need to add it
 like this:
 
 ```html
-<script
-  src="https://cdn.jsdelivr.net/npm/d3@5.9.2/dist/d3.min.js"
-  defer
-></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@5.9.2" defer></script>
 ```
 
 ### Display your first component
@@ -90,7 +84,7 @@ represents the protein length in amino-acids):
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest/dist/protvista-navigation.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest"
   defer
 ></script>
 <protvista-navigation length="223" />
@@ -107,23 +101,20 @@ and they sit between the `data-loader` and `protvista-track` components.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-utils@latest/dist/protvista-utils.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-utils@latest"
+  defer
+></script>
+<script src="https://cdn.jsdelivr.net/npm/data-loader@latest" defer></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest"
   defer
 ></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/data-loader@latest/dist/data-loader.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest"
   defer
 ></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest/dist/protvista-feature-adapter.js"
-  defer
-></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest/dist/protvista-zoomable.js"
-  defer
-></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-track@latest/dist/protvista-track.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-track@latest"
   defer
 ></script>
 

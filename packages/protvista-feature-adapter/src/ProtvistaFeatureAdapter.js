@@ -1,10 +1,24 @@
-import BasicHelper from "./BasicHelper";
+import { formatTooltip, renameProperties } from "./BasicHelper";
+
+export const transformData = data => {
+  let transformedData = [];
+  const { features } = data;
+  if (features && features.length > 0) {
+    transformedData = features.map(feature => {
+      return {
+        ...feature,
+        tooltipContent: formatTooltip(feature)
+      };
+    });
+    transformedData = renameProperties(transformedData);
+  }
+  return transformedData;
+};
 
 class ProtvistaFeatureAdapter extends HTMLElement {
   constructor() {
     super();
     this._adaptedData = [];
-    this._basicHelper = BasicHelper;
   }
 
   connectedCallback() {
@@ -19,17 +33,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
   }
 
   parseEntry(data) {
-    const { features } = data;
-    if (features && features.length > 0) {
-      this._adaptedData = features.map(feature => {
-        return {
-          ...feature,
-          tooltipContent: this._basicHelper.formatTooltip(feature)
-        };
-      });
-      this._adaptedData = this._basicHelper.renameProperties(this._adaptedData);
-    }
-    return this._adaptedData;
+    this._adaptedData = transformData(data);
   }
 
   filterData() {
@@ -42,10 +46,6 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 
   get adaptedData() {
     return this._adaptedData;
-  }
-
-  get basicHelper() {
-    return this._basicHelper;
   }
 
   _emitEvent(data) {
@@ -86,3 +86,9 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 }
 
 export default ProtvistaFeatureAdapter;
+export {
+  formatTooltip,
+  renameProperties,
+  formatXrefs,
+  getEvidenceFromCodes
+} from "./BasicHelper";

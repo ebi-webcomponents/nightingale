@@ -11,6 +11,9 @@ class ProtVistaSequence extends ProtvistaZoomable {
     if (this.sequence) {
       this._createSequence();
     }
+    this.addEventListener("load", e => {
+      this.data = e.detail.payload;
+    });
   }
 
   static get observedAttributes() {

@@ -1,6 +1,6 @@
-[![Published on NPM](https://img.shields.io/npm/v/protvista-datatable.svg)](https://www.npmjs.com/package/protvista-datatable)
+# protvista-datatable
 
-## &lt;protvista-datatable&gt;
+[![Published on NPM](https://img.shields.io/npm/v/protvista-datatable.svg)](https://www.npmjs.com/package/protvista-datatable)
 
 This component can be used to display a table of features.
 
@@ -35,13 +35,12 @@ The data to display.
 The definition used to display columns. It takes the following form:
 
 ```Javascript
-{
+const columns = {
   column1: {
     label: "My first column",
     resolver: d => d["column_name"] //this is used to resolve what to display in the column
-  },
-  ...
-}
+  }
+};
 ```
 
 #### `displaystart: number (optional)`

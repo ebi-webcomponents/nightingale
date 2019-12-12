@@ -3,6 +3,7 @@ class ProtVistaManager extends HTMLElement {
     super();
     this.protvistaElements = new Set();
     this.attributeValues = new Map();
+    this.propertyValues = new Map();
   }
 
   static get observedAttributes() {
@@ -63,16 +64,39 @@ class ProtVistaManager extends HTMLElement {
     });
   }
 
-  _changeListener(e) {
-    if (this._attributes.indexOf(e.detail.type) !== -1) {
-      this.attributeValues.set(e.detail.type, e.detail.value);
+  applyProperties(forElementId) {
+    if (forElementId) {
+      const element = this.querySelector(`#${forElementId}`);
+      this.propertyValues.forEach((value, type) => {
+        element[type] = value;
+      });
+    } else {
+      this.protvistaElements.forEach(element => {
+        this.propertyValues.forEach((value, type) => {
+          /* eslint-disable no-param-reassign */
+          element[type] = value;
+        });
+      });
     }
-    Object.keys(e.detail).forEach(key => {
-      if (this._attributes.indexOf(key) !== -1) {
-        this.attributeValues.set(key, e.detail[key]);
-      }
-    });
-    this.applyAttributes();
+  }
+
+  _changeListener(e) {
+    switch (e.detail.handler) {
+      case "property":
+        this.propertyValues.set(e.detail.type, e.detail.value);
+        this.applyProperties(e.detail.for);
+        break;
+      default:
+        if (this._attributes.indexOf(e.detail.type) !== -1) {
+          this.attributeValues.set(e.detail.type, e.detail.value);
+        }
+        Object.keys(e.detail).forEach(key => {
+          if (this._attributes.indexOf(key) !== -1) {
+            this.attributeValues.set(key, e.detail[key]);
+          }
+        });
+        this.applyAttributes();
+    }
   }
 
   connectedCallback() {

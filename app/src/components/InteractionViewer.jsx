@@ -1,11 +1,14 @@
 import React, { Fragment } from "react";
 import InteractionViewer from "interaction-viewer";
 import loadWebComponent from "../utils/load-web-component";
+import Readme from "./Readme";
+import readmeContent from "../../../packages/interaction-viewer/README.md";
 
 const InteractionViewerWrapper = props => {
   loadWebComponent("interaction-viewer", InteractionViewer);
   return (
     <Fragment>
+      <Readme content={readmeContent} />
       <interaction-viewer accession="O60941" />
       {/* <option value="A0A024R6G0">A0A024R6G0 1 interaction</option>
       <option value="A1Z9X0">A1Z9X0 5 interactions</option>

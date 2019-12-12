@@ -1,0 +1,114 @@
+<html>
+  <body>
+    <protvista-manager attributes="length displaystart displayend highlight">
+      <protvista-navigation length="770"></protvista-navigation>
+      <protvista-sequence length="770">
+        <data-loader>
+          <source
+            src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM"
+          />
+        </data-loader>
+      </protvista-sequence>
+      <protvista-track length="770">
+        <protvista-feature-adapter>
+          <data-loader>
+            <source
+              src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM"
+            />
+          </data-loader>
+        </protvista-feature-adapter>
+      </protvista-track>
+      <protvista-variation length="770">
+        <protvista-variation-adapter>
+          <data-loader>
+            <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+          </data-loader>
+        </protvista-variation-adapter>
+      </protvista-variation>
+      <protvista-variation-graph length="770">
+        <protvista-variation-adapter>
+          <data-loader>
+            <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
+          </data-loader>
+        </protvista-variation-adapter>
+      </protvista-variation-graph>
+      <protvista-tooltip id="my_tooltip" />
+    </protvista-manager>
+
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+
+    <!-- Required for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
+    <!-- Web component polyfill (only loads what it needs) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js"
+      charset="utf-8"
+    ></script>
+    <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+      charset="utf-8"
+    ></script>
+
+    <script
+      src="./packages/protvista-manager/dist/protvista-manager.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-utils/dist/protvista-utils.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-navigation/dist/protvista-navigation.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-zoomable/dist/protvista-zoomable.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-tooltip/dist/protvista-tooltip.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-track/dist/protvista-track.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-sequence/dist/protvista-sequence.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/data-loader/dist/data-loader.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-feature-adapter/dist/protvista-feature-adapter.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-variation-adapter/dist/protvista-variation-adapter.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-variation/dist/protvista-variation.js"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="./packages/protvista-variation-graph/dist/protvista-variation-graph.js"
+      charset="utf-8"
+      defer
+    ></script>
+  </body>
+</html>

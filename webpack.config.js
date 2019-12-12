@@ -1,13 +1,26 @@
-const webpack = require("webpack");
+const fs = require("fs");
 const path = require("path");
+
+// const webpack = require("webpack");
 const camelCase = require("camelcase");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const PACKAGE_ROOT_PATH = process.cwd();
 const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, "package.json"));
 
+const doesFileExists = path => {
+  try {
+    fs.statSync(path);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
 const config = {
-  entry: ["./src/index.js"],
+  entry: [
+    doesFileExists("./src/index.ts") ? "./src/index.ts" : "./src/index.js"
+  ],
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
     library: camelCase(PKG_JSON.name, { pascalCase: true }),
@@ -16,7 +29,7 @@ const config = {
   target: "web",
   devtool: "source-map",
   resolve: {
-    extensions: [".js"]
+    extensions: [".js", ".ts"]
   },
   externals: {
     d3: "d3",
@@ -38,7 +51,7 @@ const config = {
         ]
       },
       {
-        test: /\.js$/,
+        test: /\.(js|ts)$/,
         use: {
           loader: "babel-loader",
           options: {
@@ -58,7 +71,8 @@ const config = {
                   },
                   modules: false
                 }
-              ]
+              ],
+              ["@babel/preset-typescript"]
             ],
             plugins: [
               [
