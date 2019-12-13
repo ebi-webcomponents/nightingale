@@ -40,7 +40,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   .litemol-container {
-    width: ${this.hideTable ? '100' : '50'}%;
+    width: ${this.hideTable ? "100" : "50"}%;
   }
   
   .table-container table {
@@ -99,7 +99,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   .lm-viewport-controls {
-    display: ${this.hideViewportControls ? 'none' : 'block' };
+    display: ${this.hideViewportControls ? "none" : "block"};
   }
     `;
   }
@@ -138,15 +138,12 @@ class ProtvistaStructure extends HTMLElement {
     style.innerHTML = this.css;
     this.appendChild(style);
 
-    this.titleContainer = document.createElement("h4");
     const flexContainer = document.createElement("div");
     flexContainer.className = "main-container";
-    this.titleContainer.id = "litemol-title";
     const litemolDiv = document.createElement("div");
     litemolDiv.className = "litemol-container";
     litemolDiv.id = "litemol-instance";
     this.messageContainer = document.createElement("span");
-    this.appendChild(this.titleContainer);
     this.appendChild(this.messageContainer);
     this.appendChild(flexContainer);
     flexContainer.appendChild(litemolDiv);

@@ -1,4 +1,3 @@
-
 # `<protvista-structure>`
 
 In progress - A native web component wrapper around LiteMol
