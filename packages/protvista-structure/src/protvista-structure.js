@@ -13,7 +13,7 @@ class ProtvistaStructure extends HTMLElement {
     this.loadMolecule = this.loadMolecule.bind(this);
     this.loadStructureTable = this.loadStructureTable.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
-    this._height = this.height || '480px';
+    this._height = this.height || "480px";
   }
 
   get css() {
@@ -37,6 +37,10 @@ class ProtvistaStructure extends HTMLElement {
       width: 50%;
       height: ${this._height};
       position: relative;
+  }
+
+  .litemol-container {
+    width: ${this.hideTable ? '100' : '50'}%;
   }
   
   .table-container table {
@@ -93,6 +97,10 @@ class ProtvistaStructure extends HTMLElement {
       background-color: rgba(0, 112, 155, 0.3);
       ;
   }
+
+  .lm-viewport-controls {
+    display: ${this.hideViewportControls ? 'none' : 'block' };
+  }
     `;
   }
 
@@ -114,6 +122,10 @@ class ProtvistaStructure extends HTMLElement {
 
   get height() {
     return this.getAttribute("height");
+  }
+
+  get hideViewportControls() {
+    return this.getAttribute("hide-viewport-controls");
   }
 
   connectedCallback() {
