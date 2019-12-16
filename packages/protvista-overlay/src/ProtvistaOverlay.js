@@ -20,7 +20,6 @@ class ProtvistaOverlay extends HTMLElement {
   }
 
   observeSizeChangeOfTarget() {
-    console.log("start");
     const target = document.getElementById(this.for);
     this.sizeObserver = new ResizeObserver(() => {
       const { height, width } = target.getBoundingClientRect();
