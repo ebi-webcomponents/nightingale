@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb"
 }

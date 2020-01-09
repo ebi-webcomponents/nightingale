@@ -25,7 +25,7 @@
   ],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
-  "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
   "dependencies": {
     "lodash-es": "^4.17.11",
     "protvista-track": "^2.3.1"
