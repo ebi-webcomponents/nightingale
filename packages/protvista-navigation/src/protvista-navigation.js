@@ -8,17 +8,12 @@ import {
 } from "d3";
 
 const height = 40;
-const padding = {
-  top: 10,
-  right: 10,
-  bottom: 10,
-  left: 10
-};
 
 class ProtVistaNavigation extends HTMLElement {
   constructor() {
     super();
     this._x = null;
+    this._padding = 0;
     this.dontDispatch = false;
   }
 
@@ -26,6 +21,9 @@ class ProtVistaNavigation extends HTMLElement {
     this.style.display = "block";
     this.style.width = "100%";
     this.width = this.offsetWidth;
+    if (this.width > 0) {
+      this._padding = 10;
+    }
   }
 
   connectedCallback() {
@@ -83,7 +81,7 @@ class ProtVistaNavigation extends HTMLElement {
   }
 
   _createNavRuler() {
-    this._x = scaleLinear().range([padding.left, this.width - padding.right]);
+    this._x = scaleLinear().range([this._padding, this.width - this._padding]);
     this._x.domain([1, this._length]);
 
     this._svg = select(this)
@@ -100,13 +98,13 @@ class ProtVistaNavigation extends HTMLElement {
       .append("text")
       .attr("class", "start-label")
       .attr("x", 0)
-      .attr("y", height - padding.bottom);
+      .attr("y", height - this._padding);
 
     this._displayendLabel = this._svg
       .append("text")
       .attr("class", "end-label")
       .attr("x", this.width)
-      .attr("y", height - padding.bottom)
+      .attr("y", height - this._padding)
       .attr("text-anchor", "end");
     this._axis = this._svg
       .append("g")
@@ -114,7 +112,10 @@ class ProtVistaNavigation extends HTMLElement {
       .call(this._xAxis);
 
     this._viewport = brushX()
-      .extent([[padding.left, 0], [this.width - padding.right, height * 0.51]])
+      .extent([
+        [this._padding, 0],
+        [this.width - this._padding, height * 0.51]
+      ])
       .on("brush", () => {
         if (d3Event.selection) {
           this._displaystart = format("d")(
@@ -164,11 +165,11 @@ class ProtVistaNavigation extends HTMLElement {
 
   _onResize() {
     this._refreshWidth();
-    this._x = this._x.range([padding.left, this.width - padding.right]);
+    this._x = this._x.range([this._padding, this.width - this._padding]);
     this._svg.attr("width", this.width);
     this._viewport.extent([
-      [padding.left, 0],
-      [this.width - padding.right, height * 0.51]
+      [this._padding, 0],
+      [this.width - this._padding, height * 0.51]
     ]);
     this._brushG.call(this._viewport);
     this._updateNavRuler();

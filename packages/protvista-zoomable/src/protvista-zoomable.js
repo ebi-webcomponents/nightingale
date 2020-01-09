@@ -54,7 +54,7 @@ class ProtvistaZoomable extends HTMLElement {
       : 1;
     this._displayend = this.getAttribute("displayend")
       ? parseFloat(this.getAttribute("displayend"))
-      : this.width;
+      : this.length;
 
     this._height = this.getAttribute("height")
       ? Number(this.getAttribute("height"))
