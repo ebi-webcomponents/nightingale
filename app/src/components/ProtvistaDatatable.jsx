@@ -11,10 +11,6 @@ import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
 
 const columnConfig = {
-  rowId: {
-    resolver: d => (d["ftId"] ? d["ftId"] : `${d["start"]}-${d["end"]}`),
-    display: false
-  },
   type: {
     label: "Feature key",
     resolver: d => d["type"]
@@ -68,19 +64,16 @@ class ProtvistaDatatableWrapper extends Component {
       <Fragment>
         <Readme content={readmeContent} />
         <h2>Track with data-loader</h2>
-        <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
-          <protvista-navigation length="770" />
-          <protvista-track length="770" layout="non-overlapping">
-            <protvista-feature-adapter>
+        <protvista-feature-adapter subscribers="#my-protvista-track,#data-table">
               <data-loader>
                 <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING" />
               </data-loader>
-            </protvista-feature-adapter>
+        </protvista-feature-adapter>
+        <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
+          <protvista-navigation length="770" />
+          <protvista-track id="my-protvista-track" length="770" layout="non-overlapping">
           </protvista-track>
           <protvista-datatable id="data-table">
-            <data-loader>
-              <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING" />
-            </data-loader>
           </protvista-datatable>
         </protvista-manager>
       </Fragment>
