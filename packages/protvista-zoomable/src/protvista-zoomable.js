@@ -313,7 +313,15 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  createEvent(type, feature = null, withHighlight = false, start, end, target) {
+  createEvent(
+    type,
+    feature = null,
+    withHighlight = false,
+    withId = false,
+    start,
+    end,
+    target
+  ) {
     // Variation features have a different shape
     if (feature) {
       // eslint-disable-next-line no-param-reassign
@@ -334,6 +342,9 @@ class ProtvistaZoomable extends HTMLElement {
         detail.highlight = start && end ? `${start}:${end}` : null;
       }
     }
+    if (withId) {
+      detail.selectedid = feature && feature.protvistaFeatureId;
+    }
     return new CustomEvent("change", {
       detail,
       bubbles: true,
@@ -350,6 +361,7 @@ class ProtvistaZoomable extends HTMLElement {
             "mouseover",
             f,
             element._highlightEvent === "onmouseover",
+            false,
             f.start,
             f.end,
             group[i]
@@ -371,6 +383,7 @@ class ProtvistaZoomable extends HTMLElement {
             "click",
             f,
             element._highlightEvent === "onclick",
+            true,
             f.start,
             f.end,
             group[i]

@@ -24,7 +24,8 @@ export const transformData = data => {
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),
     clinicalSignificances: variant.clinicalSignificances,
     polyphenScore: variant.polyphenScore,
-    siftScore: variant.siftScore
+    siftScore: variant.siftScore,
+    protvistaFeatureId: `protvista_id_${variant.alternativeSequence}${variant.begin}-${variant.end}`
   }));
   if (!variants) return null;
   return { sequence, variants };

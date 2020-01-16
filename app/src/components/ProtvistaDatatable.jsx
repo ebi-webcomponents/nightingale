@@ -11,6 +11,10 @@ import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
 
 const columnConfig = {
+  rowId: {
+    resolver: d => d["ftId"] ? d["ftId"] : `${d["start"]}-${d["end"]}`,
+    display:false
+  },
   type: {
     label: "Feature key",
     resolver: d => d["type"]
@@ -64,7 +68,7 @@ class ProtvistaDatatableWrapper extends Component {
       <Fragment>
         <Readme content={readmeContent} />
         <h2>Track with data-loader</h2>
-        <protvista-manager attributes="length displaystart displayend variantfilters highlight">
+        <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
           <protvista-navigation length="770" />
           <protvista-track length="770" layout="non-overlapping">
             <protvista-feature-adapter>

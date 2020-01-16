@@ -7,7 +7,10 @@ export const transformData = data => {
     transformedData = features.map(feature => {
       return {
         ...feature,
-        tooltipContent: formatTooltip(feature)
+        tooltipContent: formatTooltip(feature),
+        protvistaFeatureId: `protvista_id_${
+          feature.ftId ? feature.ftId : `${feature.begin}-${feature.end}`
+        }`
       };
     });
     transformedData = renameProperties(transformedData);
