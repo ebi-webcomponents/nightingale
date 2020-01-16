@@ -251,9 +251,10 @@ class ProtvistaDatatable extends LitElement {
                     ? html`
                         <td
                           class="protvista-datatable__child-toggle"
-                          @click="${() => this.toggleVisibleChild(row.id)}"
+                          @click="${() =>
+                            this.toggleVisibleChild(getRowId(rowId, row))}"
                         >
-                          ${this.visibleChildren.includes(row.id)
+                          ${this.visibleChildren.includes(getRowId(rowId, row))
                             ? unsafeHTML(MinusSVG)
                             : unsafeHTML(PlusSVG)}
                         </td>
@@ -270,7 +271,8 @@ class ProtvistaDatatable extends LitElement {
                       `
                   )}
                 </tr>
-                ${hasChildData && this.visibleChildren.includes(row.id)
+                ${hasChildData &&
+                this.visibleChildren.includes(getRowId(rowId, row))
                   ? this.getChildRow(childRowItems, row)
                   : ""}
               `;

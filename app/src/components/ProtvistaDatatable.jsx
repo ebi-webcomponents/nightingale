@@ -12,8 +12,8 @@ import Readme from "./Readme";
 
 const columnConfig = {
   rowId: {
-    resolver: d => d["ftId"] ? d["ftId"] : `${d["start"]}-${d["end"]}`,
-    display:false
+    resolver: d => (d["ftId"] ? d["ftId"] : `${d["start"]}-${d["end"]}`),
+    display: false
   },
   type: {
     label: "Feature key",
