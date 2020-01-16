@@ -2,6 +2,7 @@ import ProtvistaFeatureAdapter, {
   renameProperties,
   formatTooltip
 } from "protvista-feature-adapter";
+import { v1 } from "uuid";
 
 export const transformData = data => {
   let adaptedData = [];
@@ -10,7 +11,8 @@ export const transformData = data => {
       return Object.assign(feature, {
         category: "PROTEOMICS",
         type: feature.unique ? "unique" : "non_unique",
-        tooltipContent: formatTooltip(feature)
+        tooltipContent: formatTooltip(feature),
+        protvistaFeatureId: v1()
       });
     });
     adaptedData = renameProperties(adaptedData);

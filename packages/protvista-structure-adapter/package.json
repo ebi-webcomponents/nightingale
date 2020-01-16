@@ -33,6 +33,7 @@
   "license": "Apache-2.0",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
-    "protvista-feature-adapter": "^2.3.0"
+    "protvista-feature-adapter": "^2.3.0",
+    "uuid": "^3.3.3"
   }
 }

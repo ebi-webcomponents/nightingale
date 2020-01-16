@@ -1,4 +1,5 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
+import { v1 } from "uuid";
 import {
   getAllFeatureStructures,
   mergeOverlappingIntervals,
@@ -14,6 +15,7 @@ export const transformData = data => {
     transformedData.forEach(feature => {
       /* eslint-disable no-param-reassign */
       feature.tooltipContent = formatTooltip(feature);
+      feature.protvistaFeatureId = v1();
     });
   }
   return transformedData;
