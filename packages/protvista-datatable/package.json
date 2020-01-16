@@ -26,7 +26,8 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "lit-element": "^2.1.0"
+    "lit-element": "^2.1.0",
+    "uuid": "^3.3.3"
   },
   "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729"
 }

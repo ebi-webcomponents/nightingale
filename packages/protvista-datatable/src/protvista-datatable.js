@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit-element";
+import { v1 } from "uuid";
 /* eslint-disable import/extensions, import/no-extraneous-dependencies */
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import styles from "./styles";
@@ -89,7 +90,11 @@ class ProtvistaDatatable extends LitElement {
           start: d.start ? d.start : d.begin
         };
       })
-      .sort((a, b) => a.start - b.start);
+      .sort((a, b) => a.start - b.start)
+      .map(d => ({
+        ...d,
+        protvistaFeatureId: d.protvistaFeatureId ? d.protvistaFeatureId : v1()
+      }));
   }
 
   static isWithinRange(rangeStart, rangeEnd, start, end) {
