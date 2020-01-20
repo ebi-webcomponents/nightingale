@@ -19,18 +19,22 @@ class ProtvistaOverlay extends HTMLElement {
     }
   }
 
-  observeSizeChangeOfTarget() {
-    const target = document.getElementById(this.for);
-    this.sizeObserver = new ResizeObserver(() => {
+  refreshOverlay(elementId) {
+    const target = document.getElementById(elementId);
+    return () => {
+      if (!target) return;
       const { height, width } = target.getBoundingClientRect();
       this.overlay.style.height = `${height}px`;
       this.overlay.style.width = `${width}px`;
       this.overlay.style.top = `${target.offsetTop}px`;
       this.overlay.style.left = `${target.offsetLeft}px`;
-    });
-    this.sizeObserver.observe(target, {
-      attributes: true
-    });
+    };
+  }
+
+  observeSizeChangeOfTarget() {
+    const target = document.getElementById(this.for);
+    this.sizeObserver = new ResizeObserver(this.refreshOverlay(this.for));
+    this.sizeObserver.observe(target);
   }
 
   renderWhenForElementIsReady() {
