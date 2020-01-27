@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit-element";
+import { v1 } from "uuid";
 /* eslint-disable import/extensions, import/no-extraneous-dependencies */
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
-import { v1 } from "uuid";
 import styles from "./styles";
 import PlusSVG from "../resources/plus.svg";
 import MinusSVG from "../resources/minus.svg";
@@ -28,7 +28,6 @@ class ProtvistaDatatable extends LitElement {
     document.addEventListener("click", this.eventHandler);
     // this makes sure the protvista-zoomable event listener doesn't reset
     this.classList.add("feature");
-    // window.addEventListener("resize", this.updateHeaderColumnSizes.bind(this));
   }
 
   disconnectedCallback() {
@@ -51,8 +50,11 @@ class ProtvistaDatatable extends LitElement {
   }
 
   eventHandler(e) {
-    if (!e.target.closest("protvista-datatable")) {
-      this.clickedRowId = null;
+    if (
+      !e.target.closest("protvista-datatable") &&
+      !e.target.closest(".feature")
+    ) {
+      this.selectedid = null;
     }
   }
 
@@ -71,8 +73,8 @@ class ProtvistaDatatable extends LitElement {
       columns: { type: Object },
       displayStart: { type: Number },
       displayEnd: { type: Number },
-      clickedRowId: { type: String },
-      visibleChildren: { type: Array }
+      visibleChildren: { type: Array },
+      selectedid: { type: String }
     };
   }
 
@@ -89,9 +91,10 @@ class ProtvistaDatatable extends LitElement {
         };
       })
       .sort((a, b) => a.start - b.start)
-      .map(d => {
-        return { ...d, id: v1() };
-      });
+      .map(d => ({
+        ...d,
+        protvistaFeatureId: d.protvistaFeatureId ? d.protvistaFeatureId : v1()
+      }));
   }
 
   static isWithinRange(rangeStart, rangeEnd, start, end) {
@@ -110,7 +113,8 @@ class ProtvistaDatatable extends LitElement {
     if (!e.target.parentNode) {
       return;
     }
-    this.clickedRowId = e.target.parentNode.dataset.uuid;
+    this.selectedid = null;
+    this.selectedid = e.target.parentNode.dataset.id;
     this.dispatchEvent(
       new CustomEvent("change", {
         detail: {
@@ -124,7 +128,7 @@ class ProtvistaDatatable extends LitElement {
 
   getStyleClass(id, start, end) {
     let className = "";
-    if (this.clickedRowId && this.clickedRowId === id) {
+    if (this.selectedid && this.selectedid === id) {
       className = `${className} active`;
     }
     if (
@@ -167,6 +171,16 @@ class ProtvistaDatatable extends LitElement {
     }
   }
 
+  scrollIntoView() {
+    if (!this.selectedid) {
+      return;
+    }
+    const element = this.shadowRoot.querySelector(
+      `[data-id="${this.selectedid}"]`
+    );
+    element.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   getChildRow(childRowItems, row) {
     return html`
       <tr class="child-row">
@@ -201,6 +215,9 @@ class ProtvistaDatatable extends LitElement {
     const childRowItems = Object.keys(this.columns).filter(
       column => this.columns[column].child
     );
+    const columnsToDisplay = Object.values(this.columns).filter(
+      column => !column.child && column.display !== false
+    );
     return html`
       <div
         class="protvista-datatable-container"
@@ -210,14 +227,12 @@ class ProtvistaDatatable extends LitElement {
           <thead>
             <tr>
               <th></th>
-              ${Object.values(this.columns)
-                .filter(column => !column.child)
-                .map(
-                  column =>
-                    html`
-                      <th>${column.label}</th>
-                    `
-                )}
+              ${columnsToDisplay.map(
+                column =>
+                  html`
+                    <th>${column.label}</th>
+                  `
+              )}
             </tr>
           </thead>
           <tbody>
@@ -225,17 +240,24 @@ class ProtvistaDatatable extends LitElement {
               const hasChildData = this.hasChildData(childRowItems, row);
               return html`
                 <tr
-                  data-uuid=${row.id}
-                  class=${this.getStyleClass(row.id, row.start, row.end)}
+                  data-id=${row.protvistaFeatureId}
+                  class=${this.getStyleClass(
+                    row.protvistaFeatureId,
+                    row.start,
+                    row.end
+                  )}
                   @click="${e => this.handleClick(e, row.start, row.end)}"
                 >
                   ${hasChildData
                     ? html`
                         <td
                           class="protvista-datatable__child-toggle"
-                          @click="${() => this.toggleVisibleChild(row.id)}"
+                          @click="${() =>
+                            this.toggleVisibleChild(row.protvistaFeatureId)}"
                         >
-                          ${this.visibleChildren.includes(row.id)
+                          ${this.visibleChildren.includes(
+                            row.protvistaFeatureId
+                          )
                             ? unsafeHTML(MinusSVG)
                             : unsafeHTML(PlusSVG)}
                         </td>
@@ -243,18 +265,17 @@ class ProtvistaDatatable extends LitElement {
                     : html`
                         <td />
                       `}
-                  ${Object.keys(this.columns)
-                    .filter(column => !this.columns[column].child)
-                    .map(
-                      column =>
-                        html`
-                          <td>
-                            ${this.columns[column].resolver(row)}
-                          </td>
-                        `
-                    )}
+                  ${columnsToDisplay.map(
+                    column =>
+                      html`
+                        <td>
+                          ${column.resolver(row)}
+                        </td>
+                      `
+                  )}
                 </tr>
-                ${hasChildData && this.visibleChildren.includes(row.id)
+                ${hasChildData &&
+                this.visibleChildren.includes(row.protvistaFeatureId)
                   ? this.getChildRow(childRowItems, row)
                   : ""}
               `;
@@ -263,6 +284,10 @@ class ProtvistaDatatable extends LitElement {
         </table>
       </div>
     `;
+  }
+
+  updated() {
+    this.scrollIntoView();
   }
 }
 

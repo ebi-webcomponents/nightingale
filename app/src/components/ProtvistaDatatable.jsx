@@ -64,20 +64,19 @@ class ProtvistaDatatableWrapper extends Component {
       <Fragment>
         <Readme content={readmeContent} />
         <h2>Track with data-loader</h2>
-        <protvista-manager attributes="length displaystart displayend variantfilters highlight">
+        <protvista-feature-adapter subscribers="#my-protvista-track,#data-table">
+          <data-loader>
+            <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING" />
+          </data-loader>
+        </protvista-feature-adapter>
+        <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
           <protvista-navigation length="770" />
-          <protvista-track length="770" layout="non-overlapping">
-            <protvista-feature-adapter>
-              <data-loader>
-                <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING" />
-              </data-loader>
-            </protvista-feature-adapter>
-          </protvista-track>
-          <protvista-datatable id="data-table">
-            <data-loader>
-              <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING" />
-            </data-loader>
-          </protvista-datatable>
+          <protvista-track
+            id="my-protvista-track"
+            length="770"
+            layout="non-overlapping"
+          ></protvista-track>
+          <protvista-datatable id="data-table"></protvista-datatable>
         </protvista-manager>
       </Fragment>
     );

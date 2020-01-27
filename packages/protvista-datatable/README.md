@@ -56,3 +56,11 @@ The end position of the selected region.
 A comma separated list of regions to highlight.
 
 Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
+
+### `selectedid: string (optional)`
+
+The row id to select. Row ids are attributed based on the `protvistaFeatureId` attribute in each data point. These are added to the data in the various adapters.
+
+### `height: number (optional)`
+
+The height of the table (in `rem`)

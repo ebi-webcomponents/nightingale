@@ -1,3 +1,4 @@
+import { v1 } from "uuid";
 import { formatTooltip, renameProperties } from "./BasicHelper";
 
 export const transformData = data => {
@@ -7,7 +8,8 @@ export const transformData = data => {
     transformedData = features.map(feature => {
       return {
         ...feature,
-        tooltipContent: formatTooltip(feature)
+        tooltipContent: formatTooltip(feature),
+        protvistaFeatureId: v1()
       };
     });
     transformedData = renameProperties(transformedData);
@@ -22,6 +24,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
   }
 
   connectedCallback() {
+    this.subscribers = this.getAttribute("subscribers");
     this._filters = this.getAttribute("filters")
       ? this.getAttribute("filters").split(",")
       : [];
@@ -30,6 +33,17 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 
   set data(data) {
     this._emitEvent(data);
+  }
+
+  set subscribers(subscribers) {
+    if (!subscribers) {
+      return;
+    }
+    this._subscribers = subscribers.split(",");
+  }
+
+  get subscribers() {
+    return this._subscribers;
   }
 
   parseEntry(data) {
@@ -48,9 +62,23 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     return this._adaptedData;
   }
 
+  _setSubscriberData() {
+    this.subscribers.forEach(subscriberId => {
+      const subscriberElt = document.querySelector(subscriberId);
+      if (subscriberElt) {
+        subscriberElt.data = this._adaptedData;
+      } else {
+        console.error(`Element with id '${subscriberId}' not found`);
+      }
+    });
+  }
+
   _emitEvent(data) {
     this.parseEntry(data);
     this.filterData();
+    if (this.subscribers) {
+      this._setSubscriberData();
+    }
     this.dispatchEvent(
       new CustomEvent("load", {
         detail: {

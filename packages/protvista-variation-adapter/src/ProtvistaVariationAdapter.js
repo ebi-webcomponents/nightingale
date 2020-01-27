@@ -1,4 +1,5 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
+import { v1 } from "uuid";
 
 import formatTooltip from "./tooltipGenerators";
 
@@ -24,7 +25,8 @@ export const transformData = data => {
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),
     clinicalSignificances: variant.clinicalSignificances,
     polyphenScore: variant.polyphenScore,
-    siftScore: variant.siftScore
+    siftScore: variant.siftScore,
+    protvistaFeatureId: v1()
   }));
   if (!variants) return null;
   return { sequence, variants };

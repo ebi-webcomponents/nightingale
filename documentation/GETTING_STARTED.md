@@ -97,7 +97,14 @@ We provide a `data-loader` component, which emmits an event caught by
 multiple requests to be made to the same url. Because the data returned by an
 API is not necesseraly in the format expected by `protvista-track`, we also
 provide some components to transform the data. We call these 'data-adapters',
-and they sit between the `data-loader` and `protvista-track` components.
+and there are different ways you can use them:
+
+#### 1. Using events
+
+As both the `data-loader` component and 'data-adapters' emit events that bubble up
+containing the data, they can just sit between the `data-loader` and `protvista-track` components like shown below.
+As the `data-loader` caches requests, it doesn't matter if you call the same
+url multiple times.
 
 ```html
 <script
@@ -128,6 +135,29 @@ and they sit between the `data-loader` and `protvista-track` components.
   </protvista-feature-adapter>
 </protvista-track>
 ```
+
+#### 2. Using subscribers
+
+If you prefer to keep your tracks and your data loading/transformation separate,
+you can do that by using the _subscribers_ attribute, which takes a comma-separated
+list of selectors. This is particularly useful when you want to share the data
+between different components, for instance tracks and data tables.
+
+```html
+<protvista-feature-adapter subscribers="#my-protvista-track">
+  <data-loader>
+    <source
+      src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING"
+    />
+  </data-loader>
+</protvista-feature-adapter>
+<protvista-track length="770" id="my-protvista-track" />
+```
+
+#### 3. Using _data-adapters_ as modules
+
+If you prefer to handle the data transformation from whithin your application, each _data-adapter_ exports a
+`transformData(data)` function.
 
 ## Usage with popular libraries and frameworks
 
