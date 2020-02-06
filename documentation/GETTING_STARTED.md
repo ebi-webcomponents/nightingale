@@ -54,13 +54,10 @@ for information on how to add polyfill, or simply add the following lines
 to your HTML file:
 
 ```html
-<script
-  src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"
-  defer
-></script>
+<script src="https://cdn.jsdelivr.net/npm/babel-polyfill" defer></script>
 <!-- Web component polyfill (only loads what it needs) -->
 <script
-  src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest/custom-elements.min.js"
+  src="https://cdn.jsdelivr.net/npm/@webcomponents/custom-elements@latest"
   defer
 ></script>
 <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
@@ -75,10 +72,7 @@ we thought it would be better to load it separately, so you will need to add it
 like this:
 
 ```html
-<script
-  src="https://cdn.jsdelivr.net/npm/d3@5.9.2/dist/d3.min.js"
-  defer
-></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@5.9.2" defer></script>
 ```
 
 ### Display your first component
@@ -90,7 +84,7 @@ represents the protein length in amino-acids):
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest/dist/protvista-navigation.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest"
   defer
 ></script>
 <protvista-navigation length="223" />
@@ -103,27 +97,31 @@ We provide a `data-loader` component, which emmits an event caught by
 multiple requests to be made to the same url. Because the data returned by an
 API is not necesseraly in the format expected by `protvista-track`, we also
 provide some components to transform the data. We call these 'data-adapters',
-and they sit between the `data-loader` and `protvista-track` components.
+and there are different ways you can use them:
+
+#### 1. Using events
+
+As both the `data-loader` component and 'data-adapters' emit events that bubble up
+containing the data, they can just sit between the `data-loader` and `protvista-track` components like shown below.
+As the `data-loader` caches requests, it doesn't matter if you call the same
+url multiple times.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-utils@latest/dist/protvista-utils.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-utils@latest"
+  defer
+></script>
+<script src="https://cdn.jsdelivr.net/npm/data-loader@latest" defer></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest"
   defer
 ></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/data-loader@latest/dist/data-loader.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest"
   defer
 ></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest/dist/protvista-feature-adapter.js"
-  defer
-></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest/dist/protvista-zoomable.js"
-  defer
-></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-track@latest/dist/protvista-track.js"
+  src="https://cdn.jsdelivr.net/npm/protvista-track@latest"
   defer
 ></script>
 
@@ -137,6 +135,29 @@ and they sit between the `data-loader` and `protvista-track` components.
   </protvista-feature-adapter>
 </protvista-track>
 ```
+
+#### 2. Using subscribers
+
+If you prefer to keep your tracks and your data loading/transformation separate,
+you can do that by using the _subscribers_ attribute, which takes a comma-separated
+list of selectors. This is particularly useful when you want to share the data
+between different components, for instance tracks and data tables.
+
+```html
+<protvista-feature-adapter subscribers="#my-protvista-track">
+  <data-loader>
+    <source
+      src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING"
+    />
+  </data-loader>
+</protvista-feature-adapter>
+<protvista-track length="770" id="my-protvista-track" />
+```
+
+#### 3. Using _data-adapters_ as modules
+
+If you prefer to handle the data transformation from whithin your application, each _data-adapter_ exports a
+`transformData(data)` function.
 
 ## Usage with popular libraries and frameworks
 

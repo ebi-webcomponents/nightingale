@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "2.2.4",
+  "version": "2.3.3",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -24,10 +24,10 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "MIT",
-  "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-zoomable": "^2.2.0"
+    "protvista-zoomable": "^2.3.3"
   },
   "devDependencies": {
     "d3": "^5.7.0"

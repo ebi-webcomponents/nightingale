@@ -8,17 +8,17 @@ module.exports = {
     test: {
       presets: [
         [
-          '@babel/env',
+          "@babel/env",
           {
-            useBuiltIns: 'usage',
-            targets: { node: '8' },
-          },
-        ],
+            useBuiltIns: "usage",
+            targets: { node: "8" }
+          }
+        ]
       ],
       plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-        '@babel/plugin-proposal-class-properties',
-      ],
-    },
-  },
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-class-properties"
+      ]
+    }
+  }
 };

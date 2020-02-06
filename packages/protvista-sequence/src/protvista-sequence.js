@@ -11,6 +11,9 @@ class ProtVistaSequence extends ProtvistaZoomable {
     if (this.sequence) {
       this._createSequence();
     }
+    this.addEventListener("load", e => {
+      this.data = e.detail.payload;
+    });
   }
 
   static get observedAttributes() {
@@ -35,16 +38,19 @@ class ProtVistaSequence extends ProtvistaZoomable {
   }
 
   _getCharWidth() {
-    this.seq_g
-      .append("text")
-      .attr("class", "base")
-      .text("T");
-    this.chWidth =
-      this.seq_g
-        .select("text.base")
-        .node()
-        .getBBox().width * 0.8;
-    this.seq_g.select("text.base").remove();
+    const ratio = 0.8;
+    const node = this.seq_g.select("text.base").node();
+    if (node) {
+      this.chWidth = node.getBBox().width * ratio;
+    } else {
+      // Add a dummy node to measure the width
+      const tempNode = this.seq_g
+        .append("text")
+        .attr("class", "base")
+        .text("T");
+      this.chWidth = tempNode.node().getBBox().width * ratio;
+      tempNode.remove();
+    }
   }
 
   _createSequence() {
@@ -65,12 +71,12 @@ class ProtVistaSequence extends ProtvistaZoomable {
       .attr("class", "sequence")
       .attr("transform", `translate(0,${0.75 * this._height})`);
 
-    this._getCharWidth();
     this.trackHighlighter.appendHighlightTo(this.svg);
     this.refresh();
   }
 
   refresh() {
+    this._getCharWidth();
     if (this.axis) {
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - this.chWidth;

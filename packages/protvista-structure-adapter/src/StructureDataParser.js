@@ -1,111 +1,93 @@
-import ldFilter from "lodash-es/filter";
-import ldMap from "lodash-es/map";
-import ldForEach from "lodash-es/forEach";
-import ldRemove from "lodash-es/remove";
-import ParserHelper from "./ParserHelper";
-
 const featureType = "PDBE_COVER";
 const featureCategory = "STRUCTURE_COVERAGE";
 
-export default class StructureDataParser {
-  constructor() {
-    this._pdbFeatures = [];
-  }
+const capitalizeFirstLetter = word => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};
 
-  parseEntry(data) {
-    this._parseValidEntry(data);
-    return this._pdbFeatures;
-  }
+const getDescription = properties => {
+  return Object.keys(properties).reduce(
+    (accumulator, propertyKey) =>
+      `${accumulator}${capitalizeFirstLetter(propertyKey)}: ${
+        properties[propertyKey]
+      }. `,
+    ""
+  );
+};
 
-  get pdbFeatures() {
-    return this._pdbFeatures;
+const parseChainString = value => {
+  const posEqual = value.indexOf("=");
+  const posDash = value.indexOf("-");
+  if (posEqual === -1 || posDash === -1) {
+    return { start: 0, end: 0 };
   }
+  return {
+    start: +value.slice(posEqual + 1, posDash),
+    end: +value.slice(posDash + 1)
+  };
+};
 
-  static _getAllFeatureStructures(data) {
-    let allFeatureStructures = [];
-    const structures = ldFilter(data.dbReferences, reference => {
+// Iterate over references and extract chain start and end
+export const getAllFeatureStructures = data => {
+  return data.dbReferences
+    .filter(reference => {
       return reference.type === "PDB";
-    });
-    allFeatureStructures = ldMap(structures, structure => {
-      const beginEnd = structure.properties.chains
-        ? ParserHelper.getBeginEnd(structure.properties.chains)
+    })
+    .map(structureReference => {
+      const parsedChain = structureReference.properties.chains
+        ? parseChainString(structureReference.properties.chains)
         : { start: 0, end: 0 };
       return {
         type: featureType,
         category: featureCategory,
         structures: [
           {
-            description: ParserHelper.getDescription(structure.properties),
-            start: beginEnd.begin,
-            end: beginEnd.end,
+            description: getDescription(structureReference.properties),
+            start: parsedChain.start,
+            end: parsedChain.end,
             source: {
-              id: structure.id,
-              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structure.id}`
+              id: structureReference.id,
+              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structureReference.id}`
             }
           }
         ],
-        start: beginEnd.begin,
-        end: beginEnd.end
+        start: parsedChain.start,
+        end: parsedChain.end
       };
     });
-    return allFeatureStructures;
+};
+
+export const mergeOverlappingIntervals = structures => {
+  if (!structures || structures.length <= 0) {
+    return [];
   }
+  // Sort by start position
+  const sortedStructures = structures.sort((a, b) => a.start - b.start);
+  const mergedIntervals = [];
+  sortedStructures.forEach(structure => {
+    const lastItem = mergedIntervals[mergedIntervals.length - 1];
+    if (
+      !lastItem ||
+      // If item doesn't overlap, push it
+      lastItem.end < structure.start
+    ) {
+      mergedIntervals.push(structure);
+    }
+    // If the end is bigger update the last one
+    else if (lastItem.end < structure.end) {
+      lastItem.end = structure.end;
+      lastItem.structures.push(structure.structures[0]);
+    }
+    // Otherwise just add to last item
+    else {
+      lastItem.structures.push(structure.structures[0]);
+    }
+  });
+  return mergedIntervals;
+};
 
-  _getOverlapping(ftStructure, startEnd) {
-    const overlapping = ldRemove(this._pdbFeatures, ftCoverage => {
-      if (
-        (ftCoverage.start <= ftStructure.start &&
-          ftStructure.start <= ftCoverage.end) ||
-        (ftCoverage.start <= ftStructure.end &&
-          ftStructure.end <= ftCoverage.end) ||
-        (ftStructure.start <= ftCoverage.end &&
-          ftCoverage.end <= ftStructure.end)
-      ) {
-        /* eslint-disable no-param-reassign */
-        startEnd.minStart = Math.min(
-          startEnd.minStart,
-          ftStructure.start,
-          ftCoverage.start
-        );
-        /* eslint-disable no-param-reassign */
-        startEnd.maxEnd = Math.max(
-          startEnd.maxEnd,
-          ftStructure.end,
-          ftCoverage.end
-        );
-        return true;
-      }
-      return false;
-    });
-    return overlapping;
-  }
-
-  _parseValidEntry(data) {
-    this._pdbFeatures = [];
-    const allFeatureStructures = StructureDataParser._getAllFeatureStructures(
-      data
-    );
-
-    ldForEach(allFeatureStructures, ftStructure => {
-      const startEnd = { minStart: Number.MAX_SAFE_INTEGER, maxEnd: 1 };
-      const overlapping = this._getOverlapping(ftStructure, startEnd);
-      if (overlapping.length === 0) {
-        this._pdbFeatures.push(ftStructure);
-      } else {
-        ftStructure.start = startEnd.minStart;
-        ftStructure.end = startEnd.maxEnd;
-        ldForEach(overlapping, overlap => {
-          ftStructure.structures = ftStructure.structures.concat(
-            overlap.structures
-          );
-        });
-        this._pdbFeatures.push(ftStructure);
-      }
-    });
-  }
-
-  static _getStructuresHTML(structureList) {
-    return `<ul>
+export const getStructuresHTML = structureList => {
+  return `<ul>
             ${structureList
               .map(
                 structure => `<li style="margin: 0.25rem 0"><a style="color:#FFF" href='${structure.source.url}' target='_blank'>
@@ -114,12 +96,9 @@ export default class StructureDataParser {
               )
               .join("")}
         </ul>`;
-  }
+};
 
-  static formatTooltip(feature) {
-    const structuresHTML = StructureDataParser._getStructuresHTML(
-      feature.structures
-    );
-    return `${structuresHTML ? `<h5>Structures</h5>${structuresHTML}` : ``}`;
-  }
-}
+export const formatTooltip = feature => {
+  const structuresHTML = getStructuresHTML(feature.structures);
+  return `${structuresHTML ? `<h5>Structures</h5>${structuresHTML}` : ``}`;
+};

@@ -1,5 +1,8 @@
 import { select } from "d3";
 import _includes from "lodash-es/includes";
+import _groupBy from "lodash-es/groupBy";
+import _union from "lodash-es/union";
+import _intersection from "lodash-es/intersection";
 
 import ProtvistaZoomable from "protvista-zoomable";
 import FeatureShape from "./FeatureShape";
@@ -54,8 +57,20 @@ class ProtvistaTrack extends ProtvistaZoomable {
     });
   }
 
+  processData(data) {
+    this._originalData = ProtvistaTrack.normalizeLocations(data);
+  }
+
   set data(data) {
-    this._data = ProtvistaTrack.normalizeLocations(data);
+    this.processData(data);
+    this._applyFilters();
+    this._layoutObj = this.getLayout();
+    this._createTrack();
+  }
+
+  set filters(filters) {
+    this._filters = filters;
+    this._applyFilters();
     this._createTrack();
   }
 
@@ -63,7 +78,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
     return ProtvistaZoomable.observedAttributes.concat([
       "highlight",
       "color",
-      "shape"
+      "shape",
+      "filters"
     ]);
   }
 
@@ -119,7 +135,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
     this._layoutObj.init(this._data);
 
     select(this)
-      .selectAll("svg")
+      .selectAll("div")
       .remove();
 
     this.svg = select(this)
@@ -137,17 +153,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   _createFeatures() {
-    this.featuresG = this.seq_g
-      .attr("clip-path", "url(#trackClip)")
-      .selectAll("g.feature-group")
-      .data(this._data);
-
-    this._clipPath = this.svg
-      .append("clipPath")
-      .attr("id", "trackClip")
-      .append("rect")
-      .attr("width", this.getWidthWithMargins())
-      .attr("height", this._height);
+    this.featuresG = this.seq_g.selectAll("g.feature-group").data(this._data);
 
     this.locations = this.featuresG
       .enter()
@@ -200,6 +206,23 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .call(this.bindEvents, this);
   }
 
+  _applyFilters() {
+    if (!this._filters || this._filters.length <= 0) {
+      this._data = this._originalData;
+      return;
+    }
+    // Filters are OR-ed within a category and AND-ed between categories
+    const groupedFilters = _groupBy(this._filters, "category");
+    const filteredGroups = Object.values(groupedFilters).map(filterGroup => {
+      const filteredData = filterGroup.map(filterItem =>
+        filterItem.filterFn(this._originalData)
+      );
+      return _union(...filteredData);
+    });
+    const intersection = _intersection(...filteredGroups);
+    this._data = intersection;
+  }
+
   refresh() {
     if (this.xScale && this.seq_g) {
       this.features = this.seq_g.selectAll("path.feature").data(
@@ -238,7 +261,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
             )},${this._layoutObj.getFeatureYPos(f.feature)})`
         );
       this._updateHighlight();
-      this._clipPath.attr("width", this.getWidthWithMargins());
     }
   }
 

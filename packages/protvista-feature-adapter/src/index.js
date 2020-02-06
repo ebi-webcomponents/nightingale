@@ -5,3 +5,9 @@ if (window.customElements) {
 }
 
 export default ProtvistaFeatureAdapter;
+export {
+  formatTooltip,
+  renameProperties,
+  formatXrefs,
+  getEvidenceFromCodes
+} from "./BasicHelper";

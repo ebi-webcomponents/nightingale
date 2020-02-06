@@ -73,52 +73,52 @@
     ></script>
 
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest/dist/protvista-navigation.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest/dist/protvista-zoomable.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-tooltip@latest/dist/protvista-tooltip.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-tooltip@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-track@latest/dist/protvista-track.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-track@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-interpro-track@latest/dist/protvista-interpro-track.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-interpro-track@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-sequence@latest/dist/protvista-sequence.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-sequence@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/data-loader/dist/index.js"
+      src="https://cdn.jsdelivr.net/npm/data-loader@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter@latest/dist/protvista-uniprot-entry-adapter.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-uniprot-entry-adapter@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter/dist/protvista-feature-adapter.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/protvista-manager@latest/dist/protvista-manager.js"
+      src="https://cdn.jsdelivr.net/npm/protvista-manager@latest"
       charset="utf-8"
       defer
     ></script>
@@ -140,7 +140,10 @@
                 accession: "feature1.2",
                 locations: [
                   {
-                    fragments: [{ start: 10, end: 27 }, { start: 29, end: 40 }]
+                    fragments: [
+                      { start: 10, end: 27 },
+                      { start: 29, end: 40 }
+                    ]
                   }
                 ]
               }
@@ -151,7 +154,12 @@
           {
             accession: "feature4",
             locations: [
-              { fragments: [{ start: 2, end: 3 }, { start: 5, end: 5 }] }
+              {
+                fragments: [
+                  { start: 2, end: 3 },
+                  { start: 5, end: 5 }
+                ]
+              }
             ],
             color: "#34Aea2"
           }

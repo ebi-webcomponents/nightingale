@@ -1,7 +1,6 @@
-import ProtvistaFilter, { ProtvistaCheckbox } from "./protvista-filter";
+import ProtvistaFilter from "./protvista-filter";
 
 const loadComponent = () => {
-  customElements.define("protvista-checkbox", ProtvistaCheckbox);
   customElements.define("protvista-filter", ProtvistaFilter);
 };
 

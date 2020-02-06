@@ -1,13 +1,30 @@
-import BasicHelper from "./BasicHelper";
+import { v1 } from "uuid";
+import { formatTooltip, renameProperties } from "./BasicHelper";
+
+export const transformData = data => {
+  let transformedData = [];
+  const { features } = data;
+  if (features && features.length > 0) {
+    transformedData = features.map(feature => {
+      return {
+        ...feature,
+        tooltipContent: formatTooltip(feature),
+        protvistaFeatureId: v1()
+      };
+    });
+    transformedData = renameProperties(transformedData);
+  }
+  return transformedData;
+};
 
 class ProtvistaFeatureAdapter extends HTMLElement {
   constructor() {
     super();
     this._adaptedData = [];
-    this._basicHelper = BasicHelper;
   }
 
   connectedCallback() {
+    this.subscribers = this.getAttribute("subscribers");
     this._filters = this.getAttribute("filters")
       ? this.getAttribute("filters").split(",")
       : [];
@@ -18,18 +35,19 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     this._emitEvent(data);
   }
 
-  parseEntry(data) {
-    const { features } = data;
-    if (features && features.length > 0) {
-      this._adaptedData = features.map(feature => {
-        return {
-          ...feature,
-          tooltipContent: this._basicHelper.formatTooltip(feature)
-        };
-      });
-      this._adaptedData = this._basicHelper.renameProperties(this._adaptedData);
+  set subscribers(subscribers) {
+    if (!subscribers) {
+      return;
     }
-    return this._adaptedData;
+    this._subscribers = subscribers.split(",");
+  }
+
+  get subscribers() {
+    return this._subscribers;
+  }
+
+  parseEntry(data) {
+    this._adaptedData = transformData(data);
   }
 
   filterData() {
@@ -44,13 +62,23 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     return this._adaptedData;
   }
 
-  get basicHelper() {
-    return this._basicHelper;
+  _setSubscriberData() {
+    this.subscribers.forEach(subscriberId => {
+      const subscriberElt = document.querySelector(subscriberId);
+      if (subscriberElt) {
+        subscriberElt.data = this._adaptedData;
+      } else {
+        console.error(`Element with id '${subscriberId}' not found`);
+      }
+    });
   }
 
   _emitEvent(data) {
     this.parseEntry(data);
     this.filterData();
+    if (this.subscribers) {
+      this._setSubscriberData();
+    }
     this.dispatchEvent(
       new CustomEvent("load", {
         detail: {
@@ -86,3 +114,9 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 }
 
 export default ProtvistaFeatureAdapter;
+export {
+  formatTooltip,
+  renameProperties,
+  formatXrefs,
+  getEvidenceFromCodes
+} from "./BasicHelper";

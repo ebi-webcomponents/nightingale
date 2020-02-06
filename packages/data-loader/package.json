@@ -1,13 +1,17 @@
 {
   "name": "data-loader",
-  "version": "2.1.12",
+  "version": "2.3.0",
   "description": "data-loader Custom Element to load data declaratively",
   "files": [
     "dist",
     "src"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "main": "dist/data-loader.js",
-  "module": "src/data-loader.js",
+  "module": "dist/es/data-loader.js",
+  "types": "dist/es/data-loader.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -30,6 +34,7 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
+    "@types/lodash-es": "4.17.3",
     "lodash-es": "^4.17.11"
   }
 }

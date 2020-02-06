@@ -1,0 +1,27 @@
+{
+  "name": "protvista-overlay",
+  "version": "2.3.2",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/protvista-overlay.js",
+  "module": "src/ProtvistaOverlay.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "dependencies": {
+    "resize-observer-polyfill": "^1.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb"
+}

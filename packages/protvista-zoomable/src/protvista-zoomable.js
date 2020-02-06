@@ -54,7 +54,7 @@ class ProtvistaZoomable extends HTMLElement {
       : 1;
     this._displayend = this.getAttribute("displayend")
       ? parseFloat(this.getAttribute("displayend"))
-      : this.width;
+      : this.length;
 
     this._height = this.getAttribute("height")
       ? Number(this.getAttribute("height"))
@@ -164,8 +164,15 @@ class ProtvistaZoomable extends HTMLElement {
   _initZoom() {
     this._zoom = d3zoom()
       .scaleExtent([1, Infinity])
-      .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]])
-      .extent([[0, 0], [this.getWidthWithMargins(), 0]])
+      .translateExtent([
+        [0, 0],
+        [this.getWidthWithMargins(), 0]
+      ])
+      .extent([
+        [0, 0],
+        [this.getWidthWithMargins(), 0]
+      ])
+      .filter(() => !this.hasAttribute("use-ctrl-to-zoom") || d3Event.ctrlKey)
       .on("zoom", this.zoomed);
   }
 
@@ -246,9 +253,10 @@ class ProtvistaZoomable extends HTMLElement {
     this._updateScaleDomain();
     this._originXScale = this.xScale.copy();
     if (this.svg) this.svg.attr("width", this.width);
-    this._zoom
-      .scaleExtent([1, Infinity])
-      .translateExtent([[0, 0], [this.getWidthWithMargins(), 0]]);
+    this._zoom.scaleExtent([1, Infinity]).translateExtent([
+      [0, 0],
+      [this.getWidthWithMargins(), 0]
+    ]);
     this.applyZoomTranslation();
   }
 
@@ -305,7 +313,15 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  createEvent(type, feature = null, withHighlight = false, start, end, target) {
+  createEvent(
+    type,
+    feature = null,
+    withHighlight = false,
+    withId = false,
+    start,
+    end,
+    target
+  ) {
     // Variation features have a different shape
     if (feature) {
       // eslint-disable-next-line no-param-reassign
@@ -326,6 +342,9 @@ class ProtvistaZoomable extends HTMLElement {
         detail.highlight = start && end ? `${start}:${end}` : null;
       }
     }
+    if (withId) {
+      detail.selectedid = feature && feature.protvistaFeatureId;
+    }
     return new CustomEvent("change", {
       detail,
       bubbles: true,
@@ -342,6 +361,7 @@ class ProtvistaZoomable extends HTMLElement {
             "mouseover",
             f,
             element._highlightEvent === "onmouseover",
+            false,
             f.start,
             f.end,
             group[i]
@@ -363,6 +383,7 @@ class ProtvistaZoomable extends HTMLElement {
             "click",
             f,
             element._highlightEvent === "onclick",
+            true,
             f.start,
             f.end,
             group[i]

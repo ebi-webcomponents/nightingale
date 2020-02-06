@@ -1,4 +1,6 @@
-# `<protvista-structure>`
+# protvista-structure
+
+[![Published on NPM](https://img.shields.io/npm/v/protvista-structure.svg)](https://www.npmjs.com/package/protvista-structure)
 
 In progress - A native web component wrapper around LiteMol
 
