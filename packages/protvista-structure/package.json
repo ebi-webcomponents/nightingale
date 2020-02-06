@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure",
-  "version": "2.3.0",
+  "version": "2.3.4",
   "description": "A custom element wrapper for LiteMol",
   "main": "dist/protvista-structure.js",
   "module": "src/protvista-structure.js",
