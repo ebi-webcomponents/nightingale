@@ -10,7 +10,7 @@ const ProtvistaStructureWrapper = props => {
   return (
     <Fragment>
       <Readme content={readmeContent} />
-      <protvista-structure accession="P06493" highlight="300:400" />
+      <protvista-structure accession="P06493" highlight="209:220" />
     </Fragment>
   );
 };
