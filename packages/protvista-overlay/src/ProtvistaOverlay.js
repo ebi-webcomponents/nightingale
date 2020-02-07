@@ -35,6 +35,7 @@ class ProtvistaOverlay extends HTMLElement {
     const target = document.getElementById(this.for);
     this.sizeObserver = new ResizeObserver(this.refreshOverlay(this.for));
     this.sizeObserver.observe(target);
+    this.sizeObserver.observe(document.body);
   }
 
   renderWhenForElementIsReady() {
