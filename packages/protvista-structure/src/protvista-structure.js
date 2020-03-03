@@ -13,7 +13,7 @@ class ProtvistaStructure extends HTMLElement {
     this.loadMolecule = this.loadMolecule.bind(this);
     this.loadStructureTable = this.loadStructureTable.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
-    this._height = this.height || "480px";
+    this._height = this.getAttribute("height") || "480px";
   }
 
   get css() {
