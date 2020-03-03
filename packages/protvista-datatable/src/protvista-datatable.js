@@ -75,7 +75,8 @@ class ProtvistaDatatable extends LitElement {
       displayEnd: { type: Number },
       visibleChildren: { type: Array },
       selectedid: { type: String },
-      rowClickEvent: { type: Function }
+      rowClickEvent: { type: Function },
+      rowIdResolver: { type: Function }
     };
   }
 
@@ -94,7 +95,10 @@ class ProtvistaDatatable extends LitElement {
       .sort((a, b) => a.start - b.start)
       .map(d => ({
         ...d,
-        protvistaFeatureId: d.protvistaFeatureId ? d.protvistaFeatureId : v1()
+        protvistaFeatureId:
+          (typeof this.rowIdResolver === "function" && this.rowIdResolver(d)) ||
+          d.protvistaFeatureId ||
+          v1()
       }));
   }
 
