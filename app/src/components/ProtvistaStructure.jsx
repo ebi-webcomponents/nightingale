@@ -1,6 +1,7 @@
 import React, { Fragment, useCallback } from "react";
 import ProtvistaStructure from "protvista-structure";
 import ProtvistaDatatable from "protvista-datatable";
+import ProtvistaManager from "protvista-manager";
 import { html } from "lit-html";
 import loadWebComponent from "../utils/load-web-component";
 import "litemol/dist/css/LiteMol-plugin.css";
@@ -10,6 +11,7 @@ import xrefData from "../mocks/pdb-xrefs.json";
 
 loadWebComponent("protvista-structure", ProtvistaStructure);
 loadWebComponent("protvista-datatable", ProtvistaDatatable);
+loadWebComponent("protvista-manager", ProtvistaManager);
 
 const processData = xrefs =>
   xrefs.map(({ id, properties }) => {
@@ -115,12 +117,14 @@ const ProtvistaStructureWrapper = props => {
   return (
     <Fragment>
       <Readme content={readmeContent} />
-      <protvista-structure
-        pdb-id="1AAP"
-        accession="P05067"
-        highlight="290:300,310:340"
-      />
-      <PDBDatatable xrefs={xrefData} />
+      <protvista-manager attributes="pdb-id">
+        <protvista-structure
+          pdb-id="1AAP"
+          accession="P05067"
+          highlight="290:300,310:340"
+        />
+        <PDBDatatable xrefs={xrefData} />
+      </protvista-manager>
     </Fragment>
   );
 };

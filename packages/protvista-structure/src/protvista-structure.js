@@ -48,7 +48,6 @@ class ProtvistaStructure extends HTMLElement {
   set pdbId(pdbId) {
     this.setAttribute("pdbid", pdbId);
     this._pdbID = pdbId;
-    this.selectMolecule(pdbId);
   }
 
   get height() {
@@ -84,8 +83,6 @@ class ProtvistaStructure extends HTMLElement {
     this.appendChild(litemolDiv);
 
     this.loadLiteMol();
-
-    this.selectMolecule(this._pdbId);
   }
 
   disconnectedCallback() {
@@ -95,7 +92,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["highlight", "pdbid", "height"];
+    return ["highlight", "pdb-id", "height"];
   }
 
   static _formatHighlight(highlightString) {
@@ -115,7 +112,7 @@ class ProtvistaStructure extends HTMLElement {
       this[`_${attrName}`] = typeof value === "number" ? newVal : value;
 
       switch (attrName) {
-        case "pdbid":
+        case "pdb-id":
           this._pdbId = newVal;
           this.selectMolecule(this._pdbId);
           break;
@@ -340,11 +337,11 @@ class ProtvistaStructure extends HTMLElement {
       return;
     }
 
-    const translatedPositions = this._highlight.map(({ start, end }) =>
-      this.translatePositions(start, end)
-    );
+    const translatedPositions = this._highlight
+      .map(({ start, end }) => this.translatePositions(start, end))
+      .filter(translatedPosition => translatedPosition);
 
-    if (!translatedPositions) {
+    if (!translatedPositions || translatedPositions.length === 0) {
       return;
     }
 
