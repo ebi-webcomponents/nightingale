@@ -109,17 +109,19 @@ class ProtvistaDatatable extends LitElement {
     return rangeStart > end || rangeEnd < start;
   }
 
-  handleClick(e, start, end) {
+  handleClick(e, start, end, id) {
     if (!e.target.parentNode) {
       return;
     }
     this.selectedid = null;
     this.selectedid = e.target.parentNode.dataset.id;
+    const detail = { "pdb-id": id };
+    if (start && end) {
+      detail.highlight = `${start}:${end}`;
+    }
     this.dispatchEvent(
       new CustomEvent("change", {
-        detail: {
-          highlight: `${start}:${end}`
-        },
+        detail,
         bubbles: true,
         cancelable: true
       })
@@ -246,7 +248,8 @@ class ProtvistaDatatable extends LitElement {
                     row.start,
                     row.end
                   )}
-                  @click="${e => this.handleClick(e, row.start, row.end)}"
+                  @click="${e =>
+                    this.handleClick(e, row.start, row.end, row.id)}"
                 >
                   ${hasChildData
                     ? html`
