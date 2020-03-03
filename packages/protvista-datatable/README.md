@@ -65,6 +65,10 @@ The row id to select. Row ids are attributed based on the `protvistaFeatureId` a
 
 The height of the table (in `rem`)
 
+### `rowClickEvent: function (optional)`
+
+A callback which will fire when a row is clicked. The data object for the clicked row will be provided in the callback.
+
 ### `noScrollToRow: boolean (false)`
 
 Don't scroll to row if it has been selected
