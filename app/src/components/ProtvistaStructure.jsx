@@ -13,6 +13,8 @@ loadWebComponent("protvista-structure", ProtvistaStructure);
 loadWebComponent("protvista-datatable", ProtvistaDatatable);
 loadWebComponent("protvista-manager", ProtvistaManager);
 
+const selectedId = "1AAP";
+
 const processData = xrefs =>
   xrefs.map(({ id, properties }) => {
     if (!properties) {
@@ -32,7 +34,8 @@ const processData = xrefs =>
       method: Method,
       resolution: !Resolution || Resolution === "-" ? null : Resolution,
       chain,
-      positions
+      positions,
+      protvistaFeatureId: id
     };
   });
 
@@ -112,16 +115,16 @@ const PDBDatatable = ({ xrefs }) => {
     },
     [data]
   );
-  return <protvista-datatable ref={setTableData} />;
+  return <protvista-datatable ref={setTableData} selectedId={selectedId} noScrollToRow noDeselect/>;
 };
 
-const ProtvistaStructureWrapper = props => {
+const ProtvistaStructureWrapper = () => {
   return (
     <Fragment>
       <Readme content={readmeContent} />
       <protvista-manager attributes="pdb-id">
         <protvista-structure
-          pdb-id="1AAP"
+          pdb-id={selectedId}
           accession="P05067"
           highlight="290:300,310:340"
         />
