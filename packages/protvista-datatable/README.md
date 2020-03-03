@@ -28,7 +28,7 @@ Wrapping it within `<protvista-manager>` will allow highlighting of features as 
 
 #### `data: Object`
 
-The data to display.
+The data to display. `protvistaFeatureId` can be used as an attribute of the `data` object to provide an id for each row.
 
 #### `columns: Object`
 
