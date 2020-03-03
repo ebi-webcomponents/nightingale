@@ -96,9 +96,7 @@ const getColumnConfig = () => ({
 });
 
 const PDBDatatable = ({ xrefs }) => {
-  console.log(JSON.stringify(xrefs));
   const data = processData(xrefs);
-  console.log(data);
   const setTableData = useCallback(
     node => {
       if (node) {
@@ -118,9 +116,9 @@ const ProtvistaStructureWrapper = props => {
     <Fragment>
       <Readme content={readmeContent} />
       <protvista-structure
-        pdb-id="4Y72"
-        accession="P06493"
-        highlight="209:220"
+        pdb-id="1AAP"
+        accession="P05067"
+        highlight="290:300,310:340"
       />
       <PDBDatatable xrefs={xrefData} />
     </Fragment>

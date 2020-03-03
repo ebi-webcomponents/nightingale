@@ -7,7 +7,6 @@ class ProtvistaStructure extends HTMLElement {
     this._mappings = [];
 
     this.loadMolecule = this.loadMolecule.bind(this);
-    // this.loadStructureTable = this.loadStructureTable.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
   }
 
@@ -67,6 +66,7 @@ class ProtvistaStructure extends HTMLElement {
     }
 
     this._pdbId = this.getAttribute("pdb-id");
+    this._accession = this.getAttribute("accession");
     this._height = this.getAttribute("height") || "480px";
     this._highlight =
       this.getAttribute("highlight") &&
@@ -99,13 +99,14 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static _formatHighlight(highlightString) {
-    return highlightString.split(",").map(region => {
+    const highlightArray = highlightString.split(",").map(region => {
       const [_start, _end] = region.split(":");
       return {
         start: Number(_start),
         end: Number(_end)
       };
     });
+    return highlightArray;
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
@@ -115,7 +116,12 @@ class ProtvistaStructure extends HTMLElement {
 
       switch (attrName) {
         case "pdbid":
-          this.pdbId = newVal;
+          this._pdbId = newVal;
+          this.selectMolecule(this._pdbId);
+          break;
+
+        case "accession":
+          this._accession = newVal;
           break;
 
         case "highlight":
@@ -136,7 +142,7 @@ class ProtvistaStructure extends HTMLElement {
     }
   }
 
-  _planHighlight(withSelection = false) {
+  _planHighlight() {
     // If rendering is already planned, skip the rest
     if (this._plannedRender) {
       return;
@@ -151,16 +157,7 @@ class ProtvistaStructure extends HTMLElement {
         return;
       }
 
-      if (withSelection) {
-        this._highlight.forEach(highlight => {
-          this._selectMoleculeWithinRange(
-            highlight.start,
-            highlight.end
-          ).then(() => this.highlightChain());
-        });
-      } else {
-        this.highlightChain();
-      }
+      this.highlightChain();
     });
   }
 
@@ -287,11 +284,10 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   processMapping(mappingData) {
-    if (!Object.values(mappingData)[0].UniProt[this.accession]) {
+    if (!Object.values(mappingData)[0].UniProt[this._accession]) {
       return null;
     }
-
-    return Object.values(mappingData)[0].UniProt[this.accession].mappings;
+    return Object.values(mappingData)[0].UniProt[this._accession].mappings;
   }
 
   translatePositions(start, end) {
@@ -315,7 +311,9 @@ class ProtvistaStructure extends HTMLElement {
             end: end - offset
           };
         }
-        this.addMessage(`Positions not found in this structure`);
+        this.addMessage(
+          `Positions ${start}-${end} not found in this structure`
+        );
       } else {
         this.addMessage(
           "Mismatch between protein sequence and structure residues"
@@ -342,82 +340,50 @@ class ProtvistaStructure extends HTMLElement {
       return;
     }
 
-    // TODO deal with multiple highlights
-    const [highlightItem] = this._highlight;
-    const translatedPos = this.translatePositions(
-      highlightItem.start,
-      highlightItem.end
+    const translatedPositions = this._highlight.map(({ start, end }) =>
+      this.translatePositions(start, end)
     );
 
-    if (!translatedPos) {
+    if (!translatedPositions) {
       return;
     }
 
-    const query = this.Query.sequence(
-      translatedPos.entity.toString(),
-      translatedPos.chain,
-      {
-        seqNumber: translatedPos.start
-      },
-      {
-        seqNumber: translatedPos.end
-      }
+    const queries = translatedPositions.map(translatedPos =>
+      this.Query.sequence(
+        translatedPos.entity.toString(),
+        translatedPos.chain,
+        {
+          seqNumber: translatedPos.start
+        },
+        {
+          seqNumber: translatedPos.end
+        }
+      )
     );
 
     const theme = this.getTheme();
+    const transform = this._liteMol.createTransform();
 
-    const action = this._liteMol.createTransform().add(
-      visual,
-      this.Transformer.Molecule.CreateSelectionFromQuery,
-      {
-        query,
-        name: "My name"
-      },
-      {
-        ref: "sequence-selection"
-      }
+    queries.forEach(query =>
+      transform.add(
+        visual,
+        this.Transformer.Molecule.CreateSelectionFromQuery,
+        {
+          query
+        },
+        {
+          ref: "sequence-selection"
+        }
+      )
     );
 
-    this._liteMol.applyTransform(action).then(() => {
+    this._liteMol.applyTransform(transform).then(() => {
       this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
         visual,
         theme
       });
     });
     this.removeMessage();
-  }
-
-  async _selectMoleculeWithinRange(start, end) {
-    if (!this._pdbEntries) {
-      return;
-    }
-
-    const matches = this._pdbEntries.filter(d => {
-      return (
-        d.properties.method !== "Model" &&
-        d.properties.chains.filter(chain => {
-          return chain.start <= start && chain.end >= end;
-        }).length > 0
-      );
-    });
-
-    if (this._selectedMolecule) {
-      if (
-        this._selectedMolecule.mappings.filter(
-          d => d.unp_start <= start && d.unp_end >= end
-        ).length > 0
-      ) {
-        return;
-      }
-    }
-
-    if (matches && matches.length > 0) {
-      await this.selectMolecule(matches[0].id);
-    }
-  }
-
-  static formatAngstrom(val) {
-    return !val ? "" : val.replace("A", "&#8491;");
   }
 }
 
