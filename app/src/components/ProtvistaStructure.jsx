@@ -6,12 +6,12 @@ import loadWebComponent from "../utils/load-web-component";
 import "litemol/dist/css/LiteMol-plugin.css";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-structure/README.md";
-import xrefData from '../mocks/pdb-xrefs.json';
-  
-loadWebComponent("protvista-structure", ProtvistaStructure);
-loadWebComponent('protvista-datatable', ProtvistaDatatable);
+import xrefData from "../mocks/pdb-xrefs.json";
 
-const processData = (xrefs) =>
+loadWebComponent("protvista-structure", ProtvistaStructure);
+loadWebComponent("protvista-datatable", ProtvistaDatatable);
+
+const processData = xrefs =>
   xrefs.map(({ id, properties }) => {
     if (!properties) {
       return null;
@@ -20,7 +20,7 @@ const processData = (xrefs) =>
     let chain;
     let positions;
     if (Chains) {
-      const tokens = Chains.split('=');
+      const tokens = Chains.split("=");
       if (tokens.length === 2) {
         [chain, positions] = tokens;
       }
@@ -28,29 +28,29 @@ const processData = (xrefs) =>
     return {
       id,
       method: Method,
-      resolution: !Resolution || Resolution === '-' ? null : Resolution,
+      resolution: !Resolution || Resolution === "-" ? null : Resolution,
       chain,
-      positions,
+      positions
     };
   });
 
 const pdbMirrors = [
   {
-    name: 'PDBe',
-    url: id => `https://www.ebi.ac.uk/pdbe-srv/view/entry/${id}`,
+    name: "PDBe",
+    url: id => `https://www.ebi.ac.uk/pdbe-srv/view/entry/${id}`
   },
   {
-    name: 'RCSB PDB',
-    url: id => `https://www.rcsb.org/structure/${id}`,
+    name: "RCSB PDB",
+    url: id => `https://www.rcsb.org/structure/${id}`
   },
   {
-    name: 'PDBj',
-    url: id => `https://pdbj.org/mine/summary/${id}`,
+    name: "PDBj",
+    url: id => `https://pdbj.org/mine/summary/${id}`
   },
   {
-    name: 'PDBsum',
-    url: id => `https://www.ebi.ac.uk/pdbsum/${id}`,
-  },
+    name: "PDBsum",
+    url: id => `https://www.ebi.ac.uk/pdbsum/${id}`
+  }
 ];
 
 const getColumnConfig = () => ({
@@ -78,15 +78,19 @@ const getColumnConfig = () => ({
     label: "Links",
     resolver: ({ id }) =>
       html`
-        ${pdbMirrors.map(
-          ({ name, url }) =>
-            html`<a href=${url(id)} >${name}</a >`
-        ).reduce(
-          (prev, curr) =>
-            html`
-              ${prev} · ${curr}
-            `
-        )}
+        ${pdbMirrors
+          .map(
+            ({ name, url }) =>
+              html`
+                <a href=${url(id)}>${name}</a>
+              `
+          )
+          .reduce(
+            (prev, curr) =>
+              html`
+                ${prev} · ${curr}
+              `
+          )}
       `
   }
 });
@@ -94,7 +98,7 @@ const getColumnConfig = () => ({
 const PDBDatatable = ({ xrefs }) => {
   console.log(JSON.stringify(xrefs));
   const data = processData(xrefs);
-  console.log(data)
+  console.log(data);
   const setTableData = useCallback(
     node => {
       if (node) {
@@ -118,7 +122,7 @@ const ProtvistaStructureWrapper = props => {
         accession="P06493"
         highlight="209:220"
       />
-      <PDBDatatable xrefs={xrefData}/>
+      <PDBDatatable xrefs={xrefData} />
     </Fragment>
   );
 };
