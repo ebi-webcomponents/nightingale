@@ -258,7 +258,7 @@ class ProtvistaStructure extends HTMLElement {
   getTheme() {
     const colors = new Map();
     colors.set("Uniform", this.CoreVis.Color.fromRgb(207, 178, 178));
-    colors.set("Selection", this.CoreVis.Color.fromRgb(255, 255, 0));
+    colors.set("Selection", this.CoreVis.Color.fromRgb(255, 0, 0));
     colors.set("Highlight", this.CoreVis.Theme.Default.HighlightColor);
     return this.Visualization.Molecule.uniformThemeProvider(undefined, {
       colors
