@@ -115,7 +115,14 @@ const PDBDatatable = ({ xrefs }) => {
     },
     [data]
   );
-  return <protvista-datatable ref={setTableData} selectedId={selectedId} noScrollToRow noDeselect/>;
+  return (
+    <protvista-datatable
+      ref={setTableData}
+      selectedId={selectedId}
+      noScrollToRow
+      noDeselect
+    />
+  );
 };
 
 const ProtvistaStructureWrapper = () => {
