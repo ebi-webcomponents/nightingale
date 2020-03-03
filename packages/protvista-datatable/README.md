@@ -64,3 +64,11 @@ The row id to select. Row ids are attributed based on the `protvistaFeatureId` a
 ### `height: number (optional)`
 
 The height of the table (in `rem`)
+
+### `noScrollToRow: boolean (false)`
+
+Don't scroll to row if it has been selected
+
+### `noDeselect: boolean (false)`
+
+Don't de-select row if clicking outside of table
