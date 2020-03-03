@@ -106,6 +106,8 @@ const PDBDatatable = ({ xrefs }) => {
         node.data = data;
         // eslint-disable-next-line no-param-reassign
         node.columns = getColumnConfig();
+        // eslint-disable-next-line no-param-reassign
+        node.rowClickEvent = ({id})=> ({'pdb-id': id})
       }
     },
     [data]
