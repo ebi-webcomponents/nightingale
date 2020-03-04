@@ -132,16 +132,13 @@ const ProtvistaStructureWrapper = () => {
       <h2>Examples</h2>
       <h3>Structure with highlighted positions</h3>
       <protvista-structure
-          pdb-id={selectedId}
-          accession="P05067"
-          highlight="290:300,310:340"
-        />
+        pdb-id={selectedId}
+        accession="P05067"
+        highlight="290:300,310:340"
+      />
       <h3>Structure with protvista-datatable</h3>
       <protvista-manager attributes="pdb-id">
-        <protvista-structure
-          pdb-id={selectedId}
-          accession="P05067"
-        />
+        <protvista-structure pdb-id={selectedId} accession="P05067" />
         <PDBDatatable xrefs={xrefData} />
       </protvista-manager>
     </Fragment>
