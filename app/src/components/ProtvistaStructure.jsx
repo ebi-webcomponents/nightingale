@@ -23,10 +23,15 @@ const processData = xrefs =>
     const { Chains, Resolution, Method } = properties;
     let chain;
     let positions;
+    let start;
     if (Chains) {
       const tokens = Chains.split("=");
       if (tokens.length === 2) {
         [chain, positions] = tokens;
+        const startEnd = positions.split("-");
+        if (startEnd && startEnd.length === 2) {
+          [start] = startEnd;
+        }
       }
     }
     return {
@@ -35,7 +40,8 @@ const processData = xrefs =>
       resolution: !Resolution || Resolution === "-" ? null : Resolution,
       chain,
       positions,
-      protvistaFeatureId: id
+      protvistaFeatureId: id,
+      start: Number(start)
     };
   });
 
