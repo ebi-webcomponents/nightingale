@@ -28,7 +28,7 @@ Wrapping it within `<protvista-manager>` will allow highlighting of features as 
 
 #### `data: Object`
 
-The data to display. `protvistaFeatureId` can be used as an attribute of the `data` object to provide an id for each row.
+The data to display. `protvistaFeatureId` can be used as an attribute of the `data` object to provide an id for each row. To sort rows by position the `data` object must have either `start` or `begin` as attributes.
 
 #### `columns: Object`
 
