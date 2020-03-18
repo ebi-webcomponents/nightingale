@@ -2,18 +2,15 @@
 import clone from "lodash-es/clone";
 import { addStringItem } from "./treeMenu";
 
-let subcellulartreeMenu;
-let diseases;
-
-function load(accession) {
-  subcellulartreeMenu = [];
-  diseases = {};
+export function load(accession) {
   return fetch(
     `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`
-  ).then(resp => resp.json().then(json => process(json)));
+  );
 }
 
-function process(data) {
+export function process(data) {
+  const subcellulartreeMenu = [];
+  const diseases = {};
   // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
   data = data.map(d => {
     if (!d.interactions) d.interactions = [];
@@ -40,21 +37,8 @@ function process(data) {
   for (const element of data) {
     element.filterTerms = [];
     const interactors = [];
-    // isoforms
-    // if (element.accession.includes('-')) {
-    //     element.isoform = element.accession;
-    //     element.accession = element
-    //         .accession
-    //         .split('-')[0];
-    // }
     // Add source  to the nodes
     for (const interactor of element.interactions) {
-      // if (interactor.id && interactor.id.includes('-')) {
-      //     interactor.isoform = interactor.id;
-      //     interactor.id = interactor
-      //         .id
-      //         .split('-')[0];
-      // }
       // Add interaction for SELF
       if (interactor.interactionType === "SELF") {
         interactor.source = element.accession;
@@ -67,7 +51,6 @@ function process(data) {
         })
       ) {
         interactor.source = element.accession;
-        // .split('-')[0];
         addInteractor(interactor, interactors);
       }
     }
@@ -98,7 +81,7 @@ function process(data) {
       }
     }
   }
-  return data;
+  return { data, subcellulartreeMenu, diseases: values(diseases) };
 }
 
 function addInteractor(interactor, interactors) {
@@ -120,21 +103,3 @@ function values(obj) {
   }
   return ret;
 }
-
-function getFilters() {
-  return [
-    {
-      name: "subcellularLocations",
-      label: "Subcellular location",
-      type: "tree",
-      items: subcellulartreeMenu
-    },
-    {
-      name: "diseases",
-      label: "Diseases",
-      items: values(diseases)
-    }
-  ];
-}
-
-export { load, getFilters };

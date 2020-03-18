@@ -3,12 +3,40 @@ import { select, selectAll, mouse } from "d3-selection";
 import { scaleBand, scaleLinear } from "d3-scale";
 import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";
-import { load, getFilters } from "./apiLoader";
+import { load, process } from "./apiLoader";
 import { addStringItem, traverseTree, getPath } from "./treeMenu";
 import "../styles/main.css";
 
 let filters = [];
 let nodes;
+
+function getFilters(subcellulartreeMenu, diseases) {
+  return [
+    {
+      name: "subcellularLocations",
+      label: "Subcellular location",
+      type: "tree",
+      items: subcellulartreeMenu
+    },
+    {
+      name: "diseases",
+      label: "Diseases",
+      items: diseases
+    }
+  ];
+}
+
+const dispatchLoadedEvent = (el, error) => {
+  el.dispatchEvent(
+    new CustomEvent("protvista-event", {
+      detail: {
+        loaded: true,
+        error: error
+      },
+      bubbles: true
+    })
+  );
+};
 
 class InteractionViewer extends HTMLElement {
   constructor() {
@@ -39,7 +67,7 @@ class InteractionViewer extends HTMLElement {
     return this._accession;
   }
 
-  render() {
+  async render() {
     if (!this._accession) {
       return;
     }
@@ -57,14 +85,19 @@ class InteractionViewer extends HTMLElement {
       .select(".interaction-tooltip")
       .remove();
 
-    // show spinner until data is loaded
-    select(this)
-      .append("div")
-      .attr("class", "loader");
-
-    load(this._accession).then(data => {
-      draw(this, this._accession, data);
-    });
+    const jsonData = await load(this._accession)
+      .then(async response => await response.json().then(json => json))
+      .catch(e => dispatchLoadedEvent(this, e));
+    if (jsonData) {
+      const { data, subcellulartreeMenu, diseases } = await process(jsonData);
+      dispatchLoadedEvent(this);
+      draw(
+        this,
+        this._accession,
+        data,
+        getFilters(subcellulartreeMenu, diseases)
+      );
+    }
   }
 }
 
@@ -107,11 +140,7 @@ function formatSubcellularLocationInfo(data) {
   }
 }
 
-function draw(el, accession, data) {
-  select(el)
-    .select(".loader")
-    .remove();
-
+function draw(el, accession, data, filters) {
   nodes = data;
 
   var tooltip = select(el)
@@ -133,7 +162,7 @@ function draw(el, accession, data) {
       `${accession} has binary interactions with ${nodes.length - 1} proteins`
     );
 
-  createFilter(el, getFilters());
+  createFilter(el, filters);
 
   const margin = {
       top: 100,
@@ -407,8 +436,10 @@ function hasFilterMatch(source, target, filters) {
   }
   const interactionFilters = _union(source.filterTerms, target.filterTerms);
   return (
-    _intersection(interactionFilters, filters.map(item => item["name"]))
-      .length === filters.length
+    _intersection(
+      interactionFilters,
+      filters.map(item => item["name"])
+    ).length === filters.length
   );
 }
 
