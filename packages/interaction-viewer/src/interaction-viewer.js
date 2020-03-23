@@ -1,15 +1,19 @@
-/* eslint-disable */
-import { select, selectAll, mouse } from "d3-selection";
+/* eslint-disable no-param-reassign */
+import { select, selectAll } from "d3-selection";
 import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";
 import { load, process } from "./apiLoader";
-import { addStringItem, traverseTree, getPath } from "./treeMenu";
-import "../styles/main.css";
 import drawAdjacencyGraph from "./AdjacencyGraph";
 import drawFilters, { getNameAsHTMLId } from "./filters";
+import "../styles/main.css";
 
 const ADJACENCY_GRAPH = "ADJACENCY_GRAPH";
 const FORCE_DIRECTED_GRAPH = "FORCE_DIRECTED_GRAPH";
+
+function ellipsis(text) {
+  const n = 25;
+  return text.length > n ? `${text.substr(0, n - 1)}...` : text;
+}
 
 function getFilters(subcellulartreeMenu, diseases) {
   return [
@@ -32,10 +36,25 @@ const dispatchLoadedEvent = (el, error) => {
     new CustomEvent("protvista-event", {
       detail: {
         loaded: true,
-        error: error
+        error
       },
       bubbles: true
     })
+  );
+};
+
+// Check if either the source or the target contain one of the specified
+// filters. returns true if no filters selected
+const hasFilterMatch = (source, target, filters) => {
+  if (filters.length <= 0) {
+    return true;
+  }
+  const interactionFilters = _union(source.filterTerms, target.filterTerms);
+  return (
+    _intersection(
+      interactionFilters,
+      filters.map(item => item.name)
+    ).length === filters.length
   );
 };
 
@@ -44,7 +63,7 @@ class InteractionViewer extends HTMLElement {
     super();
     this.mode = ADJACENCY_GRAPH;
     this.filters = [];
-    this.nodes;
+    this.nodes = null;
     this.clickFilter = this.clickFilter.bind(this);
     this.resetFilter = this.resetFilter.bind(this);
     this.resetAllFilters = this.resetAllFilters.bind(this);
@@ -63,7 +82,7 @@ class InteractionViewer extends HTMLElement {
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
-    if (attrName === "accession" && oldVal != null && oldVal != newVal) {
+    if (attrName === "accession" && oldVal != null && oldVal !== newVal) {
       this._accession = newVal;
       this.render();
     }
@@ -97,16 +116,11 @@ class InteractionViewer extends HTMLElement {
   }
 
   updateFilterSelection() {
-    for (let filter of this.filters) {
-      let item = select(`#${getNameAsHTMLId(filter.name)}`);
+    for (const filter of this.filters) {
+      const item = select(`#${getNameAsHTMLId(filter.name)}`);
       item.classed("active", filter.selected);
     }
     this.filterData();
-  }
-
-  removeFilter(d) {
-    d.selected = false;
-    updateFilterSelection();
   }
 
   resetAllFilters() {
@@ -121,30 +135,15 @@ class InteractionViewer extends HTMLElement {
     return this.nodes.find(node => node.accession === accession);
   }
 
-  // Check if either the source or the target contain one of the specified
-  // filters. returns true if no filters selected
-  hasFilterMatch(source, target, filters) {
-    if (filters.length <= 0) {
-      return true;
-    }
-    const interactionFilters = _union(source.filterTerms, target.filterTerms);
-    return (
-      _intersection(
-        interactionFilters,
-        filters.map(item => item["name"])
-      ).length === filters.length
-    );
-  }
-
   // Hide nodes and labels which don't belong to a visible filter
   filterData() {
-    let activeFilters = this.filters.filter(d => d.selected);
+    const activeFilters = this.filters.filter(d => d.selected);
 
-    let visibleAccessions = [];
+    const visibleAccessions = [];
     selectAll(".cell").attr("opacity", d => {
       const source = this.getNodeByAccession(d.source);
       const target = this.getNodeByAccession(d.id);
-      const visible = this.hasFilterMatch(source, target, activeFilters);
+      const visible = hasFilterMatch(source, target, activeFilters);
       if (visible) {
         visibleAccessions.push(source.accession);
         visibleAccessions.push(target.accession);
@@ -175,7 +174,7 @@ class InteractionViewer extends HTMLElement {
       .remove();
 
     const jsonData = await load(this._accession)
-      .then(async response => await response.json().then(json => json))
+      .then(async response => response.json().then(json => json))
       .catch(e => dispatchLoadedEvent(this, e));
     if (jsonData) {
       const { data, subcellulartreeMenu, diseases } = await process(jsonData);
@@ -197,62 +196,15 @@ class InteractionViewer extends HTMLElement {
             data,
             getFilters(subcellulartreeMenu, diseases)
           );
-          return;
+          break;
         case FORCE_DIRECTED_GRAPH:
+          break;
         //
         default:
-          return;
+          break;
       }
     }
   }
-}
-
-function formatDiseaseInfo(data, acc) {
-  if (data) {
-    let formatedString = "";
-    for (var disease of data) {
-      if (disease.dbReference) {
-        //Some have only text
-        formatedString += `<p><a href="//www.uniprot.org/uniprot/${acc}#${disease.acronym}" target="_blank">${disease.diseaseId}</a></p>`;
-      }
-    }
-    return formatedString;
-  } else {
-    return "N/A";
-  }
-}
-
-function formatSubcellularLocationInfo(data) {
-  if (data) {
-    let formatedString = '<ul class="tree-list">';
-    let tree = [];
-    for (var interactionType of data) {
-      if (!interactionType.locations) {
-        continue;
-      }
-      for (var location of interactionType.locations) {
-        addStringItem(location.location.value, tree);
-        // formatedString += `<p>${location.location.value}</p>`;
-      }
-    }
-    traverseTree(
-      tree,
-      d =>
-        (formatedString += `<li style="margin-left:${d.depth}em">${d.name}</li>`)
-    );
-    return `${formatedString}</ul>`;
-  } else {
-    return "N/A";
-  }
-}
-
-function ellipsis(text) {
-  const n = 25;
-  return text.length > n ? text.substr(0, n - 1) + "..." : text;
-}
-
-function required(name) {
-  throw Error(`missing option: ${name}`);
 }
 
 export default InteractionViewer;

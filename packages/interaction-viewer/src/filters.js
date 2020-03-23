@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { select } from "d3-selection";
 import { traverseTree } from "./treeMenu";
 
@@ -59,13 +60,13 @@ function drawFilters(
           allFilters.push(d);
           ul.datum(d)
             .append("li")
-            .style("padding-left", d.depth + "em")
+            .style("padding-left", `${d.depth}em`)
             .attr("id", d => getNameAsHTMLId(d.name))
             .text(d => d.name)
             .on("click", d => clickFilter(d, filter.name));
         });
       } else {
-        for (let d of filter.items) {
+        for (const d of filter.items) {
           d.type = filter.name;
           allFilters.push(d);
         }
@@ -86,7 +87,7 @@ function drawFilters(
     .append("button")
     .attr("class", "iv_reset")
     .text("Reset filters")
-    .on("click", d => {
+    .on("click", () => {
       resetAllFilters();
       return false;
     });

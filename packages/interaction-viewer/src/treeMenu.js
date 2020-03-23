@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-param-reassign */
 const addToTree = (nodes, items, parent) => {
   if (items.length <= 0) {
     return;
@@ -37,14 +37,6 @@ function traverseTree(data, callback, depth) {
       traverseTree(datum.children, callback, depth);
     }
   }
-}
-
-function findNode(tree, target, callback) {
-  traverseTree(tree, function(t) {
-    if (t.name === target) {
-      return callback(t);
-    }
-  });
 }
 
 function getPath(target, path) {

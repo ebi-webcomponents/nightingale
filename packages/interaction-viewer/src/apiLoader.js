@@ -1,6 +1,18 @@
-/* eslint-disable */
+/* eslint-disable no-param-reassign */
 import clone from "lodash-es/clone";
 import { addStringItem } from "./treeMenu";
+
+function addInteractor(interactor, interactors) {
+  const existingInteractor = interactors.find(i => interactor.id === i.id);
+  if (existingInteractor) {
+    // Merge objects
+    if (interactor.isoform) {
+      existingInteractor.isoform = interactor.isoform;
+    }
+  } else {
+    interactors.push(interactor);
+  }
+}
 
 export function load(accession) {
   return fetch(
@@ -71,7 +83,7 @@ export function process(data) {
         interactor.id = element.accession;
         addInteractor(interactor, interactors);
       } else if (
-        data.some(function(d) {
+        data.some(d => {
           // Check that interactor is in the data
           return d.accession === interactor.id;
         })
@@ -84,16 +96,15 @@ export function process(data) {
     element.interactions = interactors;
 
     if (element.subcellularLocations) {
-      for (const location of element.subcellularLocations) {
-        if (!location.locations) {
-          continue;
-        }
-        for (const actualLocation of location.locations) {
-          addStringItem(actualLocation.location.value, subcellulartreeMenu);
-          const locationSplit = actualLocation.location.value.split(", ");
-          element.filterTerms = element.filterTerms.concat(locationSplit);
-        }
-      }
+      element.subcellularLocations
+        .filter(d => d.locations)
+        .forEach(location => {
+          for (const actualLocation of location.locations) {
+            addStringItem(actualLocation.location.value, subcellulartreeMenu);
+            const locationSplit = actualLocation.location.value.split(", ");
+            element.filterTerms = element.filterTerms.concat(locationSplit);
+          }
+        });
     }
     if (element.diseases) {
       for (const disease of element.diseases) {
@@ -107,25 +118,5 @@ export function process(data) {
       }
     }
   }
-  return { data, subcellulartreeMenu, diseases: values(diseases) };
-}
-
-function addInteractor(interactor, interactors) {
-  const existingInteractor = interactors.find(i => interactor.id === i.id);
-  if (existingInteractor) {
-    // Merge objects
-    if (interactor.isoform) {
-      existingInteractor.isoform = interactor.isoform;
-    }
-  } else {
-    interactors.push(interactor);
-  }
-}
-
-function values(obj) {
-  const ret = [];
-  for (const [k, v] of Object.entries(obj)) {
-    ret.push(v);
-  }
-  return ret;
+  return { data, subcellulartreeMenu, diseases: Object.values(diseases) };
 }
