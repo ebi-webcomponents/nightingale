@@ -101,13 +101,13 @@ const drawAdjacencyGraph = (el, accession, data) => {
 
   const mouseover = p => {
     select(this).classed("active-cell", true);
-    selectAll(".interaction-row").classed("active", d => d.accession === p.id);
+    // selectAll(".interaction-row").classed("active", d => d.accession === p.id);
     // selectAll(".column").classed("active", d => d.accession === p.id);
 
     selectAll(".interaction-viewer-group")
       .append("line")
       .attr("class", "active-row")
-      .attr("style", "opacity:0")
+      .attr("style", "opacity:0.3")
       .attr("x1", 0)
       .attr("y1", x(p.source) + x.bandwidth() / 2)
       .attr("x2", x(p.id))
@@ -116,7 +116,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     selectAll(".interaction-viewer-group")
       .append("line")
       .attr("class", "active-row")
-      .attr("style", "opacity:0")
+      .attr("style", "opacity:0.3")
       .attr("x1", x(p.id) + x.bandwidth() / 2)
       .attr("y1", 0)
       .attr("x2", x(p.id) + x.bandwidth() / 2)
