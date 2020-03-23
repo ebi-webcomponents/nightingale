@@ -8,9 +8,33 @@ export function load(accession) {
   );
 }
 
+export const createGraph = data => {
+  const nodes = data.map(node => ({
+    accession: node.accession,
+    name: node.name,
+    proteinExistence: node.proteinExistence,
+    taxonomy: node.taxonomy
+  }));
+
+  const edges = data.reduce((accumulator, node) => {
+    const interactions = node.interactions ? node.interactions : [];
+    return [
+      ...accumulator,
+      ...interactions.map(interaction => ({
+        ...interaction,
+        accession1: interaction.accession1
+          ? interaction.accession1
+          : node.accession
+      }))
+    ];
+  }, []);
+  return { nodes, edges };
+};
+
 export function process(data) {
   const subcellulartreeMenu = [];
   const diseases = {};
+
   // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
   data = data.map(d => {
     if (!d.interactions) d.interactions = [];
@@ -20,7 +44,9 @@ export function process(data) {
   // Add symmetry if required
   for (const element of data) {
     for (const interactor of element.interactions) {
-      const otherInteractor = data.find(d => d.accession === interactor.id);
+      const otherInteractor = data.find(
+        d => d.accession === interactor.accession2
+      );
       if (otherInteractor) {
         if (
           !otherInteractor.interactions.find(d => d.id === element.accession)

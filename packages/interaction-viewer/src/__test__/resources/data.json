@@ -7,182 +7,195 @@
     "interactions": [
       {
         "interactionType": "BINARY",
+        "accession1": "Q9NYB9",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-743598",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q9NYB9",
-        "gene": "ABI2",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-743598",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession1": "Q9P2A4",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-742038",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q9P2A4",
-        "gene": "ABI3",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-742038",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession1": "D3DR37",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-10173536",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "D3DR37",
-        "gene": "CEP55",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-10173536",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-741977",
+        "interactor2": "EBI-740402",
+        "experiments": 4,
         "id": "Q96MT8",
-        "gene": "CEP63",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-741977",
-        "experiments": 4,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-295827",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "P11532",
-        "gene": "DMD",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-295827",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-465804",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q96EV8",
-        "gene": "DTNBP1",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-465804",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-447141",
+        "interactor2": "EBI-740402",
+        "experiments": 4,
         "id": "Q9UJY5",
-        "gene": "GGA1",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-447141",
+        "source": "O60941"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-740641",
+        "interactor2": "EBI-740402",
         "experiments": 4,
-        "source": "O60941"
-      },
-      {
-        "interactionType": "BINARY",
-        "id": "V9HW80",
-        "gene": "HEL-S-70",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-10175326",
-        "experiments": 3,
-        "source": "O60941"
-      },
-      {
-        "interactionType": "BINARY",
         "id": "Q9NP66",
-        "gene": "HMG20A",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-740641",
-        "experiments": 4,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-948001",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q15323",
-        "gene": "KRT31",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-948001",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-10171697",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q6A162",
-        "gene": "KRT40",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-10171697",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-742948",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q5JR59",
-        "gene": "MTUS2",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-742948",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-928842",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q9GZM8",
-        "gene": "NDEL1",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-928842",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-347978",
+        "interactor2": "EBI-740402",
+        "experiments": 4,
         "id": "P37198",
-        "gene": "NUP62",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-347978",
-        "experiments": 4,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-745426",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q13136",
-        "gene": "PPFIA1",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-745426",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-8483734",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q9BXG8",
-        "gene": "SPZ1",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-8483734",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-355744",
+        "interactor2": "EBI-740402",
+        "experiments": 4,
         "id": "Q12933",
-        "gene": "TRAF2",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-355744",
-        "experiments": 4,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-740402",
+        "experiments": 4,
         "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-359793",
-        "experiments": 4,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-739895",
+        "interactor2": "EBI-740402",
+        "experiments": 3,
         "id": "Q8N6Y0",
-        "gene": "USHBP1",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-739895",
-        "experiments": 3,
         "source": "O60941"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q96C00",
-        "gene": "ZBTB9",
-        "interactor1": "EBI-740402",
-        "interactor2": "EBI-395708",
+        "accession2": "O60941",
+        "gene": "DTNB",
+        "interactor1": "EBI-395708",
+        "interactor2": "EBI-740402",
         "experiments": 3,
+        "id": "Q96C00",
         "source": "O60941"
       }
     ],
@@ -202,29 +215,44 @@
     "interactions": [
       {
         "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q9NYB9",
+        "gene": "ABI2",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-743598",
+        "experiments": 3,
         "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-743598",
-        "interactor2": "EBI-740402",
-        "experiments": 3,
         "source": "Q9NYB9"
       },
       {
         "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q9NYB9",
+        "gene": "ABI2",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-743598",
+        "experiments": 3,
+        "id": "Q9NYB9",
+        "source": "Q9NYB9"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "Q9NYB9",
+        "gene": "ABI2",
+        "interactor1": "EBI-948001",
+        "interactor2": "EBI-743598",
+        "experiments": 3,
         "id": "Q15323",
-        "gene": "KRT31",
-        "interactor1": "EBI-743598",
-        "interactor2": "EBI-948001",
-        "experiments": 3,
         "source": "Q9NYB9"
       },
       {
         "interactionType": "BINARY",
-        "id": "P37198",
-        "gene": "NUP62",
-        "interactor1": "EBI-743598",
-        "interactor2": "EBI-347978",
+        "accession2": "Q9NYB9",
+        "gene": "ABI2",
+        "interactor1": "EBI-347978",
+        "interactor2": "EBI-743598",
         "experiments": 3,
+        "id": "P37198",
         "source": "Q9NYB9"
       }
     ],
@@ -297,11 +325,13 @@
       },
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-742038",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q9P2A4",
+        "gene": "ABI3",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-742038",
         "experiments": 3,
+        "id": "O60941",
         "source": "Q9P2A4"
       }
     ],
@@ -317,7 +347,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "11956071",
+                    "accession2": "11956071",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/11956071",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/11956071"
                   }
@@ -339,11 +369,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-10173536",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "D3DR37",
+        "gene": "CEP55",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-10173536",
         "experiments": 3,
+        "id": "O60941",
+        "source": "D3DR37"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "D3DR37",
+        "gene": "CEP55",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-10173536",
+        "experiments": 3,
+        "id": "D3DR37",
         "source": "D3DR37"
       }
     ],
@@ -357,20 +400,34 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-741977",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q96MT8",
+        "gene": "CEP63",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-741977",
         "experiments": 4,
+        "id": "O60941",
         "source": "Q96MT8"
       },
       {
         "interactionType": "BINARY",
-        "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-741977",
-        "interactor2": "EBI-359793",
+        "accession1": "O60941",
+        "accession2": "Q96MT8",
+        "gene": "CEP63",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-741977",
         "experiments": 4,
+        "id": "Q96MT8",
+        "source": "Q96MT8"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "Q96MT8",
+        "gene": "CEP63",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-741977",
+        "experiments": 4,
+        "id": "P40222",
         "source": "Q96MT8"
       }
     ],
@@ -379,7 +436,7 @@
         "type": "DISEASE",
         "diseaseId": "Seckel syndrome 6",
         "acronym": "SCKL6",
-        "dbReference": { "type": "MIM", "id": "614728" },
+        "dbReference": { "type": "MIM", "accession2": "614728" },
         "description": {
           "value": "A rare autosomal recessive disorder characterized by proportionate dwarfism of prenatal onset associated with low birth weight, growth retardation, severe microcephaly with a bird-headed like appearance, and mental retardation.",
           "evidences": [
@@ -387,7 +444,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "21983783",
+                "accession2": "21983783",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/21983783",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/21983783"
               }
@@ -413,7 +470,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "26297806",
+                    "accession2": "26297806",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/26297806",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/26297806"
                   }
@@ -429,7 +486,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21983783",
+                    "accession2": "21983783",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21983783",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21983783"
                   }
@@ -438,7 +495,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "26297806",
+                    "accession2": "26297806",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/26297806",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/26297806"
                   }
@@ -454,7 +511,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "24613305",
+                    "accession2": "24613305",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/24613305",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/24613305"
                   }
@@ -471,7 +528,7 @@
                 "code": "ECO:0000269",
                 "source": {
                   "name": "PubMed",
-                  "id": "21983783",
+                  "accession2": "21983783",
                   "url": "http://www.ncbi.nlm.nih.gov/pubmed/21983783",
                   "alternativeUrl": "http://europepmc.org/abstract/MED/21983783"
                 }
@@ -480,7 +537,7 @@
                 "code": "ECO:0000269",
                 "source": {
                   "name": "PubMed",
-                  "id": "26297806",
+                  "accession2": "26297806",
                   "url": "http://www.ncbi.nlm.nih.gov/pubmed/26297806",
                   "alternativeUrl": "http://europepmc.org/abstract/MED/26297806"
                 }
@@ -516,11 +573,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-295827",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "P11532",
+        "gene": "DMD",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-295827",
         "experiments": 3,
+        "id": "O60941",
+        "source": "P11532"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "P11532",
+        "gene": "DMD",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-295827",
+        "experiments": 3,
+        "id": "P11532",
         "source": "P11532"
       }
     ],
@@ -529,7 +599,7 @@
         "type": "DISEASE",
         "diseaseId": "Duchenne muscular dystrophy",
         "acronym": "DMD",
-        "dbReference": { "type": "MIM", "id": "310200" },
+        "dbReference": { "type": "MIM", "accession2": "310200" },
         "description": {
           "value": "Most common form of muscular dystrophy; a sex-linked recessive disorder. It typically presents in boys aged 3 to 7 year as proximal muscle weakness causing waddling gait, toe-walking, lordosis, frequent falls, and difficulty in standing up and climbing up stairs. The pelvic girdle is affected first, then the shoulder girdle. Progression is steady and most patients are confined to a wheelchair by age of 10 or 12. Flexion contractures and scoliosis ultimately occur. About 50% of patients have a lower IQ than their genetic expectations would suggest. There is no treatment.",
           "evidences": [
@@ -537,7 +607,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "12632325",
+                "accession2": "12632325",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/12632325",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/12632325"
               }
@@ -546,7 +616,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "24302611",
+                "accession2": "24302611",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/24302611",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/24302611"
               }
@@ -555,7 +625,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "7981690",
+                "accession2": "7981690",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/7981690",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/7981690"
               }
@@ -564,7 +634,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "8401582",
+                "accession2": "8401582",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/8401582",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/8401582"
               }
@@ -573,7 +643,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "8817332",
+                "accession2": "8817332",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/8817332",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/8817332"
               }
@@ -582,7 +652,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "9851445",
+                "accession2": "9851445",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/9851445",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/9851445"
               }
@@ -599,7 +669,7 @@
         "type": "DISEASE",
         "diseaseId": "Becker muscular dystrophy",
         "acronym": "BMD",
-        "dbReference": { "type": "MIM", "id": "300376" },
+        "dbReference": { "type": "MIM", "accession2": "300376" },
         "description": {
           "value": "A neuromuscular disorder characterized by dystrophin deficiency. It appears between the age of 5 and 15 years with a proximal motor deficiency of variable progression. Heart involvement can be the initial sign. Becker muscular dystrophy has a more benign course than Duchenne muscular dystrophy.",
           "evidences": [
@@ -607,7 +677,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "10573008",
+                "accession2": "10573008",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/10573008",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/10573008"
               }
@@ -624,7 +694,7 @@
         "type": "DISEASE",
         "diseaseId": "Cardiomyopathy, dilated, X-linked 3B",
         "acronym": "CMD3B",
-        "dbReference": { "type": "MIM", "id": "302045" },
+        "dbReference": { "type": "MIM", "accession2": "302045" },
         "description": {
           "value": "A disorder characterized by ventricular dilation and impaired systolic function, resulting in congestive heart failure and arrhythmia. Patients are at risk of premature death.",
           "evidences": [
@@ -632,7 +702,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "12354438",
+                "accession2": "12354438",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/12354438",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/12354438"
               }
@@ -641,7 +711,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "12359139",
+                "accession2": "12359139",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/12359139",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/12359139"
               }
@@ -650,7 +720,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "25340340",
+                "accession2": "25340340",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/25340340",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/25340340"
               }
@@ -659,7 +729,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "9170407",
+                "accession2": "9170407",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/9170407",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/9170407"
               }
@@ -685,7 +755,7 @@
                   "code": "ECO:0000250",
                   "source": {
                     "name": "UniProtKB",
-                    "id": "P11531",
+                    "accession2": "P11531",
                     "url": "http://www.uniprot.org/uniprot/P11531"
                   }
                 }
@@ -698,7 +768,7 @@
                   "code": "ECO:0000250",
                   "source": {
                     "name": "UniProtKB",
-                    "id": "P11531",
+                    "accession2": "P11531",
                     "url": "http://www.uniprot.org/uniprot/P11531"
                   }
                 }
@@ -711,7 +781,7 @@
                   "code": "ECO:0000250",
                   "source": {
                     "name": "UniProtKB",
-                    "id": "P11531",
+                    "accession2": "P11531",
                     "url": "http://www.uniprot.org/uniprot/P11531"
                   }
                 }
@@ -726,7 +796,7 @@
                   "code": "ECO:0000250",
                   "source": {
                     "name": "UniProtKB",
-                    "id": "P11531",
+                    "accession2": "P11531",
                     "url": "http://www.uniprot.org/uniprot/P11531"
                   }
                 }
@@ -741,7 +811,7 @@
                   "code": "ECO:0000250",
                   "source": {
                     "name": "UniProtKB",
-                    "id": "P11531",
+                    "accession2": "P11531",
                     "url": "http://www.uniprot.org/uniprot/P11531"
                   }
                 }
@@ -757,7 +827,7 @@
                 "code": "ECO:0000250",
                 "source": {
                   "name": "UniProtKB",
-                  "id": "P11531",
+                  "accession2": "P11531",
                   "url": "http://www.uniprot.org/uniprot/P11531"
                 }
               }
@@ -787,11 +857,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-465804",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q96EV8",
+        "gene": "DTNBP1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-465804",
         "experiments": 3,
+        "id": "O60941",
+        "source": "Q96EV8"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q96EV8",
+        "gene": "DTNBP1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-465804",
+        "experiments": 3,
+        "id": "Q96EV8",
         "source": "Q96EV8"
       }
     ],
@@ -800,7 +883,7 @@
         "type": "DISEASE",
         "diseaseId": "Hermansky-Pudlak syndrome 7",
         "acronym": "HPS7",
-        "dbReference": { "type": "MIM", "id": "614076" },
+        "dbReference": { "type": "MIM", "accession2": "614076" },
         "description": {
           "value": "A form of Hermansky-Pudlak syndrome, a genetically heterogeneous autosomal recessive disorder characterized by oculocutaneous albinism, bleeding due to platelet storage pool deficiency, and lysosomal storage defects. This syndrome results from defects of diverse cytoplasmic organelles including melanosomes, platelet dense granules and lysosomes. Ceroid storage in the lungs is associated with pulmonary fibrosis, a common cause of premature death in individuals with HPS.",
           "evidences": [
@@ -808,7 +891,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "12923531",
+                "accession2": "12923531",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/12923531",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/12923531"
               }
@@ -831,7 +914,7 @@
                 "code": "ECO:0000269",
                 "source": {
                   "name": "PubMed",
-                  "id": "15124027",
+                  "accession2": "15124027",
                   "url": "http://www.ncbi.nlm.nih.gov/pubmed/15124027",
                   "alternativeUrl": "http://europepmc.org/abstract/MED/15124027"
                 }
@@ -840,7 +923,7 @@
                 "code": "ECO:0000269",
                 "source": {
                   "name": "PubMed",
-                  "id": "15345706",
+                  "accession2": "15345706",
                   "url": "http://www.ncbi.nlm.nih.gov/pubmed/15345706",
                   "alternativeUrl": "http://europepmc.org/abstract/MED/15345706"
                 }
@@ -849,7 +932,7 @@
                 "code": "ECO:0000269",
                 "source": {
                   "name": "PubMed",
-                  "id": "19617633",
+                  "accession2": "19617633",
                   "url": "http://www.ncbi.nlm.nih.gov/pubmed/19617633",
                   "alternativeUrl": "http://europepmc.org/abstract/MED/19617633"
                 }
@@ -872,7 +955,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -888,7 +971,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -902,7 +985,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -916,7 +999,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -932,7 +1015,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -946,7 +1029,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -960,7 +1043,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -976,7 +1059,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -990,7 +1073,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1004,7 +1087,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1020,7 +1103,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1042,7 +1125,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1069,7 +1152,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1085,7 +1168,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1099,7 +1182,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1113,7 +1196,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1129,7 +1212,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1143,7 +1226,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1157,7 +1240,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1173,7 +1256,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1187,7 +1270,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1201,7 +1284,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1231,7 +1314,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1253,7 +1336,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1280,7 +1363,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1296,7 +1379,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1310,7 +1393,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1324,7 +1407,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1340,7 +1423,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1354,7 +1437,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1368,7 +1451,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1384,7 +1467,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1398,7 +1481,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1412,7 +1495,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1442,7 +1525,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "21390302",
+                    "accession2": "21390302",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/21390302",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/21390302"
                   }
@@ -1509,11 +1592,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-447141",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q9UJY5",
+        "gene": "GGA1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-447141",
         "experiments": 4,
+        "id": "O60941",
+        "source": "Q9UJY5"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q9UJY5",
+        "gene": "GGA1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-447141",
+        "experiments": 4,
+        "id": "Q9UJY5",
         "source": "Q9UJY5"
       }
     ],
@@ -1548,11 +1644,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
+        "accession1": "O60941",
+        "accession2": "V9HW80",
         "gene": "HEL-S-70",
         "interactor1": "EBI-740402",
         "interactor2": "EBI-10175326",
         "experiments": 3,
+        "id": "O60941",
+        "source": "V9HW80"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "V9HW80",
+        "gene": "HEL-S-70",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-10175326",
+        "experiments": 3,
+        "id": "V9HW80",
         "source": "V9HW80"
       }
     ],
@@ -1574,11 +1683,13 @@
       },
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-740641",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q9NP66",
+        "gene": "HMG20A",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-740641",
         "experiments": 4,
+        "id": "O60941",
         "source": "Q9NP66"
       }
     ],
@@ -1594,7 +1705,7 @@
                   "code": "ECO:0000255",
                   "source": {
                     "name": "PROSITE-ProRule",
-                    "id": "PRU00267",
+                    "accession2": "PRU00267",
                     "url": "http://prosite.expasy.org/unirule/PRU00267"
                   }
                 }
@@ -1614,38 +1725,55 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "Q9NYB9",
-        "gene": "ABI2",
-        "interactor1": "EBI-948001",
-        "interactor2": "EBI-743598",
+        "accession1": "O60941",
+        "accession2": "Q15323",
+        "gene": "KRT31",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-948001",
         "experiments": 3,
-        "source": "Q15323"
-      },
-      {
-        "interactionType": "BINARY",
         "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-948001",
-        "interactor2": "EBI-740402",
-        "experiments": 3,
         "source": "Q15323"
       },
       {
         "interactionType": "BINARY",
-        "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-948001",
-        "interactor2": "EBI-359793",
+        "accession1": "Q9NYB9",
+        "accession2": "Q15323",
+        "gene": "KRT31",
+        "interactor1": "EBI-743598",
+        "interactor2": "EBI-948001",
+        "experiments": 3,
+        "id": "Q9NYB9",
+        "source": "Q15323"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q15323",
+        "gene": "KRT31",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-948001",
+        "experiments": 3,
+        "id": "Q15323",
+        "source": "Q15323"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "Q15323",
+        "gene": "KRT31",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-948001",
         "experiments": 5,
+        "id": "P40222",
         "source": "Q15323"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q8N6Y0",
-        "gene": "USHBP1",
-        "interactor1": "EBI-948001",
-        "interactor2": "EBI-739895",
+        "accession2": "Q15323",
+        "gene": "KRT31",
+        "interactor1": "EBI-739895",
+        "interactor2": "EBI-948001",
         "experiments": 3,
+        "id": "Q8N6Y0",
         "source": "Q15323"
       }
     ],
@@ -1659,38 +1787,54 @@
     "interactions": [
       {
         "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q6A162",
+        "gene": "KRT40",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-10171697",
+        "experiments": 3,
         "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-10171697",
-        "interactor2": "EBI-740402",
-        "experiments": 3,
         "source": "Q6A162"
       },
       {
         "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q6A162",
+        "gene": "KRT40",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-10171697",
+        "experiments": 3,
+        "id": "Q6A162",
+        "source": "Q6A162"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "Q6A162",
+        "gene": "KRT40",
+        "interactor1": "EBI-928842",
+        "interactor2": "EBI-10171697",
+        "experiments": 3,
         "id": "Q9GZM8",
-        "gene": "NDEL1",
-        "interactor1": "EBI-10171697",
-        "interactor2": "EBI-928842",
-        "experiments": 3,
         "source": "Q6A162"
       },
       {
         "interactionType": "BINARY",
-        "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-10171697",
-        "interactor2": "EBI-359793",
+        "accession2": "Q6A162",
+        "gene": "KRT40",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-10171697",
         "experiments": 5,
+        "id": "P40222",
         "source": "Q6A162"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q8N6Y0",
-        "gene": "USHBP1",
-        "interactor1": "EBI-10171697",
-        "interactor2": "EBI-739895",
+        "accession2": "Q6A162",
+        "gene": "KRT40",
+        "interactor1": "EBI-739895",
+        "interactor2": "EBI-10171697",
         "experiments": 3,
+        "id": "Q8N6Y0",
         "source": "Q6A162"
       }
     ],
@@ -1704,20 +1848,34 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-742948",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q5JR59",
+        "gene": "MTUS2",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-742948",
         "experiments": 3,
+        "id": "O60941",
         "source": "Q5JR59"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q9GZM8",
-        "gene": "NDEL1",
-        "interactor1": "EBI-742948",
-        "interactor2": "EBI-928842",
+        "accession1": "O60941",
+        "accession2": "Q5JR59",
+        "gene": "MTUS2",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-742948",
         "experiments": 3,
+        "id": "Q5JR59",
+        "source": "Q5JR59"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "Q5JR59",
+        "gene": "MTUS2",
+        "interactor1": "EBI-928842",
+        "interactor2": "EBI-742948",
+        "experiments": 3,
+        "id": "Q9GZM8",
         "source": "Q5JR59"
       }
     ],
@@ -1733,7 +1891,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "19543227",
+                    "accession2": "19543227",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/19543227",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/19543227"
                   }
@@ -1767,29 +1925,33 @@
       },
       {
         "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q9GZM8",
+        "gene": "NDEL1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-928842",
+        "experiments": 3,
         "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-928842",
-        "interactor2": "EBI-740402",
-        "experiments": 3,
         "source": "Q9GZM8"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "Q9GZM8",
+        "gene": "NDEL1",
+        "interactor1": "EBI-10171697",
+        "interactor2": "EBI-928842",
+        "experiments": 3,
         "id": "Q6A162",
-        "gene": "KRT40",
-        "interactor1": "EBI-928842",
-        "interactor2": "EBI-10171697",
-        "experiments": 3,
         "source": "Q9GZM8"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q5JR59",
-        "gene": "MTUS2",
-        "interactor1": "EBI-928842",
-        "interactor2": "EBI-742948",
+        "accession2": "Q9GZM8",
+        "gene": "NDEL1",
+        "interactor1": "EBI-742948",
+        "interactor2": "EBI-928842",
         "experiments": 3,
+        "id": "Q5JR59",
         "source": "Q9GZM8"
       }
     ],
@@ -1837,29 +1999,45 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "Q9NYB9",
-        "gene": "ABI2",
-        "interactor1": "EBI-347978",
-        "interactor2": "EBI-743598",
-        "experiments": 3,
-        "source": "P37198"
-      },
-      {
-        "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-347978",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "P37198",
+        "gene": "NUP62",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-347978",
         "experiments": 4,
+        "id": "O60941",
         "source": "P37198"
       },
       {
         "interactionType": "BINARY",
-        "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-347978",
-        "interactor2": "EBI-359793",
+        "accession1": "Q9NYB9",
+        "accession2": "P37198",
+        "gene": "NUP62",
+        "interactor1": "EBI-743598",
+        "interactor2": "EBI-347978",
+        "experiments": 3,
+        "id": "Q9NYB9",
+        "source": "P37198"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "P37198",
+        "gene": "NUP62",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-347978",
+        "experiments": 4,
+        "id": "P37198",
+        "source": "P37198"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "P37198",
+        "gene": "NUP62",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-347978",
         "experiments": 5,
+        "id": "P40222",
         "source": "P37198"
       }
     ],
@@ -1868,7 +2046,7 @@
         "type": "DISEASE",
         "diseaseId": "Infantile striatonigral degeneration",
         "acronym": "SNDI",
-        "dbReference": { "type": "MIM", "id": "271930" },
+        "dbReference": { "type": "MIM", "accession2": "271930" },
         "description": {
           "value": "Neurological disorder characterized by symmetrical degeneration of the caudate nucleus, putamen, and occasionally the globus pallidus, with little involvement of the rest of the brain. The clinical features include developmental regression, choreoathetosis, dystonia, spasticity, dysphagia, failure to thrive, nystagmus, optic atrophy, and mental retardation.",
           "evidences": [
@@ -1876,7 +2054,7 @@
               "code": "ECO:0000269",
               "source": {
                 "name": "PubMed",
-                "id": "16786527",
+                "accession2": "16786527",
                 "url": "http://www.ncbi.nlm.nih.gov/pubmed/16786527",
                 "alternativeUrl": "http://europepmc.org/abstract/MED/16786527"
               }
@@ -1921,20 +2099,34 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-745426",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q13136",
+        "gene": "PPFIA1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-745426",
         "experiments": 3,
+        "id": "O60941",
         "source": "Q13136"
       },
       {
         "interactionType": "BINARY",
-        "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-745426",
-        "interactor2": "EBI-359793",
+        "accession1": "O60941",
+        "accession2": "Q13136",
+        "gene": "PPFIA1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-745426",
         "experiments": 3,
+        "id": "Q13136",
+        "source": "Q13136"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "Q13136",
+        "gene": "PPFIA1",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-745426",
+        "experiments": 3,
+        "id": "P40222",
         "source": "Q13136"
       }
     ],
@@ -1950,7 +2142,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "7796809",
+                    "accession2": "7796809",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/7796809",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/7796809"
                   }
@@ -1976,11 +2168,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-8483734",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q9BXG8",
+        "gene": "SPZ1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-8483734",
         "experiments": 3,
+        "id": "O60941",
+        "source": "Q9BXG8"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q9BXG8",
+        "gene": "SPZ1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-8483734",
+        "experiments": 3,
+        "id": "Q9BXG8",
         "source": "Q9BXG8"
       }
     ],
@@ -2021,11 +2226,13 @@
       },
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-355744",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q12933",
+        "gene": "TRAF2",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-355744",
         "experiments": 4,
+        "id": "O60941",
         "source": "Q12933"
       }
     ],
@@ -2041,7 +2248,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "15383523",
+                    "accession2": "15383523",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/15383523",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/15383523"
                   }
@@ -2050,7 +2257,7 @@
                   "code": "ECO:0000269",
                   "source": {
                     "name": "PubMed",
-                    "id": "19150425",
+                    "accession2": "19150425",
                     "url": "http://www.ncbi.nlm.nih.gov/pubmed/19150425",
                     "alternativeUrl": "http://europepmc.org/abstract/MED/19150425"
                   }
@@ -2071,65 +2278,84 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "Q96MT8",
-        "gene": "CEP63",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-741977",
+        "accession1": "O60941",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-359793",
         "experiments": 4,
-        "source": "P40222"
-      },
-      {
-        "interactionType": "BINARY",
         "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-740402",
+        "source": "P40222"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-741977",
+        "interactor2": "EBI-359793",
         "experiments": 4,
+        "id": "Q96MT8",
         "source": "P40222"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-948001",
+        "interactor2": "EBI-359793",
+        "experiments": 5,
         "id": "Q15323",
-        "gene": "KRT31",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-948001",
-        "experiments": 5,
         "source": "P40222"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-10171697",
+        "interactor2": "EBI-359793",
+        "experiments": 5,
         "id": "Q6A162",
-        "gene": "KRT40",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-10171697",
-        "experiments": 5,
         "source": "P40222"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-347978",
+        "interactor2": "EBI-359793",
+        "experiments": 5,
         "id": "P37198",
-        "gene": "NUP62",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-347978",
-        "experiments": 5,
         "source": "P40222"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q13136",
-        "gene": "PPFIA1",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-745426",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-745426",
+        "interactor2": "EBI-359793",
         "experiments": 3,
+        "id": "Q13136",
         "source": "P40222"
       },
       {
         "interactionType": "BINARY",
-        "id": "Q8N6Y0",
-        "gene": "USHBP1",
-        "interactor1": "EBI-359793",
-        "interactor2": "EBI-739895",
+        "accession1": "O60941",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-359793",
+        "experiments": 4,
+        "id": "P40222",
+        "source": "P40222"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession2": "P40222",
+        "gene": "TXLNA",
+        "interactor1": "EBI-739895",
+        "interactor2": "EBI-359793",
         "experiments": 5,
+        "id": "Q8N6Y0",
         "source": "P40222"
       }
     ],
@@ -2143,38 +2369,54 @@
     "interactions": [
       {
         "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q8N6Y0",
+        "gene": "USHBP1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-739895",
+        "experiments": 3,
         "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-739895",
-        "interactor2": "EBI-740402",
-        "experiments": 3,
         "source": "Q8N6Y0"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "Q8N6Y0",
+        "gene": "USHBP1",
+        "interactor1": "EBI-948001",
+        "interactor2": "EBI-739895",
+        "experiments": 3,
         "id": "Q15323",
-        "gene": "KRT31",
-        "interactor1": "EBI-739895",
-        "interactor2": "EBI-948001",
-        "experiments": 3,
         "source": "Q8N6Y0"
       },
       {
         "interactionType": "BINARY",
+        "accession2": "Q8N6Y0",
+        "gene": "USHBP1",
+        "interactor1": "EBI-10171697",
+        "interactor2": "EBI-739895",
+        "experiments": 3,
         "id": "Q6A162",
-        "gene": "KRT40",
-        "interactor1": "EBI-739895",
-        "interactor2": "EBI-10171697",
-        "experiments": 3,
         "source": "Q8N6Y0"
       },
       {
         "interactionType": "BINARY",
-        "id": "P40222",
-        "gene": "TXLNA",
-        "interactor1": "EBI-739895",
-        "interactor2": "EBI-359793",
+        "accession2": "Q8N6Y0",
+        "gene": "USHBP1",
+        "interactor1": "EBI-359793",
+        "interactor2": "EBI-739895",
         "experiments": 5,
+        "id": "P40222",
+        "source": "Q8N6Y0"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q8N6Y0",
+        "gene": "USHBP1",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-739895",
+        "experiments": 3,
+        "id": "Q8N6Y0",
         "source": "Q8N6Y0"
       }
     ],
@@ -2188,11 +2430,24 @@
     "interactions": [
       {
         "interactionType": "BINARY",
-        "id": "O60941",
-        "gene": "DTNB",
-        "interactor1": "EBI-395708",
-        "interactor2": "EBI-740402",
+        "accession1": "O60941",
+        "accession2": "Q96C00",
+        "gene": "ZBTB9",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-395708",
         "experiments": 3,
+        "id": "O60941",
+        "source": "Q96C00"
+      },
+      {
+        "interactionType": "BINARY",
+        "accession1": "O60941",
+        "accession2": "Q96C00",
+        "gene": "ZBTB9",
+        "interactor1": "EBI-740402",
+        "interactor2": "EBI-395708",
+        "experiments": 3,
+        "id": "Q96C00",
         "source": "Q96C00"
       }
     ],
