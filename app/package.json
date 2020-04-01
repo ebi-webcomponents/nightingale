@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -45,7 +45,7 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.1.0",
-    "data-loader": "^2.3.0",
+    "data-loader": "^2.4.2",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",
