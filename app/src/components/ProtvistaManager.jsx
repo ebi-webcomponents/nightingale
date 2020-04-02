@@ -77,7 +77,7 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     loadWebComponent("protvista-saver", ProtvistaSaver);
     loadWebComponent("protvista-overlay", ProtvistaOverlay);
-    loadWebComponent('protvista-zoom-tool', ProtvistaZoomTool);
+    loadWebComponent("protvista-zoom-tool", ProtvistaZoomTool);
     return (
       <Fragment>
         <Readme content={readmeContent} />
@@ -96,7 +96,7 @@ class ProtvistaManagerWrapper extends Component {
           displaystart="53"
           id="example"
         >
-          <protvista-zoom-tool length="770" />
+          <protvista-zoom-tool length="770" style={{float: "right"}}/>
           <protvista-navigation length="770" />
           <div id="just-tracks">
             <protvista-sequence
