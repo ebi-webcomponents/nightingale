@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -18,7 +18,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "highlight.js": "9.16.2",
-    "interaction-viewer": "^2.3.0",
+    "interaction-viewer": "^2.4.3",
     "protvista-coloured-sequence": "^2.3.5",
     "protvista-datatable": "^2.4.1",
     "protvista-feature-adapter": "^2.3.3",
