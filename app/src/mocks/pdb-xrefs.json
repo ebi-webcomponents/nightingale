@@ -1,0 +1,398 @@
+[
+  {
+    "databaseType": "PDB",
+    "id": "1AAP",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.50 A",
+      "Chains": "A/B=287-344"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1AMB",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-699"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1AMC",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-699"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1AML",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-711"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1BA4",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-711"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1BA6",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-711"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1BJB",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-699"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1BJC",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-699"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1BRC",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.50 A",
+      "Chains": "I=287-342"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1CA0",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.10 A",
+      "Chains": "D/I=289-342"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1HZ3",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=681-706"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1IYT",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1MWP",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.80 A",
+      "Chains": "A=28-123"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1OWT",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=124-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1QCM",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=696-706"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1QWP",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=696-706"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1QXC",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=696-706"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1QYT",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=696-706"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1TAW",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.80 A",
+      "Chains": "B=287-344"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1TKN",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=460-569"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1UO7",
+    "properties": {
+      "Method": "Model",
+      "Resolution": "-",
+      "Chains": "A=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1UO8",
+    "properties": {
+      "Method": "Model",
+      "Resolution": "-",
+      "Chains": "A=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1UOA",
+    "properties": {
+      "Method": "Model",
+      "Resolution": "-",
+      "Chains": "A=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1UOI",
+    "properties": {
+      "Method": "Model",
+      "Resolution": "-",
+      "Chains": "A=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1X11",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.50 A",
+      "Chains": "C/D=754-766"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1Z0Q",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1ZE7",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-687"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1ZE9",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-687"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "1ZJD",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.60 A",
+      "Chains": "B=289-344"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2BEG",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A/B/C/D/E=672-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2BOM",
+    "properties": {
+      "Method": "Model",
+      "Resolution": "-",
+      "Chains": "A/B=681-713"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2BP4",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-687"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2FJZ",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.61 A",
+      "Chains": "A=133-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2FK1",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.60 A",
+      "Chains": "A=133-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2FK2",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.65 A",
+      "Chains": "A=133-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2FK3",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.40 A",
+      "Chains": "A/B/C/D/E/F/G/H=133-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2FKL",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.50 A",
+      "Chains": "A/B=124-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2FMA",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "0.85 A",
+      "Chains": "A=133-189"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2G47",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "2.10 A",
+      "Chains": "C/D=672-711"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2IPU",
+    "properties": {
+      "Method": "X-ray",
+      "Resolution": "1.65 A",
+      "Chains": "P/Q=672-679"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2LFM",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=672-711"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2LLM",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A=686-726"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2LMN",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A/B/C/D/E/F/G/H/I/J/K/L=672-711"
+    }
+  },
+  {
+    "databaseType": "PDB",
+    "id": "2LMO",
+    "properties": {
+      "Method": "NMR",
+      "Resolution": "-",
+      "Chains": "A/B/C/D/E/F/G/H/I/J/K/L=672-711"
+    }
+  }
+]

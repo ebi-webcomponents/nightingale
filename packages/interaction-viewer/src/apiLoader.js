@@ -10,10 +10,27 @@ function load(accession) {
   diseases = {};
   return fetch(
     `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`
-  ).then(resp => resp.json().then(json => process(json)));
+  )
+    .then(response => {
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        console.error(
+          new Error(
+            `Request Failed: Status = ${
+              response.status
+            }; URI = ${url}; Time = ${new Date()}`
+          )
+        );
+        return null;
+      }
+      if (response.status === 204) return null;
+      return response.json();
+    })
+    .then(json => process(json));
 }
 
 function process(data) {
+  if (!data) return;
   // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
   data = data.map(d => {
     if (!d.interactions) d.interactions = [];

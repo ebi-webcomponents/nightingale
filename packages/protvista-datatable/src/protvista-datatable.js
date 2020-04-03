@@ -11,6 +11,8 @@ class ProtvistaDatatable extends LitElement {
     super();
     this.height = 25;
     this.visibleChildren = [];
+    this.noScrollToRow = false;
+    this.noDeselect = false;
     this.eventHandler = this.eventHandler.bind(this);
   }
 
@@ -25,7 +27,9 @@ class ProtvistaDatatable extends LitElement {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
     }
-    document.addEventListener("click", this.eventHandler);
+    if (!this.noDeselect) {
+      document.addEventListener("click", this.eventHandler);
+    }
     // this makes sure the protvista-zoomable event listener doesn't reset
     this.classList.add("feature");
   }
@@ -74,7 +78,10 @@ class ProtvistaDatatable extends LitElement {
       displayStart: { type: Number },
       displayEnd: { type: Number },
       visibleChildren: { type: Array },
-      selectedid: { type: String }
+      selectedid: { type: String },
+      rowClickEvent: { type: Function },
+      noScrollToRow: { type: Boolean },
+      noDeselect: { type: Boolean }
     };
   }
 
@@ -93,7 +100,7 @@ class ProtvistaDatatable extends LitElement {
       .sort((a, b) => a.start - b.start)
       .map(d => ({
         ...d,
-        protvistaFeatureId: d.protvistaFeatureId ? d.protvistaFeatureId : v1()
+        protvistaFeatureId: d.protvistaFeatureId || v1()
       }));
   }
 
@@ -109,17 +116,21 @@ class ProtvistaDatatable extends LitElement {
     return rangeStart > end || rangeEnd < start;
   }
 
-  handleClick(e, start, end) {
+  handleClick(e, row) {
     if (!e.target.parentNode) {
       return;
     }
-    this.selectedid = null;
+    const { start, end } = row;
+    const detail =
+      (typeof this.rowClickEvent === "function" && this.rowClickEvent(row)) ||
+      {};
     this.selectedid = e.target.parentNode.dataset.id;
+    if (start && end) {
+      detail.highlight = `${start}:${end}`;
+    }
     this.dispatchEvent(
       new CustomEvent("change", {
-        detail: {
-          highlight: `${start}:${end}`
-        },
+        detail,
         bubbles: true,
         cancelable: true
       })
@@ -246,7 +257,7 @@ class ProtvistaDatatable extends LitElement {
                     row.start,
                     row.end
                   )}
-                  @click="${e => this.handleClick(e, row.start, row.end)}"
+                  @click="${e => this.handleClick(e, row)}"
                 >
                   ${hasChildData
                     ? html`
@@ -287,7 +298,9 @@ class ProtvistaDatatable extends LitElement {
   }
 
   updated() {
-    this.scrollIntoView();
+    if (!this.noScrollToRow) {
+      this.scrollIntoView();
+    }
   }
 }
 

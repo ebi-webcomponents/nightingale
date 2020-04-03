@@ -34,6 +34,10 @@ export const load = (
         }; URI = ${url}; Time = ${new Date()}`
       );
     }
+    if (response.status === 204) {
+      // no data
+      return { payload: null, headers: response.headers };
+    }
     const payload = await response.json();
     return { payload, headers: response.headers };
   })();

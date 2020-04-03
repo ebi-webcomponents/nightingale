@@ -30,7 +30,7 @@ A UniProt protein accession.
 
 #### `highlight`
 
-This is a numerical range, represented as a string e.g. "10-20". When available, it will highlight all the residues corresponding to the given sequence positions.
+This is a comma separated list of numerical ranges represented as a string e.g. "1-5,10-20". When available, it will highlight all the residues corresponding to the given sequence positions.
 
 #### `hide-table`
 

@@ -28,7 +28,7 @@ Wrapping it within `<protvista-manager>` will allow highlighting of features as 
 
 #### `data: Object`
 
-The data to display.
+The data to display. `protvistaFeatureId` can be used as an attribute of the `data` object to provide an id for each row. To sort rows by position the `data` object must have either `start` or `begin` as attributes.
 
 #### `columns: Object`
 
@@ -64,3 +64,15 @@ The row id to select. Row ids are attributed based on the `protvistaFeatureId` a
 ### `height: number (optional)`
 
 The height of the table (in `rem`)
+
+### `rowClickEvent: function (optional)`
+
+A callback which will fire when a row is clicked. The data object for the clicked row will be provided in the callback.
+
+### `noScrollToRow: boolean (false)`
+
+Don't scroll to row if it has been selected
+
+### `noDeselect: boolean (false)`
+
+Don't de-select row if clicking outside of table
