@@ -96,7 +96,7 @@ class ProtvistaManagerWrapper extends Component {
           displaystart="53"
           id="example"
         >
-          <protvista-zoom-tool length="770" style={{float: "right"}}/>
+          <protvista-zoom-tool length="770" style={{ float: "right" }} />
           <protvista-navigation length="770" />
           <div id="just-tracks">
             <protvista-sequence

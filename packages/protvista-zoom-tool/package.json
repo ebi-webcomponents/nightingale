@@ -1,6 +1,6 @@
 {
   "name": "protvista-zoom-tool",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "description": "Zooming tool for Nightingale",
   "files": [
     "dist",
