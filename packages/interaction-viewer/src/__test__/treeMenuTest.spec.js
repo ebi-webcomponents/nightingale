@@ -1,4 +1,4 @@
-import {addStringItem, traverseTree, getPath, findNode} from "../treeMenu";
+import { addStringItem, traverseTree, getPath, findNode } from "../treeMenu";
 // import tree from './resources/subcell.json';
 
 const tree = [];
@@ -13,7 +13,7 @@ describe("treeMenu", () => {
 
   it("should should visit all children", () => {
     const names = [];
-    traverseTree(tree, (d) => {
+    traverseTree(tree, d => {
       names.push(d.name);
     });
     expect(names.length).toEqual(6);
