@@ -289,7 +289,11 @@ class ProtvistaStructure extends HTMLElement {
 
   translatePositions(start, end) {
     // return if they have been set to 'undefined'
-    if (typeof this.highlight === "string") {
+    if (
+      typeof this.highlight === "string" ||
+      Number.isNaN(start) ||
+      Number.isNaN(end)
+    ) {
       return null;
     }
     /* eslint-disable no-restricted-syntax */
