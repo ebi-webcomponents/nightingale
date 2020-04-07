@@ -175,21 +175,16 @@ const drawAdjacencyGraph = (el, accession, data) => {
       .attr("href", `//uniprot.org/uniprot/${target.accession}`)
       .text(`${target.accession}`);
 
-    
-      if(data.chain1 || data.chain2) {
-        const chainRow = table.append("tr");
-        chainRow
-          .append("td")
-          .text("Chain")
-          .attr("class", "interaction-viewer-table_row-header");
-        chainRow
-          .append("td")
-          .text(`${data.chain1 ? data.chain1 : 'N/A'}`);
-        chainRow
-          .append("td")
-          .text(`${data.chain2 ? data.chain2 : 'N/A'}`);    
-      }
-      
+    if (data.chain1 || data.chain2) {
+      const chainRow = table.append("tr");
+      chainRow
+        .append("td")
+        .text("Chain")
+        .attr("class", "interaction-viewer-table_row-header");
+      chainRow.append("td").text(`${data.chain1 ? data.chain1 : "N/A"}`);
+      chainRow.append("td").text(`${data.chain2 ? data.chain2 : "N/A"}`);
+    }
+
     const diseaseRow = table.append("tr");
     diseaseRow
       .append("td")
