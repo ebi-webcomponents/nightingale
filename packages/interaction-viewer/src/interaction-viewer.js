@@ -175,7 +175,9 @@ class InteractionViewer extends HTMLElement {
 
     const data = await load(this._accession);
     if (data) {
-      const { data: processedData, subcellulartreeMenu, diseases } = process(data);
+      const { data: processedData, subcellulartreeMenu, diseases } = process(
+        data
+      );
       this.nodes = processedData;
       dispatchLoadedEvent(this);
       drawFilters(
