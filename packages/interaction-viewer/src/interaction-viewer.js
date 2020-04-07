@@ -173,12 +173,10 @@ class InteractionViewer extends HTMLElement {
       .select(".interaction-tooltip")
       .remove();
 
-    const jsonData = await load(this._accession)
-      .then(async response => response.json().then(json => json))
-      .catch(e => dispatchLoadedEvent(this, e));
-    if (jsonData) {
-      const { data, subcellulartreeMenu, diseases } = await process(jsonData);
-      this.nodes = data;
+    const data = await load(this._accession);
+    if (data) {
+      const { data: processedData, subcellulartreeMenu, diseases } = process(data);
+      this.nodes = processedData;
       dispatchLoadedEvent(this);
       drawFilters(
         this,

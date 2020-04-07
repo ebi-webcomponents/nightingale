@@ -14,12 +14,6 @@ function addInteractor(interactor, interactors) {
   }
 }
 
-export function load(accession) {
-  return fetch(
-    `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`
-  );
-}
-
 export const createGraph = data => {
   const nodes = data.map(node => ({
     accession: node.accession,
@@ -119,4 +113,25 @@ export function process(data) {
     }
   }
   return { data, subcellulartreeMenu, diseases: Object.values(diseases) };
+}
+
+export function load(accession) {
+  const url = `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`;
+  return fetch(url)
+    .then(response => {
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        console.error(
+          new Error(
+            `Request Failed: Status = ${
+              response.status
+            }; URI = ${url}; Time = ${new Date()}`
+          )
+        );
+        return null;
+      }
+      if (response.status === 204) return null;
+      return response.json();
+    })
+    .then(json => json);
 }

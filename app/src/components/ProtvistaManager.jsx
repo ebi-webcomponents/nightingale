@@ -17,6 +17,7 @@ import { dataIPR, signatures, withResidues } from "../mocks/interpro";
 import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
 import ProtvistaSaver from "protvista-saver";
 import ProtvistaOverlay from "protvista-overlay";
+import ProtvistaZoomTool from "protvista-zoom-tool";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-manager/README.md";
 
@@ -76,6 +77,7 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
     loadWebComponent("protvista-saver", ProtvistaSaver);
     loadWebComponent("protvista-overlay", ProtvistaOverlay);
+    loadWebComponent("protvista-zoom-tool", ProtvistaZoomTool);
     return (
       <Fragment>
         <Readme content={readmeContent} />
@@ -94,6 +96,7 @@ class ProtvistaManagerWrapper extends Component {
           displaystart="53"
           id="example"
         >
+          <protvista-zoom-tool length="770" style={{ float: "right" }} />
           <protvista-navigation length="770" />
           <div id="just-tracks">
             <protvista-sequence
