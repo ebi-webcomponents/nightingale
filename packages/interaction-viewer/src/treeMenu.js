@@ -39,6 +39,16 @@ function traverseTree(data, callback, depth) {
   }
 }
 
+
+function findNode(tree, target, callback) {
+  traverseTree(tree, (t) => {
+    if (t.name === target) {
+      return callback(t);
+    }
+    return null;
+  });
+}
+
 function getPath(target, path) {
   if (target.parent) {
     path.push(target.parent);
@@ -47,4 +57,4 @@ function getPath(target, path) {
   return path;
 }
 
-export { addStringItem, traverseTree, getPath };
+export { addStringItem, traverseTree, findNode, getPath };
