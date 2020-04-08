@@ -5,14 +5,15 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
   constructor() {
     super();
     this._line = line()
-      .x(d => {
-        return this.getXFromSeqPosition(d.x) - this.getSingleBaseWidth() / 2;
-      })
-      .y(d => this._yScale(d.y));
+      .x(
+        (_, i) =>
+          this.getXFromSeqPosition(i + 1) - this.getSingleBaseWidth() / 2
+      )
+      .y(d => this._yScale(d));
   }
 
   init() {
-    this._totalsArray = null;
+    this._totalsArray = { total: null, diseaseTotal: null };
   }
 
   connectedCallback() {
@@ -31,28 +32,29 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       return;
     }
 
-    this._totalsArray = Array(data.sequence.length)
-      .fill()
-      .map(() => {
-        return {
-          total: 0,
-          diseaseTotal: 0
-        };
-      });
+    this._totalsArray.total = new Uint8ClampedArray(data.sequence.length);
+    this._totalsArray.diseaseTotal = new Uint8ClampedArray(
+      data.sequence.length
+    );
 
-    data.variants.forEach(v => {
+    for (const { start, association } of data.variants) {
+      const index = +start - 1;
+      // skip if the variant is outside of bounds
+      // eslint-disable-next-line no-continue
+      if (index < 0 || index >= data.sequence.length) continue;
+
       // eslint-disable-next-line no-plusplus
-      this._totalsArray[v.start].total++;
-      if (typeof v.association !== "undefined") {
-        const hasDisease = v.association.find(
-          association => association.disease === true
-        );
-        if (hasDisease) {
-          // eslint-disable-next-line no-plusplus
-          this._totalsArray[v.start].diseaseTotal++;
-        }
-      }
-    });
+      this._totalsArray.total[index]++;
+
+      // eslint-disable-next-line no-continue
+      if (!association) continue;
+      const hasDisease = association.find(
+        association => association.disease === true
+      );
+      // eslint-disable-next-line no-plusplus
+      if (hasDisease) this._totalsArray.diseaseTotal[index]++;
+    }
+
     this._createTrack();
   }
 
@@ -72,7 +74,13 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
 
   _initYScale() {
     this._yScale
-      .domain([0, max(this._totalsArray.map(d => d.total))])
+      .domain([
+        0,
+        Math.max(
+          max(this._totalsArray.total),
+          max(this._totalsArray.diseaseTotal)
+        )
+      ])
       .range([this._height, 0]);
   }
 
@@ -81,17 +89,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     this.svg.selectAll("path").remove();
     this.svg
       .append("path")
-      .attr(
-        "d",
-        this._line(
-          this._totalsArray.map((d, i) => {
-            return {
-              x: i + 1,
-              y: d.diseaseTotal
-            };
-          })
-        )
-      )
+      .attr("d", this._line(this._totalsArray.diseaseTotal))
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-width", "1.5px")
@@ -99,17 +97,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("transform", "translate(0,0)");
     this.svg
       .append("path")
-      .attr(
-        "d",
-        this._line(
-          this._totalsArray.map((d, i) => {
-            return {
-              x: i + 1,
-              y: d.total
-            };
-          })
-        )
-      )
+      .attr("d", this._line(this._totalsArray.total))
       .attr("fill", "none")
       .attr("stroke", "darkgrey")
       .attr("stroke-width", "1px")
