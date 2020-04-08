@@ -7,7 +7,7 @@
   ],
   "main": "dist/protvista-variation-graph.js",
   "module": "src/protvista-variation-graph.js",
-  "version": "2.3.5",
+  "version": "2.5.2",
   "keywords": [
     "nightingale",
     "webcomponents",
