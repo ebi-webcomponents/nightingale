@@ -31,28 +31,26 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       return;
     }
 
-    this._totalsArray = Array(data.sequence.length)
-      .fill()
-      .map(() => {
-        return {
-          total: 0,
-          diseaseTotal: 0
-        };
-      });
+    this._totalsArray = Array.from(data.sequence, () => ({
+      total: 0,
+      diseaseTotal: 0
+    }));
 
     data.variants.forEach(v => {
+      const totalsObject = this._totalsArray[+v.start - 1];
+
+      if (!totalsObject) return; // it should mean the variant is outside of bounds
       // eslint-disable-next-line no-plusplus
-      this._totalsArray[v.start].total++;
-      if (typeof v.association !== "undefined") {
-        const hasDisease = v.association.find(
-          association => association.disease === true
-        );
-        if (hasDisease) {
-          // eslint-disable-next-line no-plusplus
-          this._totalsArray[v.start].diseaseTotal++;
-        }
-      }
+      totalsObject.total++;
+
+      if (!v.association) return;
+      const hasDisease = v.association.find(
+        association => association.disease === true
+      );
+      // eslint-disable-next-line no-plusplus
+      if (hasDisease) totalsObject.diseaseTotal++;
     });
+
     this._createTrack();
   }
 
