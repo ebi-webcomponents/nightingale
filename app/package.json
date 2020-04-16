@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "2.5.2",
+  "version": "2.6.0",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -34,7 +34,7 @@
     "protvista-uniprot": "^2.0.3",
     "protvista-variation": "^2.3.5",
     "protvista-variation-adapter": "^2.3.3",
-    "protvista-variation-graph": "^2.5.2",
+    "protvista-variation-graph": "^2.6.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router": "^5.0.1",
