@@ -38,10 +38,10 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
     );
 
     for (const { start, association } of data.variants) {
-      const index = +start - 1;
+      const index = +start;
       // skip if the variant is outside of bounds
       // eslint-disable-next-line no-continue
-      if (index < 0 || index >= data.sequence.length) continue;
+      if (index < 1 || index > data.sequence.length) continue;
 
       // eslint-disable-next-line no-plusplus
       this._totalsArray.total[index]++;
