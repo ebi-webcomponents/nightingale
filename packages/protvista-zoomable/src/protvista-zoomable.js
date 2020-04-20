@@ -341,6 +341,9 @@ class ProtvistaZoomable extends HTMLElement {
         detail.highlight = feature.fragments
           .map(fr => `${fr.start}:${fr.end}`)
           .join(",");
+      } else if (d3Event && d3Event.shiftKey && this._highlight) {
+        // If holding shift, add to the highlights
+        detail.highlight = `${this._highlight},${start}:${end}`;
       } else {
         detail.highlight = start && end ? `${start}:${end}` : null;
       }
