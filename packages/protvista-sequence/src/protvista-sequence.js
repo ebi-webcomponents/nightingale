@@ -37,18 +37,21 @@ class ProtVistaSequence extends ProtvistaZoomable {
     }
   }
 
-  _getCharWidth() {
-    const ratio = 0.8;
+  _getCharSize() {
+    const xratio = 0.8;
+    const yratio = 1.6;
     const node = this.seq_g.select("text.base").node();
     if (node) {
-      this.chWidth = node.getBBox().width * ratio;
+      this.chWidth = node.getBBox().width * xratio;
+      this.chHeight = node.getBBox().height * yratio;
     } else {
       // Add a dummy node to measure the width
       const tempNode = this.seq_g
         .append("text")
         .attr("class", "base")
         .text("T");
-      this.chWidth = tempNode.node().getBBox().width * ratio;
+      this.chWidth = tempNode.node().getBBox().width * xratio;
+      this.chHeight = tempNode.node().getBBox().height * yratio;
       tempNode.remove();
     }
   }
@@ -76,7 +79,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
   }
 
   refresh() {
-    this._getCharWidth();
+    this._getCharSize();
     if (this.axis) {
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - this.chWidth;
@@ -95,10 +98,13 @@ class ProtVistaSequence extends ProtvistaZoomable {
                 return { start: 1 + first + i, end: 1 + first + i, aa };
               });
 
-      this.xAxis = axisBottom(this.xScale)
-        .tickFormat(d => (Number.isInteger(d) ? d : ""))
-        .ticks(NUMBER_OF_TICKS, "s");
-      this.axis.call(this.xAxis);
+      // only add axis if there is room
+      if (this.height > this.chHeight) {
+        this.xAxis = axisBottom(this.xScale)
+          .tickFormat(d => (Number.isInteger(d) ? d : ""))
+          .ticks(NUMBER_OF_TICKS, "s");
+        this.axis.call(this.xAxis);
+      }
 
       this.axis.attr("transform", `translate(${this.margin.left + half},0)`);
       this.axis.select(".domain").remove();
