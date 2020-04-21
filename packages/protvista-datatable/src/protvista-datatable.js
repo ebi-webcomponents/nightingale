@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit-element";
 import { v1 } from "uuid";
 /* eslint-disable import/extensions, import/no-extraneous-dependencies */
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+import { unsafeSVG } from "lit-html/directives/unsafe-svg.js";
 import styles from "./styles";
 import PlusSVG from "../resources/plus.svg";
 import MinusSVG from "../resources/minus.svg";
@@ -269,8 +269,8 @@ class ProtvistaDatatable extends LitElement {
                           ${this.visibleChildren.includes(
                             row.protvistaFeatureId
                           )
-                            ? unsafeHTML(MinusSVG)
-                            : unsafeHTML(PlusSVG)}
+                            ? unsafeSVG(MinusSVG)
+                            : unsafeSVG(PlusSVG)}
                         </td>
                       `
                     : html`
