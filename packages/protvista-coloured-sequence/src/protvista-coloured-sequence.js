@@ -54,7 +54,7 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
       .attr("class", "seq-gradient")
       .style("pointer-events", "none");
 
-    this._getCharWidth();
+    this._getCharSize();
 
     this.trackHighlighter.appendHighlightTo(this.svg);
     this.refresh();

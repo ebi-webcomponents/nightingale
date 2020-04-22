@@ -38,6 +38,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
   }
 
   _getCharSize() {
+    if (!this.seq_g) return;
     const xratio = 0.8;
     const yratio = 1.6;
     const node = this.seq_g.select("text.base").node();
