@@ -71,7 +71,6 @@ class ProtvistaTooltip extends LitElement {
         --body-color: #616161;
         --triangle-width: ${TRIANGLE_WIDTH}px;
         --triangle-height: ${TRIANGLE_HEIGHT}px;
-        --border-radius: none;
       }
 
       .tooltip {
@@ -87,7 +86,6 @@ class ProtvistaTooltip extends LitElement {
         /* user overridable through custom properties */
         z-index: var(--z-index);
         color: var(--text-color);
-        border-radius: var(--border-radius, 10px);
 
         /* will change those */
         opacity: 0;

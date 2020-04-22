@@ -14,22 +14,23 @@ const ProtvistaTooltipWrapper = () => {
     loadWebComponent("protvista-tooltip", ProtvistaTooltip);
   }, []);
 
-  const handleClick = useCallback(event => {
+  const handleToggle = useCallback(event => {
     setX(event.pageX);
     setY(event.pageY);
     setVisible(visible => !visible);
   }, []);
 
+  const handleChangeContent = useCallback(() => {
+    setContent("!".repeat(Math.ceil(Math.random() * 20)));
+  });
+
   return (
     <Fragment>
-      <button type="button" onClick={handleClick} style={{ width: "100%" }}>
+      <button type="button" onClick={handleToggle} style={{ width: "100%" }}>
         Click to toggle tooltip targetting mouse click location
       </button>
-      <button
-        type="button"
-        onClick={() => setContent("!".repeat(Math.ceil(Math.random() * 10)))}
-      >
-        change content
+      <button type="button" onClick={handleChangeContent}>
+        Change tooltip content
       </button>
       <protvista-tooltip
         title="My tooltip"
@@ -41,7 +42,7 @@ const ProtvistaTooltipWrapper = () => {
         Content of the tooltip (in <code>html</code> too{content})
       </protvista-tooltip>
       <Readme content={readmeContent} />
-      <button type="button" onClick={handleClick} style={{ width: "100%" }}>
+      <button type="button" onClick={handleToggle} style={{ width: "100%" }}>
         Click to toggle tooltip targetting mouse click location
       </button>
     </Fragment>
