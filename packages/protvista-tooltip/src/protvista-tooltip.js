@@ -43,9 +43,11 @@ class ProtvistaTooltip extends LitElement {
     this.visible = false;
     this.container = "html";
 
-    // rerender on any change in the DOM subtree (change in tooltip content) to
-    // make sure the position is still correct and orientation are still correct
-    this._observer = new MutationObserver(() => this.requestUpdate());
+    // rerender on any change in the DOM subtree (change in tooltip content) or
+    // window resize to make sure the position is still correct and orientation
+    // are still correct
+    this._changeHandler = () => this.requestUpdate();
+    this._observer = new MutationObserver(this._changeHandler);
   }
 
   connectedCallback() {
@@ -56,12 +58,14 @@ class ProtvistaTooltip extends LitElement {
       characterData: true,
       childList: true
     });
+    window.addEventListener("resize", this._changeHandler);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
 
     this._observer.disconnect();
+    window.removeEventListener("resize", this._changeHandler);
   }
 
   static get styles() {
