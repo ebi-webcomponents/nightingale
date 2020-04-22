@@ -1,0 +1,23 @@
+[
+  { "name": "Seckel syndrome 6", "selected": false },
+  {
+    "name": "Duchenne muscular dystrophy",
+    "selected": false
+  },
+  {
+    "name": "Becker muscular dystrophy",
+    "selected": false
+  },
+  {
+    "name": "Cardiomyopathy, dilated, X-linked 3B",
+    "selected": false
+  },
+  {
+    "name": "Hermansky-Pudlak syndrome 7",
+    "selected": false
+  },
+  {
+    "name": "Infantile striatonigral degeneration",
+    "selected": false
+  }
+]

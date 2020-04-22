@@ -1,36 +1,46 @@
-/* eslint-disable */
+/* eslint-disable no-param-reassign */
 import clone from "lodash-es/clone";
 import { addStringItem } from "./treeMenu";
 
-let subcellulartreeMenu;
-let diseases;
-
-function load(accession) {
-  subcellulartreeMenu = [];
-  diseases = {};
-  return fetch(
-    `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`
-  )
-    .then(response => {
-      if (response.status === 404) return null;
-      if (!response.ok) {
-        console.error(
-          new Error(
-            `Request Failed: Status = ${
-              response.status
-            }; URI = ${url}; Time = ${new Date()}`
-          )
-        );
-        return null;
-      }
-      if (response.status === 204) return null;
-      return response.json();
-    })
-    .then(json => process(json));
+function addInteractor(interactor, interactors) {
+  const existingInteractor = interactors.find(i => interactor.id === i.id);
+  if (existingInteractor) {
+    // Merge objects
+    if (interactor.isoform) {
+      existingInteractor.isoform = interactor.isoform;
+    }
+  } else {
+    interactors.push(interactor);
+  }
 }
 
-function process(data) {
-  if (!data) return;
+export const createGraph = data => {
+  const nodes = data.map(node => ({
+    accession: node.accession,
+    name: node.name,
+    proteinExistence: node.proteinExistence,
+    taxonomy: node.taxonomy
+  }));
+
+  const edges = data.reduce((accumulator, node) => {
+    const interactions = node.interactions ? node.interactions : [];
+    return [
+      ...accumulator,
+      ...interactions.map(interaction => ({
+        ...interaction,
+        accession1: interaction.accession1
+          ? interaction.accession1
+          : node.accession
+      }))
+    ];
+  }, []);
+  return { nodes, edges };
+};
+
+export function process(data) {
+  const subcellulartreeMenu = [];
+  const diseases = {};
+
   // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
   data = data.map(d => {
     if (!d.interactions) d.interactions = [];
@@ -40,7 +50,9 @@ function process(data) {
   // Add symmetry if required
   for (const element of data) {
     for (const interactor of element.interactions) {
-      const otherInteractor = data.find(d => d.accession === interactor.id);
+      const otherInteractor = data.find(
+        d => d.accession === interactor.accession2
+      );
       if (otherInteractor) {
         if (
           !otherInteractor.interactions.find(d => d.id === element.accession)
@@ -57,34 +69,20 @@ function process(data) {
   for (const element of data) {
     element.filterTerms = [];
     const interactors = [];
-    // isoforms
-    // if (element.accession.includes('-')) {
-    //     element.isoform = element.accession;
-    //     element.accession = element
-    //         .accession
-    //         .split('-')[0];
-    // }
     // Add source  to the nodes
     for (const interactor of element.interactions) {
-      // if (interactor.id && interactor.id.includes('-')) {
-      //     interactor.isoform = interactor.id;
-      //     interactor.id = interactor
-      //         .id
-      //         .split('-')[0];
-      // }
       // Add interaction for SELF
       if (interactor.interactionType === "SELF") {
         interactor.source = element.accession;
         interactor.id = element.accession;
         addInteractor(interactor, interactors);
       } else if (
-        data.some(function(d) {
+        data.some(d => {
           // Check that interactor is in the data
           return d.accession === interactor.id;
         })
       ) {
         interactor.source = element.accession;
-        // .split('-')[0];
         addInteractor(interactor, interactors);
       }
     }
@@ -92,16 +90,15 @@ function process(data) {
     element.interactions = interactors;
 
     if (element.subcellularLocations) {
-      for (const location of element.subcellularLocations) {
-        if (!location.locations) {
-          continue;
-        }
-        for (const actualLocation of location.locations) {
-          addStringItem(actualLocation.location.value, subcellulartreeMenu);
-          const locationSplit = actualLocation.location.value.split(", ");
-          element.filterTerms = element.filterTerms.concat(locationSplit);
-        }
-      }
+      element.subcellularLocations
+        .filter(d => d.locations)
+        .forEach(location => {
+          for (const actualLocation of location.locations) {
+            addStringItem(actualLocation.location.value, subcellulartreeMenu);
+            const locationSplit = actualLocation.location.value.split(", ");
+            element.filterTerms = element.filterTerms.concat(locationSplit);
+          }
+        });
     }
     if (element.diseases) {
       for (const disease of element.diseases) {
@@ -115,43 +112,26 @@ function process(data) {
       }
     }
   }
-  return data;
+  return { data, subcellulartreeMenu, diseases: Object.values(diseases) };
 }
 
-function addInteractor(interactor, interactors) {
-  const existingInteractor = interactors.find(i => interactor.id === i.id);
-  if (existingInteractor) {
-    // Merge objects
-    if (interactor.isoform) {
-      existingInteractor.isoform = interactor.isoform;
-    }
-  } else {
-    interactors.push(interactor);
-  }
+export function load(accession) {
+  const url = `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`;
+  return fetch(url)
+    .then(response => {
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        console.error(
+          new Error(
+            `Request Failed: Status = ${
+              response.status
+            }; URI = ${url}; Time = ${new Date()}`
+          )
+        );
+        return null;
+      }
+      if (response.status === 204) return null;
+      return response.json();
+    })
+    .then(json => json);
 }
-
-function values(obj) {
-  const ret = [];
-  for (const [k, v] of Object.entries(obj)) {
-    ret.push(v);
-  }
-  return ret;
-}
-
-function getFilters() {
-  return [
-    {
-      name: "subcellularLocations",
-      label: "Subcellular location",
-      type: "tree",
-      items: subcellulartreeMenu
-    },
-    {
-      name: "diseases",
-      label: "Diseases",
-      items: values(diseases)
-    }
-  ];
-}
-
-export { load, getFilters };
