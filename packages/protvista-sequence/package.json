@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "Sequence component for the ProtVista tool",
   "files": [
     "dist",
