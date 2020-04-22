@@ -6,7 +6,7 @@ import readmeContent from "../../../packages/protvista-tooltip/README.md";
 
 const ProtvistaTooltipWrapper = () => {
   const [visible, setVisible] = useState(true);
-  const [content, setContent] = useState("!".repeat(15));
+  const [content, setContent] = useState("!");
   const [x, setX] = useState(200);
   const [y, setY] = useState(50);
 
@@ -21,7 +21,7 @@ const ProtvistaTooltipWrapper = () => {
   }, []);
 
   const handleChangeContent = useCallback(() => {
-    setContent("!".repeat(Math.ceil(Math.random() * 20)));
+    setContent("!".repeat(Math.ceil(Math.random() * 10)));
   });
 
   return (
@@ -37,7 +37,6 @@ const ProtvistaTooltipWrapper = () => {
         x={x}
         y={y}
         visible={visible ? "" : undefined}
-        style={{ "--body-color": "red" }}
       >
         Content of the tooltip (in <code>html</code> too{content})
       </protvista-tooltip>

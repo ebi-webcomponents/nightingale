@@ -3,6 +3,8 @@ import { LitElement, html, css } from "lit-element";
 // defaults
 const TRIANGLE_WIDTH = 16;
 const TRIANGLE_HEIGHT = 10;
+const TRIANGLE_MARGIN = 10;
+const VERTICAL_DISTANCE = 5;
 
 /**
  * Utility function to extract pixel values from CSS extracted properties
@@ -71,6 +73,8 @@ class ProtvistaTooltip extends LitElement {
         --body-color: #616161;
         --triangle-width: ${TRIANGLE_WIDTH}px;
         --triangle-height: ${TRIANGLE_HEIGHT}px;
+        --triangle-margin: ${TRIANGLE_MARGIN}px;
+        --vertical-distance: ${VERTICAL_DISTANCE}px;
       }
 
       .tooltip {
@@ -108,11 +112,11 @@ class ProtvistaTooltip extends LitElement {
       }
 
       .tooltip.arrow-left::before {
-        left: 0;
+        left: var(--triangle-margin);
       }
 
       .tooltip.arrow-right::before {
-        right: 0;
+        right: var(--triangle-margin);
       }
 
       .tooltip.arrow-up::before {
@@ -191,29 +195,37 @@ class ProtvistaTooltip extends LitElement {
       style.getPropertyValue("--triangle-height"),
       TRIANGLE_HEIGHT
     );
+    const triangleMargin = getNumberFromStyleString(
+      style.getPropertyValue("--triangle-margin"),
+      TRIANGLE_MARGIN
+    );
+    const verticalDistance = getNumberFromStyleString(
+      style.getPropertyValue("--vertical-distance"),
+      VERTICAL_DISTANCE
+    );
 
     // horizontal
     // default
-    let x = this.x - triangleWidth / 2;
+    let x = this.x - triangleWidth / 2 - triangleMargin;
     let horizontal = "left";
     // does it fit?
     const fitsHorizontally = x + tooltipRect.width <= containerRect.right;
     if (!fitsHorizontally) {
       // alternative
       horizontal = "right";
-      x = this.x - tooltipRect.width + triangleWidth / 2;
+      x = this.x - tooltipRect.width + triangleWidth / 2 + triangleMargin;
     }
 
     // horizontal
     // default
-    let y = this.y + triangleHeight;
+    let y = this.y + triangleHeight + verticalDistance;
     let vertical = "up";
     // does it fit?
     const fitsVertically = y + tooltipRect.height <= containerRect.height;
     if (!fitsVertically) {
       // alternative
       vertical = "down";
-      y = this.y - tooltipRect.height - triangleHeight;
+      y = this.y - tooltipRect.height - triangleHeight - verticalDistance;
     }
 
     return { x, y, horizontal, vertical };
@@ -233,10 +245,7 @@ class ProtvistaTooltip extends LitElement {
     visible = position.x && visible;
     // position on screen with css translate
     const style =
-      visible &&
-      `
-      transform: translate(${position.x}px, ${position.y}px);
-    `;
+      visible && `transform: translate(${position.x}px, ${position.y}px);`;
 
     return html`
         <section

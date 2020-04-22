@@ -39,6 +39,8 @@ the main html element of the current document.
 
 ### overridable custom properties
 
+Override by setting new values to custom properties on the element itself
+
 #### `name: --z-index`
 
 z-index of the tooltip, defaults to `50000`.
@@ -64,3 +66,13 @@ defaults to `16px`.
 
 height of the triangle pointing the tooltip towards its target, in pixels,
 defaults to `10px`.
+
+#### `name: --triangle-margin`
+
+distance of the triangle pointing the tooltip towards its target from the side
+of the tooltip, in pixels, defaults to `10px`.
+
+#### `name: --vertical-distance`
+
+distance of the triangle pointing the tooltip towards its target from the side
+of the tooltip, in pixels, defaults to `5px`.
