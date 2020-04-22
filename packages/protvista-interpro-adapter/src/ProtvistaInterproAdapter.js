@@ -13,13 +13,13 @@ export const transformData = data => {
           Math.max(...location.fragments.map(fragment => fragment.end))
         )
       ),
-      length: proteins[0].protein_length,
       tooltipContent: `
         <h5>Accession</h5>
         <p>${metadata.accession}</p>
         <h5>Name</h5>
         <p>${metadata.name}</p>
-      `
+      `,
+      length: proteins[0].protein_length
     }));
   } catch (error) {
     throw new Error("Failed transforming the data");
