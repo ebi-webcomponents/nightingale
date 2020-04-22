@@ -3,7 +3,23 @@ export const transformData = data => {
     return data.results.map(({ metadata, proteins }) => ({
       ...metadata,
       locations: proteins[0].entry_protein_locations,
-      length: proteins[0].protein_length
+      start: Math.min(
+        ...proteins[0].entry_protein_locations.map(location =>
+          Math.min(...location.fragments.map(fragment => fragment.start))
+        )
+      ),
+      end: Math.max(
+        ...proteins[0].entry_protein_locations.map(location =>
+          Math.max(...location.fragments.map(fragment => fragment.end))
+        )
+      ),
+      length: proteins[0].protein_length,
+      tooltipContent: `
+        <h5>Accession</h5>
+        <p>${metadata.accession}</p>
+        <h5>Name</h5>
+        <p>${metadata.name}</p>
+      `
     }));
   } catch (error) {
     throw new Error("Failed transforming the data");
