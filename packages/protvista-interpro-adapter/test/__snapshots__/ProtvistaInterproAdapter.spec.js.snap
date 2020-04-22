@@ -4,6 +4,7 @@ exports[`ProtvistaFeatureAdapter tests should transform the data correctly 1`] =
 Array [
   Object {
     "accession": "IPR002223",
+    "end": 342,
     "go_terms": Array [
       Object {
         "category": Object {
@@ -47,6 +48,13 @@ Array [
     },
     "name": "Pancreatic trypsin inhibitor Kunitz domain",
     "source_database": "interpro",
+    "start": 288,
+    "tooltipContent": "
+        <h5>Accession</h5>
+        <p>IPR002223</p>
+        <h5>Name</h5>
+        <p>Pancreatic trypsin inhibitor Kunitz domain</p>
+      ",
     "type": "domain",
   },
 ]
