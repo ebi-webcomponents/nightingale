@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-adapter",
-  "version": "2.3.0",
+  "version": "2.7.1",
   "files": [
     "dist",
     "src"
