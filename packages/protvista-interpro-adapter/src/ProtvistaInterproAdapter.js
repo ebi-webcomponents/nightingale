@@ -15,18 +15,15 @@ export const transformData = data => {
       ),
       tooltipContent: `
         <h5>Accession</h5>
-        <p>${metadata.accession}</p>
-        <h5>Name</h5>
-        <p>${metadata.name}</p>
         <a
           target="_blank"
           rel="noopener"
-          href="https://www.ebi.ac.uk/interpro/entry/InterPro/${
-            metadata.accession
-          }/"
+          href="https://www.ebi.ac.uk/interpro/entry/InterPro/${metadata.accession}/"
         >
-          See this ${metadata.type || "entry"} in InterPro
+        ${metadata.accession}
         </a>
+        <h5>Name</h5>
+        <p>${metadata.name}</p>
       `,
       length: proteins[0].protein_length
     }));
