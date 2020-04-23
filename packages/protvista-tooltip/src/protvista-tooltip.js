@@ -139,7 +139,7 @@ class ProtvistaTooltip extends LitElement {
         margin: 0;
         background-color: var(--title-color);
         line-height: 2em;
-        padding-left: 1ch;
+        padding: 0 1ch;
       }
 
       :host a,
