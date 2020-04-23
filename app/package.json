@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -20,7 +20,7 @@
     "highlight.js": "9.16.2",
     "interaction-viewer": "^2.7.0",
     "protvista-coloured-sequence": "^2.7.0",
-    "protvista-datatable": "^2.7.0",
+    "protvista-datatable": "^2.8.2",
     "protvista-feature-adapter": "^2.3.3",
     "protvista-filter": "^2.7.0",
     "protvista-interpro-track": "^2.6.1",
