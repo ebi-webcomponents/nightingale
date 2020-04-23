@@ -18,6 +18,15 @@ export const transformData = data => {
         <p>${metadata.accession}</p>
         <h5>Name</h5>
         <p>${metadata.name}</p>
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://www.ebi.ac.uk/interpro/entry/InterPro/${
+            metadata.accession
+          }/"
+        >
+          See this ${metadata.type || "entry"} in InterPro
+        </a>
       `,
       length: proteins[0].protein_length
     }));
