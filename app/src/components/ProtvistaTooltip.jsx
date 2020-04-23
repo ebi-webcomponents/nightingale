@@ -1,26 +1,49 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useCallback } from "react";
 import ProtvistaTooltip from "protvista-tooltip";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-tooltip/README.md";
 
 const ProtvistaTooltipWrapper = () => {
-  useEffect(() => {
-    const tooltip = document.querySelector("protvista-tooltip");
-    tooltip.style.setProperty("top", "300px");
-    tooltip.style.setProperty("left", "300px");
-    tooltip.style.setProperty("display", "block");
+  const [visible, setVisible] = useState(true);
+  const [content, setContent] = useState("!");
+  const [x, setX] = useState(200);
+  const [y, setY] = useState(50);
 
-    tooltip.title = "My tooltip";
-    tooltip.innerHTML = "<p>Some HTML</p>";
-    tooltip.visible = true;
+  useEffect(() => {
+    loadWebComponent("protvista-tooltip", ProtvistaTooltip);
+  }, []);
+
+  const handleToggle = useCallback(event => {
+    setX(event.pageX);
+    setY(event.pageY);
+    setVisible(visible => !visible);
+  }, []);
+
+  const handleChangeContent = useCallback(() => {
+    setContent("!".repeat(Math.ceil(Math.random() * 10)));
   });
-  loadWebComponent("protvista-tooltip", ProtvistaTooltip);
 
   return (
     <Fragment>
+      <button type="button" onClick={handleToggle} style={{ width: "100%" }}>
+        Click to toggle tooltip targetting mouse click location
+      </button>
+      <button type="button" onClick={handleChangeContent}>
+        Change tooltip content
+      </button>
+      <protvista-tooltip
+        title="My tooltip"
+        x={x}
+        y={y}
+        visible={visible ? "" : undefined}
+      >
+        Content of the tooltip (in <code>html</code> too{content})
+      </protvista-tooltip>
       <Readme content={readmeContent} />
-      <protvista-tooltip />
+      <button type="button" onClick={handleToggle} style={{ width: "100%" }}>
+        Click to toggle tooltip targetting mouse click location
+      </button>
     </Fragment>
   );
 };
