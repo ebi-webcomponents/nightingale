@@ -1,6 +1,6 @@
 {
   "name": "data-loader",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "data-loader Custom Element to load data declaratively",
   "files": [
     "dist",
