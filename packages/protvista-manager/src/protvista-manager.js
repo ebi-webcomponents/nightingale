@@ -41,6 +41,7 @@ class ProtVistaManager extends HTMLElement {
 
     if (!Element.prototype.closest) {
       Element.prototype.closest = s => {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         let el = this;
 
         do {

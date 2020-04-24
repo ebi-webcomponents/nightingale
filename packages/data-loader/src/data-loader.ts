@@ -83,7 +83,7 @@ class DataLoader extends HTMLElement implements NightingaleElement {
             /* eslint-disable no-await-in-loop */
             ...(await load(source.src)),
             srcElement: source,
-            src: (<HTMLSourceElement>source).src
+            src: (source as HTMLSourceElement).src
           };
         } else {
           detail = {
