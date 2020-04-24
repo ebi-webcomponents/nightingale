@@ -346,7 +346,6 @@ class ProtvistaStructure extends HTMLElement {
       )
       .map(residue => `${residue.start}:${residue.end}`);
 
-    console.log(seqPositions);
     const event = new CustomEvent("change", {
       detail: {
         highlight: seqPositions.join(",")
