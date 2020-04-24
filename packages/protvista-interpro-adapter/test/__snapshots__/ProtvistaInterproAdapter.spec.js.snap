@@ -51,7 +51,13 @@ Array [
     "start": 288,
     "tooltipContent": "
         <h5>Accession</h5>
-        <p>IPR002223</p>
+        <a
+          target=\\"_blank\\"
+          rel=\\"noopener\\"
+          href=\\"https://www.ebi.ac.uk/interpro/entry/InterPro/IPR002223/\\"
+        >
+        IPR002223
+        </a>
         <h5>Name</h5>
         <p>Pancreatic trypsin inhibitor Kunitz domain</p>
       ",
