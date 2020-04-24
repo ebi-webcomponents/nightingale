@@ -1,6 +1,9 @@
 import "whatwg-fetch";
 import LiteMol from "litemol";
 
+const UP_PDB = "UP_PDB";
+const PDB_UP = "PDB_UP";
+
 class ProtvistaStructure extends HTMLElement {
   constructor() {
     super();
@@ -8,6 +11,7 @@ class ProtvistaStructure extends HTMLElement {
 
     this.loadMolecule = this.loadMolecule.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
+    this.propagateHighlight = this.propagateHighlight.bind(this);
   }
 
   get css() {
@@ -203,6 +207,10 @@ class ProtvistaStructure extends HTMLElement {
       },
       allowAnalytics: false
     });
+
+    this.Event.Molecule.ModelSelect.getStream(
+      this._liteMol.context
+    ).subscribe(e => this.propagateHighlight(e));
   }
 
   loadMolecule(_id) {
@@ -287,7 +295,7 @@ class ProtvistaStructure extends HTMLElement {
     return Object.values(mappingData)[0].UniProt[this._accession].mappings;
   }
 
-  translatePositions(start, end) {
+  translatePositions(start, end, direction = UP_PDB) {
     // return if they have been set to 'undefined'
     if (
       typeof this.highlight === "string" ||
@@ -302,19 +310,23 @@ class ProtvistaStructure extends HTMLElement {
         mapping.unp_end - mapping.unp_start ===
         mapping.end.residue_number - mapping.start.residue_number
       ) {
-        if (start >= mapping.unp_start && end <= mapping.unp_end) {
+        if (
+          (direction === UP_PDB &&
+            start >= mapping.unp_start &&
+            end <= mapping.unp_end) ||
+          (direction === PDB_UP &&
+            start >= mapping.start.residue_number &&
+            end <= mapping.end.residue_number)
+        ) {
           const offset = mapping.unp_start - mapping.start.residue_number;
           // TODO this is wrong because there are gaps in the PDB sequence
           return {
             entity: mapping.entity_id,
             chain: mapping.chain_id,
-            start: start - offset,
-            end: end - offset
+            start: direction === "UP_PDB" ? start - offset : start + offset,
+            end: direction === "UP_PDB" ? end - offset : end + offset
           };
         }
-        this.addMessage(
-          `Positions ${start}-${end} not found in this structure`
-        );
       } else {
         this.addMessage(
           "Mismatch between protein sequence and structure residues"
@@ -322,6 +334,26 @@ class ProtvistaStructure extends HTMLElement {
       }
     }
     return null;
+  }
+
+  propagateHighlight(e) {
+    if (!e.data || !e.data.residues) {
+      return;
+    }
+    const seqPositions = e.data.residues
+      .map(residue =>
+        this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)
+      )
+      .map(residue => `${residue.start}:${residue.end}`);
+
+    const event = new CustomEvent("change", {
+      detail: {
+        highlight: seqPositions.join(",")
+      },
+      bubbles: true,
+      cancelable: true
+    });
+    this.dispatchEvent(event);
   }
 
   highlightChain() {
