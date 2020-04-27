@@ -12,9 +12,9 @@ const VERTICAL_DISTANCE = 5;
  * @param {number} defaultValue default value to provide if can't extract
  */
 const getNumberFromStyleString = (string, defaultValue = 0) => {
-  const match = (string || "").match(/(?<number>\d+\.?\d*)px/);
+  const match = (string || "").match(/(\d+\.?\d*)px/);
   if (!match) return defaultValue;
-  return +match.groups.number;
+  return +match[1];
 };
 
 class ProtvistaTooltip extends LitElement {
