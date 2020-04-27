@@ -13,10 +13,13 @@ export default class ScrollFilter {
     // style.setProperty("--overflow-y", scrollable ? "auto" : "hidden");
     // console.log(style.getPropertyValue("--overflow-y"));
     // protvista-datatable-container
-    if (scrollable) {
-      this.element.focus();
-    }
     this.element.setAttribute("scrollable", scrollable);
+    if (!scrollable) {
+      setTimeout(() => {
+        console.log("finished timeout");
+        this.element.setAttribute("scrollable", true);
+      }, SCROLL_DELAY);
+    }
   }
 
   wheel({ x: mouseX, y: mouseY, timeStamp }) {
