@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit-element";
 import { v1 } from "uuid";
+import { ScrollFilter } from "protvista-utils";
 /* eslint-disable import/extensions, import/no-extraneous-dependencies */
 import { unsafeSVG } from "lit-html/directives/unsafe-svg.js";
 import styles from "./styles";
@@ -14,6 +15,7 @@ class ProtvistaDatatable extends LitElement {
     this.noScrollToRow = false;
     this.noDeselect = false;
     this.eventHandler = this.eventHandler.bind(this);
+    this.scrollFilter = new ScrollFilter(this);
   }
 
   connectedCallback() {
@@ -32,6 +34,8 @@ class ProtvistaDatatable extends LitElement {
     }
     // this makes sure the protvista-zoomable event listener doesn't reset
     this.classList.add("feature");
+
+    document.addEventListener("wheel", event => this.scrollFilter.wheel(event));
   }
 
   disconnectedCallback() {

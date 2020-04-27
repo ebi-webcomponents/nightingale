@@ -1,9 +1,22 @@
+/* eslint-disable class-methods-use-this */
 const SCROLL_DELAY = 500;
 
 export default class ScrollFilter {
   constructor(element) {
     this.element = element;
     this.timeStampWheelOutside = 0;
+  }
+
+  setElementScrollable(scrollable) {
+    console.log(`${scrollable ? "" : "no "}scroll`);
+    // const style = getComputedStyle(this.element);
+    // style.setProperty("--overflow-y", scrollable ? "auto" : "hidden");
+    // console.log(style.getPropertyValue("--overflow-y"));
+    // protvista-datatable-container
+    if (scrollable) {
+      this.element.focus();
+    }
+    this.element.setAttribute("scrollable", scrollable);
   }
 
   wheel({ x: mouseX, y: mouseY, timeStamp }) {
@@ -23,9 +36,9 @@ export default class ScrollFilter {
         // Count this as an outside scroll as it's within the delay and it's
         // inferred the user is doing a continuous scroll past the component
         this.timeStampWheelOutside = timeStamp;
-        console.log("no scroll");
+        this.setElementScrollable(false);
       } else {
-        console.log("scroll");
+        this.setElementScrollable(true);
       }
     } else {
       this.timeStampWheelOutside = timeStamp;
