@@ -1,5 +1,3 @@
-const SCROLL_DELAY = 500;
-
 class ProtVistaManager extends HTMLElement {
   constructor() {
     super();

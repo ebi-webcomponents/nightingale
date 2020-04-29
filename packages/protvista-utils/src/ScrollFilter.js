@@ -18,18 +18,19 @@ export default class ScrollFilter {
 
   startResetScrollableTimer() {
     if (this.resetScrollableTimeout) {
-      console.log("clearTimeout");
+      // console.log("clearTimeout");
       clearTimeout(this.resetScrollableTimeout);
     }
-    // We want to set scrollable to true
+    // We want to reset scrollable to true after a small period of time
     this.resetScrollableTimeout = setTimeout(() => {
-      console.log("done timeout, now scroll");
+      // console.log("timeout complete, now scroll");
       this.setElementScrollable(true);
       this.resetScrollableTimeout = null;
     }, SCROLL_DELAY);
   }
 
   wheel({ x: mouseX, y: mouseY, timeStamp }) {
+    // console.log("here");
     const {
       height: elementHeight,
       width: elementWidth,

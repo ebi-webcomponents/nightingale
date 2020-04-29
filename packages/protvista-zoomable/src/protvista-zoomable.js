@@ -4,7 +4,7 @@ import {
   zoomIdentity,
   event as d3Event
 } from "d3";
-import { TrackHighlighter } from "protvista-utils";
+import { TrackHighlighter, ScrollFilter } from "protvista-utils";
 
 import ResizeObserver from "resize-observer-polyfill";
 
@@ -33,6 +33,7 @@ class ProtvistaZoomable extends HTMLElement {
     this._onResize = this._onResize.bind(this);
     this._listenForResize = this._listenForResize.bind(this);
     this.trackHighlighter = new TrackHighlighter({ element: this, min: 1 });
+    this.scrollFilter = new ScrollFilter(this);
   }
 
   connectedCallback() {
@@ -75,6 +76,8 @@ class ProtvistaZoomable extends HTMLElement {
       console.error(e);
     });
     this.addEventListener("click", this._resetEventHandler);
+
+    document.addEventListener("wheel", event => this.scrollFilter.wheel(event));
   }
 
   disconnectedCallback() {
@@ -174,6 +177,9 @@ class ProtvistaZoomable extends HTMLElement {
       ])
       .filter(() => {
         if (!(d3Event instanceof WheelEvent)) return true;
+        const scrollableAttribute = this.getAttribute("scrollable");
+        console.log("scrollableAttribute", scrollableAttribute);
+        if (scrollableAttribute) return scrollableAttribute === "true";
         return !this.hasAttribute("use-ctrl-to-zoom") || d3Event.ctrlKey;
       })
       .on("zoom", this.zoomed);
