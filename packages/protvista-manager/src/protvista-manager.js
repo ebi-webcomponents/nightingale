@@ -7,7 +7,6 @@ class ProtVistaManager extends HTMLElement {
     this.attributeValues = new Map();
     this.propertyValues = new Map();
     this.mouseOver = false;
-    this.timeStampWheelOutside = 0;
   }
 
   static get observedAttributes() {
@@ -105,35 +104,6 @@ class ProtVistaManager extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener("change", this._changeListener);
-
-    document.addEventListener(
-      "wheel",
-      ({ x: mouseX, y: mouseY, timeStamp }) => {
-        const {
-          height: elementHeight,
-          width: elementWidth,
-          x: elementX,
-          y: elementY
-        } = this.getBoundingClientRect();
-        if (
-          mouseX > elementX &&
-          mouseY < elementX + elementWidth &&
-          mouseY > elementY &&
-          mouseY < elementY + elementHeight
-        ) {
-          if (timeStamp < this.timeStampWheelOutside + SCROLL_DELAY) {
-            // Count this as an outside scroll as it's within the delay and it's
-            // inferred the user is doing a continuous scroll past the component
-            this.timeStampWheelOutside = timeStamp;
-            console.log("no scroll");
-          } else {
-            console.log("scroll");
-          }
-        } else {
-          this.timeStampWheelOutside = timeStamp;
-        }
-      }
-    );
   }
 }
 
