@@ -92,16 +92,12 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       .attr("d", this._line(this._totalsArray.diseaseTotal))
       .attr("fill", "none")
       .attr("stroke", "red")
-      .attr("stroke-width", "1.5px")
-      .attr("stroke-dasharray", "0")
       .attr("transform", "translate(0,0)");
     this.svg
       .append("path")
       .attr("d", this._line(this._totalsArray.total))
       .attr("fill", "none")
       .attr("stroke", "darkgrey")
-      .attr("stroke-width", "1px")
-      .attr("stroke-dasharray", ".5")
       .attr("transform", "translate(0,0)");
     this._updateHighlight();
   }
