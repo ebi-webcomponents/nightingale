@@ -34,6 +34,7 @@ class ProtvistaZoomable extends HTMLElement {
     this._listenForResize = this._listenForResize.bind(this);
     this.trackHighlighter = new TrackHighlighter({ element: this, min: 1 });
     this.scrollFilter = new ScrollFilter(this);
+    this.wheelListener = event => this.scrollFilter.wheel(event);
   }
 
   connectedCallback() {
@@ -76,8 +77,7 @@ class ProtvistaZoomable extends HTMLElement {
       console.error(e);
     });
     this.addEventListener("click", this._resetEventHandler);
-
-    document.addEventListener("wheel", event => this.scrollFilter.wheel(event));
+    document.addEventListener("wheel", this.wheelListener, { capture: true });
   }
 
   disconnectedCallback() {
@@ -90,6 +90,7 @@ class ProtvistaZoomable extends HTMLElement {
       window.removeEventListener("resize", this._onResize);
     }
     this.removeEventListener("click", this._resetEventHandler);
+    document.removeEventListener("wheel", this.wheelListener);
   }
 
   get width() {

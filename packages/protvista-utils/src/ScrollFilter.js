@@ -30,7 +30,6 @@ export default class ScrollFilter {
   }
 
   wheel({ x: mouseX, y: mouseY, timeStamp }) {
-    // console.log("here");
     const {
       height: elementHeight,
       width: elementWidth,

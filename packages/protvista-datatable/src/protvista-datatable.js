@@ -16,6 +16,7 @@ class ProtvistaDatatable extends LitElement {
     this.noDeselect = false;
     this.eventHandler = this.eventHandler.bind(this);
     this.scrollFilter = new ScrollFilter(this);
+    this.wheelListener = event => this.scrollFilter.wheel(event);
   }
 
   connectedCallback() {
@@ -35,7 +36,7 @@ class ProtvistaDatatable extends LitElement {
     // this makes sure the protvista-zoomable event listener doesn't reset
     this.classList.add("feature");
 
-    document.addEventListener("wheel", event => this.scrollFilter.wheel(event));
+    document.addEventListener("wheel", this.wheelListener, { capture: true });
   }
 
   disconnectedCallback() {
@@ -44,6 +45,7 @@ class ProtvistaDatatable extends LitElement {
       this.manager.unregister(this);
     }
     document.removeEventListener("click", this.eventHandler);
+    document.removeEventListener("wheel", this.wheelListener);
   }
 
   // Implement our own accessors as we need to transform the data
