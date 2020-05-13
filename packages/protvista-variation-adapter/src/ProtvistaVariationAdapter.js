@@ -4,7 +4,7 @@ import { v1 } from "uuid";
 import formatTooltip from "./tooltipGenerators";
 
 const getSourceType = (xrefs, sourceType) => {
-  const xrefNames = xrefs.map(ref => ref.name);
+  const xrefNames = xrefs ? xrefs.map(ref => ref.name) : [];
   if (sourceType === "uniprot" || sourceType === "mixed") {
     xrefNames.push("uniprot");
   }
