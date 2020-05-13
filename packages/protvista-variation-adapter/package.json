@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation-adapter",
-  "version": "2.3.3",
+  "version": "2.9.4",
   "description": "Data adapter for variation data",
   "files": [
     "dist",
