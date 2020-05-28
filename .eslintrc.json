@@ -16,6 +16,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "ignorePatterns": ["ProtvistaMSA.js"],
   "rules": {
     "no-underscore-dangle": "off",
     "no-console": "off",
@@ -28,6 +29,16 @@
       "ForInStatement",
       "LabeledStatement",
       "WithStatement"
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
     ],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
