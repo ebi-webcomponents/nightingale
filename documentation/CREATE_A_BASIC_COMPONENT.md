@@ -102,7 +102,11 @@ This document documents the cration of a basic Nightingale component.
                 displaystart="53"
       ```
 
-   3. Now you can start the showcase app. This will run `webpack-dev-server` and open the app in your browser, you can then go to the Manager component, and you will see the `"Hello world."` message as part of the example.
+   3. Let `yarn` and `lerna` know about your new component by making them check the `package.json` file. For this you just need to:
+      ```bash
+      yarn start
+      ```
+   4. Now you can start the showcase app. This will run `webpack-dev-server` and open the app in your browser, you can then go to the Manager component, and you will see the `"Hello world."` message as part of the example.
       ```bash
       yarn start
       ```

@@ -29,7 +29,10 @@ const config = {
   target: "web",
   devtool: "source-map",
   resolve: {
-    extensions: [".js", ".ts"]
+    extensions: [".js", ".ts"],
+    alias: {
+      react: path.resolve("./node_modules/react")
+    }
   },
   externals: {
     d3: "d3",
@@ -58,8 +61,10 @@ const config = {
             babelrc: false,
             include: [
               "src",
-              "../../node_modules/lit-html",
-              "../../node_modules/lit-element"
+              path.resolve("node_modules", "lit-html"),
+              path.resolve("node_modules", "lit-element"),
+              // msa-viewer addded here to reuse the same react.
+              path.resolve("node_modules", "react-msa-viewer")
             ],
             presets: [
               [
@@ -69,7 +74,11 @@ const config = {
                     ie: 11,
                     browsers: "last 2 versions"
                   },
-                  modules: false
+                  modules: false,
+                  plugins: [
+                    "@babel/plugin-proposal-object-rest-spread",
+                    "@babel/plugin-proposal-class-properties"
+                  ]
                 }
               ],
               ["@babel/preset-typescript"]
