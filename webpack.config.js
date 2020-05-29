@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const PACKAGE_ROOT_PATH = process.cwd();
 const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, "package.json"));
 
-const doesFileExists = path => {
+const doesFileExists = (path) => {
   try {
     fs.statSync(path);
     return true;
@@ -19,29 +19,31 @@ const doesFileExists = path => {
 
 const config = {
   entry: [
-    doesFileExists("./src/index.ts") ? "./src/index.ts" : "./src/index.js"
+    doesFileExists("./src/index.ts") ? "./src/index.ts" : "./src/index.js",
   ],
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
     library: camelCase(PKG_JSON.name, { pascalCase: true }),
-    filename: `${PKG_JSON.name}.js`
+    filename: `${PKG_JSON.name}.js`,
   },
   target: "web",
   devtool: "source-map",
   resolve: {
     extensions: [".js", ".ts"],
     alias: {
-      react: path.resolve("./node_modules/react")
-    }
+      react: path.resolve("./node_modules/react"),
+    },
   },
   externals: {
     d3: "d3",
     litemol: "LiteMol",
+    react: "react",
+    "react-dom": "react-dom",
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
     "protvista-feature-adapter": "ProtvistaFeatureAdapter",
     "protvista-utils": "ProtvistaUtils",
-    "protvista-sequence": "ProtvistaSequence"
+    "protvista-sequence": "ProtvistaSequence",
   },
   plugins: [new CleanWebpackPlugin()],
   module: {
@@ -50,8 +52,8 @@ const config = {
         test: /\.css$/,
         use: [
           { loader: "style-loader" },
-          { loader: "css-loader", options: { importLoaders: 1 } }
-        ]
+          { loader: "css-loader", options: { importLoaders: 1 } },
+        ],
       },
       {
         test: /\.(js|ts)$/,
@@ -60,11 +62,11 @@ const config = {
           options: {
             babelrc: false,
             include: [
-              "src",
-              path.resolve("node_modules", "lit-html"),
-              path.resolve("node_modules", "lit-element"),
+              /src/,
+              /lit-html/,
+              /lit-element/,
               // msa-viewer addded here to reuse the same react.
-              path.resolve("node_modules", "react-msa-viewer")
+              /react-msa-viewer/,
             ],
             presets: [
               [
@@ -72,34 +74,33 @@ const config = {
                 {
                   targets: {
                     ie: 11,
-                    browsers: "last 2 versions"
+                    browsers: "last 2 versions",
                   },
                   modules: false,
-                  plugins: [
-                    "@babel/plugin-proposal-object-rest-spread",
-                    "@babel/plugin-proposal-class-properties"
-                  ]
-                }
+                },
               ],
-              ["@babel/preset-typescript"]
+              "@babel/react",
+              "@babel/preset-typescript"
             ],
             plugins: [
+              "@babel/plugin-proposal-object-rest-spread",
+              "@babel/plugin-proposal-class-properties",
               [
                 "@babel/plugin-transform-runtime",
                 {
-                  regenerator: true
-                }
-              ]
-            ]
-          }
-        }
+                  regenerator: true,
+                },
+              ],
+            ],
+          },
+        },
       },
       {
         test: /\.svg$/,
-        loader: "svg-inline-loader?classPrefix"
-      }
-    ]
-  }
+        loader: "svg-inline-loader?classPrefix",
+      },
+    ],
+  },
 };
 
 module.exports = config;
