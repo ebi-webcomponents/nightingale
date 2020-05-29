@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const PACKAGE_ROOT_PATH = process.cwd();
 const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, "package.json"));
 
-const doesFileExists = (path) => {
+const doesFileExists = path => {
   try {
     fs.statSync(path);
     return true;
@@ -19,20 +19,20 @@ const doesFileExists = (path) => {
 
 const config = {
   entry: [
-    doesFileExists("./src/index.ts") ? "./src/index.ts" : "./src/index.js",
+    doesFileExists("./src/index.ts") ? "./src/index.ts" : "./src/index.js"
   ],
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
     library: camelCase(PKG_JSON.name, { pascalCase: true }),
-    filename: `${PKG_JSON.name}.js`,
+    filename: `${PKG_JSON.name}.js`
   },
   target: "web",
   devtool: "source-map",
   resolve: {
     extensions: [".js", ".ts"],
     alias: {
-      react: path.resolve("./node_modules/react"),
-    },
+      react: path.resolve("./node_modules/react")
+    }
   },
   externals: {
     d3: "d3",
@@ -43,7 +43,7 @@ const config = {
     "protvista-track": "ProtvistaTrack",
     "protvista-feature-adapter": "ProtvistaFeatureAdapter",
     "protvista-utils": "ProtvistaUtils",
-    "protvista-sequence": "ProtvistaSequence",
+    "protvista-sequence": "ProtvistaSequence"
   },
   plugins: [new CleanWebpackPlugin()],
   module: {
@@ -52,8 +52,8 @@ const config = {
         test: /\.css$/,
         use: [
           { loader: "style-loader" },
-          { loader: "css-loader", options: { importLoaders: 1 } },
-        ],
+          { loader: "css-loader", options: { importLoaders: 1 } }
+        ]
       },
       {
         test: /\.(js|ts)$/,
@@ -66,7 +66,7 @@ const config = {
               /lit-html/,
               /lit-element/,
               // msa-viewer addded here to reuse the same react.
-              /react-msa-viewer/,
+              /react-msa-viewer/
             ],
             presets: [
               [
@@ -74,10 +74,10 @@ const config = {
                 {
                   targets: {
                     ie: 11,
-                    browsers: "last 2 versions",
+                    browsers: "last 2 versions"
                   },
-                  modules: false,
-                },
+                  modules: false
+                }
               ],
               "@babel/react",
               "@babel/preset-typescript"
@@ -88,19 +88,19 @@ const config = {
               [
                 "@babel/plugin-transform-runtime",
                 {
-                  regenerator: true,
-                },
-              ],
-            ],
-          },
-        },
+                  regenerator: true
+                }
+              ]
+            ]
+          }
+        }
       },
       {
         test: /\.svg$/,
-        loader: "svg-inline-loader?classPrefix",
-      },
-    ],
-  },
+        loader: "svg-inline-loader?classPrefix"
+      }
+    ]
+  }
 };
 
 module.exports = config;
