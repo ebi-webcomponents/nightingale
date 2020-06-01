@@ -36,7 +36,9 @@ class ProtvistaDatatable extends LitElement {
     // this makes sure the protvista-zoomable event listener doesn't reset
     this.classList.add("feature");
 
-    document.addEventListener("wheel", this.wheelListener, { capture: true });
+    if (this.hasAttribute("filter-scroll")) {
+      document.addEventListener("wheel", this.wheelListener, { capture: true });
+    }
   }
 
   disconnectedCallback() {

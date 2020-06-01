@@ -33,6 +33,7 @@ class ProtvistaZoomable extends HTMLElement {
     this._onResize = this._onResize.bind(this);
     this._listenForResize = this._listenForResize.bind(this);
     this.trackHighlighter = new TrackHighlighter({ element: this, min: 1 });
+
     this.scrollFilter = new ScrollFilter(this);
     this.wheelListener = event => this.scrollFilter.wheel(event);
   }
@@ -77,7 +78,9 @@ class ProtvistaZoomable extends HTMLElement {
       console.error(e);
     });
     this.addEventListener("click", this._resetEventHandler);
-    document.addEventListener("wheel", this.wheelListener, { capture: true });
+    if (this.hasAttribute("filter-scroll")) {
+      document.addEventListener("wheel", this.wheelListener, { capture: true });
+    }
   }
 
   disconnectedCallback() {
@@ -178,9 +181,10 @@ class ProtvistaZoomable extends HTMLElement {
       ])
       .filter(() => {
         if (!(d3Event instanceof WheelEvent)) return true;
-        const scrollableAttribute = this.getAttribute("scrollable");
-        console.log("scrollableAttribute", scrollableAttribute);
-        if (scrollableAttribute) return scrollableAttribute === "true";
+        if (this.hasAttribute("scroll-filter")) {
+          const scrollableAttribute = this.getAttribute("scrollable");
+          if (scrollableAttribute) return scrollableAttribute === "true";
+        }
         return !this.hasAttribute("use-ctrl-to-zoom") || d3Event.ctrlKey;
       })
       .on("zoom", this.zoomed);
