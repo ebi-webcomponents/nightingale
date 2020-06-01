@@ -4,6 +4,7 @@ class ProtVistaManager extends HTMLElement {
     this.protvistaElements = new Set();
     this.attributeValues = new Map();
     this.propertyValues = new Map();
+    this.mouseOver = false;
   }
 
   static get observedAttributes() {
