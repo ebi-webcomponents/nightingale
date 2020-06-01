@@ -9,52 +9,52 @@ export default class ScrollFilter {
   }
 
   setElementScrollable(scrollable) {
-    // console.log(`${scrollable ? "" : "no "}scroll`);
-    // const style = getComputedStyle(this.element);
-    // style.setProperty("--overflow-y", scrollable ? "auto" : "hidden");
-    // console.log(style.getPropertyValue("--overflow-y"));
     this.element.setAttribute("scrollable", scrollable);
   }
 
   startResetScrollableTimer() {
     if (this.resetScrollableTimeout) {
-      // console.log("clearTimeout");
       clearTimeout(this.resetScrollableTimeout);
     }
-    // We want to reset scrollable to true after a small period of time
+    // Reset scrollable to true after a small period of time
     this.resetScrollableTimeout = setTimeout(() => {
-      // console.log("timeout complete, now scroll");
+      console.log("timeout complete, now scroll");
       this.setElementScrollable(true);
       this.resetScrollableTimeout = null;
     }, SCROLL_DELAY);
   }
 
-  wheel({ x: mouseX, y: mouseY, timeStamp }) {
+  isWheelInsideElement(mouseX, mouseY) {
     const {
       height: elementHeight,
       width: elementWidth,
       x: elementX,
       y: elementY
     } = this.element.getBoundingClientRect();
-    if (
-      mouseX > elementX &&
+    return mouseX > elementX &&
       mouseY < elementX + elementWidth &&
       mouseY > elementY &&
       mouseY < elementY + elementHeight
-    ) {
+  }
+
+  blockScroll(timeStamp) {
+    this.timeStampWheelOutside = timeStamp;
+    this.setElementScrollable(false);
+    this.startResetScrollableTimer();
+  }
+
+  wheel({ x, y, timeStamp }) {
+    if (this.isWheelInsideElement(x,y)) {
       if (timeStamp < this.timeStampWheelOutside + SCROLL_DELAY) {
         // Count this as an outside scroll as it's within the delay and it's
         // inferred the user is doing a continuous scroll past the component
-        this.timeStampWheelOutside = timeStamp;
-        console.log("no scroll");
-        this.setElementScrollable(false);
-        this.startResetScrollableTimer();
+        this.blockScroll(timeStamp);
       } else {
-        console.log("scroll");
         this.setElementScrollable(true);
       }
     } else {
-      this.timeStampWheelOutside = timeStamp;
+        // Block scrolling and remember the time when the last scroll outside occurred.
+        this.blockScroll(timeStamp);
     }
   }
 }
