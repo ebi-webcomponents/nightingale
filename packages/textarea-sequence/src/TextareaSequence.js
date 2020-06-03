@@ -10,7 +10,8 @@ class TextareaSequence extends HTMLElement {
     this.quill = null;
     this.alphabet = alphabets.protein;
     this["case-sensitive"] = false;
-    this.single = true;
+    this["min-sequence-length"] = 0;
+    this.single = false;
   }
 
   connectedCallback() {
@@ -18,24 +19,37 @@ class TextareaSequence extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["alphabet", "case-sensitive", "single", "width", "height"];
+    return [
+      "alphabet",
+      "case-sensitive",
+      "single",
+      "width",
+      "height",
+      "min-sequence-length"
+    ];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    const innerDiv = this._getInnerDiv();
+    if (!innerDiv || !this.quill) {
+      requestAnimationFrame(() =>
+        this.attributeChangedCallback(name, oldValue, newValue)
+      );
+      return;
+    }
     if (oldValue !== newValue) {
       if (name === "width" || name === "height") {
-        const innerDiv = this._getInnerDiv();
         const value = this.getAttribute(name);
-        if (value !== null && value.trim() !== "") {
+        if (innerDiv && value !== null && value.trim() !== "") {
           innerDiv.style[name] = value;
         }
-        return;
-      }
-      if (this.quill) {
+      } else if (this.quill) {
         if (name === "alphabet" && newValue in alphabets) {
           this.quill[name] = alphabets[newValue];
         } else if (name === "single" || name === "case-sensitive") {
           this.quill[name] = newValue === "true";
+        } else if (name === "min-sequence-length") {
+          this.quill[name] = parseInt(newValue, 10);
         } else {
           this.quill[name] = newValue;
         }
@@ -49,7 +63,6 @@ class TextareaSequence extends HTMLElement {
     if (innerDiv && innerDiv.length) {
       return innerDiv[0];
     }
-    console.error("Can't find the inner div");
     return null;
   }
 
@@ -58,7 +71,7 @@ class TextareaSequence extends HTMLElement {
       .sequence-editor {
         border: 1px solid #ccc;
         font-family: 'Courier New', Courier, monospace; font-size: 1em;
-        letter-spacing: .2rem;
+        letter-spacing: .1rem;
         height: auto;
         margin: 0 auto;
         width: auto;        
@@ -74,12 +87,9 @@ class TextareaSequence extends HTMLElement {
       "#sequence-editor",
       this.alphabet,
       this["case-sensitive"],
-      this.single
+      this.single,
+      this["min-sequence-length"]
     );
-  }
-
-  refresh() {
-    console.log("refresh?", this);
   }
 }
 
