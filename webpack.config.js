@@ -29,10 +29,18 @@ const config = {
   target: "web",
   devtool: "source-map",
   resolve: {
-    extensions: [".js", ".ts"]
+    extensions: [".js", ".ts"],
+    alias: {
+      parchment: path.resolve(
+        __dirname,
+        "node_modules/parchment/src/parchment.ts"
+      ),
+      "quill/": path.resolve(__dirname, "node_modules/quill/")
+    }
   },
   externals: {
     d3: "d3",
+    quill: "quill",
     litemol: "LiteMol",
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
@@ -50,8 +58,9 @@ const config = {
           { loader: "css-loader", options: { importLoaders: 1 } }
         ]
       },
+      // TODO: ⚠️ Try splitting the ts files to it own loader  for quill
       {
-        test: /\.(js|ts)$/,
+        test: /\.js$/,
         use: {
           loader: "babel-loader",
           options: {
@@ -71,8 +80,8 @@ const config = {
                   },
                   modules: false
                 }
-              ],
-              ["@babel/preset-typescript"]
+              ]
+              // ["@babel/preset-typescript"]
             ],
             plugins: [
               [
@@ -84,6 +93,22 @@ const config = {
             ]
           }
         }
+      },
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              compilerOptions: {
+                declaration: false,
+                target: "es5",
+                module: "commonjs"
+              },
+              transpileOnly: true
+            }
+          }
+        ]
       },
       {
         test: /\.svg$/,

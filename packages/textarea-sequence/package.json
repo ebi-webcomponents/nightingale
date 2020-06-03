@@ -1,0 +1,26 @@
+{
+  "name": "textarea-sequence",
+  "version": "0.0.1",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/textarea-sequence.js",
+  "module": "src/textareaSequence.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "dependencies": {
+    "quill": "1.3.7"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+}
