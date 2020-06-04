@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 import Quill from "quill/quill";
 import "quill/dist/quill.core.css";
 
 const isTooShortAndFormat = (quill, seqLength, pos) => {
-  if (seqLength && seqLength < quill["min-sequence-length"]) {
+  if (seqLength !== null && seqLength < quill["min-sequence-length"]) {
     quill.formatText(pos - seqLength - 1, seqLength, {
       background: "rgb(255, 255, 0)"
     });
@@ -10,6 +11,17 @@ const isTooShortAndFormat = (quill, seqLength, pos) => {
   }
   return false;
 };
+
+const any = list => list.reduce((agg, v) => agg || v, false);
+
+const paintTextareaBorder = quill => {
+  if (quill.getText().trim() === "") {
+    quill.container.style.border = "1px solid #ccc";
+  } else {
+    quill.container.style.border = `1px solid ${quill.valid ? "green" : "red"}`;
+  }
+};
+
 let previousText = "";
 const format = (quill, force = false) => {
   const text = quill.getText().trim();
@@ -26,7 +38,8 @@ const format = (quill, force = false) => {
   text.split("\n").forEach(line => {
     if (line.startsWith(">")) {
       quill.formatText(pos, line.length, "bold", true);
-      if (isTooShortAndFormat(quill, seqLength, pos)) tooShort = true;
+      if (pos !== 0 && isTooShortAndFormat(quill, seqLength, pos))
+        tooShort = true;
       seqLength = 0;
       numberOfHeaders++;
       if (
@@ -67,14 +80,63 @@ const format = (quill, force = false) => {
     });
   }
   if (JSON.stringify(errors) !== JSON.stringify(quill.errors)) {
-    // eslint-disable-next-line no-param-reassign
     quill.errors = errors;
+    quill.valid = !any(Object.values(errors));
+    paintTextareaBorder(quill);
     quill.container.dispatchEvent(
       new CustomEvent("change", { bubbles: true, detail: { errors } })
     );
   }
 };
-export default (selector, alphabet, checkCase, single, minLength) => {
+
+const cleanUpText = quill => {
+  const sequences = [];
+  let current = -1;
+  const text = quill.getText();
+
+  // Add a header if missing one
+  if (!text.trim().startsWith(">")) {
+    sequences.push({
+      header: `Generated Header [${Math.random()}]`,
+      sequence: ""
+    });
+    current = 0;
+  }
+  text.split("\n").forEach(line => {
+    if (line.startsWith(">")) {
+      sequences.push({
+        header: line.slice(1).trim(),
+        sequence: ""
+      });
+      current++;
+    } else {
+      sequences[current].sequence += line
+        .trim()
+        .replace(/\s/g, "")
+        .replace(
+          new RegExp(
+            `([^${quill.alphabet}])`,
+            quill["case-sensitive"] ? "g" : "ig"
+          ),
+          ""
+        );
+    }
+  });
+  return (quill.single ? sequences.slice(0, 1) : sequences)
+    .map(
+      ({ header, sequence }) => `> ${header}\n${quill.formatSequence(sequence)}`
+    )
+    .join("\n\n");
+  // return newText;
+};
+export default (
+  selector,
+  alphabet,
+  checkCase,
+  single,
+  minLength,
+  formatSequence
+) => {
   Quill.register("modules/formatter", quill => {
     quill.on("text-change", () => format(quill));
   });
@@ -98,6 +160,12 @@ export default (selector, alphabet, checkCase, single, minLength) => {
   quill["case-sensitive"] = checkCase;
   quill["min-sequence-length"] = minLength;
   quill.single = single;
+  quill.formatSequence = formatSequence;
   quill.format = () => format(quill, true);
+  quill.cleanUp = () => {
+    const newText = cleanUpText(quill);
+    quill.setText(newText);
+    quill.format();
+  };
   return quill;
 };

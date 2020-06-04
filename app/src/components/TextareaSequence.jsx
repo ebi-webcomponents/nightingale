@@ -7,9 +7,11 @@ import readmeContent from "../../../packages/textarea-sequence/README.md";
 const ProtvistaNavigationWrapper = () => {
   const element = useRef(null);
   const [errors, setErrors] = useState({});
+  const [valid, setValid] = useState(true);
   useEffect(() => {
     element.current.addEventListener("change", e => {
       setErrors(e.detail.errors);
+      setValid(element.current.valid);
     });
   }, []);
   loadWebComponent("textarea-sequence", TextareaSequence);
@@ -22,6 +24,9 @@ const ProtvistaNavigationWrapper = () => {
         min-sequence-length="10"
         single="true"
       />
+      <button disabled={valid} onClick={() => element.current.cleanUp()}>
+        CleanUp Sequence
+      </button>
       {errors !== {} && (
         <table>
           <tbody>

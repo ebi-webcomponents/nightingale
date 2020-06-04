@@ -4,14 +4,27 @@ const alphabets = {
   dna: "AGTCN ",
   protein: "ACDEFGHIKLMNPQRSTVWY "
 };
+
+const formatSequence = sequence => {
+  const block = 10;
+  const line = 50;
+  let newSequence = "";
+  for (let pos = 0; pos < sequence.length; pos += block) {
+    if (pos > 0 && pos % line === 0) newSequence += "\n";
+    newSequence += `${sequence.slice(pos, pos + block)} `;
+  }
+  return newSequence;
+};
+
 class TextareaSequence extends HTMLElement {
   constructor() {
     super();
     this.quill = null;
     this.alphabet = alphabets.protein;
     this["case-sensitive"] = false;
-    this["min-sequence-length"] = 0;
+    this["min-sequence-length"] = 1;
     this.single = false;
+    // this.formatSequence = formatSequence;
   }
 
   connectedCallback() {
@@ -58,12 +71,27 @@ class TextareaSequence extends HTMLElement {
     }
   }
 
+  /**
+   * @param {function} newFormatSequence
+   */
+  set formatSequence(newFormatSequence) {
+    if (typeof newFormatSequence !== "function") {
+      throw new Error("Only functions are supported for this parameter");
+    } else if (this.quill) {
+      this.quill.formatSequence = newFormatSequence;
+    }
+  }
+
   _getInnerDiv() {
     const innerDiv = this.getElementsByClassName("sequence-editor");
     if (innerDiv && innerDiv.length) {
       return innerDiv[0];
     }
     return null;
+  }
+
+  cleanUp() {
+    this.quill.cleanUp();
   }
 
   firstRender() {
@@ -88,7 +116,8 @@ class TextareaSequence extends HTMLElement {
       this.alphabet,
       this["case-sensitive"],
       this.single,
-      this["min-sequence-length"]
+      this["min-sequence-length"],
+      formatSequence
     );
   }
 }
