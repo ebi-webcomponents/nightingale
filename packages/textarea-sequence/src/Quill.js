@@ -6,16 +6,16 @@ import debounce from "lodash-es/debounce";
 const isTooShortAndFormat = (quill, seqLength, pos) => {
   if (seqLength !== null && seqLength < quill["min-sequence-length"]) {
     quill.formatText(pos - seqLength - 1, seqLength, {
-      background: "rgb(255, 255, 0)",
+      background: "rgb(255, 255, 0)"
     });
     return true;
   }
   return false;
 };
 
-const any = (list) => list.reduce((agg, v) => agg || v, false);
+const any = list => list.reduce((agg, v) => agg || v, false);
 
-const paintTextareaBorder = (quill) => {
+const paintTextareaBorder = quill => {
   if (quill.getText().trim() === "") {
     quill.container.style.border = "1px solid #ccc";
   } else {
@@ -36,7 +36,7 @@ const format = (quill, force = false) => {
   let tooShort = false;
   const missingFirstHeader = !text.trim().startsWith(">");
   let secondHeaderPosition = null;
-  text.split("\n").forEach((line) => {
+  text.split("\n").forEach(line => {
     if (line.startsWith(">")) {
       quill.formatText(pos, line.length, "bold", true);
       if (pos !== 0 && isTooShortAndFormat(quill, seqLength, pos))
@@ -59,7 +59,7 @@ const format = (quill, force = false) => {
         if (i % 2 === 1) {
           quill.formatText(pos + linePos, part.length, {
             color: "rgb(255, 0, 0)",
-            bold: true,
+            bold: true
           });
           hasInvalidCharacters = true;
         }
@@ -73,11 +73,11 @@ const format = (quill, force = false) => {
     multipleSequences: numberOfHeaders > 1,
     hasInvalidCharacters,
     missingFirstHeader,
-    tooShort,
+    tooShort
   };
   if (quill.single && errors.multipleSequences && secondHeaderPosition) {
     quill.formatText(secondHeaderPosition, text.length - secondHeaderPosition, {
-      background: "rgba(255, 0, 0, 0.5)",
+      background: "rgba(255, 0, 0, 0.5)"
     });
   }
   if (JSON.stringify(errors) !== JSON.stringify(quill.errors)) {
@@ -90,7 +90,7 @@ const format = (quill, force = false) => {
   }
 };
 
-const cleanUpText = (quill) => {
+const cleanUpText = quill => {
   const sequences = [];
   let current = -1;
   const text = quill.getText();
@@ -99,15 +99,15 @@ const cleanUpText = (quill) => {
   if (!text.trim().startsWith(">")) {
     sequences.push({
       header: `Generated Header [${Math.random()}]`,
-      sequence: "",
+      sequence: ""
     });
     current = 0;
   }
-  text.split("\n").forEach((line) => {
+  text.split("\n").forEach(line => {
     if (line.startsWith(">")) {
       sequences.push({
         header: line.slice(1).trim(),
-        sequence: "",
+        sequence: ""
       });
       current++;
     } else {
@@ -138,8 +138,11 @@ export default (
   minLength,
   formatSequence
 ) => {
-  Quill.register("modules/formatter", (quill) => {
-    quill.on("text-change", debounce(()=> format(quill), 200));
+  Quill.register("modules/formatter", quill => {
+    quill.on(
+      "text-change",
+      debounce(() => format(quill), 200)
+    );
   });
 
   const quill = new Quill(selector, {
@@ -147,15 +150,15 @@ export default (
     formats: ["bold", "italic", "color", "background"],
     placeholder: "Enter your sequence",
     modules: {
-      formatter: true,
-    },
+      formatter: true
+    }
   });
 
   quill.errors = {
     multipleSequences: false,
     hasInvalidCharacters: false,
     missingFirstHeader: false,
-    tooShort: false,
+    tooShort: false
   };
   quill.alphabet = alphabet;
   quill["case-sensitive"] = checkCase;
