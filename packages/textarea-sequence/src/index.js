@@ -1,6 +1,6 @@
-import ProtvistaHello from "./TextareaSequence";
+import TextareaSequence from "./TextareaSequence";
 
 if (window.customElements) {
-  customElements.define("textarea-sequence", ProtvistaHello);
+  customElements.define("textarea-sequence", TextareaSequence);
 }
-export default ProtvistaHello;
+export default TextareaSequence;
