@@ -24,6 +24,7 @@ const config = {
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
     library: camelCase(PKG_JSON.name, { pascalCase: true }),
+    libraryTarget: "umd",
     filename: `${PKG_JSON.name}.js`
   },
   target: "web",
