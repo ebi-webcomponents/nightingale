@@ -40,14 +40,12 @@ Either a `string` explicitly listing the valid characters in the sequence or one
 type: `enum('dna'|'protein') | string`
 defaultValue: `"protein"`
 
-
 ##### `case-sensitive`
 
 Indicates if the checks against the alphabet should consider the sequence casing
 
 type: `boolean`
 defaultValue: `false`
-
 
 ##### `single`
 
@@ -56,14 +54,12 @@ Indicates if the textarea should only allow a single sequence
 type: `boolean`
 defaultValue: `false`
 
-
 ##### `min-sequence-length`
 
 Defines the minimum number of bases required in the textarea
 
 type: `number`
 defaultValue: `0`
-
 
 ##### `height`
 
@@ -72,7 +68,6 @@ Height of the textarea element.
 type: `auto|<length>|<percentage>`
 defaultValue: `"auto"`
 
-
 ##### `width`
 
 Width of the textarea element:
@@ -80,23 +75,22 @@ Width of the textarea element:
 type: `auto|<length>|<percentage>`
 defaultValue: `"auto"`
 
-
-
 ### Properties
 
-#### `sequence` ___[Read Only]___
+#### `sequence` **_[Read Only]_**
 
 The current value of the text-area.
 
 type: `string`
 
-#### `errors` ___[Read Only]___
+#### `errors` **_[Read Only]_**
 
 The current value of the error report. In the shape of an object, where the keys are the type of error, and their values are booleans indicating if the current text has that error.
 
 type: `object`
 
 Example:
+
 ```javascript
 {
   hasInvalidCharacters: false,
@@ -105,6 +99,7 @@ Example:
   tooShort: true, // The current sequence is too short
 }
 ```
+
 #### `quill`
 
 We use quill to apply the formatting of the textarea. The object related to it, is exposed in this parameter.
@@ -112,12 +107,11 @@ See the [Quill API documentation](https://quilljs.com/docs/api/) for more detail
 
 type: `object`
 
-
 #### `formatSequence`
 
 A formatting function to use in the cleanUp method. It should add desired spaces a line splits.
 
-The signature of the function should be: 
+The signature of the function should be:
 
 `<string> formatSequence(<string> sequence)`
 
@@ -129,6 +123,7 @@ parameters:
 - sequence: type: `string`
 
 Returns
+
 - `string`
 
 **Note:** This parameter can be overwritten, so you can define such format. For example, to avoid any formatting you can pass the identity function:
@@ -136,7 +131,6 @@ Returns
 ```javascript
 document.getElementByID("textareaID").formatSequence = x => x;
 ```
-
 
 ### Methods
 
@@ -150,7 +144,6 @@ This method tries to clean up the current sequence in the textarea, in the follo
 - If the attribute `single` is `true`, it will keep the first sequence and remove the rest.
 - Executes the `formatSequence` function to include spaces and line lengths.
 
-
 ### Events
 
 #### `error-change`
@@ -158,6 +151,7 @@ This method tries to clean up the current sequence in the textarea, in the follo
 Is dispatched when there is a change in the reported errors. Includes the `errors` object in the details.
 
 Usage example:
+
 ```javascript
 element.addEventListener("error-change", e => {
   console.log(e.detail.errors);
@@ -165,9 +159,11 @@ element.addEventListener("error-change", e => {
 ```
 
 #### Quill Events
+
 As mentioned before, we use quill, and its instance is exposed in the parameter `quill`. Quill implement some events, that you could also use. See the [Quill API documentation](https://quilljs.com/docs/api/#events) for more details.
 
 Usage Example:
+
 ```javascript
 element.quill.on("text-change", e => {
   console.log(element.sequence);
