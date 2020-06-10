@@ -82,6 +82,14 @@ class TextareaSequence extends HTMLElement {
     }
   }
 
+  get sequence() {
+    return this.quill.getText();
+  }
+
+  get errors() {
+    return this.quill.errors;
+  }
+
   _getInnerDiv() {
     const innerDiv = this.getElementsByClassName("sequence-editor");
     if (innerDiv && innerDiv.length) {

@@ -9,7 +9,7 @@ const ProtvistaNavigationWrapper = () => {
   const [errors, setErrors] = useState({});
   const [valid, setValid] = useState(true);
   useEffect(() => {
-    element.current.addEventListener("change", e => {
+    element.current.addEventListener("error-change", e => {
       setErrors(e.detail.errors);
       setValid(element.current.valid);
     });

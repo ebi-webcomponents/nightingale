@@ -85,7 +85,7 @@ const format = (quill, force = false) => {
     quill.valid = !any(Object.values(errors));
     paintTextareaBorder(quill);
     quill.container.dispatchEvent(
-      new CustomEvent("change", { bubbles: true, detail: { errors } })
+      new CustomEvent("error-change", { bubbles: true, detail: { errors } })
     );
   }
 };
