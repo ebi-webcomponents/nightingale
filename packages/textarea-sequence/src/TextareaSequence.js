@@ -1,30 +1,15 @@
 import Quill from "./Quill";
-
-const alphabets = {
-  dna: "AGTCN ",
-  protein: "ACDEFGHIKLMNPQRSTVWY "
-};
-
-const formatSequence = sequence => {
-  const block = 10;
-  const line = 50;
-  let newSequence = "";
-  for (let pos = 0; pos < sequence.length; pos += block) {
-    if (pos > 0 && pos % line === 0) newSequence += "\n";
-    newSequence += `${sequence.slice(pos, pos + block)} `;
-  }
-  return newSequence;
-};
+import { alphabets, formatSequence } from "./defaults";
 
 class TextareaSequence extends HTMLElement {
   constructor() {
     super();
     this.quill = null;
     this.alphabet = alphabets.protein;
-    this["case-sensitive"] = false;
     this["min-sequence-length"] = 1;
+    this["case-sensitive"] = false;
+    this["allow-comments"] = false;
     this.single = false;
-    // this.formatSequence = formatSequence;
   }
 
   connectedCallback() {
@@ -38,11 +23,13 @@ class TextareaSequence extends HTMLElement {
       "single",
       "width",
       "height",
-      "min-sequence-length"
+      "min-sequence-length",
+      "allow-comments"
     ];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    const flags = ["single", "case-sensitive", "allow-comments"];
     const innerDiv = this._getInnerDiv();
     if (!innerDiv || !this.quill) {
       requestAnimationFrame(() =>
@@ -59,7 +46,7 @@ class TextareaSequence extends HTMLElement {
       } else if (this.quill) {
         if (name === "alphabet" && newValue in alphabets) {
           this.quill[name] = alphabets[newValue];
-        } else if (name === "single" || name === "case-sensitive") {
+        } else if (flags.indexOf(name) !== -1) {
           this.quill[name] = newValue === "true";
         } else if (name === "min-sequence-length") {
           this.quill[name] = parseInt(newValue, 10);
@@ -125,6 +112,7 @@ class TextareaSequence extends HTMLElement {
       this["case-sensitive"],
       this.single,
       this["min-sequence-length"],
+      this["allow-comments"],
       formatSequence
     );
   }

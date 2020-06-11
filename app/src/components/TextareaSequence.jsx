@@ -23,6 +23,7 @@ const ProtvistaNavigationWrapper = () => {
         height="10em"
         min-sequence-length="10"
         single="true"
+        allow-comments="true"
       />
       <button disabled={valid} onClick={() => element.current.cleanUp()}>
         CleanUp Sequence

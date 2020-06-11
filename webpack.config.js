@@ -58,7 +58,6 @@ const config = {
           { loader: "css-loader", options: { importLoaders: 1 } }
         ]
       },
-      // TODO: ⚠️ Try splitting the ts files to it own loader  for quill
       {
         test: /\.js$/,
         use: {

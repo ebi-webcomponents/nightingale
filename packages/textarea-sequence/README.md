@@ -21,7 +21,7 @@ This readme is been use as a road map. A 🚧 emoji indicates that this feature 
   - ✅ Highlights headers
   - ✅ Highlights bases/residues that are not part of it's alphabet.
   - ✅ Highlights if the file includes multiple sequences, when the option `single` is included.
-  - 🚧 Greys out comment lines (i.e. starts with `;`)
+  - ✅ Greys out comment lines (i.e. starts with `;`)
 - ✅ CleanUp funtionality.
 - ✅ Error reporting.
 - ✅ Highlights the textarea border if there are errors or is valid.
@@ -169,3 +169,60 @@ element.quill.on("text-change", e => {
   console.log(element.sequence);
 });
 ```
+
+### Exposed functions
+
+We have exposed some functions tht can be use without having to load the web component:
+
+#### `formatSequence(sequence, block = 10, line = 50)`
+
+Splits a string into lines of length `line` with block of `block` length separated by white spaces.
+
+parameters:
+
+- `sequence`: type: `string`
+- `block`: type: `number`
+  default: `10`
+- `line`: type: `number`
+  default: `50`
+
+Returns:
+
+- `string`
+
+Usage example:
+
+```javascript
+import { formatSequence } from "textarea-sequence";
+const seq = "XXXXXXXXXXXXXXX";
+formatSequence(seq, 4, 8); // 'XXXX XXXX\nXXXX XXX'
+formatSequence(seq, 2, 8); // 'XX XX XX XX\nXX XX XX X'
+formatSequence(seq, 5, 10); // 'XXXXX XXXXX\nXXXXX'
+```
+
+#### `cleanUpText(text,alphabet = alphabets.protein, caseSensitive = false, removeComments = true, single = true, format = formatSequence)`
+
+Takes a sequence and transform it, applying the following heuristics:
+
+- removes any character that's not in the alphabet.
+- Generates a header if the sequence doesn't have one
+- formats the sequence using the goven function. default: blocks of 10 chars separated with a white space and lines of 50 bases.
+- If `case_sensitive` is `true` cases mismatches are removed.
+- If `removeComments` is `true`, removes any line that starts with `;`
+- If `single` is `true`, removes any sequence after the first one.
+
+When all of those things are executed, the string is formatted with the function `format()`.
+
+parameters:
+
+- `text`: type: `string`
+- `alphabet`: type: `string`
+  default: `"ACDEFGHIKLMNPQRSTVWY "`
+- `caseSensitive`: type: `boolean`
+  default: `false`
+- `removeComments`: type: `boolean`
+  default: `true`
+- `single`: type: `boolean`
+  default: `true`
+- `format`: type: `function`
+  default: `formatSequence`

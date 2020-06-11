@@ -2,6 +2,7 @@
 import Quill from "quill/quill";
 import "quill/dist/quill.core.css";
 import debounce from "lodash-es/debounce";
+import { cleanUpText } from "./defaults";
 
 const isTooShortAndFormat = (quill, seqLength, pos) => {
   if (seqLength !== null && seqLength < quill["min-sequence-length"]) {
@@ -49,6 +50,8 @@ const format = (quill, force = false) => {
       ) {
         secondHeaderPosition = pos;
       }
+    } else if (quill["allow-comments"] && line.startsWith(";")) {
+      quill.formatText(pos, line.length, "color", "rgb(173, 198, 255)");
     } else {
       seqLength += line.replace(/\s/g, "").length;
       let linePos = 0;
@@ -59,6 +62,7 @@ const format = (quill, force = false) => {
         if (i % 2 === 1) {
           quill.formatText(pos + linePos, part.length, {
             color: "rgb(255, 0, 0)",
+            background: "rgba(255, 0, 0, 0.5)",
             bold: true
           });
           hasInvalidCharacters = true;
@@ -90,52 +94,13 @@ const format = (quill, force = false) => {
   }
 };
 
-const cleanUpText = quill => {
-  const sequences = [];
-  let current = -1;
-  const text = quill.getText();
-
-  // Add a header if missing one
-  if (!text.trim().startsWith(">")) {
-    sequences.push({
-      header: `Generated Header [${Math.random()}]`,
-      sequence: ""
-    });
-    current = 0;
-  }
-  text.split("\n").forEach(line => {
-    if (line.startsWith(">")) {
-      sequences.push({
-        header: line.slice(1).trim(),
-        sequence: ""
-      });
-      current++;
-    } else {
-      sequences[current].sequence += line
-        .trim()
-        .replace(/\s/g, "")
-        .replace(
-          new RegExp(
-            `([^${quill.alphabet}])`,
-            quill["case-sensitive"] ? "g" : "ig"
-          ),
-          ""
-        );
-    }
-  });
-  return (quill.single ? sequences.slice(0, 1) : sequences)
-    .map(
-      ({ header, sequence }) => `> ${header}\n${quill.formatSequence(sequence)}`
-    )
-    .join("\n\n");
-  // return newText;
-};
 export default (
   selector,
   alphabet,
   checkCase,
   single,
   minLength,
+  allowComments,
   formatSequence
 ) => {
   Quill.register("modules/formatter", quill => {
@@ -162,12 +127,20 @@ export default (
   };
   quill.alphabet = alphabet;
   quill["case-sensitive"] = checkCase;
+  quill["allow-comments"] = allowComments;
   quill["min-sequence-length"] = minLength;
   quill.single = single;
   quill.formatSequence = formatSequence;
   quill.format = () => format(quill, true);
   quill.cleanUp = () => {
-    const newText = cleanUpText(quill);
+    const newText = cleanUpText(
+      quill.getText(),
+      quill.alphabet,
+      quill["case-sensitive"],
+      !quill["allow-comments"],
+      quill.single,
+      quill.formatSequence
+    );
     quill.setText(newText);
     quill.format();
   };
