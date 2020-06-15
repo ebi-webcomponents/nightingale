@@ -45,26 +45,39 @@ class ProtvistaMSA extends ProtvistaZoomable {
     window.requestAnimationFrame(() => {
       if (this.el) {
         this.el.updatePositionByResidue({ aaPos: this._displaystart });
-        if (
-          this.trackHighlighter &&
-          this.trackHighlighter.region &&
-          this.trackHighlighter.region.regionString
-        ) {
-          const {
-            start: from,
-            end: to
-          } = this.trackHighlighter.region.segments[0];
-          this.el.highlightRegion({
-            sequences: {
-              from: 1,
-              to: this._data.length
-            },
-            residues: {
-              from,
-              to
-            }
-          });
+        if (1 > this.getSingleBaseWidth()) {
+          this.dispatchEvent(
+            // Dispatches the event so the manager can propagate this changes to other  components
+            new CustomEvent("change", {
+              detail: {
+                displaystart: this._displaystart,
+                displayend: this._displaystart + this.xScale.range()[1]
+              },
+              bubbles: true,
+              cancelable: true
+            })
+          );
         }
+        // if (
+        //   this.trackHighlighter &&
+        //   this.trackHighlighter.region &&
+        //   this.trackHighlighter.region.regionString
+        // ) {
+        //   const {
+        //     start: from,
+        //     end: to
+        //   } = this.trackHighlighter.region.segments[0];
+        //   this.el.highlightRegion({
+        //     sequences: {
+        //       from: 1,
+        //       to: this._data.length
+        //     },
+        //     residues: {
+        //       from,
+        //       to
+        //     }
+        //   });
+        // }
       }
     });
   }
