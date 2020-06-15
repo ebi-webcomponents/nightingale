@@ -2,20 +2,18 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/protvista-structure.svg)](https://www.npmjs.com/package/protvista-structure)
 
-In progress - A native web component wrapper around LiteMol
+A native web component wrapper around LiteMol
 
 ## Usage
 
 ```html
 <!-- With UniProt Accession -->
-<protvista-structure accession="P06493" />
-<!-- To highlight a position/range -->
-<protvista-structure accession="P06493" highlight="209:220" />
+<protvista-structure accession="P06493" pdb-id="4YC3" />
 <!-- With a specific PDBe entry selected and the entrie table being hidden -->
 <protvista-structure
   accession="P06493"
   highlight="209:220"
-  molecule="4YC3"
+  pdb-id="4YC3"
   hide-table
 />
 ```
@@ -36,9 +34,9 @@ This is a comma separated list of numerical ranges represented as a string e.g. 
 
 It will prevent the PDBe entries table to render next to the 3D structure.
 
-#### `molecule`
+#### `pdb-id`
 
-When available this PDBe structure will be selected, otherwise the first structure in the entry list that its `properties.method !== "Model"` will be selected and displayed.
+The id of the structure to display for the provided accession.
 
 #### `height`
 

@@ -9,6 +9,15 @@ const styles = css`
     overflow-x: hidden;
   }
 
+  :host([scrollable="true"]) .protvista-datatable-container {
+    overflow-y: auto;
+    will-change: scroll;
+  }
+
+  :host([scrollable="false"]) .protvista-datatable-container {
+    overflow-y: hidden;
+  }
+
   .protvista-datatable__child-toggle svg {
     width: 1.1rem;
     height: 1.1rem;

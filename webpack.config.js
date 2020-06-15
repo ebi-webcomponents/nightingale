@@ -32,11 +32,17 @@ const config = {
   resolve: {
     extensions: [".js", ".ts"],
     alias: {
-      react: path.resolve("./node_modules/react")
+      react: path.resolve("./node_modules/react"),
+      parchment: path.resolve(
+        __dirname,
+        "node_modules/parchment/src/parchment.ts"
+      ),
+      "quill/": path.resolve(__dirname, "node_modules/quill/")
     }
   },
   externals: {
     d3: "d3",
+    quill: "quill",
     litemol: "LiteMol",
     react: {
       root: "React",
@@ -67,7 +73,7 @@ const config = {
         ]
       },
       {
-        test: /\.(js|ts)$/,
+        test: /\.js$/,
         use: {
           loader: "babel-loader",
           options: {
@@ -90,8 +96,8 @@ const config = {
                   modules: false
                 }
               ],
-              "@babel/react",
-              "@babel/preset-typescript"
+              "@babel/react"
+              // ["@babel/preset-typescript"]
             ],
             plugins: [
               "@babel/plugin-proposal-object-rest-spread",
@@ -105,6 +111,22 @@ const config = {
             ]
           }
         }
+      },
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              compilerOptions: {
+                declaration: false,
+                target: "es5",
+                module: "commonjs"
+              },
+              transpileOnly: true
+            }
+          }
+        ]
       },
       {
         test: /\.svg$/,

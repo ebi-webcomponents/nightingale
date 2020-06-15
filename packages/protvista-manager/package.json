@@ -1,6 +1,6 @@
 {
   "name": "protvista-manager",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "description": "Manager component for the ProtVista tool",
   "main": "dist/protvista-manager.js",
   "module": "src/protvista-manager.js",

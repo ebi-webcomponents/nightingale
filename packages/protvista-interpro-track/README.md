@@ -4,8 +4,6 @@
 
 Interpro adpation of the track
 
-See it running [Here](https://ebi-webcomponents.github.io/protvista-interpro-track/).
-
 ## Usage
 
 ```html
