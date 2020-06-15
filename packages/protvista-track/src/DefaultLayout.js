@@ -10,7 +10,9 @@ export default class DefaultLayout {
   }
 
   getFeatureYPos() {
-    return Math.min(this._layoutHeight, this._minHeight) + this._padding;
+    // Position right in the middle
+    const featureHeight = this.getFeatureHeight();
+    return this._layoutHeight / 2 - featureHeight / 2;
   }
 
   getFeatureHeight() {

@@ -202,7 +202,12 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .attr("fill", f => this._getFeatureFillColor(f))
       .attr("stroke", f => this._getFeatureColor(f))
-      .style("fill-opacity", 0.9)
+      .style("fill-opacity", ({ feature }) =>
+        feature.opacity ? feature.opacity : 0.9
+      )
+      .style("stroke-opacity", ({ feature }) => {
+        return feature.opacity ? feature.opacity : 0.9;
+      })
       .call(this.bindEvents, this);
   }
 
