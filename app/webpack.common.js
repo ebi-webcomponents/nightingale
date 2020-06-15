@@ -7,7 +7,11 @@ module.exports = {
   name: "site",
   entry: ["@babel/polyfill", path.resolve(__dirname, "src/index.jsx")],
   resolve: {
-    extensions: [".jsx", ".js"]
+    alias: {
+      parchment$: path.resolve("../node_modules/parchment/src/parchment.ts"),
+      "quill/": path.resolve("../node_modules/quill/")
+    },
+    extensions: [".jsx", ".js", ".ts"]
   },
   module: {
     rules: [
@@ -28,6 +32,22 @@ module.exports = {
             loader: "html-loader",
             options: {
               minimize: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              compilerOptions: {
+                declaration: false,
+                target: "es5",
+                module: "commonjs"
+              },
+              transpileOnly: true
             }
           }
         ]
