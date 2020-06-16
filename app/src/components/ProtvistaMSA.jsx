@@ -3,8 +3,8 @@ import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
-// import Readme from "./Readme";
-// import readmeContent from "../../../packages/protvista-sequence/README.md";
+import Readme from "./Readme";
+import readmeContent from "../../../packages/protvista-msa/README.md";
 
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
 const getRandomBase = () =>
@@ -34,10 +34,11 @@ const ProtvistaMSAWrapper = () => {
   const labelWidth = 100;
   return (
     <>
+      <h1>protvista-msa</h1>
       <protvista-manager
-        attributes="length displaystart displayend variantfilters highlight"
+        attributes="length displaystart displayend highlight"
         displaystart="1"
-        displayend="3"
+        displayend="50"
         id="example"
       >
         <div style={{ display: "flex" }}>
@@ -50,7 +51,7 @@ const ProtvistaMSAWrapper = () => {
           <protvista-navigation
             length={sequence.length}
             displaystart="1"
-            displayend="3"
+            displayend="50"
           />
         </div>
         <protvista-msa
@@ -58,11 +59,12 @@ const ProtvistaMSAWrapper = () => {
           length={sequence.length}
           height="200"
           displaystart="1"
-          displayend="3"
+          displayend="50"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
         />
       </protvista-manager>
+      <Readme content={readmeContent} />
     </>
   );
 };
