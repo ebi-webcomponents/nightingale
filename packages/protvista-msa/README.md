@@ -65,7 +65,7 @@ See more [here](https://github.com/ebi-webcomponents/nightingale/tree/master/pac
 
 ### Properties
 
-#### `data` **_[Read Only]_**
+#### `data`
 
 The sequences to be displayed. The should be in the following shape:
 
