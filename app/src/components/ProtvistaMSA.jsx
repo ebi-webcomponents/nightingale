@@ -36,8 +36,8 @@ const ProtvistaMSAWrapper = () => {
     <>
       <protvista-manager
         attributes="length displaystart displayend variantfilters highlight"
-        displaystart="53"
-        displayend="103"
+        displaystart="1"
+        displayend="3"
         id="example"
       >
         <div style={{ display: "flex" }}>
@@ -49,16 +49,16 @@ const ProtvistaMSAWrapper = () => {
           />
           <protvista-navigation
             length={sequence.length}
-            displaystart="53"
-            displayend="103"
+            displaystart="1"
+            displayend="3"
           />
         </div>
         <protvista-msa
           id="msa-track"
           length={sequence.length}
           height="200"
-          displaystart="53"
-          displayend="103"
+          displaystart="1"
+          displayend="3"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
         />
