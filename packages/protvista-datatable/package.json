@@ -29,7 +29,7 @@
     "lit-element": "^2.2.0",
     "lit-html": "^1.2.1",
     "protvista-utils": "^2.11.0",
-    "uuid": "^3.3.3"
+    "uuid": "^8.1.0"
   },
   "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729"
 }

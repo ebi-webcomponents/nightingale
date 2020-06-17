@@ -34,6 +34,6 @@
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "protvista-feature-adapter": "^2.11.0",
-    "uuid": "^3.3.3"
+    "uuid": "^8.1.0"
   }
 }
