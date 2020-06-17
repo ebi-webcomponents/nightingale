@@ -8,6 +8,7 @@ module.exports = {
   entry: ["@babel/polyfill", path.resolve(__dirname, "src/index.jsx")],
   resolve: {
     alias: {
+      react: path.resolve("../node_modules/react"),
       parchment$: path.resolve("../node_modules/parchment/src/parchment.ts"),
       "quill/": path.resolve("../node_modules/quill/")
     },
@@ -21,7 +22,11 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/react"],
-            plugins: ["syntax-dynamic-import"]
+            plugins: [
+              "syntax-dynamic-import",
+              "@babel/plugin-proposal-object-rest-spread",
+              "@babel/plugin-proposal-class-properties"
+            ]
           }
         }
       },

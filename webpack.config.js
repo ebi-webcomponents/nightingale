@@ -24,6 +24,7 @@ const config = {
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
     library: camelCase(PKG_JSON.name, { pascalCase: true }),
+    libraryTarget: "umd",
     filename: `${PKG_JSON.name}.js`
   },
   target: "web",
@@ -31,6 +32,7 @@ const config = {
   resolve: {
     extensions: [".js", ".ts"],
     alias: {
+      react: path.resolve("./node_modules/react"),
       parchment: path.resolve(
         __dirname,
         "node_modules/parchment/src/parchment.ts"
@@ -42,6 +44,18 @@ const config = {
     d3: "d3",
     quill: "quill",
     litemol: "LiteMol",
+    react: {
+      root: "React",
+      commonjs2: "react",
+      commonjs: "react",
+      amd: "react"
+    },
+    "react-dom": {
+      root: "ReactDOM",
+      commonjs2: "react-dom",
+      commonjs: "react-dom",
+      amd: "react-dom"
+    },
     "protvista-zoomable": "ProtvistaZoomable",
     "protvista-track": "ProtvistaTrack",
     "protvista-feature-adapter": "ProtvistaFeatureAdapter",
@@ -65,9 +79,11 @@ const config = {
           options: {
             babelrc: false,
             include: [
-              "src",
-              "../../node_modules/lit-html",
-              "../../node_modules/lit-element"
+              /src/,
+              /lit-html/,
+              /lit-element/,
+              // msa-viewer addded here to reuse the same react.
+              /react-msa-viewer/
             ],
             presets: [
               [
@@ -79,10 +95,13 @@ const config = {
                   },
                   modules: false
                 }
-              ]
+              ],
+              "@babel/react"
               // ["@babel/preset-typescript"]
             ],
             plugins: [
+              "@babel/plugin-proposal-object-rest-spread",
+              "@babel/plugin-proposal-class-properties",
               [
                 "@babel/plugin-transform-runtime",
                 {

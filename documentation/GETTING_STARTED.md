@@ -203,14 +203,15 @@ These are the necessary steps to import and register components in Vue:
 
 1. Ignore the elements you import from Nightingale in the `ignoredElements` configuration parameter of the `Vue` object (failing to perform this step might results in compilation errors).
 2. `npm install`, then import and register Nightingale components in the `<script>` section of Vue components:
-    ```vue
-   <script>
-      import ProtvistaSequence from 'protvista-sequence';
 
-      window.customElements.define('protvista-sequence', ProtvistaSequence);
-    </script>
-    ```
-   
+   ```vue
+   <script>
+   import ProtvistaSequence from "protvista-sequence";
+
+   window.customElements.define("protvista-sequence", ProtvistaSequence);
+   </script>
+   ```
+
 You can then use the Nightingale component in the `<template>` section of your Vue Component (in this case, you could use a `<protvista-sequence />` track).
 
 #### Data and event handling
@@ -223,18 +224,18 @@ If you want to bind data to attributes of Nightingale components via Vue, you ca
 </template>
 
 <script>
-  import ProtvistaSequence from 'protvista-sequence';
+import ProtvistaSequence from "protvista-sequence";
 
-  window.customElements.define('protvista-sequence', ProtvistaSequence);
+window.customElements.define("protvista-sequence", ProtvistaSequence);
 
-  export default {
-      name: 'ProtvistaContainer',
-      data() {
-          return {
-                  sequence: "SEQVENCE"
-          }
-      }
+export default {
+  name: "ProtvistaContainer",
+  data() {
+    return {
+      sequence: "SEQVENCE"
+    };
   }
+};
 </script>
 ```
 
@@ -242,28 +243,28 @@ If you want your Nightingale components to react to events within the Vue enviro
 
 ```vue
 <template>
-  <protvista-track ref="features" length="350"/>
+  <protvista-track ref="features" length="350" />
 </template>
 
 <script>
-  import ProtvistaTrack from 'protvista-track';
+import ProtvistaTrack from "protvista-track";
 
-  window.customElements.define('protvista-track', ProtvistaTrack);
+window.customElements.define("protvista-track", ProtvistaTrack);
 
-  export default {
-      name: 'ProtvistaContainer',
-        mounted() {
-          const features = [
-            {
-              accession:'NLS',
-              start: 1,
-              end: 3,
-              color: "#d8b365",
-            }
-          ];
+export default {
+  name: "ProtvistaContainer",
+  mounted() {
+    const features = [
+      {
+        accession: "NLS",
+        start: 1,
+        end: 3,
+        color: "#d8b365"
+      }
+    ];
 
-          this.$refs.features.data = features;
-        },
+    this.$refs.features.data = features;
   }
+};
 </script>
 ```

@@ -14,10 +14,10 @@ class ProtvistaTrack extends ProtvistaZoomable {
   getLayout() {
     if (String(this.getAttribute("layout")).toLowerCase() === "non-overlapping")
       return new NonOverlappingLayout({
-        layoutHeight: this._height,
+        layoutHeight: this._height
       });
     return new DefaultLayout({
-      layoutHeight: this._height,
+      layoutHeight: this._height
     });
   }
 
@@ -30,7 +30,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
     if (this._data) this._createTrack();
 
-    this.addEventListener("load", (e) => {
+    this.addEventListener("load", e => {
       if (_includes(this.children, e.target)) {
         this.data = e.detail.payload;
       }
@@ -38,7 +38,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
   }
 
   static normalizeLocations(data) {
-    return data.map((obj) => {
+    return data.map(obj => {
       const { locations, start, end } = obj;
       return locations
         ? obj
@@ -48,11 +48,11 @@ class ProtvistaTrack extends ProtvistaZoomable {
                 fragments: [
                   {
                     start,
-                    end,
-                  },
-                ],
-              },
-            ],
+                    end
+                  }
+                ]
+              }
+            ]
           });
     });
   }
@@ -79,7 +79,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       "highlight",
       "color",
       "shape",
-      "filters",
+      "filters"
     ]);
   }
 
@@ -159,12 +159,12 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .enter()
       .append("g")
       .attr("class", "feature-group")
-      .attr("id", (d) => `g_${d.accession}`)
+      .attr("id", d => `g_${d.accession}`)
       .selectAll("g.location-group")
-      .data((d) =>
-        d.locations.map((loc) =>
+      .data(d =>
+        d.locations.map(loc =>
           Object.assign({}, loc, {
-            feature: d,
+            feature: d
           })
         )
       )
@@ -174,17 +174,17 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
     this.features = this.locations
       .selectAll("g.fragment-group")
-      .data((d) =>
-        d.fragments.map((loc) =>
+      .data(d =>
+        d.fragments.map(loc =>
           Object.assign({}, loc, {
-            feature: d.feature,
+            feature: d.feature
           })
         )
       )
       .enter()
       .append("path")
-      .attr("class", (f) => `${this._getShape(f)} feature`)
-      .attr("d", (f) =>
+      .attr("class", f => `${this._getShape(f)} feature`)
+      .attr("d", f =>
         this._featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
           this._layoutObj.getFeatureHeight(f),
@@ -195,13 +195,13 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
       .attr(
         "transform",
-        (f) =>
+        f =>
           `translate(${this.getXFromSeqPosition(
             f.start
           )},${this._layoutObj.getFeatureYPos(f.feature)})`
       )
-      .attr("fill", (f) => this._getFeatureFillColor(f))
-      .attr("stroke", (f) => this._getFeatureColor(f))
+      .attr("fill", f => this._getFeatureFillColor(f))
+      .attr("stroke", f => this._getFeatureColor(f))
       .style("fill-opacity", ({ feature }) =>
         feature.opacity ? feature.opacity : 0.9
       )
@@ -218,8 +218,8 @@ class ProtvistaTrack extends ProtvistaZoomable {
     }
     // Filters are OR-ed within a category and AND-ed between categories
     const groupedFilters = _groupBy(this._filters, "category");
-    const filteredGroups = Object.values(groupedFilters).map((filterGroup) => {
-      const filteredData = filterGroup.map((filterItem) =>
+    const filteredGroups = Object.values(groupedFilters).map(filterGroup => {
+      const filteredData = filterGroup.map(filterItem =>
         filterItem.filterFn(this._originalData)
       );
       return _union(...filteredData);
@@ -237,9 +237,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
               f.locations.reduce(
                 (acc2, e) =>
                   acc2.concat(
-                    e.fragments.map((loc) =>
+                    e.fragments.map(loc =>
                       Object.assign({}, loc, {
-                        feature: f,
+                        feature: f
                       })
                     )
                   ),
@@ -250,7 +250,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
         )
       );
       this.features
-        .attr("d", (f) =>
+        .attr("d", f =>
           this._featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
             this._layoutObj.getFeatureHeight(f),
@@ -260,7 +260,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
         )
         .attr(
           "transform",
-          (f) =>
+          f =>
             `translate(${this.getXFromSeqPosition(
               f.start
             )},${this._layoutObj.getFeatureYPos(f.feature)})`

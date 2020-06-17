@@ -35,8 +35,8 @@
     "protvista-variation": "^2.11.0",
     "protvista-variation-adapter": "^2.11.0",
     "protvista-variation-graph": "^2.11.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1"
   },

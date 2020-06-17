@@ -27,6 +27,7 @@ const ProtvistaFilter = lazyImport("ProtvistaFilter");
 const ProtvistaDatatable = lazyImport("ProtvistaDatatable");
 const Playground = lazyImport("Playground");
 const ProtvistaVariationGraph = lazyImport("ProtvistaVariationGraph");
+const ProtvistaMSA = lazyImport("ProtvistaMSA");
 const TextareaSequence = lazyImport("TextareaSequence");
 
 function lazyImport(name) {
@@ -121,6 +122,9 @@ const App = (component = ProtvistaNavigation) => (
                     <NavLink to="/tooltip">Tooltip</NavLink>
                   </li>
                   <li>
+                    <NavLink to="/msa">Alignments</NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/textarea-sequence">Textarea Sequence</NavLink>
                   </li>
                 </ul>
@@ -156,6 +160,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/datatable" component={ProtvistaDatatable} />
               <Route path="/playground" component={Playground} />
               <Route path="/tooltip" component={ProtvistaTooltipWrapper} />
+              <Route path="/msa" component={ProtvistaMSA} />
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/" component={GettingStarted} />
             </Switch>

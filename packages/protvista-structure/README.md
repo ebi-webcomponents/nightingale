@@ -8,7 +8,7 @@ A native web component wrapper around LiteMol
 
 ```html
 <!-- With UniProt Accession -->
-<protvista-structure accession="P06493" pdb-id="4YC3"/>
+<protvista-structure accession="P06493" pdb-id="4YC3" />
 <!-- With a specific PDBe entry selected and the entrie table being hidden -->
 <protvista-structure
   accession="P06493"
