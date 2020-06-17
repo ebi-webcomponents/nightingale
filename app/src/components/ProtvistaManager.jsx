@@ -10,7 +10,6 @@ import ProtvistaVariation from "protvista-variation";
 import ProtvistaVariationGraph from "protvista-variation-graph";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaInterproTrack from "protvista-interpro-track";
-import ProtvistaMSA from "protvista-msa";
 import loadWebComponent from "../utils/load-web-component";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
@@ -63,13 +62,6 @@ class ProtvistaManagerWrapper extends Component {
     //Sets the background color of the image to save.
     document.querySelector("#saver").backgroundColor = "#ffffff";
     document.querySelector("#saver2").backgroundColor = "#ddddee";
-    const seqs = [];
-    for (let i = 0; i < 1000; i++)
-      seqs.push({
-        name: `seq_${i}`,
-        sequence: sequence.sequence
-      });
-    document.querySelector("#msa-track").data = seqs;
   }
   render() {
     loadWebComponent("protvista-manager", ProtvistaManager);
@@ -86,7 +78,6 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-saver", ProtvistaSaver);
     loadWebComponent("protvista-overlay", ProtvistaOverlay);
     loadWebComponent("protvista-zoom-tool", ProtvistaZoomTool);
-    loadWebComponent("protvista-msa", ProtvistaMSA);
     return (
       <Fragment>
         <Readme content={readmeContent} />
@@ -114,14 +105,6 @@ class ProtvistaManagerWrapper extends Component {
               highlight-event="onmouseover"
               use-ctrl-to-zoom
             />
-            <protvista-msa
-              id="msa-track"
-              length="770"
-              height="200"
-              use-ctrl-to-zoom
-              labelWidth={0}
-            />
-
             <protvista-coloured-sequence
               length="770"
               id="sequence-coloured-track"
