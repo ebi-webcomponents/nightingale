@@ -40,46 +40,21 @@ class ProtvistaTrackWrapper extends Component {
           </protvista-feature-adapter>
         </protvista-track>
         <h2>Track with set data</h2>
-        <protvista-track
-          id="track1"
-          width="1020"
-          length="223"
-          displaystart="1"
-          displayend="223"
-          color="red"
-          highlight="20:50,40:80"
-        />
-        <protvista-track
-          id="track2"
-          width="1020"
-          length="223"
-          displaystart="100"
-          displayend="200"
-          highlightstart="23"
-          highlightend="45"
-          color="green"
-          layout="non-overlapping"
-        />
-        <protvista-track
-          id="track3"
-          width="1020"
-          length="223"
-          displaystart="110"
-          displayend="210"
-          highlightstart="23"
-          highlightend="45"
-        />
+        <h3>Default layout</h3>
+        <protvista-track id="track1" width="1020" length="223" />
+        <h3>Non-overlapping layout</h3>
+        <protvista-track id="track2" length="223" layout="non-overlapping" />
+        <h3>Multiple highlights</h3>
+        <protvista-track id="track3" length="223" highlight="20:30,40:80" />
+        <h3>Shapes</h3>
         <protvista-track
           id="track4"
-          length="3"
-          displaystart="1"
-          displayend="3"
-          highlightstart="2"
-          highlightend="2"
+          length="100"
           layout="non-overlapping"
           shape="roundRectangle"
-          height="460"
+          height="420"
         />
+        <h3>Track with InterPro data model</h3>
         <protvista-track
           id="track5"
           length="100"
