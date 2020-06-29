@@ -46,7 +46,7 @@ export const cleanUpText = (
   // Add a header if missing one
   if (!text.trim().startsWith(">")) {
     sequences.push({
-      header: `Generated Header [${Math.random()}]`,
+      header: `Generated Header [${Math.round(10000 * Math.random())}]`,
       sequence: "",
       comments: {}
     });
