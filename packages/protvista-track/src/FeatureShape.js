@@ -86,6 +86,10 @@ export default class FeatureShape {
     );
   }
 
+  _line() {
+    return `M0,${this._ftHeight / 2} L${this._ftWidth},${this._ftHeight / 2}`;
+  }
+
   _bridge() {
     if (this._ftLength !== 1) {
       return (

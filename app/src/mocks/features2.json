@@ -1,15 +1,19 @@
 [
-  { "accession": "feature1", "start": 1, "end": 1, "color": "#339" },
-  { "accession": "feature2", "start": 2, "end": 2, "color": "#33d" },
-  { "accession": "feature3", "start": 3, "end": 3, "color": "#336" },
-  { "accession": "feature4", "start": 1, "end": 2, "color": "#73d" },
-  { "accession": "feature5", "start": 2, "end": 3, "color": "#63e" },
+  { "accession": "feature1", "start": 1, "end": 3, "color": "#339" },
+  { "accession": "feature5", "start": 1, "end": 3, "color": "#63e" },
   {
     "accession": "feature6",
-    "start": 2,
-    "end": 2,
+    "start": 1,
+    "end": 3,
     "color": "#35d",
     "shape": "rectangle"
+  },
+  {
+    "accession": "feature6_2",
+    "start": 1,
+    "end": 3,
+    "color": "#35d",
+    "shape": "line"
   },
   {
     "accession": "feature7",
