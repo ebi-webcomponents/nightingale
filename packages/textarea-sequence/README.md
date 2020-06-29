@@ -25,6 +25,7 @@ This readme is been use as a road map. A 🚧 emoji indicates that this feature 
 - ✅ CleanUp funtionality.
 - ✅ Error reporting.
 - ✅ Highlights the textarea border if there are errors or is valid.
+- ✅ Creates a hidden input that mirrors the value in quill, so it is included when a form is submitted.
 
 ## API reference
 
@@ -74,6 +75,22 @@ Width of the textarea element:
 
 type: `auto|<length>|<percentage>`
 defaultValue: `"auto"`
+
+##### `inner-style`
+
+Inline CSS style for the main container. The attributes `width` and `height` would have higher priority of any value for height and width created in the inline style.
+
+type: `<CSSStyleDeclaration>`
+defaultValue:
+
+```
+        border: 1px solid #ccc;
+        font-family: 'Courier New', Courier, monospace; font-size: 1em;
+        letter-spacing: .1rem;
+        height: auto;
+        margin: 0 auto;
+        width: auto;
+```
 
 ### Properties
 
@@ -129,7 +146,7 @@ Returns
 **Note:** This parameter can be overwritten, so you can define such format. For example, to avoid any formatting you can pass the identity function:
 
 ```javascript
-document.getElementByID("textareaID").formatSequence = x => x;
+document.getElementByID("textareaID").formatSequence = (x) => x;
 ```
 
 ### Methods
@@ -153,7 +170,7 @@ Is dispatched when there is a change in the reported errors. Includes the `error
 Usage example:
 
 ```javascript
-element.addEventListener("error-change", e => {
+element.addEventListener("error-change", (e) => {
   console.log(e.detail.errors);
 });
 ```
@@ -165,7 +182,7 @@ As mentioned before, we use quill, and its instance is exposed in the parameter 
 Usage Example:
 
 ```javascript
-element.quill.on("text-change", e => {
+element.quill.on("text-change", (e) => {
   console.log(element.sequence);
 });
 ```

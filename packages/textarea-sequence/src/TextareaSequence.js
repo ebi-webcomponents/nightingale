@@ -24,7 +24,8 @@ class TextareaSequence extends HTMLElement {
       "width",
       "height",
       "min-sequence-length",
-      "allow-comments"
+      "allow-comments",
+      "inner-style",
     ];
   }
 
@@ -43,6 +44,12 @@ class TextareaSequence extends HTMLElement {
         if (innerDiv && value !== null && value.trim() !== "") {
           innerDiv.style[name] = value;
         }
+      } else if (name === "inner-style") {
+        const w = innerDiv.style.width;
+        const h = innerDiv.style.height;
+        innerDiv.setAttribute("style", newValue);
+        innerDiv.style.width = innerDiv.style.width || w;
+        innerDiv.style.height = innerDiv.style.height || h;
       } else if (this.quill) {
         if (name === "alphabet" && newValue in alphabets) {
           this.quill[name] = alphabets[newValue];
@@ -100,14 +107,18 @@ class TextareaSequence extends HTMLElement {
         width: auto;        
       }
     `;
+    const name = this.getAttribute("name") || "sequence";
     this.innerHTML = `
     <style>${inlineCSS}{</style>
     <div 
-      id="sequence-editor"
+      id="${this.getAttribute("id") || ""}sequence-editor"
       class="sequence-editor"
-    />`;
+    ></div>
+    <input type="hidden" name="${name}"></input>
+    `;
+
     this.quill = new Quill(
-      "#sequence-editor",
+      `#${this.getAttribute("id") || ""}sequence-editor`,
       this.alphabet,
       this["case-sensitive"],
       this.single,
@@ -115,6 +126,9 @@ class TextareaSequence extends HTMLElement {
       this["allow-comments"],
       formatSequence
     );
+    this.quill.on("text-change", () => {
+      this.querySelector(`input[name=${name}]`).value = this.sequence;
+    });
   }
 }
 

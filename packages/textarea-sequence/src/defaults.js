@@ -1,6 +1,6 @@
 export const alphabets = {
   dna: "AGTCN ",
-  protein: "ACDEFGHIKLMNPQRSTVWY "
+  protein: "ACDEFGHIKLMNPQRSTVWY ",
 };
 
 export const formatSequence = (sequence, block = 10, line = 50) => {
@@ -18,12 +18,12 @@ const injectComments = (formattedSequence, comments) => {
   if (!commentPositions.length) return formattedSequence;
   let newSeq = "";
   let pos = 0;
-  formattedSequence.split("\n").forEach(line => {
+  formattedSequence.split("\n").forEach((line) => {
     newSeq += `${line}\n`;
     const { length } = line.replace(/\s/g, "");
     commentPositions
-      .filter(cPos => pos < cPos && cPos <= pos + length)
-      .forEach(cPos => {
+      .filter((cPos) => pos < cPos && cPos <= pos + length)
+      .forEach((cPos) => {
         newSeq += `;${comments[cPos]}\n`;
       });
     pos += length;
@@ -48,19 +48,19 @@ export const cleanUpText = (
     sequences.push({
       header: `Generated Header [${Math.round(10000 * Math.random())}]`,
       sequence: "",
-      comments: {}
+      comments: {},
     });
     current = 0;
   }
   text
     .trim()
     .split("\n")
-    .forEach(line => {
+    .forEach((line) => {
       if (line.startsWith(">")) {
         sequences.push({
           header: line.slice(1).trim(),
           sequence: "",
-          comments: {}
+          comments: {},
         });
         current++;
       } else if (line.startsWith(";")) {

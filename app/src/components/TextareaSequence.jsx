@@ -9,7 +9,7 @@ const ProtvistaNavigationWrapper = () => {
   const [errors, setErrors] = useState({});
   const [valid, setValid] = useState(true);
   useEffect(() => {
-    element.current.addEventListener("error-change", e => {
+    element.current.addEventListener("error-change", (e) => {
       setErrors(e.detail.errors);
       setValid(element.current.valid);
     });
@@ -24,6 +24,8 @@ const ProtvistaNavigationWrapper = () => {
         min-sequence-length="10"
         single="true"
         allow-comments="true"
+        name="example-sequence"
+        inner-style="letter-spacing: .01rem;"
       />
       <button disabled={valid} onClick={() => element.current.cleanUp()}>
         CleanUp Sequence
