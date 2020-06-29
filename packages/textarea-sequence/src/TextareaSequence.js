@@ -100,7 +100,8 @@ class TextareaSequence extends HTMLElement {
     const inlineCSS = `
       .sequence-editor {
         border: 1px solid #ccc;
-        font-family: 'Courier New', Courier, monospace; font-size: 1em;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.8em;
         letter-spacing: .1rem;
         height: auto;
         margin: 0 auto;
