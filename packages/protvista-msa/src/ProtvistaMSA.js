@@ -19,6 +19,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       this.svg = select(this).select("div");
     });
   }
+
   // eslint-disable-next-line class-methods-use-this
   get margin() {
     return {
