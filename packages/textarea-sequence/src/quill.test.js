@@ -28,7 +28,7 @@ describe("textarea-sequence: cleanUpText", () => {
     const seq = "\n\n\n\n\n   AAAAAAAAAAAAAAAAAAAAA  \n\n";
     const clean = cleanUpText(seq);
     const lines = clean.split("\n");
-    expect(lines[0]).toMatch(/> Generated Header \[0\.\d+\]/);
+    expect(lines[0]).toMatch(/> Generated Header \[\d{4}\]/);
     expect(lines[1]).toEqual("AAAAAAAAAA AAAAAAAAAA A");
   });
 
@@ -59,7 +59,7 @@ describe("textarea-sequence: cleanUpText", () => {
   test("lines of 10 blocks of 5: formatting function", () => {
     const cleaned2 = "> header\nAAAAAAAAAAAAAAAAAAAAA";
     expect(
-      cleanUpText(seq, alphabets.protein, false, true, false, x => x)
+      cleanUpText(seq, alphabets.protein, false, true, false, (x) => x)
     ).toEqual(cleaned2);
   });
 });
