@@ -6,7 +6,10 @@ import { select } from "d3";
 
 class ProtvistaMSA extends ProtvistaZoomable {
   static get observedAttributes() {
-    return ProtvistaZoomable.observedAttributes.concat(["labelwidth"]);
+    return ProtvistaZoomable.observedAttributes.concat([
+      "labelwidth",
+      "colorscheme",
+    ]);
   }
 
   set data(_data) {
@@ -22,7 +25,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       top: 10,
       right: 0,
       bottom: 10,
-      left: this._labelwidth || 10
+      left: this._labelwidth || 10,
     };
   }
 
@@ -33,22 +36,22 @@ class ProtvistaMSA extends ProtvistaZoomable {
       width: this.width - (this._labelwidth || 0),
       tileHeight: 20,
       tileWidth: Math.max(1, this.getSingleBaseWidth()),
-      colorScheme: "clustal",
+      colorScheme: this._colorscheme || "clustal",
       layout: "nightingale",
       sequenceOverflow: "scroll",
       sequenceOverflowX: "overflow",
-      sequenceDisableDragging: true
+      sequenceDisableDragging: true,
     };
     if (this._labelwidth) {
       options.labelStyle = {
         width: this._labelwidth - 5,
         "text-align": "end",
         "padding-right": 5,
-        overflow: "hidden"
+        overflow: "hidden",
       };
     }
     ReactDOM.render(
-      <ReactMSAViewer {...options} ref={ref => (this.el = ref)} />,
+      <ReactMSAViewer {...options} ref={(ref) => (this.el = ref)} />,
       this
     );
     window.requestAnimationFrame(() => {
@@ -60,10 +63,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
             new CustomEvent("change", {
               detail: {
                 displaystart: this._displaystart,
-                displayend: this._displaystart + this.xScale.range()[1]
+                displayend: this._displaystart + this.xScale.range()[1],
               },
               bubbles: true,
-              cancelable: true
+              cancelable: true,
             })
           );
         }
