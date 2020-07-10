@@ -9,6 +9,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
     return ProtvistaZoomable.observedAttributes.concat([
       "labelwidth",
       "colorscheme",
+      "calculateConservation",
     ]);
   }
 
@@ -29,6 +30,9 @@ class ProtvistaMSA extends ProtvistaZoomable {
       left: this._labelwidth || 10,
     };
   }
+  getColorMap() {
+    return this.el.getColorMap();
+  }
 
   refresh() {
     const options = {
@@ -43,6 +47,9 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceOverflowX: "overflow",
       sequenceDisableDragging: true,
     };
+    if (this.hasAttribute("calculate-conservation")) {
+      options.calculateConservation = true;
+    }
     if (this._labelwidth) {
       options.labelStyle = {
         width: this._labelwidth - 5,
