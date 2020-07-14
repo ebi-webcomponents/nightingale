@@ -59,7 +59,7 @@ describe("textarea-sequence: cleanUpText", () => {
   test("lines of 10 blocks of 5: formatting function", () => {
     const cleaned2 = "> header\nAAAAAAAAAAAAAAAAAAAAA";
     expect(
-      cleanUpText(seq, alphabets.protein, false, true, false, x => x)
+      cleanUpText(seq, alphabets.protein, false, true, false, (x) => x)
     ).toEqual(cleaned2);
   });
 });

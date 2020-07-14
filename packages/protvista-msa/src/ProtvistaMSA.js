@@ -23,6 +23,8 @@ class ProtvistaMSA extends ProtvistaZoomable {
     return ProtvistaZoomable.observedAttributes.concat([
       "labelwidth",
       "activeLabel",
+      "colorscheme",
+      "calculateConservation",
     ]);
   }
 
@@ -51,6 +53,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       this.svg = select(this).select("div");
     });
   }
+
   // eslint-disable-next-line class-methods-use-this
   get margin() {
     return {
@@ -59,6 +62,9 @@ class ProtvistaMSA extends ProtvistaZoomable {
       bottom: 10,
       left: this._labelwidth || 10,
     };
+  }
+  getColorMap() {
+    return this.el.getColorMap();
   }
 
   refresh() {
@@ -72,7 +78,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       width: this.width - (this._labelwidth || 0),
       tileHeight: 20,
       tileWidth: Math.max(1, this.getSingleBaseWidth()),
-      colorScheme: "clustal",
+      colorScheme: this._colorscheme || "clustal",
       layout: "nightingale",
       sequenceOverflow: "scroll",
       sequenceOverflowX: "overflow",
@@ -117,6 +123,9 @@ class ProtvistaMSA extends ProtvistaZoomable {
         );
       },
     };
+    if (this.hasAttribute("calculate-conservation")) {
+      options.calculateConservation = true;
+    }
     if (this._labelwidth) {
       options.labelStyle = {
         width: this._labelwidth - 5,

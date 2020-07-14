@@ -1,50 +1,95 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-msa/README.md";
+import Console from "./Console";
+const AllowedColorschemes = [
+  "buried_index",
+  "clustal",
+  "clustal2",
+  "cinema",
+  "helix_propensity",
+  "hydro",
+  "lesk",
+  "mae",
+  "nucleotide",
+  "purine_pyrimidine",
+  "strand_propensity",
+  "taylor",
+  "turn_propensity",
+  "zappo",
+  "conservation",
+];
 
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
 const getRandomBase = () =>
   alphabet[Math.floor(Math.random() * alphabet.length)];
 
+let currentColor = null;
 const ProtvistaMSAWrapper = () => {
+  const [ColorScheme, setColorScheme] = useState("clustal");
+  const msaTrack = useRef(null);
+  const [logs, setLogs] = useState("");
+  const addLog = (log) => setLogs(`${logs}\n${log}`);
   const sequence =
     "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
   useEffect(() => {
     const seqs = [];
-    for (let i = 0; i < 1000; i++) {
-      const mutation_pos = Math.round(Math.random() * sequence.length);
+    for (let i = 0; i < 400; i++) {
+      const mutationPos = Math.round(Math.random() * (sequence.length - 1));
       seqs.push({
         name: `seq_${i}`,
         sequence: `${sequence.substring(
           0,
-          mutation_pos
-        )}${getRandomBase()}${sequence.substring(mutation_pos + 1)}`,
+          mutationPos
+        )}${getRandomBase()}${sequence.substring(mutationPos + 1)}`,
       });
     }
-    document.querySelector("#msa-track").data = seqs;
-  });
+    msaTrack.current.data = seqs;
+    msaTrack.current.addEventListener("conservationProgress", (e) =>
+      addLog(`[conservationProgress]: ${e.detail.progress * 100}%`)
+    );
+    msaTrack.current.addEventListener("drawCompleted", () => {
+      const { name, map } = msaTrack.current.getColorMap();
+      if (name !== currentColor) {
+        addLog(
+          `[colors-${name}]:\n${Object.entries(map)
+            .map(([base, color]) => `\t${base}: ${color}`)
+            .join("\n")}`
+        );
+        currentColor = name;
+      }
+    });
+    msaTrack.current.onActiveTrackChange = (trackId) => {
+      console.log("on active track change:", trackId);
+    };
+  }, []);
 
   loadWebComponent("protvista-msa", ProtvistaMSA);
   loadWebComponent("protvista-navigation", ProtvistaNavigation);
   loadWebComponent("protvista-manager", ProtvistaManager);
-  const labelWidth = 100;
 
-  const msaPropertiesRef = useCallback((node) => {
-    if (node !== null) {
-      // eslint-disable-next-line no-param-reassign
-      node.onActiveTrackChange = (trackId) => {
-        console.log("on active track change:", trackId);
-      };
-    }
-  }, []);
+  const handleColorChange = (event) => {
+    setColorScheme(event.target.value);
+    addLog(`[setColorScheme]: ${event.target.value}`);
+  };
+  const labelWidth = 100;
 
   return (
     <>
       <h1>protvista-msa</h1>
+      <select
+        value={ColorScheme}
+        onChange={handleColorChange}
+        onBlur={handleColorChange}
+      >
+        {AllowedColorschemes.map((c) => (
+          <option key={c}>{c}</option>
+        ))}
+      </select>
       <protvista-manager
         attributes="length displaystart displayend highlight"
         displaystart="1"
@@ -66,15 +111,18 @@ const ProtvistaMSAWrapper = () => {
         </div>
         <protvista-msa
           id="msa-track"
+          ref={msaTrack}
           length={sequence.length}
           height="200"
           displaystart="1"
           displayend="50"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
-          ref={msaPropertiesRef}
+          colorscheme={ColorScheme}
+          calculate-conservation
         />
       </protvista-manager>
+      <Console>{logs}</Console>
       <Readme content={readmeContent} />
     </>
   );

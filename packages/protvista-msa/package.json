@@ -1,6 +1,6 @@
 {
   "name": "protvista-msa",
-  "version": "2.12.0",
+  "version": "2.14.2",
   "files": [
     "dist",
     "src"
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "protvista-zoomable": "^2.12.0",
-    "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:^1.1.1"
+    "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.2.2"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }

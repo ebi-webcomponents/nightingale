@@ -15,6 +15,7 @@ It currently uses the `clustal` color scheme, and only displays the alignment, n
   displayend="30"
   use-ctrl-to-zoom
   labelWidth="100"
+  colorscheme="clustal"
 />
 ```
 
@@ -27,7 +28,7 @@ This readme is been use as a road map. A 🚧 emoji indicates that this feature 
 - ✅ Renders the sequence names if there is space assigned in the attribute `labelwidth`
 - ✅ Forces the zoom to stay at a level thet there is at least a pixel per base.
 - 🔲 Find an alternative to be able to zoom farther.
-- 🔲 Changes in color schema
+- ✅ Changes in color schema
 - 🔲 Highlights a region
 - 🔲 Adding other components to the layout. eg. scale, conservancy plot, etc.
 
@@ -57,6 +58,24 @@ If a value of `0` is assigned, the rendering of labels will be avoided completel
 type: `number`
 defaultValue: 0
 
+##### `colorscheme`
+
+The colour scheme to use when painting the alignment tiles.
+
+Note: The conservation color scheme has to calculate some values. The current approach is to do the calculation in a web worker, if the component requests using the `'conservation'` scheme before the calculation is completed, it paint all the background in white, and repaints it once the calculations are done.
+
+type: `enum('buried_index'|'clustal'|'clustal2'|'cinema'|'helix_propensity'|'hydro'|'lesk'|'mae'|'nucleotide'|'purine_pyrimidine'|'strand_propensity'|'taylor'|'turn_propensity'|'zappo'|'conservation')`
+defaultValue: `'clustal'`
+
+##### `calculate-conservation`
+
+A flag that calculates the conservation values per base in the alignment.
+
+The calculation is executed on a web worker to avoid any interrruption on the main thread.
+
+type: `boolean`
+defaultValue: `false`
+
 ##### Other inherit from `protvista-zoomable`
 
 displaystart, displayend, length, highlight
@@ -73,10 +92,85 @@ The sequences to be displayed. The should be in the following shape:
 [
   {
     name: "seq1",
-    sequence: "MAMYDDEFDTKASDLTFSPWVEVE"
-  }
+    sequence: "MAMYDDEFDTKASDLTFSPWVEVE",
+  },
   // ...
 ];
 ```
 
 type: `array`
+
+### Methods
+
+#### `getColorMap()`
+
+Return an object that contains the name of the current colorscheme in usage, and a map, that is a dictionary indicating the colorMapping used. For example the default scheme `'clustal'` would return something like:
+
+```javascript
+{
+  name: 'clustal',
+  map: {
+    A: "orange",
+    B: "#fff",
+    C: "green",
+    D: "red",
+    E: "red",
+    F: "blue",
+    G: "orange",
+    H: "red",
+    I: "green",
+    J: "#fff",
+    K: "red",
+    L: "green",
+    M: "green",
+    N: "#fff",
+    O: "#fff",
+    P: "orange",
+    Q: "#fff",
+    R: "red",
+    S: "orange",
+    T: "orange",
+    U: "#fff",
+    V: "green",
+    W: "blue",
+    X: "#fff",
+    Y: "blue",
+    Z: "#fff",
+    Gap: "#fff"
+  }
+}
+```
+
+### Events
+
+#### `conservationProgress`
+
+It notifies progress at calculating the conservation. The detail of the event is an event with the progress, and the current count of bases per position in the current sequence.
+When the progress is equal to 1, then the current values of the sum is divided by the number of sequences.
+
+```javascript
+// in the middle of the calculation
+{
+  progress: 0.5,
+  conservation: [
+    {M:5, A:3},
+    {E:4, S:4},
+  ]
+}
+
+//When the conservation calculation has been completed
+{
+  progress: 1,
+  conservation: [
+    {M:0.5, A:0.375, P:0.125},
+    {E:0.375, S:0.375, -:0.5},
+  ]
+}
+
+```
+
+#### `drawCompleted`
+
+Evrytime the component redraws the alignment this event is raised. There are multiple actions to redraw the alignment, for instance, changes in the props, or dragging the viewport.
+
+It doesn't have any data in the details.

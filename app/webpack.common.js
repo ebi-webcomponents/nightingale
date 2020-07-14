@@ -10,12 +10,16 @@ module.exports = {
     alias: {
       react: path.resolve("../node_modules/react"),
       parchment$: path.resolve("../node_modules/parchment/src/parchment.ts"),
-      "quill/": path.resolve("../node_modules/quill/")
+      "quill/": path.resolve("../node_modules/quill/"),
     },
-    extensions: [".jsx", ".js", ".ts"]
+    extensions: [".jsx", ".js", ".ts"],
   },
   module: {
     rules: [
+      {
+        test: /\.worker\.js$/,
+        use: { loader: "worker-loader" },
+      },
       {
         test: /\.(js|jsx)$/,
         use: {
@@ -25,10 +29,10 @@ module.exports = {
             plugins: [
               "syntax-dynamic-import",
               "@babel/plugin-proposal-object-rest-spread",
-              "@babel/plugin-proposal-class-properties"
-            ]
-          }
-        }
+              "@babel/plugin-proposal-class-properties",
+            ],
+          },
+        },
       },
       {
         test: /\.html$/,
@@ -36,10 +40,10 @@ module.exports = {
           {
             loader: "html-loader",
             options: {
-              minimize: true
-            }
-          }
-        ]
+              minimize: true,
+            },
+          },
+        ],
       },
       {
         test: /\.ts$/,
@@ -50,27 +54,27 @@ module.exports = {
               compilerOptions: {
                 declaration: false,
                 target: "es5",
-                module: "commonjs"
+                module: "commonjs",
               },
-              transpileOnly: true
-            }
-          }
-        ]
+              transpileOnly: true,
+            },
+          },
+        ],
       },
       {
         test: /\.md$/,
-        use: [{ loader: "text-loader" }, { loader: "markdown-loader" }]
+        use: [{ loader: "text-loader" }, { loader: "markdown-loader" }],
       },
       {
         test: /\.css$/,
         use: [
           {
-            loader: "style-loader" // creates style nodes from JS strings
+            loader: "style-loader", // creates style nodes from JS strings
           },
           {
-            loader: "css-loader" // translates CSS into CommonJS
-          }
-        ]
+            loader: "css-loader", // translates CSS into CommonJS
+          },
+        ],
       },
       {
         test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
@@ -79,22 +83,22 @@ module.exports = {
             loader: "file-loader",
             options: {
               name: "[name].[ext]",
-              outputPath: "fonts/"
-            }
-          }
-        ]
+              outputPath: "fonts/",
+            },
+          },
+        ],
       },
       {
         test: /\.svg$/,
-        loader: "svg-inline-loader"
-      }
-    ]
+        loader: "svg-inline-loader",
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
       template: `${__dirname}/index.html`,
-      filename: "index.html"
-    })
-  ]
+      filename: "index.html",
+    }),
+  ],
 };

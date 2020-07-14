@@ -125,3 +125,22 @@ g.residues-group path.feature,
 g.child-group path.feature {
   transition: transform 0.2s ease-out;
 }
+
+.console {
+  width: 100%;
+  margin: 1em;
+  font-family: Courier, Monaco, monospace;
+  font-size: 0.8em;
+  color: cyan;
+  background: slategray;
+  height: 5em;
+  overflow: scroll;
+  overflow-anchor: none;
+}
+.console .anchor {
+  /* allow the final child to be selected as an anchor node */
+  overflow-anchor: auto;
+
+  /* anchor nodes are required to have non-zero area */
+  height: 1px;
+}

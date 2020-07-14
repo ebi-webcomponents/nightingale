@@ -3,10 +3,11 @@
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react"],
   "env": {
     "es6": true,
     "browser": true,
