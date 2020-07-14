@@ -1,12 +1,47 @@
 import ProtvistaZoomable from "protvista-zoomable";
 import ReactMSAViewer from "react-msa-viewer";
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { select } from "d3";
 
 class ProtvistaMSA extends ProtvistaZoomable {
+  static get properties() {
+    return {
+      onActiveTrackChange: { type: Function },
+    };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.hasAttribute("activeLabel")) {
+      this.activeLabel = this.getAttribute("activeLabel");
+    }
+  }
+
   static get observedAttributes() {
-    return ProtvistaZoomable.observedAttributes.concat(["labelwidth"]);
+    return ProtvistaZoomable.observedAttributes.concat([
+      "labelwidth",
+      "activeLabel",
+    ]);
+  }
+
+  get activeLabel() {
+    return this.getAttribute("activeLabel");
+  }
+
+  set activeLabel(value) {
+    this.setAttribute("activeLabel", value);
+  }
+
+  setActiveLabel(newValue) {
+    this.setAttribute("activeLabel", newValue);
+
+    if (this.onActiveTrackChange) {
+      this.onActiveTrackChange(newValue);
+    }
+
+    this.refresh();
   }
 
   set data(_data) {
@@ -22,11 +57,15 @@ class ProtvistaMSA extends ProtvistaZoomable {
       top: 10,
       right: 0,
       bottom: 10,
-      left: this._labelwidth || 10
+      left: this._labelwidth || 10,
     };
   }
 
   refresh() {
+    if (!this.activeLabel && this._data && this._data[0]) {
+      this.setActiveLabel(this._data[0].name);
+    }
+
     const options = {
       sequences: this._data,
       height: this._height,
@@ -37,18 +76,57 @@ class ProtvistaMSA extends ProtvistaZoomable {
       layout: "nightingale",
       sequenceOverflow: "scroll",
       sequenceOverflowX: "overflow",
-      sequenceDisableDragging: true
+      sequenceDisableDragging: true,
+      labelComponent: ({ sequence }) => {
+        const labelStyle = {
+          height: 20,
+          fontWeight: "normal",
+          fontSizes: "14px",
+          cursor: "pointer",
+          display: "block",
+          padding: "0 0.5rem",
+          borderLeft: "0.2rem solid transparent",
+          boxSizing: "content-box",
+          color: "#00639A",
+          textTransform: "uppercase",
+        };
+
+        const activeLabelStyle = {
+          ...labelStyle,
+          fontWeight: "bold",
+          borderLeft: "0.2rem solid #00639A",
+        };
+
+        const labelRef = useRef(null);
+        useEffect(() => {
+          labelRef.current.addEventListener("click", () =>
+            this.setActiveLabel(sequence.name)
+          );
+        }, [labelRef]);
+
+        return (
+          <span
+            style={
+              sequence.name === this.activeLabel ? activeLabelStyle : labelStyle
+            }
+            data-msa-sequence-lable-id={sequence.name}
+            ref={labelRef}
+          >
+            {sequence.name}
+          </span>
+        );
+      },
     };
     if (this._labelwidth) {
       options.labelStyle = {
         width: this._labelwidth - 5,
         "text-align": "end",
         "padding-right": 5,
-        overflow: "hidden"
+        overflow: "hidden",
       };
     }
     ReactDOM.render(
-      <ReactMSAViewer {...options} ref={ref => (this.el = ref)} />,
+      <ReactMSAViewer {...options} ref={(ref) => (this.el = ref)} />,
       this
     );
     window.requestAnimationFrame(() => {
@@ -60,10 +138,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
             new CustomEvent("change", {
               detail: {
                 displaystart: this._displaystart,
-                displayend: this._displaystart + this.xScale.range()[1]
+                displayend: this._displaystart + this.xScale.range()[1],
               },
               bubbles: true,
-              cancelable: true
+              cancelable: true,
             })
           );
         }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
@@ -22,7 +22,7 @@ const ProtvistaMSAWrapper = () => {
         sequence: `${sequence.substring(
           0,
           mutation_pos
-        )}${getRandomBase()}${sequence.substring(mutation_pos + 1)}`
+        )}${getRandomBase()}${sequence.substring(mutation_pos + 1)}`,
       });
     }
     document.querySelector("#msa-track").data = seqs;
@@ -32,6 +32,16 @@ const ProtvistaMSAWrapper = () => {
   loadWebComponent("protvista-navigation", ProtvistaNavigation);
   loadWebComponent("protvista-manager", ProtvistaManager);
   const labelWidth = 100;
+
+  const msaPropertiesRef = useCallback((node) => {
+    if (node !== null) {
+      // eslint-disable-next-line no-param-reassign
+      node.onActiveTrackChange = (trackId) => {
+        console.log("on active track change:", trackId);
+      };
+    }
+  }, []);
+
   return (
     <>
       <h1>protvista-msa</h1>
@@ -45,7 +55,7 @@ const ProtvistaMSAWrapper = () => {
           <div
             style={{
               width: labelWidth,
-              flexShrink: 0
+              flexShrink: 0,
             }}
           />
           <protvista-navigation
@@ -62,6 +72,7 @@ const ProtvistaMSAWrapper = () => {
           displayend="50"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
+          ref={msaPropertiesRef}
         />
       </protvista-manager>
       <Readme content={readmeContent} />
