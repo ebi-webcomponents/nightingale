@@ -4,7 +4,53 @@ import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { select } from "d3";
 
+// This component is used internally to create a clickable
+// label inside ProtvistaMSA
+const TrackLabel = (sequence, activeLabel, setActiveLabel) => {
+  const labelStyle = {
+    height: 20,
+    fontWeight: "normal",
+    fontSize: "14px",
+    cursor: "pointer",
+    display: "block",
+    padding: "0 0.5rem",
+    borderLeft: "0.2rem solid transparent",
+    boxSizing: "content-box",
+    color: "#00639A",
+    textTransform: "uppercase",
+  };
+
+  const activeLabelStyle = {
+    ...labelStyle,
+    fontWeight: "bold",
+    borderLeft: "0.2rem solid #00639A",
+  };
+
+  const labelRef = useRef(null);
+  useEffect(() => {
+    labelRef.current.addEventListener("click", () =>
+      setActiveLabel(sequence.name)
+    );
+  }, [labelRef]);
+
+  return (
+    <span
+      style={
+        sequence.name === activeLabel ? activeLabelStyle : labelStyle
+      }
+      ref={labelRef}
+    >
+      {sequence.name}
+    </span>
+  );
+}
+
 class ProtvistaMSA extends ProtvistaZoomable {
+  constructor() {
+    super();
+    this.setActiveLabel = this.setActiveLabel.bind(this);
+  }
+
   static get properties() {
     return {
       onActiveTrackChange: { type: Function },
@@ -83,46 +129,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceOverflow: "scroll",
       sequenceOverflowX: "overflow",
       sequenceDisableDragging: true,
-      labelComponent: ({ sequence }) => {
-        const labelStyle = {
-          height: 20,
-          fontWeight: "normal",
-          fontSizes: "14px",
-          cursor: "pointer",
-          display: "block",
-          padding: "0 0.5rem",
-          borderLeft: "0.2rem solid transparent",
-          boxSizing: "content-box",
-          color: "#00639A",
-          textTransform: "uppercase",
-        };
-
-        const activeLabelStyle = {
-          ...labelStyle,
-          fontWeight: "bold",
-          borderLeft: "0.2rem solid #00639A",
-        };
-
-        const labelRef = useRef(null);
-        useEffect(() => {
-          labelRef.current.addEventListener("click", () =>
-            this.setActiveLabel(sequence.name)
-          );
-        }, [labelRef]);
-
-        return (
-          <span
-            style={
-              sequence.name === this.activeLabel ? activeLabelStyle : labelStyle
-            }
-            data-msa-sequence-lable-id={sequence.name}
-            ref={labelRef}
-          >
-            {sequence.name}
-          </span>
-        );
-      },
+      labelComponent: ({ sequence }) =>
+        TrackLabel(sequence, this.activeLabel, this.setActiveLabel),
     };
+
     if (this.hasAttribute("calculate-conservation")) {
       options.calculateConservation = true;
     }
