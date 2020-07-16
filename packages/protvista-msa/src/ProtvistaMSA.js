@@ -6,7 +6,7 @@ import { select } from "d3";
 
 // This component is used internally to create a clickable
 // label inside ProtvistaMSA
-const TrackLabel = (sequence, activeLabel, setActiveLabel) => {
+const TrackLabel = (sequence, activeLabel, setActiveTrack) => {
   const labelStyle = {
     height: 20,
     fontWeight: "normal",
@@ -29,7 +29,7 @@ const TrackLabel = (sequence, activeLabel, setActiveLabel) => {
   const labelRef = useRef(null);
   useEffect(() => {
     labelRef.current.addEventListener("click", () =>
-      setActiveLabel(sequence.name)
+      setActiveTrack(sequence.name)
     );
   }, [labelRef]);
 
@@ -48,7 +48,7 @@ const TrackLabel = (sequence, activeLabel, setActiveLabel) => {
 class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
     super();
-    this.setActiveLabel = this.setActiveLabel.bind(this);
+    this.setActiveTrack = this.setActiveTrack.bind(this);
   }
 
   static get properties() {
@@ -82,7 +82,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
     this.setAttribute("activeLabel", value);
   }
 
-  setActiveLabel(newValue) {
+  setActiveTrack(newValue) {
     this.setAttribute("activeLabel", newValue);
 
     if (this.onActiveTrackChange) {
@@ -115,7 +115,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
 
   refresh() {
     if (!this.activeLabel && this._data && this._data[0]) {
-      this.setActiveLabel(this._data[0].name);
+      this.setActiveTrack(this._data[0].name);
     }
 
     const options = {
@@ -130,7 +130,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceOverflowX: "overflow",
       sequenceDisableDragging: true,
       labelComponent: ({ sequence }) =>
-        TrackLabel(sequence, this.activeLabel, this.setActiveLabel),
+        TrackLabel(sequence, this.activeLabel, this.setActiveTrack),
     };
 
     if (this.hasAttribute("calculate-conservation")) {
