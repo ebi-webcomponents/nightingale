@@ -16,6 +16,7 @@ It currently uses the `clustal` color scheme, and only displays the alignment, n
   use-ctrl-to-zoom
   labelWidth="100"
   colorscheme="clustal"
+  activeLabel="seq_1"
 />
 ```
 
@@ -76,6 +77,10 @@ The calculation is executed on a web worker to avoid any interrruption on the ma
 type: `boolean`
 defaultValue: `false`
 
+#### `activeLabel`
+
+The value of the active label/track to be selected in the visualisation.
+
 ##### Other inherit from `protvista-zoomable`
 
 displaystart, displayend, length, highlight
@@ -96,6 +101,17 @@ The sequences to be displayed. The should be in the following shape:
   },
   // ...
 ];
+```
+
+#### `onActiveTrackChange`
+
+The value of `onActiveTrackChange` should be a callback function to fire for when the active label/track is changed. Usage:
+
+```
+// msaTrack is a reference to <protvista-msa /> element
+msaTrack.current.onActiveTrackChange = (trackId) => {
+  console.log("active track changed:", trackId);
+};
 ```
 
 type: `array`
