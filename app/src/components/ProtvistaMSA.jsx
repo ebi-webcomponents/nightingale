@@ -6,6 +6,7 @@ import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-msa/README.md";
 import Console from "./Console";
+
 const AllowedColorschemes = [
   "buried_index",
   "clustal",
@@ -24,6 +25,22 @@ const AllowedColorschemes = [
   "conservation",
 ];
 
+const features = [
+  {
+    residues: { from: 1, to: 20 },
+    sequences: { from: 0, to: 0 },
+    id: "id-1",
+    borderColor: "blue",
+    fillColor: "black",
+  },
+  {
+    residues: { from: 3, to: 10 },
+    sequences: { from: 2, to: 2 },
+    id: "id-2",
+    borderColor: "blue",
+    fillColor: "black",
+  },
+];
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
 const getRandomBase = () =>
   alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -65,6 +82,10 @@ const ProtvistaMSAWrapper = () => {
     });
     msaTrack.current.onActiveTrackChange = (trackId) => {
       console.log("on active track change:", trackId);
+    };
+    msaTrack.current.features = features;
+    msaTrack.current.onFeatureClick = (id) => {
+      console.log("on feature click:", id);
     };
   }, []);
 

@@ -35,15 +35,13 @@ const TrackLabel = (sequence, activeLabel, setActiveTrack) => {
 
   return (
     <span
-      style={
-        sequence.name === activeLabel ? activeLabelStyle : labelStyle
-      }
+      style={sequence.name === activeLabel ? activeLabelStyle : labelStyle}
       ref={labelRef}
     >
       {sequence.name}
     </span>
   );
-}
+};
 
 class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
@@ -54,6 +52,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
   static get properties() {
     return {
       onActiveTrackChange: { type: Function },
+      onFeatureClick: { type: Function },
     };
   }
 
@@ -71,6 +70,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "activeLabel",
       "colorscheme",
       "calculateConservation",
+      "features",
     ]);
   }
 
@@ -100,6 +100,11 @@ class ProtvistaMSA extends ProtvistaZoomable {
     });
   }
 
+  set features(_features) {
+    this._features = _features;
+    this.refresh();
+  }
+
   // eslint-disable-next-line class-methods-use-this
   get margin() {
     return {
@@ -113,11 +118,14 @@ class ProtvistaMSA extends ProtvistaZoomable {
     return this.el.getColorMap();
   }
 
+  handleFeatureClick(id) {
+    this.onFeatureClick(id);
+  }
+
   refresh() {
     if (!this.activeLabel && this._data && this._data[0]) {
       this.setActiveTrack(this._data[0].name);
     }
-
     const options = {
       sequences: this._data,
       height: this._height,
@@ -131,6 +139,8 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceDisableDragging: true,
       labelComponent: ({ sequence }) =>
         TrackLabel(sequence, this.activeLabel, this.setActiveTrack),
+      onFeatureClick: (id) => this.handleFeatureClick(id),
+      features: this._features,
     };
 
     if (this.hasAttribute("calculate-conservation")) {
