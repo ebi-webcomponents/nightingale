@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
@@ -63,6 +63,9 @@ const ProtvistaMSAWrapper = () => {
         currentColor = name;
       }
     });
+    msaTrack.current.onActiveTrackChange = (trackId) => {
+      console.log("on active track change:", trackId);
+    };
   }, []);
 
   loadWebComponent("protvista-msa", ProtvistaMSA);

@@ -1,16 +1,95 @@
 import ProtvistaZoomable from "protvista-zoomable";
 import ReactMSAViewer from "react-msa-viewer";
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { select } from "d3";
 
+// This component is used internally to create a clickable
+// label inside ProtvistaMSA
+const TrackLabel = (sequence, activeLabel, setActiveTrack) => {
+  const labelStyle = {
+    height: 20,
+    fontWeight: "normal",
+    fontSize: "14px",
+    cursor: "pointer",
+    display: "block",
+    padding: "0 0.5rem",
+    borderLeft: "0.2rem solid transparent",
+    boxSizing: "content-box",
+    color: "#00639A",
+    textTransform: "uppercase",
+  };
+
+  const activeLabelStyle = {
+    ...labelStyle,
+    fontWeight: "bold",
+    borderLeft: "0.2rem solid #00639A",
+  };
+
+  const labelRef = useRef(null);
+  useEffect(() => {
+    labelRef.current.addEventListener("click", () =>
+      setActiveTrack(sequence.name)
+    );
+  }, [labelRef]);
+
+  return (
+    <span
+      style={
+        sequence.name === activeLabel ? activeLabelStyle : labelStyle
+      }
+      ref={labelRef}
+    >
+      {sequence.name}
+    </span>
+  );
+}
+
 class ProtvistaMSA extends ProtvistaZoomable {
+  constructor() {
+    super();
+    this.setActiveTrack = this.setActiveTrack.bind(this);
+  }
+
+  static get properties() {
+    return {
+      onActiveTrackChange: { type: Function },
+    };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.hasAttribute("activeLabel")) {
+      this.activeLabel = this.getAttribute("activeLabel");
+    }
+  }
+
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat([
       "labelwidth",
+      "activeLabel",
       "colorscheme",
       "calculateConservation",
     ]);
+  }
+
+  get activeLabel() {
+    return this.getAttribute("activeLabel");
+  }
+
+  set activeLabel(value) {
+    this.setAttribute("activeLabel", value);
+  }
+
+  setActiveTrack(newValue) {
+    this.setAttribute("activeLabel", newValue);
+
+    if (this.onActiveTrackChange) {
+      this.onActiveTrackChange(newValue);
+    }
+
+    this.refresh();
   }
 
   set data(_data) {
@@ -35,6 +114,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
   }
 
   refresh() {
+    if (!this.activeLabel && this._data && this._data[0]) {
+      this.setActiveTrack(this._data[0].name);
+    }
+
     const options = {
       sequences: this._data,
       height: this._height,
@@ -46,7 +129,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceOverflow: "scroll",
       sequenceOverflowX: "overflow",
       sequenceDisableDragging: true,
+      labelComponent: ({ sequence }) =>
+        TrackLabel(sequence, this.activeLabel, this.setActiveTrack),
     };
+
     if (this.hasAttribute("calculate-conservation")) {
       options.calculateConservation = true;
     }
