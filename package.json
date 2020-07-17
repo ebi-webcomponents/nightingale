@@ -14,7 +14,7 @@
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
     "test": "jest --config jest.config.js",
-    "pre-lerna-publish": "npm run build",
+    "prelerna-publish": "npm run build",
     "lerna-publish": "lerna publish"
   },
   "devDependencies": {
