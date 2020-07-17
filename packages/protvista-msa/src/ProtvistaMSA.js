@@ -90,26 +90,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
             })
           );
         }
-        // if (
-        //   this.trackHighlighter &&
-        //   this.trackHighlighter.region &&
-        //   this.trackHighlighter.region.regionString
-        // ) {
-        //   const {
-        //     start: from,
-        //     end: to
-        //   } = this.trackHighlighter.region.segments[0];
-        //   this.el.highlightRegion({
-        //     sequences: {
-        //       from: 1,
-        //       to: this._data.length
-        //     },
-        //     residues: {
-        //       from,
-        //       to
-        //     }
-        //   });
-        // }
       }
     });
   }
