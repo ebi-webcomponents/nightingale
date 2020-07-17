@@ -150,7 +150,7 @@ const ProtvistaMSAWrapper = () => {
           use-ctrl-to-zoom
           labelWidth={labelWidth}
           colorscheme={ColorScheme}
-          text-font="16px Times"
+          text-font="16px sans-serif"
           {...conervationOptions}
         />
       </protvista-manager>
