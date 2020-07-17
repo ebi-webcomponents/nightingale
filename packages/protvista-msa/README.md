@@ -31,6 +31,8 @@ This readme is been use as a road map. A 🚧 emoji indicates that this feature 
 - ✅ Changes in color schema
 - 🔲 Highlights a region
 - 🔲 Adding other components to the layout. eg. scale, conservancy plot, etc.
+- ✅ Calculates conservation of the alignment. This calculations runs as in a separate web worker.
+- ✅ Can use the conservation either as a colorscheme or as an overlay of the current colorscheme.
 
 ## API reference
 
@@ -67,9 +69,16 @@ Note: The conservation color scheme has to calculate some values. The current ap
 type: `enum('buried_index'|'clustal'|'clustal2'|'cinema'|'helix_propensity'|'hydro'|'lesk'|'mae'|'nucleotide'|'purine_pyrimidine'|'strand_propensity'|'taylor'|'turn_propensity'|'zappo'|'conservation')`
 defaultValue: `'clustal'`
 
+##### `text-font`
+
+The font for the bases in the alignment. It should be in the format `"[size]px [font]"`. Where `[size]` is a number and `[font]` should be a valid font name.
+
+type: `string`
+default: `'18px Arial'`
+
 ##### `calculate-conservation`
 
-A flag that calculates the conservation values per base in the alignment.
+A flag that enable the calculation of the conservation values per base in the alignment.
 
 The calculation is executed on a web worker to avoid any interrruption on the main thread.
 
@@ -81,6 +90,23 @@ defaultValue: `false`
 displaystart, displayend, length, highlight
 
 See more [here](https://github.com/ebi-webcomponents/nightingale/tree/master/packages/protvista-zoomable)
+
+##### `overlay-conservation`
+
+It uses the calculated conservation to define opacity values for the background of the residues.
+This way highly conservated areas will be full coloured, while mutations will have a white background.
+
+type: `boolean`
+defaultValue: `false`
+
+##### `sample-size-conservation`
+
+If present, the value given here indicates how many sequences will be considered when calculating the conservation.
+This way alignments with many sequences won't require a full analysis of the conservation, but it will be estimated based on a sample.
+If not present, the conservation analysis will be executed with the all the sequences in the alignment.
+
+type: `number`
+defaultValue: `undefined`
 
 ### Properties
 

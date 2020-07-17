@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "protvista-zoomable": "^2.12.0",
-    "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.2.2"
+    "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#ca9a629"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }

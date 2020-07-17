@@ -31,6 +31,8 @@ const getRandomBase = () =>
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
   const [ColorScheme, setColorScheme] = useState("clustal");
+  const [overlayConservation, setOverlayConservation] = useState(false);
+  const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
   const msaTrack = useRef(null);
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);
@@ -55,11 +57,13 @@ const ProtvistaMSAWrapper = () => {
     msaTrack.current.addEventListener("drawCompleted", () => {
       const { name, map } = msaTrack.current.getColorMap();
       if (name !== currentColor) {
-        addLog(
-          `[colors-${name}]:\n${Object.entries(map)
-            .map(([base, color]) => `\t${base}: ${color}`)
-            .join("\n")}`
-        );
+        if (name && map) {
+          addLog(
+            `[colors-${name}]:\n${Object.entries(map)
+              .map(([base, color]) => `\t${base}: ${color}`)
+              .join("\n")}`
+          );
+        }
         currentColor = name;
       }
     });
@@ -74,19 +78,49 @@ const ProtvistaMSAWrapper = () => {
     addLog(`[setColorScheme]: ${event.target.value}`);
   };
   const labelWidth = 100;
+  const conervationOptions = {
+    "calculate-conservation": true,
+  };
+  if (overlayConservation) {
+    conervationOptions["overlay-conservation"] = true;
+  }
+  if (sampleSizeConservation > 0) {
+    conervationOptions["sample-size-conservation"] = sampleSizeConservation;
+  }
 
   return (
     <>
       <h1>protvista-msa</h1>
-      <select
-        value={ColorScheme}
-        onChange={handleColorChange}
-        onBlur={handleColorChange}
-      >
-        {AllowedColorschemes.map((c) => (
-          <option key={c}>{c}</option>
-        ))}
-      </select>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <label>
+          colorScheme:
+          <select
+            value={ColorScheme}
+            onChange={handleColorChange}
+            onBlur={handleColorChange}
+          >
+            {AllowedColorschemes.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          overlayConservation:
+          <input
+            type="checkbox"
+            value={overlayConservation}
+            onChange={() => setOverlayConservation(!overlayConservation)}
+          />
+        </label>
+        <label>
+          sampleSizeConservation:
+          <input
+            type="number"
+            value={sampleSizeConservation}
+            onChange={(evt) => setSampleSizeConservation(evt.target.value)}
+          />
+        </label>
+      </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
         displaystart="1"
@@ -116,7 +150,8 @@ const ProtvistaMSAWrapper = () => {
           use-ctrl-to-zoom
           labelWidth={labelWidth}
           colorscheme={ColorScheme}
-          calculate-conservation
+          text-font="16px Times"
+          {...conervationOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>
