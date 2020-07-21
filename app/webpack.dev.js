@@ -1,4 +1,4 @@
-const merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const path = require("path");
 const common = require("./webpack.common.js");
 
@@ -10,6 +10,6 @@ module.exports = merge(common, {
     compress: true,
     host: "localhost",
     port: 39095,
-    historyApiFallback: true
-  }
+    historyApiFallback: true,
+  },
 });
