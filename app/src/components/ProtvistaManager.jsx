@@ -92,8 +92,9 @@ class ProtvistaManagerWrapper extends Component {
         </protvista-saver>
         <protvista-overlay for="just-tracks" />
         <protvista-manager
-          attributes="length displaystart displayend variantfilters highlight"
-          displaystart="53"
+          attributes="variantfilters"
+          displaystart="370"
+          displayend="420"
           id="example"
         >
           <protvista-zoom-tool length="770" style={{ float: "right" }} />

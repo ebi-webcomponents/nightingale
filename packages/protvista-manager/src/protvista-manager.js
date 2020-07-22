@@ -1,3 +1,8 @@
+const LENGTH = "length";
+const DISPLAY_START = "displaystart";
+const DISPLAY_END = "displayend";
+const HIGHLIGHT = "highlight";
+
 class ProtVistaManager extends HTMLElement {
   constructor() {
     super();
@@ -8,7 +13,39 @@ class ProtVistaManager extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["attributes"];
+    return ["attributes", LENGTH, DISPLAY_START, DISPLAY_END, HIGHLIGHT];
+  }
+
+  set length(length) {
+    this.attributeValues.set(LENGTH, length);
+  }
+
+  get length() {
+    this.attributeValues.get(LENGTH);
+  }
+
+  set displaystart(displaystart) {
+    this.attributeValues.set(DISPLAY_START, displaystart);
+  }
+
+  get displaystart() {
+    this.attributeValues.get(DISPLAY_START);
+  }
+
+  set displayend(displayend) {
+    this.attributeValues.set(DISPLAY_END, displayend);
+  }
+
+  get displayend() {
+    this.attributeValues.get(DISPLAY_END);
+  }
+
+  set highlight(highlight) {
+    this.attributeValues.set(HIGHLIGHT, highlight);
+  }
+
+  get highlight() {
+    this.attributeValues.get(HIGHLIGHT);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -19,12 +56,27 @@ class ProtVistaManager extends HTMLElement {
           throw new Error("'type' can't be used as a protvista attribute");
         if (this._attributes.indexOf("value") !== -1)
           throw new Error("'value' can't be used as a protvista attribute");
+      } else {
+        if (name === LENGTH) {
+          this.length = newValue;
+        }
+        if (name === DISPLAY_START) {
+          this.displaystart = newValue;
+        }
+        if (name === DISPLAY_END) {
+          this.displayend = newValue;
+        }
+        if (name === HIGHLIGHT) {
+          this.highlight = newValue;
+        }
       }
+      this.applyAttributes();
     }
   }
 
   register(element) {
     this.protvistaElements.add(element);
+    this.applyAttributes();
   }
 
   unregister(element) {
@@ -41,7 +93,7 @@ class ProtVistaManager extends HTMLElement {
     }
 
     if (!Element.prototype.closest) {
-      Element.prototype.closest = s => {
+      Element.prototype.closest = (s) => {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         let el = this;
 
@@ -55,7 +107,7 @@ class ProtVistaManager extends HTMLElement {
   }
 
   applyAttributes() {
-    this.protvistaElements.forEach(element => {
+    this.protvistaElements.forEach((element) => {
       this.attributeValues.forEach((value, type) => {
         if (value === false) {
           element.removeAttribute(type);
@@ -73,13 +125,20 @@ class ProtVistaManager extends HTMLElement {
         element[type] = value;
       });
     } else {
-      this.protvistaElements.forEach(element => {
+      this.protvistaElements.forEach((element) => {
         this.propertyValues.forEach((value, type) => {
           /* eslint-disable no-param-reassign */
           element[type] = value;
         });
       });
     }
+  }
+
+  isRegisteredAttribute(attributeName) {
+    return (
+      [...this.attributeValues.keys()].includes(attributeName) ||
+      ProtVistaManager.observedAttributes.includes(attributeName)
+    );
   }
 
   _changeListener(e) {
@@ -89,11 +148,11 @@ class ProtVistaManager extends HTMLElement {
         this.applyProperties(e.detail.for);
         break;
       default:
-        if (this._attributes.indexOf(e.detail.type) !== -1) {
+        if (this.isRegisteredAttribute(e.detail.type)) {
           this.attributeValues.set(e.detail.type, e.detail.value);
         }
-        Object.keys(e.detail).forEach(key => {
-          if (this._attributes.indexOf(key) !== -1) {
+        Object.keys(e.detail).forEach((key) => {
+          if (this.isRegisteredAttribute(key)) {
             this.attributeValues.set(key, e.detail[key]);
           }
         });
