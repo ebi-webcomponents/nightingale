@@ -10,7 +10,7 @@ A protvista descendent is any element in its subtree which tag name starts with 
 
 The children should fire events of the type change, and the detail object should contain the attributes `type` and `value`.
 
-Additionally, there are a set of pre-defined attributes which can be used with this component and will be propagated to descendents: `displaystart`, `displayend`, `highlight` and `end`. This is useful if you want to control things like zoom level from outside, for instance directly from your application.
+Additionally, there are a set of pre-defined attributes which can be used with this component and will be propagated to descendents: `displaystart`, `displayend`, `highlight` and `length`. This is useful if you want to control things like zoom level from outside, for instance directly from your application.
 
 See it running [Here](https://ebi-webcomponents.github.io/protvista-manager/index.html).
 
@@ -47,6 +47,6 @@ this.dispatchEvent(
 
 #### `highlight?: start:end,start:end,...`
 
-#### `length?: start:end,start:end,...`
+#### `length?: number`
 
 List of attributes that this component will be propagating.
