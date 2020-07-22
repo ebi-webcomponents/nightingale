@@ -30,7 +30,7 @@ const getRandomBase = () =>
 
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
-  const [ColorScheme, setColorScheme] = useState("clustal");
+  const [colorScheme, setColorScheme] = useState("clustal");
   const [overlayConservation, setOverlayConservation] = useState(false);
   const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
   const msaTrack = useRef(null);
@@ -95,7 +95,7 @@ const ProtvistaMSAWrapper = () => {
         <label>
           colorScheme:
           <select
-            value={ColorScheme}
+            value={colorScheme}
             onChange={handleColorChange}
             onBlur={handleColorChange}
           >
@@ -149,7 +149,7 @@ const ProtvistaMSAWrapper = () => {
           displayend="50"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
-          colorscheme={ColorScheme}
+          colorscheme={colorScheme}
           text-font="16px sans-serif"
           {...conervationOptions}
         />
