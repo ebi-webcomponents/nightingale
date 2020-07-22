@@ -70,7 +70,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "labelwidth",
       "activeLabel",
       "colorscheme",
-      "calculateConservation",
+      "calculate-conservation",
+      "overlay-conservation",
+      "sample-size-conservation",
+      "text-font",
     ]);
   }
 
@@ -110,7 +113,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
     };
   }
   getColorMap() {
-    return this.el.getColorMap();
+    return this?.el?.getColorMap() || {};
   }
 
   refresh() {
@@ -135,6 +138,15 @@ class ProtvistaMSA extends ProtvistaZoomable {
 
     if (this.hasAttribute("calculate-conservation")) {
       options.calculateConservation = true;
+    }
+    if (this.hasAttribute("overlay-conservation")) {
+      options.overlayConservation = true;
+    }
+    if (this["_sample-size-conservation"] > 0) {
+      options.sampleSizeConservation = this["_sample-size-conservation"];
+    }
+    if (this["_text-font"] > 0) {
+      options.sequenceTextFont = this.getAttribute("text-font");
     }
     if (this._labelwidth) {
       options.labelStyle = {
@@ -164,26 +176,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
             })
           );
         }
-        // if (
-        //   this.trackHighlighter &&
-        //   this.trackHighlighter.region &&
-        //   this.trackHighlighter.region.regionString
-        // ) {
-        //   const {
-        //     start: from,
-        //     end: to
-        //   } = this.trackHighlighter.region.segments[0];
-        //   this.el.highlightRegion({
-        //     sequences: {
-        //       from: 1,
-        //       to: this._data.length
-        //     },
-        //     residues: {
-        //       from,
-        //       to
-        //     }
-        //   });
-        // }
       }
     });
   }
