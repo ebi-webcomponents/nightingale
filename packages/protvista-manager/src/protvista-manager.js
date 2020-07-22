@@ -21,7 +21,7 @@ class ProtVistaManager extends HTMLElement {
   }
 
   get length() {
-    this.attributeValues.get(LENGTH);
+    return this.attributeValues.get(LENGTH);
   }
 
   set displaystart(displaystart) {
@@ -29,7 +29,7 @@ class ProtVistaManager extends HTMLElement {
   }
 
   get displaystart() {
-    this.attributeValues.get(DISPLAY_START);
+    return this.attributeValues.get(DISPLAY_START);
   }
 
   set displayend(displayend) {
@@ -37,7 +37,7 @@ class ProtVistaManager extends HTMLElement {
   }
 
   get displayend() {
-    this.attributeValues.get(DISPLAY_END);
+    return this.attributeValues.get(DISPLAY_END);
   }
 
   set highlight(highlight) {
@@ -45,7 +45,7 @@ class ProtVistaManager extends HTMLElement {
   }
 
   get highlight() {
-    this.attributeValues.get(HIGHLIGHT);
+    return this.attributeValues.get(HIGHLIGHT);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
