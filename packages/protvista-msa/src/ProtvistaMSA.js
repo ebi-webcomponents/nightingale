@@ -35,15 +35,13 @@ const TrackLabel = (sequence, activeLabel, setActiveTrack) => {
 
   return (
     <span
-      style={
-        sequence.name === activeLabel ? activeLabelStyle : labelStyle
-      }
+      style={sequence.name === activeLabel ? activeLabelStyle : labelStyle}
       ref={labelRef}
     >
       {sequence.name}
     </span>
   );
-}
+};
 
 class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
