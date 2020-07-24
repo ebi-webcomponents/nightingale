@@ -6,17 +6,25 @@ import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-msa/README.md";
 import Console from "./Console";
+
 const AllowedColorschemes = [
+  "aliphatic",
+  "aromatic",
   "buried_index",
-  "clustal",
-  "clustal2",
+  "charged",
   "cinema",
+  "clustal2",
+  "clustal",
   "helix_propensity",
   "hydro",
   "lesk",
   "mae",
+  "negative",
   "nucleotide",
+  "polar",
+  "positive",
   "purine_pyrimidine",
+  "serine_threonine",
   "strand_propensity",
   "taylor",
   "turn_propensity",
