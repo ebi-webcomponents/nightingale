@@ -127,7 +127,7 @@ const ProtvistaMSAWrapper = () => {
           sampleSizeConservation:
           <input
             type="number"
-            value={sampleSizeConservation}
+            value={sampleSizeConservation || ""}
             onChange={(evt) => setSampleSizeConservation(evt.target.value)}
           />
         </label>
