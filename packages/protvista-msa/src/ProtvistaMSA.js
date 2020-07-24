@@ -128,7 +128,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       colorScheme: this._colorscheme || "clustal",
       layout: "nightingale",
       sequenceOverflow: "scroll",
-      sequenceOverflowX: "overflow",
+      sequenceOverflowX: "hidden",
       sequenceDisableDragging: true,
       labelComponent: ({ sequence }) =>
         TrackLabel(sequence, this.activeLabel, this.setActiveTrack),
