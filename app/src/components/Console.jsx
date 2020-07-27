@@ -2,9 +2,9 @@ import React from "react";
 
 const Console = ({ children }) => {
   return (
-    <div class="console">
+    <div className="console">
       <pre>{children}</pre>
-      <div class="anchor"></div>
+      <div className="anchor"></div>
     </div>
   );
 };

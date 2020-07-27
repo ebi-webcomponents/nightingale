@@ -6,17 +6,25 @@ import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-msa/README.md";
 import Console from "./Console";
+
 const AllowedColorschemes = [
+  "aliphatic",
+  "aromatic",
   "buried_index",
+  "charged",
+  "cinema",
   "clustal",
   "clustal2",
-  "cinema",
   "helix_propensity",
   "hydro",
   "lesk",
   "mae",
+  "negative",
   "nucleotide",
+  "polar",
+  "positive",
   "purine_pyrimidine",
+  "serine_threonine",
   "strand_propensity",
   "taylor",
   "turn_propensity",
@@ -119,7 +127,7 @@ const ProtvistaMSAWrapper = () => {
           sampleSizeConservation:
           <input
             type="number"
-            value={sampleSizeConservation}
+            value={sampleSizeConservation || ""}
             onChange={(evt) => setSampleSizeConservation(evt.target.value)}
           />
         </label>
