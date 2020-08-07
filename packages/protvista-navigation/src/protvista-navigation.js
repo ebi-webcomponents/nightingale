@@ -4,7 +4,7 @@ import {
   brushX,
   format,
   select,
-  event as d3Event
+  event as d3Event,
 } from "d3";
 
 const height = 40;
@@ -38,6 +38,7 @@ class ProtVistaNavigation extends HTMLElement {
       parseFloat(this.getAttribute("displayend")) || this._length;
     this._highlightStart = parseFloat(this.getAttribute("highlightStart"));
     this._highlightEnd = parseFloat(this.getAttribute("highlightEnd"));
+    this._rulerstart = parseFloat(this.getAttribute("rulerStart")) || 1;
 
     this._onResize = this._onResize.bind(this);
 
@@ -61,7 +62,8 @@ class ProtVistaNavigation extends HTMLElement {
       "displayend",
       "highlightStart",
       "highlightEnd",
-      "width"
+      "width",
+      "rulerstart",
     ];
   }
 
@@ -82,7 +84,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _createNavRuler() {
     this._x = scaleLinear().range([this._padding, this.width - this._padding]);
-    this._x.domain([1, this._length]);
+    this._x.domain([this._rulerstart, this._length]);
 
     this._svg = select(this)
       .append("div")
@@ -114,7 +116,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._viewport = brushX()
       .extent([
         [this._padding, 0],
-        [this.width - this._padding, height * 0.51]
+        [this.width - this._padding, height * 0.51],
       ])
       .on("brush", () => {
         if (d3Event.selection) {
@@ -128,10 +130,10 @@ class ProtVistaNavigation extends HTMLElement {
                 detail: {
                   displayend: this._displayend,
                   displaystart: this._displaystart,
-                  extra: { transform: d3Event.transform }
+                  extra: { transform: d3Event.transform },
                 },
                 bubbles: true,
-                cancelable: true
+                cancelable: true,
               })
             );
           this._updateLabels();
@@ -146,7 +148,7 @@ class ProtVistaNavigation extends HTMLElement {
 
     this._brushG.call(this._viewport.move, [
       this._x(this._displaystart),
-      this._x(this._displayend)
+      this._x(this._displayend),
     ]);
 
     this.polygon = this._svg
@@ -169,7 +171,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._svg.attr("width", this.width);
     this._viewport.extent([
       [this._padding, 0],
-      [this.width - this._padding, height * 0.51]
+      [this.width - this._padding, height * 0.51],
     ]);
     this._brushG.call(this._viewport);
     this._updateNavRuler();
@@ -177,7 +179,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _updateNavRuler() {
     if (this._x) {
-      this._x.domain([1, this._length]);
+      this._x.domain([this._rulerstart, this._length]);
       this._axis.call(this._xAxis);
       this._updatePolygon();
       this._updateLabels();
@@ -185,7 +187,7 @@ class ProtVistaNavigation extends HTMLElement {
         this.dontDispatch = true;
         this._brushG.call(this._viewport.move, [
           this._x(this._displaystart),
-          this._x(this._displayend)
+          this._x(this._displayend),
         ]);
         this.dontDispatch = false;
       }
