@@ -84,7 +84,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _createNavRuler() {
     this._x = scaleLinear().range([this._padding, this.width - this._padding]);
-    this._x.domain([this._rulerstart, this._length]);
+    this._x.domain([this._rulerstart, this._rulerstart + this._length]);
 
     this._svg = select(this)
       .append("div")
@@ -179,7 +179,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _updateNavRuler() {
     if (this._x) {
-      this._x.domain([this._rulerstart, this._length]);
+      this._x.domain([this._rulerstart, this._rulerstart + this._length]);
       this._axis.call(this._xAxis);
       this._updatePolygon();
       this._updateLabels();
