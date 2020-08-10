@@ -1,6 +1,6 @@
 {
   "name": "protvista-navigation",
-  "version": "2.12.0",
+  "version": "2.16.0",
   "description": "Navigation component for the ProtVista tool",
   "files": [
     "dist",
