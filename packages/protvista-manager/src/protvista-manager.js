@@ -109,7 +109,7 @@ class ProtVistaManager extends HTMLElement {
   applyAttributes() {
     this.protvistaElements.forEach((element) => {
       this.attributeValues.forEach((value, type) => {
-        if (value === false) {
+        if (value === false || value === null || value === undefined) {
           element.removeAttribute(type);
         } else {
           element.setAttribute(type, typeof value === "boolean" ? "" : value);
