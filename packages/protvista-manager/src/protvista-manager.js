@@ -56,6 +56,13 @@ class ProtVistaManager extends HTMLElement {
           throw new Error("'type' can't be used as a protvista attribute");
         if (this._attributes.indexOf("value") !== -1)
           throw new Error("'value' can't be used as a protvista attribute");
+        this.attributeValues = new Map(
+          this._attributes
+            .filter(
+              (attr) => !ProtVistaManager.observedAttributes.includes(attr)
+            )
+            .map((attr) => [attr, null])
+        );
       } else {
         if (name === LENGTH) {
           this.length = newValue;
