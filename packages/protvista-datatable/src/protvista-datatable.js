@@ -2,10 +2,7 @@ import { LitElement, html } from "lit-element";
 import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
 /* eslint-disable import/extensions, import/no-extraneous-dependencies */
-import { unsafeSVG } from "lit-html/directives/unsafe-svg.js";
 import styles from "./styles";
-import PlusSVG from "../resources/plus.svg";
-import MinusSVG from "../resources/minus.svg";
 
 class ProtvistaDatatable extends LitElement {
   constructor() {
@@ -16,12 +13,12 @@ class ProtvistaDatatable extends LitElement {
     this.noDeselect = false;
     this.eventHandler = this.eventHandler.bind(this);
     this.scrollFilter = new ScrollFilter(this);
-    this.wheelListener = event => this.scrollFilter.wheel(event);
+    this.wheelListener = (event) => this.scrollFilter.wheel(event);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener("load", e => {
+    this.addEventListener("load", (e) => {
       if (Array.from(this.children).includes(e.target)) {
         this.data = ProtvistaDatatable.processData(e.detail.payload.features);
       }
@@ -74,12 +71,12 @@ class ProtvistaDatatable extends LitElement {
     return {
       data: { type: Object },
       highlight: {
-        converter: value => {
+        converter: (value) => {
           if (value && value !== "null") {
-            return value.split(":").map(d => Number(d));
+            return value.split(":").map((d) => Number(d));
           }
           return null;
-        }
+        },
       },
       height: { type: Number },
       columns: { type: Object },
@@ -89,7 +86,7 @@ class ProtvistaDatatable extends LitElement {
       selectedid: { type: String },
       rowClickEvent: { type: Function },
       noScrollToRow: { type: Boolean },
-      noDeselect: { type: Boolean }
+      noDeselect: { type: Boolean },
     };
   }
 
@@ -99,16 +96,16 @@ class ProtvistaDatatable extends LitElement {
 
   static processData(data) {
     return data
-      .map(d => {
+      .map((d) => {
         return {
           ...d,
-          start: d.start ? d.start : d.begin
+          start: d.start ? d.start : d.begin,
         };
       })
       .sort((a, b) => a.start - b.start)
-      .map(d => ({
+      .map((d) => ({
         ...d,
-        protvistaFeatureId: d.protvistaFeatureId || v1()
+        protvistaFeatureId: d.protvistaFeatureId || v1(),
       }));
   }
 
@@ -140,7 +137,7 @@ class ProtvistaDatatable extends LitElement {
       new CustomEvent("change", {
         detail,
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       })
     );
   }
@@ -177,13 +174,13 @@ class ProtvistaDatatable extends LitElement {
   }
 
   hasChildData(rowItems, row) {
-    return rowItems.some(column => this.columns[column].resolver(row));
+    return rowItems.some((column) => this.columns[column].resolver(row));
   }
 
   toggleVisibleChild(rowId) {
     if (this.visibleChildren.includes(rowId)) {
       this.visibleChildren = this.visibleChildren.filter(
-        childId => childId !== rowId
+        (childId) => childId !== rowId
       );
     } else {
       this.visibleChildren = [...this.visibleChildren, rowId];
@@ -204,10 +201,11 @@ class ProtvistaDatatable extends LitElement {
     return html`
       <tr class="child-row">
         <td
-          colspan="${Object.values(this.columns).filter(column => !column.child)
-            .length + 1}"
+          colspan="${Object.values(this.columns).filter(
+            (column) => !column.child
+          ).length + 1}"
         >
-          ${childRowItems.map(column => {
+          ${childRowItems.map((column) => {
             const data = this.columns[column].resolver(row);
             return data
               ? html`
@@ -232,10 +230,10 @@ class ProtvistaDatatable extends LitElement {
       return html``;
     }
     const childRowItems = Object.keys(this.columns).filter(
-      column => this.columns[column].child
+      (column) => this.columns[column].child
     );
     const columnsToDisplay = Object.values(this.columns).filter(
-      column => !column.child && column.display !== false
+      (column) => !column.child && column.display !== false
     );
     return html`
       <div
@@ -245,52 +243,45 @@ class ProtvistaDatatable extends LitElement {
         <table>
           <thead>
             <tr>
-              <th></th>
               ${columnsToDisplay.map(
-                column =>
-                  html`
-                    <th>${column.label}</th>
-                  `
+                (column) => html` <th>${column.label}</th> `
               )}
             </tr>
           </thead>
           <tbody>
-            ${this.data.map(row => {
+            ${this.data.map((row, rowIndex) => {
               const hasChildData = this.hasChildData(childRowItems, row);
               return html`
                 <tr
-                  data-id=${row.protvistaFeatureId}
-                  class=${this.getStyleClass(
+                  data-id="${row.protvistaFeatureId}"
+                  class="${this.getStyleClass(
                     row.protvistaFeatureId,
                     row.start,
                     row.end
-                  )}
-                  @click="${e => this.handleClick(e, row)}"
+                  )} ${rowIndex % 2 === 1 ? "even" : "odd"}"
+                  @click="${(e) => this.handleClick(e, row)}"
                 >
-                  ${hasChildData
-                    ? html`
-                        <td
-                          class="protvista-datatable__child-toggle"
-                          @click="${() =>
-                            this.toggleVisibleChild(row.protvistaFeatureId)}"
-                        >
-                          ${this.visibleChildren.includes(
-                            row.protvistaFeatureId
-                          )
-                            ? unsafeSVG(MinusSVG)
-                            : unsafeSVG(PlusSVG)}
-                        </td>
-                      `
-                    : html`
-                        <td />
-                      `}
-                  ${columnsToDisplay.map(
-                    column =>
-                      html`
-                        <td>
-                          ${column.resolver(row)}
-                        </td>
-                      `
+                  ${columnsToDisplay.map((column, index) =>
+                    hasChildData && index === 0
+                      ? html`
+                          <td
+                            title="View more"
+                            @click="${() =>
+                              this.toggleVisibleChild(row.protvistaFeatureId)}"
+                            class="${this.visibleChildren.includes(
+                              row.protvistaFeatureId
+                            )
+                              ? "withChildren minus"
+                              : "withChildren plus"}"
+                          >
+                            ${column.resolver(row)}
+                          </td>
+                        `
+                      : html`
+                          <td>
+                            ${column.resolver(row)}
+                          </td>
+                        `
                   )}
                 </tr>
                 ${hasChildData &&
