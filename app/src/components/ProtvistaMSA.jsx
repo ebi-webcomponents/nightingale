@@ -32,8 +32,8 @@ const AllowedColorschemes = [
   "conservation",
 ];
 
-const nSequences = 400;
-const nGaps = 20;
+const nSequences = 1;
+const nGaps = 100;
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
 
 const getRandomBase = () =>
@@ -60,6 +60,8 @@ const ProtvistaMSAWrapper = () => {
   const [colorScheme, setColorScheme] = useState("clustal");
   const [overlayConservation, setOverlayConservation] = useState(false);
   const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
+  const [offsetSeqStart, setOffsetSeqStart] = useState(false);
+  const [excludeGaps, setExcludeGaps] = useState(false);
   const msaTrack = useRef(null);
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);
@@ -75,9 +77,9 @@ const ProtvistaMSAWrapper = () => {
           changeBaseAtPosition(sequence, getRandomBase(), mutationPos),
           nGaps
         ),
+        start: 1 + getRandomPosition(sequence.length),
       });
     }
-    console.log(seqs);
     msaTrack.current.data = seqs;
     msaTrack.current.addEventListener("conservationProgress", (e) =>
       addLog(`[conservationProgress]: ${e.detail.progress * 100}%`)
@@ -151,6 +153,22 @@ const ProtvistaMSAWrapper = () => {
             onChange={(evt) => setSampleSizeConservation(evt.target.value)}
           />
         </label>
+        <label>
+          offset coordinates by sequence start:
+          <input
+            type="checkbox"
+            value={offsetSeqStart}
+            onChange={() => setOffsetSeqStart(!offsetSeqStart)}
+          />
+        </label>
+        <label>
+          exclude gaps from coordinate count:
+          <input
+            type="checkbox"
+            value={excludeGaps}
+            onChange={() => setExcludeGaps(!excludeGaps)}
+          />
+        </label>
       </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
@@ -188,10 +206,11 @@ const ProtvistaMSAWrapper = () => {
           labelWidth={labelWidth}
           colorscheme={colorScheme}
           text-font="16px sans-serif"
-          left-coordinate
-          right-coordinate
+          coordinate-left
+          coordinate-right
           coordinate-width={coordinateWidth}
-          exclude-gaps-from-coordinates
+          coordinate-exclude-gaps={excludeGaps}
+          coordinate-offset-seq-start={offsetSeqStart}
           {...conservationOptions}
         />
       </protvista-manager>

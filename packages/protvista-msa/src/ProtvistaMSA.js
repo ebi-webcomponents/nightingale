@@ -55,7 +55,7 @@ const TrackLabel = ({
 };
 
 const getNumberOfInsertionsBeforeIndex = (sequence, index) =>
-  (sequence.slice(0, index).match(/-/g) || []).length;
+  (sequence.slice(0, index - 1).match(/-/g) || []).length;
 
 const coordinateStyle = {
   fontSize: "14px",
@@ -83,21 +83,21 @@ const Coordinate = ({
   sequence,
   style,
   excludeGaps = true,
-}) => {
-  return (
-    <div
-      style={{
-        ...style,
-        width,
-        height: tileHeight,
-      }}
-    >
-      {coord -
-        (excludeGaps &&
-          getNumberOfInsertionsBeforeIndex(sequence.sequence, coord))}
-    </div>
-  );
-};
+  offsetStart = false,
+}) => (
+  <div
+    style={{
+      ...style,
+      width,
+      height: tileHeight,
+    }}
+  >
+    {coord -
+      (excludeGaps &&
+        getNumberOfInsertionsBeforeIndex(sequence.sequence, coord)) +
+      (offsetStart && sequence.start && sequence.start)}
+  </div>
+);
 
 class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
@@ -129,9 +129,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "sample-size-conservation",
       "text-font",
       "coordinate-width",
-      "left-coordinate",
-      "right-coordinate",
-      "exclude-gaps-from-coordinates",
+      "coordinate-left",
+      "coordinate-right",
+      "coordinate-exclude-gaps",
+      "coordinate-offset-seq-start",
     ]);
   }
 
@@ -174,8 +175,8 @@ class ProtvistaMSA extends ProtvistaZoomable {
   getCoordinateWidth() {
     return (
       (this["_coordinate-width"] || 0) *
-      (this.hasAttribute("left-coordinate") +
-        this.hasAttribute("right-coordinate"))
+      (this.hasAttribute("coordinate-left") +
+        this.hasAttribute("coordinate-right"))
     );
   }
 
@@ -223,27 +224,33 @@ class ProtvistaMSA extends ProtvistaZoomable {
       options.sequenceTextFont = this.getAttribute("text-font");
     }
 
-    if (this.hasAttribute("left-coordinate")) {
+    if (this.hasAttribute("coordinate-left")) {
       options.leftCoordinateComponent = ({ start, tileHeight, sequence }) => (
         <Coordinate
           width={this["_coordinate-width"]}
           tileHeight={tileHeight}
           sequence={sequence}
           style={leftCoordinateStyle}
-          excludeGaps={this.hasAttribute("exclude-gaps-from-coordinates")}
+          excludeGaps={this.getAttribute("coordinate-exclude-gaps") == "true"}
+          offsetStart={
+            this.getAttribute("coordinate-offset-seq-start") == "true"
+          }
         >
           {start}
         </Coordinate>
       );
     }
-    if (this.hasAttribute("right-coordinate")) {
+    if (this.hasAttribute("coordinate-right")) {
       options.rightCoordinateComponent = ({ end, tileHeight, sequence }) => (
         <Coordinate
           width={this["_coordinate-width"]}
           tileHeight={tileHeight}
           sequence={sequence}
           style={rightCoordinateStyle}
-          excludeGaps={this.hasAttribute("exclude-gaps-from-coordinates")}
+          excludeGaps={this.getAttribute("coordinate-exclude-gaps") == "true"}
+          offsetStart={
+            this.getAttribute("coordinate-offset-seq-start") == "true"
+          }
         >
           {end}
         </Coordinate>
