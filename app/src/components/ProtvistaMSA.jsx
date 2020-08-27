@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import isEmpty from "lodash-es/isEmpty";
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
@@ -60,6 +61,8 @@ const ProtvistaMSAWrapper = () => {
   const [colorScheme, setColorScheme] = useState("clustal");
   const [overlayConservation, setOverlayConservation] = useState(false);
   const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
+  const [showLeftCoordinate, setShowLeftCoordinate] = useState(true);
+  const [showRightCoordinate, setShowRightCoordinate] = useState(true);
   const [offsetSeqStart, setOffsetSeqStart] = useState(false);
   const [excludeGaps, setExcludeGaps] = useState(false);
   const msaTrack = useRef(null);
@@ -121,6 +124,24 @@ const ProtvistaMSAWrapper = () => {
   if (sampleSizeConservation > 0) {
     conservationOptions["sample-size-conservation"] = sampleSizeConservation;
   }
+
+  const coordinateOptions = {};
+  if (showLeftCoordinate) {
+    coordinateOptions["coordinate-left"] = true;
+  }
+  if (showRightCoordinate) {
+    coordinateOptions["coordinate-right"] = true;
+  }
+  if (!isEmpty(coordinateOptions)) {
+    coordinateOptions["coordinate-width"] = coordinateWidth;
+    if (excludeGaps) {
+      coordinateOptions["coordinate-exclude-gaps"] = true;
+    }
+    if (offsetSeqStart) {
+      coordinateOptions["coordinate-offset-seq-start"] = true;
+    }
+  }
+
   return (
     <>
       <h1>protvista-msa</h1>
@@ -141,7 +162,7 @@ const ProtvistaMSAWrapper = () => {
           overlayConservation:
           <input
             type="checkbox"
-            value={overlayConservation}
+            checked={overlayConservation}
             onChange={() => setOverlayConservation(!overlayConservation)}
           />
         </label>
@@ -154,21 +175,41 @@ const ProtvistaMSAWrapper = () => {
           />
         </label>
         <label>
-          offset coordinates by sequence start:
+          show left coordinates:
           <input
             type="checkbox"
-            value={offsetSeqStart}
-            onChange={() => setOffsetSeqStart(!offsetSeqStart)}
+            checked={showLeftCoordinate}
+            onChange={() => setShowLeftCoordinate(!showLeftCoordinate)}
           />
         </label>
         <label>
-          exclude gaps from coordinate count:
+          show right coordinates:
           <input
             type="checkbox"
-            value={excludeGaps}
-            onChange={() => setExcludeGaps(!excludeGaps)}
+            checked={showRightCoordinate}
+            onChange={() => setShowRightCoordinate(!showRightCoordinate)}
           />
         </label>
+        {(showLeftCoordinate || showRightCoordinate) && (
+          <>
+            <label>
+              offset coordinates by sequence start:
+              <input
+                type="checkbox"
+                checked={offsetSeqStart}
+                onChange={() => setOffsetSeqStart(!offsetSeqStart)}
+              />
+            </label>
+            <label>
+              exclude gaps from coordinate count:
+              <input
+                type="checkbox"
+                checked={excludeGaps}
+                onChange={() => setExcludeGaps(!excludeGaps)}
+              />
+            </label>
+          </>
+        )}
       </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
@@ -179,7 +220,7 @@ const ProtvistaMSAWrapper = () => {
         <div style={{ display: "flex", width: "100%" }}>
           <div
             style={{
-              width: labelWidth + coordinateWidth,
+              width: labelWidth + (showLeftCoordinate && coordinateWidth),
               flexShrink: 0,
             }}
           />
@@ -190,7 +231,7 @@ const ProtvistaMSAWrapper = () => {
           />
           <div
             style={{
-              width: coordinateWidth,
+              width: showRightCoordinate && coordinateWidth,
               flexShrink: 0,
             }}
           />
@@ -206,12 +247,8 @@ const ProtvistaMSAWrapper = () => {
           labelWidth={labelWidth}
           colorscheme={colorScheme}
           text-font="16px sans-serif"
-          coordinate-left
-          coordinate-right
-          coordinate-width={coordinateWidth}
-          coordinate-exclude-gaps={excludeGaps}
-          coordinate-offset-seq-start={offsetSeqStart}
           {...conservationOptions}
+          {...coordinateOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>
