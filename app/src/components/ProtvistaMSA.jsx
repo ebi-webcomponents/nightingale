@@ -192,7 +192,7 @@ const ProtvistaMSAWrapper = () => {
           right-coordinate
           coordinate-width={coordinateWidth}
           exclude-gaps-from-coordinates
-          // {...conservationOptions}
+          {...conservationOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>
