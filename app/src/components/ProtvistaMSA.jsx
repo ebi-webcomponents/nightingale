@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
@@ -32,9 +32,28 @@ const AllowedColorschemes = [
   "conservation",
 ];
 
+const nSequences = 400;
+const nGaps = 20;
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
+
 const getRandomBase = () =>
   alphabet[Math.floor(Math.random() * alphabet.length)];
+
+const getRandomPosition = (length) => Math.round(Math.random() * (length - 1));
+
+const changeBaseAtPosition = (sequence, base, position) =>
+  `${sequence.substring(0, position)}${base}${sequence.substring(
+    position + 1
+  )}`;
+
+const addGaps = (sequence, nGaps) => {
+  let result = sequence;
+  for (let i = 0; i < nGaps; i++) {
+    const position = getRandomPosition(sequence.length);
+    result = changeBaseAtPosition(result, "-", position);
+  }
+  return result;
+};
 
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
@@ -48,16 +67,17 @@ const ProtvistaMSAWrapper = () => {
     "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
   useEffect(() => {
     const seqs = [];
-    for (let i = 0; i < 400; i++) {
-      const mutationPos = Math.round(Math.random() * (sequence.length - 1));
+    for (let i = 1; i <= nSequences; i++) {
+      const mutationPos = getRandomPosition(sequence.length);
       seqs.push({
         name: `seq_${i}`,
-        sequence: `${sequence.substring(
-          0,
-          mutationPos
-        )}${getRandomBase()}${sequence.substring(mutationPos + 1)}`,
+        sequence: addGaps(
+          changeBaseAtPosition(sequence, getRandomBase(), mutationPos),
+          nGaps
+        ),
       });
     }
+    console.log(seqs);
     msaTrack.current.data = seqs;
     msaTrack.current.addEventListener("conservationProgress", (e) =>
       addLog(`[conservationProgress]: ${e.detail.progress * 100}%`)
@@ -88,17 +108,17 @@ const ProtvistaMSAWrapper = () => {
     setColorScheme(event.target.value);
     addLog(`[setColorScheme]: ${event.target.value}`);
   };
-  const labelWidth = 100;
-  const conervationOptions = {
+  const labelWidth = 60;
+  const coordinateWidth = 30;
+  const conservationOptions = {
     "calculate-conservation": true,
   };
   if (overlayConservation) {
-    conervationOptions["overlay-conservation"] = true;
+    conservationOptions["overlay-conservation"] = true;
   }
   if (sampleSizeConservation > 0) {
-    conervationOptions["sample-size-conservation"] = sampleSizeConservation;
+    conservationOptions["sample-size-conservation"] = sampleSizeConservation;
   }
-
   return (
     <>
       <h1>protvista-msa</h1>
@@ -138,17 +158,23 @@ const ProtvistaMSAWrapper = () => {
         displayend="50"
         id="example"
       >
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", width: "100%" }}>
           <div
             style={{
-              width: labelWidth,
+              width: labelWidth + coordinateWidth,
               flexShrink: 0,
             }}
           />
           <protvista-navigation
-            length={sequence.length}
+            length={sequence.length + 1}
             displaystart="1"
             displayend="50"
+          />
+          <div
+            style={{
+              width: coordinateWidth,
+              flexShrink: 0,
+            }}
           />
         </div>
         <protvista-msa
@@ -162,7 +188,11 @@ const ProtvistaMSAWrapper = () => {
           labelWidth={labelWidth}
           colorscheme={colorScheme}
           text-font="16px sans-serif"
-          {...conervationOptions}
+          left-coordinate
+          right-coordinate
+          coordinate-width={coordinateWidth}
+          exclude-gaps-from-coordinates
+          // {...conservationOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>

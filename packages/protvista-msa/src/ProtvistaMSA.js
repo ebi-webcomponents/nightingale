@@ -6,18 +6,29 @@ import { select } from "d3";
 
 // This component is used internally to create a clickable
 // label inside ProtvistaMSA
-const TrackLabel = (sequence, activeLabel, setActiveTrack) => {
+const TrackLabel = ({
+  sequence,
+  activeLabel,
+  setActiveTrack,
+  width,
+  tileHeight,
+}) => {
   const labelStyle = {
-    height: 20,
+    width,
+    height: tileHeight,
+    textAlign: "left",
+    overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
     fontWeight: "normal",
     fontSize: "14px",
     cursor: "pointer",
-    display: "block",
-    padding: "0 0.5rem",
+    boxSizing: "border-box",
+    padding: "0 0.25rem",
     borderLeft: "0.2rem solid transparent",
-    boxSizing: "content-box",
     color: "#00639A",
     textTransform: "uppercase",
+    flexShrink: 0,
   };
 
   const activeLabelStyle = {
@@ -40,6 +51,51 @@ const TrackLabel = (sequence, activeLabel, setActiveTrack) => {
     >
       {sequence.name}
     </span>
+  );
+};
+
+const getNumberOfInsertionsBeforeIndex = (sequence, index) =>
+  (sequence.slice(0, index).match(/-/g) || []).length;
+
+const coordinateStyle = {
+  fontSize: "14px",
+  boxSizing: "border-box",
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: 0,
+  justifyContent: "center",
+};
+
+const leftCoordinateStyle = {
+  ...coordinateStyle,
+  textAlign: "right",
+  paddingRight: "0.25rem",
+};
+const rightCoordinateStyle = {
+  ...coordinateStyle,
+  paddingLeft: "0.25rem",
+};
+
+const Coordinate = ({
+  children: coord,
+  width,
+  tileHeight,
+  sequence,
+  style,
+  excludeGaps = true,
+}) => {
+  return (
+    <div
+      style={{
+        ...style,
+        width,
+        height: tileHeight,
+      }}
+    >
+      {coord -
+        (excludeGaps &&
+          getNumberOfInsertionsBeforeIndex(sequence.sequence, coord))}
+    </div>
   );
 };
 
@@ -72,6 +128,10 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "overlay-conservation",
       "sample-size-conservation",
       "text-font",
+      "coordinate-width",
+      "left-coordinate",
+      "right-coordinate",
+      "exclude-gaps-from-coordinates",
     ]);
   }
 
@@ -107,9 +167,18 @@ class ProtvistaMSA extends ProtvistaZoomable {
       top: 10,
       right: 0,
       bottom: 10,
-      left: this._labelwidth || 10,
+      left: this._labelwidth + this["_coordinate-width"] || 10,
     };
   }
+
+  getCoordinateWidth() {
+    return (
+      (this["_coordinate-width"] || 0) *
+      (this.hasAttribute("left-coordinate") +
+        this.hasAttribute("right-coordinate"))
+    );
+  }
+
   getColorMap() {
     return this?.el?.getColorMap() || {};
   }
@@ -118,12 +187,13 @@ class ProtvistaMSA extends ProtvistaZoomable {
     if (!this.activeLabel && this._data && this._data[0]) {
       this.setActiveTrack(this._data[0].name);
     }
-
+    const coordinateWidth = this.getCoordinateWidth();
+    const tileHeight = 20;
     const options = {
       sequences: this._data,
       height: this._height,
-      width: this.width - (this._labelwidth || 0),
-      tileHeight: 20,
+      width: this.width - (this._labelwidth || 0) - coordinateWidth,
+      tileHeight,
       tileWidth: Math.max(1, this.getSingleBaseWidth()),
       colorScheme: this._colorscheme || "clustal",
       layout: "nightingale",
@@ -131,7 +201,13 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceOverflowX: "hidden",
       sequenceDisableDragging: true,
       labelComponent: ({ sequence }) =>
-        TrackLabel(sequence, this.activeLabel, this.setActiveTrack),
+        TrackLabel({
+          sequence: sequence,
+          activeLabel: this.activeLabel,
+          setActiveTrack: this.setActiveTrack,
+          width: this._labelwidth,
+          tileHeight: tileHeight,
+        }),
     };
 
     if (this.hasAttribute("calculate-conservation")) {
@@ -146,13 +222,32 @@ class ProtvistaMSA extends ProtvistaZoomable {
     if (this["_text-font"] > 0) {
       options.sequenceTextFont = this.getAttribute("text-font");
     }
-    if (this._labelwidth) {
-      options.labelStyle = {
-        width: this._labelwidth - 5,
-        "text-align": "end",
-        "padding-right": 5,
-        overflow: "hidden",
-      };
+
+    if (this.hasAttribute("left-coordinate")) {
+      options.leftCoordinateComponent = ({ start, tileHeight, sequence }) => (
+        <Coordinate
+          width={this["_coordinate-width"]}
+          tileHeight={tileHeight}
+          sequence={sequence}
+          style={leftCoordinateStyle}
+          excludeGaps={this.hasAttribute("exclude-gaps-from-coordinates")}
+        >
+          {start}
+        </Coordinate>
+      );
+    }
+    if (this.hasAttribute("right-coordinate")) {
+      options.rightCoordinateComponent = ({ end, tileHeight, sequence }) => (
+        <Coordinate
+          width={this["_coordinate-width"]}
+          tileHeight={tileHeight}
+          sequence={sequence}
+          style={rightCoordinateStyle}
+          excludeGaps={this.hasAttribute("exclude-gaps-from-coordinates")}
+        >
+          {end}
+        </Coordinate>
+      );
     }
     ReactDOM.render(
       <ReactMSAViewer {...options} ref={(ref) => (this.el = ref)} />,
