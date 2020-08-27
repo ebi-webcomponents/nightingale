@@ -32,8 +32,8 @@ const AllowedColorschemes = [
   "conservation",
 ];
 
-const nSequences = 1;
-const nGaps = 100;
+const nSequences = 400;
+const nGaps = 20;
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
 
 const getRandomBase = () =>
