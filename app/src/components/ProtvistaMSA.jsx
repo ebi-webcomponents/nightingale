@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import isEmpty from "lodash-es/isEmpty";
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
@@ -32,15 +33,38 @@ const AllowedColorschemes = [
   "conservation",
 ];
 
+const nSequences = 400;
+const nGaps = 20;
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
+
 const getRandomBase = () =>
   alphabet[Math.floor(Math.random() * alphabet.length)];
+
+const getRandomPosition = (length) => Math.round(Math.random() * (length - 1));
+
+const changeBaseAtPosition = (sequence, base, position) =>
+  `${sequence.substring(0, position)}${base}${sequence.substring(
+    position + 1
+  )}`;
+
+const addGaps = (sequence, nGaps) => {
+  let result = sequence;
+  for (let i = 0; i < nGaps; i++) {
+    const position = getRandomPosition(sequence.length);
+    result = changeBaseAtPosition(result, "-", position);
+  }
+  return result;
+};
 
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
   const [colorScheme, setColorScheme] = useState("clustal");
   const [overlayConservation, setOverlayConservation] = useState(false);
   const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
+  const [showLeftCoordinate, setShowLeftCoordinate] = useState(true);
+  const [showRightCoordinate, setShowRightCoordinate] = useState(true);
+  const [offsetSeqStart, setOffsetSeqStart] = useState(false);
+  const [excludeGaps, setExcludeGaps] = useState(false);
   const msaTrack = useRef(null);
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);
@@ -48,14 +72,15 @@ const ProtvistaMSAWrapper = () => {
     "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
   useEffect(() => {
     const seqs = [];
-    for (let i = 0; i < 400; i++) {
-      const mutationPos = Math.round(Math.random() * (sequence.length - 1));
+    for (let i = 1; i <= nSequences; i++) {
+      const mutationPos = getRandomPosition(sequence.length);
       seqs.push({
         name: `seq_${i}`,
-        sequence: `${sequence.substring(
-          0,
-          mutationPos
-        )}${getRandomBase()}${sequence.substring(mutationPos + 1)}`,
+        sequence: addGaps(
+          changeBaseAtPosition(sequence, getRandomBase(), mutationPos),
+          nGaps
+        ),
+        start: 1 + getRandomPosition(sequence.length),
       });
     }
     msaTrack.current.data = seqs;
@@ -88,15 +113,33 @@ const ProtvistaMSAWrapper = () => {
     setColorScheme(event.target.value);
     addLog(`[setColorScheme]: ${event.target.value}`);
   };
-  const labelWidth = 100;
-  const conervationOptions = {
+  const labelWidth = 60;
+  const coordinateWidth = 30;
+  const conservationOptions = {
     "calculate-conservation": true,
   };
   if (overlayConservation) {
-    conervationOptions["overlay-conservation"] = true;
+    conservationOptions["overlay-conservation"] = true;
   }
   if (sampleSizeConservation > 0) {
-    conervationOptions["sample-size-conservation"] = sampleSizeConservation;
+    conservationOptions["sample-size-conservation"] = sampleSizeConservation;
+  }
+
+  const coordinateOptions = {};
+  if (showLeftCoordinate) {
+    coordinateOptions["coordinate-left"] = true;
+  }
+  if (showRightCoordinate) {
+    coordinateOptions["coordinate-right"] = true;
+  }
+  if (!isEmpty(coordinateOptions)) {
+    coordinateOptions["coordinate-width"] = coordinateWidth;
+    if (excludeGaps) {
+      coordinateOptions["coordinate-exclude-gaps"] = true;
+    }
+    if (offsetSeqStart) {
+      coordinateOptions["coordinate-offset-seq-start"] = true;
+    }
   }
 
   return (
@@ -119,7 +162,7 @@ const ProtvistaMSAWrapper = () => {
           overlayConservation:
           <input
             type="checkbox"
-            value={overlayConservation}
+            checked={overlayConservation}
             onChange={() => setOverlayConservation(!overlayConservation)}
           />
         </label>
@@ -131,6 +174,42 @@ const ProtvistaMSAWrapper = () => {
             onChange={(evt) => setSampleSizeConservation(evt.target.value)}
           />
         </label>
+        <label>
+          show left coordinates:
+          <input
+            type="checkbox"
+            checked={showLeftCoordinate}
+            onChange={() => setShowLeftCoordinate(!showLeftCoordinate)}
+          />
+        </label>
+        <label>
+          show right coordinates:
+          <input
+            type="checkbox"
+            checked={showRightCoordinate}
+            onChange={() => setShowRightCoordinate(!showRightCoordinate)}
+          />
+        </label>
+        {(showLeftCoordinate || showRightCoordinate) && (
+          <>
+            <label>
+              offset coordinates by sequence start:
+              <input
+                type="checkbox"
+                checked={offsetSeqStart}
+                onChange={() => setOffsetSeqStart(!offsetSeqStart)}
+              />
+            </label>
+            <label>
+              exclude gaps from coordinate count:
+              <input
+                type="checkbox"
+                checked={excludeGaps}
+                onChange={() => setExcludeGaps(!excludeGaps)}
+              />
+            </label>
+          </>
+        )}
       </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
@@ -138,17 +217,23 @@ const ProtvistaMSAWrapper = () => {
         displayend="50"
         id="example"
       >
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", width: "100%" }}>
           <div
             style={{
-              width: labelWidth,
+              width: labelWidth + (showLeftCoordinate && coordinateWidth),
               flexShrink: 0,
             }}
           />
           <protvista-navigation
-            length={sequence.length}
+            length={sequence.length + 1}
             displaystart="1"
             displayend="50"
+          />
+          <div
+            style={{
+              width: showRightCoordinate && coordinateWidth,
+              flexShrink: 0,
+            }}
           />
         </div>
         <protvista-msa
@@ -162,7 +247,8 @@ const ProtvistaMSAWrapper = () => {
           labelWidth={labelWidth}
           colorscheme={colorScheme}
           text-font="16px sans-serif"
-          {...conervationOptions}
+          {...conservationOptions}
+          {...coordinateOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>
