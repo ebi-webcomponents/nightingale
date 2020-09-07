@@ -2,18 +2,20 @@ import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import { v1 } from "uuid";
 
 import formatTooltip from "./tooltipGenerators";
+import { NightingaleElement } from "../../data-loader/src/data-loader";
+import { ProteinsAPIVariation } from "../types/variants";
 
 const getSourceType = (xrefs, sourceType) => {
-  const xrefNames = xrefs ? xrefs.map(ref => ref.name) : [];
+  const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
   if (sourceType === "uniprot" || sourceType === "mixed") {
     xrefNames.push("uniprot");
   }
   return xrefNames;
 };
 
-export const transformData = data => {
+export const transformData = (data: ProteinsAPIVariation) => {
   const { sequence, features } = data;
-  const variants = features.map(variant => ({
+  const variants = features.map((variant) => ({
     type: "Variant",
     accession: variant.genomicLocation,
     variant: variant.alternativeSequence,
@@ -26,13 +28,18 @@ export const transformData = data => {
     clinicalSignificances: variant.clinicalSignificances,
     polyphenScore: variant.polyphenScore,
     siftScore: variant.siftScore,
-    protvistaFeatureId: v1()
+    protvistaFeatureId: v1(),
   }));
   if (!variants) return null;
   return { sequence, variants };
 };
 
-class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
+class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter
+  implements NightingaleElement {
+  static get is() {
+    return "protvista-variation-adapter";
+  }
+
   connectedCallback() {
     super.connectedCallback();
     if (this.closest("protvista-manager")) {
@@ -47,16 +54,16 @@ class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
     }
   }
 
-  parseEntry(data) {
+  parseEntry(data: ProteinsAPIVariation) {
     this._adaptedData = transformData(data);
   }
 
-  _fireEvent(name, detail) {
+  _fireEvent(name: string, detail: any) {
     this.dispatchEvent(
       new CustomEvent(name, {
         detail,
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       })
     );
   }

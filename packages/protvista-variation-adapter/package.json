@@ -6,8 +6,12 @@
     "dist",
     "src"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "main": "dist/protvista-variation-adapter.js",
-  "module": "src/ProtvistaVariationAdapter.js",
+  "module": "dist/es/protvista-variation-adapter.js",
+  "types": "dist/es/protvista-variation-adapter.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -33,5 +37,8 @@
   },
   "peerDependencies": {
     "d3": "5.X"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.0"
   }
 }
