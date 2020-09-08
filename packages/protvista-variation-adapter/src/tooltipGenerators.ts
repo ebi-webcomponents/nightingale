@@ -1,93 +1,83 @@
-import groupBy from "lodash-es/groupBy";
 import { formatXrefs, getEvidenceFromCodes } from "protvista-feature-adapter";
+import groupBy from "lodash-es/groupBy";
+import {
+  Association,
+  Feature,
+  Description,
+  PopulationFrequency,
+  Prediction,
+} from "./variants";
 
-const getDiseaseAssociations = associations => {
-  return associations
-    .map(
-      association => `
+export const getDiseaseAssociations = (associations: Association[]) =>
+  associations
+    ?.map(
+      (association) => `
               <h4>Disease association</h4><p>${association.name}</p>
               ${
-                association.xrefs
-                  ? `<h5>Cross-references</h5>${formatXrefs(association.xrefs)}`
+                association.description
+                  ? `<>${association.description}</p>`
+                  : ""
+              }
+              ${
+                association.dbReferences
+                  ? `<h5>Cross-references</h5>${formatXrefs(
+                      association.dbReferences
+                    )}`
                   : ""
               }
               ${getEvidenceFromCodes(association.evidences)}
           `
     )
     .join("");
-};
 
-const getUniProtHTML = variant => {
-  return `<h4>UniProt</h4>
-        ${
-          variant.descriptionArray && variant.descriptionArray.UP
-            ? `<h5>Description</h5><p>${variant.descriptionArray.UP.join(
-                "; "
-              )}</p>`
-            : ``
-        }
-        ${variant.ftId ? `<h5>Feature ID</h5><p>${variant.ftId}</p>` : ``}
-        ${
-          variant.association ? getDiseaseAssociations(variant.association) : ""
-        }
-        `;
-};
+export const getDescriptions = (descriptions: Description[]) =>
+  `<hr/><h5>Description</h5>${descriptions.map(
+    (description) => `<p>${description.value}</p>`
+  )}
+  `;
 
-const getLSSHTML = variant => {
-  return `<h4>Large scale studies</h4>
-        ${
-          variant.descriptionArray && variant.descriptionArray.LSS
-            ? `<h5>Description</h5><p>${variant.descriptionArray.LSS}</p>`
-            : ``
-        }
-        ${
-          variant.frequency
-            ? `<h5>Frequency (MAF)</h5><p>${variant.frequency}</p>`
-            : ``
-        }
-        <h5>Cross-references</h5>${formatXrefs(variant.xrefs)}
-        `;
-};
+export const getPopulationFrequencies = (
+  popFrequencies: PopulationFrequency[]
+) =>
+  `<hr/><h5>Population frequencies</h5>${popFrequencies.map(
+    (freq) =>
+      `<p>${freq.frequency} - ${freq.populationName} (${freq.source})</p>`
+  )}`;
 
-const getDescriptionsAsArray = description => {
-  let descriptionArray = description.split(/\[LSS_|\[SWP]: /g);
-  descriptionArray = groupBy(descriptionArray, desc => {
-    if (desc.length === 0) {
-      return "NOTHING";
-    }
-    if (desc.indexOf("]: ") !== -1) {
-      return "LSS";
-    }
-    return "UP";
+export const getPredictions = (predictions: Prediction[]) => {
+  const groupedPredictions = groupBy(predictions, "predAlgorithmNameType");
+  const counts = Object.keys(groupedPredictions).map((key) => {
+    const valueGroups = groupBy(groupedPredictions[key], "predictionValType");
+    return {
+      algorithm: key,
+      values: Object.keys(valueGroups).map((valKey) => ({
+        name: valKey,
+        count: valueGroups[valKey].length,
+      })),
+    };
   });
-  descriptionArray.LSS = descriptionArray.LSS
-    ? descriptionArray.LSS.join("; ").replace(/]: /g, ": ")
-    : undefined;
-  return descriptionArray;
+  return counts
+    .map(
+      (countItem) =>
+        `<h6>${
+          countItem.algorithm
+        }</h6><ul class="no-bullet">${countItem.values.map(
+          (countValue) =>
+            `<li>${countValue.name} (${countValue.count} studies)</li>`
+        )}</ul>`
+    )
+    .join("");
 };
 
-const formatTooltip = variant => {
-  if (variant.description)
-    // eslint-disable-next-line no-param-reassign
-    variant.descriptionArray = getDescriptionsAsArray(variant.description);
-  return `
+export const formatTooltip = (variant: Feature) =>
+  `
                 <h5>Variant</h5><p>${variant.wildType} > ${
     variant.alternativeSequence
   }</p>
                 ${
-                  variant.frequency
-                    ? `<h5>Frequency (MAF)</h5><p>${variant.frequency}</p>`
-                    : ``
-                }
-                ${
-                  variant.siftScore
-                    ? `<h5>SIFT</h5><p>${variant.siftPrediction} ${variant.siftScore}</p>`
-                    : ``
-                }
-                ${
-                  variant.polyphenScore
-                    ? `<h5>Polyphen</h5><p>${variant.polyphenPrediction} ${variant.polyphenScore}</p>`
-                    : ``
+                  variant.populationFrequencies
+                    ? getPopulationFrequencies(variant.populationFrequencies)
+                    : ""
                 }
                 ${
                   variant.consequenceType
@@ -107,18 +97,25 @@ const formatTooltip = variant => {
                     : ``
                 }
                 ${
-                  variant.sourceType === "UniProt" ||
-                  variant.sourceType === "mixed"
-                    ? `<hr/>${getUniProtHTML(variant)}`
+                  variant.ftId
+                    ? `<h5>Feature ID</h5><p>${variant.ftId}</p>`
+                    : ``
+                }
+                ${
+                  variant.descriptions
+                    ? getDescriptions(variant.descriptions)
                     : ""
                 }
                 ${
-                  variant.sourceType === "large_scale_study" ||
-                  variant.sourceType === "mixed"
-                    ? `<hr/>${getLSSHTML(variant)}`
+                  variant.association
+                    ? getDiseaseAssociations(variant.association)
                     : ""
                 }
+                ${
+                  variant.predictions ? getPredictions(variant.predictions) : ""
+                }
+
+                
         `;
-};
 
 export default formatTooltip;

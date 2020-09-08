@@ -18,7 +18,7 @@ export type Feature = {
   begin: string;
   end: string;
   xrefs: Xref[];
-  cytogeneticBand: CytogeneticBand;
+  cytogeneticBand: string;
   genomicLocation: string;
   locations: Location[];
   codon?: string;
@@ -70,40 +70,58 @@ export type Association = {
 };
 
 export type Xref = {
-  name: Source;
+  name: string;
   id: string;
   url: string;
   alternativeUrl?: string;
 };
 
+/*
+ * This has been imported from the backend enums but
+ * might be best kept as a string...
+ */
 export enum Source {
-  ClinVar = "ClinVar",
-  Cosmic = "Cosmic",
-  CosmicCurated = "cosmic curated",
-  CosmicStudy = "cosmic_study",
+  CLINVAR = "ClinVar",
+  ESP = "ESP",
+  EXAC = "ExAC",
+  GENOMES1K = "1000Genomes",
+  BOVINE_SNP50 = "BovineSNP50",
+  BOVINE_LD = "BovineLD",
+  BOVINE_HD = "BovineHD",
+  EQUINE_SNP50 = "EquineSNP50",
+  CHICKEN_600K = "Chicken600K",
+  KG_HQ = "1kg_hq",
+  COSMIC = "cosmic curated",
+  REVIEWED = "reviewed",
+  UNIPROT = "UniProt",
   DBSNP = "dbSNP",
-  Ensembl = "Ensembl",
-  Esp = "ESP",
-  ExAC = "ExAC",
-  GnomAD = "gnomAD",
-  Mim = "MIM",
-  NCITCGACosmic = "NCI-TCGA Cosmic",
-  NciTcga = "NCI-TCGA",
-  Pubmed = "pubmed",
-  TOPMed = "TOPMed",
-  The1000Genomes = "1000Genomes",
-  UniProt = "UniProt",
+  ENSEMBL = "Ensembl",
+  ENSEMBL_PLANTS = "EnsemblPlants",
+  VECTORBASE = "VectorBase",
+  REFSEQ = "RefSeq",
+  DBGAP = "dbGaP",
+  DDD = "DDD",
+  PHARMCOGKB = "PharmGKB",
+  ENSEMBL_FUNGI = "EnsemblFungi",
+  ENSEMBL_METAZOA = "EnsemblMetazoa",
+  GNOMAD_V2 = "gnomAD_v2.0",
+  GNOMAD_V3 = "gnomAD_v3.0",
+  TCGA = "NCI-TCGA",
+  TCGA_COSMIC = "NCI-TCGA Cosmic",
+  DECIPHER = "ddG2P",
+  TOPMED = "TOPMed",
+  GNOMAD = "gnomAD",
+  PHARMGKB = "pharmgkb",
+  SGRP = "SGRP",
+  SGD = "SGD",
+  JEFFARES_SNPS = "Jeffares_SNPs",
+  JEFFARES_INDELS = "Jeffares_Indels",
 }
 
 export type Evidence = {
-  code: Code;
+  code: string;
   source: Xref;
 };
-
-export enum Code {
-  Eco0000269 = "ECO:0000269",
-  Eco0000313 = "ECO:0000313",
-}
 
 export type ClinicalSignificance = {
   type: ClinicalSignificanceType;
@@ -129,10 +147,6 @@ export enum ConsequenceType {
   StopGained = "stop gained",
 }
 
-export enum CytogeneticBand {
-  The21Q213 = "21q21.3",
-}
-
 export type Description = {
   value: string;
   sources: Source[];
@@ -140,27 +154,19 @@ export type Description = {
 
 export type Location = {
   loc: string;
-  seqId: SeqID;
+  seqId: string;
   source: Source;
 };
 
-export enum SeqID {
-  Enst00000346798 = "ENST00000346798",
-}
-
 export type PopulationFrequency = {
-  populationName: PopulationName;
+  populationName: string;
   frequency: number;
   source: Source;
 };
 
-export enum PopulationName {
-  Maf = "MAF",
-}
-
 export type Prediction = {
   predictionValType: PredictionValType;
-  predictorType: PredictorType;
+  predictorType: string;
   score: number;
   predAlgorithmNameType: PredAlgorithmNameType;
   sources: Source[];
@@ -183,13 +189,10 @@ export enum PredictionValType {
   Unknown = "unknown",
 }
 
-export enum PredictorType {
-  MultiCoding = "multi coding",
-}
-
 export enum SourceType {
   LargeScaleStudy = "large_scale_study",
   Mixed = "mixed",
+  UniProt = "uniprot",
 }
 
 export enum FeatureType {

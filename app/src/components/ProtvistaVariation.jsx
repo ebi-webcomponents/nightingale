@@ -1,35 +1,38 @@
-import React, { Component, Fragment } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import DataLoader from "data-loader";
 import ProtvistaVariation from "protvista-variation";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import loadWebComponent from "../utils/load-web-component";
-import data from "../mocks/variants.json";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-variation/README.md";
 
-class ProtvistaVariationWrapper extends Component {
-  componentDidMount() {
-    document.querySelector("#track1").data = data;
-  }
+const ProtvistaVariationWrapper = () => {
+  const [tooltipContent, setTooltipContent] = useState();
 
-  render() {
+  useEffect(() => {
     loadWebComponent("protvista-variation", ProtvistaVariation);
     loadWebComponent("data-loader", DataLoader);
     loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
-    return (
-      <Fragment>
-        <Readme content={readmeContent} />
-        <protvista-variation id="track1" length="770" />
-        <protvista-variation length="770">
-          <protvista-variation-adapter>
-            <data-loader>
-              <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-            </data-loader>
-          </protvista-variation-adapter>
-        </protvista-variation>
-      </Fragment>
-    );
-  }
-}
+    window.addEventListener("change", (e) => {
+      if (e.detail.eventtype === "click") {
+        setTooltipContent({ __html: e.detail.feature.tooltipContent });
+      }
+    });
+  }, []);
+
+  return (
+    <>
+      <Readme content={readmeContent} />
+      <protvista-variation length="770">
+        <protvista-variation-adapter>
+          <data-loader>
+            <source src="https://wwwdev.ebi.ac.uk/proteins/api/variation/P05067" />
+          </data-loader>
+        </protvista-variation-adapter>
+      </protvista-variation>
+      <div dangerouslySetInnerHTML={tooltipContent}></div>
+    </>
+  );
+};
 
 export default ProtvistaVariationWrapper;

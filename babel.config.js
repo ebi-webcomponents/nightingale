@@ -7,19 +7,20 @@ module.exports = {
   env: {
     test: {
       presets: [
+        "@babel/preset-typescript",
         [
           "@babel/env",
           {
             useBuiltIns: "usage",
-            targets: { node: "8" }
-          }
-        ]
+            targets: { node: "8" },
+          },
+        ],
       ],
       plugins: [
         "@babel/plugin-syntax-dynamic-import",
         "@babel/plugin-proposal-object-rest-spread",
-        "@babel/plugin-proposal-class-properties"
-      ]
-    }
-  }
+        "@babel/plugin-proposal-class-properties",
+      ],
+    },
+  },
 };

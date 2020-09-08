@@ -1,4 +1,4 @@
-import ProtvistaVariationAdapter from "./ProtvistaVariationAdapter";
+import ProtvistaVariationAdapter from "./protvistaVariationAdapter";
 
 if (window.customElements) {
   customElements.define(
