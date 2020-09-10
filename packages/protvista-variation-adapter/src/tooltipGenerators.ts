@@ -31,18 +31,20 @@ export const getDiseaseAssociations = (associations: Association[]) =>
     .join("");
 
 export const getDescriptions = (descriptions: Description[]) =>
-  `<hr/><h5>Description</h5>${descriptions.map(
-    (description) => `<p>${description.value}</p>`
-  )}
+  `<hr/><h5>Description</h5>${descriptions
+    .map((description) => `<p>${description.value}</p>`)
+    .join("")}
   `;
 
 export const getPopulationFrequencies = (
   popFrequencies: PopulationFrequency[]
 ) =>
-  `<hr/><h5>Population frequencies</h5>${popFrequencies.map(
-    (freq) =>
-      `<p>${freq.frequency} - ${freq.populationName} (${freq.source})</p>`
-  )}`;
+  `<hr/><h5>Population frequencies</h5>${popFrequencies
+    .map(
+      (freq) =>
+        `<p>${freq.frequency} - ${freq.populationName} (${freq.source})</p>`
+    )
+    .join("")}`;
 
 export const getPredictions = (predictions: Prediction[]) => {
   const groupedPredictions = groupBy(predictions, "predAlgorithmNameType");
@@ -61,10 +63,12 @@ export const getPredictions = (predictions: Prediction[]) => {
       (countItem) =>
         `<h6>${
           countItem.algorithm
-        }</h6><ul class="no-bullet">${countItem.values.map(
-          (countValue) =>
-            `<li>${countValue.name} (${countValue.count} studies)</li>`
-        )}</ul>`
+        }</h6><ul class="no-bullet">${countItem.values
+          .map(
+            (countValue) =>
+              `<li>${countValue.name} (${countValue.count} studies)</li>`
+          )
+          .join("")}</ul>`
     )
     .join("");
 };

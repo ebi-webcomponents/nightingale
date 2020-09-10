@@ -1,7 +1,7 @@
 import {
   renameProperties,
-  formatTooltip
-} from "../src/ProtvistaFeatureAdapter";
+  formatTooltip,
+} from "../src/protvista-feature-adapter";
 
 const feature = {
   type: "SIGNAL",
@@ -16,10 +16,10 @@ const feature = {
         name: "PubMed",
         id: "12665801",
         url: "http://www.ncbi.nlm.nih.gov/pubmed/12665801",
-        alternativeUrl: "https://europepmc.org/abstract/MED/12665801"
-      }
-    }
-  ]
+        alternativeUrl: "https://europepmc.org/abstract/MED/12665801",
+      },
+    },
+  ],
 };
 
 describe("ProtvistaFeatureAdapter tests", () => {
@@ -28,7 +28,7 @@ describe("ProtvistaFeatureAdapter tests", () => {
     const renamedFeatures = renameProperties(features);
     expect(renamedFeatures).toEqual([
       { begin: 1, start: 1 },
-      { begin: 23, start: 23 }
+      { begin: 23, start: 23 },
     ]);
   });
 

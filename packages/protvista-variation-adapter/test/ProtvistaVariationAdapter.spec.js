@@ -1,4 +1,4 @@
-import { transformData } from "../src/protvistaVariationAdapter";
+import { transformData } from "../src/protvista-variation-adapter";
 import variants from "./variants.json";
 import {
   getDiseaseAssociations,

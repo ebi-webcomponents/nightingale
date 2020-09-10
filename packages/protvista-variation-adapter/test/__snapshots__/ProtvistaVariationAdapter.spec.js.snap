@@ -104,6 +104,7 @@ Object {
         },
       ],
       "end": "51",
+      "hasPredictions": true,
       "protvistaFeatureId": "uuid_id",
       "sourceType": "large_scale_study",
       "start": "51",

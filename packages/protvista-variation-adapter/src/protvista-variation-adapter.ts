@@ -26,6 +26,7 @@ export const transformData = (data: ProteinsAPIVariation) => {
     sourceType: variant.sourceType,
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),
     clinicalSignificances: variant.clinicalSignificances,
+    hasPredictions: variant.predictions && variant.predictions.length > 0,
     protvistaFeatureId: v1(),
   }));
   if (!variants) return null;

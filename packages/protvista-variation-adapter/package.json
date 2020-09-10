@@ -11,8 +11,8 @@
     "build:es": "tsc"
   },
   "main": "dist/protvista-variation-adapter.js",
-  "module": "dist/es/protvistaVariationAdapter.js",
-  "types": "dist/es/protvistaVariationAdapter.d.ts",
+  "module": "dist/es/protvista-variation-adapter.js",
+  "types": "dist/es/protvista-variation-adapter.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"

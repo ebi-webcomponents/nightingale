@@ -5,7 +5,7 @@
     "declaration": true
   },
   "files": [
-    "src/protvistaVariationAdapter.ts",
+    "src/protvista-variation-adapter.ts",
     "types/protvista-feature-adapter.d.ts"
   ]
 }
