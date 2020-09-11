@@ -1,6 +1,6 @@
 {
   "name": "textarea-sequence",
-  "version": "2.15.3",
+  "version": "2.18.0",
   "files": [
     "dist",
     "src"
