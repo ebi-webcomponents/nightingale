@@ -6,7 +6,7 @@
     "src"
   ],
   "main": "dist/protvista-feature-adapter.js",
-  "module": "src/ProtvistaFeatureAdapter.js",
+  "module": "src/protvista-feature-adapter.js",
   "keywords": [
     "nightingale",
     "webcomponents",
