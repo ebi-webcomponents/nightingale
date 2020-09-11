@@ -32,7 +32,7 @@ const ProtvistaVariationWrapper = () => {
       <protvista-variation length="770">
         <protvista-variation-adapter>
           <data-loader>
-            <source src="https://wwwdev.ebi.ac.uk/proteins/api/variation/P05067" />
+            <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
           </data-loader>
         </protvista-variation-adapter>
       </protvista-variation>
