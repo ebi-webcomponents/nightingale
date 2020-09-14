@@ -207,6 +207,39 @@ class ProtvistaTrack extends ProtvistaZoomable {
         return feature.opacity ? feature.opacity : 0.9;
       })
       .call(this.bindEvents, this);
+
+    this.rectangles = this.locations
+        .selectAll("g.fragment-group")
+        .data((d) =>
+            d.fragments.map((loc) =>
+                Object.assign({}, loc, {
+                  feature: d.feature,
+                })
+            )
+        )
+        .enter()
+        .filter((f) => this._getShape(f) === 'helix')
+        .append("path")
+        .attr("class", 'outer-rectangle')
+        .attr("d", (f) =>
+            this._featureShape.getFeatureShape(
+                this.getSingleBaseWidth(),
+                this._layoutObj.getFeatureHeight(f),
+                f.end ? f.end - f.start + 1 : 1
+            )
+        )
+
+        .attr(
+            "transform",
+            (f) =>
+                `translate(${this.getXFromSeqPosition(
+                    f.start
+                )},${this._layoutObj.getFeatureYPos(f.feature)})`
+        )
+        .attr("fill", "transparent")
+        .attr("stroke", "transparent")
+        .style("fill-opacity", 0)
+        .call(this.bindEvents, this);
   }
 
   _applyFilters() {
@@ -263,6 +296,45 @@ class ProtvistaTrack extends ProtvistaZoomable {
               f.start
             )},${this._layoutObj.getFeatureYPos(f.feature)})`
         );
+
+      this.rectangles = this.seq_g.selectAll("path.outer-rectangle").data(
+          this._data.reduce(
+              (acc, f) =>
+                  acc.concat(
+                      f.locations.reduce(
+                          (acc2, e) =>
+                              acc2.concat(
+                                  e.fragments.map((loc) =>
+                                      Object.assign({}, loc, {
+                                        feature: f,
+                                      })
+                                  )
+                              ),
+                          []
+                      )
+                  ),
+              []
+          )
+      );
+
+      this.rectangles
+          .filter((f) => this._getShape(f) === 'helix')
+          .attr("d", (f) =>
+              this._featureShape.getFeatureShape(
+                  this.getSingleBaseWidth(),
+                  this._layoutObj.getFeatureHeight(f),
+                  f.end ? f.end - f.start + 1 : 1
+              )
+          )
+          .attr(
+              "transform",
+              (f) =>
+                  `translate(${this.getXFromSeqPosition(
+                      f.start
+                  )},${this._layoutObj.getFeatureYPos(f.feature)})`
+          )
+      ;
+
       this._updateHighlight();
     }
   }
