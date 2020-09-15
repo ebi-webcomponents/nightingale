@@ -1,0 +1,23 @@
+{
+  "name": "protvista-links",
+  "version": "0.0.1",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/protvista-links.js",
+  "module": "src/ProtvistaLinks.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+}
