@@ -3,7 +3,14 @@ import { v1 } from "uuid";
 import { NightingaleElement } from "data-loader";
 
 import formatTooltip from "./tooltipGenerators";
-import { ProteinsAPIVariation, Xref, SourceType } from "./variants";
+import {
+  ProteinsAPIVariation,
+  Xref,
+  SourceType,
+  FeatureType,
+  Association,
+  ClinicalSignificance,
+} from "./variants";
 
 const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
@@ -13,10 +20,32 @@ const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   return xrefNames;
 };
 
-export const transformData = (data: ProteinsAPIVariation) => {
+export type TransformedVariant = {
+  type: FeatureType;
+  accession: string;
+  variant: string;
+  start: string;
+  end: string;
+  tooltipContent: string;
+  association?: Association[];
+  sourceType: SourceType;
+  xrefNames: string[];
+  clinicalSignificances?: ClinicalSignificance[];
+  hasPredictions: boolean;
+  protvistaFeatureId: string;
+};
+
+export type TransformedVariantsData = {
+  sequence: string;
+  variants: TransformedVariant[];
+};
+
+export const transformData = (
+  data: ProteinsAPIVariation
+): TransformedVariantsData => {
   const { sequence, features } = data;
   const variants = features.map((variant) => ({
-    type: "Variant",
+    type: FeatureType.Variant,
     accession: variant.genomicLocation,
     variant: variant.alternativeSequence ? variant.alternativeSequence : "-",
     start: variant.begin,

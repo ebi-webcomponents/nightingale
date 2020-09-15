@@ -129,7 +129,7 @@ Object {
 
                 
         ",
-      "type": "Variant",
+      "type": "VARIANT",
       "variant": "N",
       "xrefNames": Array [
         "1000Genomes",
