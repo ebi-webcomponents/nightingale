@@ -1,4 +1,5 @@
 import ProtvistaZoomable from "protvista-zoomable";
+import { Region } from "protvista-utils";
 import ReactMSAViewer from "react-msa-viewer";
 import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
@@ -276,6 +277,33 @@ class ProtvistaMSA extends ProtvistaZoomable {
             })
           );
         }
+        this.highlight();
+      }
+    });
+  }
+
+  highlight() {
+    window.requestAnimationFrame(() => {
+      if (this._highlight && this._highlight !== "0:0") {
+        const region = new Region({
+          min: 1,
+          max: this._data?.[0]?.sequence?.length || 1,
+        });
+        region.decode(this._highlight);
+        this.el.highlightRegion(
+          region.segments.map(({ start, end }) => ({
+            sequences: {
+              from: 0,
+              to: this._data.length,
+            },
+            residues: {
+              from: start,
+              to: end,
+            },
+          }))
+        );
+      } else {
+        this.el.removeHighlightRegion();
       }
     });
   }

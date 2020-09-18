@@ -1,12 +1,13 @@
-function union(setA, setB) {
-  const _union = new Set(setA);
-  for (const elem of setB) {
-    _union.add(elem);
-  }
-  return _union;
+type ArrayOfNumberArray = Array<Array<number>>;
+interface LinksObject {
+  links: ArrayOfNumberArray;
 }
 
-const parseLinks = (text, threshold) => {
+interface NumberArray {
+  [index: number]: number;
+}
+
+const parseLinks = (text: string, threshold: number): LinksObject => {
   const rawData = text
     .split("\n")
     .slice(1)
@@ -15,8 +16,8 @@ const parseLinks = (text, threshold) => {
       return [+n1, +n2, +p];
     })
     .filter(([_, __, p]) => p > threshold);
-  const n2set = {};
-  const sets = [];
+  const n2set: NumberArray = {};
+  const sets: ArrayOfNumberArray = [];
   rawData.forEach(([n1, n2]) => {
     if (!n2set[n1] && !n2set[n2]) {
       n2set[n1] = sets.length;
@@ -36,7 +37,9 @@ const parseLinks = (text, threshold) => {
     }
   });
   return {
-    links: sets.filter((_, i) => Object.values(n2set).includes(i)),
+    links: sets
+      .filter((_, i) => Object.values(n2set).includes(i))
+      .map((s) => s.sort((x, y) => x - y)),
   };
 };
 

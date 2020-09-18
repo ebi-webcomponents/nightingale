@@ -13,6 +13,6 @@ describe("links parser", () => {
       obj.links.reduce((agg, v) => agg + v.length, 0)
     );
     expect(obj.links.flat().length).toBe(new Set(obj.links.flat()).size);
-    console.log(obj.links);
+    // console.log(obj.links);
   });
 });

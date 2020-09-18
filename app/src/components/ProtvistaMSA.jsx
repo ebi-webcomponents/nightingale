@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import isEmpty from "lodash-es/isEmpty";
+
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
+import ProtvistaLinks from "protvista-links";
+
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-msa/README.md";
 import Console from "./Console";
+import { rawContactsHC } from "../mocks/interpro";
 
 const AllowedColorschemes = [
   "aliphatic",
@@ -103,11 +107,13 @@ const ProtvistaMSAWrapper = () => {
     msaTrack.current.onActiveTrackChange = (trackId) => {
       console.log("on active track change:", trackId);
     };
+    document.querySelector("#links-track").data = rawContactsHC;
   }, []);
 
   loadWebComponent("protvista-msa", ProtvistaMSA);
   loadWebComponent("protvista-navigation", ProtvistaNavigation);
   loadWebComponent("protvista-manager", ProtvistaManager);
+  loadWebComponent("protvista-links", ProtvistaLinks);
 
   const handleColorChange = (event) => {
     setColorScheme(event.target.value);
@@ -224,10 +230,35 @@ const ProtvistaMSAWrapper = () => {
               flexShrink: 0,
             }}
           />
-          <protvista-navigation
-            length={sequence.length + 1}
-            displaystart="1"
-            displayend="50"
+          <protvista-navigation length={sequence.length + 1} />
+          <div
+            style={{
+              width: showRightCoordinate && coordinateWidth,
+              flexShrink: 0,
+            }}
+          />
+        </div>
+        <div style={{ display: "flex", width: "100%" }}>
+          <div
+            style={{
+              width: labelWidth + (showLeftCoordinate && coordinateWidth),
+              flexShrink: 0,
+              height: "20px",
+              textAlign: "left",
+              overflow: "hidden",
+              fontWeight: "bold",
+              fontSize: "14px",
+              color: "rgb(0, 99, 154)",
+              textTransform: "uppercase",
+            }}
+          >
+            Contacts
+          </div>
+          <protvista-links
+            id="links-track"
+            length={sequence.length}
+            height={20}
+            use-ctrl-to-zoom
           />
           <div
             style={{
@@ -236,6 +267,7 @@ const ProtvistaMSAWrapper = () => {
             }}
           />
         </div>
+
         <protvista-msa
           id="msa-track"
           ref={msaTrack}

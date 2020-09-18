@@ -18,7 +18,6 @@ import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
 import ProtvistaSaver from "protvista-saver";
 import ProtvistaOverlay from "protvista-overlay";
 import ProtvistaZoomTool from "protvista-zoom-tool";
-import ProtvistaLinks from "protvista-links";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-manager/README.md";
 
@@ -79,7 +78,6 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-saver", ProtvistaSaver);
     loadWebComponent("protvista-overlay", ProtvistaOverlay);
     loadWebComponent("protvista-zoom-tool", ProtvistaZoomTool);
-    loadWebComponent("protvista-links", ProtvistaLinks);
     return (
       <Fragment>
         <Readme content={readmeContent} />
@@ -93,10 +91,9 @@ class ProtvistaManagerWrapper extends Component {
           <button>Download Just Tracks</button>
         </protvista-saver>
         <protvista-overlay for="just-tracks" />
-        <protvista-links />
         <protvista-manager
           attributes="variantfilters"
-          displaystart="370"
+          displaystart="70"
           displayend="420"
           id="example"
         >
@@ -125,6 +122,7 @@ class ProtvistaManagerWrapper extends Component {
               height="10"
               use-ctrl-to-zoom
             />
+
             <protvista-track id="track1" length="770" use-ctrl-to-zoom>
               <protvista-feature-adapter id="adapter1">
                 <data-loader>
