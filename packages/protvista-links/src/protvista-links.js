@@ -1,7 +1,7 @@
+import { schemePaired } from "d3";
+
 import ProtvistaTrack from "protvista-track";
 import linksParser from "./links-parser";
-
-import { schemePaired } from "d3";
 
 const OPACITY_MOUSEOUT = 0.3;
 
