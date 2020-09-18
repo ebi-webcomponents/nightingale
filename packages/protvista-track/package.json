@@ -1,6 +1,6 @@
 {
   "name": "protvista-track",
-  "version": "2.18.0",
+  "version": "2.18.2",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
