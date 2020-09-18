@@ -1,5 +1,5 @@
-import linksParser from "./links-parser";
 import fs from "fs";
+import linksParser from "./links-parser";
 
 let data = "???";
 describe("links parser", () => {

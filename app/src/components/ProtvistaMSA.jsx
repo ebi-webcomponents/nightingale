@@ -65,8 +65,8 @@ const ProtvistaMSAWrapper = () => {
   const [colorScheme, setColorScheme] = useState("clustal");
   const [overlayConservation, setOverlayConservation] = useState(false);
   const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
-  const [showLeftCoordinate, setShowLeftCoordinate] = useState(true);
-  const [showRightCoordinate, setShowRightCoordinate] = useState(true);
+  const [showLeftCoordinate, setShowLeftCoordinate] = useState(false);
+  const [showRightCoordinate, setShowRightCoordinate] = useState(false);
   const [offsetSeqStart, setOffsetSeqStart] = useState(false);
   const [excludeGaps, setExcludeGaps] = useState(false);
   const msaTrack = useRef(null);

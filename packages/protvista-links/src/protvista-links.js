@@ -1,7 +1,7 @@
+import { schemePaired } from "d3";
+
 import ProtvistaTrack from "protvista-track";
 import linksParser from "./links-parser";
-
-import { schemePaired } from "d3";
 
 const OPACITY_MOUSEOUT = 0.3;
 
@@ -65,6 +65,13 @@ class ProtvistaLinks extends ProtvistaTrack {
       });
   }
 
+  getRadius(isSelected) {
+    return (
+      (isSelected ? 0.7 : 0.5) *
+      Math.min(this._layoutObj.getFeatureHeight(), this.getSingleBaseWidth())
+    );
+  }
+
   refresh() {
     this.contactPoints
       .merge(this.contactPoints.enter())
@@ -72,19 +79,13 @@ class ProtvistaLinks extends ProtvistaTrack {
       .attr(
         "cx",
         (d) =>
-          this.getXFromSeqPosition(d.position) + this.getSingleBaseWidth() / 2
+          this.getXFromSeqPosition(d.position) +
+          this.getSingleBaseWidth() / 2 -
+          this.getRadius(false)
       )
       .attr("cy", this._layoutObj.getFeatureHeight() / 2)
       .transition()
-      .attr(
-        "r",
-        (d) =>
-          (d.group === this._data.selected ? 0.7 : 0.5) *
-          Math.min(
-            this._layoutObj.getFeatureHeight(),
-            this.getSingleBaseWidth()
-          )
-      )
+      .attr("r", (d) => this.getRadius(d.group === this._data.selected))
       .style("opacity", (d) =>
         d.group === this._data.selected ? 1 : OPACITY_MOUSEOUT
       );
