@@ -64,10 +64,7 @@ export const getPredictions = (predictions: Prediction[]) => {
         `<h6>${
           countItem.algorithm
         }</h6><ul class="no-bullet">${countItem.values
-          .map(
-            (countValue) =>
-              `<li>${countValue.name} (${countValue.count} studies)</li>`
-          )
+          .map((countValue) => `<li>${countValue.name}</li>`)
           .join("")}</ul>`
     )
     .join("");

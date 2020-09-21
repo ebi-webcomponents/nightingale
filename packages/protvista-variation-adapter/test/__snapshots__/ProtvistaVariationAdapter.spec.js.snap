@@ -18,7 +18,7 @@ exports[`ProtvistaVariationAdapter should format disease associations 1`] = `
 
 exports[`ProtvistaVariationAdapter should format population frequencies 1`] = `"<hr/><h5>Population frequencies</h5><p>0.0002 - MAF (1000Genomes)</p>"`;
 
-exports[`ProtvistaVariationAdapter should format predictions 1`] = `"<h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging (2 studies)</li></ul>"`;
+exports[`ProtvistaVariationAdapter should format predictions 1`] = `"<h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging</li></ul>"`;
 
 exports[`ProtvistaVariationAdapter should transform the data adequately 1`] = `
 Object {
@@ -125,7 +125,7 @@ Object {
       <ul><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20301340&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20301340' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20301340' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20301414&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20301414' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20301414' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20831773&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20831773' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20831773' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;21500874&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/21500874' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/21500874' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;24829003&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/24829003' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/24829003' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;&nbsp;<a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000813633' style=\\"color:#FFF\\" target='_blank'>RCV000813633</a>&nbsp;(ClinVar)</li></ul>
     
           
-                <h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging (2 studies)</li></ul>
+                <h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging</li></ul>
 
                 
         ",
