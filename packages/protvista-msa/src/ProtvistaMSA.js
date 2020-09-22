@@ -167,7 +167,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
   get margin() {
     return {
       top: 10,
-      right: 0,
+      right: 10,
       bottom: 10,
       left: this._labelwidth + this["_coordinate-width"] || 10,
     };
@@ -184,17 +184,26 @@ class ProtvistaMSA extends ProtvistaZoomable {
   getColorMap() {
     return this?.el?.getColorMap() || {};
   }
+  getWidthWithMargins() {
+    const coordinateWidth = this.getCoordinateWidth();
+    return this.width
+      ? this.width -
+          (this._labelwidth || 0) -
+          coordinateWidth -
+          this.margin.left -
+          this.margin.right
+      : 0;
+  }
 
   refresh() {
     if (!this.activeLabel && this._data && this._data[0]) {
       this.setActiveTrack(this._data[0].name);
     }
-    const coordinateWidth = this.getCoordinateWidth();
     const tileHeight = 20;
     const options = {
       sequences: this._data,
       height: this._height,
-      width: this.width - (this._labelwidth || 0) - coordinateWidth,
+      width: this.getWidthWithMargins(),
       tileHeight,
       tileWidth: Math.max(1, this.getSingleBaseWidth()),
       colorScheme: this._colorscheme || "clustal",
@@ -202,6 +211,9 @@ class ProtvistaMSA extends ProtvistaZoomable {
       sequenceOverflow: "scroll",
       sequenceOverflowX: "hidden",
       sequenceDisableDragging: true,
+      style: {
+        paddingLeft: `${this.margin.left || 0}px`,
+      },
       labelComponent: ({ sequence }) =>
         TrackLabel({
           sequence: sequence,

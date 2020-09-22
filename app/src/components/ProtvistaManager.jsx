@@ -10,10 +10,12 @@ import ProtvistaVariation from "protvista-variation";
 import ProtvistaVariationGraph from "protvista-variation-graph";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaInterproTrack from "protvista-interpro-track";
+import ProtvistaLinks from "protvista-links";
 import loadWebComponent from "../utils/load-web-component";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
+import { rawContactsHC } from "../mocks/interpro";
 import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
 import ProtvistaSaver from "protvista-saver";
 import ProtvistaOverlay from "protvista-overlay";
@@ -35,6 +37,7 @@ class ProtvistaManagerWrapper extends Component {
     document.querySelector("#sequence-coloured-track-iso").data = sequence;
     document.querySelector("#sequence-coloured-track-iso").fixedHighlight =
       "400:600";
+    document.querySelector("#links-track").data = rawContactsHC;
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
     document.querySelector("#track3").data = secondaryStructureData;
@@ -78,6 +81,8 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-saver", ProtvistaSaver);
     loadWebComponent("protvista-overlay", ProtvistaOverlay);
     loadWebComponent("protvista-zoom-tool", ProtvistaZoomTool);
+    loadWebComponent("protvista-links", ProtvistaLinks);
+
     return (
       <Fragment>
         <Readme content={readmeContent} />
@@ -93,8 +98,8 @@ class ProtvistaManagerWrapper extends Component {
         <protvista-overlay for="just-tracks" />
         <protvista-manager
           attributes="variantfilters"
-          displaystart="70"
-          displayend="420"
+          displaystart="1"
+          displayend="10"
           id="example"
         >
           <protvista-zoom-tool length="770" style={{ float: "right" }} />
@@ -120,6 +125,13 @@ class ProtvistaManagerWrapper extends Component {
               scale="isoelectric-point-scale"
               color_range="white:0,dodgerblue:11"
               height="10"
+              use-ctrl-to-zoom
+            />
+
+            <protvista-links
+              id="links-track"
+              length="770"
+              height={20}
               use-ctrl-to-zoom
             />
 

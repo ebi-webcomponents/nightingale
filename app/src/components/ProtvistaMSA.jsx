@@ -62,7 +62,7 @@ const addGaps = (sequence, nGaps) => {
 
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
-  const [colorScheme, setColorScheme] = useState("clustal");
+  const [colorScheme, setColorScheme] = useState("clustal2");
   const [overlayConservation, setOverlayConservation] = useState(false);
   const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
   const [showLeftCoordinate, setShowLeftCoordinate] = useState(false);
@@ -119,7 +119,7 @@ const ProtvistaMSAWrapper = () => {
     setColorScheme(event.target.value);
     addLog(`[setColorScheme]: ${event.target.value}`);
   };
-  const labelWidth = 60;
+  const labelWidth = 100;
   const coordinateWidth = 30;
   const conservationOptions = {
     "calculate-conservation": true,
@@ -180,7 +180,7 @@ const ProtvistaMSAWrapper = () => {
             onChange={(evt) => setSampleSizeConservation(evt.target.value)}
           />
         </label>
-        <label>
+        {/* <label>
           show left coordinates:
           <input
             type="checkbox"
@@ -215,12 +215,12 @@ const ProtvistaMSAWrapper = () => {
               />
             </label>
           </>
-        )}
+        )} */}
       </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
         displaystart="1"
-        displayend="50"
+        displayend="100"
         id="example"
       >
         <div style={{ display: "flex", width: "100%" }}>
