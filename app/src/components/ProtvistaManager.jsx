@@ -99,7 +99,7 @@ class ProtvistaManagerWrapper extends Component {
         <protvista-manager
           attributes="variantfilters"
           displaystart="1"
-          displayend="10"
+          displayend="100"
           id="example"
         >
           <protvista-zoom-tool length="770" style={{ float: "right" }} />

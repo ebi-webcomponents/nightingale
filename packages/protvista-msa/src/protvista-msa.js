@@ -55,51 +55,6 @@ const TrackLabel = ({
   );
 };
 
-const getNumberOfInsertionsBeforeIndex = (sequence, index) =>
-  (sequence.slice(0, index - 1).match(/-/g) || []).length;
-
-const coordinateStyle = {
-  fontSize: "14px",
-  boxSizing: "border-box",
-  display: "flex",
-  flexDirection: "column",
-  flexShrink: 0,
-  justifyContent: "center",
-};
-
-const leftCoordinateStyle = {
-  ...coordinateStyle,
-  textAlign: "right",
-  paddingRight: "0.25rem",
-};
-const rightCoordinateStyle = {
-  ...coordinateStyle,
-  paddingLeft: "0.25rem",
-};
-
-const Coordinate = ({
-  children: coord,
-  width,
-  tileHeight,
-  sequence,
-  style,
-  excludeGaps = true,
-  offsetStart = false,
-}) => (
-  <div
-    style={{
-      ...style,
-      width,
-      height: tileHeight,
-    }}
-  >
-    {coord -
-      (excludeGaps &&
-        getNumberOfInsertionsBeforeIndex(sequence.sequence, coord)) +
-      (offsetStart && sequence.start && sequence.start)}
-  </div>
-);
-
 class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
     super();
@@ -129,11 +84,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "overlay-conservation",
       "sample-size-conservation",
       "text-font",
-      "coordinate-width",
-      "coordinate-left",
-      "coordinate-right",
-      "coordinate-exclude-gaps",
-      "coordinate-offset-seq-start",
     ]);
   }
 
@@ -169,27 +119,18 @@ class ProtvistaMSA extends ProtvistaZoomable {
       top: 10,
       right: 10,
       bottom: 10,
-      left: this._labelwidth + this["_coordinate-width"] || 10,
+      left: 10,
     };
-  }
-
-  getCoordinateWidth() {
-    return (
-      (this["_coordinate-width"] || 0) *
-      (this.hasAttribute("coordinate-left") +
-        this.hasAttribute("coordinate-right"))
-    );
   }
 
   getColorMap() {
     return this?.el?.getColorMap() || {};
   }
+
   getWidthWithMargins() {
-    const coordinateWidth = this.getCoordinateWidth();
     return this.width
       ? this.width -
           (this._labelwidth || 0) -
-          coordinateWidth -
           this.margin.left -
           this.margin.right
       : 0;
@@ -216,11 +157,11 @@ class ProtvistaMSA extends ProtvistaZoomable {
       },
       labelComponent: ({ sequence }) =>
         TrackLabel({
-          sequence: sequence,
+          sequence,
           activeLabel: this.activeLabel,
           setActiveTrack: this.setActiveTrack,
           width: this._labelwidth,
-          tileHeight: tileHeight,
+          tileHeight,
         }),
     };
 
@@ -237,38 +178,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
       options.sequenceTextFont = this.getAttribute("text-font");
     }
 
-    if (this.hasAttribute("coordinate-left")) {
-      options.leftCoordinateComponent = ({ start, tileHeight, sequence }) => (
-        <Coordinate
-          width={this["_coordinate-width"]}
-          tileHeight={tileHeight}
-          sequence={sequence}
-          style={leftCoordinateStyle}
-          excludeGaps={this.getAttribute("coordinate-exclude-gaps") == "true"}
-          offsetStart={
-            this.getAttribute("coordinate-offset-seq-start") == "true"
-          }
-        >
-          {start}
-        </Coordinate>
-      );
-    }
-    if (this.hasAttribute("coordinate-right")) {
-      options.rightCoordinateComponent = ({ end, tileHeight, sequence }) => (
-        <Coordinate
-          width={this["_coordinate-width"]}
-          tileHeight={tileHeight}
-          sequence={sequence}
-          style={rightCoordinateStyle}
-          excludeGaps={this.getAttribute("coordinate-exclude-gaps") == "true"}
-          offsetStart={
-            this.getAttribute("coordinate-offset-seq-start") == "true"
-          }
-        >
-          {end}
-        </Coordinate>
-      );
-    }
     ReactDOM.render(
       <ReactMSAViewer {...options} ref={(ref) => (this.el = ref)} />,
       this
@@ -276,7 +185,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
     window.requestAnimationFrame(() => {
       if (this.el) {
         this.el.updatePositionByResidue({ aaPos: this._displaystart });
-        if (1 > this.getSingleBaseWidth()) {
+        if (this.getSingleBaseWidth() < 1) {
           this.dispatchEvent(
             // Dispatches the event so the manager can propagate this changes to other  components
             new CustomEvent("change", {
