@@ -24,5 +24,13 @@
     "protvista-utils": "^2.12.0",
     "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.5.1"
   },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "d3": "5.X"
+  },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }

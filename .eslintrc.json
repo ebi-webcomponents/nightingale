@@ -17,7 +17,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "ignorePatterns": ["ProtvistaMSA.js"],
+  "ignorePatterns": ["protvista-msa.js"],
   "rules": {
     "no-underscore-dangle": "off",
     "no-console": "off",
@@ -45,16 +45,26 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": [
       1,
       {
         "args": "after-used",
         "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_|(React$)",
         "ignoreRestSiblings": true
       }
     ]
   },
+  "overrides": [
+    {
+      // enable the rule specifically for TypeScript files
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": ["warning"]
+      }
+    }
+  ],
   "settings": {
     "import/resolver": {
       "node": {
