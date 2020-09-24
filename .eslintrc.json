@@ -7,11 +7,7 @@
     "prettier/react"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier"],
   "env": {
     "es6": true,
     "browser": true,
@@ -65,9 +61,7 @@
       // enable the rule specifically for TypeScript files
       "files": ["*.ts", "*.tsx"],
       "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": [
-          "warn"
-        ]
+        "@typescript-eslint/explicit-module-boundary-types": ["warn"]
       }
     }
   ],
