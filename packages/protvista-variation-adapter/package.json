@@ -1,13 +1,18 @@
 {
   "name": "protvista-variation-adapter",
-  "version": "2.12.0",
+  "version": "2.18.3",
   "description": "Data adapter for variation data",
   "files": [
     "dist",
+    "types",
     "src"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "main": "dist/protvista-variation-adapter.js",
-  "module": "src/ProtvistaVariationAdapter.js",
+  "module": "dist/es/protvista-variation-adapter.js",
+  "types": "dist/es/protvista-variation-adapter.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -27,11 +32,15 @@
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "d3-scale": "^3.2.0",
+    "data-loader": "^2.12.0",
     "lodash-es": "^4.17.11",
-    "protvista-feature-adapter": "^2.12.0",
+    "protvista-feature-adapter": "^2.18.0",
     "uuid": "^8.1.0"
   },
   "peerDependencies": {
     "d3": "5.X"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.0"
   }
 }

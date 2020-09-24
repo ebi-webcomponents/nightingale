@@ -7,6 +7,7 @@ module.exports = {
   env: {
     test: {
       presets: [
+        "@babel/preset-typescript",
         [
           "@babel/env",
           {
@@ -14,7 +15,6 @@ module.exports = {
             targets: { node: "8" },
           },
         ],
-        "@babel/preset-typescript",
       ],
       plugins: [
         "@babel/plugin-syntax-dynamic-import",

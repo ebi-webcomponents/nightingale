@@ -170,7 +170,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .append("g")
       .attr("class", "location-group");
 
-    this.features = this.locations
+    const fragmentGroup = this.locations
       .selectAll("g.fragment-group")
       .data((d) =>
         d.fragments.map((loc) =>
@@ -180,6 +180,10 @@ class ProtvistaTrack extends ProtvistaZoomable {
         )
       )
       .enter()
+      .append("g")
+      .attr("class", "fragment-group");
+
+    fragmentGroup
       .append("path")
       .attr("class", (f) => `${this._getShape(f)} feature`)
       .attr("d", (f) =>
@@ -190,7 +194,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
           this._getShape(f)
         )
       )
-
       .attr(
         "transform",
         (f) =>
@@ -205,7 +208,25 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .style("stroke-opacity", ({ feature }) => {
         return feature.opacity ? feature.opacity : 0.9;
-      })
+      });
+
+    fragmentGroup
+      .append("rect")
+      .attr("class", "outer-rectangle feature")
+      .attr(
+        "width",
+        (f) => this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
+      )
+      .attr("height", (f) => this._layoutObj.getFeatureHeight(f))
+      .attr(
+        "transform",
+        (f) =>
+          `translate(${this.getXFromSeqPosition(
+            f.start
+          )},${this._layoutObj.getFeatureYPos(f.feature)})`
+      )
+      .attr("fill", "transparent")
+      .attr("stroke", "transparent")
       .call(this.bindEvents, this);
   }
 
@@ -228,7 +249,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   refresh() {
     if (this.xScale && this.seq_g) {
-      this.features = this.seq_g.selectAll("path.feature").data(
+      const fragmentG = this.seq_g.selectAll("g.fragment-group").data(
         this._data.reduce(
           (acc, f) =>
             acc.concat(
@@ -247,7 +268,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
           []
         )
       );
-      this.features
+
+      fragmentG
+        .selectAll("path.feature")
         .attr("d", (f) =>
           this._featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
@@ -263,6 +286,22 @@ class ProtvistaTrack extends ProtvistaZoomable {
               f.start
             )},${this._layoutObj.getFeatureYPos(f.feature)})`
         );
+
+      fragmentG
+        .selectAll("rect.outer-rectangle")
+        .attr(
+          "width",
+          (f) => this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
+        )
+        .attr("height", (f) => this._layoutObj.getFeatureHeight(f))
+        .attr(
+          "transform",
+          (f) =>
+            `translate(${this.getXFromSeqPosition(
+              f.start
+            )},${this._layoutObj.getFeatureYPos(f.feature)})`
+        );
+
       this._updateHighlight();
     }
   }

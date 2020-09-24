@@ -2,10 +2,7 @@ import { select, scalePow } from "d3";
 
 class VariationPlot {
   constructor() {
-    this._frequency = scalePow()
-      .exponent(0.001)
-      .domain([0, 1])
-      .range([5, 10]);
+    this._frequency = scalePow().exponent(0.001).domain([0, 1]).range([5, 10]);
     // Data bind otherwise babel removes it
     this.drawVariationPlot = this.drawVariationPlot.bind(this);
   }
@@ -20,10 +17,10 @@ class VariationPlot {
       const series = select(nodes[i]);
 
       // Only draw positions where there is data
-      const withVariants = data.filter(elem => elem.variants.length !== 0);
+      const withVariants = data.filter((elem) => elem.variants.length !== 0);
 
       // bind data
-      const bars = series.selectAll("g").data(withVariants, d => d.pos);
+      const bars = series.selectAll("g").data(withVariants, (d) => d.pos);
 
       bars.exit().remove();
 
@@ -33,7 +30,7 @@ class VariationPlot {
         .append("g")
         .merge(bars)
         .selectAll("circle")
-        .data(d => d.variants);
+        .data((d) => d.variants);
 
       circle.exit().remove();
 
@@ -42,22 +39,22 @@ class VariationPlot {
         .append("circle")
         .merge(circle)
         .attr("class", "feature")
-        .attr("title", d => d.start)
-        .attr("r", d => (d.size ? d.size : 5))
-        .attr("cx", d => {
+        .attr("title", (d) => d.start)
+        .attr("r", (d) => (d.size ? d.size : 5))
+        .attr("cx", (d) => {
           return element.getXFromSeqPosition(d.start) + half;
         })
-        .attr("cy", d => {
+        .attr("cy", (d) => {
           return element._yScale(d.variant.charAt(0));
         })
-        .attr("name", d => {
+        .attr("name", (d) => {
           const mutation =
             d.alternativeSequence === "*" ? "STOP" : d.alternativeSequence;
           // eslint-disable-next-line no-param-reassign
           d.internalId = `var_${d.wildType}${d.start}${mutation}`;
           return d.internalId;
         })
-        .attr("fill", d =>
+        .attr("fill", (d) =>
           element._colorConfig ? element._colorConfig(d) : d.color
         )
         .call(element.bindEvents, element);

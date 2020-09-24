@@ -29,7 +29,7 @@ class ProtvistaTooltip extends LitElement {
       // flag
       visible: { type: Boolean, reflect: true },
       // selector pointing to the container of the tooltip (for edge detection)
-      container: { type: String, reflect: true }
+      container: { type: String, reflect: true },
     };
   }
 
@@ -56,7 +56,7 @@ class ProtvistaTooltip extends LitElement {
     this._observer.observe(this, {
       subtree: true,
       characterData: true,
-      childList: true
+      childList: true,
     });
     window.addEventListener("resize", this._changeHandler);
   }
@@ -79,6 +79,21 @@ class ProtvistaTooltip extends LitElement {
         --triangle-height: ${TRIANGLE_HEIGHT}px;
         --triangle-margin: ${TRIANGLE_MARGIN}px;
         --vertical-distance: ${VERTICAL_DISTANCE}px;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+      }
+
+      h1 {
+        background-color: var(--title-color);
+        line-height: 2em;
+        padding: 0 1ch;
       }
 
       .tooltip {
@@ -135,13 +150,6 @@ class ProtvistaTooltip extends LitElement {
         border-top-width: var(--triangle-height);
       }
 
-      h1 {
-        margin: 0;
-        background-color: var(--title-color);
-        line-height: 2em;
-        padding: 0 1ch;
-      }
-
       :host a,
       :host a:link,
       :host a:active,
@@ -168,6 +176,13 @@ class ProtvistaTooltip extends LitElement {
         font-size: 1rem !important;
         margin: 0 !important;
         font-weight: 500 !important;
+        color: #fff !important;
+      }
+
+      ::slotted(h6) {
+        font-size: 1rem !important;
+        margin: 0 !important;
+        font-weight: 300 !important;
         color: #fff !important;
       }
 
@@ -253,10 +268,9 @@ class ProtvistaTooltip extends LitElement {
 
     return html`
         <section
-          class="tooltip arrow-${position.horizontal ||
-            "left"} arrow-${position.vertical || "up"} ${
-      visible ? "visible" : ""
-    }"
+          class="tooltip arrow-${position.horizontal || "left"} arrow-${
+      position.vertical || "up"
+    } ${visible ? "visible" : ""}"
           style="${style}"
         >
           <h1>${this.title}</h1>
