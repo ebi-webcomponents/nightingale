@@ -12,17 +12,6 @@ const withMargin = (
     },
   }
 ) => {
-  for (const side of sides) {
-    Object.defineProperty(Element.prototype, `margin${side}`, {
-      get() {
-        return this.margin[side] || 0;
-      },
-      set(value) {
-        this.margin[side] = +value;
-      },
-    });
-  }
-
   class ElementWithMargin extends Element {
     constructor() {
       super();
@@ -41,6 +30,16 @@ const withMargin = (
       }
       super.attributeChangedCallback(name, oldValue, newValue);
     }
+  }
+  for (const side of sides) {
+    Object.defineProperty(ElementWithMargin.prototype, `margin${side}`, {
+      get() {
+        return this.margin[side] || 0;
+      },
+      set(value) {
+        this.margin[side] = +value;
+      },
+    });
   }
   return ElementWithMargin;
 };
