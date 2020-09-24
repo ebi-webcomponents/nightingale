@@ -65,7 +65,7 @@ let currentColor = null;
 const ProtvistaMSAWrapper = () => {
   const [colorScheme, setColorScheme] = useState("clustal2");
   const [overlayConservation, setOverlayConservation] = useState(false);
-  const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
+  const [sampleSizeConservation, setSampleSizeConservation] = useState(20);
   const msaTrack = useRef(null);
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);

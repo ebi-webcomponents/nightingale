@@ -183,7 +183,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       this
     );
     window.requestAnimationFrame(() => {
-      if (this.el) {
+      if (this.el && this.svg) {
         this.el.updatePositionByResidue({ aaPos: this._displaystart });
         if (this.getSingleBaseWidth() < 1) {
           this.dispatchEvent(
