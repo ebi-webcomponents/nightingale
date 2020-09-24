@@ -92,6 +92,10 @@ module.exports = {
         test: /\.svg$/,
         loader: "svg-inline-loader",
       },
+      {
+        test: /\.tsv$/,
+        loader: "raw-loader",
+      },
     ],
   },
   plugins: [

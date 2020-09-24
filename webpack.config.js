@@ -136,6 +136,10 @@ const config = {
         test: /\.svg$/,
         loader: "svg-inline-loader?classPrefix",
       },
+      {
+        test: /\.tsv$/,
+        loader: "raw-loader",
+      },
     ],
   },
 };

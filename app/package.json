@@ -33,6 +33,8 @@
     "protvista-track": "^2.18.2",
     "protvista-uniprot": "^2.0.3",
     "protvista-variation": "^2.18.2",
+    "protvista-links": "^0.0.1",
+    "protvista-msa": "^2.18.0",
     "protvista-variation-adapter": "^2.18.3",
     "protvista-variation-graph": "^2.18.2",
     "react": "^16.13.0",

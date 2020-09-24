@@ -1,4 +1,4 @@
-import { interpolateRainbow, transition } from "d3";
+import { interpolateRainbow } from "d3";
 
 import ProtvistaTrack from "protvista-track";
 import { parseLinks, contactObjectToLinkList } from "./links-parser";
@@ -24,16 +24,32 @@ const getHighlightEvent = (
 };
 
 class ProtvistaLinks extends ProtvistaTrack {
+  constructor() {
+    super();
+    this._threshold = 0.9;
+    this._rawData = null;
+  }
+
   set data(data: LinksData) {
+    this._rawData = data;
     if (typeof data === "string") {
-      this._data = parseLinks(data, 0.9);
+      this._data = parseLinks(data, this._threshold);
     } else if (Array.isArray(data)) {
       this._data = data;
     }
     this._createTrack();
   }
 
-  _createFeatures() {
+  get threshold(): number {
+    return this._threshold;
+  }
+
+  set threshold(value: number) {
+    this._threshold = +value;
+    this._data = parseLinks(this._rawData, this._threshold);
+  }
+
+  _createFeatures(): void {
     this.seq_g.selectAll("g.contact-group").remove();
     const contactGroup = this.seq_g.append("g").attr("class", "contact-group");
     const linksGroup = this.seq_g.append("g").attr("class", "links-group");
@@ -106,7 +122,7 @@ class ProtvistaLinks extends ProtvistaTrack {
     );
   }
 
-  refresh() {
+  refresh(): void {
     this.contactPoints
       .attr(
         "cx",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import isEmpty from "lodash-es/isEmpty";
+
+import rawContactsHC from "protvista-links/src/example.tsv";
 
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
@@ -7,10 +8,10 @@ import ProtvistaManager from "protvista-manager";
 import ProtvistaLinks from "protvista-links";
 
 import loadWebComponent from "../utils/load-web-component";
-import Readme from "./Readme";
+import Readme from "./Readme.jsx";
 import readmeContent from "../../../packages/protvista-msa/README.md";
-import Console from "./Console";
-import { rawContactsHC } from "../mocks/interpro";
+import Console from "./Console.jsx";
+// import { rawContactsHC } from "../mocks/interpro";
 
 const AllowedColorschemes = [
   "aliphatic",
@@ -69,7 +70,7 @@ const ProtvistaMSAWrapper = () => {
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);
   const sequence =
-    "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
+    "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNPMAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNPMAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
   useEffect(() => {
     const seqs = [];
     for (let i = 1; i <= nSequences; i++) {
