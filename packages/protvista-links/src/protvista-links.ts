@@ -1,9 +1,9 @@
-import { interpolateRainbow, event as d3Event } from "d3";
+import { interpolateCividis as d3Color } from "d3";
 
 import ProtvistaTrack from "protvista-track";
 import { parseLinks, contactObjectToLinkList } from "./links-parser";
 
-const OPACITY_MOUSEOUT = 0.3;
+const OPACITY_MOUSEOUT = 0.7;
 
 const getHighlightEvent = (
   type: string,
@@ -49,6 +49,13 @@ class ProtvistaLinks extends ProtvistaTrack {
     this._data = parseLinks(this._rawData, this._threshold);
   }
 
+  _getColor(d: number): string {
+    if (!this._data.contacts[d]) return "";
+    return d3Color(
+      1 - this._data.contacts[d].size / this._data.maxNumberOfContacts
+    );
+  }
+
   _dispatchSelectNode(d: number) {
     this._data.selected = d;
     this.dispatchEvent(
@@ -76,7 +83,7 @@ class ProtvistaLinks extends ProtvistaTrack {
       .enter()
       .append("circle")
       .attr("class", "contact-point")
-      .attr("fill", (d: number) => interpolateRainbow(d / this._length))
+      .attr("fill", (d: number) => this._getColor(d))
       .attr("id", (d: number) => `cp_${d}`)
       .on("mouseover", (d: number) => {
         if (this._data.isHold) return;
@@ -101,6 +108,7 @@ class ProtvistaLinks extends ProtvistaTrack {
       .attr("class", "contact-link")
       .attr("fill", "transparent")
       .attr("stroke", "black")
+      .style("opacity", 0)
       .style("pointer-events", "none")
       .attr("id", ([n1, n2]: Array<number>) => `cn_${n1}_${n2}`);
   }
@@ -153,7 +161,7 @@ class ProtvistaLinks extends ProtvistaTrack {
     this.contactLines
       .attr("d", (d: number[]) => this.arc(d))
       .transition()
-      .attr("stroke", interpolateRainbow(this._data.selected / this._length))
+      .attr("stroke", this._getColor(this._data.selected))
       .style("opacity", ([n1, n2]: Array<number>) =>
         +n1 === +this._data.selected || +n2 === +this._data.selected ? 1 : 0
       );

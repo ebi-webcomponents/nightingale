@@ -6,6 +6,7 @@ interface LinksObject {
 }
 interface ContactObject {
   contacts: Contacts;
+  maxNumberOfContacts: number;
 }
 
 interface NumberArray {

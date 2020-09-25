@@ -50,6 +50,9 @@ export const parseLinks = (text: string, threshold: number): ContactObject => {
   });
   return {
     contacts,
+    maxNumberOfContacts: Math.max(
+      ...Object.values(contacts).map((s) => s.size)
+    ),
   };
 };
 
