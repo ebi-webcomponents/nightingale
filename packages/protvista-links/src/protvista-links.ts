@@ -1,4 +1,4 @@
-import { interpolateRainbow } from "d3";
+import { interpolateRainbow, event as d3Event } from "d3";
 
 import ProtvistaTrack from "protvista-track";
 import { parseLinks, contactObjectToLinkList } from "./links-parser";
@@ -26,7 +26,7 @@ const getHighlightEvent = (
 class ProtvistaLinks extends ProtvistaTrack {
   constructor() {
     super();
-    this._threshold = 0.9;
+    this._threshold = 0.7;
     this._rawData = null;
   }
 
@@ -49,7 +49,23 @@ class ProtvistaLinks extends ProtvistaTrack {
     this._data = parseLinks(this._rawData, this._threshold);
   }
 
+  _dispatchSelectNode(d: number) {
+    this._data.selected = d;
+    this.dispatchEvent(
+      getHighlightEvent(
+        "mouseover",
+        this,
+        Array.from(this._data.contacts[d])
+          .concat(+d)
+          .sort()
+      )
+    );
+    this.refresh();
+  }
+
   _createFeatures(): void {
+    this.removeEventListener("click", this._resetEventHandler);
+
     this.seq_g.selectAll("g.contact-group").remove();
     const contactGroup = this.seq_g.append("g").attr("class", "contact-group");
     const linksGroup = this.seq_g.append("g").attr("class", "links-group");
@@ -63,22 +79,18 @@ class ProtvistaLinks extends ProtvistaTrack {
       .attr("fill", (d: number) => interpolateRainbow(d / this._length))
       .attr("id", (d: number) => `cp_${d}`)
       .on("mouseover", (d: number) => {
-        this._data.selected = d;
-        this.dispatchEvent(
-          getHighlightEvent(
-            "mouseover",
-            this,
-            Array.from(this._data.contacts[d])
-              .concat(+d)
-              .sort()
-          )
-        );
-        this.refresh();
+        if (this._data.isHold) return;
+        this._dispatchSelectNode(d);
       })
       .on("mouseout", () => {
+        if (this._data.isHold) return;
         this._data.selected = undefined;
         this.dispatchEvent(getHighlightEvent("mouseout", this));
         this.refresh();
+      })
+      .on("click", (d: number) => {
+        this._data.isHold = !this._data.isHold;
+        if (!this._data.isHold) this._dispatchSelectNode(d);
       });
 
     this.contactLines = linksGroup
