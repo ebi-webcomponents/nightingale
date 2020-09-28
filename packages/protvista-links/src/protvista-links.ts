@@ -1,9 +1,11 @@
-import { interpolateCividis as d3Color } from "d3";
+import { scaleLinear } from "d3";
 
 import ProtvistaTrack from "protvista-track";
 import { parseLinks, contactObjectToLinkList } from "./links-parser";
 
-const OPACITY_MOUSEOUT = 0.7;
+const OPACITY_MOUSEOUT = 0.4;
+
+const d3Color = scaleLinear([0, 1], ["orange", "blue"]);
 
 const getHighlightEvent = (
   type: string,
@@ -52,7 +54,7 @@ class ProtvistaLinks extends ProtvistaTrack {
   _getColor(d: number): string {
     if (!this._data.contacts[d]) return "";
     return d3Color(
-      1 - this._data.contacts[d].size / this._data.maxNumberOfContacts
+      this._data.contacts[d].size / this._data.maxNumberOfContacts
     );
   }
 
@@ -67,7 +69,6 @@ class ProtvistaLinks extends ProtvistaTrack {
           .sort()
       )
     );
-    this.refresh();
   }
 
   _createFeatures(): void {
@@ -85,9 +86,11 @@ class ProtvistaLinks extends ProtvistaTrack {
       .attr("class", "contact-point")
       .attr("fill", (d: number) => this._getColor(d))
       .attr("id", (d: number) => `cp_${d}`)
+      .style("stroke-width", 2)
       .on("mouseover", (d: number) => {
         if (this._data.isHold) return;
         this._dispatchSelectNode(d);
+        this.refresh();
       })
       .on("mouseout", () => {
         if (this._data.isHold) return;
@@ -98,6 +101,7 @@ class ProtvistaLinks extends ProtvistaTrack {
       .on("click", (d: number) => {
         this._data.isHold = !this._data.isHold;
         if (!this._data.isHold) this._dispatchSelectNode(d);
+        this.refresh();
       });
 
     this.contactLines = linksGroup
@@ -152,6 +156,11 @@ class ProtvistaLinks extends ProtvistaTrack {
       .transition()
       .attr("cy", this.height * 0.5)
       .attr("r", (d: number) => this.getRadius(d === this._data.selected))
+      .attr("stroke", (d: number) =>
+        d === this._data.selected && this._data.isHold
+          ? "rgb(127 255 127)"
+          : undefined
+      )
       .style("opacity", (d: number) =>
         d === this._data.selected ||
         this.isLinkedWithSelected(d, this._data.selected)

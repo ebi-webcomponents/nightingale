@@ -173,7 +173,7 @@ const ProtvistaMSAWrapper = () => {
               flexShrink: 0,
             }}
           />
-          <protvista-navigation length={sequence.length + 1} />
+          <protvista-navigation length={sequence.length} />
         </div>
         <div style={{ display: "flex", width: "100%" }}>
           <div
