@@ -2,9 +2,9 @@ import {
   scaleLinear,
   zoom as d3zoom,
   zoomIdentity,
-  event as d3Event
+  event as d3Event,
 } from "d3";
-import { TrackHighlighter, ScrollFilter } from "protvista-utils";
+import { TrackHighlighter, ScrollFilter, withMargin } from "protvista-utils";
 
 import ResizeObserver from "resize-observer-polyfill";
 
@@ -17,7 +17,6 @@ class ProtvistaZoomable extends HTMLElement {
     this.zoomed = this.zoomed.bind(this);
     this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
     this._resetEventHandler = this._resetEventHandler.bind(this);
-    // this.bindEvents = this.bindEvents(this);
     let aboutToApply = false;
     // Postponing the zoom translation to the next frame.
     // This helps in case several attributes are changed almost at the same time,
@@ -35,7 +34,7 @@ class ProtvistaZoomable extends HTMLElement {
     this.trackHighlighter = new TrackHighlighter({ element: this, min: 1 });
 
     this.scrollFilter = new ScrollFilter(this);
-    this.wheelListener = event => this.scrollFilter.wheel(event);
+    this.wheelListener = (event) => this.scrollFilter.wheel(event);
   }
 
   connectedCallback() {
@@ -74,7 +73,7 @@ class ProtvistaZoomable extends HTMLElement {
     this._originXScale = this.xScale.copy();
     this._initZoom();
     this._listenForResize();
-    this.addEventListener("error", e => {
+    this.addEventListener("error", (e) => {
       console.error(e);
     });
     this.addEventListener("click", this._resetEventHandler);
@@ -143,16 +142,6 @@ class ProtvistaZoomable extends HTMLElement {
     return this._svg;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  get margin() {
-    return {
-      top: 10,
-      right: 10,
-      bottom: 10,
-      left: 10
-    };
-  }
-
   set fixedHighlight(region) {
     this.trackHighlighter.setFixedHighlight(region);
   }
@@ -173,11 +162,11 @@ class ProtvistaZoomable extends HTMLElement {
       .scaleExtent([1, Infinity])
       .translateExtent([
         [0, 0],
-        [this.getWidthWithMargins(), 0]
+        [this.getWidthWithMargins(), 0],
       ])
       .extent([
         [0, 0],
-        [this.getWidthWithMargins(), 0]
+        [this.getWidthWithMargins(), 0],
       ])
       .filter(() => {
         if (!(d3Event instanceof WheelEvent)) return true;
@@ -232,10 +221,10 @@ class ProtvistaZoomable extends HTMLElement {
           displayend: Math.min(
             this.length,
             Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
-          )
+          ),
         },
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       })
     );
   }
@@ -269,7 +258,7 @@ class ProtvistaZoomable extends HTMLElement {
     if (this.svg) this.svg.attr("width", this.width);
     this._zoom.scaleExtent([1, Infinity]).translateExtent([
       [0, 0],
-      [this.getWidthWithMargins(), 0]
+      [this.getWidthWithMargins(), 0],
     ]);
     this.applyZoomTranslation();
   }
@@ -314,7 +303,7 @@ class ProtvistaZoomable extends HTMLElement {
     }
 
     if (!Element.prototype.closest) {
-      Element.prototype.closest = s => {
+      Element.prototype.closest = (s) => {
         let el = this;
 
         do {
@@ -345,12 +334,12 @@ class ProtvistaZoomable extends HTMLElement {
       eventtype: type,
       coords: ProtvistaZoomable._getClickCoords(),
       feature,
-      target
+      target,
     };
     if (withHighlight) {
       if (feature && feature.fragments) {
         detail.highlight = feature.fragments
-          .map(fr => `${fr.start}:${fr.end}`)
+          .map((fr) => `${fr.start}:${fr.end}`)
           .join(",");
       } else if (d3Event && d3Event.shiftKey && this._highlight) {
         // If holding shift, add to the highlights
@@ -365,7 +354,7 @@ class ProtvistaZoomable extends HTMLElement {
     return new CustomEvent("change", {
       detail,
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     });
   }
 
@@ -410,4 +399,11 @@ class ProtvistaZoomable extends HTMLElement {
   }
 }
 
-export default ProtvistaZoomable;
+export default withMargin(ProtvistaZoomable, {
+  initialValue: {
+    top: 10,
+    right: 10,
+    bottom: 10,
+    left: 10,
+  },
+});
