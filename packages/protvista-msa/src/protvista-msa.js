@@ -59,6 +59,8 @@ class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
     super();
     this.setActiveTrack = this.setActiveTrack.bind(this);
+    this.marginleft = 0;
+    this.marginright = 0;
   }
 
   static get properties() {
@@ -111,16 +113,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
     window.requestAnimationFrame(() => {
       this.svg = select(this).select("div");
     });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  get margin() {
-    return {
-      top: 10,
-      right: 10,
-      bottom: 10,
-      left: 10,
-    };
   }
 
   getColorMap() {
