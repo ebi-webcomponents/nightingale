@@ -133,17 +133,22 @@ class ProtvistaMSA extends ProtvistaZoomable {
       this.setActiveTrack(this._data[0].name);
     }
     const tileHeight = 20;
+    const tileWidth = Math.max(1, this.getSingleBaseWidth());
     const options = {
       sequences: this._data,
       height: this._height,
       width: this.getWidthWithMargins(),
       tileHeight,
-      tileWidth: Math.max(1, this.getSingleBaseWidth()),
+      tileWidth,
       colorScheme: this._colorscheme || "clustal",
       layout: "nightingale",
       sequenceOverflow: "scroll",
       sequenceOverflowX: "hidden",
       sequenceDisableDragging: true,
+      highlight: null,
+      position: {
+        xPos: (this._displaystart - 1) * tileWidth,
+      },
       style: {
         paddingLeft: `${this.margin.left || 0}px`,
       },
@@ -170,55 +175,28 @@ class ProtvistaMSA extends ProtvistaZoomable {
       options.sequenceTextFont = this.getAttribute("text-font");
     }
 
+    if (this._highlight && this._highlight !== "0:0") {
+      const region = new Region({
+        min: 1,
+        max: this._data?.[0]?.sequence?.length || 1,
+      });
+      region.decode(this._highlight);
+      options.highlight = region.segments.map(({ start, end }) => ({
+        sequences: {
+          from: 0,
+          to: this._data.length,
+        },
+        residues: {
+          from: start,
+          to: end,
+        },
+      }));
+    }
+
     ReactDOM.render(
       <ReactMSAViewer {...options} ref={(ref) => (this.el = ref)} />,
       this
     );
-    window.requestAnimationFrame(() => {
-      if (this.el && this.svg) {
-        this.el.updatePositionByResidue({ aaPos: this._displaystart });
-        if (this.getSingleBaseWidth() < 1) {
-          this.dispatchEvent(
-            // Dispatches the event so the manager can propagate this changes to other  components
-            new CustomEvent("change", {
-              detail: {
-                displaystart: this._displaystart,
-                displayend: this._displaystart + this.xScale.range()[1],
-              },
-              bubbles: true,
-              cancelable: true,
-            })
-          );
-        }
-        this.highlight();
-      }
-    });
-  }
-
-  highlight() {
-    window.requestAnimationFrame(() => {
-      if (this._highlight && this._highlight !== "0:0") {
-        const region = new Region({
-          min: 1,
-          max: this._data?.[0]?.sequence?.length || 1,
-        });
-        region.decode(this._highlight);
-        this.el.highlightRegion(
-          region.segments.map(({ start, end }) => ({
-            sequences: {
-              from: 0,
-              to: this._data.length,
-            },
-            residues: {
-              from: start,
-              to: end,
-            },
-          }))
-        );
-      } else {
-        this.el.removeHighlightRegion();
-      }
-    });
   }
 }
 
