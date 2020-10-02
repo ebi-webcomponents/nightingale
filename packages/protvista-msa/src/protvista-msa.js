@@ -81,6 +81,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
     return ProtvistaZoomable.observedAttributes.concat([
       "labelwidth",
       "activeLabel",
+      "hidelabel",
       "colorscheme",
       "calculate-conservation",
       "overlay-conservation",
@@ -120,16 +121,22 @@ class ProtvistaMSA extends ProtvistaZoomable {
   }
 
   getWidthWithMargins() {
-    return this.width
-      ? this.width -
-          (this._labelwidth || 0) -
-          this.margin.left -
-          this.margin.right
-      : 0;
+    if (!this.width) {
+      return 0;
+    }
+    if (this._hidelabel) {
+      return this.width;
+    }
+    return (
+      this.width -
+      (this._labelwidth || 0) -
+      this.margin.left -
+      this.margin.right
+    );
   }
 
   refresh() {
-    if (!this.activeLabel && this._data && this._data[0]) {
+    if (!this._hidelabel && !this.activeLabel && this._data && this._data[0]) {
       this.setActiveTrack(this._data[0].name);
     }
     const tileHeight = 20;
@@ -150,16 +157,8 @@ class ProtvistaMSA extends ProtvistaZoomable {
         xPos: (this._displaystart - 1) * tileWidth,
       },
       style: {
-        paddingLeft: `${this.margin.left || 0}px`,
+        paddingLeft: `${this._hidelabel ? 0 : this.margin.left || 0}px`,
       },
-      labelComponent: ({ sequence }) =>
-        TrackLabel({
-          sequence,
-          activeLabel: this.activeLabel,
-          setActiveTrack: this.setActiveTrack,
-          width: this._labelwidth,
-          tileHeight,
-        }),
     };
 
     if (this.hasAttribute("calculate-conservation")) {
@@ -173,6 +172,17 @@ class ProtvistaMSA extends ProtvistaZoomable {
     }
     if (this["_text-font"] > 0) {
       options.sequenceTextFont = this.getAttribute("text-font");
+    }
+
+    if (!this._hidelabel) {
+      options.labelComponent = ({ sequence }) =>
+        TrackLabel({
+          sequence,
+          activeLabel: this.activeLabel,
+          setActiveTrack: this.setActiveTrack,
+          width: this._labelwidth,
+          tileHeight,
+        });
     }
 
     if (this._highlight && this._highlight !== "0:0") {
