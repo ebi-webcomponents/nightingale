@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import isEmpty from "lodash-es/isEmpty";
+
+import rawContactsHC from "protvista-links/src/example.tsv";
+
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
+import ProtvistaLinks from "protvista-links";
+
 import loadWebComponent from "../utils/load-web-component";
-import Readme from "./Readme";
+import Readme from "./Readme.jsx";
 import readmeContent from "../../../packages/protvista-msa/README.md";
-import Console from "./Console";
+import Console from "./Console.jsx";
+// import { rawContactsHC } from "../mocks/interpro";
 
 const AllowedColorschemes = [
   "aliphatic",
@@ -58,18 +63,14 @@ const addGaps = (sequence, nGaps) => {
 
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
-  const [colorScheme, setColorScheme] = useState("clustal");
+  const [colorScheme, setColorScheme] = useState("clustal2");
   const [overlayConservation, setOverlayConservation] = useState(false);
-  const [sampleSizeConservation, setSampleSizeConservation] = useState(null);
-  const [showLeftCoordinate, setShowLeftCoordinate] = useState(true);
-  const [showRightCoordinate, setShowRightCoordinate] = useState(true);
-  const [offsetSeqStart, setOffsetSeqStart] = useState(false);
-  const [excludeGaps, setExcludeGaps] = useState(false);
+  const [sampleSizeConservation, setSampleSizeConservation] = useState(20);
   const msaTrack = useRef(null);
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);
   const sequence =
-    "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
+    "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNPMAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNPMAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
   useEffect(() => {
     const seqs = [];
     for (let i = 1; i <= nSequences; i++) {
@@ -103,18 +104,19 @@ const ProtvistaMSAWrapper = () => {
     msaTrack.current.onActiveTrackChange = (trackId) => {
       console.log("on active track change:", trackId);
     };
+    document.querySelector("#links-track").data = rawContactsHC;
   }, []);
 
   loadWebComponent("protvista-msa", ProtvistaMSA);
   loadWebComponent("protvista-navigation", ProtvistaNavigation);
   loadWebComponent("protvista-manager", ProtvistaManager);
+  loadWebComponent("protvista-links", ProtvistaLinks);
 
   const handleColorChange = (event) => {
     setColorScheme(event.target.value);
     addLog(`[setColorScheme]: ${event.target.value}`);
   };
-  const labelWidth = 60;
-  const coordinateWidth = 30;
+  const labelWidth = 100;
   const conservationOptions = {
     "calculate-conservation": true,
   };
@@ -123,23 +125,6 @@ const ProtvistaMSAWrapper = () => {
   }
   if (sampleSizeConservation > 0) {
     conservationOptions["sample-size-conservation"] = sampleSizeConservation;
-  }
-
-  const coordinateOptions = {};
-  if (showLeftCoordinate) {
-    coordinateOptions["coordinate-left"] = true;
-  }
-  if (showRightCoordinate) {
-    coordinateOptions["coordinate-right"] = true;
-  }
-  if (!isEmpty(coordinateOptions)) {
-    coordinateOptions["coordinate-width"] = coordinateWidth;
-    if (excludeGaps) {
-      coordinateOptions["coordinate-exclude-gaps"] = true;
-    }
-    if (offsetSeqStart) {
-      coordinateOptions["coordinate-offset-seq-start"] = true;
-    }
   }
 
   return (
@@ -174,68 +159,46 @@ const ProtvistaMSAWrapper = () => {
             onChange={(evt) => setSampleSizeConservation(evt.target.value)}
           />
         </label>
-        <label>
-          show left coordinates:
-          <input
-            type="checkbox"
-            checked={showLeftCoordinate}
-            onChange={() => setShowLeftCoordinate(!showLeftCoordinate)}
-          />
-        </label>
-        <label>
-          show right coordinates:
-          <input
-            type="checkbox"
-            checked={showRightCoordinate}
-            onChange={() => setShowRightCoordinate(!showRightCoordinate)}
-          />
-        </label>
-        {(showLeftCoordinate || showRightCoordinate) && (
-          <>
-            <label>
-              offset coordinates by sequence start:
-              <input
-                type="checkbox"
-                checked={offsetSeqStart}
-                onChange={() => setOffsetSeqStart(!offsetSeqStart)}
-              />
-            </label>
-            <label>
-              exclude gaps from coordinate count:
-              <input
-                type="checkbox"
-                checked={excludeGaps}
-                onChange={() => setExcludeGaps(!excludeGaps)}
-              />
-            </label>
-          </>
-        )}
       </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
         displaystart="1"
-        displayend="50"
+        displayend="100"
         id="example"
       >
         <div style={{ display: "flex", width: "100%" }}>
           <div
             style={{
-              width: labelWidth + (showLeftCoordinate && coordinateWidth),
+              width: labelWidth,
               flexShrink: 0,
             }}
           />
-          <protvista-navigation
-            length={sequence.length + 1}
-            displaystart="1"
-            displayend="50"
-          />
+          <protvista-navigation length={sequence.length} />
+        </div>
+        <div style={{ display: "flex", width: "100%" }}>
           <div
             style={{
-              width: showRightCoordinate && coordinateWidth,
+              width: labelWidth,
               flexShrink: 0,
+              height: "20px",
+              textAlign: "left",
+              overflow: "hidden",
+              fontWeight: "bold",
+              fontSize: "14px",
+              color: "rgb(0, 99, 154)",
+              textTransform: "uppercase",
             }}
+          >
+            Contacts
+          </div>
+          <protvista-links
+            id="links-track"
+            length={sequence.length}
+            height={20}
+            use-ctrl-to-zoom
           />
         </div>
+
         <protvista-msa
           id="msa-track"
           ref={msaTrack}
@@ -248,7 +211,6 @@ const ProtvistaMSAWrapper = () => {
           colorscheme={colorScheme}
           text-font="16px sans-serif"
           {...conservationOptions}
-          {...coordinateOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>

@@ -121,10 +121,6 @@
 .child-location-group.clg-5 path {
   stroke: #b6a31b;
 }
-g.residues-group path.feature,
-g.child-group path.feature {
-  transition: transform 0.2s ease-out;
-}
 
 .console {
   width: 100%;

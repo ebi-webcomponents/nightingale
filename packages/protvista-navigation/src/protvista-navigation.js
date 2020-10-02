@@ -85,7 +85,7 @@ class ProtVistaNavigation extends HTMLElement {
 
   _createNavRuler() {
     this._x = scaleLinear().range([this._padding, this.width - this._padding]);
-    this._x.domain([this._rulerstart, this._rulerstart + this._length]);
+    this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
 
     this._container = select(this).append("div").attr("class", "container");
 
@@ -185,7 +185,7 @@ class ProtVistaNavigation extends HTMLElement {
         .style("padding-right", `${this.margin.right}px`)
         .style("padding-top", `${this.margin.top}px`)
         .style("padding-bottom", `${this.margin.bottom}px`);
-      this._x.domain([this._rulerstart, this._rulerstart + this._length]);
+      this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
       this._axis.call(this._xAxis);
       this._updatePolygon();
       this._updateLabels();

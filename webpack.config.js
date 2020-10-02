@@ -124,7 +124,7 @@ const config = {
             options: {
               compilerOptions: {
                 declaration: false,
-                target: "es5",
+                target: "es6",
                 module: "commonjs",
               },
               transpileOnly: true,
@@ -135,6 +135,10 @@ const config = {
       {
         test: /\.svg$/,
         loader: "svg-inline-loader?classPrefix",
+      },
+      {
+        test: /\.tsv$/,
+        loader: "raw-loader",
       },
     ],
   },

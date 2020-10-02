@@ -1,4 +1,5 @@
 import ProtvistaZoomable from "protvista-zoomable";
+import { Region } from "protvista-utils";
 import ReactMSAViewer from "react-msa-viewer";
 import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
@@ -54,55 +55,12 @@ const TrackLabel = ({
   );
 };
 
-const getNumberOfInsertionsBeforeIndex = (sequence, index) =>
-  (sequence.slice(0, index - 1).match(/-/g) || []).length;
-
-const coordinateStyle = {
-  fontSize: "14px",
-  boxSizing: "border-box",
-  display: "flex",
-  flexDirection: "column",
-  flexShrink: 0,
-  justifyContent: "center",
-};
-
-const leftCoordinateStyle = {
-  ...coordinateStyle,
-  textAlign: "right",
-  paddingRight: "0.25rem",
-};
-const rightCoordinateStyle = {
-  ...coordinateStyle,
-  paddingLeft: "0.25rem",
-};
-
-const Coordinate = ({
-  children: coord,
-  width,
-  tileHeight,
-  sequence,
-  style,
-  excludeGaps = true,
-  offsetStart = false,
-}) => (
-  <div
-    style={{
-      ...style,
-      width,
-      height: tileHeight,
-    }}
-  >
-    {coord -
-      (excludeGaps &&
-        getNumberOfInsertionsBeforeIndex(sequence.sequence, coord)) +
-      (offsetStart && sequence.start && sequence.start)}
-  </div>
-);
-
 class ProtvistaMSA extends ProtvistaZoomable {
   constructor() {
     super();
     this.setActiveTrack = this.setActiveTrack.bind(this);
+    this.marginleft = 0;
+    this.marginright = 0;
   }
 
   static get properties() {
@@ -128,11 +86,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "overlay-conservation",
       "sample-size-conservation",
       "text-font",
-      "coordinate-width",
-      "coordinate-left",
-      "coordinate-right",
-      "coordinate-exclude-gaps",
-      "coordinate-offset-seq-start",
     ]);
   }
 
@@ -162,52 +115,50 @@ class ProtvistaMSA extends ProtvistaZoomable {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  get margin() {
-    return {
-      top: 10,
-      right: 0,
-      bottom: 10,
-      left: this._labelwidth + this["_coordinate-width"] || 10,
-    };
-  }
-
-  getCoordinateWidth() {
-    return (
-      (this["_coordinate-width"] || 0) *
-      (this.hasAttribute("coordinate-left") +
-        this.hasAttribute("coordinate-right"))
-    );
-  }
-
   getColorMap() {
     return this?.el?.getColorMap() || {};
+  }
+
+  getWidthWithMargins() {
+    return this.width
+      ? this.width -
+          (this._labelwidth || 0) -
+          this.margin.left -
+          this.margin.right
+      : 0;
   }
 
   refresh() {
     if (!this.activeLabel && this._data && this._data[0]) {
       this.setActiveTrack(this._data[0].name);
     }
-    const coordinateWidth = this.getCoordinateWidth();
     const tileHeight = 20;
+    const tileWidth = Math.max(1, this.getSingleBaseWidth());
     const options = {
       sequences: this._data,
       height: this._height,
-      width: this.width - (this._labelwidth || 0) - coordinateWidth,
+      width: this.getWidthWithMargins(),
       tileHeight,
-      tileWidth: Math.max(1, this.getSingleBaseWidth()),
+      tileWidth,
       colorScheme: this._colorscheme || "clustal",
       layout: "nightingale",
       sequenceOverflow: "scroll",
       sequenceOverflowX: "hidden",
       sequenceDisableDragging: true,
+      highlight: null,
+      position: {
+        xPos: (this._displaystart - 1) * tileWidth,
+      },
+      style: {
+        paddingLeft: `${this.margin.left || 0}px`,
+      },
       labelComponent: ({ sequence }) =>
         TrackLabel({
-          sequence: sequence,
+          sequence,
           activeLabel: this.activeLabel,
           setActiveTrack: this.setActiveTrack,
           width: this._labelwidth,
-          tileHeight: tileHeight,
+          tileHeight,
         }),
     };
 
@@ -224,60 +175,28 @@ class ProtvistaMSA extends ProtvistaZoomable {
       options.sequenceTextFont = this.getAttribute("text-font");
     }
 
-    if (this.hasAttribute("coordinate-left")) {
-      options.leftCoordinateComponent = ({ start, tileHeight, sequence }) => (
-        <Coordinate
-          width={this["_coordinate-width"]}
-          tileHeight={tileHeight}
-          sequence={sequence}
-          style={leftCoordinateStyle}
-          excludeGaps={this.getAttribute("coordinate-exclude-gaps") == "true"}
-          offsetStart={
-            this.getAttribute("coordinate-offset-seq-start") == "true"
-          }
-        >
-          {start}
-        </Coordinate>
-      );
+    if (this._highlight && this._highlight !== "0:0") {
+      const region = new Region({
+        min: 1,
+        max: this._data?.[0]?.sequence?.length || 1,
+      });
+      region.decode(this._highlight);
+      options.highlight = region.segments.map(({ start, end }) => ({
+        sequences: {
+          from: 0,
+          to: this._data.length,
+        },
+        residues: {
+          from: start,
+          to: end,
+        },
+      }));
     }
-    if (this.hasAttribute("coordinate-right")) {
-      options.rightCoordinateComponent = ({ end, tileHeight, sequence }) => (
-        <Coordinate
-          width={this["_coordinate-width"]}
-          tileHeight={tileHeight}
-          sequence={sequence}
-          style={rightCoordinateStyle}
-          excludeGaps={this.getAttribute("coordinate-exclude-gaps") == "true"}
-          offsetStart={
-            this.getAttribute("coordinate-offset-seq-start") == "true"
-          }
-        >
-          {end}
-        </Coordinate>
-      );
-    }
+
     ReactDOM.render(
       <ReactMSAViewer {...options} ref={(ref) => (this.el = ref)} />,
       this
     );
-    window.requestAnimationFrame(() => {
-      if (this.el) {
-        this.el.updatePositionByResidue({ aaPos: this._displaystart });
-        if (1 > this.getSingleBaseWidth()) {
-          this.dispatchEvent(
-            // Dispatches the event so the manager can propagate this changes to other  components
-            new CustomEvent("change", {
-              detail: {
-                displaystart: this._displaystart,
-                displayend: this._displaystart + this.xScale.range()[1],
-              },
-              bubbles: true,
-              cancelable: true,
-            })
-          );
-        }
-      }
-    });
   }
 }
 

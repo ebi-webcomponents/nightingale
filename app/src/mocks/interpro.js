@@ -2,8 +2,8 @@ const dataIPR = [
   {
     accession: "IPR00001",
     locations: [{ fragments: [{ start: 1, end: 466 }] }],
-    color: "#cacaca"
-  }
+    color: "#cacaca",
+  },
 ];
 const signatures = [
   {
@@ -13,25 +13,25 @@ const signatures = [
         fragments: [
           { start: 127, end: 264 },
           { start: 279, end: 385 },
-          { start: 400, end: 466 }
-        ]
-      }
+          { start: 400, end: 466 },
+        ],
+      },
     ],
-    color: "#7acaca"
+    color: "#7acaca",
   },
   {
     accession: "PF00001",
     locations: [
       { fragments: [{ start: 146, end: 266 }] },
-      { fragments: [{ start: 346, end: 466 }] }
+      { fragments: [{ start: 346, end: 466 }] },
     ],
-    color: "#ca7aca"
+    color: "#ca7aca",
   },
   {
     accession: "CD0001",
     locations: [{ fragments: [{ start: 146, end: 456 }] }],
-    color: "#caca7a"
-  }
+    color: "#caca7a",
+  },
 ];
 const withResidues = [
   {
@@ -65,22 +65,22 @@ const withResidues = [
               { start: 421, end: 421, residues: "H" },
               { start: 447, end: 447, residues: "W" },
               { start: 449, end: 449, residues: "Y" },
-              { start: 457, end: 457, residues: "W" }
+              { start: 457, end: 457, residues: "W" },
             ],
-            description: "ligand binding site"
+            description: "ligand binding site",
           },
           {
             fragments: [
               { start: 138, end: 138, residues: "K" },
               { start: 216, end: 216, residues: "R" },
               { start: 310, end: 310, residues: "R" },
-              { start: 396, end: 396, residues: "M" }
+              { start: 396, end: 396, residues: "M" },
             ],
-            description: "putative domain interaction site"
-          }
-        ]
-      }
-    ]
+            description: "putative domain interaction site",
+          },
+        ],
+      },
+    ],
   },
   {
     accession: "cd00108",
@@ -113,22 +113,22 @@ const withResidues = [
               { start: 421, end: 421, residues: "H" },
               { start: 447, end: 447, residues: "W" },
               { start: 449, end: 449, residues: "Y" },
-              { start: 457, end: 457, residues: "W" }
+              { start: 457, end: 457, residues: "W" },
             ],
-            description: "ligand binding site"
+            description: "ligand binding site",
           },
           {
             fragments: [
               { start: 138, end: 138, residues: "K" },
               { start: 216, end: 216, residues: "R" },
               { start: 310, end: 310, residues: "R" },
-              { start: 396, end: 396, residues: "M" }
+              { start: 396, end: 396, residues: "M" },
             ],
-            description: "putative domain interaction site"
-          }
-        ]
-      }
-    ]
+            description: "putative domain interaction site",
+          },
+        ],
+      },
+    ],
   },
   {
     accession: "cd00108",
@@ -164,22 +164,22 @@ const withResidues = [
               { start: 421, end: 421, residues: "H" },
               { start: 447, end: 447, residues: "W" },
               { start: 449, end: 449, residues: "Y" },
-              { start: 457, end: 457, residues: "W" }
+              { start: 457, end: 457, residues: "W" },
             ],
-            description: "ligand binding site"
+            description: "ligand binding site",
           },
           {
             fragments: [
               { start: 138, end: 138, residues: "K" },
               { start: 216, end: 216, residues: "R" },
               { start: 310, end: 310, residues: "R" },
-              { start: 396, end: 396, residues: "M" }
+              { start: 396, end: 396, residues: "M" },
             ],
-            description: "putative domain interaction site"
-          }
-        ]
-      }
-    ]
+            description: "putative domain interaction site",
+          },
+        ],
+      },
+    ],
   },
   {
     accession: "cd00108",
@@ -215,23 +215,39 @@ const withResidues = [
               { start: 421, end: 421, residues: "H" },
               { start: 447, end: 447, residues: "W" },
               { start: 449, end: 449, residues: "Y" },
-              { start: 457, end: 457, residues: "W" }
+              { start: 457, end: 457, residues: "W" },
             ],
-            description: "ligand binding site"
+            description: "ligand binding site",
           },
           {
             fragments: [
               { start: 138, end: 138, residues: "K" },
               { start: 216, end: 216, residues: "R" },
               { start: 310, end: 310, residues: "R" },
-              { start: 396, end: 396, residues: "M" }
+              { start: 396, end: 396, residues: "M" },
             ],
-            description: "putative domain interaction site"
-          }
-        ]
-      }
-    ]
-  }
+            description: "putative domain interaction site",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
-export { dataIPR, signatures, withResidues };
+const rawContactsHC = `x y a b score
+191 225 0 8 0.9999824
+50 208 0 8 0.9999750
+46 207 0 8 0.9999180
+47 27 0 8 0.9999129
+43 207 0 8 0.9998918
+47 21 0 8 0.9998869
+126 195 0 8 0.9998656
+50 21 0 8 0.9998630
+19 184 0 8 0.9998622
+130 161 0 8 0.9998603
+95 33 0 8 0.9998345
+25 94 0 8 0.9997534
+15 181 0 8 0.8997336
+26 61 0 8 0.8997303`;
+
+export { dataIPR, signatures, withResidues, rawContactsHC };
