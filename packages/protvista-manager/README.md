@@ -12,7 +12,7 @@ The children should fire events of the type change, and the detail object should
 
 Additionally, there are a set of pre-defined attributes which can be used with this component and will be propagated to descendents: `displaystart`, `displayend`, `highlight` and `length`. This is useful if you want to control things like zoom level from outside, for instance directly from your application.
 
-See it running [Here](https://ebi-webcomponents.github.io/protvista-manager/index.html).
+See it running [Here](https://ebi-webcomponents.github.io/nightingale/#/manager).
 
 ## Usage
 
