@@ -92,7 +92,12 @@ class ProtvistaMSA extends ProtvistaZoomable {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "hidelabel") {
-      this._hidelabel = newValue !== null ? newValue === "true" : false;
+      this._hidelabel =
+        newValue !== null
+          ? ["true", "hidelabel", ""].includes(newValue)
+          : false;
+      // forcing rendering
+      this.applyZoomTranslation();
     } else {
       super.attributeChangedCallback(name, oldValue, newValue);
     }
