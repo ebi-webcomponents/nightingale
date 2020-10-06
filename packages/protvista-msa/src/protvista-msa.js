@@ -75,10 +75,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
     if (this.hasAttribute("activeLabel")) {
       this.activeLabel = this.getAttribute("activeLabel");
     }
-
-    this._hidelabel = this.hasAttribute("hidelabel")
-      ? this.getAttribute("hidelabel") === "true"
-      : false;
   }
 
   static get observedAttributes() {
@@ -90,7 +86,16 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "overlay-conservation",
       "sample-size-conservation",
       "text-font",
+      "hidelabel",
     ]);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "hidelabel") {
+      this._hidelabel = newValue !== null ? newValue === "true" : false;
+    } else {
+      super.attributeChangedCallback(name, oldValue, newValue);
+    }
   }
 
   get activeLabel() {
