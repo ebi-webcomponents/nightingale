@@ -14,7 +14,7 @@
   "author": "Xavier Watkins",
   "license": "MIT",
   "dependencies": {
-    "lit-element": "^2.2.0",
+    "lit-element": "^2.4.0",
     "lodash-es": "^4.17.11"
   },
   "keywords": [

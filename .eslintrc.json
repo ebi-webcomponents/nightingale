@@ -24,6 +24,7 @@
     "no-shadow": "off",
     "prefer-object-spread": "off",
     "no-plusplus": "off",
+    "no-use-before-define": "off",
     "no-return-assign": [1, "except-parens"],
     "no-restricted-syntax": [
       "error",
