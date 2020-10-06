@@ -75,13 +75,16 @@ class ProtvistaMSA extends ProtvistaZoomable {
     if (this.hasAttribute("activeLabel")) {
       this.activeLabel = this.getAttribute("activeLabel");
     }
+
+    this._hidelabel = this.hasAttribute("hidelabel")
+      ? this.getAttribute("hidelabel") === "true"
+      : false;
   }
 
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat([
       "labelwidth",
       "activeLabel",
-      "hidelabel",
       "colorscheme",
       "calculate-conservation",
       "overlay-conservation",
@@ -173,7 +176,6 @@ class ProtvistaMSA extends ProtvistaZoomable {
     if (this["_text-font"] > 0) {
       options.sequenceTextFont = this.getAttribute("text-font");
     }
-
     if (!this._hidelabel) {
       options.labelComponent = ({ sequence }) =>
         TrackLabel({
