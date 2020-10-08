@@ -26,6 +26,7 @@ Object {
   "variants": Array [
     Object {
       "accession": "NC_000021.9:g.26112051C>A",
+      "alternativeSequence": "N",
       "association": Array [
         Object {
           "dbReferences": Array [
@@ -95,6 +96,7 @@ Object {
           "name": "Alzheimer disease (AD)",
         },
       ],
+      "begin": "51",
       "clinicalSignificances": Array [
         Object {
           "sources": Array [
@@ -103,9 +105,62 @@ Object {
           "type": "Variant of uncertain significance",
         },
       ],
+      "codon": "AAG/AAT",
+      "consequenceType": "missense",
+      "cytogeneticBand": "21q21.3",
+      "descriptions": Array [
+        Object {
+          "sources": Array [
+            "ClinVar",
+          ],
+          "value": "Alzheimer disease",
+        },
+      ],
       "end": "51",
+      "genomicLocation": "NC_000021.9:g.26112051C>A",
       "hasPredictions": true,
+      "locations": Array [
+        Object {
+          "loc": "p.Lys51Asn",
+          "seqId": "ENST00000346798",
+          "source": "Ensembl",
+        },
+        Object {
+          "loc": "c.153G>T",
+          "seqId": "ENST00000346798",
+          "source": "Ensembl",
+        },
+      ],
+      "mutatedType": "N",
+      "populationFrequencies": Array [
+        Object {
+          "frequency": 0.0002,
+          "populationName": "MAF",
+          "source": "1000Genomes",
+        },
+      ],
+      "predictions": Array [
+        Object {
+          "predAlgorithmNameType": "PolyPhen",
+          "predictionValType": "probably damaging",
+          "predictorType": "multi coding",
+          "score": 0.983,
+          "sources": Array [
+            "Ensembl",
+          ],
+        },
+        Object {
+          "predAlgorithmNameType": "PolyPhen",
+          "predictionValType": "probably damaging",
+          "predictorType": "multi coding",
+          "score": 0.954,
+          "sources": Array [
+            "Ensembl",
+          ],
+        },
+      ],
       "protvistaFeatureId": "uuid_id",
+      "somaticStatus": 0,
       "sourceType": "large_scale_study",
       "start": "51",
       "tooltipContent": "
@@ -131,10 +186,28 @@ Object {
         ",
       "type": "VARIANT",
       "variant": "N",
+      "wildType": "K",
       "xrefNames": Array [
         "1000Genomes",
         "ExAC",
         "gnomAD",
+      ],
+      "xrefs": Array [
+        Object {
+          "id": "rs529782627",
+          "name": "1000Genomes",
+          "url": "https://www.ensembl.org/homo_sapiens/Variation/Explore?v=rs529782627",
+        },
+        Object {
+          "id": "rs529782627",
+          "name": "ExAC",
+          "url": "https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=rs529782627",
+        },
+        Object {
+          "id": "rs529782627",
+          "name": "gnomAD",
+          "url": " http://gnomad.broadinstitute.org/awesome?query=rs529782627",
+        },
       ],
     },
   ],

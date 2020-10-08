@@ -3,14 +3,7 @@ import { v1 } from "uuid";
 import { NightingaleElement } from "data-loader";
 
 import formatTooltip from "./tooltipGenerators";
-import {
-  ProteinsAPIVariation,
-  Xref,
-  SourceType,
-  FeatureType,
-  Association,
-  ClinicalSignificance,
-} from "./variants";
+import { ProteinsAPIVariation, Xref, SourceType, Feature } from "./variants";
 
 const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
@@ -21,19 +14,14 @@ const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
 };
 
 export type TransformedVariant = {
-  type: FeatureType;
   accession: string;
   variant: string;
   start: string;
-  end: string;
-  tooltipContent: string;
-  association?: Association[];
-  sourceType: SourceType;
   xrefNames: string[];
-  clinicalSignificances?: ClinicalSignificance[];
   hasPredictions: boolean;
+  tooltipContent: string;
   protvistaFeatureId: string;
-};
+} & Feature;
 
 export type TransformedVariantsData = {
   sequence: string;
@@ -45,24 +33,21 @@ export const transformData = (
 ): TransformedVariantsData => {
   const { sequence, features } = data;
   const variants = features.map((variant) => ({
-    type: FeatureType.Variant,
+    ...variant,
     accession: variant.genomicLocation,
     variant: variant.alternativeSequence ? variant.alternativeSequence : "-",
     start: variant.begin,
-    end: variant.end,
-    tooltipContent: formatTooltip(variant),
-    association: variant.association,
-    sourceType: variant.sourceType,
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),
-    clinicalSignificances: variant.clinicalSignificances,
     hasPredictions: variant.predictions && variant.predictions.length > 0,
+    tooltipContent: formatTooltip(variant),
     protvistaFeatureId: v1(),
   }));
   if (!variants) return null;
   return { sequence, variants };
 };
 
-class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter
+class ProtvistaVariationAdapter
+  extends ProtvistaFeatureAdapter
   implements NightingaleElement {
   static get is() {
     return "protvista-variation-adapter";
