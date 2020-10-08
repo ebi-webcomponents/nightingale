@@ -30,5 +30,6 @@
   },
   "peerDependencies": {
     "d3": "5.X"
-  }
+  },
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
 }

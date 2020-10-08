@@ -26,7 +26,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "version": "3.1.1",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
     "protvista-feature-adapter": "^3.1.1",
     "uuid": "^8.3.1"

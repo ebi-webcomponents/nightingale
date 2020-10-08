@@ -22,5 +22,6 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "uuid": "^8.3.1"
-  }
+  },
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
 }

@@ -29,7 +29,7 @@
   ],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
     "d3-scale": "^3.2.3",
     "data-loader": "^3.0.0",
