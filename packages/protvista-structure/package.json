@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure",
-  "version": "2.12.0",
+  "version": "3.1.2",
   "description": "A custom element wrapper for LiteMol",
   "main": "dist/protvista-structure.js",
   "module": "src/protvista-structure.js",
@@ -26,10 +26,10 @@
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.4.1"
   },
   "peerDependencies": {
     "litemol": "^2.4.2"
   },
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178"
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
 }

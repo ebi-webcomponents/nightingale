@@ -1,23 +1,36 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+import rawContactsHC from "protvista-links/src/example.tsv";
+
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
 import ProtvistaManager from "protvista-manager";
+import ProtvistaLinks from "protvista-links";
+
 import loadWebComponent from "../utils/load-web-component";
-import Readme from "./Readme";
+import Readme from "./Readme.jsx";
 import readmeContent from "../../../packages/protvista-msa/README.md";
-import Console from "./Console";
+import Console from "./Console.jsx";
+// import { rawContactsHC } from "../mocks/interpro";
 
 const AllowedColorschemes = [
+  "aliphatic",
+  "aromatic",
   "buried_index",
+  "charged",
+  "cinema",
   "clustal",
   "clustal2",
-  "cinema",
   "helix_propensity",
   "hydro",
   "lesk",
   "mae",
+  "negative",
   "nucleotide",
+  "polar",
+  "positive",
   "purine_pyrimidine",
+  "serine_threonine",
   "strand_propensity",
   "taylor",
   "turn_propensity",
@@ -41,28 +54,51 @@ const features = [
     fillColor: "black",
   },
 ];
+
+const nSequences = 400;
+const nGaps = 20;
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
+
 const getRandomBase = () =>
   alphabet[Math.floor(Math.random() * alphabet.length)];
 
+const getRandomPosition = (length) => Math.round(Math.random() * (length - 1));
+
+const changeBaseAtPosition = (sequence, base, position) =>
+  `${sequence.substring(0, position)}${base}${sequence.substring(
+    position + 1
+  )}`;
+
+const addGaps = (sequence, nGaps) => {
+  let result = sequence;
+  for (let i = 0; i < nGaps; i++) {
+    const position = getRandomPosition(sequence.length);
+    result = changeBaseAtPosition(result, "-", position);
+  }
+  return result;
+};
+
 let currentColor = null;
 const ProtvistaMSAWrapper = () => {
-  const [ColorScheme, setColorScheme] = useState("clustal");
+  const [colorScheme, setColorScheme] = useState("clustal2");
+  const [overlayConservation, setOverlayConservation] = useState(false);
+  const [sampleSizeConservation, setSampleSizeConservation] = useState(20);
   const msaTrack = useRef(null);
   const [logs, setLogs] = useState("");
   const addLog = (log) => setLogs(`${logs}\n${log}`);
   const sequence =
-    "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
+    "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNPMAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNPMAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP";
   useEffect(() => {
     const seqs = [];
-    for (let i = 0; i < 400; i++) {
-      const mutationPos = Math.round(Math.random() * (sequence.length - 1));
+    for (let i = 1; i <= nSequences; i++) {
+      const mutationPos = getRandomPosition(sequence.length);
       seqs.push({
         name: `seq_${i}`,
-        sequence: `${sequence.substring(
-          0,
-          mutationPos
-        )}${getRandomBase()}${sequence.substring(mutationPos + 1)}`,
+        sequence: addGaps(
+          changeBaseAtPosition(sequence, getRandomBase(), mutationPos),
+          nGaps
+        ),
+        start: 1 + getRandomPosition(sequence.length),
       });
     }
     msaTrack.current.data = seqs;
@@ -72,17 +108,20 @@ const ProtvistaMSAWrapper = () => {
     msaTrack.current.addEventListener("drawCompleted", () => {
       const { name, map } = msaTrack.current.getColorMap();
       if (name !== currentColor) {
-        addLog(
-          `[colors-${name}]:\n${Object.entries(map)
-            .map(([base, color]) => `\t${base}: ${color}`)
-            .join("\n")}`
-        );
+        if (name && map) {
+          addLog(
+            `[colors-${name}]:\n${Object.entries(map)
+              .map(([base, color]) => `\t${base}: ${color}`)
+              .join("\n")}`
+          );
+        }
         currentColor = name;
       }
     });
     msaTrack.current.onActiveTrackChange = (trackId) => {
       console.log("on active track change:", trackId);
     };
+    document.querySelector("#links-track").data = rawContactsHC;
     msaTrack.current.features = features;
     msaTrack.current.onFeatureClick = (id) => {
       console.log("on feature click:", id);
@@ -92,44 +131,95 @@ const ProtvistaMSAWrapper = () => {
   loadWebComponent("protvista-msa", ProtvistaMSA);
   loadWebComponent("protvista-navigation", ProtvistaNavigation);
   loadWebComponent("protvista-manager", ProtvistaManager);
+  loadWebComponent("protvista-links", ProtvistaLinks);
 
   const handleColorChange = (event) => {
     setColorScheme(event.target.value);
     addLog(`[setColorScheme]: ${event.target.value}`);
   };
   const labelWidth = 100;
+  const conservationOptions = {
+    "calculate-conservation": true,
+  };
+  if (overlayConservation) {
+    conservationOptions["overlay-conservation"] = true;
+  }
+  if (sampleSizeConservation > 0) {
+    conservationOptions["sample-size-conservation"] = sampleSizeConservation;
+  }
 
   return (
     <>
       <h1>protvista-msa</h1>
-      <select
-        value={ColorScheme}
-        onChange={handleColorChange}
-        onBlur={handleColorChange}
-      >
-        {AllowedColorschemes.map((c) => (
-          <option key={c}>{c}</option>
-        ))}
-      </select>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <label>
+          colorScheme:
+          <select
+            value={colorScheme}
+            onChange={handleColorChange}
+            onBlur={handleColorChange}
+          >
+            {AllowedColorschemes.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          overlayConservation:
+          <input
+            type="checkbox"
+            checked={overlayConservation}
+            onChange={() => setOverlayConservation(!overlayConservation)}
+          />
+        </label>
+        <label>
+          sampleSizeConservation:
+          <input
+            type="number"
+            value={sampleSizeConservation || ""}
+            onChange={(evt) => setSampleSizeConservation(evt.target.value)}
+          />
+        </label>
+      </div>
       <protvista-manager
         attributes="length displaystart displayend highlight"
         displaystart="1"
-        displayend="50"
+        displayend="100"
         id="example"
       >
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", width: "100%" }}>
           <div
             style={{
               width: labelWidth,
               flexShrink: 0,
             }}
           />
-          <protvista-navigation
+          <protvista-navigation length={sequence.length} />
+        </div>
+        <div style={{ display: "flex", width: "100%" }}>
+          <div
+            style={{
+              width: labelWidth,
+              flexShrink: 0,
+              height: "20px",
+              textAlign: "left",
+              overflow: "hidden",
+              fontWeight: "bold",
+              fontSize: "14px",
+              color: "rgb(0, 99, 154)",
+              textTransform: "uppercase",
+            }}
+          >
+            Contacts
+          </div>
+          <protvista-links
+            id="links-track"
             length={sequence.length}
-            displaystart="1"
-            displayend="50"
+            height={20}
+            use-ctrl-to-zoom
           />
         </div>
+
         <protvista-msa
           id="msa-track"
           ref={msaTrack}
@@ -139,8 +229,9 @@ const ProtvistaMSAWrapper = () => {
           displayend="50"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
-          colorscheme={ColorScheme}
-          calculate-conservation
+          colorscheme={colorScheme}
+          text-font="16px sans-serif"
+          {...conservationOptions}
         />
       </protvista-manager>
       <Console>{logs}</Console>

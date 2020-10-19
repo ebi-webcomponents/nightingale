@@ -1,12 +1,12 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "2.12.0",
+  "version": "3.1.2",
   "files": [
     "dist",
     "src"
   ],
   "main": "dist/protvista-feature-adapter.js",
-  "module": "src/ProtvistaFeatureAdapter.js",
+  "module": "src/protvista-feature-adapter.js",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "uuid": "^8.1.0"
-  }
+    "uuid": "^8.3.1"
+  },
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
 }

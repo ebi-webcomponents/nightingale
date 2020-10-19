@@ -9,7 +9,14 @@ This custom element can be used to zoom and navigate along the sequence displaye
 ## Usage
 
 ```html
-<protvista-navigation length="456" />
+<protvista-navigation
+  length="456"
+  displaystart="143"
+  displayend="400"
+  highlightStart="23"
+  highlightEnd="45"
+  rulerstart="50"
+/>
 ```
 
 ## API Reference
@@ -17,5 +24,25 @@ This custom element can be used to zoom and navigate along the sequence displaye
 #### `length: number`
 
 The protein or nucleic acid sequence length.
+
+#### `displaystart: number (optional)`
+
+The start position of the selected region.
+
+#### `displayend: number (optional)`
+
+The end position of the selected region.
+
+#### `highlightStart: number (optional)`
+
+The start position of the highlighted region.
+
+#### `highlightEnd: number (optional)`
+
+The end position of the highlighted region.
+
+#### `rulerstart: number (optional)`
+
+The starting coordinate of the ruler.
 
 #### also see [protvista-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)

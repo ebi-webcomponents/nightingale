@@ -10,8 +10,9 @@ install:
   - yarn
   - lerna bootstrap
 script:
-  - yarn test
+  # jest look for 'main' in package.json so build first
   - yarn build
+  - yarn test
   - yarn build-site
 deploy:
   provider: pages

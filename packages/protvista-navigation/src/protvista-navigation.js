@@ -4,23 +4,24 @@ import {
   brushX,
   format,
   select,
-  event as d3Event
+  event as d3Event,
 } from "d3";
 
-const height = 40;
+import { withMargin } from "protvista-utils";
 
 class ProtVistaNavigation extends HTMLElement {
   constructor() {
     super();
     this._x = null;
     this._padding = 0;
+    this.height = 40;
     this.dontDispatch = false;
   }
 
   _refreshWidth() {
     this.style.display = "block";
     this.style.width = "100%";
-    this.width = this.offsetWidth;
+    this.width = this.offsetWidth - this.margin.left - this.margin.right;
     if (this.width > 0) {
       this._padding = 10;
     }
@@ -38,6 +39,7 @@ class ProtVistaNavigation extends HTMLElement {
       parseFloat(this.getAttribute("displayend")) || this._length;
     this._highlightStart = parseFloat(this.getAttribute("highlightStart"));
     this._highlightEnd = parseFloat(this.getAttribute("highlightEnd"));
+    this._rulerstart = parseFloat(this.getAttribute("rulerStart")) || 1;
 
     this._onResize = this._onResize.bind(this);
 
@@ -61,7 +63,8 @@ class ProtVistaNavigation extends HTMLElement {
       "displayend",
       "highlightStart",
       "highlightEnd",
-      "width"
+      "width",
+      "rulerstart",
     ];
   }
 
@@ -82,15 +85,15 @@ class ProtVistaNavigation extends HTMLElement {
 
   _createNavRuler() {
     this._x = scaleLinear().range([this._padding, this.width - this._padding]);
-    this._x.domain([1, this._length]);
+    this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
 
-    this._svg = select(this)
-      .append("div")
-      .attr("class", "")
+    this._container = select(this).append("div").attr("class", "container");
+
+    this._svg = this._container
       .append("svg")
       .attr("id", "")
       .attr("width", this.width)
-      .attr("height", height);
+      .attr("height", this.height);
 
     this._xAxis = axisBottom(this._x);
 
@@ -98,13 +101,13 @@ class ProtVistaNavigation extends HTMLElement {
       .append("text")
       .attr("class", "start-label")
       .attr("x", 0)
-      .attr("y", height - this._padding);
+      .attr("y", this.height - this._padding);
 
     this._displayendLabel = this._svg
       .append("text")
       .attr("class", "end-label")
       .attr("x", this.width)
-      .attr("y", height - this._padding)
+      .attr("y", this.height - this._padding)
       .attr("text-anchor", "end");
     this._axis = this._svg
       .append("g")
@@ -114,7 +117,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._viewport = brushX()
       .extent([
         [this._padding, 0],
-        [this.width - this._padding, height * 0.51]
+        [this.width - this._padding, this.height * 0.51],
       ])
       .on("brush", () => {
         if (d3Event.selection) {
@@ -128,10 +131,10 @@ class ProtVistaNavigation extends HTMLElement {
                 detail: {
                   displayend: this._displayend,
                   displaystart: this._displaystart,
-                  extra: { transform: d3Event.transform }
+                  extra: { transform: d3Event.transform },
                 },
                 bubbles: true,
-                cancelable: true
+                cancelable: true,
               })
             );
           this._updateLabels();
@@ -146,7 +149,7 @@ class ProtVistaNavigation extends HTMLElement {
 
     this._brushG.call(this._viewport.move, [
       this._x(this._displaystart),
-      this._x(this._displayend)
+      this._x(this._displayend),
     ]);
 
     this.polygon = this._svg
@@ -169,7 +172,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._svg.attr("width", this.width);
     this._viewport.extent([
       [this._padding, 0],
-      [this.width - this._padding, height * 0.51]
+      [this.width - this._padding, this.height * 0.51],
     ]);
     this._brushG.call(this._viewport);
     this._updateNavRuler();
@@ -177,7 +180,12 @@ class ProtVistaNavigation extends HTMLElement {
 
   _updateNavRuler() {
     if (this._x) {
-      this._x.domain([1, this._length]);
+      this._container
+        .style("padding-left", `${this.margin.left}px`)
+        .style("padding-right", `${this.margin.right}px`)
+        .style("padding-top", `${this.margin.top}px`)
+        .style("padding-bottom", `${this.margin.bottom}px`);
+      this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
       this._axis.call(this._xAxis);
       this._updatePolygon();
       this._updateLabels();
@@ -185,7 +193,7 @@ class ProtVistaNavigation extends HTMLElement {
         this.dontDispatch = true;
         this._brushG.call(this._viewport.move, [
           this._x(this._displaystart),
-          this._x(this._displayend)
+          this._x(this._displayend),
         ]);
         this.dontDispatch = false;
       }
@@ -203,12 +211,12 @@ class ProtVistaNavigation extends HTMLElement {
     if (this.polygon)
       this.polygon.attr(
         "points",
-        `${this._x(this._displaystart)},${height / 2}
-        ${this._x(this._displayend)},${height / 2}
-        ${this.width},${height}
-        0,${height}`
+        `${this._x(this._displaystart)},${this.height / 2}
+        ${this._x(this._displayend)},${this.height / 2}
+        ${this.width},${this.height}
+        0,${this.height}`
       );
   }
 }
 
-export default ProtVistaNavigation;
+export default withMargin(ProtVistaNavigation);

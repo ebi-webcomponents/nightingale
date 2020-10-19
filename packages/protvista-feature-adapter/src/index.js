@@ -1,4 +1,4 @@
-import ProtvistaFeatureAdapter from "./ProtvistaFeatureAdapter";
+import ProtvistaFeatureAdapter from "./protvista-feature-adapter";
 
 if (window.customElements) {
   customElements.define("protvista-feature-adapter", ProtvistaFeatureAdapter);
@@ -9,5 +9,5 @@ export {
   formatTooltip,
   renameProperties,
   formatXrefs,
-  getEvidenceFromCodes
+  getEvidenceFromCodes,
 } from "./BasicHelper";

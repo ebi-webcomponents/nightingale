@@ -6,7 +6,9 @@ const styles = css`
   }
   .protvista-datatable-container {
     overflow-y: auto;
-    overflow-x: hidden;
+    // Note: overflow-x was set to 'hidden' but changing
+    // to 'auto' doesn't seem to be an issue.
+    overflow-x: auto;
   }
 
   :host([scrollable="true"]) .protvista-datatable-container {
@@ -16,11 +18,6 @@ const styles = css`
 
   :host([scrollable="false"]) .protvista-datatable-container {
     overflow-y: hidden;
-  }
-
-  .protvista-datatable__child-toggle svg {
-    width: 1.1rem;
-    height: 1.1rem;
   }
 
   table {
@@ -57,6 +54,28 @@ const styles = css`
     cursor: pointer;
   }
 
+  .withChildren:before {
+    display: inline-block;
+    font-family: "Courier New", Courier, monospace;
+    width: 1rem;
+    text-align: center;
+    border-radius: 1rem;
+    line-height: 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    border: 2px solid white;
+    background-color: var(--protvista-datatable__childToggle, #00639a);
+  }
+
+  .plus:before {
+    content: "+";
+  }
+
+  .minus:before {
+    content: "-";
+  }
+
   td:nth-child(1) {
     border-left: 0.5rem solid transparent;
   }
@@ -70,7 +89,7 @@ const styles = css`
     background-color: var(
       --protvista-datatable__active,
       rgba(255, 235, 59, 0.3)
-    );
+    ) !important;
   }
   .hidden {
     opacity: 0.2;
@@ -108,6 +127,14 @@ const styles = css`
   }
 
   .protvista-datatable__child-item__content {
+  }
+
+  .odd {
+    background-color: var(--protvista-datatable__odd, #e4e8eb);
+  }
+
+  .even {
+    background-color: var(--protvista-datatable__even, #fff);
   }
 `;
 

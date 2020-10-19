@@ -1,7 +1,7 @@
 {
   "name": "protvista-tooltip",
   "description": "A tooltip for ProtVista webcomponents",
-  "version": "2.12.0",
+  "version": "3.1.2",
   "files": [
     "dist",
     "src"
@@ -27,9 +27,9 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "xwatkins@ebi.ac.uk",
   "license": "MIT",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
-    "lit-element": "^2.2.0",
+    "lit-element": "^2.4.0",
     "lodash-es": "^4.17.11"
   }
 }

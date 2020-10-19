@@ -1,15 +1,15 @@
 import { v1 } from "uuid";
 import { formatTooltip, renameProperties } from "./BasicHelper";
 
-export const transformData = data => {
+export const transformData = (data) => {
   let transformedData = [];
   const { features } = data;
   if (features && features.length > 0) {
-    transformedData = features.map(feature => {
+    transformedData = features.map((feature) => {
       return {
         ...feature,
         tooltipContent: formatTooltip(feature),
-        protvistaFeatureId: v1()
+        protvistaFeatureId: v1(),
       };
     });
     transformedData = renameProperties(transformedData);
@@ -52,7 +52,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 
   filterData() {
     if (Array.isArray(this._adaptedData) && this._filters.length > 0) {
-      this._adaptedData = this._adaptedData.filter(d => {
+      this._adaptedData = this._adaptedData.filter((d) => {
         return this._filters.includes(d.type);
       });
     }
@@ -63,7 +63,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
   }
 
   _setSubscriberData() {
-    this.subscribers.forEach(subscriberId => {
+    this.subscribers.forEach((subscriberId) => {
       const subscriberElt = document.querySelector(subscriberId);
       if (subscriberElt) {
         subscriberElt.data = this._adaptedData;
@@ -82,16 +82,16 @@ class ProtvistaFeatureAdapter extends HTMLElement {
     this.dispatchEvent(
       new CustomEvent("load", {
         detail: {
-          payload: this._adaptedData
+          payload: this._adaptedData,
         },
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       })
     );
   }
 
   _addLoaderListeners() {
-    this.addEventListener("load", e => {
+    this.addEventListener("load", (e) => {
       if (e.target !== this) {
         e.stopPropagation();
         try {
@@ -104,7 +104,7 @@ class ProtvistaFeatureAdapter extends HTMLElement {
             new CustomEvent("error", {
               detail: error,
               bubbles: true,
-              cancelable: true
+              cancelable: true,
             })
           );
         }
@@ -118,5 +118,5 @@ export {
   formatTooltip,
   renameProperties,
   formatXrefs,
-  getEvidenceFromCodes
+  getEvidenceFromCodes,
 } from "./BasicHelper";

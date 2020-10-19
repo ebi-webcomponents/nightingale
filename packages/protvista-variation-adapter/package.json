@@ -1,13 +1,18 @@
 {
   "name": "protvista-variation-adapter",
-  "version": "2.12.0",
+  "version": "3.1.2",
   "description": "Data adapter for variation data",
   "files": [
     "dist",
+    "types",
     "src"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "main": "dist/protvista-variation-adapter.js",
-  "module": "src/ProtvistaVariationAdapter.js",
+  "module": "dist/es/protvista-variation-adapter.js",
+  "types": "dist/es/protvista-variation-adapter.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -24,14 +29,18 @@
   ],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
-    "d3-scale": "^3.2.0",
+    "d3-scale": "^3.2.3",
+    "data-loader": "^3.0.0",
     "lodash-es": "^4.17.11",
-    "protvista-feature-adapter": "^2.12.0",
-    "uuid": "^8.1.0"
+    "protvista-feature-adapter": "^3.1.2",
+    "uuid": "^8.3.1"
   },
   "peerDependencies": {
     "d3": "5.X"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.0"
   }
 }

@@ -7,7 +7,7 @@
     "prettier/react"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react"],
+  "plugins": ["@typescript-eslint", "react", "prettier"],
   "env": {
     "es6": true,
     "browser": true,
@@ -17,13 +17,14 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "ignorePatterns": ["ProtvistaMSA.js"],
+  "ignorePatterns": ["protvista-msa.js"],
   "rules": {
     "no-underscore-dangle": "off",
     "no-console": "off",
     "no-shadow": "off",
     "prefer-object-spread": "off",
     "no-plusplus": "off",
+    "no-use-before-define": "off",
     "no-return-assign": [1, "except-parens"],
     "no-restricted-syntax": [
       "error",
@@ -44,8 +45,27 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/camelcase": "off",
-    "@typescript-eslint/no-this-alias": "off"
+    "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": [
+      1,
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_|(React$)",
+        "ignoreRestSiblings": true
+      }
+    ]
   },
+  "overrides": [
+    {
+      // enable the rule specifically for TypeScript files
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": ["warn"]
+      }
+    }
+  ],
   "settings": {
     "import/resolver": {
       "node": {

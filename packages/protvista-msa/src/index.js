@@ -1,4 +1,4 @@
-import ProtvistaMSA from "./ProtvistaMSA";
+import ProtvistaMSA from "./protvista-msa";
 
 if (window.customElements) {
   customElements.define("protvista-msa", ProtvistaMSA);

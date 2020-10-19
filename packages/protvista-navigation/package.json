@@ -1,6 +1,6 @@
 {
   "name": "protvista-navigation",
-  "version": "2.12.0",
+  "version": "3.0.0",
   "description": "Navigation component for the ProtVista tool",
   "files": [
     "dist",
@@ -25,7 +25,8 @@
   "license": "ISC",
   "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
   "dependencies": {
-    "lodash-es": "^4.17.11"
+    "lodash-es": "^4.17.11",
+    "protvista-utils": "^3.0.0"
   },
   "devDependencies": {
     "d3": "^5.7.0"
