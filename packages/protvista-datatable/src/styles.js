@@ -108,11 +108,11 @@ const styles = css`
     padding-left: 0.25rem;
     text-transform: capitalize;
   }
-  .svg-colour-reviewed {
-    fill: #c39b00;
+  .svg-colour-reviewed svg {
+    color: #c39b00;
   }
-  .svg-colour-unreviewed {
-    fill: #c0c0c0;
+  .svg-colour-unreviewed svg {
+    color: #c0c0c0;
   }
 
   .protvista-datatable__child-item {
