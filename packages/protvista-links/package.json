@@ -1,6 +1,6 @@
 {
   "name": "protvista-links",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "files": [
     "dist",
     "src"
@@ -22,7 +22,7 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-track": "^3.0.0"
+    "protvista-track": "^3.2.0"
   },
   "devDependencies": {
     "@types/d3": "^5.16.3",
