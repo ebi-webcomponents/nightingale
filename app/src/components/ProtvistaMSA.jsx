@@ -38,6 +38,23 @@ const AllowedColorschemes = [
   "conservation",
 ];
 
+const features = [
+  {
+    residues: { from: 1, to: 20 },
+    sequences: { from: 0, to: 0 },
+    id: "id-1",
+    borderColor: "blue",
+    fillColor: "black",
+  },
+  {
+    residues: { from: 3, to: 10 },
+    sequences: { from: 2, to: 2 },
+    id: "id-2",
+    borderColor: "blue",
+    fillColor: "black",
+  },
+];
+
 const nSequences = 400;
 const nGaps = 20;
 const alphabet = "ACDEFGHIKLMNPQRSTVWY-";
@@ -105,6 +122,10 @@ const ProtvistaMSAWrapper = () => {
       console.log("on active track change:", trackId);
     };
     document.querySelector("#links-track").data = rawContactsHC;
+    msaTrack.current.features = features;
+    msaTrack.current.onFeatureClick = (id) => {
+      console.log("on feature click:", id);
+    };
   }, []);
 
   loadWebComponent("protvista-msa", ProtvistaMSA);

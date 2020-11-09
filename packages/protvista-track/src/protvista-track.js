@@ -313,3 +313,4 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
 export default ProtvistaTrack;
 export { DefaultLayout };
+export { getColorByType };

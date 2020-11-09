@@ -277,11 +277,7 @@ class ProtvistaDatatable extends LitElement {
                             ${column.resolver(row)}
                           </td>
                         `
-                      : html`
-                          <td>
-                            ${column.resolver(row)}
-                          </td>
-                        `
+                      : html` <td>${column.resolver(row)}</td> `
                   )}
                 </tr>
                 ${hasChildData &&

@@ -66,6 +66,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
   static get properties() {
     return {
       onActiveTrackChange: { type: Function },
+      onFeatureClick: { type: Function },
     };
   }
 
@@ -87,6 +88,7 @@ class ProtvistaMSA extends ProtvistaZoomable {
       "sample-size-conservation",
       "text-font",
       "hidelabel",
+      "features",
     ]);
   }
 
@@ -148,6 +150,17 @@ class ProtvistaMSA extends ProtvistaZoomable {
     );
   }
 
+  set features(_features) {
+    this._features = _features;
+    this.refresh();
+  }
+
+  handleFeatureClick(id) {
+    if (typeof this.onFeatureClick === "function") {
+      this.onFeatureClick(id);
+    }
+  }
+
   refresh() {
     if (!this._hidelabel && !this.activeLabel && this._data && this._data[0]) {
       this.setActiveTrack(this._data[0].name);
@@ -172,6 +185,8 @@ class ProtvistaMSA extends ProtvistaZoomable {
       style: {
         paddingLeft: `${this._hidelabel ? 0 : this.margin.left || 0}px`,
       },
+      onFeatureClick: (id) => this.handleFeatureClick(id),
+      features: this._features,
     };
 
     if (this.hasAttribute("calculate-conservation")) {

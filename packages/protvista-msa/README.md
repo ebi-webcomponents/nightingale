@@ -129,6 +129,8 @@ The sequences to be displayed. The should be in the following shape:
 ];
 ```
 
+type: `array`
+
 #### `onActiveTrackChange`
 
 The value of `onActiveTrackChange` should be a callback function to fire for when the active label/track is changed. Usage:
@@ -140,7 +142,32 @@ msaTrack.current.onActiveTrackChange = (trackId) => {
 };
 ```
 
+type: `function`
+
+#### `features`
+
+An array of regions that indicates the existence of features:
+
+```javascript
+[
+  {
+    residues: { from: 1, to: 20 }, // 1-based
+    sequences: { from: 0, to: 0 }, // 0-based
+    id: "id-1", // returned if onFeatureClick has been provided
+    borderColor: "blue", // optional
+    fillColor: "black", // optional
+  },
+  // ...
+];
+```
+
 type: `array`
+
+#### `onFeatureClick`
+
+Returns the id of the feature that was clicked.
+
+type: `function`
 
 ### Methods
 
