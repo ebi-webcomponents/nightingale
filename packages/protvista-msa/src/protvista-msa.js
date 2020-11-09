@@ -156,7 +156,9 @@ class ProtvistaMSA extends ProtvistaZoomable {
   }
 
   handleFeatureClick(id) {
-    this.onFeatureClick(id);
+    if (typeof this.onFeatureClick === "function") {
+      this.onFeatureClick(id);
+    }
   }
 
   refresh() {
