@@ -22,7 +22,7 @@
   "dependencies": {
     "protvista-utils": "^3.0.0",
     "protvista-zoomable": "^3.0.0",
-    "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.1"
+    "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.2"
   },
   "devDependencies": {
     "d3": "^5.7.0"
