@@ -21,6 +21,6 @@ jobs:
           yarn build-site
           ls -l app/dist
       - name: Deploy Site 🚀
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/github_actions'
         run: |
           echo "To be implemented"
