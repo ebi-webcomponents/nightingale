@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ebi-webcomponents/nightingale.svg?branch=master)](https://travis-ci.org/ebi-webcomponents/nightingale)
+![Test and Publish Nightingale App](https://github.com/ebi-webcomponents/nightingale/workflows/Test%20and%20Publish%20Nightingale%20App/badge.svg)
 
 # nightingale
 
