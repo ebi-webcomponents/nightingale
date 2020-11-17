@@ -10,7 +10,10 @@ import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
 import pkg from "../package.json";
 import logo from "../resources/nightingale_logo.svg";
 import "./App.css";
-import GettingStarted, { CreateComponent } from "./tutorial/GettingStarted";
+import GettingStarted, {
+  CreateComponent,
+  CreateAdapter,
+} from "./tutorial/GettingStarted";
 import ProtvistaTooltip from "./components/ProtvistaTooltip.jsx";
 import ProtvistaTooltipWrapper from "./components/ProtvistaTooltip.jsx";
 
@@ -70,6 +73,15 @@ const App = (component = ProtvistaNavigation) => (
                       activeClassName="active"
                     >
                       Create a component
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/create-adapter"
+                      exact
+                      activeClassName="active"
+                    >
+                      Create an Adapter
                     </NavLink>
                   </li>
                 </ul>
@@ -176,6 +188,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/msa" component={ProtvistaMSA} />
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/create-component" component={CreateComponent} />
+              <Route path="/create-adapter" component={CreateAdapter} />
               <Route path="/" component={GettingStarted} />
             </Switch>
           </Suspense>
