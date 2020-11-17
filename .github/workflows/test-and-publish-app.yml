@@ -1,0 +1,17 @@
+name: Test and Publish Nightingale App
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: yarn global add lerna jest
+      - run: yarn
+      - run: lerna bootstrap
+      - run: yarn build
+      - run: yarn test
+      - run: yarn build-site
+      - run: ls -l app/dist
