@@ -1,4 +1,4 @@
-![Test and Publish Nightingale App](https://github.com/ebi-webcomponents/nightingale/workflows/Test%20and%20Publish%20Nightingale%20App/badge.svg)
+[![Test and Publish Nightingale App](https://github.com/ebi-webcomponents/nightingale/workflows/Test%20and%20Publish%20Nightingale%20App/badge.svg)](https://github.com/ebi-webcomponents/nightingale/actions)
 
 # nightingale
 
