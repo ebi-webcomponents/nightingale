@@ -8,9 +8,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: yarn
-      - run: yarn bootstrap
-      - run: yarn build
-      - run: yarn test
-      - run: yarn build-site
-      - run: ls -l app/dist
+      - name: Install and Build 🔧
+        run: |
+          yarn
+          yarn bootstrap
+          yarn build
+      - name: Test 🧪
+        run: |
+          yarn test
+      - name: Build Site 🏗
+        run: |
+          yarn build-site
+          ls -l app/dist
+      - name: Deploy Site 🚀
+        if: ${{ github.ref == "master" }}
+        run: |
+          echo "To be implemented"
