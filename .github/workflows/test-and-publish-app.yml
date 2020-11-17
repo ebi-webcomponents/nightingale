@@ -21,7 +21,7 @@ jobs:
           yarn build-site
           ls -l app/dist
       - name: Deploy Site 🚀
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/github_actions'
+        if: github.ref == 'refs/heads/master'
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
