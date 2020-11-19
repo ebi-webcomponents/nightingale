@@ -1,8 +1,8 @@
 # HOW TO CREATE A BASIC COMPONENT (Hello World)
 
-This document documents the cration of a basic Nightingale component.
+This document describes the creation of a basic Nightingale component.
 
-## Steps to get a Hello World component.
+## Steps to get a `Hello World` component.
 
 1. Create the folder for your component under the `packages/` folder. This will ensure that the scripts defined in the main `package.json` can operate in the new component.
    ```bash
