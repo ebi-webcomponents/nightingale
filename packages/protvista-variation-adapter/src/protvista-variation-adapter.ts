@@ -1,9 +1,10 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
+import { ProtvistaVariationData } from "protvista-variation";
 import { v1 } from "uuid";
 import { NightingaleElement } from "data-loader";
 
 import formatTooltip from "./tooltipGenerators";
-import { ProteinsAPIVariation, Xref, SourceType, Feature } from "./variants";
+import { ProteinsAPIVariation, Xref, SourceType } from "./variants";
 
 const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
@@ -13,24 +14,9 @@ const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   return xrefNames;
 };
 
-export type TransformedVariant = {
-  accession: string;
-  variant: string;
-  start: string;
-  xrefNames: string[];
-  hasPredictions: boolean;
-  tooltipContent: string;
-  protvistaFeatureId: string;
-} & Feature;
-
-export type TransformedVariantsData = {
-  sequence: string;
-  variants: TransformedVariant[];
-};
-
 export const transformData = (
   data: ProteinsAPIVariation
-): TransformedVariantsData => {
+): ProtvistaVariationData => {
   const { sequence, features } = data;
   const variants = features.map((variant) => ({
     ...variant,

@@ -1,15 +1,14 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import { TransformedVariantsData } from "protvista-variation-adapter";
+import { ProtvistaVariationData } from "protvista-variation";
 import { NightingaleElement } from "data-loader";
-import { VCFData } from "../types/vcf.d.ts";
+import { VCFData } from "./vcf";
 import {
   AminoAcid,
   ConsequenceType,
-  FeatureType,
   SourceType,
 } from "../../protvista-variation-adapter/dist/es/variants";
 
-export const transformData = (vcfData: VCFData[]): TransformedVariantsData => {
+export const transformData = (vcfData: VCFData[]): ProtvistaVariationData => {
   return {
     sequence: "ABCD",
     variants: vcfData.map((vcfItem) => ({
@@ -18,7 +17,7 @@ export const transformData = (vcfData: VCFData[]): TransformedVariantsData => {
       start: vcfItem.start.toString(),
       begin: vcfItem.start.toString(),
       end: vcfItem.end.toString(),
-      type: FeatureType.Variant,
+      type: "variant",
       cytogeneticBand: "",
       genomicLocation: "",
       locations: [],

@@ -2,10 +2,10 @@ import { formatXrefs, getEvidenceFromCodes } from "protvista-feature-adapter";
 import groupBy from "lodash-es/groupBy";
 import {
   Association,
-  Feature,
   Description,
   PopulationFrequency,
   Prediction,
+  Variant,
 } from "./variants";
 
 export const getDiseaseAssociations = (associations: Association[]) =>
@@ -70,7 +70,7 @@ export const getPredictions = (predictions: Prediction[]) => {
     .join("");
 };
 
-export const formatTooltip = (variant: Feature) =>
+export const formatTooltip = (variant: Variant) =>
   `
                 <h5>Variant</h5><p>${variant.wildType} > ${
     variant.alternativeSequence

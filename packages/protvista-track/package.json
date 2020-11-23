@@ -9,6 +9,7 @@
   "main": "dist/protvista-track.js",
   "module": "src/protvista-track.js",
   "jsnext:main": "src/protvista-track.js",
+  "types": "types/protvista-track.d.ts",
   "keywords": [
     "nightingale",
     "webcomponents",

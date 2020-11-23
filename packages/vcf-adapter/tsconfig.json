@@ -4,5 +4,5 @@
     "outDir": "./dist/es/",
     "declaration": true
   },
-  "files": ["src/vcf-adapter.ts", "types/vcf.d.ts"]
+  "files": ["src/vcf-adapter.ts", "src/vcf.ts"]
 }

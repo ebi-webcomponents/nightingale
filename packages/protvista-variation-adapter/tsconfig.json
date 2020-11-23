@@ -4,8 +4,5 @@
     "outDir": "./dist/es/",
     "declaration": true
   },
-  "files": [
-    "src/protvista-variation-adapter.ts",
-    "types/protvista-feature-adapter.d.ts"
-  ]
+  "files": ["src/protvista-variation-adapter.ts"]
 }
