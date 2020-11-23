@@ -1,22 +1,26 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import { ProtvistaVariationData } from "protvista-variation";
 import { NightingaleElement } from "data-loader";
-import { VCFData } from "./vcf";
+import { vcfToJSON } from "vcftojson";
+import { VCFJSON } from "vcftojson/dist/types";
 import {
   AminoAcid,
   ConsequenceType,
   SourceType,
 } from "../../protvista-variation-adapter/dist/es/variants";
 
-export const transformData = (vcfData: VCFData[]): ProtvistaVariationData => {
+export const transformData = (vcfData: VCFJSON[]): ProtvistaVariationData => {
   return {
     sequence: "ABCD",
     variants: vcfData.map((vcfItem) => ({
       accession: vcfItem.id,
       variant: "",
-      start: vcfItem.start.toString(),
-      begin: vcfItem.start.toString(),
-      end: vcfItem.end.toString(),
+      start: "0",
+      begin: "0",
+      end: "0",
+      // start: vcfItem.start.toString(),
+      // begin: vcfItem.start.toString(),
+      // end: vcfItem.end.toString(),
       type: "variant",
       cytogeneticBand: "",
       genomicLocation: "",
@@ -35,15 +39,18 @@ export const transformData = (vcfData: VCFData[]): ProtvistaVariationData => {
 };
 
 class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
-  connectedCallback() {
+  connectedCallback(): void {
     super.connectedCallback();
   }
 
-  parseEntry(data: VCFData[]) {
-    this._adaptedData = transformData(data);
+  parseEntry(data: string): ProtvistaVariationData {
+    vcfToJSON(data, { runVEP: true }).then((vcfJson) => {
+      return (this._adaptedData = transformData(vcfJson));
+    });
+    return null;
   }
 
-  static get is() {
+  static get is(): string {
     return "vcf-adapter";
   }
 }

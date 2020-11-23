@@ -1,5 +1,3 @@
-declare module "protvista-variation";
-
 export type ProtvistaVariationDatum = {
   accession: string;
   variant: string;

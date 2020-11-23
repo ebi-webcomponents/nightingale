@@ -1,5 +1,3 @@
-declare module "protvista-track";
-
 export enum Shape {
   rectangle = "rectangle",
   bridge = "bridge",
