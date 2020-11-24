@@ -17,7 +17,6 @@ function processVariants(data) {
   });
 
   variants.forEach((variant) => {
-    console.log(variant);
     if (mutationArray[variant.start - 1]) {
       // Currently not dealing with variants outside of sequence
       mutationArray[variant.start - 1].variants.push(variant);

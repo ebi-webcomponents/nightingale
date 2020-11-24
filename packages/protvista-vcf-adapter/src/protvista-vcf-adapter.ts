@@ -6,39 +6,57 @@ import { vcfToJSON } from "vcftojson";
 import transformData from "./dataTransformer";
 
 class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
-  private accession = "P01008";
+  private accession: string;
 
-  private sequence =
-    "MYSNVIGTVTSGKRKVYLLSLLLIGFWDCVTCHGSPVDICTAKPRDIPMNPMCIYRSPEKKATEDEGSEQKIPEATNRRVWELSKANSRFATTFYQHLADSKNDNDNIFLSPLSISTAFAMTKLGACNDTLQQLMEVFKFDTISEKTSDQIHFFFAKLNCRLYRKANKSSKLVSANRLFGDKSLTFNETYQDISELVYGAKLQPLDFKENAEQSRAAINKWVSNKTEGRITDVIPSEAINELTVLVLVNTIYFKGLWKSKFSPENTRKELFYKADGESCSASMMYQEGKFRYRRVAEGTQVLELPFKGDDITMVLILPKPEKSLAKVEKELTPEVLQEWLDELEEMMLVVHMPRFRIEDGFSLKEQLQDMGLVDLFSPEKSKLPGIVAEGRDDLYVSDAFHKAFLEVNEEGSEAAASTAVVIAGRSLNPNRVTFKANRPFLVFIREVPLNTIIFMGRVANPCVK";
+  private sequence: string;
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.accession = this.getAttribute("accession");
     this.onChange = this.onChange.bind(this);
   }
 
   connectedCallback(): void {
     super.connectedCallback();
+    if (this.closest("protvista-manager")) {
+      this.manager = this.closest("protvista-manager");
+      this.manager.register(this);
+    }
     this.render();
   }
 
-  _emitEvent(): void {
-    this.dispatchEvent(
-      new CustomEvent("load", {
-        detail: {
-          payload: this._adaptedData,
-        },
-        bubbles: true,
-        cancelable: true,
-      })
-    );
+  disconnectedCallback(): void {
+    if (this.manager) {
+      this.manager.unregister(this);
+    }
+  }
+
+  _emitEvent(data?: { sequence: string }): void {
+    if (data) {
+      this.sequence = data.sequence;
+    }
+    // TODO handle lack of sequence better here, could be race condition
+    if (this.sequence && this._adaptedData && this._adaptedData.length) {
+      this.dispatchEvent(
+        new CustomEvent("load", {
+          detail: {
+            payload: {
+              sequence: this.sequence,
+              variants: this._adaptedData,
+            },
+          },
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    }
   }
 
   async parseEntry(data: string): Promise<void> {
     const vcfJson = await vcfToJSON(data, { runVEP: true });
-    this._adaptedData = transformData(vcfJson, this.accession, this.sequence);
+    this._adaptedData = transformData(vcfJson, this.accession);
     this._emitEvent();
-    console.log(this._adaptedData);
   }
 
   static get is(): string {
@@ -51,7 +69,12 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
     reader.onload = () => {
       this.parseEntry(reader.result as string);
     };
-    reader.readAsText(target.files[0]);
+    if (target.files[0]) {
+      const file = target.files[0];
+      if (file.name.endsWith(".vcf") && file.type.startsWith("text/")) {
+        reader.readAsText(target.files[0]);
+      }
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
