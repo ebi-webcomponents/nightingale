@@ -12,11 +12,12 @@ function processVariants(data) {
       type: "VARIANT",
       normal: aa,
       pos: i + 1,
-      variants: []
+      variants: [],
     };
   });
 
-  variants.forEach(variant => {
+  variants.forEach((variant) => {
+    console.log(variant);
     if (mutationArray[variant.start - 1]) {
       // Currently not dealing with variants outside of sequence
       mutationArray[variant.start - 1].variants.push(variant);

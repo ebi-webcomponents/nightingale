@@ -28,7 +28,7 @@ const aaList = [
   "W",
   "P",
   "d",
-  "*"
+  "*",
 ];
 
 const deepArrayOperation = (arrays, operation) => {
@@ -38,7 +38,7 @@ const deepArrayOperation = (arrays, operation) => {
   const firstArray = arrays[0];
   // Iterate over positions
   firstArray.forEach((position, i) => {
-    const filteredVariants = arrays.map(array => array[i].variants);
+    const filteredVariants = arrays.map((array) => array[i].variants);
     /* eslint-disable no-param-reassign */
     position.variants = operation(...filteredVariants);
   });
@@ -149,8 +149,8 @@ class ProtvistaVariation extends ProtvistaTrack {
       return;
     }
     const groupedFilters = _groupBy(this._filters, "category");
-    const filteredGroups = Object.values(groupedFilters).map(filterGroup => {
-      const filteredData = filterGroup.map(filterItem =>
+    const filteredGroups = Object.values(groupedFilters).map((filterGroup) => {
+      const filteredData = filterGroup.map((filterItem) =>
         filterItem.filterFn(this._originalData)
       );
       return deepArrayOperation(filteredData, _union);

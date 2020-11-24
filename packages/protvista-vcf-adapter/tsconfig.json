@@ -4,5 +4,5 @@
     "outDir": "./dist/es/",
     "declaration": true
   },
-  "files": ["src/vcf-adapter.ts"]
+  "files": ["src/protvista-vcf-adapter.ts"]
 }

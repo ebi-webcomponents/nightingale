@@ -35,11 +35,11 @@ export const transformData = (
 class ProtvistaVariationAdapter
   extends ProtvistaFeatureAdapter
   implements NightingaleElement {
-  static get is() {
+  static get is(): string {
     return "protvista-variation-adapter";
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     super.connectedCallback();
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
@@ -47,24 +47,14 @@ class ProtvistaVariationAdapter
     }
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     if (this.manager) {
       this.manager.unregister(this);
     }
   }
 
-  parseEntry(data: ProteinsAPIVariation) {
+  parseEntry(data: ProteinsAPIVariation): void {
     this._adaptedData = transformData(data);
-  }
-
-  _fireEvent(name: string, detail: any) {
-    this.dispatchEvent(
-      new CustomEvent(name, {
-        detail,
-        bubbles: true,
-        cancelable: true,
-      })
-    );
   }
 }
 

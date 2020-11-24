@@ -1,5 +1,6 @@
 {
-  "name": "vcf-adapter",
+  "name": "protvista-vcf-adapter",
+  "version": "3.2.0",
   "files": [
     "dist",
     "types",
@@ -8,9 +9,9 @@
   "scripts": {
     "build:es": "tsc"
   },
-  "main": "dist/vcf-adapter.js",
-  "module": "dist/es/vcf-adapter.js",
-  "types": "dist/es/vcf-adapter.d.ts",
+  "main": "dist/protvista-vcf-adapter.js",
+  "module": "dist/es/protvista-vcf-adapter.js",
+  "types": "dist/es/protvista-vcf-adapter.d.ts",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -26,6 +27,7 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "data-loader": "^3.0.0",
+    "lit-html": "^1.3.0",
     "protvista-feature-adapter": "^3.1.2",
     "protvista-variation": "^3.2.0",
     "protvista-variation-adapter": "^3.1.2",
