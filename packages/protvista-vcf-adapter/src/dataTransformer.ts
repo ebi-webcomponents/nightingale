@@ -1,6 +1,33 @@
+/* eslint-disable no-param-reassign */
 import { ProtvistaVariationDatum } from "protvista-variation";
 import { SourceType } from "protvista-variation-adapter/dist/es/variants";
 import { VCFJSON } from "vcftojson/dist/types";
+
+const JSONToHTML = (obj: any, level = 1, ignoreKeys?: string[]): string => {
+  if (typeof obj !== "object") {
+    return `<span>${obj}</span>`;
+  }
+  return `<ul>${Object.entries(obj).reduce((accumulator, [key, value]) => {
+    if (ignoreKeys?.includes(key)) {
+      return accumulator;
+    }
+    if (Array.isArray(value)) {
+      const reduced = `${value.reduce(
+        (acc2, value2) => `${acc2}${JSONToHTML(value2, level++, ignoreKeys)}`,
+        ""
+      )}`;
+      return `${accumulator}<li><strong>${key}</strong><span>${reduced}</span></li>`;
+    }
+    if (typeof value === "object") {
+      return `${accumulator}<li><strong>${key}</strong><span>${JSONToHTML(
+        value,
+        level++,
+        ignoreKeys
+      )}</span></li>`;
+    }
+    return `${accumulator}<li><strong>${key}</strong><span>${value}</span></li>`;
+  }, "")}</ul>`;
+};
 
 const transformData = (
   vcfData: VCFJSON[],
@@ -32,7 +59,7 @@ const transformData = (
           sourceType: SourceType.LargeScaleStudy,
           xrefNames: [],
           hasPredictions: false,
-          tooltipContent: "",
+          tooltipContent: JSONToHTML(vcfItem, 0, ["vcfLine", "input"]),
           protvistaFeatureId: vcfItem.id,
         };
       } // TODO handle else

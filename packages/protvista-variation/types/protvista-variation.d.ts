@@ -4,7 +4,7 @@ export type ProtvistaVariationDatum = {
   start: string;
   xrefNames: string[];
   hasPredictions: boolean;
-  tooltipContent: string;
+  tooltipContent?: string;
   protvistaFeatureId: string;
 };
 
