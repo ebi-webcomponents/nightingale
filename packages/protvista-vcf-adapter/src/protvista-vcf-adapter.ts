@@ -64,7 +64,8 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
   }
 
   onChange(fileSelect: Event): void {
-    const target = (fileSelect.target as unknown) as HTMLInputElement;
+    if (!(fileSelect.target instanceof HTMLInputElement)) return;
+    const target = fileSelect.target as HTMLInputElement;
     const reader = new FileReader();
     reader.onload = () => {
       this.parseEntry(reader.result as string);

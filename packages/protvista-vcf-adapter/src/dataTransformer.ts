@@ -4,6 +4,7 @@ import { SourceType } from "protvista-variation-adapter/dist/es/variants";
 import { VCFJSON } from "vcftojson/dist/types";
 
 export const JSONToHTML = (
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   obj: any,
   level = 1,
   ignoreKeys?: string[]
@@ -11,26 +12,27 @@ export const JSONToHTML = (
   if (typeof obj !== "object") {
     return `<span>${obj}</span>`;
   }
-  return `<ul>${Object.entries(obj).reduce((accumulator, [key, value]) => {
-    if (ignoreKeys?.includes(key)) {
-      return accumulator;
-    }
-    if (Array.isArray(value)) {
-      const reduced = `${value.reduce(
-        (acc2, value2) => `${acc2}${JSONToHTML(value2, level++, ignoreKeys)}`,
-        ""
-      )}`;
-      return `${accumulator}<li><strong>${key}</strong><span>${reduced}</span></li>`;
-    }
-    if (typeof value === "object") {
-      return `${accumulator}<li><strong>${key}</strong><span>${JSONToHTML(
-        value,
-        level++,
-        ignoreKeys
-      )}</span></li>`;
-    }
-    return `${accumulator}<li><strong>${key}</strong><span>${value}</span></li>`;
-  }, "")}</ul>`;
+  return `<ul>${Object.entries(obj)
+    .map(([key, value]) => {
+      if (ignoreKeys?.includes(key)) {
+        return "";
+      }
+      if (Array.isArray(value)) {
+        const reduced = `${value
+          .map((value2) => JSONToHTML(value2, level++, ignoreKeys))
+          .join("")}`;
+        return `<li><strong>${key}</strong><span>${reduced}</span></li>`;
+      }
+      if (typeof value === "object") {
+        return `<li><strong>${key}</strong><span>${JSONToHTML(
+          value,
+          level++,
+          ignoreKeys
+        )}</span></li>`;
+      }
+      return `<li><strong>${key}</strong><span>${value}</span></li>`;
+    })
+    .join("")}</ul>`;
 };
 
 const transformData = (

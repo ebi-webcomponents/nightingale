@@ -12810,10 +12810,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-vcftojson@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/vcftojson/-/vcftojson-1.0.0.tgz#6e87fc02a0638c52a60d9ba393ad67ffb5b4264a"
-  integrity sha512-2Xpgj9l/E26Sv6OA39yx58WvtO600F+QCUZWXCyfn5IQd375tqyNtIoh3paQOpDR0grbGCOJ0lRIj6AsBEuntQ==
+vcftojson@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vcftojson/-/vcftojson-1.1.0.tgz#3fcfbd0ebbcf1ce8b61e907f5ae4b649f22ae827"
+  integrity sha512-aniVd4L9QpiWTim5sYspCOmrYtD/4F4PtDVuuSweEozQAgtqt9p9bcPzFzyZ8FuQgEXtImuri0L0yT2306jmvg==
   dependencies:
     axios "^0.21.0"
 
