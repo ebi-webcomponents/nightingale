@@ -1,9 +1,24 @@
-import { transformData } from "../src/vcf-adapter";
-import vcfDataMock from "./__mock__/variant_example.json";
-import converted from "./__mock__/converted.json";
+import transformData, { JSONToHTML } from "../src/dataTransformer";
+import vcfOutput from "./__mock__/vcfConverterOutput.json";
 
 describe("vcf-adapter", () => {
+  it("parses the object correctly to generate html", () => {
+    const object = {
+      attribute1: "attribute1",
+      array1: [
+        {
+          item1: "item1",
+          item2: "item2",
+          item3: [{ itemA: "itemA", itemB: "itemB" }],
+        },
+      ],
+      array2: ["item 1", "item 2"],
+    };
+    const html = JSONToHTML(object);
+    expect(html).toMatchSnapshot();
+  });
+
   it("converts the model", () => {
-    expect(transformData(vcfDataMock)).toEqual(converted);
+    expect(transformData(vcfOutput, "P01008")).toMatchSnapshot();
   });
 });

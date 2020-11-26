@@ -3,7 +3,11 @@ import { ProtvistaVariationDatum } from "protvista-variation";
 import { SourceType } from "protvista-variation-adapter/dist/es/variants";
 import { VCFJSON } from "vcftojson/dist/types";
 
-const JSONToHTML = (obj: any, level = 1, ignoreKeys?: string[]): string => {
+export const JSONToHTML = (
+  obj: any,
+  level = 1,
+  ignoreKeys?: string[]
+): string => {
   if (typeof obj !== "object") {
     return `<span>${obj}</span>`;
   }
