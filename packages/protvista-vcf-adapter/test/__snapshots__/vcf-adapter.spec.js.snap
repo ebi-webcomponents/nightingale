@@ -185,4 +185,4 @@ Array [
 ]
 `;
 
-exports[`vcf-adapter parses the object correctly to generate html 1`] = `"<ul><li><strong>attribute1</strong><span>attribute1</span></li><li><strong>array1</strong><span><ul><li><strong>item1</strong><span>item1</span></li><li><strong>item2</strong><span>item2</span></li><li><strong>item3</strong><span><ul><li><strong>itemA</strong><span>itemA</span></li><li><strong>itemB</strong><span>itemB</span></li></ul></span></li></ul></span></li><li><strong>array2</strong><span><span>item 1</span><span>item 2</span></span></li></ul>"`;
+exports[`vcf-adapter parses the object correctly to generate html 1`] = `"<ul><li><strong>attribute1</strong><span>attribute1</span></li><li><strong>array1</strong><span><ul><li><strong>item1</strong><span>item1</span></li><li><strong>item2</strong><span>item2</span></li><li><strong>item3</strong><span><ul><li><strong>itemB</strong><span>itemB</span></li></ul></span></li></ul></span></li><li><strong>array2</strong><span><span>item 1</span><span>item 2</span></span></li></ul>"`;

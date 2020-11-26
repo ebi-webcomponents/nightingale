@@ -14,7 +14,7 @@ describe("vcf-adapter", () => {
       ],
       array2: ["item 1", "item 2"],
     };
-    const html = JSONToHTML(object);
+    const html = JSONToHTML(object, 1, ["itemA"]);
     expect(html).toMatchSnapshot();
   });
 
