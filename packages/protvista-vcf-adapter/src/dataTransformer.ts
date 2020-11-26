@@ -3,6 +3,10 @@ import { ProtvistaVariationDatum } from "protvista-variation";
 import { SourceType } from "protvista-variation-adapter/dist/es/variants";
 import { VCFJSON } from "vcftojson/dist/types";
 
+const style =
+  "<style>.row{display:flex;} .column{flex:2;} .column:first-child{flex:1;text-overflow:ellipsis;overflow:hidden;text-align:right;margin-right:1rem;}</style>";
+
+// Note: classes are defined in protvista-tooltip
 export const JSONToHTML = (
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   obj: any,
@@ -12,7 +16,7 @@ export const JSONToHTML = (
   if (typeof obj !== "object") {
     return `<span>${obj}</span>`;
   }
-  return `<ul>${Object.entries(obj)
+  return `${Object.entries(obj)
     .map(([key, value]) => {
       if (ignoreKeys?.includes(key)) {
         return "";
@@ -21,18 +25,18 @@ export const JSONToHTML = (
         const reduced = `${value
           .map((value2) => JSONToHTML(value2, level++, ignoreKeys))
           .join("")}`;
-        return `<li><strong>${key}</strong><span>${reduced}</span></li>`;
+        return `<h3>${key}</h3><section>${reduced}</section>`;
       }
       if (typeof value === "object") {
-        return `<li><strong>${key}</strong><span>${JSONToHTML(
+        return `<h3>${key}</h3><section>${JSONToHTML(
           value,
           level++,
           ignoreKeys
-        )}</span></li>`;
+        )}</section>`;
       }
-      return `<li><strong>${key}</strong><span>${value}</span></li>`;
+      return `<span class="row"><strong class="column" title="${key}">${key}</strong><span class="column">${value}</span></span>`;
     })
-    .join("")}</ul>`;
+    .join("")}`;
 };
 
 const transformData = (
@@ -65,7 +69,10 @@ const transformData = (
           sourceType: SourceType.LargeScaleStudy,
           xrefNames: [],
           hasPredictions: false,
-          tooltipContent: JSONToHTML(vcfItem, 0, ["vcfLine", "input"]),
+          tooltipContent: `${style}${JSONToHTML(vcfItem, 0, [
+            "vcfLine",
+            "input",
+          ])}`,
           protvistaFeatureId: vcfItem.id,
         };
       } // TODO handle else
