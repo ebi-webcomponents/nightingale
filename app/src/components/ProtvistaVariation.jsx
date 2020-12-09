@@ -48,16 +48,11 @@ const ProtvistaVariationWrapper = () => {
         <div dangerouslySetInnerHTML={tooltipContent}></div>
       </protvista-tooltip>
       <protvista-variation length="770">
-        {/* <protvista-variation-adapter>
+        <protvista-variation-adapter>
           <data-loader>
             <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
           </data-loader>
-        </protvista-variation-adapter> */}
-        <protvista-vcf-adapter accession="P01008">
-          <data-loader>
-            <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
-          </data-loader>
-        </protvista-vcf-adapter>
+        </protvista-variation-adapter>
       </protvista-variation>
     </>
   );
