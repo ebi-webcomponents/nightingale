@@ -33,7 +33,6 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   render() {
-    console.log("ran");
     litRender(html`<input type="file" id="input" />`, this);
   }
 }

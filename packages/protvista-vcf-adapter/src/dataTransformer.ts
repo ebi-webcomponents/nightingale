@@ -45,10 +45,12 @@ const transformData = (
 ): ProtvistaVariationDatum[] => {
   return vcfData
     .map((vcfItem) => {
+      // using startsWith as there seems to be a recent change in VEP which
+      // appends a number to the accessions...
       const matchingTranscript = vcfItem.vep?.transcript_consequences.find(
         ({ swissprot, trembl }) =>
-          (swissprot && swissprot.includes(accession)) ||
-          (trembl && trembl.includes(accession))
+          (swissprot && swissprot.find((swp) => swp.startsWith(accession))) ||
+          (trembl && trembl.find((trmbl) => trmbl.startsWith(accession)))
       );
       if (matchingTranscript) {
         const [wt, change] = matchingTranscript.amino_acids?.split("/");

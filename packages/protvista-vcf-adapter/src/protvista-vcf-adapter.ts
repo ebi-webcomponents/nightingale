@@ -10,15 +10,18 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
 
   private sequence: string;
 
+  private isLoading = false;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.accession = this.getAttribute("accession");
     this.onChange = this.onChange.bind(this);
   }
 
   connectedCallback(): void {
     super.connectedCallback();
+    this.accession = this.getAttribute("accession");
+    this.sequence = this.getAttribute("sequence");
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
@@ -41,6 +44,7 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
       this.dispatchEvent(
         new CustomEvent("load", {
           detail: {
+            type: VCFAdapter.is,
             payload: {
               sequence: this.sequence,
               variants: this._adaptedData,
@@ -54,8 +58,12 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
   }
 
   async parseEntry(data: string): Promise<void> {
+    this.isLoading = true;
+    this.render();
     const vcfJson = await vcfToJSON(data, { runVEP: true });
     this._adaptedData = transformData(vcfJson, this.accession);
+    this.isLoading = false;
+    this.render();
     this._emitEvent();
   }
 
@@ -81,7 +89,10 @@ class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   render() {
     litRender(
-      html`<input type="file" id="input" @change=${this.onChange} />`,
+      html`<input type="file" id="input" @change=${this.onChange} />${this
+          .isLoading
+          ? html`<small>Loading...</small>`
+          : ""}`,
       this.shadowRoot
     );
   }
