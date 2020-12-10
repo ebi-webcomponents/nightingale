@@ -1,0 +1,35 @@
+{
+  "name": "@nightingale-elements/nightingale-core",
+  "version": "0.0.1",
+  "description": "Base Elements for Nightingale Components",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-core.js",
+  "module": "src/nightingale-core.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "contributors": [
+    "Xavier Watkins <xwatkins@ebi.ac.uk>",
+    "Gustavo A Salazar <gsalazar@ebi.ac.uk>",
+    "Aurélien Luciani <luciani@ebi.ac.uk>",
+    "Daniel Rice <dlrice@ebi.ac.uk>"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "keywords": [
+    "nightingale",
+    "customelements",
+    "webcomponents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+}
