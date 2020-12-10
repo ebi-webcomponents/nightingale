@@ -7,6 +7,7 @@
   ],
   "main": "dist/protvista-feature-adapter.js",
   "module": "src/protvista-feature-adapter.js",
+  "types": "types/protvista-feature-adapter.d.ts",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -21,6 +22,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
+    "protvista-track": "^3.2.0",
     "uuid": "^8.3.1"
   },
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db"

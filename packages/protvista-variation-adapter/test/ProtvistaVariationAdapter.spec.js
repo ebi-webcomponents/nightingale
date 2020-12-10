@@ -35,7 +35,7 @@ describe("ProtvistaVariationAdapter", () => {
   });
 
   it("should transform the data adequately", () => {
-    const transformedVariants = transformData(variants);
-    expect(transformedVariants).toMatchSnapshot();
+    const data = transformData(variants);
+    expect(data).toMatchSnapshot();
   });
 });

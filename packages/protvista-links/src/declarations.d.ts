@@ -1,5 +1,3 @@
-declare module "protvista-track";
-
 type ArrayOfNumberArray = Array<Array<number>>;
 interface LinksObject {
   contacts: ArrayOfNumberArray;

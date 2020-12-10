@@ -9,11 +9,11 @@ export type ProteinsAPIVariation = {
   sequenceChecksum: string;
   sequenceVersion: number;
   taxid: number;
-  features: Feature[];
+  features: Variant[];
 };
 
-export type Feature = {
-  type: FeatureType;
+export type Variant = {
+  type: string;
   alternativeSequence?: AminoAcid;
   begin: string;
   end: string;
@@ -193,8 +193,4 @@ export enum SourceType {
   LargeScaleStudy = "large_scale_study",
   Mixed = "mixed",
   UniProt = "uniprot",
-}
-
-export enum FeatureType {
-  Variant = "VARIANT",
 }
