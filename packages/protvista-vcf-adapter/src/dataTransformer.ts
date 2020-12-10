@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { ProtvistaVariationDatum } from "protvista-variation";
-import { SourceType } from "protvista-variation-adapter/dist/es/variants";
 import { VCFJSON } from "vcftojson/dist/types";
 
 const style =
@@ -68,7 +67,7 @@ const transformData = (
           xrefs: [],
           wildType: wt,
           somaticStatus: 0,
-          sourceType: SourceType.LargeScaleStudy,
+          sourceType: "VCF",
           xrefNames: [],
           hasPredictions: false,
           tooltipContent: `${style}${JSONToHTML(vcfItem, 0, [
