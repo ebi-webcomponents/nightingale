@@ -1,0 +1,26 @@
+[
+  {
+    "name": "John",
+    "age": 20,
+    "address": {
+      "number": 12,
+      "street": "Baker street"
+    }
+  },
+  {
+    "name": "Barry",
+    "age": 30,
+    "address": {
+      "number": 2,
+      "street": "Abbey road"
+    }
+  },
+  {
+    "name": "James",
+    "age": 50,
+    "address": {
+      "number": 223,
+      "street": "Some road"
+    }
+  }
+]
