@@ -227,7 +227,7 @@ class ProtvistaDatatable extends LitElement {
 
   render() {
     if (!this.data || !this.columns) {
-      return html``;
+      return html`<span id="my-test">Hello!</span>`;
     }
     const childRowItems = Object.keys(this.columns).filter(
       (column) => this.columns[column].child
