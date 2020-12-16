@@ -4,15 +4,19 @@ import { WITH_DIMENSION } from "./withDimensions";
 const WITH_ZOOM = "WITH_ZOOM";
 
 const withZoom = (
-  Element: typeof NightingaleBaseElement,
-  options: {} = {}
+  Element: typeof NightingaleBaseElement
+  // options: {} = {}
 ): any => {
   class ElementWithZoom extends Element {
     container: HTMLElement;
 
-    implements: Array<string> = super.implements.concat(WITH_ZOOM);
+    get implements(): Array<string> {
+      return super.implements.concat(WITH_ZOOM);
+    }
 
-    dependencies: Array<string> = super.dependencies.concat(WITH_DIMENSION);
+    get dependencies(): Array<string> {
+      return super.dependencies.concat(WITH_DIMENSION);
+    }
 
     constructor() {
       super();

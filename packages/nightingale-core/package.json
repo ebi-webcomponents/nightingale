@@ -19,6 +19,9 @@
   ],
   "license": "MIT",
   "dependencies": {},
+  "devDependencies": {
+    "@testing-library/dom": "^7.29.0"
+  },
   "keywords": [
     "nightingale",
     "customelements",

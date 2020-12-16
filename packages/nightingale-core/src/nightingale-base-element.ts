@@ -1,14 +1,22 @@
 class NightingaleBaseElement extends HTMLElement {
-  dependencies: Array<string> = [];
+  // eslint-disable-next-line class-methods-use-this
+  get implements(): Array<string> {
+    return [];
+  }
 
-  implements: Array<string> = [];
+  // eslint-disable-next-line class-methods-use-this
+  get dependencies(): Array<string> {
+    return [];
+  }
+
+  // implements: Array<string> = [];
 
   constructor() {
     super();
     for (const dependency of this.dependencies) {
       if (!this.implements.includes(dependency)) {
         throw new Error(
-          `Dependency error: ${this} has a unreached dependency: ${dependency}`
+          `Dependency error: ${this.constructor.name} has an unsatisfied dependency: ${dependency}`
         );
       }
     }

@@ -17,7 +17,11 @@ const withDimensions = (
 
     height: number;
 
-    implements: Array<string> = super.implements.concat(WITH_DIMENSION);
+    get implements(): Array<string> {
+      return super.implements.concat(WITH_DIMENSION);
+    }
+
+    // implements: Array<string> = super.implements.concat(WITH_DIMENSION);
 
     constructor() {
       super();
