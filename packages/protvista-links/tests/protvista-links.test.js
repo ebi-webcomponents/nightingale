@@ -3,12 +3,12 @@ import {
   parseLinksAssociative,
   parseLinks,
   contactObjectToLinkList,
-} from "./links-parser";
+} from "../src/links-parser";
 
 let data = "???";
 describe("links parser", () => {
   beforeAll(() => {
-    data = fs.readFileSync(`${__dirname}/example.tsv`, "utf8");
+    data = fs.readFileSync(`${__dirname}/mockData/example.tsv`, "utf8");
   });
   test.skip("can parse associative ", () => {
     const obj = parseLinksAssociative(data, 0.8);

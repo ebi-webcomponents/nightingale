@@ -1,4 +1,4 @@
-import { cleanUpText, formatSequence, alphabets } from "./defaults";
+import { cleanUpText, formatSequence, alphabets } from "../src/defaults";
 
 describe("textarea-sequence: formatSequence", () => {
   test("trims", () => {
