@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import rawContactsHC from "protvista-links/src/example.tsv";
+import rawContactsHC from "protvista-links/tests/mockData/example.tsv";
 
 import ProtvistaMSA from "protvista-msa";
 import ProtvistaNavigation from "protvista-navigation";
