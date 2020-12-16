@@ -11,6 +11,7 @@
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
     "protvista-sequence": "^3.0.0",
     "protvista-utils": "^3.0.0"
   },

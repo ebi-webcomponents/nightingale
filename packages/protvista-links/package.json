@@ -5,8 +5,12 @@
     "dist",
     "src"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "main": "dist/protvista-links.js",
-  "module": "src/protvista-links.ts",
+  "module": "dist/es/protvista-links.js",
+  "types": "dist/es/protvista-links.d.ts",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -21,6 +25,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
     "lodash-es": "^4.17.11",
     "protvista-track": "^3.2.1"
   },

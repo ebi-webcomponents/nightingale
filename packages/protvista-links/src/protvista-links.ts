@@ -25,7 +25,7 @@ const getHighlightEvent = (
   });
 };
 
-class ProtvistaLinks extends ProtvistaTrack {
+class ProtvistaLinks extends HTMLElement implements ProtvistaTrack {
   constructor() {
     super();
     this._threshold = 0.7;

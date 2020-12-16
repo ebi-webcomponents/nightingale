@@ -96,12 +96,10 @@ class ProtvistaDatatable extends LitElement {
 
   static processData(data) {
     return data
-      .map((d) => {
-        return {
-          ...d,
-          start: d.start ? d.start : d.begin,
-        };
-      })
+      .map((d) => ({
+        ...d,
+        start: d.start ? d.start : d.begin,
+      }))
       .sort((a, b) => a.start - b.start)
       .map((d) => ({
         ...d,

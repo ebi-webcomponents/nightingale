@@ -1,30 +1,28 @@
 import ecoMap from "./evidences";
 
-export const renameProperties = features => {
-  return features.map(ft => {
+export const renameProperties = (features) =>
+  features.map((ft) => {
     const obj = {};
     if (ft.begin) {
       obj.start = ft.begin;
     }
     return {
       ...ft,
-      ...obj
+      ...obj,
     };
   });
-};
 
-const formatSource = source => {
-  return source.name.toLowerCase() === "PubMed".toLowerCase()
+const formatSource = (source) =>
+  source.name.toLowerCase() === "PubMed".toLowerCase()
     ? `${source.id}&nbsp;(<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>)`
     : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.id}</a>&nbsp;(${source.name})`;
-};
 
-export const getEvidenceFromCodes = evidenceList => {
+export const getEvidenceFromCodes = (evidenceList) => {
   if (!evidenceList) return ``;
   return `
       <ul>${evidenceList
-        .map(ev => {
-          const ecoMatch = ecoMap.find(eco => eco.name === ev.code);
+        .map((ev) => {
+          const ecoMatch = ecoMap.find((eco) => eco.name === ev.code);
           if (!ecoMatch) return ``;
           return `<li title='${
             ecoMatch.description
@@ -36,10 +34,10 @@ export const getEvidenceFromCodes = evidenceList => {
     `;
 };
 
-export const formatXrefs = xrefs => {
-  return `<ul>${xrefs
+export const formatXrefs = (xrefs) =>
+  `<ul>${xrefs
     .map(
-      xref =>
+      (xref) =>
         `<li style="padding: .25rem 0">${xref.name} ${
           xref.url
             ? `<a href="${xref.url}" style="color:#FFF" target="_blank">${xref.id}</a>`
@@ -47,9 +45,8 @@ export const formatXrefs = xrefs => {
         }</li>`
     )
     .join("")}</ul>`;
-};
 
-export const formatTooltip = feature => {
+export const formatTooltip = (feature) => {
   const evidenceHTML = getEvidenceFromCodes(feature.evidences);
   return `
       ${

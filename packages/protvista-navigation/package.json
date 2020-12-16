@@ -25,6 +25,7 @@
   "license": "ISC",
   "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
   "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
     "lodash-es": "^4.17.11",
     "protvista-utils": "^3.0.0"
   },

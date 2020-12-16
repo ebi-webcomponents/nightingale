@@ -20,6 +20,7 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
     "protvista-utils": "^3.0.0",
     "protvista-zoomable": "^3.0.0",
     "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.2"

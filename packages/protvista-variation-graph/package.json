@@ -24,6 +24,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
     "protvista-track": "^3.2.1"
   },
   "devDependencies": {

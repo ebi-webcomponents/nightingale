@@ -1,5 +1,4 @@
+import { defineElement } from "@nightingale-elements/utils";
 import DataLoader from "./data-loader";
 
-if (window.customElements) {
-  customElements.define(DataLoader.is, DataLoader);
-}
+defineElement(DataLoader);

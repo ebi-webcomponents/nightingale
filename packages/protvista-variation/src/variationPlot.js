@@ -41,12 +41,8 @@ class VariationPlot {
         .attr("class", "feature")
         .attr("title", (d) => d.start)
         .attr("r", (d) => (d.size ? d.size : 5))
-        .attr("cx", (d) => {
-          return element.getXFromSeqPosition(d.start) + half;
-        })
-        .attr("cy", (d) => {
-          return element._yScale(d.variant.charAt(0));
-        })
+        .attr("cx", (d) => element.getXFromSeqPosition(d.start) + half)
+        .attr("cy", (d) => element._yScale(d.variant.charAt(0)))
         .attr("name", (d) => {
           const mutation =
             d.alternativeSequence === "*" ? "STOP" : d.alternativeSequence;
@@ -54,9 +50,7 @@ class VariationPlot {
           d.internalId = `var_${d.wildType}${d.start}${mutation}`;
           return d.internalId;
         })
-        .attr("fill", (d) => {
-          return d.color ? d.color : element._colorConfig(d);
-        })
+        .attr("fill", (d) => (d.color ? d.color : element._colorConfig(d)))
         .call(element.bindEvents, element);
     });
   }

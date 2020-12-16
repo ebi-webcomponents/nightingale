@@ -1,0 +1,37 @@
+{
+  "name": "@nightingale-elements/types",
+  "version": "1.0.0",
+  "description": "data-loader Custom Element to load data declaratively",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build:es": "tsc"
+  },
+  "main": "dist/index.js",
+  "module": "dist/es/index.js",
+  "types": "dist/es/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "license": "Apache-2.0",
+  "author": "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l)",
+  "keywords": [
+    "webcomponents",
+    "customelements",
+    "types",
+    "typescript",
+    "nightingale",
+    "embl-ebi",
+    "embl",
+    "ebi",
+    "protvista",
+    "definition"
+  ],
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+}
