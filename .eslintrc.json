@@ -17,7 +17,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "ignorePatterns": ["protvista-msa.js"],
+  "ignorePatterns": ["protvista-msa.js", "nightingale-msa.js"],
   "rules": {
     "no-underscore-dangle": "off",
     "no-console": "off",

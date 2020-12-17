@@ -1,4 +1,5 @@
-import { ProtvistaTrackDatum } from "protvista-track";
+import { ProtvistaTrackDatum } from "@nightingale-elements/nightingale-track";
+import { NightingaleElement } from "@nightingale-elements/types";
 
 export interface FeaturesAPI {
   accession: string;
@@ -42,12 +43,17 @@ export declare const transformData: (
   data: APIFeature[]
 ) => (ProtvistaTrackDatum & APIFeature)[];
 
-declare class ProtvistaFeatureAdapter extends HTMLElement {
+declare class ProtvistaFeatureAdapter extends NightingaleElement {
   manager: any;
+
   data: any;
+
   _adaptedData: any;
+
   connectedCallback(): void;
+
   disconnectedCallback(): void;
+
   parseEntry(data: any): void;
 }
 

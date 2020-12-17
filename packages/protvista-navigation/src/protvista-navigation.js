@@ -7,7 +7,7 @@ import {
   event as d3Event,
 } from "d3";
 
-import { withMargin } from "protvista-utils";
+import { withMargin } from "@nightingale-elements/utils";
 
 class ProtVistaNavigation extends HTMLElement {
   constructor() {

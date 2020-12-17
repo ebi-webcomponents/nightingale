@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import InteractionViewer from "interaction-viewer";
+import InteractionViewer from "@nightingale-elements/nightingale-interaction-viewer";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/interaction-viewer/README.md";
 
-const InteractionViewerWrapper = props => {
+const InteractionViewerWrapper = (props) => {
   loadWebComponent("interaction-viewer", InteractionViewer);
   return (
     <Fragment>

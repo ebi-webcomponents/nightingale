@@ -1,6 +1,6 @@
 import { html, render as litRender } from "lit-html";
-import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import { NightingaleElement } from "data-loader";
+import ProtvistaFeatureAdapter from "@nightingale-elements/nightingale-feature-adapter";
+import { NightingaleElement } from "@nightingale-elements/types";
 import { vcfToJSON } from "vcftojson";
 
 import transformData from "./dataTransformer";

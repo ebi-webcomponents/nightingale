@@ -1,8 +1,8 @@
 {
-  "name": "protvista-manager",
+  "name": "@nightingale-elements/nightingale-manager",
   "version": "3.0.0",
   "description": "Manager component for the ProtVista tool",
-  "main": "dist/protvista-manager.js",
+  "main": "dist/nightingale-manager.js",
   "module": "src/protvista-manager.js",
   "files": [
     "dist",
@@ -25,6 +25,8 @@
   "license": "ISC",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
     "lodash-es": "^4.17.11"
   }
 }

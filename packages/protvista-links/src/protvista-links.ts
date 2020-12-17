@@ -1,6 +1,6 @@
 import { scaleLinear } from "d3";
 
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 import { parseLinks, contactObjectToLinkList } from "./links-parser";
 
 const OPACITY_MOUSEOUT = 0.4;
@@ -11,8 +11,8 @@ const getHighlightEvent = (
   type: string,
   target: ProtvistaLinks,
   residues?: Array<any>
-): CustomEvent => {
-  return new CustomEvent("change", {
+): CustomEvent =>
+  new CustomEvent("change", {
     detail: {
       type,
       target,
@@ -23,9 +23,8 @@ const getHighlightEvent = (
     bubbles: true,
     cancelable: true,
   });
-};
 
-class ProtvistaLinks extends ProtvistaTrack {
+class ProtvistaLinks extends HTMLElement implements ProtvistaTrack {
   constructor() {
     super();
     this._threshold = 0.7;
@@ -58,7 +57,7 @@ class ProtvistaLinks extends ProtvistaTrack {
     );
   }
 
-  _dispatchSelectNode(d: number) {
+  _dispatchSelectNode(d: number): void {
     this._data.selected = d;
     this.dispatchEvent(
       getHighlightEvent(

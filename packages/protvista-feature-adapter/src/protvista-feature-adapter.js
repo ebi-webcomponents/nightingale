@@ -5,13 +5,11 @@ export const transformData = (data) => {
   let transformedData = [];
   const { features } = data;
   if (features && features.length > 0) {
-    transformedData = features.map((feature) => {
-      return {
-        ...feature,
-        tooltipContent: formatTooltip(feature),
-        protvistaFeatureId: v1(),
-      };
-    });
+    transformedData = features.map((feature) => ({
+      ...feature,
+      tooltipContent: formatTooltip(feature),
+      protvistaFeatureId: v1(),
+    }));
     transformedData = renameProperties(transformedData);
   }
   return transformedData;
@@ -52,9 +50,9 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 
   filterData() {
     if (Array.isArray(this._adaptedData) && this._filters.length > 0) {
-      this._adaptedData = this._adaptedData.filter((d) => {
-        return this._filters.includes(d.type);
-      });
+      this._adaptedData = this._adaptedData.filter((d) =>
+        this._filters.includes(d.type)
+      );
     }
   }
 

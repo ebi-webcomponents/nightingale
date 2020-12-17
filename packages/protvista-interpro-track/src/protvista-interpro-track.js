@@ -1,4 +1,4 @@
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 import InterproEntryLayout from "./InterproEntryLayout";
 import { getCoverage } from "./coverage";
 

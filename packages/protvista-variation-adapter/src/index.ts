@@ -1,8 +1,4 @@
+import { defineElement } from "@nightingale-elements/utils";
 import ProtvistaVariationAdapter from "./protvista-variation-adapter";
 
-if (window.customElements) {
-  customElements.define(
-    ProtvistaVariationAdapter.is,
-    ProtvistaVariationAdapter
-  );
-}
+defineElement(ProtvistaVariationAdapter);

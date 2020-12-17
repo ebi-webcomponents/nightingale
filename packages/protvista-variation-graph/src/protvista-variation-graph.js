@@ -1,4 +1,4 @@
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 import { scaleLinear, select, line, max } from "d3";
 
 class ProtvistaVariationGraph extends ProtvistaTrack {
@@ -9,7 +9,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
         (_, i) =>
           this.getXFromSeqPosition(i + 1) - this.getSingleBaseWidth() / 2
       )
-      .y(d => this._yScale(d));
+      .y((d) => this._yScale(d));
   }
 
   init() {
@@ -49,7 +49,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
       // eslint-disable-next-line no-continue
       if (!association) continue;
       const hasDisease = association.find(
-        association => association.disease === true
+        (association) => association.disease === true
       );
       // eslint-disable-next-line no-plusplus
       if (hasDisease) this._totalsArray.diseaseTotal[index]++;
@@ -59,9 +59,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
   }
 
   _createTrack() {
-    select(this)
-      .selectAll("svg")
-      .remove();
+    select(this).selectAll("svg").remove();
     this.svg = select(this)
       .append("svg")
       .attr("width", this.width)
@@ -79,7 +77,7 @@ class ProtvistaVariationGraph extends ProtvistaTrack {
         Math.max(
           max(this._totalsArray.total),
           max(this._totalsArray.diseaseTotal)
-        )
+        ),
       ])
       .range([this._height, 0]);
   }

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import ProtvistaNavigation from "protvista-navigation";
+import ProtvistaNavigation from "@nightingale-elements/nightingale-navigation";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-navigation/README.md";

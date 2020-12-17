@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useCallback } from "react";
-import ProtvistaTooltip from "protvista-tooltip";
+import ProtvistaTooltip from "@nightingale-elements/nightingale-tooltip";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-tooltip/README.md";
@@ -14,10 +14,10 @@ const ProtvistaTooltipWrapper = () => {
     loadWebComponent("protvista-tooltip", ProtvistaTooltip);
   }, []);
 
-  const handleToggle = useCallback(event => {
+  const handleToggle = useCallback((event) => {
     setX(event.pageX);
     setY(event.pageY);
-    setVisible(visible => !visible);
+    setVisible((visible) => !visible);
   }, []);
 
   const handleChangeContent = useCallback(() => {

@@ -1,12 +1,13 @@
 {
-  "name": "protvista-links",
+  "name": "@nightingale-elements/nightingale-links",
   "version": "3.2.1",
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/protvista-links.js",
-  "module": "src/protvista-links.ts",
+  "main": "dist/nightingale-links.js",
+  "module": "dist/es/protvista-links.js",
+  "types": "dist/es/protvista-links.d.ts",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -21,8 +22,10 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "lodash-es": "^4.17.11",
-    "protvista-track": "^3.2.1"
+    "@nightingale-elements/nightingale-track": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
+    "lodash-es": "^4.17.11"
   },
   "devDependencies": {
     "@types/d3": "^5.16.3",

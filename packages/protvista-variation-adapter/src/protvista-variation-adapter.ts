@@ -1,7 +1,6 @@
-import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import { ProtvistaVariationData } from "protvista-variation";
+import ProtvistaFeatureAdapter from "@nightingale-elements/nightingale-feature-adapter";
+import { ProtvistaVariationData } from "@nightingale-elements/nightingale-variation";
 import { v1 } from "uuid";
-import { NightingaleElement } from "data-loader";
 
 import formatTooltip from "./tooltipGenerators";
 import { ProteinsAPIVariation, Xref, SourceType } from "./variants";
@@ -32,9 +31,7 @@ export const transformData = (
   return { sequence, variants };
 };
 
-class ProtvistaVariationAdapter
-  extends ProtvistaFeatureAdapter
-  implements NightingaleElement {
+class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter {
   static get is(): string {
     return "protvista-variation-adapter";
   }

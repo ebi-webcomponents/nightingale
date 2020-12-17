@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import ProtvistaSequence from "protvista-sequence";
-import ProtvistaTrack from "protvista-track";
-import ProtvistaManager from "protvista-manager";
-import ProtvistaNavigation from "protvista-navigation";
+import ProtvistaSequence from "@nightingale-elements/nightingale-sequence";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
+import ProtvistaManager from "@nightingale-elements/nightingale-manager";
+import ProtvistaNavigation from "@nightingale-elements/nightingale-navigation";
 
 window.customElements.define("protvista-sequence", ProtvistaSequence);
 window.customElements.define("protvista-track", ProtvistaTrack);
@@ -24,7 +24,7 @@ export default {
   props: {},
   data() {
     return {
-      sequence: "SEQVENCE"
+      sequence: "SEQVENCE",
     };
   },
   mounted() {
@@ -33,11 +33,11 @@ export default {
         accession: "NLS",
         start: 1,
         end: 3,
-        color: "#d8b365"
-      }
+        color: "#d8b365",
+      },
     ];
 
     this.$refs.features.data = features;
-  }
+  },
 };
 </script>

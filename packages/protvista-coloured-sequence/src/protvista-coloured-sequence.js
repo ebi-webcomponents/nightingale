@@ -1,7 +1,7 @@
 import { select, scaleLinear } from "d3";
 
-import ProtVistaSequence from "protvista-sequence";
-import { ColorScaleParser, String2Object } from "protvista-utils";
+import ProtVistaSequence from "@nightingale-elements/nightingale-sequence";
+import { ColorScaleParser, String2Object } from "@nightingale-elements/utils";
 
 import hydroInterfaceScale from "./hydrophobicity-interface-scale.json";
 import hydroOctanoleScale from "./hydrophobicity-octanol-scale.json";
@@ -12,12 +12,12 @@ const supportedScales = [
   "hydrophobicity-interface-scale",
   "hydrophobicity-octanol-scale",
   "hydrophobicity-scale",
-  "isoelectric-point-scale"
+  "isoelectric-point-scale",
 ];
 
 const defaultScale = {
   domain: [-2, 2],
-  range: ["#ffdd00", "#0000FF"]
+  range: ["#ffdd00", "#0000FF"],
 };
 
 const MIN_BASE_SIZE = 8;
@@ -39,9 +39,7 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
       .attr("width", this.width)
       .attr("height", this._height);
 
-    this.uniqueID = Math.random()
-      .toString(36)
-      .substring(7);
+    this.uniqueID = Math.random().toString(36).substring(7);
 
     this.gradient = this.svg
       .append("defs")
@@ -83,8 +81,8 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
     ) {
       try {
         scale = String2Object(this._scale, {
-          keyFormatter: x => x.toUpperCase(),
-          valueFormatter: x => parseFloat(x)
+          keyFormatter: (x) => x.toUpperCase(),
+          valueFormatter: (x) => parseFloat(x),
         });
       } catch (error) {
         console.error(`Couldn't parse the given scale ${this._scale}`, error);
@@ -123,13 +121,13 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
             end: 1 + first + i,
             aa,
             value,
-            colour: colorScale(value)
+            colour: colorScale(value),
           };
         });
 
       this.residues = this.seq_g
         .selectAll("rect.base_bg")
-        .data(ftWidth < MIN_BASE_SIZE ? [] : bases, d => d.start);
+        .data(ftWidth < MIN_BASE_SIZE ? [] : bases, (d) => d.start);
 
       this.residues
         .enter()
@@ -154,11 +152,11 @@ class ProtVistaColouredSequence extends ProtVistaSequence {
         .append("stop")
         .merge(stops)
         .attr("offset", (_, pos) => (pos + 0.5) / this.sequence.length)
-        .attr("stop-color", base => {
-          return colorScale(
+        .attr("stop-color", (base) =>
+          colorScale(
             base.toUpperCase() in scale ? scale[base.toUpperCase()] : 0 // if the base is not in the given scale
-          );
-        });
+          )
+        );
       this.gradient.exit().remove();
 
       this.seq_greadient

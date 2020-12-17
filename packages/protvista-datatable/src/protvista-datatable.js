@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit-element";
 import { v1 } from "uuid";
-import { ScrollFilter } from "protvista-utils";
+import { ScrollFilter } from "@nightingale-elements/utils";
 /* eslint-disable import/extensions, import/no-extraneous-dependencies */
 import styles from "./styles";
 
@@ -96,12 +96,10 @@ class ProtvistaDatatable extends LitElement {
 
   static processData(data) {
     return data
-      .map((d) => {
-        return {
-          ...d,
-          start: d.start ? d.start : d.begin,
-        };
-      })
+      .map((d) => ({
+        ...d,
+        start: d.start ? d.start : d.begin,
+      }))
       .sort((a, b) => a.start - b.start)
       .map((d) => ({
         ...d,

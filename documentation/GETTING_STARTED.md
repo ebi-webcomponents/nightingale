@@ -15,7 +15,7 @@ All components are exported as modules. This means you can import them as any
 other ES6 module in your application:
 
 ```js
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 ```
 
 You then need to register them as custom elements:
@@ -206,7 +206,7 @@ These are the necessary steps to import and register components in Vue:
 
    ```vue
    <script>
-   import ProtvistaSequence from "protvista-sequence";
+   import ProtvistaSequence from "@nightingale-elements/nightingale-sequence";
 
    window.customElements.define("protvista-sequence", ProtvistaSequence);
    </script>
@@ -224,7 +224,7 @@ If you want to bind data to attributes of Nightingale components via Vue, you ca
 </template>
 
 <script>
-import ProtvistaSequence from "protvista-sequence";
+import ProtvistaSequence from "@nightingale-elements/nightingale-sequence";
 
 window.customElements.define("protvista-sequence", ProtvistaSequence);
 
@@ -232,9 +232,9 @@ export default {
   name: "ProtvistaContainer",
   data() {
     return {
-      sequence: "SEQVENCE"
+      sequence: "SEQVENCE",
     };
-  }
+  },
 };
 </script>
 ```
@@ -247,7 +247,7 @@ If you want your Nightingale components to react to events within the Vue enviro
 </template>
 
 <script>
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 
 window.customElements.define("protvista-track", ProtvistaTrack);
 
@@ -259,12 +259,12 @@ export default {
         accession: "NLS",
         start: 1,
         end: 3,
-        color: "#d8b365"
-      }
+        color: "#d8b365",
+      },
     ];
 
     this.$refs.features.data = features;
-  }
+  },
 };
 </script>
 ```

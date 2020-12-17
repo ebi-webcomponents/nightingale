@@ -1,11 +1,11 @@
 {
-  "name": "protvista-variation-graph",
+  "name": "@nightingale-elements/nightingale-variation-graph",
   "description": "ProtVista Variation Graph",
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/protvista-variation-graph.js",
+  "main": "dist/nightingale-variation-graph.js",
   "module": "src/protvista-variation-graph.js",
   "version": "3.2.1",
   "keywords": [
@@ -24,7 +24,9 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "protvista-track": "^3.2.1"
+    "@nightingale-elements/nightingale-track": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0"
   },
   "devDependencies": {
     "d3": "^5.7.0"

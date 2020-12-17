@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback } from "react";
-import ProtvistaStructure from "protvista-structure";
-import ProtvistaDatatable from "protvista-datatable";
-import ProtvistaManager from "protvista-manager";
+import ProtvistaStructure from "@nightingale-elements/nightingale-structure";
+import ProtvistaDatatable from "@nightingale-elements/nightingale-datatable";
+import ProtvistaManager from "@nightingale-elements/nightingale-manager";
 import { html } from "lit-html";
 import loadWebComponent from "../utils/load-web-component";
 import "litemol/dist/css/LiteMol-plugin.css";
@@ -15,7 +15,7 @@ loadWebComponent("protvista-manager", ProtvistaManager);
 
 const selectedId = "1AAP";
 
-const processData = xrefs =>
+const processData = (xrefs) =>
   xrefs.map(({ id, properties }) => {
     if (!properties) {
       return null;
@@ -41,75 +41,65 @@ const processData = xrefs =>
       chain,
       positions,
       protvistaFeatureId: id,
-      start: Number(start)
+      start: Number(start),
     };
   });
 
 const pdbMirrors = [
   {
     name: "PDBe",
-    url: id => `https://www.ebi.ac.uk/pdbe-srv/view/entry/${id}`
+    url: (id) => `https://www.ebi.ac.uk/pdbe-srv/view/entry/${id}`,
   },
   {
     name: "RCSB PDB",
-    url: id => `https://www.rcsb.org/structure/${id}`
+    url: (id) => `https://www.rcsb.org/structure/${id}`,
   },
   {
     name: "PDBj",
-    url: id => `https://pdbj.org/mine/summary/${id}`
+    url: (id) => `https://pdbj.org/mine/summary/${id}`,
   },
   {
     name: "PDBsum",
-    url: id => `https://www.ebi.ac.uk/pdbsum/${id}`
-  }
+    url: (id) => `https://www.ebi.ac.uk/pdbsum/${id}`,
+  },
 ];
 
 const getColumnConfig = () => ({
   type: {
     label: "PDB Entry",
-    resolver: ({ id }) => id
+    resolver: ({ id }) => id,
   },
   method: {
     label: "Method",
-    resolver: ({ method }) => method
+    resolver: ({ method }) => method,
   },
   resolution: {
     label: "Resolution",
-    resolver: ({ resolution }) => resolution && resolution.replace("A", "Å")
+    resolver: ({ resolution }) => resolution && resolution.replace("A", "Å"),
   },
   chain: {
     label: "Chain",
-    resolver: ({ chain }) => chain
+    resolver: ({ chain }) => chain,
   },
   positions: {
     label: "Positions",
-    resolver: ({ positions }) => positions
+    resolver: ({ positions }) => positions,
   },
   links: {
     label: "Links",
     resolver: ({ id }) =>
       html`
         ${pdbMirrors
-          .map(
-            ({ name, url }) =>
-              html`
-                <a href=${url(id)}>${name}</a>
-              `
-          )
-          .reduce(
-            (prev, curr) =>
-              html`
-                ${prev} · ${curr}
-              `
-          )}
-      `
-  }
+          .map(({ name, url }) => html` <a href=${url(id)}>${name}</a> `)
+          .reduce((prev, curr) => html` ${prev} · ${curr} `)}
+      `,
+  },
 });
 
 const PDBDatatable = ({ xrefs }) => {
   const data = processData(xrefs);
   const setTableData = useCallback(
-    node => {
+    (node) => {
       if (node) {
         // eslint-disable-next-line no-param-reassign
         node.data = data;

@@ -1,5 +1,5 @@
 {
-  "name": "protvista-utils",
+  "name": "@nightingale-elements/utils",
   "version": "3.0.0",
   "description": "Collection of utilities for ProtVista components",
   "files": [
@@ -22,9 +22,19 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "main": "dist/protvista-utils.js",
-  "module": "src/index.js",
+  "scripts": {
+    "build:es": "tsc"
+  },
+  "main": "dist/utils.js",
+  "module": "dist/es/index.js",
+  "types": "dist/es/index.d.ts",
+  "exports": {
+    ".": "./dist/es/"
+  },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729"
+  "gitHead": "5c6758c2c1ae3a9f0e664eef2293677b2a15e729",
+  "dependencies": {
+    "@nightingale-elements/types": "^1.0.0"
+  }
 }

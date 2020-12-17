@@ -1,18 +1,19 @@
 {
-  "name": "protvista-coloured-sequence",
+  "name": "@nightingale-elements/nightingale-coloured-sequence",
   "version": "3.0.0",
   "description": "Track that colors each base by a given function. The default function is hydrophobicity",
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/protvista-coloured-sequence.js",
+  "main": "dist/nightingale-coloured-sequence.js",
   "module": "src/protvista-coloured-sequence.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {
-    "protvista-sequence": "^3.0.0",
-    "protvista-utils": "^3.0.0"
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-sequence": "^3.0.0",
+    "@nightingale-elements/utils": "^3.0.0"
   },
   "repository": {
     "type": "git",

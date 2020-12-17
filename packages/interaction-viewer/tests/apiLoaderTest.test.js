@@ -1,7 +1,7 @@
-import { process } from "../apiLoader";
-import jsonData from "./resources/O60941.json";
-import diseasesJson from "./resources/diseases.json";
-import dataJson from "./resources/data.json";
+import { process } from "../src/apiLoader";
+import jsonData from "./mockData/O60941.json";
+import diseasesJson from "./mockData/diseases.json";
+import dataJson from "./mockData/data.json";
 
 describe("interaction-viewer apiLoader", () => {
   it("should process the data", () => {

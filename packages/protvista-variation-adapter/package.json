@@ -1,5 +1,5 @@
 {
-  "name": "protvista-variation-adapter",
+  "name": "@nightingale-elements/nightingale-variation-adapter",
   "version": "3.2.1",
   "description": "Data adapter for variation data",
   "files": [
@@ -10,7 +10,7 @@
   "scripts": {
     "build:es": "tsc"
   },
-  "main": "dist/protvista-variation-adapter.js",
+  "main": "dist/nightingale-variation-adapter.js",
   "module": "dist/es/protvista-variation-adapter.js",
   "types": "dist/es/protvista-variation-adapter.d.ts",
   "repository": {
@@ -31,12 +31,13 @@
   "license": "MIT",
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
+    "@nightingale-elements/nightingale-feature-adapter": "^3.2.1",
+    "@nightingale-elements/nightingale-variation": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
     "d3-scale": "^3.2.3",
-    "data-loader": "^3.0.0",
     "lodash-es": "^4.17.11",
-    "protvista-feature-adapter": "^3.2.1",
-    "protvista-variation": "^3.2.1",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.2"
   },
   "peerDependencies": {
     "d3": "5.X"

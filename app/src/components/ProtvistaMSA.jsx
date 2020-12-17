@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import rawContactsHC from "protvista-links/src/example.tsv";
+import rawContactsHC from "@nightingale-elements/nightingale-links/tests/mockData/example.tsv";
 
-import ProtvistaMSA from "protvista-msa";
-import ProtvistaNavigation from "protvista-navigation";
-import ProtvistaManager from "protvista-manager";
-import ProtvistaLinks from "protvista-links";
+import ProtvistaMSA from "@nightingale-elements/nightingale-msa";
+import ProtvistaNavigation from "@nightingale-elements/nightingale-navigation";
+import ProtvistaManager from "@nightingale-elements/nightingale-manager";
+import ProtvistaLinks from "@nightingale-elements/nightingale-links";
 
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme.jsx";

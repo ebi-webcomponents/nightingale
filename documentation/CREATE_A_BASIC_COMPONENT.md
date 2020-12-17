@@ -79,8 +79,8 @@ This document describes the creation of a basic Nightingale component.
       @@ -16,6 +16,7 @@ import sequence from "../mocks/sequence.json";
       import { dataIPR, signatures, withResidues } from "../mocks/interpro";
       import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
-      import ProtvistaSaver from "protvista-saver";
-      +import ProtvistaOverlay from "protvista-overlay";
+      import ProtvistaSaver from "@nightingale-elements/nightingale-saver";
+      +import ProtvistaOverlay from "@nightingale-elements/nightingale-overlay";
       import Readme from "./Readme";
       import readmeContent from "../../../packages/protvista-manager/README.md";
 

@@ -6,7 +6,7 @@ class ProtvistaFilter extends LitElement {
     return {
       filters: { type: Array },
       selectedFilters: { type: Set },
-      for: { type: String }
+      for: { type: String },
     };
   }
 
@@ -84,20 +84,15 @@ class ProtvistaFilter extends LitElement {
   }
 
   render() {
-    const groupByType = groupBy(this.filters, f => {
-      return f.type.text;
-    });
+    const groupByType = groupBy(this.filters, (f) => f.type.text);
     return html`
       ${Object.keys(groupByType).map(
-        type =>
+        (type) =>
           html`
             <h4>${type}</h4>
             <div>
               ${groupByType[type].map(
-                filterItem =>
-                  html`
-                    ${this.getCheckBox(filterItem)}
-                  `
+                (filterItem) => html` ${this.getCheckBox(filterItem)} `
               )}
             </div>
           `
@@ -136,9 +131,7 @@ class ProtvistaFilter extends LitElement {
               : options.colors[0]
           };`}
         ></span>
-        <span class="protvista_checkbox_label">
-          ${labels.join("/")}
-        </span>
+        <span class="protvista_checkbox_label"> ${labels.join("/")} </span>
       </label>
     `;
   }
@@ -158,12 +151,12 @@ class ProtvistaFilter extends LitElement {
           handler: "property",
           for: this.for,
           value: this.filters
-            .filter(filter => this.selectedFilters.has(filter.name))
-            .map(filter => ({
+            .filter((filter) => this.selectedFilters.has(filter.name))
+            .map((filter) => ({
               category: filter.type.name,
-              filterFn: filter.filterData
-            }))
-        }
+              filterFn: filter.filterData,
+            })),
+        },
       })
     );
   }

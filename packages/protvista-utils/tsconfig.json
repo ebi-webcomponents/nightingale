@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/es/",
+    "declaration": true,
+    "noImplicitAny": false,
+    "allowJs": true
+  },
+  "files": ["src/index.ts"]
+}

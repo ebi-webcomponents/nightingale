@@ -1,5 +1,5 @@
 import transformData, { JSONToHTML } from "../src/dataTransformer";
-import vcfOutput from "./__mock__/vcfConverterOutput.json";
+import vcfOutput from "./mockData/vcfConverterOutput.json";
 
 describe("vcf-adapter", () => {
   it("parses the object correctly to generate html", () => {
