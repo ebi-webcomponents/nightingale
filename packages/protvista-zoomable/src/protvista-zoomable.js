@@ -7,14 +7,25 @@ import {
 import {
   TrackHighlighter,
   ScrollFilter,
-  withMargin,
+  // withMargin,
 } from "@nightingale-elements/utils";
 
 import ResizeObserver from "resize-observer-polyfill";
 
-class ProtvistaZoomable extends HTMLElement {
+import NightingaleElement, {
+  withDimensions,
+} from "@nightingale-elements/nightingale-core";
+
+class ProtvistaZoomable extends NightingaleElement {
   constructor() {
     super();
+    this.margin = {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    };
+
     ProtvistaZoomable._polyfillElementClosest();
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
@@ -42,10 +53,6 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   connectedCallback() {
-    this.style.display = "block";
-    this.style.width = "100%";
-    this.width = this.offsetWidth;
-
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
@@ -62,9 +69,9 @@ class ProtvistaZoomable extends HTMLElement {
       ? parseFloat(this.getAttribute("displayend"))
       : this.length;
 
-    this._height = this.getAttribute("height")
-      ? Number(this.getAttribute("height"))
-      : 44;
+    // this._height = this.getAttribute("height")
+    //   ? Number(this.getAttribute("height"))
+    //   : 44;
     this._highlightEvent = this.getAttribute("highlight-event")
       ? this.getAttribute("highlight-event")
       : "onclick";
@@ -97,22 +104,6 @@ class ProtvistaZoomable extends HTMLElement {
     }
     this.removeEventListener("click", this._resetEventHandler);
     document.removeEventListener("wheel", this.wheelListener);
-  }
-
-  get width() {
-    return this._width;
-  }
-
-  set width(width) {
-    this._width = width;
-  }
-
-  set height(height) {
-    this._height = height;
-  }
-
-  get height() {
-    return this._height;
   }
 
   set length(length) {
@@ -193,6 +184,9 @@ class ProtvistaZoomable extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    super.attributeChangedCallback(name, oldValue, newValue);
+    const inWiths = ["width", "height"];
+    if (inWiths.includes(name) || !this.zoom) return;
     // eslint-disable-next-line no-param-reassign
     if (newValue === "null") newValue = null;
     if (oldValue !== newValue) {
@@ -403,11 +397,7 @@ class ProtvistaZoomable extends HTMLElement {
   }
 }
 
-export default withMargin(ProtvistaZoomable, {
-  initialValue: {
-    top: 10,
-    right: 10,
-    bottom: 10,
-    left: 10,
-  },
+export default withDimensions(ProtvistaZoomable, {
+  width: 0,
+  height: 44,
 });

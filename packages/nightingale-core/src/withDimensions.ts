@@ -42,6 +42,7 @@ const withDimensions = (
       this.style.display = "block";
       this.style.width = "100%";
       this.width = this.offsetWidth;
+      super.connectedCallback();
     }
 
     static get observedAttributes() {

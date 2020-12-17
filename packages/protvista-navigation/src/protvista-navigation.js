@@ -7,7 +7,7 @@ import {
   event as d3Event,
 } from "d3";
 
-import { withMargin } from "@nightingale-elements/utils";
+// import { withMargin } from "@nightingale-elements/utils";
 
 class ProtVistaNavigation extends HTMLElement {
   constructor() {
@@ -16,6 +16,12 @@ class ProtVistaNavigation extends HTMLElement {
     this._padding = 0;
     this.height = 40;
     this.dontDispatch = false;
+    this.margin = {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    };
   }
 
   _refreshWidth() {
@@ -219,4 +225,4 @@ class ProtVistaNavigation extends HTMLElement {
   }
 }
 
-export default withMargin(ProtVistaNavigation);
+export default ProtVistaNavigation;
