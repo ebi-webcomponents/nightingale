@@ -9,29 +9,22 @@ import {
 } from "molstar/lib/mol-plugin-state/actions/structure";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { CellPack } from "molstar/lib/extensions/cellpack";
-import {
-  RCSBAssemblySymmetry,
-  RCSBValidationReport,
-} from "molstar/lib/extensions/rcsb";
 import { PDBeStructureQualityReport } from "molstar/lib/extensions/pdbe";
 import { ObjectKeys } from "molstar/lib/mol-util/type-helpers";
+import { StructureSelection } from "molstar/lib/mol-model/structure";
 import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
+import { Script } from "molstar/lib/mol-script/script";
 import { ANVILMembraneOrientation } from "molstar/lib/extensions/anvil/behavior";
 import { DnatcoConfalPyramids } from "molstar/lib/extensions/dnatco";
-import { G3DFormat, G3dProvider } from "molstar/lib/extensions/g3d/format";
-import { DataFormatProvider } from "molstar/lib/mol-plugin-state/formats/provider";
 import { Mp4Export } from "molstar/lib/extensions/mp4-export";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 
 import "../../../node_modules/molstar/build/viewer/molstar.css";
-
 // require("../../../node_modules/molstar/lib/mol-plugin-ui/skin/light.scss");
 
 interface LoadStructureOptions {
   representationParams?: StructureRepresentationPresetProvider.CommonParams;
 }
-
-const CustomFormats = [["g3d", G3dProvider] as const];
 
 const Extensions = {
   cellpack: PluginSpec.Behavior(CellPack),
@@ -39,92 +32,98 @@ const Extensions = {
   "pdbe-structure-quality-report": PluginSpec.Behavior(
     PDBeStructureQualityReport
   ),
-  "rcsb-assembly-symmetry": PluginSpec.Behavior(RCSBAssemblySymmetry),
-  "rcsb-validation-report": PluginSpec.Behavior(RCSBValidationReport),
   "anvil-membrane-orientation": PluginSpec.Behavior(ANVILMembraneOrientation),
-  g3d: PluginSpec.Behavior(G3DFormat),
   "mp4-export": PluginSpec.Behavior(Mp4Export),
 };
 
-const DefaultViewerOptions = {
-  customFormats: CustomFormats as [string, DataFormatProvider][],
+const viewerOptions = {
   extensions: ObjectKeys(Extensions),
-  layoutIsExpanded: true,
-  layoutShowControls: true,
-  layoutShowRemoteState: true,
+  layoutIsExpanded: false,
+  layoutShowControls: false,
+  layoutShowRemoteState: false,
   layoutControlsDisplay: "reactive" as PluginLayoutControlsDisplay,
-  layoutShowSequence: true,
-  layoutShowLog: true,
-  layoutShowLeftPanel: true,
+  layoutShowSequence: false,
+  layoutShowLog: false,
+  layoutShowLeftPanel: false,
   disableAntialiasing: false,
   pixelScale: 1,
   enableWboit: false,
-
-  viewportShowExpand: PluginConfig.Viewport.ShowExpand.defaultValue,
+  viewportShowExpand: true,
+  viewportShowSelectionMode: false,
+  viewportShowAnimation: false,
+  pdbProvider: "pdbe",
   viewportShowControls: PluginConfig.Viewport.ShowControls.defaultValue,
   viewportShowSettings: PluginConfig.Viewport.ShowSettings.defaultValue,
-  viewportShowSelectionMode:
-    PluginConfig.Viewport.ShowSelectionMode.defaultValue,
-  viewportShowAnimation: PluginConfig.Viewport.ShowAnimation.defaultValue,
   pluginStateServer: PluginConfig.State.DefaultServer.defaultValue,
   volumeStreamingServer:
     PluginConfig.VolumeStreaming.DefaultServer.defaultValue,
   volumeStreamingDisabled: !PluginConfig.VolumeStreaming.Enabled.defaultValue,
-  pdbProvider: PluginConfig.Download.DefaultPdbProvider.defaultValue,
-  emdbProvider: PluginConfig.Download.DefaultEmdbProvider.defaultValue,
 };
-type ViewerOptions = typeof DefaultViewerOptions;
 
-class Viewer {
+class MolStar {
   plugin: PluginContext;
 
-  constructor(
-    elementOrId: string | HTMLElement,
-    options: Partial<ViewerOptions> = {}
-  ) {
-    const o = { ...DefaultViewerOptions, ...options };
-
+  constructor(elementOrId: string | HTMLElement) {
     const spec: PluginSpec = {
       actions: [...DefaultPluginSpec.actions],
       behaviors: [
         ...DefaultPluginSpec.behaviors,
-        ...o.extensions.map((e) => Extensions[e]),
+        ...viewerOptions.extensions.map((e) => Extensions[e]),
       ],
       animations: [...(DefaultPluginSpec.animations || [])],
       customParamEditors: DefaultPluginSpec.customParamEditors,
-      customFormats: o?.customFormats,
       layout: {
         initial: {
-          isExpanded: o.layoutIsExpanded,
-          showControls: o.layoutShowControls,
-          controlsDisplay: o.layoutControlsDisplay,
+          isExpanded: viewerOptions.layoutIsExpanded,
+          showControls: viewerOptions.layoutShowControls,
+          controlsDisplay: viewerOptions.layoutControlsDisplay,
         },
         controls: {
           ...(DefaultPluginSpec.layout && DefaultPluginSpec.layout.controls),
-          top: o.layoutShowSequence ? undefined : "none",
-          bottom: o.layoutShowLog ? undefined : "none",
-          left: o.layoutShowLeftPanel ? undefined : "none",
+          top: viewerOptions.layoutShowSequence ? undefined : "none",
+          bottom: viewerOptions.layoutShowLog ? undefined : "none",
+          left: viewerOptions.layoutShowLeftPanel ? undefined : "none",
         },
       },
       components: {
         ...DefaultPluginSpec.components,
-        remoteState: o.layoutShowRemoteState ? "default" : "none",
+        remoteState: viewerOptions.layoutShowRemoteState ? "default" : "none",
       },
       config: [
-        [PluginConfig.General.DisableAntialiasing, o.disableAntialiasing],
-        [PluginConfig.General.PixelScale, o.pixelScale],
-        [PluginConfig.General.EnableWboit, o.enableWboit],
-        [PluginConfig.Viewport.ShowExpand, o.viewportShowExpand],
-        [PluginConfig.Viewport.ShowControls, o.viewportShowControls],
-        [PluginConfig.Viewport.ShowSettings, o.viewportShowSettings],
-        [PluginConfig.Viewport.ShowSelectionMode, o.viewportShowSelectionMode],
-        [PluginConfig.Viewport.ShowAnimation, o.viewportShowAnimation],
-        [PluginConfig.State.DefaultServer, o.pluginStateServer],
-        [PluginConfig.State.CurrentServer, o.pluginStateServer],
-        [PluginConfig.VolumeStreaming.DefaultServer, o.volumeStreamingServer],
-        [PluginConfig.VolumeStreaming.Enabled, !o.volumeStreamingDisabled],
-        [PluginConfig.Download.DefaultPdbProvider, o.pdbProvider],
-        [PluginConfig.Download.DefaultEmdbProvider, o.emdbProvider],
+        [
+          PluginConfig.General.DisableAntialiasing,
+          viewerOptions.disableAntialiasing,
+        ],
+        [PluginConfig.General.PixelScale, viewerOptions.pixelScale],
+        [PluginConfig.General.EnableWboit, viewerOptions.enableWboit],
+        [PluginConfig.Viewport.ShowExpand, viewerOptions.viewportShowExpand],
+        [
+          PluginConfig.Viewport.ShowControls,
+          viewerOptions.viewportShowControls,
+        ],
+        [
+          PluginConfig.Viewport.ShowSettings,
+          viewerOptions.viewportShowSettings,
+        ],
+        [
+          PluginConfig.Viewport.ShowSelectionMode,
+          viewerOptions.viewportShowSelectionMode,
+        ],
+        [
+          PluginConfig.Viewport.ShowAnimation,
+          viewerOptions.viewportShowAnimation,
+        ],
+        [PluginConfig.State.DefaultServer, viewerOptions.pluginStateServer],
+        [PluginConfig.State.CurrentServer, viewerOptions.pluginStateServer],
+        [
+          PluginConfig.VolumeStreaming.DefaultServer,
+          viewerOptions.volumeStreamingServer,
+        ],
+        [
+          PluginConfig.VolumeStreaming.Enabled,
+          !viewerOptions.volumeStreamingDisabled,
+        ],
+        [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
       ],
     };
 
@@ -167,9 +166,31 @@ class Viewer {
     );
   }
 
+  highlight(): void {
+    const data = this.plugin.managers.structure.hierarchy.current.structures[0]
+      ?.cell.obj?.data;
+    if (!data) return;
+
+    const seqId = 7;
+    const sel = Script.getStructureSelection(
+      (Q) =>
+        Q.struct.generator.atomGroups({
+          "residue-test": Q.core.rel.eq([
+            Q.struct.atomProperty.macromolecular.label_seq_id(),
+            seqId,
+          ]),
+          "group-by": Q.struct.atomProperty.macromolecular.residueKey(),
+        }),
+      data
+    );
+    console.log(sel);
+    const loci = StructureSelection.toLociWithSourceUnits(sel);
+    this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
+  }
+
   handleResize(): void {
     this.plugin.layout.events.updated.next();
   }
 }
 
-export default Viewer;
+export default MolStar;

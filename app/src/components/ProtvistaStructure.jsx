@@ -13,9 +13,10 @@ loadWebComponent("protvista-structure", ProtvistaStructure);
 loadWebComponent("protvista-datatable", ProtvistaDatatable);
 loadWebComponent("protvista-manager", ProtvistaManager);
 
-const selectedId = "1AAP";
+// const selectedId = "1AAP";
+const selectedId = "1GRM";
 
-const processData = xrefs =>
+const processData = (xrefs) =>
   xrefs.map(({ id, properties }) => {
     if (!properties) {
       return null;
@@ -41,75 +42,65 @@ const processData = xrefs =>
       chain,
       positions,
       protvistaFeatureId: id,
-      start: Number(start)
+      start: Number(start),
     };
   });
 
 const pdbMirrors = [
   {
     name: "PDBe",
-    url: id => `https://www.ebi.ac.uk/pdbe-srv/view/entry/${id}`
+    url: (id) => `https://www.ebi.ac.uk/pdbe-srv/view/entry/${id}`,
   },
   {
     name: "RCSB PDB",
-    url: id => `https://www.rcsb.org/structure/${id}`
+    url: (id) => `https://www.rcsb.org/structure/${id}`,
   },
   {
     name: "PDBj",
-    url: id => `https://pdbj.org/mine/summary/${id}`
+    url: (id) => `https://pdbj.org/mine/summary/${id}`,
   },
   {
     name: "PDBsum",
-    url: id => `https://www.ebi.ac.uk/pdbsum/${id}`
-  }
+    url: (id) => `https://www.ebi.ac.uk/pdbsum/${id}`,
+  },
 ];
 
 const getColumnConfig = () => ({
   type: {
     label: "PDB Entry",
-    resolver: ({ id }) => id
+    resolver: ({ id }) => id,
   },
   method: {
     label: "Method",
-    resolver: ({ method }) => method
+    resolver: ({ method }) => method,
   },
   resolution: {
     label: "Resolution",
-    resolver: ({ resolution }) => resolution && resolution.replace("A", "Å")
+    resolver: ({ resolution }) => resolution && resolution.replace("A", "Å"),
   },
   chain: {
     label: "Chain",
-    resolver: ({ chain }) => chain
+    resolver: ({ chain }) => chain,
   },
   positions: {
     label: "Positions",
-    resolver: ({ positions }) => positions
+    resolver: ({ positions }) => positions,
   },
   links: {
     label: "Links",
     resolver: ({ id }) =>
       html`
         ${pdbMirrors
-          .map(
-            ({ name, url }) =>
-              html`
-                <a href=${url(id)}>${name}</a>
-              `
-          )
-          .reduce(
-            (prev, curr) =>
-              html`
-                ${prev} · ${curr}
-              `
-          )}
-      `
-  }
+          .map(({ name, url }) => html` <a href=${url(id)}>${name}</a> `)
+          .reduce((prev, curr) => html` ${prev} · ${curr} `)}
+      `,
+  },
 });
 
 const PDBDatatable = ({ xrefs }) => {
   const data = processData(xrefs);
   const setTableData = useCallback(
-    node => {
+    (node) => {
       if (node) {
         // eslint-disable-next-line no-param-reassign
         node.data = data;
@@ -142,11 +133,11 @@ const ProtvistaStructureWrapper = () => {
         accession="P05067"
         highlight="290:300,310:340"
       />
-      <h3>Structure with protvista-datatable</h3>
+      {/* <h3>Structure with protvista-datatable</h3>
       <protvista-manager attributes="pdb-id">
         <protvista-structure pdb-id={selectedId} accession="P05067" />
         <PDBDatatable xrefs={xrefData} />
-      </protvista-manager>
+      </protvista-manager> */}
     </Fragment>
   );
 };

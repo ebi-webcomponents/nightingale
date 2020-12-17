@@ -231,30 +231,11 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   loadMolStar() {
-    this._molStar = new MolStar(this.molStarDiv, {
-      layoutIsExpanded: false,
-      layoutShowControls: false,
-      layoutShowRemoteState: false,
-      layoutShowSequence: false,
-      layoutShowLog: false,
-      layoutShowLeftPanel: false,
-
-      viewportShowExpand: true,
-      viewportShowSelectionMode: false,
-      viewportShowAnimation: false,
-
-      pdbProvider: "rcsb",
-      emdbProvider: "rcsb",
-    });
-
-    this.molStarDiv.addEventListener("click", (e) => {
-      console.log(e);
-    });
+    this._molStar = new MolStar(this.molStarDiv);
   }
 
   loadMolecule2(_id) {
     this._molStar.loadPdb(_id.toLowerCase());
-    console.log(this._molStar);
   }
 
   loadMolecule(_id) {
@@ -401,6 +382,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   highlightChain() {
+    this._molStar.highlight();
     if (!this._highlight) {
       return;
     }
@@ -420,7 +402,7 @@ class ProtvistaStructure extends HTMLElement {
     const translatedPositions = this._highlight
       .map(({ start, end }) => this.translatePositions(start, end))
       .filter((translatedPosition) => translatedPosition);
-
+    console.log(this._highlight, translatedPositions);
     if (!translatedPositions || translatedPositions.length === 0) {
       return;
     }
