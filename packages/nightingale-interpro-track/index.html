@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>nightingale-interpro-track-demo</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <!-- Place favicon.ico in the root directory -->
+  </head>
+  <body>
+    <table style="width: 100%">
+      <tr>
+        <th>FROM</th>
+        <th style="width: 90%">Track</th>
+        <th>TO</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>
+          <nightingale-interpro-track
+            id="track1"
+            length="223"
+            displaystart="1"
+            displayend="223"
+            highlightstart="23"
+            highlightend="45"
+            color="red"
+          ></nightingale-interpro-track>
+        </td>
+        <td>223</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>
+          <nightingale-interpro-track
+            id="track2"
+            length="223"
+            displaystart="1"
+            displayend="223"
+            highlightstart="23"
+            highlightend="45"
+            color="green"
+            expanded
+          ></nightingale-interpro-track>
+        </td>
+        <td>223</td>
+      </tr>
+      <tr>
+        <td>110</td>
+        <td>
+          <nightingale-interpro-track
+            id="track3"
+            length="223"
+            displaystart="110"
+            displayend="210"
+            highlightstart="23"
+            highlightend="45"
+          ></nightingale-interpro-track>
+        </td>
+        <td>210</td>
+      </tr>
+    </table>
+
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+
+    <!-- Required for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
+    <!-- Web component polyfill (only loads what it needs) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-lite.js"
+      charset="utf-8"
+    ></script>
+    <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+      charset="utf-8"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/nightingale-zoomable@latest"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/nightingale-track@latest"
+      charset="utf-8"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/nightingale-interpro-track@latest"
+      charset="utf-8"
+      defer
+    ></script>
+
+    <script>
+      window.onload = () => {
+        const data = [
+          { accession: "feature1", start: 10, end: 40, color: "#342ea2" },
+          {
+            accession: "feature2",
+            locations: [{ fragments: [{ start: 50, end: 160 }] }],
+            color: "#A42ea2",
+          },
+          {
+            accession: "feature3",
+            locations: [
+              {
+                fragments: [{ start: 155, end: 155 }],
+              },
+              { fragments: [{ start: 158, end: 158 }] },
+            ],
+            color: "#A4Aea2",
+          },
+          {
+            accession: "feature4",
+            locations: [
+              {
+                fragments: [
+                  { start: 200, end: 204 },
+                  { start: 206, end: 210 },
+                ],
+              },
+            ],
+          },
+        ];
+        const contributors = [
+          {
+            accession: "feature1.1",
+            start: 12,
+            end: 40,
+            residues: [
+              {
+                accession: "CAP_ED",
+                locations: [
+                  {
+                    description: "ligand binding site",
+                    fragments: [
+                      { start: 20, end: 20, residue: "G" },
+                      { start: 25, end: 25, residue: "A" },
+                      { start: 30, end: 30, residue: "S" },
+                    ],
+                  },
+                  {
+                    description: "flexible hinge region",
+                    fragments: [
+                      { start: 22, end: 22, residue: "T" },
+                      { start: 24, end: 24, residue: "G" },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            accession: "feature1.2",
+            locations: [
+              {
+                fragments: [
+                  { start: 10, end: 27 },
+                  { start: 29, end: 40 },
+                ],
+              },
+            ],
+          },
+          { accession: "feature2.1", start: 50, end: 160 },
+          {
+            accession: "feature2.2",
+            locations: [
+              {
+                fragments: [
+                  { start: 50, end: 94 },
+                  { start: 99, end: 110 },
+                  { start: 116, end: 158 },
+                ],
+              },
+            ],
+          },
+          {
+            accession: "feature2.3",
+            locations: [
+              {
+                fragments: [
+                  { start: 52, end: 98 },
+                  { start: 104, end: 160 },
+                ],
+              },
+            ],
+          },
+          {
+            accession: "feature3.1",
+            locations: [
+              { fragments: [{ start: 155, end: 155 }] },
+              { fragments: [{ start: 158, end: 158 }] },
+            ],
+          },
+        ];
+        document.querySelector("#track1").data = data;
+        document.querySelector("#track2").data = data;
+        document.querySelector("#track3").data = data;
+        document.querySelector("#track1").contributors = contributors;
+        document.querySelector("#track2").contributors = contributors;
+        document.querySelector("#track3").contributors = contributors;
+      };
+    </script>
+  </body>
+</html>

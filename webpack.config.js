@@ -59,11 +59,12 @@ const config = {
       commonjs: "react-dom",
       amd: "react-dom",
     },
-    "protvista-zoomable": "ProtvistaZoomable",
-    "protvista-track": "ProtvistaTrack",
-    "protvista-feature-adapter": "ProtvistaFeatureAdapter",
-    "protvista-utils": "ProtvistaUtils",
-    "protvista-sequence": "ProtvistaSequence",
+    "@nightingale-elements/nightingale-zoomable": "NightingaleZoomable",
+    "@nightingale-elements/nightingale-track": "NightingaleTrack",
+    "@nightingale-elements/nightingale-feature-adapter":
+      "NightingaleFeatureAdapter",
+    "@nightingale-elements/nightingale-utils": "NightingaleUtils",
+    "@nightingale-elements/nightingale-sequence": "NightingaleSequence",
   },
   plugins: [new CleanWebpackPlugin()],
   module: {

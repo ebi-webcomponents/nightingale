@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import loadWebComponent from "../utils/load-web-component";
+
 import elements from "./examples";
 
-import DataLoader from "@nightingale-elements/data-loader";
-import ProtvistaTrack from "@nightingale-elements/nightingale-track";
-import ProtvistaSequence from "@nightingale-elements/nightingale-sequence";
-import ProtvistaFeatureAdapter from "@nightingale-elements/nightingale-feature-adapter";
-import ProtvistaNavigation from "@nightingale-elements/nightingale-navigation";
+import "@nightingale-elements/data-loader";
+import "@nightingale-elements/nightingale-track";
+import "@nightingale-elements/nightingale-sequence";
+import "@nightingale-elements/nightingale-feature-adapter";
+import "@nightingale-elements/nightingale-navigation";
 
 const styleTextArea = {
   fontFamily: "courier",
@@ -108,18 +108,11 @@ const DemoArea = ({ code, data, example }) => {
   return <div dangerouslySetInnerHTML={html} />;
 };
 
-const loadWebComponents = () => {
-  loadWebComponent("protvista-feature-adapter", ProtvistaFeatureAdapter);
-  loadWebComponent("protvista-track", ProtvistaTrack);
-  loadWebComponent("protvista-sequence", ProtvistaSequence);
-  loadWebComponent("protvista-navigation", ProtvistaNavigation);
-  loadWebComponent("data-loader", DataLoader);
-};
 const Playground = () => {
   const [example, setExample] = useState(null);
   const [code, setCode] = useState("");
   const [data, setData] = useState("");
-  loadWebComponents();
+
   return (
     <div>
       <h1>Playground area</h1>

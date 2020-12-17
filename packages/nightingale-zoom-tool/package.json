@@ -1,0 +1,35 @@
+{
+  "name": "@nightingale-elements/nightingale-zoom-tool",
+  "version": "3.1.2",
+  "description": "Zooming tool for Nightingale",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-zoom-tool.js",
+  "module": "src/NightingaleZoomTool.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "zoom"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "license": "MIT",
+  "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
+    "lit-html": "^1.3.0"
+  },
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
+}

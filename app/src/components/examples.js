@@ -4,23 +4,23 @@ const elements = {
   clear: {
     name: "clear",
     codeSample: "",
-    dataSample: ""
+    dataSample: "",
   },
-  "protvista-navigation": {
-    name: "protvista-navigation",
+  "nightingale-navigation": {
+    name: "nightingale-navigation",
     codeSample: `
-      <protvista-navigation 
-          id="protvista-navigation" 
+      <nightingale-navigation 
+          id="nightingale-navigation" 
           length="223" 
           displaystart="1" 
           displayend="223" 
-      />`
+      />`,
   },
-  "protvista-track": {
-    name: "protvista-track",
+  "nightingale-track": {
+    name: "nightingale-track",
     codeSample: `
-      <protvista-track 
-          id="protvista-track" 
+      <nightingale-track 
+          id="nightingale-track" 
           width="1020" 
           length="223" 
           displaystart="1" 
@@ -30,13 +30,13 @@ const elements = {
           color="red"
       />`,
     dataType: "json",
-    dataSample: data
+    dataSample: data,
   },
-  "protvista-sequence": {
-    name: "protvista-sequence",
+  "nightingale-sequence": {
+    name: "nightingale-sequence",
     codeSample: `
-      <protvista-sequence 
-          id="protvista-sequence" 
+      <nightingale-sequence 
+          id="nightingale-sequence" 
           width="1020" 
           length="223" 
           displaystart="1" 
@@ -46,8 +46,8 @@ const elements = {
        />`,
     dataType: "string",
     dataSample:
-      "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP"
-  }
+      "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP",
+  },
 };
 
 export default elements;

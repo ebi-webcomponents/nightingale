@@ -1,0 +1,39 @@
+{
+  "name": "@nightingale-elements/nightingale-interpro-track",
+  "version": "3.2.1",
+  "description": "Interpro extension of the track type.",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-interpro-track.js",
+  "module": "src/nightingale-interpro-track.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "ISC",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "dependencies": {
+    "@nightingale-elements/nightingale-track": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
+    "lodash-es": "^4.17.11"
+  },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  }
+}

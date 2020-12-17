@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import TextareaSequence from "textarea-sequence";
-import loadWebComponent from "../utils/load-web-component";
+
 import Readme from "./Readme";
 import readmeContent from "../../../packages/textarea-sequence/README.md";
 
-const ProtvistaNavigationWrapper = () => {
+import "@nightingale-elements/textarea-sequence";
+
+const NightingaleNavigationWrapper = () => {
   const element = useRef(null);
   const [errors, setErrors] = useState({});
   const [valid, setValid] = useState(true);
@@ -14,11 +15,11 @@ const ProtvistaNavigationWrapper = () => {
       setValid(element.current.valid);
     });
   }, []);
-  loadWebComponent("textarea-sequence", TextareaSequence);
+
   return (
     <>
       <h1>textarea-sequence</h1>
-      <textarea-sequence
+      <nightingale-sequence
         ref={element}
         height="10em"
         min-sequence-length="10"
@@ -47,4 +48,4 @@ const ProtvistaNavigationWrapper = () => {
   );
 };
 
-export default ProtvistaNavigationWrapper;
+export default NightingaleNavigationWrapper;

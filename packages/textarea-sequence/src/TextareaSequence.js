@@ -1,7 +1,10 @@
+import { NightingaleElement } from "@nightingale-elements/types";
 import Quill from "./Quill";
 import { alphabets, formatSequence } from "./defaults";
 
-class TextareaSequence extends HTMLElement {
+class TextareaSequence extends NightingaleElement {
+  static is = "textarea-sequence";
+
   constructor() {
     super();
     this.quill = null;
