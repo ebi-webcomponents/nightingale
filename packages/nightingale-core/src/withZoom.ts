@@ -1,7 +1,5 @@
 import NightingaleBaseElement from "./nightingale-base-element";
-import { WITH_DIMENSION } from "./withDimensions";
-
-const WITH_ZOOM = "WITH_ZOOM";
+import Registry from "./registryWith";
 
 const withZoom = (
   Element: typeof NightingaleBaseElement
@@ -10,12 +8,12 @@ const withZoom = (
   class ElementWithZoom extends Element {
     container: HTMLElement;
 
-    get implements(): Array<string> {
-      return super.implements.concat(WITH_ZOOM);
+    get implements(): Array<keyof typeof Registry> {
+      return super.implements.concat(Registry.withZoom);
     }
 
-    get dependencies(): Array<string> {
-      return super.dependencies.concat(WITH_DIMENSION);
+    get dependencies(): Array<keyof typeof Registry> {
+      return super.dependencies.concat(Registry.withDimensions);
     }
 
     constructor() {
@@ -25,7 +23,5 @@ const withZoom = (
   }
   return ElementWithZoom;
 };
-
-withZoom.__nType = WITH_ZOOM;
 
 export default withZoom;

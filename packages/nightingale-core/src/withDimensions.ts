@@ -1,6 +1,5 @@
 import NightingaleBaseElement from "./nightingale-base-element";
-
-export const WITH_DIMENSION = "WITH_DIMENSION";
+import Registry from "./registryWith";
 
 const withDimensions = (
   Element: typeof NightingaleBaseElement,
@@ -17,11 +16,9 @@ const withDimensions = (
 
     height: number;
 
-    get implements(): Array<string> {
-      return super.implements.concat(WITH_DIMENSION);
+    get implements(): Array<keyof typeof Registry> {
+      return super.implements.concat(Registry.withDimensions);
     }
-
-    // implements: Array<string> = super.implements.concat(WITH_DIMENSION);
 
     constructor() {
       super();
@@ -31,7 +28,5 @@ const withDimensions = (
   }
   return ElementWithDimensions;
 };
-
-withDimensions.__nType = WITH_DIMENSION;
 
 export default withDimensions;

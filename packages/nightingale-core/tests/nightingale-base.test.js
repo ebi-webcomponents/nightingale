@@ -1,4 +1,5 @@
 import NightingaleBaseElement, { withZoom, withDimensions } from "../src/index";
+import Registry from "../src/registryWith";
 
 describe("nightingale-base-element", () => {
   test("creates nightingale-base-element", () => {
@@ -22,7 +23,7 @@ describe("nightingale-base-element", () => {
     const element = document.createElement("with-dimensions-element");
     expect(element).toBeInstanceOf(HTMLElement);
     expect(element).toBeInstanceOf(NightingaleBaseElement);
-    expect(element.implements).toEqual(["WITH_DIMENSION"]);
+    expect(element.implements).toEqual([Registry.withDimensions]);
     expect(element.dependencies).toEqual([]);
   });
 
@@ -32,7 +33,7 @@ describe("nightingale-base-element", () => {
       window.customElements.define("with-zoom-element", ElementWithZoom);
       // eslint-disable-next-line no-new
       new ElementWithZoom();
-    }).toThrow();
+    }).toThrow("Dependency error");
   });
 
   test("crea nightingale-with-zoom-with-dimensions", () => {
@@ -47,8 +48,8 @@ describe("nightingale-base-element", () => {
     const element = document.createElement("with-dimensions-zoom-element");
     expect(element).toBeInstanceOf(HTMLElement);
     expect(element).toBeInstanceOf(NightingaleBaseElement);
-    expect(element.implements).toContain("WITH_ZOOM");
-    expect(element.implements).toContain("WITH_DIMENSION");
-    expect(element.dependencies).toContain("WITH_DIMENSION");
+    expect(element.implements).toContain(Registry.withZoom);
+    expect(element.implements).toContain(Registry.withDimensions);
+    expect(element.dependencies).toContain(Registry.withDimensions);
   });
 });

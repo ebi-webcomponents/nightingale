@@ -1,15 +1,15 @@
+import Registry from "./registryWith";
+
 class NightingaleBaseElement extends HTMLElement {
   // eslint-disable-next-line class-methods-use-this
-  get implements(): Array<string> {
+  get implements(): Array<keyof typeof Registry> {
     return [];
   }
 
   // eslint-disable-next-line class-methods-use-this
-  get dependencies(): Array<string> {
+  get dependencies(): Array<keyof typeof Registry> {
     return [];
   }
-
-  // implements: Array<string> = [];
 
   constructor() {
     super();
