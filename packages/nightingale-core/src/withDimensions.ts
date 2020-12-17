@@ -12,9 +12,58 @@ const withDimensions = (
   }
 ): any => {
   class ElementWithDimensions extends Element {
-    width: number;
+    _width: number;
 
-    height: number;
+    _height: number;
+
+    get width() {
+      return this._width;
+    }
+
+    set width(width) {
+      if (this._width !== width) {
+        this._width = width;
+        this.render();
+      }
+    }
+
+    get height() {
+      return this._height;
+    }
+
+    set height(height) {
+      if (this._height !== height) {
+        this._height = height;
+        this.render();
+      }
+    }
+
+    connectedCallback() {
+      this.style.display = "block";
+      this.style.width = "100%";
+      this.width = this.offsetWidth;
+    }
+
+    static get observedAttributes() {
+      return Element.observedAttributes.concat(["height", "width"]);
+    }
+
+    attributeChangedCallback(
+      name: string,
+      oldValue: string,
+      newValue: string
+    ): void {
+      const nv = newValue === "null" ? null : newValue;
+      if (oldValue !== nv) {
+        const value = parseFloat(nv);
+        if (name === "width") {
+          this.width = Number.isNaN(value) ? 0 : value;
+        } else if (name === "height") {
+          this.height = Number.isNaN(value) ? 0 : value;
+        }
+      }
+      super.attributeChangedCallback(name, oldValue, newValue);
+    }
 
     get implements(): Array<keyof typeof Registry> {
       return super.implements.concat(Registry.withDimensions);
@@ -22,8 +71,8 @@ const withDimensions = (
 
     constructor() {
       super();
-      this.width = options.width;
-      this.height = options.height;
+      this._width = options.width;
+      this._height = options.height;
     }
   }
   return ElementWithDimensions;

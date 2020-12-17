@@ -11,6 +11,19 @@ class NightingaleBaseElement extends HTMLElement {
     return [];
   }
 
+  static observedAttributes: Array<string> = [];
+
+  attributeChangedCallback(
+    name: string,
+    oldValue: string,
+    newValue: string
+  ): void {
+    const nv = newValue === "null" ? null : newValue;
+    if (oldValue !== nv) {
+      this.render();
+    }
+  }
+
   constructor() {
     super();
     for (const dependency of this.dependencies) {
