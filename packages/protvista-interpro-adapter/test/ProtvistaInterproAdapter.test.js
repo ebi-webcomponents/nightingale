@@ -14,21 +14,21 @@ const payload = {
         integrated: null,
         member_databases: {
           prints: {
-            PR00759: "BASICPTASE"
+            PR00759: "BASICPTASE",
           },
           smart: {
-            SM00131: "BPTI/Kunitz family of serine protease inhibitors."
+            SM00131: "BPTI/Kunitz family of serine protease inhibitors.",
           },
           pfam: {
-            PF00014: "Kunitz/Bovine pancreatic trypsin inhibitor domain"
+            PF00014: "Kunitz/Bovine pancreatic trypsin inhibitor domain",
           },
           profile: {
-            PS50279: "Pancreatic trypsin inhibitor (Kunitz) family profile"
+            PS50279: "Pancreatic trypsin inhibitor (Kunitz) family profile",
           },
           cdd: {
             cd00109:
-              "BPTI/Kunitz family of serine protease inhibitors; Structure is a disulfide ri..."
-          }
+              "BPTI/Kunitz family of serine protease inhibitors; Structure is a disulfide ri...",
+          },
         },
         go_terms: [
           {
@@ -36,10 +36,10 @@ const payload = {
             name: "serine-type endopeptidase inhibitor activity",
             category: {
               code: "F",
-              name: "molecular_function"
-            }
-          }
-        ]
+              name: "molecular_function",
+            },
+          },
+        ],
       },
       proteins: [
         {
@@ -54,15 +54,15 @@ const payload = {
                 {
                   start: 288,
                   end: 342,
-                  "dc-status": "CONTINUOUS"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                  "dc-status": "CONTINUOUS",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 describe("ProtvistaFeatureAdapter tests", () => {

@@ -1,4 +1,4 @@
-import string2object from "./String2Object";
+import string2object from "../src/String2Object";
 
 describe("color range parsing", () => {
   test("parseColorRange is a function", () => {
@@ -21,7 +21,7 @@ describe("color range parsing", () => {
   });
   test("Should not create a scale without blocks KEY:VALUE", () => {
     const strings2parse = ["X", "X:Y,Z", "X:X,R,Y:Z", "X,Y:Z", "X:Y:Z"];
-    strings2parse.forEach(str => {
+    strings2parse.forEach((str) => {
       const fn1 = () => string2object(str);
       expect(fn1).toThrow();
     });
@@ -31,27 +31,27 @@ describe("color range parsing", () => {
     expect(Object.keys(obj).length).toEqual(2);
     expect(obj).toEqual({
       x: "1",
-      y: "2"
+      y: "2",
     });
   });
   test("parsing a valid 2 points string and formatting keys", () => {
     const obj = string2object("x:1,y:2", {
-      keyFormatter: x => x.toUpperCase()
+      keyFormatter: (x) => x.toUpperCase(),
     });
     expect(Object.keys(obj).length).toEqual(2);
     expect(obj).toEqual({
       X: "1",
-      Y: "2"
+      Y: "2",
     });
   });
   test("parsing a valid 2 points string and formatting values", () => {
     const obj = string2object("x:1,y:2", {
-      valueFormatter: x => parseFloat(x)
+      valueFormatter: (x) => parseFloat(x),
     });
     expect(Object.keys(obj).length).toEqual(2);
     expect(obj).toEqual({
       x: 1.0,
-      y: 2.0
+      y: 2.0,
     });
   });
 });
