@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import DataLoader from "data-loader";
-import ProtvistaVariationGraph from "protvista-variation-graph";
-import ProtvistaVariationAdapter from "protvista-variation-adapter";
+import DataLoader from "@nightingale-elements/data-loader";
+import ProtvistaVariationGraph from "@nightingale-elements/nightingale-variation-graph";
+import ProtvistaVariationAdapter from "@nightingale-elements/nightingale-variation-adapter";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-variation-graph/README.md";

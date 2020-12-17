@@ -1,7 +1,7 @@
 {
-  "name": "protvista-proteomics-adapter",
+  "name": "@nightingale-elements/nightingale-proteomics-adapter",
   "description": "A dataloader and parser (ProtVista compliant) for proteomics/peptide data imported in UniProt",
-  "main": "dist/protvista-proteomics-adapter",
+  "main": "dist/nightingale-proteomics-adapter",
   "module": "src/ProtvistaProteomicsAdapter.js",
   "files": [
     "src",
@@ -28,8 +28,9 @@
   "version": "3.2.1",
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
+    "@nightingale-elements/nightingale-feature-adapter": "^3.2.1",
     "@nightingale-elements/types": "^1.0.0",
-    "protvista-feature-adapter": "^3.2.1",
+    "@nightingale-elements/utils": "^3.0.0",
     "uuid": "^8.3.2"
   }
 }

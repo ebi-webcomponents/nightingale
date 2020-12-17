@@ -4,7 +4,11 @@ import {
   zoomIdentity,
   event as d3Event,
 } from "d3";
-import { TrackHighlighter, ScrollFilter, withMargin } from "protvista-utils";
+import {
+  TrackHighlighter,
+  ScrollFilter,
+  withMargin,
+} from "@nightingale-elements/utils";
 
 import ResizeObserver from "resize-observer-polyfill";
 

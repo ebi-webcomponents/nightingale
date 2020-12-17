@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
-import DataLoader from "data-loader";
-import ProtvistaVariation from "protvista-variation";
-import ProtvistaVariationAdapter from "protvista-variation-adapter";
-import ProtvistaTooltip from "protvista-tooltip";
-import VCFAdapter from "protvista-vcf-adapter";
+import DataLoader from "@nightingale-elements/data-loader";
+import ProtvistaVariation from "@nightingale-elements/nightingale-variation";
+import ProtvistaVariationAdapter from "@nightingale-elements/nightingale-variation-adapter";
+import ProtvistaTooltip from "@nightingale-elements/nightingale-tooltip";
+import VCFAdapter from "@nightingale-elements/nightingale-vcf-adapter";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-variation/README.md";

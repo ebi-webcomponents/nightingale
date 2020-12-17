@@ -1,11 +1,11 @@
 import React, { Fragment, Component } from "react";
 import { html } from "lit-html";
-import ProtvistaDatatable from "protvista-datatable";
-import ProtvistaTrack from "protvista-track";
-import ProtvistaManager from "protvista-manager";
-import ProtvistaNavigation from "protvista-navigation";
-import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import DataLoader from "data-loader";
+import ProtvistaDatatable from "@nightingale-elements/nightingale-datatable";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
+import ProtvistaManager from "@nightingale-elements/nightingale-manager";
+import ProtvistaNavigation from "@nightingale-elements/nightingale-navigation";
+import ProtvistaFeatureAdapter from "@nightingale-elements/nightingale-feature-adapter";
+import DataLoader from "@nightingale-elements/data-loader";
 import loadWebComponent from "../utils/load-web-component";
 import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
@@ -13,40 +13,35 @@ import Readme from "./Readme";
 const columnConfig = {
   type: {
     label: "Feature key",
-    resolver: d => d["type"]
+    resolver: (d) => d["type"],
   },
   description: {
     label: "Description",
-    resolver: d => d["description"]
+    resolver: (d) => d["description"],
   },
   positions: {
     label: "Positions",
-    resolver: d => `${d["start"]}-${d["end"]}`
+    resolver: (d) => `${d["start"]}-${d["end"]}`,
   },
   consequence: {
     label: "Evidences",
     child: true,
-    resolver: d => {
+    resolver: (d) => {
       const evidences = d["evidences"];
       if (evidences && evidences.length > 0) {
         return html`
           <ul>
-            ${evidences.map(
-              evidence =>
-                html`
-                  <li>${evidence.code}</li>
-                `
-            )}
+            ${evidences.map((evidence) => html` <li>${evidence.code}</li> `)}
           </ul>
         `;
       }
-    }
+    },
   },
   ftId: {
     label: "Feature ID",
     child: true,
-    resolver: d => d.ftId
-  }
+    resolver: (d) => d.ftId,
+  },
 };
 class ProtvistaDatatableWrapper extends Component {
   componentDidMount() {

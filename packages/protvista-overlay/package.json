@@ -1,11 +1,11 @@
 {
-  "name": "protvista-overlay",
+  "name": "@nightingale-elements/nightingale-overlay",
   "version": "3.0.0",
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/protvista-overlay.js",
+  "main": "dist/nightingale-overlay.js",
   "module": "src/ProtvistaOverlay.js",
   "keywords": [
     "nightingale",
@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
     "resize-observer-polyfill": "^1.5.0"
   },
   "repository": {

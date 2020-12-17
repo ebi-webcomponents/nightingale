@@ -18,7 +18,10 @@
     "Daniel Rice <dlrice@ebi.ac.uk>"
   ],
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0"
+  },
   "devDependencies": {
     "@testing-library/dom": "^7.29.0"
   },

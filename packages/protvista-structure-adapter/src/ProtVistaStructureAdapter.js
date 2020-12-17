@@ -1,18 +1,18 @@
-import ProtvistaFeatureAdapter from "protvista-feature-adapter";
+import ProtvistaFeatureAdapter from "@nightingale-elements/nightingale-feature-adapter";
 import { v1 } from "uuid";
 import {
   getAllFeatureStructures,
   mergeOverlappingIntervals,
-  formatTooltip
+  formatTooltip,
 } from "./StructureDataParser";
 
-export const transformData = data => {
+export const transformData = (data) => {
   let transformedData = [];
   if (data && data.length !== 0) {
     const allFeatureStructures = getAllFeatureStructures(data);
     transformedData = mergeOverlappingIntervals(allFeatureStructures);
 
-    transformedData.forEach(feature => {
+    transformedData.forEach((feature) => {
       /* eslint-disable no-param-reassign */
       feature.tooltipContent = formatTooltip(feature);
       feature.protvistaFeatureId = v1();

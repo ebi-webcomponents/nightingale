@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { ProtvistaVariationDatum } from "protvista-variation";
+import { ProtvistaVariationDatum } from "@nightingale-elements/nightingale-variation";
 import { VCFJSON } from "vcftojson/dist/types";
 
 const style =

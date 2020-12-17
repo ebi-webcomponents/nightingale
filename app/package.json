@@ -18,6 +18,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
     "highlight.js": "10.4.1",
     "interaction-viewer": "^3.1.2",
     "protvista-coloured-sequence": "^3.0.0",

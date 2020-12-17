@@ -4,7 +4,7 @@ import _groupBy from "lodash-es/groupBy";
 import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";
 
-import ProtvistaZoomable from "protvista-zoomable";
+import ProtvistaZoomable from "@nightingale-elements/nightingale-zoomable";
 import FeatureShape from "./FeatureShape";
 import NonOverlappingLayout from "./NonOverlappingLayout";
 import DefaultLayout from "./DefaultLayout";

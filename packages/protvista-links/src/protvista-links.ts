@@ -1,6 +1,6 @@
 import { scaleLinear } from "d3";
 
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 import { parseLinks, contactObjectToLinkList } from "./links-parser";
 
 const OPACITY_MOUSEOUT = 0.4;

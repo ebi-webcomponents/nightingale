@@ -1,12 +1,12 @@
 {
-  "name": "protvista-tooltip",
+  "name": "@nightingale-elements/nightingale-tooltip",
   "description": "A tooltip for ProtVista webcomponents",
   "version": "3.1.2",
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/protvista-tooltip.js",
+  "main": "dist/nightingale-tooltip.js",
   "module": "src/protvista-tooltip.js",
   "keywords": [
     "protvista",
@@ -30,6 +30,7 @@
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
     "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/utils": "^3.0.0",
     "lit-element": "^2.4.0",
     "lodash-es": "^4.17.11"
   }

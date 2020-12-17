@@ -1,4 +1,4 @@
-import ProtvistaTrack from "protvista-track";
+import ProtvistaTrack from "@nightingale-elements/nightingale-track";
 import { scaleLinear, scalePoint, axisLeft, axisRight } from "d3";
 import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";

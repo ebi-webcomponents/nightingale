@@ -28,7 +28,7 @@ Only needed if the `data-loader` name clashes with an other existing
 Custom Element.
 
 ```js
-import DataLoader from "data-loader";
+import DataLoader from "@nightingale-elements/data-loader";
 
 // Register the Custom Elements
 customElements.define("namespaced-data-loader", DataLoader);

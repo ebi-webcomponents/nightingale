@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from "react";
-import DataLoader from "data-loader";
-import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import ProtvistaInterProTrack from "protvista-interpro-track";
+import DataLoader from "@nightingale-elements/data-loader";
+import ProtvistaFeatureAdapter from "@nightingale-elements/nightingale-feature-adapter";
+import ProtvistaInterProTrack from "@nightingale-elements/nightingale-interpro-track";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-interpro-track/README.md";

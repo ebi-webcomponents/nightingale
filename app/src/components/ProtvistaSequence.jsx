@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from "react";
-import ProtvistaSequence from "protvista-sequence";
+import ProtvistaSequence from "@nightingale-elements/nightingale-sequence";
 import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-sequence/README.md";

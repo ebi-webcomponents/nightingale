@@ -1,4 +1,7 @@
-import { formatXrefs, getEvidenceFromCodes } from "protvista-feature-adapter";
+import {
+  formatXrefs,
+  getEvidenceFromCodes,
+} from "@nightingale-elements/nightingale-feature-adapter";
 import groupBy from "lodash-es/groupBy";
 import {
   Association,

@@ -1,7 +1,7 @@
 import { select, scaleLinear } from "d3";
 
-import ProtVistaSequence from "protvista-sequence";
-import { ColorScaleParser, String2Object } from "protvista-utils";
+import ProtVistaSequence from "@nightingale-elements/nightingale-sequence";
+import { ColorScaleParser, String2Object } from "@nightingale-elements/utils";
 
 import hydroInterfaceScale from "./hydrophobicity-interface-scale.json";
 import hydroOctanoleScale from "./hydrophobicity-octanol-scale.json";

@@ -1,6 +1,6 @@
 import { axisBottom, select } from "d3";
 
-import ProtvistaZoomable from "protvista-zoomable";
+import ProtvistaZoomable from "@nightingale-elements/nightingale-zoomable";
 
 const NUMBER_OF_TICKS = 3;
 

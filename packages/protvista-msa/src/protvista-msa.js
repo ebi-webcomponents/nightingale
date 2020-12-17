@@ -1,5 +1,5 @@
-import ProtvistaZoomable from "protvista-zoomable";
-import { Region } from "protvista-utils";
+import ProtvistaZoomable from "@nightingale-elements/nightingale-zoomable";
+import { Region } from "@nightingale-elements/utils";
 import ReactMSAViewer from "react-msa-viewer";
 import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";

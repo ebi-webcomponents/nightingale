@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { DefaultLayout } from "protvista-track";
+import { DefaultLayout } from "@nightingale-elements/nightingale-track";
 
 export const COLLAPSED_HEIGHT = 16;
 export const EXPANDED_HEIGHT = 14;
@@ -90,7 +90,7 @@ export default class InterproEntryLayout extends DefaultLayout {
               : this.height[featureAcc] - 2 * this.innerPadding,
             yPos: expanded
               ? this.maxYPos + this._padding
-              : yPos + this.innerPadding
+              : yPos + this.innerPadding,
           };
           yPos = expanded
             ? this.maxYPos + 2 * this._padding + CHILD_HEIGHT
@@ -108,17 +108,17 @@ export default class InterproEntryLayout extends DefaultLayout {
 
   static _filterOutResidueFragmentsOutOfLocation(residue, featureLocations) {
     residue.locations.forEach(
-      locRes =>
-        (locRes.fragments = locRes.fragments.filter(fragRes =>
-          featureLocations.some(loc =>
+      (locRes) =>
+        (locRes.fragments = locRes.fragments.filter((fragRes) =>
+          featureLocations.some((loc) =>
             loc.fragments.some(
-              frag => fragRes.start >= frag.start && fragRes.end <= frag.end
+              (frag) => fragRes.start >= frag.start && fragRes.end <= frag.end
             )
           )
         ))
     );
     residue.locations = residue.locations.filter(
-      locRes => locRes.fragments.length
+      (locRes) => locRes.fragments.length
     );
   }
 

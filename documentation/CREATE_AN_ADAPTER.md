@@ -22,7 +22,7 @@ There are 2 ways of using an adaptor:
 - Calling directly the `transformData`, useful when an app already has the data and wants to inject the data programatically. Example:
 
 ```javascript
-import { transformData } from "protvista-feature-adapter";
+import { transformData } from "@nightingale-elements/nightingale-feature-adapter";
 
 //...
 
@@ -80,14 +80,14 @@ myProtvistaComponent.data = dataForComponent;
    And you want to use `protvista-track` to visualise this, then a naive `transformData` function could be:
 
 ```javascript
-export const transformData = data =>
+export const transformData = (data) =>
   data
     .split("\n")
-    .map(line => line.split(","))
+    .map((line) => line.split(","))
     .map(([accession, start, end]) => ({
       accession,
       start: Number.parseInt(start),
-      end: Number.parseInt(end)
+      end: Number.parseInt(end),
     }));
 ```
 
@@ -110,10 +110,10 @@ export const transformData = data =>
           this.dispatchEvent(
             new CustomEvent("load", {
               detail: {
-                payload: this._data
+                payload: this._data,
               },
               bubbles: true,
-              cancelable: true
+              cancelable: true,
             })
           );
         }
@@ -126,7 +126,7 @@ export const transformData = data =>
    class ProtvistaFeatureAdapter extends HTMLElement {
      // ...
      connectedCallback() {
-       this.addEventListener("load", e => {
+       this.addEventListener("load", (e) => {
          if (e.target !== this) {
            e.stopPropagation();
            try {
@@ -139,7 +139,7 @@ export const transformData = data =>
                new CustomEvent("error", {
                  detail: error,
                  bubbles: true,
-                 cancelable: true
+                 cancelable: true,
                })
              );
            }

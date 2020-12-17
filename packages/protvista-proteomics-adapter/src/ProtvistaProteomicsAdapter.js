@@ -1,7 +1,7 @@
 import ProtvistaFeatureAdapter, {
   renameProperties,
   formatTooltip,
-} from "protvista-feature-adapter";
+} from "@nightingale-elements/nightingale-feature-adapter";
 import { v1 } from "uuid";
 
 export const transformData = (data) => {

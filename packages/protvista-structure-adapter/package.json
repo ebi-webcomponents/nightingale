@@ -1,8 +1,8 @@
 {
-  "name": "protvista-structure-adapter",
+  "name": "@nightingale-elements/nightingale-structure-adapter",
   "version": "3.2.1",
   "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
-  "main": "dist/protvista-structure-adapter.js",
+  "main": "dist/nightingale-structure-adapter.js",
   "module": "src/ProtVistaStructureAdapter.js",
   "files": [
     "src",
@@ -33,8 +33,9 @@
   "license": "Apache-2.0",
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "dependencies": {
+    "@nightingale-elements/nightingale-feature-adapter": "^3.2.1",
     "@nightingale-elements/types": "^1.0.0",
-    "protvista-feature-adapter": "^3.2.1",
+    "@nightingale-elements/utils": "^3.0.0",
     "uuid": "^8.3.2"
   }
 }
