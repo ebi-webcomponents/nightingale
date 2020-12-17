@@ -26,6 +26,8 @@
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.11",
+    "molstar": "^1.2.6",
+    "ramda": "^0.27.1",
     "whatwg-fetch": "^3.4.1"
   },
   "peerDependencies": {
