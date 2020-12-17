@@ -13,7 +13,7 @@ module.exports = {
           {
             useBuiltIns: "usage",
             targets: { node: "10" },
-            corejs: { version: 3 },
+            corejs: { version: 2 },
           },
         ],
       ],
