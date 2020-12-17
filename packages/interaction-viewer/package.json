@@ -37,6 +37,7 @@
   },
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "devDependencies": {
+    "@testing-library/dom": "^7.29.0",
     "d3": "^5.7.0"
   },
   "peerDependencies": {

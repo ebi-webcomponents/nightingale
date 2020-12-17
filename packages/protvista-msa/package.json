@@ -25,6 +25,7 @@
     "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.2"
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.29.0",
     "d3": "^5.7.0"
   },
   "peerDependencies": {
