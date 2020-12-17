@@ -27,7 +27,5 @@
   "dependencies": {
     "lodash-es": "^4.17.11"
   },
-  "devDependencies": {
-    "@testing-library/dom": "^7.29.0"
-  }
+  "devDependencies": {}
 }

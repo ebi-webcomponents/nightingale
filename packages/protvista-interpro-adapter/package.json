@@ -20,7 +20,5 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "devDependencies": {
-    "@testing-library/dom": "^7.29.0"
-  }
+  "devDependencies": {}
 }

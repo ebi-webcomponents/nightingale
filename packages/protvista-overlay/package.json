@@ -24,7 +24,5 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
-  "devDependencies": {
-    "@testing-library/dom": "^7.29.0"
-  }
+  "devDependencies": {}
 }
