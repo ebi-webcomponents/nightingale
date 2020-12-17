@@ -24,6 +24,7 @@ describe("protvista-sequence tests", () => {
 
   test("it should display the sequence correctly", () => {
     const text = findByText(rendered, "LQA");
+    console.log("here");
     expect(text).toBeTruthy();
   });
 });
