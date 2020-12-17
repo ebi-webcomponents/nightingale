@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-undef */
-import Region from "./Region";
+import Region from "../src/Region";
 
 describe("region encoding", () => {
   test("encode empty region", () => {

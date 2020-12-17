@@ -1,4 +1,4 @@
-import parseScaleRange from "./ColorScaleParser";
+import parseScaleRange from "../src/ColorScaleParser";
 
 describe("color range parsing", () => {
   test("parseColorRange is a function", () => {

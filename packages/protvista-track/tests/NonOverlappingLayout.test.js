@@ -1,26 +1,26 @@
-import NonOverlappingLayout from "../NonOverlappingLayout";
+import NonOverlappingLayout from "../src/NonOverlappingLayout";
 
 const features = [
   {
     start: 1,
-    end: 15
+    end: 15,
   },
   {
     start: 6,
-    end: 15
+    end: 15,
   },
   {
     start: 17,
-    end: 78
+    end: 78,
   },
   {
     start: 4,
-    end: 17
+    end: 17,
   },
   {
     start: 1,
-    end: 3
-  }
+    end: 3,
+  },
 ];
 
 let layout;
@@ -28,7 +28,7 @@ let layout;
 describe("Layout bumping", () => {
   beforeEach(() => {
     layout = new NonOverlappingLayout({
-      layoutHeight: 18
+      layoutHeight: 18,
     });
     layout.init(features);
   });
