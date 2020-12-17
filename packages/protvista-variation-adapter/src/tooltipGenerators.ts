@@ -8,7 +8,9 @@ import {
   Variant,
 } from "./variants";
 
-export const getDiseaseAssociations = (associations: Association[]) =>
+export const getDiseaseAssociations = (
+  associations?: Association[]
+): string | undefined =>
   associations
     ?.map(
       (association) => `
@@ -30,7 +32,7 @@ export const getDiseaseAssociations = (associations: Association[]) =>
     )
     .join("");
 
-export const getDescriptions = (descriptions: Description[]) =>
+export const getDescriptions = (descriptions: Description[]): string =>
   `<hr/><h5>Description</h5>${descriptions
     .map((description) => `<p>${description.value}</p>`)
     .join("")}
@@ -38,7 +40,7 @@ export const getDescriptions = (descriptions: Description[]) =>
 
 export const getPopulationFrequencies = (
   popFrequencies: PopulationFrequency[]
-) =>
+): string =>
   `<hr/><h5>Population frequencies</h5>${popFrequencies
     .map(
       (freq) =>
@@ -46,7 +48,7 @@ export const getPopulationFrequencies = (
     )
     .join("")}`;
 
-export const getPredictions = (predictions: Prediction[]) => {
+export const getPredictions = (predictions: Prediction[]): string => {
   const groupedPredictions = groupBy(predictions, "predAlgorithmNameType");
   const counts = Object.keys(groupedPredictions).map((key) => {
     const valueGroups = groupBy(groupedPredictions[key], "predictionValType");
@@ -70,53 +72,32 @@ export const getPredictions = (predictions: Prediction[]) => {
     .join("");
 };
 
-export const formatTooltip = (variant: Variant) =>
+export const formatTooltip = (variant: Variant): string =>
   `
-                <h5>Variant</h5><p>${variant.wildType} > ${
-    variant.alternativeSequence
-  }</p>
-                ${
-                  variant.populationFrequencies
-                    ? getPopulationFrequencies(variant.populationFrequencies)
-                    : ""
-                }
-                ${
-                  variant.consequenceType
-                    ? `<h5>Consequence</h5><p>${variant.consequenceType}</p>`
-                    : ``
-                }
-                ${
-                  variant.somaticStatus
-                    ? `<h5>Somatic</h5><p>${
-                        variant.somaticStatus === 0 ? "No" : "Yes"
-                      }</p>`
-                    : ``
-                }
-                ${
-                  variant.genomicLocation
-                    ? `<h5>Location</h5><p>${variant.genomicLocation}</p>`
-                    : ``
-                }
-                ${
-                  variant.ftId
-                    ? `<h5>Feature ID</h5><p>${variant.ftId}</p>`
-                    : ``
-                }
-                ${
-                  variant.descriptions
-                    ? getDescriptions(variant.descriptions)
-                    : ""
-                }
-                ${
-                  variant.association
-                    ? getDiseaseAssociations(variant.association)
-                    : ""
-                }
-                ${
-                  variant.predictions ? getPredictions(variant.predictions) : ""
-                }
-
-                
-        `;
+<h5>Variant</h5><p>${variant.wildType} > ${variant.alternativeSequence}</p>
+${
+  variant.populationFrequencies
+    ? getPopulationFrequencies(variant.populationFrequencies)
+    : ""
+}
+${
+  variant.consequenceType
+    ? `<h5>Consequence</h5><p>${variant.consequenceType}</p>`
+    : ``
+}
+${
+  variant.somaticStatus
+    ? `<h5>Somatic</h5><p>${variant.somaticStatus === 0 ? "No" : "Yes"}</p>`
+    : ``
+}
+${
+  variant.genomicLocation
+    ? `<h5>Location</h5><p>${variant.genomicLocation}</p>`
+    : ``
+}
+${variant.ftId ? `<h5>Feature ID</h5><p>${variant.ftId}</p>` : ``}
+${variant.descriptions ? getDescriptions(variant.descriptions) : ""}
+${variant.association ? getDiseaseAssociations(variant.association) : ""}
+${variant.predictions ? getPredictions(variant.predictions) : ""}`;
 
 export default formatTooltip;

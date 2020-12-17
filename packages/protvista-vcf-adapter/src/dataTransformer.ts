@@ -41,8 +41,8 @@ export const JSONToHTML = (
 const transformData = (
   vcfData: VCFJSON[],
   accession: string
-): ProtvistaVariationDatum[] => {
-  return vcfData
+): ProtvistaVariationDatum[] =>
+  vcfData
     .map((vcfItem) => {
       // using startsWith as there seems to be a recent change in VEP which
       // appends a number to the accessions...
@@ -80,6 +80,5 @@ const transformData = (
       return null;
     })
     .filter((variant) => variant);
-};
 
 export default transformData;

@@ -25,7 +25,7 @@
   "scripts": {
     "build:es": "tsc"
   },
-  "main": "dist/protvista-utils.js",
+  "main": "dist/utils.js",
   "module": "dist/es/index.js",
   "types": "dist/es/index.d.ts",
   "exports": {

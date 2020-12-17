@@ -44,10 +44,15 @@ export declare const transformData: (
 
 declare class ProtvistaFeatureAdapter extends HTMLElement {
   manager: any;
+
   data: any;
+
   _adaptedData: any;
+
   connectedCallback(): void;
+
   disconnectedCallback(): void;
+
   parseEntry(data: any): void;
 }
 

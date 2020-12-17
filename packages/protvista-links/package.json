@@ -5,9 +5,6 @@
     "dist",
     "src"
   ],
-  "scripts": {
-    "build:es": "tsc"
-  },
   "main": "dist/protvista-links.js",
   "module": "dist/es/protvista-links.js",
   "types": "dist/es/protvista-links.d.ts",

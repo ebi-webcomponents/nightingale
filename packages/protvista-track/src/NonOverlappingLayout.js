@@ -1,15 +1,13 @@
 import DefaultLayout from "./DefaultLayout";
 
-const featuresOverlap = (feature1, feature2) => {
-  return !(
+const featuresOverlap = (feature1, feature2) =>
+  !(
     Number(feature2.start) > Number(feature1.end) ||
     Number(feature2.end) < Number(feature1.start)
   );
-};
 
-const featureOvelapsInRow = (feature, row) => {
-  return row.some(rowFeature => featuresOverlap(feature, rowFeature));
-};
+const featureOvelapsInRow = (feature, row) =>
+  row.some((rowFeature) => featuresOverlap(feature, rowFeature));
 
 export default class NonOverlappingLayout extends DefaultLayout {
   constructor(options) {
@@ -21,9 +19,9 @@ export default class NonOverlappingLayout extends DefaultLayout {
   }
 
   init(features) {
-    features.forEach(feature => {
+    features.forEach((feature) => {
       const rowIndex = this._rows.findIndex(
-        row => !featureOvelapsInRow(feature, row)
+        (row) => !featureOvelapsInRow(feature, row)
       );
       if (rowIndex >= 0) {
         this._rows[rowIndex].push(feature);

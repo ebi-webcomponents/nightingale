@@ -4,13 +4,13 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prewatch": "npm run bootstrap",
-    "lint": "lerna exec --ignore nightingale-showcase-app --parallel -- eslint -c ../../.eslintrc.json src --ext .js --ext .ts",
+    "lint": "eslint -c .eslintrc.json \"packages/*/src/**/*.[jt]s\"",
     "build": "npm run build:cjs && npm run build:es",
-    "build:cjs": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=production",
+    "build:cjs": "lerna exec --ignore nightingale-showcase-app -- webpack --config ../../webpack.config.js --mode=production",
     "build:es": "lerna run build:es",
     "watch:es": "lerna run --parallel build:es",
     "watch": "lerna exec --ignore nightingale-showcase-app --parallel -- webpack --config ../../webpack.config.js --mode=development -w",
-    "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf .jshint .eslint dist node_modules",
+    "clean": "lerna exec --ignore nightingale-showcase-app --parallel -- rimraf dist node_modules",
     "link-all": "lerna exec --ignore nightingale-showcase-app --parallel yarn link",
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
@@ -41,7 +41,7 @@
     "eslint-plugin-react": "7.21.5",
     "husky": "^4.3.6",
     "jest": "^26.6.3",
-    "lerna": "^3.3.2",
+    "lerna": "^3.22.1",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
     "raw-loader": "4.0.2",
@@ -54,12 +54,11 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged",
-      "pre-push": "yarn lint"
+      "pre-push": "yarn build && yarn lint"
     }
   },
   "workspaces": [
     "app",
     "packages/*"
-  ],
-  "dependencies": {}
+  ]
 }

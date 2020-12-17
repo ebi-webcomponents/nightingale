@@ -206,9 +206,9 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .style("fill-opacity", ({ feature }) =>
         feature.opacity ? feature.opacity : 0.9
       )
-      .style("stroke-opacity", ({ feature }) => {
-        return feature.opacity ? feature.opacity : 0.9;
-      });
+      .style("stroke-opacity", ({ feature }) =>
+        feature.opacity ? feature.opacity : 0.9
+      );
 
     fragmentGroup
       .append("rect")

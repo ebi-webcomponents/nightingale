@@ -11,8 +11,8 @@ const getHighlightEvent = (
   type: string,
   target: ProtvistaLinks,
   residues?: Array<any>
-): CustomEvent => {
-  return new CustomEvent("change", {
+): CustomEvent =>
+  new CustomEvent("change", {
     detail: {
       type,
       target,
@@ -23,7 +23,6 @@ const getHighlightEvent = (
     bubbles: true,
     cancelable: true,
   });
-};
 
 class ProtvistaLinks extends HTMLElement implements ProtvistaTrack {
   constructor() {
@@ -58,7 +57,7 @@ class ProtvistaLinks extends HTMLElement implements ProtvistaTrack {
     );
   }
 
-  _dispatchSelectNode(d: number) {
+  _dispatchSelectNode(d: number): void {
     this._data.selected = d;
     this.dispatchEvent(
       getHighlightEvent(
