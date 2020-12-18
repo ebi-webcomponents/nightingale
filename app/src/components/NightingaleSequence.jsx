@@ -31,32 +31,28 @@ class NightingaleSequenceWrapper extends Component {
           length="223"
           displaystart="10"
           displayend="150"
-          highlightStart="23"
-          highlightEnd="45"
+          highlight="23:45"
         />
         <nightingale-sequence
           id="seq3"
           length="223"
           displaystart="18"
           displayend="100"
-          highlightStart="23"
-          highlightEnd="45"
+          highlight="23:45"
         />
         <nightingale-sequence
           id="seq4"
           length="223"
           displaystart="22"
           displayend="50"
-          highlightStart="23"
-          highlightEnd="45"
+          highlight="23:45"
         />
         <nightingale-sequence
           sequence="MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP"
           length="223"
           displaystart="1"
           displayend="4"
-          highlightStart="2"
-          highlightEnd="2"
+          highlight="23:45"
         />
       </>
     );

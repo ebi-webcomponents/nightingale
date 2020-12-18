@@ -25,8 +25,7 @@ const elements = {
           length="223" 
           displaystart="1" 
           displayend="223" 
-          highlightstart="23" 
-          highlightend="45"
+          highlight="23:45"
           color="red"
       />`,
     dataType: "json",
@@ -41,8 +40,7 @@ const elements = {
           length="223" 
           displaystart="1" 
           displayend="223" 
-          highlightstart="23" 
-          highlightend="45"
+          highlight="23:45"
        />`,
     dataType: "string",
     dataSample:

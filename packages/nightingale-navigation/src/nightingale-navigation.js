@@ -37,8 +37,6 @@ class NightingaleNavigation extends HTMLElement {
     this._displaystart = parseFloat(this.getAttribute("displaystart")) || 1;
     this._displayend =
       parseFloat(this.getAttribute("displayend")) || this._length;
-    this._highlightStart = parseFloat(this.getAttribute("highlightStart"));
-    this._highlightEnd = parseFloat(this.getAttribute("highlightEnd"));
     this._rulerstart = parseFloat(this.getAttribute("rulerStart")) || 1;
 
     this._onResize = this._onResize.bind(this);
@@ -57,15 +55,7 @@ class NightingaleNavigation extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return [
-      "length",
-      "displaystart",
-      "displayend",
-      "highlightStart",
-      "highlightEnd",
-      "width",
-      "rulerstart",
-    ];
+    return ["length", "displaystart", "displayend", "width", "rulerstart"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

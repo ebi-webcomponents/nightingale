@@ -30,12 +30,10 @@ The start position of the selected region.
 
 The end position of the selected region.
 
-#### `highlightStart: number (optional)`
+#### `highlight: string (optional)`
 
-The start position of the highlighted region.
+A comma separated list of regions to highlight.
 
-#### `highlightEnd: number (optional)`
-
-The end position of the highlighted region.
+Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
 
 ### Events

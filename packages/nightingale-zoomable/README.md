@@ -155,8 +155,7 @@ otherwise the zooming functionality might be compromised. For example:
 ```javascript
  static get observedAttributes() {
    return NightingaleZoomable.observedAttributes.concat(
-     "highlightstart",
-     "highlightend",
+     "my_attr",
    );
  }
 ```

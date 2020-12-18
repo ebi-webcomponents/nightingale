@@ -13,8 +13,7 @@ This custom element can be used to zoom and navigate along the sequence displaye
   length="456"
   displaystart="143"
   displayend="400"
-  highlightStart="23"
-  highlightEnd="45"
+  highlight="23:45"
   rulerstart="50"
 />
 ```
@@ -33,13 +32,11 @@ The start position of the selected region.
 
 The end position of the selected region.
 
-#### `highlightStart: number (optional)`
+#### `highlight: string (optional)`
 
-The start position of the highlighted region.
+A comma separated list of regions to highlight.
 
-#### `highlightEnd: number (optional)`
-
-The end position of the highlighted region.
+Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
 
 #### `rulerstart: number (optional)`
 
