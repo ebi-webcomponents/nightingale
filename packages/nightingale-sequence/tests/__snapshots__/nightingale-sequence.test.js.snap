@@ -88,7 +88,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
 
 exports[`nightingale-sequence tests it should display the sequence correctly after highlight 1`] = `
 <nightingale-sequence
-  highlightstart="4"
+  highlight="2:4"
   length="15"
   sequence="MAMYDDEFDTKASDL"
   style="display: block; width: 100%;"
@@ -164,8 +164,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
           fill="rgba(255, 235, 59, 0.8)"
           height="44"
           style="opacity: 0.5; pointer-events: none;"
-          width="26.666666666666668"
-          x="0"
+          width="20"
+          x="6.666666666666667"
         />
       </g>
     </svg>
