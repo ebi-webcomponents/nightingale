@@ -39,7 +39,7 @@ const Extensions = {
 const viewerOptions = {
   extensions: ObjectKeys(Extensions),
   layoutIsExpanded: false,
-  layoutShowControls: false,
+  layoutShowControls: true,
   layoutShowRemoteState: false,
   layoutControlsDisplay: "reactive" as PluginLayoutControlsDisplay,
   layoutShowSequence: false,
@@ -80,9 +80,10 @@ class MolStar {
         },
         controls: {
           ...(DefaultPluginSpec.layout && DefaultPluginSpec.layout.controls),
-          top: viewerOptions.layoutShowSequence ? undefined : "none",
-          bottom: viewerOptions.layoutShowLog ? undefined : "none",
-          left: viewerOptions.layoutShowLeftPanel ? undefined : "none",
+          //   top: true, // viewerOptions.layoutShowSequence ? undefined : "none",
+          right: "none",
+          bottom: "none",
+          left: "none",
         },
       },
       components: {
@@ -166,26 +167,28 @@ class MolStar {
     );
   }
 
-  highlight(): void {
+  highlight(ranges: { start: number; end: number }[]): void {
     const data = this.plugin.managers.structure.hierarchy.current.structures[0]
       ?.cell.obj?.data;
     if (!data) return;
-
-    const seqId = 7;
     const sel = Script.getStructureSelection(
       (Q) =>
         Q.struct.generator.atomGroups({
-          "residue-test": Q.core.rel.eq([
-            Q.struct.atomProperty.macromolecular.label_seq_id(),
-            seqId,
-          ]),
-          "group-by": Q.struct.atomProperty.macromolecular.residueKey(),
+          "residue-test": Q.core.logic.or(
+            ranges.map(({ start, end }) =>
+              Q.core.rel.inRange([
+                Q.struct.atomProperty.macromolecular.auth_seq_id(),
+                start,
+                end,
+              ])
+            )
+          ),
         }),
       data
     );
-    console.log(sel);
     const loci = StructureSelection.toLociWithSourceUnits(sel);
-    this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
+    this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
+    // this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
   }
 
   handleResize(): void {

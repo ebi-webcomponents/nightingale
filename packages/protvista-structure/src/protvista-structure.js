@@ -192,7 +192,8 @@ class ProtvistaStructure extends HTMLElement {
 
   async selectMolecule(id) {
     const pdbEntry = await this.loadPDBEntry(id);
-    const mappings = this.processMapping(pdbEntry);
+    const mappings = Object.values(pdbEntry)[0].UniProt[this._accession]
+      ?.mappings;
 
     await this.loadMolecule(id);
     await this.loadMolecule2(id);
@@ -313,13 +314,6 @@ class ProtvistaStructure extends HTMLElement {
     });
   }
 
-  processMapping(mappingData) {
-    if (!Object.values(mappingData)[0].UniProt[this._accession]) {
-      return null;
-    }
-    return Object.values(mappingData)[0].UniProt[this._accession].mappings;
-  }
-
   translatePositions(start, end, direction = UP_PDB) {
     // return if they have been set to 'undefined'
     if (
@@ -370,7 +364,6 @@ class ProtvistaStructure extends HTMLElement {
         this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)
       )
       .map((residue) => `${residue.start}:${residue.end}`);
-
     const event = new CustomEvent("change", {
       detail: {
         highlight: seqPositions.join(","),
@@ -382,66 +375,54 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   highlightChain() {
-    this._molStar.highlight();
     if (!this._highlight) {
-      return;
-    }
-
-    this.Command.Visual.ResetTheme.dispatch(this._liteMol.context, undefined);
-    this.Command.Tree.RemoveNode.dispatch(
-      this._liteMol.context,
-      "sequence-selection"
-    );
-
-    const visual = this._liteMol.context.select("polymer-visual")[0];
-
-    if (!visual) {
       return;
     }
 
     const translatedPositions = this._highlight
       .map(({ start, end }) => this.translatePositions(start, end))
-      .filter((translatedPosition) => translatedPosition);
-    console.log(this._highlight, translatedPositions);
-    if (!translatedPositions || translatedPositions.length === 0) {
+      .filter(Boolean);
+
+    if (!translatedPositions?.length) {
       return;
     }
 
-    const queries = translatedPositions.map((translatedPos) =>
-      this.Query.sequence(
-        translatedPos.entity.toString(),
-        translatedPos.chain,
-        {
-          seqNumber: translatedPos.start,
-        },
-        {
-          seqNumber: translatedPos.end,
-        }
-      )
-    );
+    this._molStar.highlight(translatedPositions);
+    // const queries = translatedPositions.map((translatedPos) =>
+    //   this.Query.sequence(
+    //     translatedPos.entity.toString(),
+    //     translatedPos.chain,
+    //     {
+    //       seqNumber: translatedPos.start,
+    //     },
+    //     {
+    //       seqNumber: translatedPos.end,
+    //     }
+    //   )
+    // );
 
-    const theme = this.getTheme();
-    const transform = this._liteMol.createTransform();
+    // const theme = this.getTheme();
+    // const transform = this._liteMol.createTransform();
 
-    queries.forEach((query) =>
-      transform.add(
-        visual,
-        this.Transformer.Molecule.CreateSelectionFromQuery,
-        {
-          query,
-        },
-        {
-          ref: "sequence-selection",
-        }
-      )
-    );
+    // queries.forEach((query) =>
+    //   transform.add(
+    //     visual,
+    //     this.Transformer.Molecule.CreateSelectionFromQuery,
+    //     {
+    //       query,
+    //     },
+    //     {
+    //       ref: "sequence-selection",
+    //     }
+    //   )
+    // );
 
-    this._liteMol.applyTransform(transform).then(() => {
-      this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
-        visual,
-        theme,
-      });
-    });
+    // this._liteMol.applyTransform(transform).then(() => {
+    //   this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
+    //     visual,
+    //     theme,
+    //   });
+    // });
     this.removeMessage();
   }
 }
