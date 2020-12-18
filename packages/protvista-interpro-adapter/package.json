@@ -19,6 +19,5 @@
   "bugs": {
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "devDependencies": {}
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }

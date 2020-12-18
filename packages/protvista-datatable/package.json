@@ -31,6 +31,5 @@
     "protvista-utils": "^3.0.0",
     "uuid": "^8.3.1"
   },
-  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
-  "devDependencies": {}
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
 }

@@ -36,6 +36,5 @@
   "dependencies": {
     "@types/lodash-es": "4.17.3",
     "lodash-es": "^4.17.11"
-  },
-  "devDependencies": {}
+  }
 }

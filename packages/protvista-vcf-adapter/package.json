@@ -32,6 +32,5 @@
     "protvista-variation": "^3.2.1",
     "protvista-variation-adapter": "^3.2.1",
     "vcftojson": "^1.1.0"
-  },
-  "devDependencies": {}
+  }
 }

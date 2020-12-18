@@ -23,6 +23,5 @@
     "lodash-es": "^4.17.11",
     "quill": "1.3.7"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "devDependencies": {}
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }

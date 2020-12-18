@@ -31,6 +31,5 @@
   "dependencies": {
     "lit-element": "^2.4.0",
     "lodash-es": "^4.17.11"
-  },
-  "devDependencies": {}
+  }
 }
