@@ -12,7 +12,8 @@ module.exports = {
           "@babel/env",
           {
             useBuiltIns: "usage",
-            targets: { node: "8" },
+            targets: { node: "10" },
+            corejs: { version: 2 },
           },
         ],
       ],
