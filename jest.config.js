@@ -9,4 +9,5 @@ module.exports = {
   moduleNameMapper: {
     "^lodash-es$": "lodash",
   },
+  setupFilesAfterEnv: ["<rootDir>/setupJest.js"],
 };
