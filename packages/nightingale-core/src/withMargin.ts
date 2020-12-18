@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
-import NightingaleBaseElement from "./nightingale-base-element";
+// import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
-import { WithDimensionsI } from "./withDimensions";
+import { ElementWithDimensions } from "./withDimensions";
 
 const sides = ["left", "right", "top", "bottom"];
 const marginSides = sides.map((side) => `margin${side}`);
@@ -17,13 +17,6 @@ type MarginType = {
   right: number;
 };
 
-declare class ElementWithDimensions
-  extends NightingaleBaseElement
-  implements WithDimensionsI {
-  width: number;
-
-  height: number;
-}
 const withMargin = (
   Element: typeof ElementWithDimensions,
   options: {

@@ -6,12 +6,11 @@ import {
 } from "d3";
 import { TrackHighlighter, ScrollFilter } from "@nightingale-elements/utils";
 
-import ResizeObserver from "resize-observer-polyfill";
-
 import NightingaleElement, {
   withDimensions,
   withPosition,
   withMargin,
+  withResizable,
 } from "@nightingale-elements/nightingale-core";
 
 class ProtvistaZoomable extends NightingaleElement {
@@ -36,8 +35,6 @@ class ProtvistaZoomable extends NightingaleElement {
         this._applyZoomTranslation();
       });
     };
-    this._onResize = this._onResize.bind(this);
-    this._listenForResize = this._listenForResize.bind(this);
     this.trackHighlighter = new TrackHighlighter({ element: this, min: 1 });
 
     this.scrollFilter = new ScrollFilter(this);
@@ -61,7 +58,6 @@ class ProtvistaZoomable extends NightingaleElement {
     // It only gets redefined if the size of the component, or the length of the sequence changes.
     this._originXScale = this.xScale.copy();
     this._initZoom();
-    this._listenForResize();
     this.addEventListener("error", (e) => {
       console.error(e);
     });
@@ -75,11 +71,6 @@ class ProtvistaZoomable extends NightingaleElement {
     if (this.manager) {
       this.manager.unregister(this);
     }
-    if (this._ro) {
-      this._ro.unobserve(this);
-    } else {
-      window.removeEventListener("resize", this._onResize);
-    }
     this.removeEventListener("click", this._resetEventHandler);
     document.removeEventListener("wheel", this.wheelListener);
   }
@@ -88,6 +79,19 @@ class ProtvistaZoomable extends NightingaleElement {
   set length(length) {
     super._length = length;
     this.trackHighlighter.max = length;
+  }
+
+  set width(width) {
+    this._width = width;
+    if (!this._zoom) return;
+    this._updateScaleDomain();
+    this._originXScale = this.xScale.copy();
+    if (this.svg) this.svg.attr("width", this.width);
+    this._zoom.scaleExtent([1, Infinity]).translateExtent([
+      [0, 0],
+      [this.getWidthWithMargins(), 0],
+    ]);
+    this.applyZoomTranslation();
   }
 
   get xScale() {
@@ -224,25 +228,6 @@ class ProtvistaZoomable extends NightingaleElement {
     this.applyZoomTranslation();
   }
 
-  _onResize() {
-    this.width = this.offsetWidth;
-    this._updateScaleDomain();
-    this._originXScale = this.xScale.copy();
-    if (this.svg) this.svg.attr("width", this.width);
-    this._zoom.scaleExtent([1, Infinity]).translateExtent([
-      [0, 0],
-      [this.getWidthWithMargins(), 0],
-    ]);
-    this.applyZoomTranslation();
-  }
-
-  _listenForResize() {
-    // TODO add sleep to make transition appear smoother. Could experiment with CSS3
-    // transitions too
-    this._ro = new ResizeObserver(this._onResize);
-    this._ro.observe(this);
-  }
-
   _resetEventHandler(e) {
     if (!e.target.closest(".feature")) {
       this.dispatchEvent(this.createEvent("reset", null, true));
@@ -372,11 +357,13 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 }
 
-export default withMargin(
-  withPosition(
-    withDimensions(ProtvistaZoomable, {
-      width: 0,
-      height: 44,
-    })
+export default withResizable(
+  withMargin(
+    withPosition(
+      withDimensions(ProtvistaZoomable, {
+        width: 0,
+        height: 44,
+      })
+    )
   )
 );

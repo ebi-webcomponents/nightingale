@@ -1,7 +1,15 @@
+// eslint-disable-next-line max-classes-per-file
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
 export interface WithDimensionsI extends NightingaleBaseElement {
+  width: number;
+
+  height: number;
+}
+export declare class ElementWithDimensions
+  extends NightingaleBaseElement
+  implements WithDimensionsI {
   width: number;
 
   height: number;
@@ -39,6 +47,7 @@ const withDimensions = (
     set width(width) {
       if (this._width !== width) {
         this._width = width;
+        super.width = width;
         this.render();
       }
     }
