@@ -13,6 +13,7 @@ import "./App.css";
 import GettingStarted, {
   CreateComponent,
   CreateAdapter,
+  NamingComponents,
 } from "./tutorial/GettingStarted";
 import ProtvistaTooltip from "./components/ProtvistaTooltip.jsx";
 import ProtvistaTooltipWrapper from "./components/ProtvistaTooltip.jsx";
@@ -82,6 +83,15 @@ const App = (component = ProtvistaNavigation) => (
                       activeClassName="active"
                     >
                       Create an Adapter
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/naming-components"
+                      exact
+                      activeClassName="active"
+                    >
+                      Naming components
                     </NavLink>
                   </li>
                 </ul>
@@ -189,6 +199,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/create-component" component={CreateComponent} />
               <Route path="/create-adapter" component={CreateAdapter} />
+              <Route path="/naming-components" component={NamingComponents} />
               <Route path="/" component={GettingStarted} />
             </Switch>
           </Suspense>

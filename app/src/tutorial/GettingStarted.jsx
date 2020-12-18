@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import htmlContent from "../../../documentation/GETTING_STARTED.md";
 import createComponentContent from "../../../documentation/CREATE_A_BASIC_COMPONENT.md";
 import createAdapterContent from "../../../documentation/CREATE_AN_ADAPTER.md";
+import namingComponents from "../../../documentation/NAMING_COMPONENTS.md";
 
 import Readme from "../components/Readme";
 
@@ -14,6 +15,9 @@ export const CreateComponent = () => {
 };
 export const CreateAdapter = () => {
   return <Readme content={createAdapterContent} />;
+};
+export const NamingComponents = () => {
+  return <Readme content={namingComponents} />;
 };
 
 export default GettingStarted;
