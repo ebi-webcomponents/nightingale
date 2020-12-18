@@ -11,13 +11,13 @@ import NightingaleElement, {
   withPosition,
   withMargin,
   withResizable,
+  withManager,
 } from "@nightingale-elements/nightingale-core";
 
 class ProtvistaZoomable extends NightingaleElement {
   constructor() {
     super();
 
-    ProtvistaZoomable._polyfillElementClosest();
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
@@ -42,11 +42,6 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 
   connectedCallback() {
-    if (this.closest("protvista-manager")) {
-      this.manager = this.closest("protvista-manager");
-      this.manager.register(this);
-    }
-
     this._highlightEvent = this.getAttribute("highlight-event")
       ? this.getAttribute("highlight-event")
       : "onclick";
@@ -68,9 +63,6 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 
   disconnectedCallback() {
-    if (this.manager) {
-      this.manager.unregister(this);
-    }
     this.removeEventListener("click", this._resetEventHandler);
     document.removeEventListener("wheel", this.wheelListener);
   }
@@ -251,28 +243,6 @@ class ProtvistaZoomable extends NightingaleElement {
     return [d3Event.pageX, d3Event.pageY];
   }
 
-  static _polyfillElementClosest() {
-    // Polyfill for IE support, see
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
-    if (!Element.prototype.matches) {
-      Element.prototype.matches =
-        Element.prototype.msMatchesSelector ||
-        Element.prototype.webkitMatchesSelector;
-    }
-
-    if (!Element.prototype.closest) {
-      Element.prototype.closest = (s) => {
-        let el = this;
-
-        do {
-          if (el.matches(s)) return el;
-          el = el.parentElement || el.parentNode;
-        } while (el !== null && el.nodeType === 1);
-        return null;
-      };
-    }
-  }
-
   // eslint-disable-next-line class-methods-use-this
   createEvent(
     type,
@@ -357,13 +327,15 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 }
 
-export default withResizable(
-  withMargin(
-    withPosition(
-      withDimensions(ProtvistaZoomable, {
-        width: 0,
-        height: 44,
-      })
+export default withManager(
+  withResizable(
+    withMargin(
+      withPosition(
+        withDimensions(ProtvistaZoomable, {
+          width: 0,
+          height: 44,
+        })
+      )
     )
   )
 );

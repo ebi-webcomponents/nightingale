@@ -15,9 +15,8 @@ const withResizable = (
 
     constructor() {
       super();
-      console.log("binding");
-      this._onResize = this._onResize.bind(this);
-      this._listenForResize = this._listenForResize.bind(this);
+      this.onResize = this.onResize.bind(this);
+      this.listenForResize = this.listenForResize.bind(this);
     }
 
     get implements(): Array<keyof typeof Registry> {
@@ -29,9 +28,7 @@ const withResizable = (
     }
 
     connectedCallback() {
-      console.log("connectedCallback");
-
-      this._listenForResize();
+      this.listenForResize();
       super.connectedCallback();
     }
 
@@ -39,19 +36,17 @@ const withResizable = (
       if (this.#observer) {
         this.#observer.unobserve(this);
       } else {
-        window.removeEventListener("resize", this._onResize);
+        window.removeEventListener("resize", this.onResize);
       }
       super.disconnectedCallback();
     }
 
-    _onResize() {
-      console.log("_onResize");
+    private onResize() {
       this.width = this.offsetWidth;
     }
 
-    _listenForResize() {
-      console.log("_listenForResize");
-      this.#observer = new ResizeObserver(this._onResize);
+    private listenForResize() {
+      this.#observer = new ResizeObserver(this.onResize);
       this.#observer.observe(this);
     }
   }

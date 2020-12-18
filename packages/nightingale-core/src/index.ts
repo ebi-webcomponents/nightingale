@@ -1,14 +1,10 @@
 import NightingaleBaseElement from "./nightingale-base-element";
-import _withZoom from "./withZoom";
-import _withDimensions from "./withDimensions";
-import _withPosition from "./withPosition";
-import _withMargin from "./withMargin";
-import _withResizable from "./withResizable";
 
-export const withZoom = _withZoom;
-export const withDimensions = _withDimensions;
-export const withPosition = _withPosition;
-export const withMargin = _withMargin;
-export const withResizable = _withResizable;
+export { default as withZoom } from "./withZoom";
+export { default as withDimensions } from "./withDimensions";
+export { default as withPosition } from "./withPosition";
+export { default as withMargin } from "./withMargin";
+export { default as withResizable } from "./withResizable";
+export { default as withManager } from "./withManager";
 
 export default NightingaleBaseElement;
