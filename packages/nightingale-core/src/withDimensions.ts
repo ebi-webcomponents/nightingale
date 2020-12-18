@@ -1,6 +1,12 @@
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
+export interface WithDimensionsI extends NightingaleBaseElement {
+  width: number;
+
+  height: number;
+}
+
 const withDimensions = (
   Element: typeof NightingaleBaseElement,
   options: {
@@ -11,7 +17,7 @@ const withDimensions = (
     height: 0,
   }
 ): any => {
-  class ElementWithDimensions extends Element {
+  class ElementWithDimensions extends Element implements WithDimensionsI {
     _width: number;
 
     _height: number;
@@ -20,6 +26,10 @@ const withDimensions = (
       super();
       this._width = options.width;
       this._height = options.height;
+    }
+
+    get implements(): Array<keyof typeof Registry> {
+      return super.implements.concat(Registry.withDimensions);
     }
 
     get width() {
@@ -70,10 +80,6 @@ const withDimensions = (
         }
       }
       super.attributeChangedCallback(name, oldValue, newValue);
-    }
-
-    get implements(): Array<keyof typeof Registry> {
-      return super.implements.concat(Registry.withDimensions);
     }
   }
   return ElementWithDimensions;

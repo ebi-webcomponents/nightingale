@@ -105,6 +105,7 @@ const withPosition = (
       super.attributeChangedCallback(name, oldValue, newValue);
     }
   }
+
   return ElementWithPosition;
 };
 

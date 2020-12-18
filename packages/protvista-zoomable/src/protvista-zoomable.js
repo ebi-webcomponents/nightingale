@@ -4,28 +4,19 @@ import {
   zoomIdentity,
   event as d3Event,
 } from "d3";
-import {
-  TrackHighlighter,
-  ScrollFilter,
-  // withMargin,
-} from "@nightingale-elements/utils";
+import { TrackHighlighter, ScrollFilter } from "@nightingale-elements/utils";
 
 import ResizeObserver from "resize-observer-polyfill";
 
 import NightingaleElement, {
   withDimensions,
   withPosition,
+  withMargin,
 } from "@nightingale-elements/nightingale-core";
 
 class ProtvistaZoomable extends NightingaleElement {
   constructor() {
     super();
-    this.margin = {
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-    };
 
     ProtvistaZoomable._polyfillElementClosest();
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
@@ -123,10 +114,6 @@ class ProtvistaZoomable extends NightingaleElement {
 
   set fixedHighlight(region) {
     this.trackHighlighter.setFixedHighlight(region);
-  }
-
-  getWidthWithMargins() {
-    return this.width ? this.width - this.margin.left - this.margin.right : 0;
   }
 
   _updateScaleDomain() {
@@ -385,9 +372,11 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 }
 
-export default withPosition(
-  withDimensions(ProtvistaZoomable, {
-    width: 0,
-    height: 44,
-  })
+export default withMargin(
+  withPosition(
+    withDimensions(ProtvistaZoomable, {
+      width: 0,
+      height: 44,
+    })
+  )
 );
