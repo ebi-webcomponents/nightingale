@@ -20,7 +20,7 @@ packages/my-component/package.json # contains the package definition
 ### Naming conventions
 
 - Your package name should be short and descriptive (avoid acronyms).
-- If your component is for ProtVista (the protein features visualisation tool) it should have the `protvista-` prefix.
+- If your component is for Nightingale (the protein features visualisation tool) it should have the `nightingale-` prefix.
 - the file in which your main component is defined should have the same name as your package (in kebab-case).
 - your main component should have the same name as your package, but in PascalCase.
 - Documentation, comments, and more importantly code, should all use American English. For example, use `color` and not ~`colour`~
@@ -33,7 +33,7 @@ Why pull requests?
 - Disseminate knowledge
 - Catch potential issues early
 
-Before you submit a pull request, please ensure your code comforms to the [styleguide](#styleguide), that the tests are passing and follow instructions in [the template](https://github.com/ebi-webcomponents/protvista-uniprot/blob/master/pull_request_template.md).
+Before you submit a pull request, please ensure your code comforms to the [styleguide](#styleguide), that the tests are passing and follow instructions in [the template](https://github.com/ebi-webcomponents/nightingale-uniprot/blob/master/pull_request_template.md).
 
 ### Styleguide
 

@@ -1,11 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import lodashGet from "lodash-es/get";
-
-// TODO: move that at a common place in the nightingale repo to be reused
-// Watch out for the generated file structure when that is moved up in the repo
-export abstract class NightingaleElement {
-  static readonly is: string;
-}
+import { NightingaleElement } from "@nightingale-elements/types";
 
 type Selector = string | ((data: any) => any);
 type Data = { payload: any; headers: Headers };
@@ -21,7 +16,7 @@ const store: Map<string, Promise<Data>> = new Map();
 export const load = (
   url: string,
   headers: Headers = new Headers({ accept: "application/json" })
-) => {
+): Promise<Data> => {
   const cached = store.get(url);
   if (cached) return cached;
 
@@ -50,22 +45,20 @@ export const load = (
 };
 
 const getSourceData = (children: HTMLCollection) =>
-  Array.from(children).filter(child =>
+  Array.from(children).filter((child) =>
     child.matches('source[src], script[type="application/json"]')
   );
 
-class DataLoader extends HTMLElement implements NightingaleElement {
+class DataLoader extends NightingaleElement {
+  static is = "data-loader";
+
   private _errors: Error[];
 
   private _data: any;
 
   private _selector: Selector;
 
-  static get is() {
-    return "data-loader";
-  }
-
-  async fetch() {
+  async fetch(): Promise<void> {
     // get all the potentials sources elements
     const sources = getSourceData(this.children);
     // if nothing there, bails
@@ -83,11 +76,11 @@ class DataLoader extends HTMLElement implements NightingaleElement {
             /* eslint-disable no-await-in-loop */
             ...(await load(source.src)),
             srcElement: source,
-            src: (source as HTMLSourceElement).src
+            src: (source as HTMLSourceElement).src,
           };
         } else {
           detail = {
-            payload: JSON.parse(source.textContent)
+            payload: JSON.parse(source.textContent),
           };
         }
 
@@ -105,7 +98,7 @@ class DataLoader extends HTMLElement implements NightingaleElement {
           new CustomEvent("error", {
             detail: errors,
             bubbles: true,
-            cancelable: true
+            cancelable: true,
           })
         );
       } catch (e) {
@@ -160,7 +153,7 @@ class DataLoader extends HTMLElement implements NightingaleElement {
       (this.getAttribute("selector") || "").trim() || ((d: any) => d);
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.fetch();
   }
 }

@@ -1,64 +1,64 @@
 <html>
   <body>
-    <protvista-manager attributes="length displaystart displayend highlight">
-      <protvista-navigation length="770"></protvista-navigation>
-      <protvista-sequence length="770">
+    <nightingale-manager attributes="length displaystart displayend highlight">
+      <nightingale-navigation length="770"></nightingale-navigation>
+      <nightingale-sequence length="770">
         <data-loader>
           <source
             src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM"
           />
         </data-loader>
-      </protvista-sequence>
-      <protvista-track length="770">
-        <protvista-feature-adapter>
+      </nightingale-sequence>
+      <nightingale-track length="770">
+        <nightingale-feature-adapter>
           <data-loader>
             <source
               src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM"
             />
           </data-loader>
-        </protvista-feature-adapter>
-      </protvista-track>
-      <protvista-variation length="770">
-        <protvista-variation-adapter>
+        </nightingale-feature-adapter>
+      </nightingale-track>
+      <nightingale-variation length="770">
+        <nightingale-variation-adapter>
           <data-loader>
             <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
           </data-loader>
-        </protvista-variation-adapter>
-      </protvista-variation>
-      <protvista-variation-graph length="770">
-        <protvista-variation-adapter>
+        </nightingale-variation-adapter>
+      </nightingale-variation>
+      <nightingale-variation-graph length="770">
+        <nightingale-variation-adapter>
           <data-loader>
             <source src="https://www.ebi.ac.uk/proteins/api/variation/P05067" />
           </data-loader>
-        </protvista-variation-adapter>
-      </protvista-variation-graph>
-      <protvista-tooltip id="my_tooltip" />
-    </protvista-manager>
+        </nightingale-variation-adapter>
+      </nightingale-variation-graph>
+      <nightingale-tooltip id="my_tooltip" />
+    </nightingale-manager>
 
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
 
     <script
-      src="./packages/protvista-manager/dist/protvista-manager.js"
+      src="./packages/nightingale-manager/dist/nightingale-manager.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-navigation/dist/protvista-navigation.js"
+      src="./packages/nightingale-navigation/dist/nightingale-navigation.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-tooltip/dist/protvista-tooltip.js"
+      src="./packages/nightingale-tooltip/dist/nightingale-tooltip.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-track/dist/protvista-track.js"
+      src="./packages/nightingale-track/dist/nightingale-track.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-sequence/dist/protvista-sequence.js"
+      src="./packages/nightingale-sequence/dist/nightingale-sequence.js"
       charset="utf-8"
       defer
     ></script>
@@ -68,22 +68,22 @@
       defer
     ></script>
     <script
-      src="./packages/protvista-feature-adapter/dist/protvista-feature-adapter.js"
+      src="./packages/nightingale-feature-adapter/dist/nightingale-feature-adapter.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-variation-adapter/dist/protvista-variation-adapter.js"
+      src="./packages/nightingale-variation-adapter/dist/nightingale-variation-adapter.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-variation/dist/protvista-variation.js"
+      src="./packages/nightingale-variation/dist/nightingale-variation.js"
       charset="utf-8"
       defer
     ></script>
     <script
-      src="./packages/protvista-variation-graph/dist/protvista-variation-graph.js"
+      src="./packages/nightingale-variation-graph/dist/nightingale-variation-graph.js"
       charset="utf-8"
       defer
     ></script>

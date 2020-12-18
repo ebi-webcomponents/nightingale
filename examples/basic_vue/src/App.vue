@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <ProtvistaContainer />
+    <NightingaleContainer />
   </div>
 </template>
 
 <script>
-import ProtvistaContainer from "./components/ProtvistaContainer.vue";
+import NightingaleContainer from "./components/NightingaleContainer.vue";
 
 export default {
   name: "App",
   components: {
-    ProtvistaContainer
-  }
+    NightingaleContainer,
+  },
 };
 </script>
 

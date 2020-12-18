@@ -7,6 +7,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const PACKAGE_ROOT_PATH = process.cwd();
 const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, "package.json"));
+const SCOPE = "@nightingale-elements";
 
 const doesFileExists = (path) => {
   try {
@@ -23,9 +24,11 @@ const config = {
   ],
   output: {
     path: path.resolve(PACKAGE_ROOT_PATH, "dist"),
-    library: camelCase(PKG_JSON.name, { pascalCase: true }),
+    library: camelCase(PKG_JSON.name.replace(`${SCOPE}/`, ""), {
+      pascalCase: true,
+    }),
     libraryTarget: "umd",
-    filename: `${PKG_JSON.name}.js`,
+    filename: `${PKG_JSON.name.replace(`${SCOPE}/`, "")}.js`,
   },
   target: "web",
   devtool: "source-map",
@@ -117,11 +120,6 @@ const config = {
           {
             loader: "ts-loader",
             options: {
-              compilerOptions: {
-                declaration: false,
-                target: "es6",
-                module: "commonjs",
-              },
               transpileOnly: true,
             },
           },

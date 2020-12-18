@@ -1,7 +1,7 @@
 # Getting started
 
 Nightingale is a library of re-usable data visualisation Web Components, which
-can be used to display protein sequence features (ProtVista), variants,
+can be used to display protein sequence features (Nightingale), variants,
 interaction data, 3D structure, etc. These components are flexible, allowing you
 to easily view multiple data sources (UniProt API, your own resource, etc)
 within the same context.
@@ -15,13 +15,13 @@ All components are exported as modules. This means you can import them as any
 other ES6 module in your application:
 
 ```js
-import ProtvistaTrack from "protvista-track";
+import NightingaleTrack from "@nightingale-elements/nightingale-track";
 ```
 
 You then need to register them as custom elements:
 
 ```js
-window.customElements.define("protvista-track", ProtvistaTrack);
+window.customElements.define("nightingale-track", NightingaleTrack);
 ```
 
 If you use a lot of components, it might be worth defining a function to do
@@ -78,62 +78,62 @@ like this:
 ### Display your first component
 
 Using a component is as easy as importing it to your HTML and using it like you
-would a regular HTML tag. Let's display the `protvista-navigation` component,
-used in ProtVista to zoom and navigate a protein sequence (note: `length`
+would a regular HTML tag. Let's display the `nightingale-navigation` component,
+used in Nightingale to zoom and navigate a protein sequence (note: `length`
 represents the protein length in amino-acids):
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-navigation@latest"
+  src="https://cdn.jsdelivr.net/npm/nightingale-navigation@latest"
   defer
 ></script>
-<protvista-navigation length="223" />
+<nightingale-navigation length="223" />
 ```
 
 ### Loading data
 
 We provide a `data-loader` component, which emmits an event caught by
-`protvista-track` when it is done. It also caches data in the window, preventing
+`nightingale-track` when it is done. It also caches data in the window, preventing
 multiple requests to be made to the same url. Because the data returned by an
-API is not necesseraly in the format expected by `protvista-track`, we also
+API is not necesseraly in the format expected by `nightingale-track`, we also
 provide some components to transform the data. We call these 'data-adapters',
 and there are different ways you can use them:
 
 #### 1. Using events
 
 As both the `data-loader` component and 'data-adapters' emit events that bubble up
-containing the data, they can just sit between the `data-loader` and `protvista-track` components like shown below.
+containing the data, they can just sit between the `data-loader` and `nightingale-track` components like shown below.
 As the `data-loader` caches requests, it doesn't matter if you call the same
 url multiple times.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-utils@latest"
+  src="https://cdn.jsdelivr.net/npm/nightingale-utils@latest"
   defer
 ></script>
 <script src="https://cdn.jsdelivr.net/npm/data-loader@latest" defer></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest"
+  src="https://cdn.jsdelivr.net/npm/nightingale-feature-adapter@latest"
   defer
 ></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest"
+  src="https://cdn.jsdelivr.net/npm/nightingale-zoomable@latest"
   defer
 ></script>
 <script
-  src="https://cdn.jsdelivr.net/npm/protvista-track@latest"
+  src="https://cdn.jsdelivr.net/npm/nightingale-track@latest"
   defer
 ></script>
 
-<protvista-track length="770">
-  <protvista-feature-adapter>
+<nightingale-track length="770">
+  <nightingale-feature-adapter>
     <data-loader>
       <source
         src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM"
       />
     </data-loader>
-  </protvista-feature-adapter>
-</protvista-track>
+  </nightingale-feature-adapter>
+</nightingale-track>
 ```
 
 #### 2. Using subscribers
@@ -144,14 +144,14 @@ list of selectors. This is particularly useful when you want to share the data
 between different components, for instance tracks and data tables.
 
 ```html
-<protvista-feature-adapter subscribers="#my-protvista-track">
+<nightingale-feature-adapter subscribers="#my-nightingale-track">
   <data-loader>
     <source
       src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING"
     />
   </data-loader>
-</protvista-feature-adapter>
-<protvista-track length="770" id="my-protvista-track" />
+</nightingale-feature-adapter>
+<nightingale-track length="770" id="my-nightingale-track" />
 ```
 
 #### 3. Using _data-adapters_ as modules
@@ -185,7 +185,7 @@ useEffect(()=> {
 }, [data]);
 
 
-return <protvista-track ref={trackContainer}/>;
+return <nightingale-track ref={trackContainer}/>;
 ...
 ```
 
@@ -206,13 +206,13 @@ These are the necessary steps to import and register components in Vue:
 
    ```vue
    <script>
-   import ProtvistaSequence from "protvista-sequence";
+   import NightingaleSequence from "@nightingale-elements/nightingale-sequence";
 
-   window.customElements.define("protvista-sequence", ProtvistaSequence);
+   window.customElements.define("nightingale-sequence", NightingaleSequence);
    </script>
    ```
 
-You can then use the Nightingale component in the `<template>` section of your Vue Component (in this case, you could use a `<protvista-sequence />` track).
+You can then use the Nightingale component in the `<template>` section of your Vue Component (in this case, you could use a `<nightingale-sequence />` track).
 
 #### Data and event handling
 
@@ -220,21 +220,21 @@ If you want to bind data to attributes of Nightingale components via Vue, you ca
 
 ```vue
 <template>
-  <protvista-sequence :length="sequence.length" :sequence="sequence" />
+  <nightingale-sequence :length="sequence.length" :sequence="sequence" />
 </template>
 
 <script>
-import ProtvistaSequence from "protvista-sequence";
+import NightingaleSequence from "@nightingale-elements/nightingale-sequence";
 
-window.customElements.define("protvista-sequence", ProtvistaSequence);
+window.customElements.define("nightingale-sequence", NightingaleSequence);
 
 export default {
-  name: "ProtvistaContainer",
+  name: "NightingaleContainer",
   data() {
     return {
-      sequence: "SEQVENCE"
+      sequence: "SEQVENCE",
     };
-  }
+  },
 };
 </script>
 ```
@@ -243,28 +243,28 @@ If you want your Nightingale components to react to events within the Vue enviro
 
 ```vue
 <template>
-  <protvista-track ref="features" length="350" />
+  <nightingale-track ref="features" length="350" />
 </template>
 
 <script>
-import ProtvistaTrack from "protvista-track";
+import NightingaleTrack from "@nightingale-elements/nightingale-track";
 
-window.customElements.define("protvista-track", ProtvistaTrack);
+window.customElements.define("nightingale-track", NightingaleTrack);
 
 export default {
-  name: "ProtvistaContainer",
+  name: "NightingaleContainer",
   mounted() {
     const features = [
       {
         accession: "NLS",
         start: 1,
         end: 3,
-        color: "#d8b365"
-      }
+        color: "#d8b365",
+      },
     ];
 
     this.$refs.features.data = features;
-  }
+  },
 };
 </script>
 ```

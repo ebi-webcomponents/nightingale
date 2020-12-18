@@ -1,0 +1,38 @@
+{
+  "name": "@nightingale-elements/nightingale-variation-graph",
+  "description": "Nightingale Variation Graph",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-variation-graph.js",
+  "module": "src/index.js",
+  "version": "3.2.1",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "variation",
+    "graph"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "dependencies": {
+    "@nightingale-elements/nightingale-track": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1"
+  },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  },
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb"
+}

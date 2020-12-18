@@ -1,0 +1,38 @@
+{
+  "name": "@nightingale-elements/nightingale-links",
+  "version": "3.2.1",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-links.js",
+  "module": "dist/es/nightingale-links.js",
+  "types": "dist/es/nightingale-links.d.ts",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "dependencies": {
+    "@nightingale-elements/nightingale-track": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "lodash-es": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/d3": "^5.16.3",
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  },
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
+}
