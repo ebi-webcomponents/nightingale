@@ -26,8 +26,6 @@
         displaystart="1"
         displayend="158"
       ></protvista-sequence>
-      <!-- <protvista-track id="track1" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45"></protvista-track>
-        <protvista-track id="track2" length="223" displaystart="1" displayend="158" highlightstart="10" highlightend="45" layout="non-overlapping"></protvista-track> -->
       <protvista-track
         id="track1"
         length="770"
@@ -142,12 +140,12 @@
                   {
                     fragments: [
                       { start: 10, end: 27 },
-                      { start: 29, end: 40 }
-                    ]
-                  }
-                ]
-              }
-            ]
+                      { start: 29, end: 40 },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
           { accession: "feature2", start: 30, end: 150, color: "#A42ea2" },
           { accession: "feature3", start: 155, end: 155, color: "#A4Aea2" },
@@ -157,12 +155,12 @@
               {
                 fragments: [
                   { start: 2, end: 3 },
-                  { start: 5, end: 5 }
-                ]
-              }
+                  { start: 5, end: 5 },
+                ],
+              },
             ],
-            color: "#34Aea2"
-          }
+            color: "#34Aea2",
+          },
         ];
         document.querySelector("#track1").data = data;
         document.querySelector("#track2").data = data;

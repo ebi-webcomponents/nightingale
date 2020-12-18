@@ -11,10 +11,10 @@
     <!-- Place favicon.ico in the root directory -->
   </head>
   <body>
-    <table style="width:  100%;">
+    <table style="width: 100%">
       <tr>
         <th>FROM</th>
-        <th style="width:  90%;">Track</th>
+        <th style="width: 90%">Track</th>
         <th>TO</th>
       </tr>
       <tr>
@@ -25,8 +25,7 @@
             length="223"
             displaystart="1"
             displayend="223"
-            highlightstart="23"
-            highlightend="45"
+            highlight="23:45"
             color="red"
           ></protvista-interpro-track>
         </td>
@@ -40,8 +39,7 @@
             length="223"
             displaystart="1"
             displayend="223"
-            highlightstart="23"
-            highlightend="45"
+            highlight="23:45"
             color="green"
             expanded
           ></protvista-interpro-track>
@@ -56,8 +54,7 @@
             length="223"
             displaystart="110"
             displayend="210"
-            highlightstart="23"
-            highlightend="45"
+            highlight="23:45"
           ></protvista-interpro-track>
         </td>
         <td>210</td>
@@ -102,17 +99,17 @@
           {
             accession: "feature2",
             locations: [{ fragments: [{ start: 50, end: 160 }] }],
-            color: "#A42ea2"
+            color: "#A42ea2",
           },
           {
             accession: "feature3",
             locations: [
               {
-                fragments: [{ start: 155, end: 155 }]
+                fragments: [{ start: 155, end: 155 }],
               },
-              { fragments: [{ start: 158, end: 158 }] }
+              { fragments: [{ start: 158, end: 158 }] },
             ],
-            color: "#A4Aea2"
+            color: "#A4Aea2",
           },
           {
             accession: "feature4",
@@ -120,11 +117,11 @@
               {
                 fragments: [
                   { start: 200, end: 204 },
-                  { start: 206, end: 210 }
-                ]
-              }
-            ]
-          }
+                  { start: 206, end: 210 },
+                ],
+              },
+            ],
+          },
         ];
         const contributors = [
           {
@@ -140,19 +137,19 @@
                     fragments: [
                       { start: 20, end: 20, residue: "G" },
                       { start: 25, end: 25, residue: "A" },
-                      { start: 30, end: 30, residue: "S" }
-                    ]
+                      { start: 30, end: 30, residue: "S" },
+                    ],
                   },
                   {
                     description: "flexible hinge region",
                     fragments: [
                       { start: 22, end: 22, residue: "T" },
-                      { start: 24, end: 24, residue: "G" }
-                    ]
-                  }
-                ]
-              }
-            ]
+                      { start: 24, end: 24, residue: "G" },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
           {
             accession: "feature1.2",
@@ -160,10 +157,10 @@
               {
                 fragments: [
                   { start: 10, end: 27 },
-                  { start: 29, end: 40 }
-                ]
-              }
-            ]
+                  { start: 29, end: 40 },
+                ],
+              },
+            ],
           },
           { accession: "feature2.1", start: 50, end: 160 },
           {
@@ -173,10 +170,10 @@
                 fragments: [
                   { start: 50, end: 94 },
                   { start: 99, end: 110 },
-                  { start: 116, end: 158 }
-                ]
-              }
-            ]
+                  { start: 116, end: 158 },
+                ],
+              },
+            ],
           },
           {
             accession: "feature2.3",
@@ -184,18 +181,18 @@
               {
                 fragments: [
                   { start: 52, end: 98 },
-                  { start: 104, end: 160 }
-                ]
-              }
-            ]
+                  { start: 104, end: 160 },
+                ],
+              },
+            ],
           },
           {
             accession: "feature3.1",
             locations: [
               { fragments: [{ start: 155, end: 155 }] },
-              { fragments: [{ start: 158, end: 158 }] }
-            ]
-          }
+              { fragments: [{ start: 158, end: 158 }] },
+            ],
+          },
         ];
         document.querySelector("#track1").data = data;
         document.querySelector("#track2").data = data;

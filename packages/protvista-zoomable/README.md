@@ -147,7 +147,7 @@ Disconnects the resize observer.
 
 #### `observedAttributes()`
 
-The observed attributes are: `["displaystart", "displayend", "length"]`.
+The observed attributes are: `["displaystart", "displayend", "length", "highlight]`.
 
 _Note_: If you are overwriting this method in your component, make sure to include those defined here,
 otherwise the zooming functionality might be compromised. For example:
@@ -155,8 +155,7 @@ otherwise the zooming functionality might be compromised. For example:
 ```javascript
  static get observedAttributes() {
    return ProtvistaZoomable.observedAttributes.concat(
-     "highlightstart",
-     "highlightend",
+     "my_observed_attr",
    );
  }
 ```
@@ -179,7 +178,7 @@ Returns the default values of the margin. you should overwrite this to define yo
   top: 10,
   right: 10,
   bottom: 10,
-  left: 10
+  left: 10,
 }
 ```
 
@@ -207,8 +206,8 @@ The detail of the event includes the new coordinates. For example:
 {
   detail: {
     displaystart: 3,
-    displayend: 5
-  }
+    displayend: 5,
+  },
 }
 ```
 

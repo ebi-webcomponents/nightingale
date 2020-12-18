@@ -13,8 +13,7 @@ const ProtvistaNavigationWrapper = (props) => {
         length="456"
         displaystart="143"
         displayend="400"
-        highlightStart="23"
-        highlightEnd="45"
+        highlight="23:45"
         rulerstart="50"
       />
     </Fragment>

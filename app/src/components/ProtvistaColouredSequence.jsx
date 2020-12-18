@@ -45,8 +45,7 @@ class ProtvistaColouredSequenceWrapper extends Component {
           height="10"
           displaystart="50"
           displayend="70"
-          highlightStart="23"
-          highlightEnd="45"
+          highlight="23:45"
           scale="hydrophobicity-scale"
         />
         <protvista-coloured-sequence

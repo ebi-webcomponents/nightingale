@@ -4,7 +4,7 @@ const elements = {
   clear: {
     name: "clear",
     codeSample: "",
-    dataSample: ""
+    dataSample: "",
   },
   "protvista-navigation": {
     name: "protvista-navigation",
@@ -14,7 +14,7 @@ const elements = {
           length="223" 
           displaystart="1" 
           displayend="223" 
-      />`
+      />`,
   },
   "protvista-track": {
     name: "protvista-track",
@@ -24,13 +24,12 @@ const elements = {
           width="1020" 
           length="223" 
           displaystart="1" 
-          displayend="223" 
-          highlightstart="23" 
-          highlightend="45"
+          displayend="223"
+          highlight="23:45" 
           color="red"
       />`,
     dataType: "json",
-    dataSample: data
+    dataSample: data,
   },
   "protvista-sequence": {
     name: "protvista-sequence",
@@ -41,13 +40,12 @@ const elements = {
           length="223" 
           displaystart="1" 
           displayend="223" 
-          highlightstart="23" 
-          highlightend="45"
+          highlight="23:45"
        />`,
     dataType: "string",
     dataSample:
-      "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP"
-  }
+      "MAMYDDEFDTKASDLTFSPWVEVENWKDVTTRLRAIKFALQADRDKIPGVLSDLKTNCPYSAFKRFPDKSLYSVLSKEAVIAVAQIQSASGFKRRADEKNAVSGLVSVTPTQISQSASSSAATPVGLATVKPPRESDSAFQEDTFSYAKFDDASTAFHKALAYLEGLSLRPTYRRKFEKDMNVKWGGSGSAPSGAPAGGSSGSAPPTSGSSGSGAAPTPPPNP",
+  },
 };
 
 export default elements;

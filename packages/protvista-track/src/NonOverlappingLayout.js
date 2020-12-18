@@ -8,7 +8,7 @@ const featuresOverlap = (feature1, feature2) => {
 };
 
 const featureOvelapsInRow = (feature, row) => {
-  return row.some(rowFeature => featuresOverlap(feature, rowFeature));
+  return row.some((rowFeature) => featuresOverlap(feature, rowFeature));
 };
 
 export default class NonOverlappingLayout extends DefaultLayout {
@@ -21,9 +21,9 @@ export default class NonOverlappingLayout extends DefaultLayout {
   }
 
   init(features) {
-    features.forEach(feature => {
+    features.forEach((feature) => {
       const rowIndex = this._rows.findIndex(
-        row => !featureOvelapsInRow(feature, row)
+        (row) => !featureOvelapsInRow(feature, row)
       );
       if (rowIndex >= 0) {
         this._rows[rowIndex].push(feature);

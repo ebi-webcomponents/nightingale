@@ -20,8 +20,7 @@
         length="223"
         displaystart="120"
         displayend="158"
-        highlightStart="10"
-        highlightEnd="45"
+        highlight="10:45"
       ></protvista-navigation>
       <protvista-sequence
         id="seq1"
@@ -48,8 +47,7 @@
         length="223"
         displaystart="120"
         displayend="158"
-        highlightstart="10"
-        highlightend="45"
+        highlight="10:45"
         layout="non-overlapping"
       ></protvista-track>
       <protvista-interpro-track
@@ -57,8 +55,7 @@
         length="223"
         displaystart="120"
         displayend="158"
-        highlightstart="10"
-        highlightend="45"
+        highlight="10:45"
       ></protvista-interpro-track>
       <protvista-tooltip id="my_tooltip" />
     </protvista-manager>
@@ -142,21 +139,29 @@
                 accession: "feature1.2",
                 locations: [
                   {
-                    fragments: [{ start: 10, end: 27 }, { start: 29, end: 40 }]
-                  }
-                ]
-              }
-            ]
+                    fragments: [
+                      { start: 10, end: 27 },
+                      { start: 29, end: 40 },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
           { accession: "feature2", start: 30, end: 150, color: "#A42ea2" },
           { accession: "feature3", start: 155, end: 155, color: "#A4Aea2" },
           {
             accession: "feature4",
             locations: [
-              { fragments: [{ start: 2, end: 3 }, { start: 5, end: 5 }] }
+              {
+                fragments: [
+                  { start: 2, end: 3 },
+                  { start: 5, end: 5 },
+                ],
+              },
             ],
-            color: "#34Aea2"
-          }
+            color: "#34Aea2",
+          },
         ];
         // document.querySelector("#track1").data = data;
         document.querySelector("#track2").data = data;
@@ -174,25 +179,30 @@
                     fragments: [
                       { start: 20, end: 20, residue: "G" },
                       { start: 25, end: 25, residue: "A" },
-                      { start: 30, end: 30, residue: "S" }
-                    ]
+                      { start: 30, end: 30, residue: "S" },
+                    ],
                   },
                   {
                     description: "flexible hinge region",
                     fragments: [
                       { start: 22, end: 22, residue: "T" },
-                      { start: 24, end: 24, residue: "G" }
-                    ]
-                  }
-                ]
-              }
-            ]
+                      { start: 24, end: 24, residue: "G" },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
           {
             accession: "feature1.2",
             locations: [
-              { fragments: [{ start: 10, end: 27 }, { start: 29, end: 40 }] }
-            ]
+              {
+                fragments: [
+                  { start: 10, end: 27 },
+                  { start: 29, end: 40 },
+                ],
+              },
+            ],
           },
           { accession: "feature2.1", start: 50, end: 160 },
           {
@@ -202,16 +212,21 @@
                 fragments: [
                   { start: 50, end: 94 },
                   { start: 99, end: 110 },
-                  { start: 116, end: 158 }
-                ]
-              }
-            ]
+                  { start: 116, end: 158 },
+                ],
+              },
+            ],
           },
           {
             accession: "feature2.3",
             locations: [
-              { fragments: [{ start: 52, end: 98 }, { start: 104, end: 160 }] }
-            ]
+              {
+                fragments: [
+                  { start: 52, end: 98 },
+                  { start: 104, end: 160 },
+                ],
+              },
+            ],
           },
           {
             accession: "feature3.1",
@@ -219,17 +234,17 @@
               {
                 fragments: [
                   { start: 155, end: 155, shape: "discontinuosEnd" },
-                  { start: 158, end: 158, shape: "discontinuosStart" }
-                ]
-              }
-            ]
-          }
+                  { start: 158, end: 158, shape: "discontinuosStart" },
+                ],
+              },
+            ],
+          },
         ];
 
         document.querySelector("#track3").data = data;
         document.querySelector("#track3").contributors = contributors;
 
-        document.addEventListener("change", e => {
+        document.addEventListener("change", (e) => {
           const { detail } = e;
           const tooltip = document.getElementById("my_tooltip");
           if (detail.eventtype === "click") {
