@@ -14,7 +14,7 @@
     "link-all": "lerna exec --ignore nightingale-showcase-app --parallel yarn link",
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
-    "test": "lerna exec --ignore nightingale-showcase-app --parallel -- jest --passWithNoTests",
+    "test": "jest",
     "prelerna-publish": "npm run build",
     "lerna-publish": "lerna publish"
   },
@@ -27,6 +27,7 @@
     "@babel/preset-env": "7.12.11",
     "@babel/preset-typescript": "7.12.7",
     "@babel/runtime": "7.12.5",
+    "@testing-library/dom": "7.29.0",
     "@typescript-eslint/eslint-plugin": "4.10.0",
     "@typescript-eslint/parser": "4.10.0",
     "@webcomponents/webcomponentsjs": "2.5.0",

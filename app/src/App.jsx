@@ -12,6 +12,7 @@ import "./App.css";
 import GettingStarted, {
   CreateComponent,
   CreateAdapter,
+  NamingComponents,
 } from "./tutorial/GettingStarted";
 
 import NightingaleTooltipWrapper from "./components/NightingaleTooltip.jsx";
@@ -81,6 +82,15 @@ const App = () => (
                       activeClassName="active"
                     >
                       Create an Adapter
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/naming-components"
+                      exact
+                      activeClassName="active"
+                    >
+                      Naming components
                     </NavLink>
                   </li>
                 </ul>
@@ -188,6 +198,7 @@ const App = () => (
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/create-component" component={CreateComponent} />
               <Route path="/create-adapter" component={CreateAdapter} />
+              <Route path="/naming-components" component={NamingComponents} />
               <Route path="/" component={GettingStarted} />
             </Switch>
           </Suspense>
