@@ -10,6 +10,8 @@ import {
 // import { withMargin } from "@nightingale-elements/utils";
 
 class NightingaleNavigation extends HTMLElement {
+  static is = "nightingale-navigation";
+
   constructor() {
     super();
     this._x = null;
@@ -79,6 +81,11 @@ class NightingaleNavigation extends HTMLElement {
       this[`_${name}`] = parseFloat(newValue);
       this._updateNavRuler();
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get margin() {
+    return { bottom: 0, left: 0, top: 0, right: 0 };
   }
 
   get width() {
