@@ -14,12 +14,12 @@ import NightingaleElement, {
   withManager,
 } from "@nightingale-elements/nightingale-core";
 
-class ProtvistaZoomable extends NightingaleElement {
+class NightingaleZoomable extends NightingaleElement {
   static is = "nightingale-zoomable";
 
   constructor() {
     super();
-    NightingaleZoomable._polyfillElementClosest();
+
     this._updateScaleDomain = this._updateScaleDomain.bind(this);
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
@@ -108,12 +108,6 @@ class ProtvistaZoomable extends NightingaleElement {
 
   get svg() {
     return this._svg;
-  }
-
-  // TODO: remove when proper withMargin is implemented
-  // eslint-disable-next-line class-methods-use-this
-  get margin() {
-    return { left: 0, right: 0, top: 0, bottom: 0 };
   }
 
   set fixedHighlight(region) {
@@ -339,19 +333,11 @@ export default withManager(
   withResizable(
     withMargin(
       withPosition(
-        withDimensions(ProtvistaZoomable, {
+        withDimensions(NightingaleZoomable, {
           width: 0,
           height: 44,
         })
-      ),
-      {
-        initialValue: {
-          top: 10,
-          right: 10,
-          bottom: 10,
-          left: 10,
-        },
-      }
+      )
     )
   )
 );

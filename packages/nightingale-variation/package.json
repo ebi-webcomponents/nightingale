@@ -30,7 +30,7 @@
   "dependencies": {
     "@nightingale-elements/nightingale-track": "^3.2.1",
     "@nightingale-elements/types": "^1.0.0",
-    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "@nightingale-elements/nightingale-core": "^1.0.0",
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
