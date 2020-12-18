@@ -7,9 +7,6 @@
     "types",
     "src"
   ],
-  "scripts": {
-    "build:es": "tsc"
-  },
   "main": "dist/nightingale-variation-adapter.js",
   "module": "dist/es/nightingale-variation-adapter.js",
   "types": "dist/es/nightingale-variation-adapter.d.ts",
@@ -34,7 +31,7 @@
     "@nightingale-elements/nightingale-feature-adapter": "^3.2.1",
     "@nightingale-elements/nightingale-variation": "^3.2.1",
     "@nightingale-elements/types": "^1.0.0",
-    "@nightingale-elements/utils": "^3.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
     "d3-scale": "^3.2.3",
     "lodash-es": "^4.17.11",
     "uuid": "^8.3.2"

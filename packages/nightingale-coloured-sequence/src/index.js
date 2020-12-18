@@ -1,4 +1,4 @@
-import { defineElement } from "@nightingale-elements/utils";
+import { defineElement } from "@nightingale-elements/nightingale-core";
 import NightingaleColouredSequence from "./nightingale-coloured-sequence";
 
 defineElement(NightingaleColouredSequence);

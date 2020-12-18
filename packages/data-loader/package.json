@@ -6,9 +6,6 @@
     "dist",
     "src"
   ],
-  "scripts": {
-    "build:es": "tsc"
-  },
   "main": "dist/data-loader.js",
   "module": "dist/es/data-loader.js",
   "types": "dist/es/data-loader.d.ts",
@@ -35,7 +32,7 @@
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "@nightingale-elements/types": "1.0.0",
-    "@nightingale-elements/utils": "^3.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
     "@types/lodash-es": "4.17.4",
     "lodash-es": "^4.17.11"
   }

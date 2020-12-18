@@ -6,9 +6,6 @@
     "dist",
     "src"
   ],
-  "scripts": {
-    "build:es": "tsc"
-  },
   "main": "dist/types.js",
   "module": "dist/es/index.js",
   "types": "dist/es/index.d.ts",

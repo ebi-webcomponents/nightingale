@@ -26,7 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "@nightingale-elements/types": "^1.0.0",
-    "@nightingale-elements/utils": "^3.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
     "lodash-es": "^4.17.11",
     "whatwg-fetch": "^3.5.0"
   },

@@ -126,11 +126,6 @@ const config = {
           {
             loader: "ts-loader",
             options: {
-              compilerOptions: {
-                declaration: false,
-                target: "es6",
-                module: "commonjs",
-              },
               transpileOnly: true,
             },
           },
