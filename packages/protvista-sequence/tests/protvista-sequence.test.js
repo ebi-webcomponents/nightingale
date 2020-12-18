@@ -6,10 +6,6 @@ describe("protvista-sequence tests", () => {
   beforeAll(() => {
     // TODO remove when the definition is part of the import
     window.customElements.define("protvista-sequence", ProtvistaSequence);
-    window.SVGElement.prototype.getBBox.mockReturnValue({
-      width: 10,
-      height: 10,
-    });
   });
 
   beforeEach(() => {

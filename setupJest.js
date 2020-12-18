@@ -27,6 +27,6 @@ Object.defineProperties(window.HTMLElement.prototype, {
 // You can override the mockReturnValue in your tests
 window.SVGElement.prototype.getBBox = jest.fn();
 window.SVGElement.prototype.getBBox.mockReturnValue({
-  width: 0,
-  height: 0,
+  width: 10,
+  height: 10,
 });
