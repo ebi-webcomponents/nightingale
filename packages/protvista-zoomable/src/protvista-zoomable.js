@@ -14,6 +14,7 @@ import ResizeObserver from "resize-observer-polyfill";
 
 import NightingaleElement, {
   withDimensions,
+  withPosition,
 } from "@nightingale-elements/nightingale-core";
 
 class ProtvistaZoomable extends NightingaleElement {
@@ -58,20 +59,6 @@ class ProtvistaZoomable extends NightingaleElement {
       this.manager.register(this);
     }
 
-    this._length = this.getAttribute("length")
-      ? parseFloat(this.getAttribute("length"))
-      : 0;
-
-    this._displaystart = this.getAttribute("displaystart")
-      ? parseFloat(this.getAttribute("displaystart"))
-      : 1;
-    this._displayend = this.getAttribute("displayend")
-      ? parseFloat(this.getAttribute("displayend"))
-      : this.length;
-
-    // this._height = this.getAttribute("height")
-    //   ? Number(this.getAttribute("height"))
-    //   : 44;
     this._highlightEvent = this.getAttribute("highlight-event")
       ? this.getAttribute("highlight-event")
       : "onclick";
@@ -106,13 +93,10 @@ class ProtvistaZoomable extends NightingaleElement {
     document.removeEventListener("wheel", this.wheelListener);
   }
 
+  // TODO: remove when ewithHighlight
   set length(length) {
-    this._length = length;
+    super._length = length;
     this.trackHighlighter.max = length;
-  }
-
-  get length() {
-    return this._length;
   }
 
   get xScale() {
@@ -175,7 +159,7 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 
   static get observedAttributes() {
-    return ["displaystart", "displayend", "length", "highlight"];
+    return ["highlight"];
   }
 
   setFloatAttribute(name, strValue) {
@@ -185,7 +169,7 @@ class ProtvistaZoomable extends NightingaleElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
-    const inWiths = ["width", "height"];
+    const inWiths = ["width", "height", "displaystart", "displayend"];
     if (inWiths.includes(name) || !this.zoom) return;
     // eslint-disable-next-line no-param-reassign
     if (newValue === "null") newValue = null;
@@ -247,6 +231,10 @@ class ProtvistaZoomable extends NightingaleElement {
     );
     this.dontDispatch = false;
     this.refresh();
+  }
+
+  render() {
+    this.applyZoomTranslation();
   }
 
   _onResize() {
@@ -397,7 +385,9 @@ class ProtvistaZoomable extends NightingaleElement {
   }
 }
 
-export default withDimensions(ProtvistaZoomable, {
-  width: 0,
-  height: 44,
-});
+export default withPosition(
+  withDimensions(ProtvistaZoomable, {
+    width: 0,
+    height: 44,
+  })
+);

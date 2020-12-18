@@ -16,6 +16,12 @@ const withDimensions = (
 
     _height: number;
 
+    constructor() {
+      super();
+      this._width = options.width;
+      this._height = options.height;
+    }
+
     get width() {
       return this._width;
     }
@@ -68,12 +74,6 @@ const withDimensions = (
 
     get implements(): Array<keyof typeof Registry> {
       return super.implements.concat(Registry.withDimensions);
-    }
-
-    constructor() {
-      super();
-      this._width = options.width;
-      this._height = options.height;
     }
   }
   return ElementWithDimensions;
