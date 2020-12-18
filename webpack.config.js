@@ -59,11 +59,6 @@ const config = {
       commonjs: "react-dom",
       amd: "react-dom",
     },
-    "protvista-zoomable": "ProtvistaZoomable",
-    "protvista-track": "ProtvistaTrack",
-    "protvista-feature-adapter": "ProtvistaFeatureAdapter",
-    "protvista-utils": "ProtvistaUtils",
-    "protvista-sequence": "ProtvistaSequence",
   },
   plugins: [new CleanWebpackPlugin()],
   module: {
@@ -125,11 +120,6 @@ const config = {
           {
             loader: "ts-loader",
             options: {
-              compilerOptions: {
-                declaration: false,
-                target: "es6",
-                module: "commonjs",
-              },
               transpileOnly: true,
             },
           },

@@ -1,0 +1,7 @@
+import { defineElement } from "@nightingale-elements/nightingale-core";
+import NightingaleTrack from "./nightingale-track";
+
+defineElement(NightingaleTrack);
+
+export { default as DefaultLayout } from "./DefaultLayout";
+export default NightingaleTrack;

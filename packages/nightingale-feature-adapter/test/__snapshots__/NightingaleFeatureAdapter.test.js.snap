@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NightingaleFeatureAdapter tests should generate the correct tooltip data 1`] = `
+"
+      
+      
+      
+      
+      <h5>Evidence</h5>
+      <ul><li title='Manual assertion based on experiment' style=\\"padding: .25rem 0\\">Publication:&nbsp;12665801&nbsp;(<a href='http://www.ncbi.nlm.nih.gov/pubmed/12665801' style=\\"color:#FFF\\" target='_blank'>PubMed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/12665801' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li></ul>
+    
+      
+        "
+`;

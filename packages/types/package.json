@@ -6,9 +6,6 @@
     "dist",
     "src"
   ],
-  "scripts": {
-    "build:es": "tsc"
-  },
   "main": "dist/types.js",
   "module": "dist/es/index.js",
   "types": "dist/es/index.d.ts",
@@ -33,8 +30,5 @@
     "protvista",
     "definition"
   ],
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "dependencies": {
-    "@nightingale-elements/utils": "^3.0.0"
-  }
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }

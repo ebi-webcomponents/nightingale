@@ -6,38 +6,38 @@ import {
   Switch,
   Link,
 } from "react-router-dom";
-import "@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce";
-import pkg from "../package.json";
+
 import logo from "../resources/nightingale_logo.svg";
 import "./App.css";
 import GettingStarted, {
   CreateComponent,
   CreateAdapter,
+  NamingComponents,
 } from "./tutorial/GettingStarted";
-import ProtvistaTooltip from "./components/ProtvistaTooltip.jsx";
-import ProtvistaTooltipWrapper from "./components/ProtvistaTooltip.jsx";
 
-const ProtvistaTrack = lazyImport("ProtvistaTrack");
-const ProtvistaInterProTrack = lazyImport("ProtvistaInterProTrack");
-const ProtvistaSequence = lazyImport("ProtvistaSequence");
-const ProtvistaColouredSequence = lazyImport("ProtvistaColouredSequence");
-const ProtvistaVariation = lazyImport("ProtvistaVariation");
-const ProtvistaStructure = lazyImport("ProtvistaStructure");
-const ProtvistaNavigation = lazyImport("ProtvistaNavigation");
-const ProtvistaManager = lazyImport("ProtvistaManager");
-const InteractionViewer = lazyImport("InteractionViewer");
-const ProtvistaFilter = lazyImport("ProtvistaFilter");
-const ProtvistaDatatable = lazyImport("ProtvistaDatatable");
+import NightingaleTooltipWrapper from "./components/NightingaleTooltip.jsx";
+
+const NightingaleTrack = lazyImport("NightingaleTrack");
+const NightingaleInterProTrack = lazyImport("NightingaleInterProTrack");
+const NightingaleSequence = lazyImport("NightingaleSequence");
+const NightingaleColouredSequence = lazyImport("NightingaleColouredSequence");
+const NightingaleVariation = lazyImport("NightingaleVariation");
+const NightingaleStructure = lazyImport("NightingaleStructure");
+const NightingaleNavigation = lazyImport("NightingaleNavigation");
+const NightingaleManager = lazyImport("NightingaleManager");
+const InteractionViewer = lazyImport("NightingaleInteractionViewer");
+const NightingaleFilter = lazyImport("NightingaleFilter");
+const NightingaleDatatable = lazyImport("NightingaleDatatable");
 const Playground = lazyImport("Playground");
-const ProtvistaVariationGraph = lazyImport("ProtvistaVariationGraph");
-const ProtvistaMSA = lazyImport("ProtvistaMSA");
+const NightingaleVariationGraph = lazyImport("NightingaleVariationGraph");
+const NightingaleMSA = lazyImport("NightingaleMSA");
 const TextareaSequence = lazyImport("TextareaSequence");
 
 function lazyImport(name) {
   return lazy(() => import(`./components/${name}`));
 }
 
-const App = (component = ProtvistaNavigation) => (
+const App = () => (
   <Router>
     <div className="App">
       <div className="App-header">
@@ -82,6 +82,15 @@ const App = (component = ProtvistaNavigation) => (
                       activeClassName="active"
                     >
                       Create an Adapter
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/naming-components"
+                      exact
+                      activeClassName="active"
+                    >
+                      Naming components
                     </NavLink>
                   </li>
                 </ul>
@@ -165,30 +174,31 @@ const App = (component = ProtvistaNavigation) => (
         <div className="main-content">
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
-              <Route path="/track" component={ProtvistaTrack} />
+              <Route path="/track" component={NightingaleTrack} />
               <Route
                 path="/interpro-track"
-                component={ProtvistaInterProTrack}
+                component={NightingaleInterProTrack}
               />
-              <Route path="/sequence" component={ProtvistaSequence} />
+              <Route path="/sequence" component={NightingaleSequence} />
               <Route
                 path="/coloured-sequence"
-                component={ProtvistaColouredSequence}
+                component={NightingaleColouredSequence}
               />
-              <Route path="/variation" component={ProtvistaVariation} />
-              <Route path="/structure" component={ProtvistaStructure} />
-              <Route path="/navigation" component={ProtvistaNavigation} />
-              <Route path="/manager" component={ProtvistaManager} />
+              <Route path="/variation" component={NightingaleVariation} />
+              <Route path="/structure" component={NightingaleStructure} />
+              <Route path="/navigation" component={NightingaleNavigation} />
+              <Route path="/manager" component={NightingaleManager} />
               <Route path="/interaction-viewer" component={InteractionViewer} />
-              <Route path="/filter" component={ProtvistaFilter} />
-              <Route path="/graph" component={ProtvistaVariationGraph} />
-              <Route path="/datatable" component={ProtvistaDatatable} />
+              <Route path="/filter" component={NightingaleFilter} />
+              <Route path="/graph" component={NightingaleVariationGraph} />
+              <Route path="/datatable" component={NightingaleDatatable} />
               <Route path="/playground" component={Playground} />
-              <Route path="/tooltip" component={ProtvistaTooltipWrapper} />
-              <Route path="/msa" component={ProtvistaMSA} />
+              <Route path="/tooltip" component={NightingaleTooltipWrapper} />
+              <Route path="/msa" component={NightingaleMSA} />
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/create-component" component={CreateComponent} />
               <Route path="/create-adapter" component={CreateAdapter} />
+              <Route path="/naming-components" component={NamingComponents} />
               <Route path="/" component={GettingStarted} />
             </Switch>
           </Suspense>

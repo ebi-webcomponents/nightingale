@@ -6,22 +6,22 @@ This document describes the creation of a basic Nightingale component.
 
 1. Create the folder for your component under the `packages/` folder. This will ensure that the scripts defined in the main `package.json` can operate in the new component.
    ```bash
-   mkdir packages/protvista-hello
+   mkdir packages/nightingale-hello
    ```
 2. Create a folder for your source code `src/` and one for your tests `test/`:
    ```bash
-   mkdir packages/protvista-overlay/src
-   mkdir packages/protvista-overlay/test
+   mkdir packages/nightingale-overlay/src
+   mkdir packages/nightingale-overlay/test
    ```
 3. Create the `package.json` for the new component. Here is an example of its content:
 
    ```javascript
    {
-     "name": "protvista-hello",
+     "name": "nightingale-hello",
      "version": "2.2.14",
      "files": [ "dist", "src" ],
-     "main": "dist/protvista-hello.js",
-     "module": "src/ProtvistaHello.js",
+     "main": "dist/nightingale-hello.js",
+     "module": "src/index.js",
      "keywords": ["nightingale", "webcomponents", "customelements"],
      "repository": {
        "type": "git",
@@ -37,18 +37,18 @@ This document describes the creation of a basic Nightingale component.
 
 4. Create the entrypoint for webpack. The current setup of the nightingale project, looks for `src/index.js`:
    ```javascript
-   import ProtvistaHello from "./ProtvistaHello";
+   import NightingaleHello from "./NightingaleHello";
    if (window.customElements) {
-     customElements.define("protvista-hello", ProtvistaHello);
+     customElements.define("nightingale-hello", NightingaleHello);
    }
-   export default ProtvistaHello;
+   export default NightingaleHello;
    ```
-5. Create the file where the code of your custom element will be. In our example `src/ProtvistaHello.js`.
+5. Create the file where the code of your custom element will be. In our example `src/NightingaleHello.js`.
 
    1. To start we can create a Hello world document with this code:
 
       ```javascript
-      class ProtvistaHello extends HTMLElement {
+      class NightingaleHello extends HTMLElement {
         connectedCallback() {
           this.render();
         }
@@ -58,46 +58,46 @@ This document describes the creation of a basic Nightingale component.
         }
       }
 
-      export default ProtvistaHello;
+      export default NightingaleHello;
       ```
 
       Here are some notes of this code:
 
-      - A very similar code up to this point can be seen in this [commit](https://github.com/ebi-webcomponents/nightingale/commit/8f23f1fe159052598fe59b0aba1f413fcc47bac3), for the `<protvista-overlay>` component.
+      - A very similar code up to this point can be seen in this [commit](https://github.com/ebi-webcomponents/nightingale/commit/8f23f1fe159052598fe59b0aba1f413fcc47bac3), for the `<nightingale-overlay>` component.
       - Nightingale components follow the Custom element standard of [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), hence the class ineriting from `HTMLElement`.
       - The method `connectedCallback()` is part of the API of custom elements, and is invoked when the component is mounted in the DOM.
       - The mothod `render()` has not especial meaning in the API and in this case is only called by `connectedCallback()`.
-      - Other components (e.g. `<protvista-saver>`) use [lit-html](https://lit-html.polymer-project.org/), in which case `render()` has an especial meaning.
+      - Other components (e.g. `<nightingale-saver>`) use [lit-html](https://lit-html.polymer-project.org/), in which case `render()` has an especial meaning.
 
-   2. You can try out the new component by including it in the logic of the showcase app for nightingale. See below the diff of the file that includes `<protvista-overlay>` as an example, or you can check the [commit in GitHub](https://github.com/ebi-webcomponents/nightingale/commit/16d2e9cbf778c590566518c862bddc959ae4d716).
+   2. You can try out the new component by including it in the logic of the showcase app for nightingale. See below the diff of the file that includes `<nightingale-overlay>` as an example, or you can check the [commit in GitHub](https://github.com/ebi-webcomponents/nightingale/commit/16d2e9cbf778c590566518c862bddc959ae4d716).
 
       ```diff
-      diff --git a/app/src/components/ProtvistaManager.jsx b/app/src/components/ProtvistaManager.jsx
+      diff --git a/app/src/components/NightingaleManager.jsx b/app/src/components/NightingaleManager.jsx
       index afe5fb7..3199635 100644
-      --- a/app/src/components/ProtvistaManager.jsx
-      +++ b/app/src/components/ProtvistaManager.jsx
+      --- a/app/src/components/NightingaleManager.jsx
+      +++ b/app/src/components/NightingaleManager.jsx
       @@ -16,6 +16,7 @@ import sequence from "../mocks/sequence.json";
       import { dataIPR, signatures, withResidues } from "../mocks/interpro";
       import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
-      import ProtvistaSaver from "@nightingale-elements/nightingale-saver";
-      +import ProtvistaOverlay from "@nightingale-elements/nightingale-overlay";
+      import NightingaleSaver from "@nightingale-elements/nightingale-saver";
+      +import NightingaleOverlay from "@nightingale-elements/nightingale-overlay";
       import Readme from "./Readme";
-      import readmeContent from "../../../packages/protvista-manager/README.md";
+      import readmeContent from "../../../packages/nightingale-manager/README.md";
 
-      @@ -74,6 +75,7 @@ class ProtvistaManagerWrapper extends Component {
+      @@ -74,6 +75,7 @@ class NightingaleManagerWrapper extends Component {
           loadWebComponent("data-loader", DataLoader);
-          loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
-          loadWebComponent("protvista-saver", ProtvistaSaver);
-      +    loadWebComponent("protvista-overlay", ProtvistaOverlay);
+          loadWebComponent("nightingale-variation-adapter", NightingaleVariationAdapter);
+          loadWebComponent("nightingale-saver", NightingaleSaver);
+      +    loadWebComponent("nightingale-overlay", NightingaleOverlay);
           return (
-            <Fragment>
+            <>
               <Readme content={readmeContent} />
-      @@ -86,6 +88,7 @@ class ProtvistaManagerWrapper extends Component {
+      @@ -86,6 +88,7 @@ class NightingaleManagerWrapper extends Component {
               >
                 <button>Download Just Tracks</button>
-              </protvista-saver>
-      +        <protvista-overlay />
-              <protvista-manager
+              </nightingale-saver>
+      +        <nightingale-overlay />
+              <nightingale-manager
                 attributes="length displaystart displayend variantfilters highlight"
                 displaystart="53"
       ```

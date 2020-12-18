@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NightingaleFeatureAdapter tests should transform the data correctly 1`] = `
+Array [
+  Object {
+    "accession": "IPR002223",
+    "end": 342,
+    "go_terms": Array [
+      Object {
+        "category": Object {
+          "code": "F",
+          "name": "molecular_function",
+        },
+        "identifier": "GO:0004867",
+        "name": "serine-type endopeptidase inhibitor activity",
+      },
+    ],
+    "integrated": null,
+    "length": 770,
+    "locations": Array [
+      Object {
+        "fragments": Array [
+          Object {
+            "dc-status": "CONTINUOUS",
+            "end": 342,
+            "start": 288,
+          },
+        ],
+        "model_acc": null,
+      },
+    ],
+    "member_databases": Object {
+      "cdd": Object {
+        "cd00109": "BPTI/Kunitz family of serine protease inhibitors; Structure is a disulfide ri...",
+      },
+      "pfam": Object {
+        "PF00014": "Kunitz/Bovine pancreatic trypsin inhibitor domain",
+      },
+      "prints": Object {
+        "PR00759": "BASICPTASE",
+      },
+      "profile": Object {
+        "PS50279": "Pancreatic trypsin inhibitor (Kunitz) family profile",
+      },
+      "smart": Object {
+        "SM00131": "BPTI/Kunitz family of serine protease inhibitors.",
+      },
+    },
+    "name": "Pancreatic trypsin inhibitor Kunitz domain",
+    "source_database": "interpro",
+    "start": 288,
+    "tooltipContent": "
+        <h5>Accession</h5>
+        <a
+          target=\\"_blank\\"
+          rel=\\"noopener\\"
+          href=\\"https://www.ebi.ac.uk/interpro/entry/InterPro/IPR002223/\\"
+        >
+        IPR002223
+        </a>
+        <h5>Name</h5>
+        <p>Pancreatic trypsin inhibitor Kunitz domain</p>
+      ",
+    "type": "domain",
+  },
+]
+`;

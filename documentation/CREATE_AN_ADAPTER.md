@@ -27,26 +27,26 @@ import { transformData } from "@nightingale-elements/nightingale-feature-adapter
 //...
 
 const dataForComponent = transformData(myData);
-myProtvistaComponent.data = dataForComponent;
+myNightingaleComponent.data = dataForComponent;
 ```
 
 ## Steps To create an adapter
 
 1. Create a folder for your component, and the necessary child directories:
    ```
-   mkdir packages/protvista-my-adapter
-   mkdir packages/protvista-my-adapter/src
-   mkdir packages/protvista-my-adapter/test
+   mkdir packages/nightingale-my-adapter
+   mkdir packages/nightingale-my-adapter/src
+   mkdir packages/nightingale-my-adapter/test
    ```
 2. Create the `package.json` for this component. for example:
 
    ```json
    {
-     "name": "protvista-my-adapter",
+     "name": "nightingale-my-adapter",
      "version": "2.2.14",
      "files": ["dist", "src"],
-     "main": "dist/protvista-my-adapter.js",
-     "module": "src/ProtvistaMyAdapter.js",
+     "main": "dist/nightingale-my-adapter.js",
+     "module": "src/index.js",
      "keywords": ["nightingale", "webcomponents", "customelements"],
      "repository": {
        "type": "git",
@@ -62,22 +62,22 @@ myProtvistaComponent.data = dataForComponent;
 3. Create the `src/index.js` file which will be the entry point for webpack when bundling, and which function is to register the web component to the browser. Example:
 
    ```javascript
-   import ProtvistaMyAdapter from "./ProtvistaMyAdapter";
+   import NightingaleMyAdapter from "./NightingaleMyAdapter";
 
    if (window.customElements) {
-     customElements.define("protvista-my-adapter", ProtvistaMyAdapter);
+     customElements.define("nightingale-my-adapter", NightingaleMyAdapter);
    }
 
-   export default ProtvistaMyAdapter;
+   export default NightingaleMyAdapter;
    ```
 
-4. Create the function `transformData()` in the file that has been declared in both `src/index.js` and `package.json`. In the current example would be `src/ProtvistaMyAdapter.js`. So for example imagine you have a server which responses are CSV files, with columns (accession, start, end):
+4. Create the function `transformData()` in the file that has been declared in both `src/index.js` and `package.json`. In the current example would be `src/NightingaleMyAdapter.js`. So for example imagine you have a server which responses are CSV files, with columns (accession, start, end):
    ```csv
    feature1, 20, 50
    feature2, 60, 70
    feature3, 80, 100
    ```
-   And you want to use `protvista-track` to visualise this, then a naive `transformData` function could be:
+   And you want to use `nightingale-track` to visualise this, then a naive `transformData` function could be:
 
 ```javascript
 export const transformData = (data) =>
@@ -96,12 +96,12 @@ export const transformData = (data) =>
    1. Create a class that inherits from `HTMLElement`:
 
       ```javascript
-      class ProtvistaFeatureAdapter extends HTMLElement {}
+      class NightingaleFeatureAdapter extends HTMLElement {}
       ```
 
    2. If somebody sets the parameter `data` of the adapter, we should transform the data and trigger a `load` event, so the parent component can use it.
       ```javascript
-      class ProtvistaFeatureAdapter extends HTMLElement {
+      class NightingaleFeatureAdapter extends HTMLElement {
         set data(data) {
           this._data = transformData(data);
           this._emitEvent();
@@ -123,7 +123,7 @@ export const transformData = (data) =>
 
    ```javascript
    // ...
-   class ProtvistaFeatureAdapter extends HTMLElement {
+   class NightingaleFeatureAdapter extends HTMLElement {
      // ...
      connectedCallback() {
        this.addEventListener("load", (e) => {
@@ -153,13 +153,13 @@ export const transformData = (data) =>
    We are using [jest](https://jestjs.io/) in our project, so a very basic test for the developed component is to have some data transformed and save the snapshot. For example
 
    ```javascript
-   import { transformData } from "../src/ProtvistaMyAdapter";
+   import { transformData } from "../src/NightingaleMyAdapter";
 
    const data = `feature1, 20, 50
    feature2, 60, 70
    feature3, 80, 100`;
 
-   describe("ProtvistaMyAdapter tests", () => {
+   describe("NightingaleMyAdapter tests", () => {
      it("should transform the data correctly", () => {
        const transformedData = transformData(data);
        expect(transformedData).toMatchSnapshot();
@@ -169,5 +169,5 @@ export const transformData = (data) =>
 
 ```
 
-As a reference you can check the code of the `protvista-interpro-adapter` component [Here](https://github.com/ebi-webcomponents/nightingale/tree/master/packages/protvista-interpro-adapter), which was developed following this steps.
+As a reference you can check the code of the `nightingale-interpro-adapter` component [Here](https://github.com/ebi-webcomponents/nightingale/tree/master/packages/nightingale-interpro-adapter), which was developed following this steps.
 ```

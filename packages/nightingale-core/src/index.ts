@@ -7,4 +7,5 @@ export { default as withMargin } from "./withMargin";
 export { default as withResizable } from "./withResizable";
 export { default as withManager } from "./withManager";
 
+export { default as defineElement } from "./utils/defineElement";
 export default NightingaleBaseElement;

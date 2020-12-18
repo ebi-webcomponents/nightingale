@@ -1,0 +1,37 @@
+{
+  "name": "@nightingale-elements/nightingale-tooltip",
+  "description": "A tooltip for Nightingale webcomponents",
+  "version": "3.1.2",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-tooltip.js",
+  "module": "src/index.js",
+  "keywords": [
+    "protvista",
+    "webcomponents",
+    "customelements",
+    "protein sequence",
+    "protein annotation",
+    "nightingale",
+    "tooltip"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "xwatkins@ebi.ac.uk",
+  "license": "MIT",
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
+  "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "lit-element": "^2.4.0",
+    "lodash-es": "^4.17.11"
+  }
+}

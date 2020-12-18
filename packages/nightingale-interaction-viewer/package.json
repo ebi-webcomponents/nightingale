@@ -1,0 +1,47 @@
+{
+  "name": "@nightingale-elements/nightingale-interaction-viewer",
+  "version": "3.1.2",
+  "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
+  "main": "dist/nightingale-interaction-viewer.js",
+  "module": "src/index.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "interaction",
+    "visualization",
+    "biojs",
+    "uniprot",
+    "ebi"
+  ],
+  "files": [
+    "src",
+    "styles",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "d3-scale": "^3.2.3",
+    "d3-selection": "^1.4.0",
+    "lodash-es": "^4.17.11",
+    "whatwg-fetch": "^3.5.0"
+  },
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  }
+}

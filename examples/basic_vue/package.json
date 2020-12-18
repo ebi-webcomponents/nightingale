@@ -10,10 +10,10 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "d3": "^5.16.0",
-    "protvista-manager": "^2.3.0",
-    "protvista-navigation": "^2.3.2",
-    "protvista-sequence": "^2.7.0",
-    "protvista-track": "^2.6.1",
+    "@nightingale-elements/nightingale-manager": "^2.3.0",
+    "@nightingale-elements/nightingale-navigation": "^2.3.2",
+    "@nightingale-elements/nightingale-sequence": "^2.7.0",
+    "@nightingale-elements/nightingale-track": "^2.6.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {

@@ -1,0 +1,40 @@
+{
+  "name": "@nightingale-elements/nightingale-track",
+  "version": "3.2.1",
+  "description": "Basic track type of the viewer.",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-track.js",
+  "module": "src/index.js",
+  "types": "types/nightingale-track.d.ts",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "MIT",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "dependencies": {
+    "@nightingale-elements/nightingale-zoomable": "^3.0.0",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "lodash-es": "^4.17.11"
+  },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  }
+}

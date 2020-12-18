@@ -1,0 +1,41 @@
+{
+  "name": "@nightingale-elements/nightingale-structure-adapter",
+  "version": "3.2.1",
+  "description": "A dataloader and parser (Nightingale compliant) for 3D structures",
+  "main": "dist/nightingale-structure-adapter.js",
+  "module": "src/index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "Nightingale",
+    "dataloader",
+    "parser",
+    "protein-structure",
+    "structure",
+    "3d",
+    "pdb",
+    "pdbe",
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "author": "ljgarcia",
+  "license": "Apache-2.0",
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
+  "dependencies": {
+    "@nightingale-elements/nightingale-feature-adapter": "^3.2.1",
+    "@nightingale-elements/types": "^1.0.0",
+    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "uuid": "^8.3.2"
+  }
+}
