@@ -15,15 +15,7 @@ exports[`nightingale-track tests it should change the layout 1`] = `
     >
       <g
         class="highlighted"
-      >
-        <rect
-          fill="rgba(255, 235, 59, 0.8)"
-          height="44"
-          style="opacity: 0.5; pointer-events: none;"
-          width="0"
-          x="0"
-        />
-      </g>
+      />
       <g
         class="sequence-features"
       >
@@ -3022,15 +3014,7 @@ exports[`nightingale-track tests it should zoom in 1`] = `
     >
       <g
         class="highlighted"
-      >
-        <rect
-          fill="rgba(255, 235, 59, 0.8)"
-          height="44"
-          style="opacity: 0.5; pointer-events: none;"
-          width="0"
-          x="-33.33333333333333"
-        />
-      </g>
+      />
       <g
         class="sequence-features"
       >

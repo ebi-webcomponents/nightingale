@@ -143,6 +143,9 @@ class NightingaleTrack extends NightingaleZoomable {
   }
 
   _createTrack() {
+    if (!this._data) {
+      return;
+    }
     this._layoutObj.init(this._data);
 
     select(this).selectAll("div").remove();
