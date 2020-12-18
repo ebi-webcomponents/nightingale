@@ -1,4 +1,4 @@
-import { transformData } from "../src/NightingaleInterproAdapter";
+import { transformData } from "../src/nightingale-interpro-adapter";
 
 const payload = {
   count: 18,

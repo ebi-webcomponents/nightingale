@@ -55,7 +55,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged",
-      "pre-push": "yarn build && yarn lint"
+      "pre-push": "yarn build && yarn lint && yarn test"
     }
   },
   "workspaces": [
