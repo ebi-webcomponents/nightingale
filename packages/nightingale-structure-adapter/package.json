@@ -3,7 +3,7 @@
   "version": "3.2.1",
   "description": "A dataloader and parser (Nightingale compliant) for 3D structures",
   "main": "dist/nightingale-structure-adapter.js",
-  "module": "src/NightingaleStructureAdapter.js",
+  "module": "src/index.js",
   "files": [
     "src",
     "dist"

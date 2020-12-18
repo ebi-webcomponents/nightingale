@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/nightingale-zoomable.js",
-  "module": "src/nightingale-zoomable.js",
+  "module": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"

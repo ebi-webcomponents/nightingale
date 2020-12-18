@@ -6,7 +6,7 @@
     "src"
   ],
   "main": "dist/textarea-sequence.js",
-  "module": "src/textareaSequence.js",
+  "module": "src/index.js",
   "keywords": [
     "nightingale",
     "webcomponents",

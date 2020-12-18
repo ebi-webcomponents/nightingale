@@ -3,7 +3,7 @@
   "version": "3.1.2",
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
   "main": "dist/nightingale-interaction-viewer.js",
-  "module": "src/nightingale-interaction-viewer.js",
+  "module": "src/index.js",
   "keywords": [
     "nightingale",
     "webcomponents",

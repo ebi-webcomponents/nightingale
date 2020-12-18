@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/nightingale-sequence.js",
-  "module": "src/nightingale-sequence.js",
+  "module": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "keywords": [

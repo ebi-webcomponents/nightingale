@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/nightingale-interpro-track.js",
-  "module": "src/nightingale-interpro-track.js",
+  "module": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"

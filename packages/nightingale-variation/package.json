@@ -8,7 +8,7 @@
     "src"
   ],
   "main": "dist/nightingale-variation.js",
-  "module": "src/nightingale-variation.js",
+  "module": "src/index.js",
   "types": "types/nightingale-variation.js",
   "repository": {
     "type": "git",

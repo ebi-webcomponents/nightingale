@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/nightingale-tooltip.js",
-  "module": "src/nightingale-tooltip.js",
+  "module": "src/index.js",
   "keywords": [
     "protvista",
     "webcomponents",

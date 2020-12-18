@@ -6,7 +6,7 @@
     "src"
   ],
   "main": "dist/nightingale-feature-adapter.js",
-  "module": "src/nightingale-feature-adapter.js",
+  "module": "src/index.js",
   "types": "types/nightingale-feature-adapter.d.ts",
   "keywords": [
     "nightingale",

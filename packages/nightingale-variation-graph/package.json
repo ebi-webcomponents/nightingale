@@ -6,7 +6,7 @@
     "src"
   ],
   "main": "dist/nightingale-variation-graph.js",
-  "module": "src/nightingale-variation-graph.js",
+  "module": "src/index.js",
   "version": "3.2.1",
   "keywords": [
     "nightingale",

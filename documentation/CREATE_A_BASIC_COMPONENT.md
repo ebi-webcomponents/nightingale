@@ -21,7 +21,7 @@ This document describes the creation of a basic Nightingale component.
      "version": "2.2.14",
      "files": [ "dist", "src" ],
      "main": "dist/nightingale-hello.js",
-     "module": "src/NightingaleHello.js",
+     "module": "src/index.js",
      "keywords": ["nightingale", "webcomponents", "customelements"],
      "repository": {
        "type": "git",

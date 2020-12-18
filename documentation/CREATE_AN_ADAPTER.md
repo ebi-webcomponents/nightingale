@@ -46,7 +46,7 @@ myNightingaleComponent.data = dataForComponent;
      "version": "2.2.14",
      "files": ["dist", "src"],
      "main": "dist/nightingale-my-adapter.js",
-     "module": "src/NightingaleMyAdapter.js",
+     "module": "src/index.js",
      "keywords": ["nightingale", "webcomponents", "customelements"],
      "repository": {
        "type": "git",

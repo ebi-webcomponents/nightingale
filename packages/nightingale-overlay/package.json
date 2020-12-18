@@ -6,7 +6,7 @@
     "src"
   ],
   "main": "dist/nightingale-overlay.js",
-  "module": "src/NightingaleOverlay.js",
+  "module": "src/index.js",
   "keywords": [
     "nightingale",
     "webcomponents",

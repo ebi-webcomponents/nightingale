@@ -2,7 +2,7 @@
   "name": "@nightingale-elements/nightingale-proteomics-adapter",
   "description": "A dataloader and parser (Nightingale compliant) for proteomics/peptide data imported in UniProt",
   "main": "dist/nightingale-proteomics-adapter",
-  "module": "src/NightingaleProteomicsAdapter.js",
+  "module": "src/index.js",
   "files": [
     "src",
     "dist"

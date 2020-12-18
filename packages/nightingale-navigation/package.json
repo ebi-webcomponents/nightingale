@@ -20,7 +20,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "main": "dist/nightingale-navigation.js",
-  "module": "src/nightingale-navigation.js",
+  "module": "src/index.js",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "ISC",
   "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",

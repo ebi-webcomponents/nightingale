@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/nightingale-track.js",
-  "module": "src/nightingale-track.js",
+  "module": "src/index.js",
   "types": "types/nightingale-track.d.ts",
   "keywords": [
     "nightingale",

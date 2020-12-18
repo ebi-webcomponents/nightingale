@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "Manager component for the Nightingale tool",
   "main": "dist/nightingale-manager.js",
-  "module": "src/nightingale-manager.js",
+  "module": "src/index.js",
   "files": [
     "dist",
     "src"

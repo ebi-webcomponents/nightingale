@@ -6,7 +6,7 @@
     "src"
   ],
   "main": "dist/nightingale-msa.js",
-  "module": "src/nightingale-msa.js",
+  "module": "src/index.js",
   "keywords": [
     "nightingale",
     "webcomponents",

@@ -148,6 +148,12 @@ class NightingaleZoomable extends HTMLElement {
     return this._svg;
   }
 
+  // TODO: remove when proper withMargin is implemented
+  // eslint-disable-next-line class-methods-use-this
+  get margin() {
+    return { left: 0, right: 0, top: 0, bottom: 0 };
+  }
+
   set fixedHighlight(region) {
     this.trackHighlighter.setFixedHighlight(region);
   }

@@ -77,7 +77,7 @@ class NightingaleTrack extends NightingaleZoomable {
   }
 
   static get observedAttributes() {
-    return NightingaleTrack.observedAttributes.concat([
+    return NightingaleZoomable.observedAttributes.concat([
       "highlight",
       "color",
       "shape",

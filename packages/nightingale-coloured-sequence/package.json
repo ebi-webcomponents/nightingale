@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/nightingale-coloured-sequence.js",
-  "module": "src/nightingale-coloured-sequence.js",
+  "module": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {

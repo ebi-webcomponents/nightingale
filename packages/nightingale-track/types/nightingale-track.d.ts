@@ -31,3 +31,7 @@ export declare type NightingaleTrackDatum = {
     }
   ];
 };
+
+// temporary
+type NightingaleTrack = any;
+export default NightingaleTrack;
