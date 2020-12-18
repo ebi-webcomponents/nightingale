@@ -11,8 +11,11 @@ import DefaultLayout from "./DefaultLayout";
 import { getShapeByType, getColorByType } from "./ConfigHelper";
 
 class ProtvistaTrack extends ProtvistaZoomable {
-  getLayout() {
-    if (String(this.getAttribute("layout")).toLowerCase() === "non-overlapping")
+  getLayout(layout) {
+    if (
+      layout === "non-overlapping" ||
+      String(this.getAttribute("layout")).toLowerCase() === "non-overlapping"
+    )
       return new NonOverlappingLayout({
         layoutHeight: this._height,
       });
@@ -76,11 +79,20 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
   static get observedAttributes() {
     return ProtvistaZoomable.observedAttributes.concat([
-      "highlight",
       "color",
       "shape",
       "filters",
+      "layout",
     ]);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    super.attributeChangedCallback(name, oldValue, newValue);
+    if (name === "layout") {
+      this._applyFilters();
+      this._layoutObj = this.getLayout();
+      this._createTrack();
+    }
   }
 
   _getFeatureColor(f) {

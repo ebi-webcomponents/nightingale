@@ -11,16 +11,9 @@ class ProtVistaSequence extends ProtvistaZoomable {
     if (this.sequence) {
       this._createSequence();
     }
-    this.addEventListener("load", e => {
+    this.addEventListener("load", (e) => {
       this.data = e.detail.payload;
     });
-  }
-
-  static get observedAttributes() {
-    return ProtvistaZoomable.observedAttributes.concat(
-      "highlightstart",
-      "highlightend"
-    );
   }
 
   get data() {
@@ -102,7 +95,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
       // only add axis if there is room
       if (this.height > this.chHeight) {
         this.xAxis = axisBottom(this.xScale)
-          .tickFormat(d => (Number.isInteger(d) ? d : ""))
+          .tickFormat((d) => (Number.isInteger(d) ? d : ""))
           .ticks(NUMBER_OF_TICKS, "s");
         this.axis.call(this.xAxis);
       }
@@ -111,24 +104,26 @@ class ProtVistaSequence extends ProtvistaZoomable {
       this.axis.select(".domain").remove();
       this.axis.selectAll(".tick line").remove();
 
-      this.bases = this.seq_g.selectAll("text.base").data(bases, d => d.start);
+      this.bases = this.seq_g
+        .selectAll("text.base")
+        .data(bases, (d) => d.start);
       this.bases
         .enter()
         .append("text")
         .attr("class", "base")
         .attr("text-anchor", "middle")
-        .attr("x", d => this.getXFromSeqPosition(d.start) + half)
-        .text(d => d.aa)
+        .attr("x", (d) => this.getXFromSeqPosition(d.start) + half)
+        .text((d) => d.aa)
         .style("pointer-events", "none")
         .style("font-family", "monospace");
 
       this.bases.exit().remove();
 
-      this.bases.attr("x", d => this.getXFromSeqPosition(d.start) + half);
+      this.bases.attr("x", (d) => this.getXFromSeqPosition(d.start) + half);
 
       this.background = this.seq_bg
         .selectAll("rect.base_bg")
-        .data(bases, d => d.start);
+        .data(bases, (d) => d.start);
       this.background
         .enter()
         .append("rect")
@@ -136,10 +131,10 @@ class ProtVistaSequence extends ProtvistaZoomable {
         .attr("height", this._height)
         .merge(this.background)
         .attr("width", ftWidth)
-        .attr("fill", d => {
+        .attr("fill", (d) => {
           return Math.round(d.start) % 2 ? "#ccc" : "#eee";
         })
-        .attr("x", d => this.getXFromSeqPosition(d.start))
+        .attr("x", (d) => this.getXFromSeqPosition(d.start))
         .call(this.bindEvents, this);
       this.background.exit().remove();
 

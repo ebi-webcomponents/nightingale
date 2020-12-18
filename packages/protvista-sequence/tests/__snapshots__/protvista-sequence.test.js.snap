@@ -88,7 +88,7 @@ exports[`protvista-sequence tests it should display the sequence correctly 1`] =
 
 exports[`protvista-sequence tests it should display the sequence correctly after highlight 1`] = `
 <protvista-sequence
-  highlightstart="4"
+  highlight="2:4"
   length="15"
   sequence="MAMYDDEFDTKASDL"
   style="display: block; width: 100%;"
@@ -164,8 +164,8 @@ exports[`protvista-sequence tests it should display the sequence correctly after
           fill="rgba(255, 235, 59, 0.8)"
           height="44"
           style="opacity: 0.5; pointer-events: none;"
-          width="21.333333333333332"
-          x="10"
+          width="16"
+          x="15.333333333333332"
         />
       </g>
     </svg>

@@ -1,0 +1,4013 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`protvista-track tests it should change the layout 1`] = `
+<protvista-track
+  layout="non-overlapping"
+  length="223"
+  style="display: block; width: 100%;"
+>
+  <div
+    style="line-height: 0;"
+  >
+    <svg
+      height="44"
+      width="100"
+    >
+      <g
+        class="highlighted"
+      >
+        <rect
+          fill="rgba(255, 235, 59, 0.8)"
+          height="44"
+          style="opacity: 0.5; pointer-events: none;"
+          width="0"
+          x="10"
+        />
+      </g>
+      <g
+        class="sequence-features"
+      >
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L11.121076233183857,0L11.121076233183857,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#342ea2"
+                stroke="#342ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(13.228699551569507,2)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(13.228699551569507,2)"
+                width="11.121076233183857"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L39.82062780269058,0L39.82062780269058,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#A42ea2"
+                stroke="#A42ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(27.57847533632287,3.4193548387096775)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(27.57847533632287,3.4193548387096775)"
+                width="39.82062780269058"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature3"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L0.35874439461883406,0L0.35874439461883406,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(65.24663677130044,4.838709677419355)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(65.24663677130044,4.838709677419355)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L0.35874439461883406,0L0.35874439461883406,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(66.32286995515696,4.838709677419355)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(66.32286995515696,4.838709677419355)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature4"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.7937219730941703,0L1.7937219730941703,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(81.39013452914799,6.258064516129032)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(81.39013452914799,6.258064516129032)"
+                width="1.7937219730941703"
+              />
+            </g>
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.7937219730941703,0L1.7937219730941703,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(83.54260089686099,6.258064516129032)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(83.54260089686099,6.258064516129032)"
+                width="1.7937219730941703"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#339"
+                stroke="#339"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,2)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,2)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature5"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#63e"
+                stroke="#63e"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,7.67741935483871)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,7.67741935483871)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,-0.5806451612903225L0,-0.5806451612903225Z"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,9.096774193548388)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,9.096774193548388)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6_2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="line feature"
+                d="M0,-0.29032258064516125 L1.0762331838565022,-0.29032258064516125"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,10.516129032258064)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,10.516129032258064)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature7"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,-0.5806451612903225L0,-0.29032258064516125L0.17937219730941703,-0.29032258064516125L0.17937219730941703,0L0.17937219730941703,-0.29032258064516125L0.35874439461883406,-0.29032258064516125L0.35874439461883406,-0.5806451612903225Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,11.935483870967742)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,11.935483870967742)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature8"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,-0.5806451612903225L0,0L0.7174887892376681,0L0.7174887892376681,-0.5806451612903225L0.7174887892376681,2L0,2Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,13.35483870967742)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,13.35483870967742)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature9"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M0.17937219730941703,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14.774193548387098)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14.774193548387098)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature10"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M0.35874439461883406,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5M0,5L0.7174887892376681,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,16.193548387096776)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,16.193548387096776)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature11"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M0.17937219730941703,5L5.179372197309417,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5L-4.820627802690583,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,17.612903225806452)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,17.612903225806452)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature12"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M0.35874439461883406,5L5.358744394618834,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5L-4.641255605381166,0L0.35874439461883406,5M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,19.032258064516128)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,19.032258064516128)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature13"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M-4.820627802690583,0L-4.820627802690583,6L-1.8206278026905829,10L2.179372197309417,10L5.179372197309417,6L5.179372197309417,0L2.179372197309417,4L-1.8206278026905829,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,20.451612903225808)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,20.451612903225808)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature14"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M-4.641255605381166,0L-4.641255605381166,6L-1.641255605381166,10L2.3587443946188342,10L5.358744394618834,6L5.358744394618834,0L2.3587443946188342,4L-1.641255605381166,4M0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,21.870967741935484)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,21.870967741935484)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M0.17937219730941703,0L5.179372197309417,10L-4.820627802690583,10Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,23.290322580645164)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,23.290322580645164)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M0.35874439461883406,0L5.358744394618834,10L-4.641255605381166,10L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,24.70967741935484)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,24.70967741935484)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M-4.820627802690583,5A2.5,5 0 1,1 0.17937219730941703,5A2.5,5 0 1,0 5.179372197309417,5Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,26.129032258064516)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,26.129032258064516)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M-4.641255605381166,5A2.5,5 0 1,1 0.35874439461883406,5A2.5,5 0 1,0 5.358744394618834,5M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,27.548387096774196)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,27.548387096774196)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 5.179372197309417,5 2.6793721973094176,9.330127018922193 -2.320627802690582,9.330127018922195 -4.820627802690583,5.000000000000001 -2.320627802690585,0.6698729810778072 2.6793721973094176,0.6698729810778072 Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,28.967741935483872)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,28.967741935483872)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 5.358744394618834,5 2.8587443946188347,9.330127018922193 -2.141255605381165,9.330127018922195 -4.641255605381166,5.000000000000001 -2.141255605381168,0.6698729810778072 2.8587443946188347,0.6698729810778072  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,30.38709677419355)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,30.38709677419355)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 5.179372197309417,5 1.7244571691841544,9.755282581475768 -3.8657127745653193,7.938926261462367 -3.86571277456532,2.061073738537635 1.7244571691841533,0.2447174185242318 Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,31.806451612903228)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,31.806451612903228)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 5.358744394618834,5 1.9038293664935713,9.755282581475768 -3.686340577255902,7.938926261462367 -3.686340577255903,2.061073738537635 1.9038293664935702,0.2447174185242318  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,33.225806451612904)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,33.225806451612904)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M0.17937219730941703,0A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,10A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,34.645161290322584)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,34.645161290322584)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M0.35874439461883406,0A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,10A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,36.064516129032256)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,36.064516129032256)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M0.17937219730941703,0L-0.820627802690583,0L-4.820627802690583,4L-0.820627802690583,-0.5806451612903225L0.17937219730941703,-0.5806451612903225L4.179372197309417,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,37.483870967741936)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,37.483870967741936)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M0.35874439461883406,0L-0.641255605381166,0L-4.641255605381166,4L-0.641255605381166,-0.5806451612903225L0.35874439461883406,-0.5806451612903225L4.358744394618834,4L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,38.903225806451616)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,38.903225806451616)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M0.17937219730941703,0L-4.820627802690583,10L0.17937219730941703,10L5.179372197309417,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,40.322580645161295)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,40.322580645161295)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M0.35874439461883406,0L-4.641255605381166,10L0.35874439461883406,10L5.358744394618834,0L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,41.74193548387097)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,41.74193548387097)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="helix feature"
+                d=""
+                fill="transparent"
+                stroke="#f06"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,43.16129032258065)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10,43.16129032258065)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="strand feature"
+                d="M0,-0.14516129032258063L0,-0.14516129032258063L0,-0.4354838709677419L0,-0.4354838709677419L0,-0.14516129032258063M0,0L0.35874439461883406,-0.29032258064516125L0,-0.5806451612903225Z"
+                fill="#fc0"
+                stroke="#fc0"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,44.58064516129033)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="-0.5806451612903225"
+                stroke="transparent"
+                transform="translate(10.358744394618833,44.58064516129033)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+</protvista-track>
+`;
+
+exports[`protvista-track tests it should display the sequence correctly after highlight 1`] = `
+<protvista-track
+  highlight="10:30"
+  length="223"
+  style="display: block; width: 100%;"
+>
+  <div
+    style="line-height: 0;"
+  >
+    <svg
+      height="44"
+      width="100"
+    >
+      <g
+        class="highlighted"
+      >
+        <rect
+          fill="rgba(255, 235, 59, 0.8)"
+          height="44"
+          style="opacity: 0.5; pointer-events: none;"
+          width="7.533632286995515"
+          x="13.228699551569507"
+        />
+      </g>
+      <g
+        class="sequence-features"
+      >
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L11.121076233183857,0L11.121076233183857,16L0,16Z"
+                fill="#342ea2"
+                stroke="#342ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(13.228699551569507,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(13.228699551569507,14)"
+                width="11.121076233183857"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L39.82062780269058,0L39.82062780269058,16L0,16Z"
+                fill="#A42ea2"
+                stroke="#A42ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(27.57847533632287,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(27.57847533632287,14)"
+                width="39.82062780269058"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature3"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L0.35874439461883406,0L0.35874439461883406,16L0,16Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(65.24663677130044,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(65.24663677130044,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L0.35874439461883406,0L0.35874439461883406,16L0,16Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(66.32286995515696,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(66.32286995515696,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature4"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.7937219730941703,0L1.7937219730941703,16L0,16Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(81.39013452914799,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(81.39013452914799,14)"
+                width="1.7937219730941703"
+              />
+            </g>
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.7937219730941703,0L1.7937219730941703,16L0,16Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(83.54260089686099,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(83.54260089686099,14)"
+                width="1.7937219730941703"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,16L0,16Z"
+                fill="#339"
+                stroke="#339"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature5"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,16L0,16Z"
+                fill="#63e"
+                stroke="#63e"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,16L0,16Z"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6_2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="line feature"
+                d="M0,8 L1.0762331838565022,8"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature7"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,16L0,8L0.17937219730941703,8L0.17937219730941703,0L0.17937219730941703,8L0.35874439461883406,8L0.35874439461883406,16Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature8"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,16L0,0L0.7174887892376681,0L0.7174887892376681,16L0.7174887892376681,2L0,2Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature9"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M0.17937219730941703,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature10"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M0.35874439461883406,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5M0,5L0.7174887892376681,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature11"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M0.17937219730941703,5L5.179372197309417,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5L-4.820627802690583,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature12"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M0.35874439461883406,5L5.358744394618834,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5L-4.641255605381166,0L0.35874439461883406,5M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature13"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M-4.820627802690583,0L-4.820627802690583,6L-1.8206278026905829,10L2.179372197309417,10L5.179372197309417,6L5.179372197309417,0L2.179372197309417,4L-1.8206278026905829,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature14"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M-4.641255605381166,0L-4.641255605381166,6L-1.641255605381166,10L2.3587443946188342,10L5.358744394618834,6L5.358744394618834,0L2.3587443946188342,4L-1.641255605381166,4M0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M0.17937219730941703,0L5.179372197309417,10L-4.820627802690583,10Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M0.35874439461883406,0L5.358744394618834,10L-4.641255605381166,10L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M-4.820627802690583,5A2.5,5 0 1,1 0.17937219730941703,5A2.5,5 0 1,0 5.179372197309417,5Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M-4.641255605381166,5A2.5,5 0 1,1 0.35874439461883406,5A2.5,5 0 1,0 5.358744394618834,5M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 5.179372197309417,5 2.6793721973094176,9.330127018922193 -2.320627802690582,9.330127018922195 -4.820627802690583,5.000000000000001 -2.320627802690585,0.6698729810778072 2.6793721973094176,0.6698729810778072 Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 5.358744394618834,5 2.8587443946188347,9.330127018922193 -2.141255605381165,9.330127018922195 -4.641255605381166,5.000000000000001 -2.141255605381168,0.6698729810778072 2.8587443946188347,0.6698729810778072  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 5.179372197309417,5 1.7244571691841544,9.755282581475768 -3.8657127745653193,7.938926261462367 -3.86571277456532,2.061073738537635 1.7244571691841533,0.2447174185242318 Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 5.358744394618834,5 1.9038293664935713,9.755282581475768 -3.686340577255902,7.938926261462367 -3.686340577255903,2.061073738537635 1.9038293664935702,0.2447174185242318  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M0.17937219730941703,0A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,10A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M0.35874439461883406,0A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,10A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M0.17937219730941703,0L-0.820627802690583,0L-4.820627802690583,4L-0.820627802690583,16L0.17937219730941703,16L4.179372197309417,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M0.35874439461883406,0L-0.641255605381166,0L-4.641255605381166,4L-0.641255605381166,16L0.35874439461883406,16L4.358744394618834,4L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M0.17937219730941703,0L-4.820627802690583,10L0.17937219730941703,10L5.179372197309417,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M0.35874439461883406,0L-4.641255605381166,10L0.35874439461883406,10L5.358744394618834,0L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="helix feature"
+                d=""
+                fill="transparent"
+                stroke="#f06"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="strand feature"
+                d="M0,4L0,4L0,12L0,12L0,4M0,0L0.35874439461883406,8L0,16Z"
+                fill="#fc0"
+                stroke="#fc0"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+</protvista-track>
+`;
+
+exports[`protvista-track tests it should display the track correctly 1`] = `
+<protvista-track
+  length="223"
+  style="display: block; width: 100%;"
+>
+  <div
+    style="line-height: 0;"
+  >
+    <svg
+      height="44"
+      width="100"
+    >
+      <g
+        class="highlighted"
+      />
+      <g
+        class="sequence-features"
+      >
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L11.121076233183857,0L11.121076233183857,16L0,16Z"
+                fill="#342ea2"
+                stroke="#342ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(13.228699551569507,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(13.228699551569507,14)"
+                width="11.121076233183857"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L39.82062780269058,0L39.82062780269058,16L0,16Z"
+                fill="#A42ea2"
+                stroke="#A42ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(27.57847533632287,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(27.57847533632287,14)"
+                width="39.82062780269058"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature3"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L0.35874439461883406,0L0.35874439461883406,16L0,16Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(65.24663677130044,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(65.24663677130044,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L0.35874439461883406,0L0.35874439461883406,16L0,16Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(66.32286995515696,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(66.32286995515696,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature4"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.7937219730941703,0L1.7937219730941703,16L0,16Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(81.39013452914799,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(81.39013452914799,14)"
+                width="1.7937219730941703"
+              />
+            </g>
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.7937219730941703,0L1.7937219730941703,16L0,16Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(83.54260089686099,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(83.54260089686099,14)"
+                width="1.7937219730941703"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,16L0,16Z"
+                fill="#339"
+                stroke="#339"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature5"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,16L0,16Z"
+                fill="#63e"
+                stroke="#63e"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L1.0762331838565022,0L1.0762331838565022,16L0,16Z"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6_2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="line feature"
+                d="M0,8 L1.0762331838565022,8"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="1.0762331838565022"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature7"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,16L0,8L0.17937219730941703,8L0.17937219730941703,0L0.17937219730941703,8L0.35874439461883406,8L0.35874439461883406,16Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature8"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,16L0,0L0.7174887892376681,0L0.7174887892376681,16L0.7174887892376681,2L0,2Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature9"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M0.17937219730941703,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature10"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M0.35874439461883406,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5M0,5L0.7174887892376681,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature11"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M0.17937219730941703,5L5.179372197309417,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5L-4.820627802690583,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature12"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M0.35874439461883406,5L5.358744394618834,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5L-4.641255605381166,0L0.35874439461883406,5M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature13"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M-4.820627802690583,0L-4.820627802690583,6L-1.8206278026905829,10L2.179372197309417,10L5.179372197309417,6L5.179372197309417,0L2.179372197309417,4L-1.8206278026905829,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature14"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M-4.641255605381166,0L-4.641255605381166,6L-1.641255605381166,10L2.3587443946188342,10L5.358744394618834,6L5.358744394618834,0L2.3587443946188342,4L-1.641255605381166,4M0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M0.17937219730941703,0L5.179372197309417,10L-4.820627802690583,10Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M0.35874439461883406,0L5.358744394618834,10L-4.641255605381166,10L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M-4.820627802690583,5A2.5,5 0 1,1 0.17937219730941703,5A2.5,5 0 1,0 5.179372197309417,5Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M-4.641255605381166,5A2.5,5 0 1,1 0.35874439461883406,5A2.5,5 0 1,0 5.358744394618834,5M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 5.179372197309417,5 2.6793721973094176,9.330127018922193 -2.320627802690582,9.330127018922195 -4.820627802690583,5.000000000000001 -2.320627802690585,0.6698729810778072 2.6793721973094176,0.6698729810778072 Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 5.358744394618834,5 2.8587443946188347,9.330127018922193 -2.141255605381165,9.330127018922195 -4.641255605381166,5.000000000000001 -2.141255605381168,0.6698729810778072 2.8587443946188347,0.6698729810778072  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 5.179372197309417,5 1.7244571691841544,9.755282581475768 -3.8657127745653193,7.938926261462367 -3.86571277456532,2.061073738537635 1.7244571691841533,0.2447174185242318 Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 5.358744394618834,5 1.9038293664935713,9.755282581475768 -3.686340577255902,7.938926261462367 -3.686340577255903,2.061073738537635 1.9038293664935702,0.2447174185242318  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M0.17937219730941703,0A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,10A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M0.35874439461883406,0A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,10A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M0.17937219730941703,0L-0.820627802690583,0L-4.820627802690583,4L-0.820627802690583,16L0.17937219730941703,16L4.179372197309417,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M0.35874439461883406,0L-0.641255605381166,0L-4.641255605381166,4L-0.641255605381166,16L0.35874439461883406,16L4.358744394618834,4L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M0.17937219730941703,0L-4.820627802690583,10L0.17937219730941703,10L5.179372197309417,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M0.35874439461883406,0L-4.641255605381166,10L0.35874439461883406,10L5.358744394618834,0L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="helix feature"
+                d=""
+                fill="transparent"
+                stroke="#f06"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="0.7174887892376681"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="strand feature"
+                d="M0,4L0,4L0,12L0,12L0,4M0,0L0.35874439461883406,8L0,16Z"
+                fill="#fc0"
+                stroke="#fc0"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10.358744394618833,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10.358744394618833,14)"
+                width="0.35874439461883406"
+              />
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+</protvista-track>
+`;
+
+exports[`protvista-track tests it should zoom in 1`] = `
+<protvista-track
+  displayend="4"
+  displaystart="2"
+  length="223"
+  style="display: block; width: 100%;"
+>
+  <div
+    style="line-height: 0;"
+  >
+    <svg
+      height="44"
+      width="100"
+    >
+      <g
+        class="highlighted"
+      >
+        <rect
+          fill="rgba(255, 235, 59, 0.8)"
+          height="44"
+          style="opacity: 0.5; pointer-events: none;"
+          width="0"
+          x="-16.666666666666664"
+        />
+      </g>
+      <g
+        class="sequence-features"
+      >
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L826.6666666666666,0L826.6666666666666,16L0,16Z"
+                fill="#342ea2"
+                stroke="#342ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(223.33333333333331,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(223.33333333333331,14)"
+                width="826.6666666666666"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L2959.9999999999995,0L2959.9999999999995,16L0,16Z"
+                fill="#A42ea2"
+                stroke="#A42ea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(1290,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(1290,14)"
+                width="2959.9999999999995"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature3"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L26.666666666666664,0L26.666666666666664,16L0,16Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(4090,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(4090,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L26.666666666666664,0L26.666666666666664,16L0,16Z"
+                fill="#A4Aea2"
+                stroke="#A4Aea2"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(4170,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(4170,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature4"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L133.33333333333331,0L133.33333333333331,16L0,16Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(5290,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(5290,14)"
+                width="133.33333333333331"
+              />
+            </g>
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L133.33333333333331,0L133.33333333333331,16L0,16Z"
+                fill="black"
+                stroke="black"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(5450,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(5450,14)"
+                width="133.33333333333331"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature1"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L80,0L80,16L0,16Z"
+                fill="#339"
+                stroke="#339"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="80"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature5"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L80,0L80,16L0,16Z"
+                fill="#63e"
+                stroke="#63e"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="80"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="rectangle feature"
+                d="M0,0L80,0L80,16L0,16Z"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="80"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature6_2"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="line feature"
+                d="M0,8 L80,8"
+                fill="#35d"
+                stroke="#35d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="80"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature7"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,16L0,8L13.333333333333332,8L13.333333333333332,0L13.333333333333332,8L26.666666666666664,8L26.666666666666664,16Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature8"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="bridge feature"
+                d="M0,16L0,0L53.33333333333333,0L53.33333333333333,16L53.33333333333333,2L0,2Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature9"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M13.333333333333332,0L18.333333333333332,5L13.333333333333332,10L8.333333333333332,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature10"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="diamond feature"
+                d="M26.666666666666664,0L31.666666666666664,5L26.666666666666664,10L21.666666666666664,5M0,5L53.33333333333333,5Z"
+                fill="#33d"
+                stroke="#33d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature11"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M13.333333333333332,5L18.333333333333332,0L18.333333333333332,5L13.333333333333332,10L8.333333333333332,5L8.333333333333332,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature12"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="chevron feature"
+                d="M26.666666666666664,5L31.666666666666664,0L31.666666666666664,5L26.666666666666664,10L21.666666666666664,5L21.666666666666664,0L26.666666666666664,5M0,5L53.33333333333333,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature13"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M8.333333333333332,0L8.333333333333332,6L11.333333333333332,10L15.333333333333332,10L18.333333333333332,6L18.333333333333332,0L15.333333333333332,4L11.333333333333332,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature14"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="catFace feature"
+                d="M21.666666666666664,0L21.666666666666664,6L24.666666666666664,10L28.666666666666664,10L31.666666666666664,6L31.666666666666664,0L28.666666666666664,4L24.666666666666664,4M26.666666666666664,0M0,5L53.33333333333333,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M13.333333333333332,0L18.333333333333332,10L8.333333333333332,10Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="triangle feature"
+                d="M26.666666666666664,0L31.666666666666664,10L21.666666666666664,10L26.666666666666664,0M0,5L53.33333333333333,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M8.333333333333332,5A2.5,5 0 1,1 13.333333333333332,5A2.5,5 0 1,0 18.333333333333332,5Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="wave feature"
+                d="M21.666666666666664,5A2.5,5 0 1,1 26.666666666666664,5A2.5,5 0 1,0 31.666666666666664,5M0,5L53.33333333333333,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature15"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 18.333333333333332,5 15.833333333333332,9.330127018922193 10.833333333333332,9.330127018922195 8.333333333333332,5.000000000000001 10.83333333333333,0.6698729810778072 15.833333333333332,0.6698729810778072 Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature16"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="hexagon feature"
+                d="M 31.666666666666664,5 29.166666666666664,9.330127018922193 24.166666666666664,9.330127018922195 21.666666666666664,5.000000000000001 24.16666666666666,0.6698729810778072 29.166666666666664,0.6698729810778072  31.666666666666664,5 M0,5L53.33333333333333,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature17"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 18.333333333333332,5 14.878418305208069,9.755282581475768 9.288248361458596,7.938926261462367 9.288248361458596,2.061073738537635 14.878418305208069,0.2447174185242318 Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature18"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="pentagon feature"
+                d="M 31.666666666666664,5 28.2117516385414,9.755282581475768 22.621581694791928,7.938926261462367 22.621581694791928,2.061073738537635 28.2117516385414,0.2447174185242318  31.666666666666664,5 M0,5L53.33333333333333,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M13.333333333333332,0A1.7841241161527712,1.7841241161527712 0 1,1 13.333333333333332,10A1.7841241161527712,1.7841241161527712 0 1,1 13.333333333333332,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="circle feature"
+                d="M26.666666666666664,0A1.7841241161527712,1.7841241161527712 0 1,1 26.666666666666664,10A1.7841241161527712,1.7841241161527712 0 1,1 26.666666666666664,0M0,5L53.33333333333333,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M13.333333333333332,0L12.333333333333332,0L8.333333333333332,4L12.333333333333332,16L13.333333333333332,16L17.333333333333332,4Z"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="arrow feature"
+                d="M26.666666666666664,0L25.666666666666664,0L21.666666666666664,4L25.666666666666664,16L26.666666666666664,16L30.666666666666664,4L26.666666666666664,0M0,5L53.33333333333333,5ZZ"
+                fill="#d3d"
+                stroke="#d3d"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature19"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M13.333333333333332,0L8.333333333333332,10L13.333333333333332,10L18.333333333333332,0Z"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature20"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="doubleBar feature"
+                d="M26.666666666666664,0L21.666666666666664,10L26.666666666666664,10L31.666666666666664,0L26.666666666666664,0M0,5L53.33333333333333,5ZZ"
+                fill="#3a3"
+                stroke="#3a3"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature21"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="helix feature"
+                d="M0,16 C5,7.5 5,2.5 2.5, 0 C0,2.5 2.5,7.5 5,16M5,16 C10,7.5 10,2.5 7.5, 0 C5,2.5 7.5,7.5 10,16M10,16 C15,7.5 15,2.5 12.5, 0 C10,2.5 12.5,7.5 15,16M15,16 C20,7.5 20,2.5 17.5, 0 C15,2.5 17.5,7.5 20,16M20,16 C25,7.5 25,2.5 22.5, 0 C20,2.5 22.5,7.5 25,16M25,16 C30,7.5 30,2.5 27.5, 0 C25,2.5 27.5,7.5 30,16M30,16 C35,7.5 35,2.5 32.5, 0 C30,2.5 32.5,7.5 35,16M35,16 C40,7.5 40,2.5 37.5, 0 C35,2.5 37.5,7.5 40,16M40,16 C45,7.5 45,2.5 42.5, 0 C40,2.5 42.5,7.5 45,16M45,16 C50,7.5 50,2.5 47.5, 0 C45,2.5 47.5,7.5 50,16M50,16 C55,7.5 55,2.5 52.5, 0 C50,2.5 52.5,7.5 55,16"
+                fill="transparent"
+                stroke="#f06"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(-16.666666666666664,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(-16.666666666666664,14)"
+                width="53.33333333333333"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="feature-group"
+          id="g_feature22"
+        >
+          <g
+            class="location-group"
+          >
+            <g
+              class="fragment-group"
+            >
+              <path
+                class="strand feature"
+                d="M0,4L21.666666666666664,4L21.666666666666664,12L0,12L0,4M21.666666666666664,0L26.666666666666664,8L21.666666666666664,16Z"
+                fill="#fc0"
+                stroke="#fc0"
+                style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+                transform="translate(10,14)"
+              />
+              <rect
+                class="outer-rectangle feature"
+                fill="transparent"
+                height="16"
+                stroke="transparent"
+                transform="translate(10,14)"
+                width="26.666666666666664"
+              />
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+</protvista-track>
+`;
