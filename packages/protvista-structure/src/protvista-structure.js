@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import "whatwg-fetch";
-import LiteMol from "litemol";
 import MolStar from "./molstar";
 
 const UP_PDB = "UP_PDB";
@@ -12,7 +11,6 @@ class ProtvistaStructure extends HTMLElement {
     this._mappings = [];
 
     this.loadMolecule = this.loadMolecule.bind(this);
-    this.loadMolecule2 = this.loadMolecule2.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
     this.propagateHighlight = this.propagateHighlight.bind(this);
   }
@@ -28,11 +26,6 @@ class ProtvistaStructure extends HTMLElement {
       margin-right: 1em;
     }
       
-    .litemol-container {
-      position: relative;
-      height: ${this._height};
-    }
-
     .molstar-container {
       position: relative;
       height: ${this._height};
@@ -87,15 +80,6 @@ class ProtvistaStructure extends HTMLElement {
     style.innerHTML = this.css;
     this.appendChild(style);
 
-    const litemolDiv = document.createElement("div");
-    litemolDiv.className = "litemol-container";
-    litemolDiv.id = "litemol-instance";
-    this.messageContainer = document.createElement("span");
-    this.appendChild(this.messageContainer);
-    this.appendChild(litemolDiv);
-
-    this.loadLiteMol();
-
     const molStarDiv = document.createElement("div");
     molStarDiv.className = "molstar-container";
     molStarDiv.id = "molstar-instance";
@@ -133,8 +117,10 @@ class ProtvistaStructure extends HTMLElement {
 
       switch (attrName) {
         case "pdb-id":
-          this._pdbId = newVal;
-          this.selectMolecule(this._pdbId);
+          if (newVal !== null) {
+            this._pdbId = newVal;
+            this.selectMolecule(this._pdbId);
+          }
           break;
 
         case "accession":
@@ -185,7 +171,7 @@ class ProtvistaStructure extends HTMLElement {
       );
       return await data.json();
     } catch (e) {
-      this.addMessage(`Couldn't load PDB entry`);
+      this._molStar.showErrorMessage(`Couldn't load PDB entry`);
       throw new Error(e);
     }
   }
@@ -196,7 +182,6 @@ class ProtvistaStructure extends HTMLElement {
       ?.mappings;
 
     await this.loadMolecule(id);
-    await this.loadMolecule2(id);
     this._selectedMolecule = {
       id,
       mappings,
@@ -204,115 +189,26 @@ class ProtvistaStructure extends HTMLElement {
     this._planHighlight();
   }
 
-  loadLiteMol() {
-    const { Plugin } = LiteMol;
-    this.Command = LiteMol.Bootstrap.Command;
-    this.Query = LiteMol.Core.Structure.Query;
-    this.Bootstrap = LiteMol.Bootstrap;
-    this.Core = LiteMol.Core;
-    this.Tree = this.Bootstrap.Tree;
-    this.CoreVis = LiteMol.Visualization;
-    this.Transformer = this.Bootstrap.Entity.Transformer;
-    this.Visualization = this.Bootstrap.Visualization;
-    this.Event = this.Bootstrap.Event;
-    this.Context = Plugin.Components.Context;
-
-    this._liteMol = Plugin.create({
-      target: this.querySelector("#litemol-instance"),
-      viewportBackground: "#fff",
-      layoutState: {
-        hideControls: true,
-      },
-      allowAnalytics: false,
-    });
-
-    this.Event.Molecule.ModelSelect.getStream(
-      this._liteMol.context
-    ).subscribe((e) => this.propagateHighlight(e));
-  }
-
   loadMolStar() {
     this._molStar = new MolStar(this.molStarDiv);
-  }
-
-  loadMolecule2(_id) {
-    this._molStar.loadPdb(_id.toLowerCase());
+    // this.Event.Molecule.ModelSelect.getStream(
+    //   this._liteMol.context
+    // ).subscribe((e) => this.propagateHighlight(e));
   }
 
   loadMolecule(_id) {
-    this._liteMol.clear();
-
-    const transform = this._liteMol.createTransform();
-
-    transform
-      .add(this._liteMol.root, this.Transformer.Data.Download, {
-        url: `https://www.ebi.ac.uk/pdbe/coordinates/${_id.toLowerCase()}/full?encoding=BCIF`,
-        type: "Binary",
-        _id,
-      })
-      .then(
-        this.Transformer.Data.ParseBinaryCif,
-        {
-          id: _id,
-        },
-        {
-          isBinding: true,
-          ref: "cifDict",
-        }
-      )
-      .then(
-        this.Transformer.Molecule.CreateFromMmCif,
-        {
-          blockIndex: 0,
-        },
-        {
-          isBinding: true,
-        }
-      )
-      .then(
-        this.Transformer.Molecule.CreateModel,
-        {
-          modelIndex: 0,
-        },
-        {
-          isBinding: false,
-          ref: "model",
-        }
-      )
-      .then(this.Transformer.Molecule.CreateMacromoleculeVisual, {
-        polymer: true,
-        polymerRef: "polymer-visual",
-        het: true,
-        water: true,
-      });
-
-    return this._liteMol.applyTransform(transform);
+    this._molStar.loadPdb(_id.toLowerCase());
   }
 
-  getTheme() {
-    const colors = new Map();
-    colors.set("Uniform", this.CoreVis.Color.fromRgb(207, 178, 178));
-    colors.set("Selection", this.CoreVis.Color.fromRgb(255, 0, 0));
-    colors.set("Highlight", this.CoreVis.Theme.Default.HighlightColor);
-    return this.Visualization.Molecule.uniformThemeProvider(undefined, {
-      colors,
-    });
-  }
-
-  addMessage(message) {
-    this.removeMessage();
-    this._liteMol.command(this.Bootstrap.Command.Toast.Show, {
-      key: "UPMessage",
-      message,
-      timeoutMs: 30 * 1000,
-    });
-  }
-
-  removeMessage() {
-    this._liteMol.command(this.Bootstrap.Command.Toast.Hide, {
-      key: "UPMessage",
-    });
-  }
+  // getTheme() {
+  //   const colors = new Map();
+  //   colors.set("Uniform", this.CoreVis.Color.fromRgb(207, 178, 178));
+  //   colors.set("Selection", this.CoreVis.Color.fromRgb(255, 0, 0));
+  //   colors.set("Highlight", this.CoreVis.Theme.Default.HighlightColor);
+  //   return this.Visualization.Molecule.uniformThemeProvider(undefined, {
+  //     colors,
+  //   });
+  // }
 
   translatePositions(start, end, direction = UP_PDB) {
     // return if they have been set to 'undefined'
@@ -347,7 +243,7 @@ class ProtvistaStructure extends HTMLElement {
           };
         }
       } else {
-        this.addMessage(
+        this._molStar.showErrorMessage(
           "Mismatch between protein sequence and structure residues"
         );
       }
@@ -388,42 +284,7 @@ class ProtvistaStructure extends HTMLElement {
     }
 
     this._molStar.highlight(translatedPositions);
-    // const queries = translatedPositions.map((translatedPos) =>
-    //   this.Query.sequence(
-    //     translatedPos.entity.toString(),
-    //     translatedPos.chain,
-    //     {
-    //       seqNumber: translatedPos.start,
-    //     },
-    //     {
-    //       seqNumber: translatedPos.end,
-    //     }
-    //   )
-    // );
-
-    // const theme = this.getTheme();
-    // const transform = this._liteMol.createTransform();
-
-    // queries.forEach((query) =>
-    //   transform.add(
-    //     visual,
-    //     this.Transformer.Molecule.CreateSelectionFromQuery,
-    //     {
-    //       query,
-    //     },
-    //     {
-    //       ref: "sequence-selection",
-    //     }
-    //   )
-    // );
-
-    // this._liteMol.applyTransform(transform).then(() => {
-    //   this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
-    //     visual,
-    //     theme,
-    //   });
-    // });
-    this.removeMessage();
+    this._molStar.clearMessages();
   }
 }
 

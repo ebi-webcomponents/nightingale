@@ -18,8 +18,10 @@ import { ANVILMembraneOrientation } from "molstar/lib/extensions/anvil/behavior"
 import { DnatcoConfalPyramids } from "molstar/lib/extensions/dnatco";
 import { Mp4Export } from "molstar/lib/extensions/mp4-export";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
+import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 
 import "../../../node_modules/molstar/build/viewer/molstar.css";
+import { Color } from "molstar/lib/mol-util/color";
 // require("../../../node_modules/molstar/lib/mol-plugin-ui/skin/light.scss");
 
 interface LoadStructureOptions {
@@ -135,9 +137,17 @@ class MolStar {
     if (!element)
       throw new Error(`Could not get element with id '${elementOrId}'`);
     this.plugin = createPlugin(element, spec);
+    PluginCommands.Canvas3D.SetSettings(this.plugin, {
+      settings: (props) => {
+        // eslint-disable-next-line no-param-reassign
+        props.renderer.backgroundColor = Color(0xffffff);
+      },
+    });
   }
 
   loadPdb(pdb: string, options?: LoadStructureOptions): Promise<void> {
+    this.plugin.clear();
+    this.clearMessages();
     const params = DownloadStructure.createDefaultParams(
       this.plugin.state.data.root.obj!,
       this.plugin
@@ -188,7 +198,20 @@ class MolStar {
     );
     const loci = StructureSelection.toLociWithSourceUnits(sel);
     this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
-    // this.plugin.managers.interactivity.lociHighlights.highlightOnly({ loci });
+  }
+
+  showErrorMessage(message: string): void {
+    this.clearMessages();
+    PluginCommands.Toast.Show(this.plugin, {
+      title: "Error",
+      message,
+      key: "UPMessage",
+      timeoutMs: 30 * 1000,
+    });
+  }
+
+  clearMessages(): void {
+    PluginCommands.Toast.Hide(this.plugin);
   }
 
   handleResize(): void {
