@@ -10,7 +10,6 @@ class ProtvistaStructure extends HTMLElement {
     super();
     this._mappings = [];
 
-    this.loadMolecule = this.loadMolecule.bind(this);
     this._planHighlight = this._planHighlight.bind(this);
     this.propagateHighlight = this.propagateHighlight.bind(this);
   }
@@ -83,10 +82,8 @@ class ProtvistaStructure extends HTMLElement {
     const molStarDiv = document.createElement("div");
     molStarDiv.className = "molstar-container";
     molStarDiv.id = "molstar-instance";
-    this.molStarDiv = molStarDiv;
     this.appendChild(molStarDiv);
-
-    this.loadMolStar();
+    this._molStar = new MolStar(molStarDiv);
   }
 
   disconnectedCallback() {
@@ -171,7 +168,7 @@ class ProtvistaStructure extends HTMLElement {
       );
       return await data.json();
     } catch (e) {
-      this._molStar.showErrorMessage(`Couldn't load PDB entry`);
+      this._molStar.showMessage("Error", `Couldn't load PDB entry`);
       throw new Error(e);
     }
   }
@@ -181,7 +178,7 @@ class ProtvistaStructure extends HTMLElement {
     const mappings = Object.values(pdbEntry)[0].UniProt[this._accession]
       ?.mappings;
 
-    await this.loadMolecule(id);
+    await this._molStar.loadPdb(id.toLowerCase());
     this._selectedMolecule = {
       id,
       mappings,
@@ -189,16 +186,11 @@ class ProtvistaStructure extends HTMLElement {
     this._planHighlight();
   }
 
-  loadMolStar() {
-    this._molStar = new MolStar(this.molStarDiv);
-    // this.Event.Molecule.ModelSelect.getStream(
-    //   this._liteMol.context
-    // ).subscribe((e) => this.propagateHighlight(e));
-  }
-
-  loadMolecule(_id) {
-    this._molStar.loadPdb(_id.toLowerCase());
-  }
+  // loadMolStar() {
+  // this.Event.Molecule.ModelSelect.getStream(
+  //   this._liteMol.context
+  // ).subscribe((e) => this.propagateHighlight(e));
+  // }
 
   // getTheme() {
   //   const colors = new Map();
@@ -234,7 +226,6 @@ class ProtvistaStructure extends HTMLElement {
             end <= mapping.end.residue_number)
         ) {
           const offset = mapping.unp_start - mapping.start.residue_number;
-          // TODO this is wrong because there are gaps in the PDB sequence
           return {
             entity: mapping.entity_id,
             chain: mapping.chain_id,
@@ -243,7 +234,8 @@ class ProtvistaStructure extends HTMLElement {
           };
         }
       } else {
-        this._molStar.showErrorMessage(
+        this._molStar.showMessage(
+          "Error",
           "Mismatch between protein sequence and structure residues"
         );
       }

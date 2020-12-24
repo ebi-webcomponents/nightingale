@@ -147,7 +147,7 @@ class MolStar {
 
   loadPdb(pdb: string, options?: LoadStructureOptions): Promise<void> {
     this.plugin.clear();
-    this.clearMessages();
+    this.showMessage("Loading", pdb);
     const params = DownloadStructure.createDefaultParams(
       this.plugin.state.data.root.obj!,
       this.plugin
@@ -155,26 +155,30 @@ class MolStar {
     const provider = this.plugin.config.get(
       PluginConfig.Download.DefaultPdbProvider
     )!;
-    return this.plugin.runTask(
-      this.plugin.state.data.applyAction(DownloadStructure, {
-        source: {
-          name: "pdb" as const,
-          params: {
-            provider: {
-              id: pdb,
-              server: {
-                name: provider,
-                params: PdbDownloadProvider[provider].defaultValue as any,
+    return this.plugin
+      .runTask(
+        this.plugin.state.data.applyAction(DownloadStructure, {
+          source: {
+            name: "pdb" as const,
+            params: {
+              provider: {
+                id: pdb,
+                server: {
+                  name: provider,
+                  params: PdbDownloadProvider[provider].defaultValue as any,
+                },
+              },
+              options: {
+                ...params.source.params.options,
+                representationParams: options?.representationParams as any,
               },
             },
-            options: {
-              ...params.source.params.options,
-              representationParams: options?.representationParams as any,
-            },
           },
-        },
-      })
-    );
+        })
+      )
+      .then(() => {
+        this.clearMessages();
+      });
   }
 
   highlight(ranges: { start: number; end: number }[]): void {
@@ -200,13 +204,12 @@ class MolStar {
     this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
   }
 
-  showErrorMessage(message: string): void {
+  showMessage(title: string, message: string, timeoutMs?: number): void {
     this.clearMessages();
     PluginCommands.Toast.Show(this.plugin, {
-      title: "Error",
+      title,
       message,
-      key: "UPMessage",
-      timeoutMs: 30 * 1000,
+      timeoutMs,
     });
   }
 
