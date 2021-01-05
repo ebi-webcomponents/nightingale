@@ -10,8 +10,8 @@ const withManager = (Element: typeof NightingaleBaseElement): any => {
     }
 
     connectedCallback() {
-      if (this.closest("protvista-manager")) {
-        this.#manager = this.closest("protvista-manager");
+      if (this.closest("nightingale-manager")) {
+        this.#manager = this.closest("nightingale-manager");
         this.#manager.register(this);
       }
       super.connectedCallback();

@@ -18,12 +18,6 @@ class NightingaleNavigation extends HTMLElement {
     this._padding = 0;
     this.height = 40;
     this.dontDispatch = false;
-    this.margin = {
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-    };
   }
 
   _refreshWidth() {

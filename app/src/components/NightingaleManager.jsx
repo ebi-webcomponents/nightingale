@@ -10,7 +10,7 @@ import "@nightingale-elements/nightingale-variation";
 import "@nightingale-elements/nightingale-variation-graph";
 import "@nightingale-elements/nightingale-variation-adapter";
 import "@nightingale-elements/nightingale-interpro-track";
-import "@nightingale-elements/nightingale-links";
+// import "@nightingale-elements/nightingale-links";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
@@ -36,7 +36,7 @@ class NightingaleManagerWrapper extends Component {
     document.querySelector("#sequence-coloured-track-iso").data = sequence;
     document.querySelector("#sequence-coloured-track-iso").fixedHighlight =
       "400:600";
-    document.querySelector("#links-track").data = rawContactsHC;
+    // document.querySelector("#links-track").data = rawContactsHC;
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
     document.querySelector("#track3").data = secondaryStructureData;
@@ -111,12 +111,12 @@ class NightingaleManagerWrapper extends Component {
               use-ctrl-to-zoom
             />
 
-            <nightingale-links
+            {/* <nightingale-links
               id="links-track"
               length="770"
               height={20}
               use-ctrl-to-zoom
-            />
+            /> */}
 
             <nightingale-track id="track1" length="770" use-ctrl-to-zoom>
               <nightingale-feature-adapter id="adapter1">

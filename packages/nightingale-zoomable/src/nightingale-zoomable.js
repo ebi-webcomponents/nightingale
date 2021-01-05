@@ -4,7 +4,7 @@ import {
   zoomIdentity,
   event as d3Event,
 } from "d3";
-import { TrackHighlighter, ScrollFilter } from "@nightingale-elements/utils";
+import { ScrollFilter } from "@nightingale-elements/utils";
 
 import NightingaleElement, {
   withDimensions,
@@ -12,6 +12,7 @@ import NightingaleElement, {
   withMargin,
   withResizable,
   withManager,
+  withHighlight,
 } from "@nightingale-elements/nightingale-core";
 
 class NightingaleZoomable extends NightingaleElement {
@@ -37,19 +38,11 @@ class NightingaleZoomable extends NightingaleElement {
         this._applyZoomTranslation();
       });
     };
-    this.trackHighlighter = new TrackHighlighter({ element: this, min: 1 });
-
     this.scrollFilter = new ScrollFilter(this);
     this.wheelListener = (event) => this.scrollFilter.wheel(event);
   }
 
   connectedCallback() {
-    this._highlightEvent = this.getAttribute("highlight-event")
-      ? this.getAttribute("highlight-event")
-      : "onclick";
-
-    this.trackHighlighter.setAttributesInElement(this);
-
     this._updateScaleDomain();
     // The _originXScale is a way to mantain all the future transformations over the same original scale.
     // It only gets redefined if the size of the component, or the length of the sequence changes.
@@ -110,10 +103,6 @@ class NightingaleZoomable extends NightingaleElement {
     return this._svg;
   }
 
-  set fixedHighlight(region) {
-    this.trackHighlighter.setFixedHighlight(region);
-  }
-
   _updateScaleDomain() {
     this.xScale = scaleLinear()
       // The max width should match the start of the n+1 base
@@ -143,10 +132,6 @@ class NightingaleZoomable extends NightingaleElement {
       .on("zoom", this.zoomed);
   }
 
-  static get observedAttributes() {
-    return ["highlight"];
-  }
-
   setFloatAttribute(name, strValue) {
     const value = parseFloat(strValue);
     this[`_${name}`] = Number.isNaN(value) ? strValue : value;
@@ -154,15 +139,17 @@ class NightingaleZoomable extends NightingaleElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
-    const inWiths = ["width", "height", "displaystart", "displayend"];
+    const inWiths = [
+      "width",
+      "height",
+      "displaystart",
+      "displayend",
+      "highlight",
+    ];
     if (inWiths.includes(name) || !this.zoom) return;
     // eslint-disable-next-line no-param-reassign
     if (newValue === "null") newValue = null;
     if (oldValue !== newValue) {
-      if (name.startsWith("highlight")) {
-        this.trackHighlighter.changedCallBack(name, newValue);
-        return;
-      }
       this.setFloatAttribute(name, newValue);
 
       if (name === "length") {
@@ -330,13 +317,15 @@ class NightingaleZoomable extends NightingaleElement {
 }
 
 export default withManager(
-  withResizable(
-    withMargin(
-      withPosition(
-        withDimensions(NightingaleZoomable, {
-          width: 0,
-          height: 44,
-        })
+  withHighlight(
+    withResizable(
+      withMargin(
+        withPosition(
+          withDimensions(NightingaleZoomable, {
+            width: 0,
+            height: 44,
+          })
+        )
       )
     )
   )
