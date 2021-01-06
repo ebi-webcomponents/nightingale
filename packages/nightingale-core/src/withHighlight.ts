@@ -6,7 +6,7 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
   class ElementWithManager extends Element {
     trackHighlighter: TrackHighlighter;
 
-    #highlightEvent: string;
+    _highlightEvent: string;
 
     constructor() {
       super();
@@ -18,7 +18,7 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
     }
 
     connectedCallback() {
-      this.#highlightEvent = this.getAttribute("highlight-event")
+      this._highlightEvent = this.getAttribute("highlight-event")
         ? this.getAttribute("highlight-event")
         : "onclick";
       this.trackHighlighter.setAttributesInElement(this);
@@ -33,9 +33,18 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
       return Element.observedAttributes.concat(["highlight"]);
     }
 
+    set length(length) {
+      super._length = length;
+      this.trackHighlighter.max = length;
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
       super.attributeChangedCallback(name, oldValue, newValue);
-      if (name === "highlight" && oldValue !== newValue) {
+      if (
+        name === "highlight" &&
+        typeof newValue === "string" &&
+        oldValue !== newValue
+      ) {
         this.trackHighlighter.changedCallBack(name, newValue);
       }
     }

@@ -25,7 +25,8 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@testing-library/dom": "^7.29.0"
+    "@testing-library/dom": "^7.29.0",
+    "d3": "^5.7.0"
   },
   "keywords": [
     "nightingale",

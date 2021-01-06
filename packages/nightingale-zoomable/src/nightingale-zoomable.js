@@ -13,6 +13,7 @@ import NightingaleElement, {
   withResizable,
   withManager,
   withHighlight,
+  withEventBinder,
 } from "@nightingale-elements/nightingale-core";
 
 class NightingaleZoomable extends NightingaleElement {
@@ -25,7 +26,6 @@ class NightingaleZoomable extends NightingaleElement {
     this._initZoom = this._initZoom.bind(this);
     this.zoomed = this.zoomed.bind(this);
     this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
-    this._resetEventHandler = this._resetEventHandler.bind(this);
     let aboutToApply = false;
     // Postponing the zoom translation to the next frame.
     // This helps in case several attributes are changed almost at the same time,
@@ -48,24 +48,13 @@ class NightingaleZoomable extends NightingaleElement {
     // It only gets redefined if the size of the component, or the length of the sequence changes.
     this._originXScale = this.xScale.copy();
     this._initZoom();
-    this.addEventListener("error", (e) => {
-      console.error(e);
-    });
-    this.addEventListener("click", this._resetEventHandler);
     if (this.hasAttribute("filter-scroll")) {
       document.addEventListener("wheel", this.wheelListener, { capture: true });
     }
   }
 
   disconnectedCallback() {
-    this.removeEventListener("click", this._resetEventHandler);
     document.removeEventListener("wheel", this.wheelListener);
-  }
-
-  // TODO: remove when ewithHighlight
-  set length(length) {
-    super._length = length;
-    this.trackHighlighter.max = length;
   }
 
   set width(width) {
@@ -139,24 +128,13 @@ class NightingaleZoomable extends NightingaleElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
-    const inWiths = [
-      "width",
-      "height",
-      "displaystart",
-      "displayend",
-      "highlight",
-    ];
-    if (inWiths.includes(name) || !this.zoom) return;
+
+    if (!this.zoom) return;
     // eslint-disable-next-line no-param-reassign
     if (newValue === "null") newValue = null;
-    if (oldValue !== newValue) {
-      this.setFloatAttribute(name, newValue);
-
-      if (name === "length") {
-        this._updateScaleDomain();
-        this._originXScale = this.xScale.copy();
-      }
-      // One of the observable attributes changed, so the scale needs to be redefined.
+    if (oldValue !== newValue && name === "length") {
+      this._updateScaleDomain();
+      this._originXScale = this.xScale.copy();
       this.applyZoomTranslation();
     }
   }
@@ -173,7 +151,7 @@ class NightingaleZoomable extends NightingaleElement {
         detail: {
           displaystart: Math.max(1, start),
           displayend: Math.min(
-            this.length,
+            this._length,
             Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
           ),
         },
@@ -189,7 +167,7 @@ class NightingaleZoomable extends NightingaleElement {
     const k = Math.max(
       1,
       // +1 because the displayend base should be included
-      this.length / (1 + this._displayend - this._displaystart)
+      this._length / (1 + this._displayend - this._displaystart)
     );
     // The deltaX gets calculated using the position of the first base to display in original scale
     const dx = -this._originXScale(this._displaystart);
@@ -209,12 +187,6 @@ class NightingaleZoomable extends NightingaleElement {
     this.applyZoomTranslation();
   }
 
-  _resetEventHandler(e) {
-    if (!e.target.closest(".feature")) {
-      this.dispatchEvent(this.createEvent("reset", null, true));
-    }
-  }
-
   getXFromSeqPosition(position) {
     return this.margin.left + this.xScale(position);
   }
@@ -222,109 +194,19 @@ class NightingaleZoomable extends NightingaleElement {
   getSingleBaseWidth() {
     return this.xScale(2) - this.xScale(1);
   }
-
-  static _getClickCoords() {
-    if (!d3Event) {
-      return null;
-    }
-    // const boundingRect = this.querySelector("svg").getBoundingClientRect();
-    // Note: it would be nice to also return the position of the bottom left of the feature
-    return [d3Event.pageX, d3Event.pageY];
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  createEvent(
-    type,
-    feature = null,
-    withHighlight = false,
-    withId = false,
-    start,
-    end,
-    target
-  ) {
-    // Variation features have a different shape
-    if (feature) {
-      // eslint-disable-next-line no-param-reassign
-      feature = feature.feature ? feature.feature : feature;
-    }
-    const detail = {
-      eventtype: type,
-      coords: NightingaleZoomable._getClickCoords(),
-      feature,
-      target,
-    };
-    if (withHighlight) {
-      if (feature && feature.fragments) {
-        detail.highlight = feature.fragments
-          .map((fr) => `${fr.start}:${fr.end}`)
-          .join(",");
-      } else if (d3Event && d3Event.shiftKey && this._highlight) {
-        // If holding shift, add to the highlights
-        detail.highlight = `${this._highlight},${start}:${end}`;
-      } else {
-        detail.highlight = start && end ? `${start}:${end}` : null;
-      }
-    }
-    if (withId) {
-      detail.selectedid = feature && feature.protvistaFeatureId;
-    }
-    return new CustomEvent("change", {
-      detail,
-      bubbles: true,
-      cancelable: true,
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  bindEvents(feature, element) {
-    feature
-      .on("mouseover", (f, i, group) => {
-        element.dispatchEvent(
-          element.createEvent(
-            "mouseover",
-            f,
-            element._highlightEvent === "onmouseover",
-            false,
-            f.start,
-            f.end,
-            group[i]
-          )
-        );
-      })
-      .on("mouseout", () => {
-        element.dispatchEvent(
-          element.createEvent(
-            "mouseout",
-            null,
-            element._highlightEvent === "onmouseover"
-          )
-        );
-      })
-      .on("click", (f, i, group) => {
-        element.dispatchEvent(
-          element.createEvent(
-            "click",
-            f,
-            element._highlightEvent === "onclick",
-            true,
-            f.start,
-            f.end,
-            group[i]
-          )
-        );
-      });
-  }
 }
 
 export default withManager(
-  withHighlight(
-    withResizable(
-      withMargin(
-        withPosition(
-          withDimensions(NightingaleZoomable, {
-            width: 0,
-            height: 44,
-          })
+  withEventBinder(
+    withHighlight(
+      withResizable(
+        withMargin(
+          withPosition(
+            withDimensions(NightingaleZoomable, {
+              width: 0,
+              height: 44,
+            })
+          )
         )
       )
     )
