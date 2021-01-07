@@ -30,6 +30,8 @@ const withDimensions = (
 
     _height: number;
 
+    onWidthChange: () => any;
+
     constructor() {
       super();
       this._width = options.width;
@@ -47,8 +49,8 @@ const withDimensions = (
     set width(width) {
       if (this._width !== width) {
         this._width = width;
-        super.width = width;
-        this.render();
+        if (typeof this.onWidthChange === "function") this.onWidthChange();
+        else this.render();
       }
     }
 
