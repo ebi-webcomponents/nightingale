@@ -30,6 +30,10 @@ class NightingaleNavigation extends NightingaleElement {
     this._createNavRuler();
   }
 
+  // TODO: This is here to pass the tests, not sure why is needed.
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-empty-function
+  disconnectedCallback() {}
+
   static get observedAttributes() {
     return ["rulerstart"];
   }

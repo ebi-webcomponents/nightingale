@@ -25,6 +25,12 @@ class NightingaleBaseElement extends NightingaleElement {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-empty-function
+  disconnectedCallback(): void {}
+
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-empty-function
+  connectedCallback(): void {}
+
   constructor() {
     super();
     for (const dependency of this.dependencies) {
