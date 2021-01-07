@@ -18,13 +18,6 @@ class NightingaleSequence extends NightingaleZoomable {
     });
   }
 
-  static get observedAttributes() {
-    return NightingaleZoomable.observedAttributes.concat(
-      "highlightstart",
-      "highlightend"
-    );
-  }
-
   get data() {
     return this.sequence;
   }

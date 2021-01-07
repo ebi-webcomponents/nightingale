@@ -95,7 +95,7 @@ class NightingaleZoomable extends NightingaleElement {
   _updateScaleDomain() {
     this.xScale = scaleLinear()
       // The max width should match the start of the n+1 base
-      .domain([1, this._length + 1])
+      .domain([1, this.sequenceLength + 1])
       .range([0, this.getWidthWithMargins()]);
   }
 
@@ -119,11 +119,6 @@ class NightingaleZoomable extends NightingaleElement {
         return !this.hasAttribute("use-ctrl-to-zoom") || d3Event.ctrlKey;
       })
       .on("zoom", this.zoomed);
-  }
-
-  setFloatAttribute(name, strValue) {
-    const value = parseFloat(strValue);
-    this[`_${name}`] = Number.isNaN(value) ? strValue : value;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -151,7 +146,7 @@ class NightingaleZoomable extends NightingaleElement {
         detail: {
           displaystart: Math.max(1, start),
           displayend: Math.min(
-            this._length,
+            this.sequenceLength,
             Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
           ),
         },
@@ -167,7 +162,7 @@ class NightingaleZoomable extends NightingaleElement {
     const k = Math.max(
       1,
       // +1 because the displayend base should be included
-      this._length / (1 + this._displayend - this._displaystart)
+      this.sequenceLength / (1 + this.displayend - this.displaystart)
     );
     // The deltaX gets calculated using the position of the first base to display in original scale
     const dx = -this._originXScale(this._displaystart);

@@ -6,11 +6,11 @@ const withPosition = (
   options: {
     displaystart: number;
     displayend: number;
-    length: number;
+    sequenceLength: number;
   } = {
     displaystart: 1,
     displayend: 1,
-    length: 0,
+    sequenceLength: 0,
   }
 ): any => {
   class ElementWithPosition extends Element {
@@ -24,7 +24,7 @@ const withPosition = (
       super();
       this._displaystart = options.displaystart;
       this._displayend = options.displayend;
-      this._length = options.length;
+      this._length = options.sequenceLength;
     }
 
     get implements(): Array<keyof typeof Registry> {
@@ -32,7 +32,7 @@ const withPosition = (
     }
 
     get displaystart() {
-      return this._displaystart;
+      return this._displaystart || 1;
     }
 
     set displaystart(displaystart) {
@@ -43,7 +43,7 @@ const withPosition = (
     }
 
     get displayend() {
-      return this._displayend;
+      return this._displayend || this.sequenceLength;
     }
 
     set displayend(displayend) {
@@ -53,11 +53,11 @@ const withPosition = (
       }
     }
 
-    get length() {
+    get sequenceLength() {
       return this._length;
     }
 
-    set length(length) {
+    set sequenceLength(length) {
       if (this._length !== length) {
         this._length = length;
         this.render();
@@ -74,7 +74,7 @@ const withPosition = (
         : 1;
       this._displayend = this.getAttribute("displayend")
         ? parseFloat(this.getAttribute("displayend"))
-        : this.length;
+        : this.sequenceLength;
       super.connectedCallback();
     }
 
@@ -97,9 +97,9 @@ const withPosition = (
         if (name === "displaystart") {
           this.displaystart = Number.isNaN(value) ? 1 : value;
         } else if (name === "displayend") {
-          this.displayend = Number.isNaN(value) ? this.length : value;
+          this.displayend = Number.isNaN(value) ? this.sequenceLength : value;
         } else if (name === "length") {
-          this.length = Number.isNaN(value) ? 0 : value;
+          this.sequenceLength = Number.isNaN(value) ? 0 : value;
         }
       }
       super.attributeChangedCallback(name, oldValue, newValue);

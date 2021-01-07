@@ -1,4 +1,4 @@
-import { TrackHighlighter, ScrollFilter } from "@nightingale-elements/utils";
+import { TrackHighlighter } from "@nightingale-elements/utils";
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
@@ -33,7 +33,12 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
       return Element.observedAttributes.concat(["highlight"]);
     }
 
-    set length(length) {
+    get sequenceLength() {
+      return this._length;
+    }
+
+    set sequenceLength(length) {
+      this._length = length;
       super._length = length;
       this.trackHighlighter.max = length;
     }
