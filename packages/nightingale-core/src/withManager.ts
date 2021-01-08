@@ -10,16 +10,18 @@ const withManager = (Element: typeof NightingaleBaseElement): any => {
     }
 
     connectedCallback() {
-      if (this.closest("nightingale-manager")) {
-        this.#manager = this.closest("nightingale-manager");
-        this.#manager.register(this);
+      if (((this as unknown) as HTMLElement).closest("nightingale-manager")) {
+        this.#manager = ((this as unknown) as HTMLElement).closest(
+          "nightingale-manager"
+        );
+        (this.#manager as any).register(this);
       }
       super.connectedCallback();
     }
 
     disconnectedCallback() {
       if (this.#manager) {
-        this.#manager.unregister(this);
+        (this.#manager as any).unregister(this);
       }
       super.disconnectedCallback();
     }

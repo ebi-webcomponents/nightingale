@@ -1,7 +1,12 @@
 import { NightingaleElement } from "@nightingale-elements/types";
 import Registry from "./registryWith";
+import { WithDimensionsI } from "./withDimensions";
+import { WithHighlightI } from "./withHighlight";
+import { withPositionI } from "./withPosition";
 
-class NightingaleBaseElement extends NightingaleElement {
+class NightingaleBaseElement
+  extends NightingaleElement
+  implements WithDimensionsI, withPositionI, WithHighlightI {
   // eslint-disable-next-line class-methods-use-this
   get implements(): Array<keyof typeof Registry> {
     return [];

@@ -1,6 +1,12 @@
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
+export interface withPositionI extends NightingaleBaseElement {
+  displaystart?: number;
+  displayend?: number;
+  length?: number;
+}
+
 const withPosition = (
   Element: typeof NightingaleBaseElement,
   options: {

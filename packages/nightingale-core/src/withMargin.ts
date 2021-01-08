@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 // import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
-import { ElementWithDimensions } from "./withDimensions";
+import NightingaleBaseElement from "./nightingale-base-element";
 
 const sides = ["left", "right", "top", "bottom"];
 const marginSides = sides.map((side) => `margin${side}`);
@@ -18,7 +18,7 @@ type MarginType = {
 };
 
 const withMargin = (
-  Element: typeof ElementWithDimensions,
+  Element: typeof NightingaleBaseElement,
   options: {
     initialValue: MarginType;
   } = {
@@ -51,7 +51,9 @@ const withMargin = (
     }
 
     getWidthWithMargins() {
-      return this.width ? this.width - this.margin.left - this.margin.right : 0;
+      return (this as any).width
+        ? (this as any).width - this.margin.left - this.margin.right
+        : 0;
     }
 
     attributeChangedCallback(
@@ -61,7 +63,7 @@ const withMargin = (
     ): void {
       if (oldValue !== newValue) {
         if (marginSides.includes(name)) {
-          this[name] = newValue;
+          (this as any)[name] = newValue;
         }
       }
       super.attributeChangedCallback(name, oldValue, newValue);

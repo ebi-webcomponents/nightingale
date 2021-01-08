@@ -1,7 +1,6 @@
 import { event as d3Event } from "d3";
-
+import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
-import { ElementWithDimensions } from "./withDimensions";
 
 type EventType = "click" | "mouseover" | "mouseout" | "reset";
 interface FeatureI {
@@ -12,6 +11,7 @@ interface FeatureI {
   }>;
   start?: number;
   end?: number;
+  protvistaFeatureId: string;
 }
 interface detailI {
   eventtype: EventType;
@@ -22,7 +22,7 @@ interface detailI {
   selectedid?: string;
 }
 const withEventBinder = (
-  Element: typeof ElementWithDimensions
+  Element: typeof NightingaleBaseElement
   // options: {} = {
   // }
 ): any => {
@@ -81,9 +81,9 @@ const withEventBinder = (
           detail.highlight = feature.fragments
             .map((fr) => `${fr.start}:${fr.end}`)
             .join(",");
-        } else if (d3Event && d3Event.shiftKey && this.highlight) {
+        } else if (d3Event && d3Event.shiftKey && (this as any).highlight) {
           // If holding shift, add to the highlights
-          detail.highlight = `${this.highlight},${start}:${end}`;
+          detail.highlight = `${(this as any).highlight},${start}:${end}`;
         } else {
           detail.highlight = start && end ? `${start}:${end}` : null;
         }
@@ -108,7 +108,7 @@ const withEventBinder = (
               ElementWithEvents.createEvent(
                 "mouseover",
                 f,
-                element.highlightEvent === "onmouseover",
+                (element as any).highlightEvent === "onmouseover",
                 false,
                 f.start,
                 f.end,
@@ -122,7 +122,7 @@ const withEventBinder = (
             ElementWithEvents.createEvent(
               "mouseout",
               null,
-              element.highlightEvent === "onmouseover"
+              (element as any).highlightEvent === "onmouseover"
             )
           );
         })
@@ -131,7 +131,7 @@ const withEventBinder = (
             ElementWithEvents.createEvent(
               "click",
               f,
-              element.highlightEvent === "onclick",
+              (element as any).highlightEvent === "onclick",
               true,
               f.start,
               f.end,

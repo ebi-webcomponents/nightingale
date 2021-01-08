@@ -3,16 +3,9 @@ import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
 export interface WithDimensionsI extends NightingaleBaseElement {
-  width: number;
+  width?: number;
 
-  height: number;
-}
-export declare class ElementWithDimensions
-  extends NightingaleBaseElement
-  implements WithDimensionsI {
-  width: number;
-
-  height: number;
+  height?: number;
 }
 
 const withDimensions = (

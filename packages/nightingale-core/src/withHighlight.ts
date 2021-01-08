@@ -2,6 +2,10 @@ import { TrackHighlighter } from "@nightingale-elements/utils";
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
+export interface WithHighlightI extends NightingaleBaseElement {
+  highlight?: string;
+}
+
 const withHighlight = (Element: typeof NightingaleBaseElement): any => {
   class ElementWithManager extends Element {
     trackHighlighter: TrackHighlighter;
@@ -25,7 +29,7 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
       super.connectedCallback();
     }
 
-    set fixedHighlight(region) {
+    set fixedHighlight(region: string) {
       this.trackHighlighter.setFixedHighlight(region);
     }
 
@@ -34,16 +38,20 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
     }
 
     get sequenceLength() {
-      return this._length;
+      return (this as any)._length;
     }
 
-    set sequenceLength(length) {
-      this._length = length;
-      super._length = length;
+    set sequenceLength(length: number) {
+      (this as any)._length = length;
+      (this as any)._length = length;
       this.trackHighlighter.max = length;
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(
+      name: string,
+      oldValue: string,
+      newValue: string
+    ): void {
       super.attributeChangedCallback(name, oldValue, newValue);
       if (
         name === "highlight" &&

@@ -3,10 +3,10 @@
 import ResizeObserver from "resize-observer-polyfill";
 
 import Registry from "./registryWith";
-import { ElementWithDimensions } from "./withDimensions";
+import NightingaleBaseElement from "./nightingale-base-element";
 
 const withResizable = (
-  Element: typeof ElementWithDimensions
+  Element: typeof NightingaleBaseElement
   // options: {} = {
   // }
 ): any => {
@@ -42,7 +42,7 @@ const withResizable = (
     }
 
     private onResize() {
-      this.width = this.offsetWidth;
+      (this as any).width = this.offsetWidth;
     }
 
     private listenForResize() {
