@@ -102,7 +102,17 @@ class ProtvistaManagerWrapper extends Component {
           displayend="100"
           id="example"
         >
-          <protvista-zoom-tool length="770" style={{ float: "right" }} />
+          <protvista-zoom-tool
+            length="770"
+            style={{
+              float: "right",
+              "--button-background": "#00639a",
+              "--button-text-color": "#FFFFFF",
+              "--button-background-focus": "#00a6d5",
+            }}
+          >
+            <span slot="zoom-in">+</span>
+          </protvista-zoom-tool>
           <protvista-navigation length="770" />
           <div id="just-tracks">
             <protvista-sequence
