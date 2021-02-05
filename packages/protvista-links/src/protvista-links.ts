@@ -2,9 +2,10 @@ import { scaleLinear } from "d3";
 
 import ProtvistaTrack from "protvista-track";
 import {
-  parseLinks,
+  parseToRowData,
   contactObjectToLinkList,
   getContactsObject,
+  filterOverThreshold,
 } from "./links-parser";
 
 const OPACITY_MOUSEOUT = 0.4;
@@ -36,13 +37,29 @@ class ProtvistaLinks extends ProtvistaTrack {
     this._rawData = null;
   }
 
-  set data(data: LinksData) {
-    this._rawData = data;
-    if (typeof data === "string") {
-      this._data = parseLinks(data, this._threshold);
-    } else if (Array.isArray(data)) {
-      this._data = getContactsObject(data);
+  static get observedAttributes() {
+    return ProtvistaTrack.observedAttributes.concat("threshold");
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "threshold" && oldValue !== newValue) {
+      this.threshold = newValue;
+    } else {
+      super.attributeChangedCallback(name, oldValue, newValue);
     }
+  }
+
+  set data(data: LinksData) {
+    if (typeof data === "string") {
+      this._rawData = parseToRowData(data);
+    } else if (Array.isArray(data)) {
+      this._rawData = data;
+    } else {
+      throw new Error("data is not in a valid format");
+    }
+    this._data = getContactsObject(
+      filterOverThreshold(this._rawData, this._threshold)
+    );
     this._createTrack();
   }
 
@@ -52,7 +69,10 @@ class ProtvistaLinks extends ProtvistaTrack {
 
   set threshold(value: number) {
     this._threshold = +value;
-    this._data = parseLinks(this._rawData, this._threshold);
+    this._data = getContactsObject(
+      filterOverThreshold(this._rawData, this._threshold)
+    );
+    this._createTrack();
   }
 
   _getColor(d: number): string {

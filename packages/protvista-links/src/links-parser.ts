@@ -1,12 +1,27 @@
-const parseToRowData = (text: string, threshold: number): ArrayOfNumberArray =>
+export const parseToRowData = (text: string): ArrayOfNumberArray =>
   text
     .split("\n")
     .slice(1)
     .map((line) => {
-      const [n1, n2, _, __, p] = line.split(" ");
-      return [+n1, +n2, +p];
+      if (line.trim() === "") return null;
+      const values = line.trim().split(" ");
+      if (values.length === 5) {
+        const [n1, n2, _, __, p] = values;
+        return [+n1, +n2, +p];
+      }
+      if (values.length === 3) {
+        const [n1, n2, p] = values;
+        return [+n1, +n2, +p];
+      }
+
+      throw new Error("The file is not valid");
     })
-    .filter(([_, __, p]) => p > threshold);
+    .filter(Boolean);
+
+export const filterOverThreshold = (
+  data: ArrayOfNumberArray,
+  threshold: number
+): ArrayOfNumberArray => data.filter(([_, __, p]) => p > threshold);
 
 export const parseLinksAssociative = (
   text: string,
@@ -40,8 +55,8 @@ export const parseLinksAssociative = (
   };
 };
 export const parseLinks = (text: string, threshold: number): ContactObject => {
-  const rawData = parseToRowData(text, threshold);
-  return getContactsObject(rawData);
+  const rawData = parseToRowData(text);
+  return getContactsObject(filterOverThreshold(rawData, threshold));
 };
 
 export const getContactsObject = (
