@@ -1,7 +1,11 @@
 import { scaleLinear } from "d3";
 
 import ProtvistaTrack from "protvista-track";
-import { parseLinks, contactObjectToLinkList } from "./links-parser";
+import {
+  parseLinks,
+  contactObjectToLinkList,
+  getContactsObject,
+} from "./links-parser";
 
 const OPACITY_MOUSEOUT = 0.4;
 
@@ -37,7 +41,7 @@ class ProtvistaLinks extends ProtvistaTrack {
     if (typeof data === "string") {
       this._data = parseLinks(data, this._threshold);
     } else if (Array.isArray(data)) {
-      this._data = data;
+      this._data = getContactsObject(data);
     }
     this._createTrack();
   }

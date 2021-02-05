@@ -41,17 +41,23 @@ export const parseLinksAssociative = (
 };
 export const parseLinks = (text: string, threshold: number): ContactObject => {
   const rawData = parseToRowData(text, threshold);
-  const contacts: Contacts = {};
-  rawData.forEach(([n1, n2]) => {
-    if (!contacts[n1]) contacts[n1] = new Set<number>();
-    if (!contacts[n2]) contacts[n2] = new Set<number>();
-    contacts[n1].add(n2);
-    contacts[n2].add(n1);
+  return getContactsObject(rawData);
+};
+
+export const getContactsObject = (
+  contacts: ArrayOfNumberArray
+): ContactObject => {
+  const contactsObj: Contacts = {};
+  contacts.forEach(([n1, n2]) => {
+    if (!contactsObj[n1]) contactsObj[n1] = new Set<number>();
+    if (!contactsObj[n2]) contactsObj[n2] = new Set<number>();
+    contactsObj[n1].add(n2);
+    contactsObj[n2].add(n1);
   });
   return {
-    contacts,
+    contacts: contactsObj,
     maxNumberOfContacts: Math.max(
-      ...Object.values(contacts).map((s) => s.size)
+      ...Object.values(contactsObj).map((s) => s.size)
     ),
   };
 };
