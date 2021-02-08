@@ -15,7 +15,8 @@ class ProtvistaZoomTool extends HTMLElement {
     this._displaystart = parseFloat(this.getAttribute("displaystart")) || 1;
     this._displayend =
       parseFloat(this.getAttribute("displayend")) || this._length;
-    this._scaleFactor = parseFloat(this.getAttribute("scalefactor")) || 10;
+    this._scaleFactor =
+      parseFloat(this.getAttribute("scalefactor")) || this._length / 5;
 
     this.renderContent();
   }
@@ -31,15 +32,24 @@ class ProtvistaZoomTool extends HTMLElement {
   }
 
   zoom(operation) {
-    let k;
-    if (operation === "zoom-in") k = this._scaleFactor;
-    else k = -this._scaleFactor;
-    const newStart =
-      this._displaystart === 1
-        ? this._displaystart - 1 + k
-        : this._displaystart + k;
+    let k = 0;
+    if (operation === "zoom-in") {
+      k = this._scaleFactor;
+    } else if (operation === "zoom-out") {
+      k = -this._scaleFactor;
+    } else if (operation === "zoom-in-seq") {
+      k =
+        this._displayend -
+        this._displaystart -
+        (this._displaystart === 1 ? 29 : 30);
+    }
     const newEnd = this._displayend - k;
-    if (newStart < newEnd) {
+    let newStart = this._displaystart;
+    // if we've reached the end when zooming out, remove from start
+    if (newEnd > this._length) {
+      newStart -= newEnd - this._length;
+    }
+    if (this._displaystart < newEnd) {
       this.dispatchEvent(
         new CustomEvent("change", {
           detail: {
@@ -64,8 +74,9 @@ class ProtvistaZoomTool extends HTMLElement {
           text-decoration: none;
           background: var(--button-background, #d3d3d3);
           color: var(--button-text-color);
-          font-family: var(--font-family, sans-serif);
-          font-size: var(--font-size, 1rem);
+          font-family: var(--button-font-family, sans-serif);
+          font-size: var(--button-font-size, 1rem);
+          border-radius: var(--button-border-radius, 0);
           cursor: pointer;
           text-align: center;
           transition: var(
@@ -87,6 +98,9 @@ class ProtvistaZoomTool extends HTMLElement {
       </button>
       <button @click=${() => this.zoom("zoom-in")} title="Zoom In">
         <slot name="zoom-in">Zoom in</slot>
+      </button>
+      <button @click=${() => this.zoom("zoom-in-seq")} title="Zoom to sequence">
+        <slot name="zoom-in-seq">Zoom in to sequence</slot>
       </button>
     `;
     render(content, this.shadowRoot);

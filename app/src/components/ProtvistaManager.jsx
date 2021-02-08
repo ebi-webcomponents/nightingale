@@ -109,6 +109,7 @@ class ProtvistaManagerWrapper extends Component {
               "--button-background": "#00639a",
               "--button-text-color": "#FFFFFF",
               "--button-background-focus": "#00a6d5",
+              "--button-border-radius": "4px",
             }}
           >
             <span slot="zoom-in">+</span>
