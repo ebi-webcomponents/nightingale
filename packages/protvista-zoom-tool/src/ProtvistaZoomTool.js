@@ -17,7 +17,7 @@ class ProtvistaZoomTool extends HTMLElement {
       parseFloat(this.getAttribute("displayend")) || this._length;
     this._scaleFactor =
       parseFloat(this.getAttribute("scalefactor")) || this._length / 5;
-
+    this._zoomToSeq = this.querySelector('[slot="zoom-in-seq"]') !== null;
     this.renderContent();
   }
 
@@ -99,9 +99,14 @@ class ProtvistaZoomTool extends HTMLElement {
       <button @click=${() => this.zoom("zoom-in")} title="Zoom In">
         <slot name="zoom-in">Zoom in</slot>
       </button>
-      <button @click=${() => this.zoom("zoom-in-seq")} title="Zoom to sequence">
-        <slot name="zoom-in-seq">Zoom in to sequence</slot>
-      </button>
+      ${this._zoomToSeq
+        ? html`<button
+            @click=${() => this.zoom("zoom-in-seq")}
+            title="Zoom to sequence"
+          >
+            <slot name="zoom-in-seq"></slot>
+          </button>`
+        : ""}
     `;
     render(content, this.shadowRoot);
   }

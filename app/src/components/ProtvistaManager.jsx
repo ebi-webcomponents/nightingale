@@ -113,6 +113,7 @@ class ProtvistaManagerWrapper extends Component {
             }}
           >
             <span slot="zoom-in">+</span>
+            <span slot="zoom-in-seq">Zoom to Sequence</span>
           </protvista-zoom-tool>
           <protvista-navigation length="770" />
           <div id="just-tracks">
