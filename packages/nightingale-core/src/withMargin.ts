@@ -25,8 +25,8 @@ const withMargin = (
     initialValue: {
       top: 0,
       bottom: 0,
-      left: 0,
-      right: 0,
+      left: 10, // this gives space to draw y-axis if needed
+      right: 10,
     },
   }
 ): any => {
