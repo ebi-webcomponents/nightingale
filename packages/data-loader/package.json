@@ -7,7 +7,7 @@
     "src"
   ],
   "main": "dist/data-loader.js",
-  "module": "dist/es/data-loader.js",
+  "module": "dist/es/index.js",
   "types": "dist/es/data-loader.d.ts",
   "repository": {
     "type": "git",
