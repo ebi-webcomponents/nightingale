@@ -84,9 +84,9 @@ const drawAdjacencyGraph = (el, accession, data) => {
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-    .attr("class", "interaction-viewer")
+    .attr("class", "nightingale-interaction-viewer")
     .append("g")
-    .attr("class", "interaction-viewer-group")
+    .attr("class", "nightingale-interaction-viewer-group")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
   x.domain(nodes.map((entry) => entry.accession));
@@ -144,7 +144,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
 
     const table = element
       .append("table")
-      .attr("class", "interaction-viewer-table");
+      .attr("class", "nightingale-interaction-viewer-table");
     const headerRow = table.append("tr");
     headerRow.append("th");
     headerRow.append("th").text("Interactor 1");
@@ -154,7 +154,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     nameRow
       .append("td")
       .text("Name")
-      .attr("class", "interaction-viewer-table_row-header");
+      .attr("class", "nightingale-interaction-viewer-table_row-header");
     nameRow.append("td").text(`${source.name}`);
     nameRow.append("td").text(`${target.name}`);
 
@@ -162,7 +162,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     uniprotRow
       .append("td")
       .text("UniProtKB")
-      .attr("class", "interaction-viewer-table_row-header");
+      .attr("class", "nightingale-interaction-viewer-table_row-header");
     uniprotRow
       .append("td")
       .append("a")
@@ -179,7 +179,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
       chainRow
         .append("td")
         .text("Chain")
-        .attr("class", "interaction-viewer-table_row-header");
+        .attr("class", "nightingale-interaction-viewer-table_row-header");
       chainRow.append("td").text(`${data.chain1 ? data.chain1 : "N/A"}`);
       chainRow.append("td").text(`${data.chain2 ? data.chain2 : "N/A"}`);
     }
@@ -188,7 +188,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     diseaseRow
       .append("td")
       .text("Pathology")
-      .attr("class", "interaction-viewer-table_row-header");
+      .attr("class", "nightingale-interaction-viewer-table_row-header");
     diseaseRow
       .append("td")
       .html(formatDiseaseInfo(source.diseases, source.accession));
@@ -200,7 +200,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     subcellRow
       .append("td")
       .text("Subcellular location")
-      .attr("class", "interaction-viewer-table_row-header");
+      .attr("class", "nightingale-interaction-viewer-table_row-header");
     subcellRow
       .append("td")
       .html(formatSubcellularLocationInfo(source.subcellularLocations));
@@ -212,7 +212,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     intactRow
       .append("td")
       .text("IntAct")
-      .attr("class", "interaction-viewer-table_row-header");
+      .attr("class", "nightingale-interaction-viewer-table_row-header");
     intactRow
       .append("td")
       .attr("colspan", 2)
