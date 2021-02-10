@@ -2,6 +2,8 @@ import { TrackHighlighter } from "@nightingale-elements/utils";
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
 
+export const HIGHLIGHT_EVENT = "highlight-event";
+
 export interface WithHighlightI extends NightingaleBaseElement {
   highlight?: string;
 }
@@ -22,8 +24,8 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
     }
 
     connectedCallback() {
-      this._highlightEvent = this.getAttribute("highlight-event")
-        ? this.getAttribute("highlight-event")
+      this._highlightEvent = this.getAttribute(HIGHLIGHT_EVENT)
+        ? this.getAttribute(HIGHLIGHT_EVENT)
         : "onclick";
       this.trackHighlighter.setAttributesInElement(this);
       super.connectedCallback();

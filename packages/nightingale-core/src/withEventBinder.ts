@@ -1,6 +1,7 @@
 import { event as d3Event } from "d3";
 import NightingaleBaseElement from "./nightingale-base-element";
 import Registry from "./registryWith";
+import { HIGHLIGHT_EVENT } from "./withHighlight";
 
 type EventType = "click" | "mouseover" | "mouseout" | "reset";
 interface FeatureI {
@@ -108,7 +109,7 @@ const withEventBinder = (
               ElementWithEvents.createEvent(
                 "mouseover",
                 f,
-                (element as any).highlightEvent === "onmouseover",
+                element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
                 false,
                 f.start,
                 f.end,
@@ -122,7 +123,7 @@ const withEventBinder = (
             ElementWithEvents.createEvent(
               "mouseout",
               null,
-              (element as any).highlightEvent === "onmouseover"
+              element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover"
             )
           );
         })
@@ -131,7 +132,7 @@ const withEventBinder = (
             ElementWithEvents.createEvent(
               "click",
               f,
-              (element as any).highlightEvent === "onclick",
+              element.getAttribute(HIGHLIGHT_EVENT) === "onclick",
               true,
               f.start,
               f.end,
