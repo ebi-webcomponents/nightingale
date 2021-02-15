@@ -1,18 +1,42 @@
-const parseToRowData = (text: string, threshold: number): ArrayOfNumberArray =>
+import {
+  ArrayOfNumberArray,
+  LinksObject,
+  NumberArray,
+  ContactObject,
+  Contacts,
+  ContactLink,
+} from "./declarations";
+
+export const parseToRowData = (text: string): ArrayOfNumberArray =>
   text
     .split("\n")
     .slice(1)
     .map((line) => {
-      const [n1, n2, _, __, p] = line.split(" ");
-      return [+n1, +n2, +p];
+      if (line.trim() === "") return null;
+      const values = line.trim().split(" ");
+      if (values.length === 5) {
+        const [n1, n2, _, __, p] = values;
+        return [+n1, +n2, +p];
+      }
+      if (values.length === 3) {
+        const [n1, n2, p] = values;
+        return [+n1, +n2, +p];
+      }
+
+      throw new Error("The file is not valid");
     })
-    .filter(([_, __, p]) => p > threshold);
+    .filter(Boolean);
+
+export const filterOverThreshold = (
+  data: ArrayOfNumberArray,
+  threshold: number
+): ArrayOfNumberArray => data.filter(([_, __, p]) => p > threshold);
 
 export const parseLinksAssociative = (
   text: string,
   threshold: number
 ): LinksObject => {
-  const rawData = parseToRowData(text, threshold);
+  const rawData = filterOverThreshold(parseToRowData(text), threshold);
   const n2set: NumberArray = {};
   const sets: ArrayOfNumberArray = [];
   rawData.forEach(([n1, n2]) => {
@@ -40,24 +64,30 @@ export const parseLinksAssociative = (
   };
 };
 export const parseLinks = (text: string, threshold: number): ContactObject => {
-  const rawData = parseToRowData(text, threshold);
-  const contacts: Contacts = {};
-  rawData.forEach(([n1, n2]) => {
-    if (!contacts[n1]) contacts[n1] = new Set<number>();
-    if (!contacts[n2]) contacts[n2] = new Set<number>();
-    contacts[n1].add(n2);
-    contacts[n2].add(n1);
+  const rawData = parseToRowData(text);
+  return getContactsObject(filterOverThreshold(rawData, threshold));
+};
+
+export const getContactsObject = (
+  contacts: ArrayOfNumberArray
+): ContactObject => {
+  const contactsObj: Contacts = {};
+  contacts.forEach(([n1, n2]) => {
+    if (!contactsObj[n1]) contactsObj[n1] = new Set<number>();
+    if (!contactsObj[n2]) contactsObj[n2] = new Set<number>();
+    contactsObj[n1].add(n2);
+    contactsObj[n2].add(n1);
   });
   return {
-    contacts,
+    contacts: contactsObj,
     maxNumberOfContacts: Math.max(
-      ...Object.values(contacts).map((s) => s.size)
+      ...Object.values(contactsObj).map((s) => s.size)
     ),
   };
 };
 
 export const contactObjectToLinkList = (
-  contacts: ContactObject
+  contacts: Contacts
 ): Array<ContactLink> => {
   const linkList: Array<ContactLink> = [];
   const keys: Set<string> = new Set();
