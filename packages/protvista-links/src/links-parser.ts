@@ -27,7 +27,7 @@ export const parseLinksAssociative = (
   text: string,
   threshold: number
 ): LinksObject => {
-  const rawData = parseToRowData(text, threshold);
+  const rawData = filterOverThreshold(parseToRowData(text), threshold);
   const n2set: NumberArray = {};
   const sets: ArrayOfNumberArray = [];
   rawData.forEach(([n1, n2]) => {
@@ -78,7 +78,7 @@ export const getContactsObject = (
 };
 
 export const contactObjectToLinkList = (
-  contacts: ContactObject
+  contacts: Contacts
 ): Array<ContactLink> => {
   const linkList: Array<ContactLink> = [];
   const keys: Set<string> = new Set();
