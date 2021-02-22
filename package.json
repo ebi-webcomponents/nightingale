@@ -15,6 +15,7 @@
     "start": "lerna run start --stream",
     "build-site": "lerna run build-site --stream",
     "test": "jest",
+    "test:types": "tsc --project tsconfig.check.json",
     "prelerna-publish": "npm run build",
     "lerna-publish": "lerna publish"
   },

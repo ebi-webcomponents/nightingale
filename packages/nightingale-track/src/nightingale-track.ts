@@ -10,6 +10,39 @@ import NonOverlappingLayout from "./NonOverlappingLayout";
 import DefaultLayout from "./DefaultLayout";
 import { getShapeByType, getColorByType } from "./ConfigHelper";
 
+export type Shape =
+  | "rectangle"
+  | "bridge"
+  | "diamond"
+  | "chevron"
+  | "catFace"
+  | "triangle"
+  | "wave"
+  | "hexagon"
+  | "pentagon"
+  | "circle"
+  | "arrow"
+  | "doubleBar";
+
+export type NightingaleTrackDatum = {
+  accession: string;
+  start: number;
+  end: number;
+  color?: string;
+  shape?: Shape;
+  tooltipContent?: string;
+  locations?: [
+    {
+      fragments: [
+        {
+          start: number;
+          end: number;
+        }
+      ];
+    }
+  ];
+};
+
 class NightingaleTrack extends NightingaleZoomable {
   static is = "nightingale-track";
 
@@ -23,7 +56,7 @@ class NightingaleTrack extends NightingaleZoomable {
     });
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     super.connectedCallback();
     this._color = this.getAttribute("color");
     this._shape = this.getAttribute("shape");

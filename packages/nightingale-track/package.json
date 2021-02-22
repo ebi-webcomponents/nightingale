@@ -7,8 +7,8 @@
     "src"
   ],
   "main": "dist/nightingale-track.js",
-  "module": "src/index.js",
-  "types": "types/nightingale-track.d.ts",
+  "module": "dist/es/index.js",
+  "types": "dist/es/index.d.ts",
   "keywords": [
     "nightingale",
     "webcomponents",

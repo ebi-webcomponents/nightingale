@@ -9,6 +9,11 @@ export type TrackData = object;
 export class NightingaleElement extends HTMLElement {
   static readonly is: string;
 
+  // eslint-disable-next-line no-useless-constructor
+  constructor() {
+    super();
+  }
+
   // eslint-disable-next-line class-methods-use-this
   render(): void {
     /**/

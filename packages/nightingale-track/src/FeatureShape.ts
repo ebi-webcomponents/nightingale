@@ -1,25 +1,43 @@
 /* eslint-disable prefer-template, no-param-reassign  */
+
+import { Shape } from "./nightingale-track";
+
 /* jslint node: true */
 const symbolSize = 10;
 
-export default class FeatureShape {
-  getFeatureShape(aaWidth, ftHeight, ftLength, shape) {
-    shape = shape || "rectangle";
+type ShapeBuilder = {
+  [name in `_${Shape}`]: () => string;
+};
+
+export default class FeatureShape implements ShapeBuilder {
+  _ftLength: number;
+
+  _ftHeight: number;
+
+  _ftWidth: number;
+
+  getFeatureShape(
+    aaWidth: number,
+    ftHeight: number,
+    ftLength: number,
+    shape: Shape
+  ): string {
+    const _shape = shape || "rectangle";
     this._ftLength = ftLength;
     this._ftHeight = ftHeight;
     this._ftWidth = aaWidth * ftLength;
-    if (typeof this["_" + shape] !== "function") {
+    if (typeof this["_" + _shape] !== "function") {
       shape = "rectangle";
     }
     return this["_" + shape]();
   }
 
-  static isContinuous(shape) {
-    shape = shape.toLowerCase();
-    return shape !== "bridge";
+  static isContinuous(shape: Shape): boolean {
+    const _shape = shape.toLowerCase();
+    return _shape !== "bridge";
   }
 
-  _rectangle() {
+  _rectangle(): string {
     return (
       "M0,0" +
       "L" +
@@ -35,7 +53,7 @@ export default class FeatureShape {
     );
   }
 
-  _roundRectangle() {
+  _roundRectangle(): string {
     const radius = 6;
     return (
       "M" +
@@ -86,11 +104,11 @@ export default class FeatureShape {
     );
   }
 
-  _line() {
+  _line(): string {
     return `M0,${this._ftHeight / 2} L${this._ftWidth},${this._ftHeight / 2}`;
   }
 
-  _bridge() {
+  _bridge(): string {
     if (this._ftLength !== 1) {
       return (
         "M0," +
@@ -138,11 +156,11 @@ export default class FeatureShape {
     );
   }
 
-  _getMiddleLine(centerx) {
+  _getMiddleLine(centerx: number, _unusedFeatureWidth: number): string {
     return "M0," + centerx + "L" + this._ftWidth + "," + centerx + "Z";
   }
 
-  _diamond() {
+  _diamond(): string {
     const centerx = symbolSize / 2;
     const m = this._ftWidth / 2;
     const shape =
@@ -166,7 +184,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _chevron() {
+  _chevron(): string {
     const m = this._ftWidth / 2;
     const centerx = symbolSize / 2;
     const shape =
@@ -203,7 +221,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _catFace() {
+  _catFace(): string {
     const centerx = symbolSize / 2;
     const step = symbolSize / 10;
     const m = this._ftWidth / 2;
@@ -248,7 +266,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _triangle() {
+  _triangle(): string {
     const centerx = symbolSize / 2;
     const m = this._ftWidth / 2;
     const shape =
@@ -273,7 +291,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _wave() {
+  _wave(): string {
     const rx = symbolSize / 4;
     const ry = symbolSize / 2;
     const m = this._ftWidth / 2;
@@ -303,7 +321,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _getPolygon(sidesNumber) {
+  _getPolygon(sidesNumber: number): string {
     const r = symbolSize / 2;
     let polygon = "M ";
     const m = this._ftWidth / 2;
@@ -327,15 +345,15 @@ export default class FeatureShape {
       : polygon + "Z";
   }
 
-  _hexagon() {
+  _hexagon(): string {
     return this._getPolygon(6);
   }
 
-  _pentagon() {
+  _pentagon(): string {
     return this._getPolygon(5);
   }
 
-  _circle() {
+  _circle(): string {
     const m = this._ftWidth / 2;
     const r = Math.sqrt(symbolSize / Math.PI);
     const shape =
@@ -362,7 +380,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _arrow() {
+  _arrow(): string {
     const step = symbolSize / 10;
     const m = this._ftWidth / 2;
     const shape =
@@ -398,7 +416,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _doubleBar() {
+  _doubleBar(): string {
     const m = this._ftWidth / 2;
     const centerx = symbolSize / 2;
     const shape =
@@ -426,7 +444,7 @@ export default class FeatureShape {
       : shape + "Z";
   }
 
-  _getBrokenEnd() {
+  _getBrokenEnd(): string {
     const qh = this._ftHeight / 4.0;
     return (
       "L" +
@@ -448,12 +466,12 @@ export default class FeatureShape {
     );
   }
 
-  _getBrokenStart() {
+  _getBrokenStart(): string {
     const qh = this._ftHeight / 4.0;
     return "L" + qh + "," + 3 * qh + "L0," + 2 * qh + "L" + qh + "," + qh;
   }
 
-  _discontinuosStart() {
+  _discontinuosStart(): string {
     return (
       "M0,0" +
       "L" +
@@ -470,7 +488,7 @@ export default class FeatureShape {
     );
   }
 
-  _discontinuos() {
+  _discontinuous(): string {
     return (
       "M0,0" +
       "L" +
@@ -484,7 +502,7 @@ export default class FeatureShape {
     );
   }
 
-  _discontinuosEnd() {
+  _discontinuousEnd(): string {
     return (
       "M0,0" +
       "L" +
@@ -497,7 +515,7 @@ export default class FeatureShape {
     );
   }
 
-  _helix() {
+  _helix(): string {
     const x = symbolSize / 2; // Fitting two loops in a symbol
     const y = symbolSize / 4;
     let center = x / 2;
@@ -539,7 +557,7 @@ export default class FeatureShape {
     return loop;
   }
 
-  _strand() {
+  _strand(): string {
     let rl = 0;
     if (this._ftWidth > symbolSize / 2) {
       rl = this._ftWidth - symbolSize / 2;

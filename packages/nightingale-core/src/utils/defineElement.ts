@@ -1,6 +1,8 @@
 import { NightingaleElement } from "@nightingale-elements/types";
 
-const defineElement = (Element: typeof NightingaleElement): void => {
+const defineElement = <T extends typeof NightingaleElement>(
+  Element: T
+): void => {
   if ("customElements" in window) {
     const alreadyDefined = window.customElements.get(Element.is);
     if (!alreadyDefined) {

@@ -1,4 +1,5 @@
-import DefaultLayout from "./DefaultLayout";
+import DefaultLayout, { DefaultConstructorProps } from "./DefaultLayout";
+import { Feature } from "./types";
 
 const featuresOverlap = (feature1, feature2) =>
   !(
@@ -10,7 +11,13 @@ const featureOvelapsInRow = (feature, row) =>
   row.some((rowFeature) => featuresOverlap(feature, rowFeature));
 
 export default class NonOverlappingLayout extends DefaultLayout {
-  constructor(options) {
+  featuresMap: Map<Feature, number>;
+
+  _rowHeight: number;
+
+  _rows: Array<Array<Feature>>;
+
+  constructor(options: DefaultConstructorProps) {
     super(options);
     this.featuresMap = new Map();
     this._rowHeight = 0;
@@ -18,7 +25,7 @@ export default class NonOverlappingLayout extends DefaultLayout {
     this._minHeight = 15;
   }
 
-  init(features) {
+  init(features: Feature[]): void {
     features.forEach((feature) => {
       const rowIndex = this._rows.findIndex(
         (row) => !featureOvelapsInRow(feature, row)
@@ -37,7 +44,7 @@ export default class NonOverlappingLayout extends DefaultLayout {
     );
   }
 
-  getOffset() {
+  getOffset(): number {
     // this offset is required for centering if the number of rows doesn't
     // fill the layout
     if (this._rows.length * this._rowHeight < this._layoutHeight) {
@@ -46,12 +53,12 @@ export default class NonOverlappingLayout extends DefaultLayout {
     return 0;
   }
 
-  getFeatureYPos(feature) {
+  getFeatureYPos(feature: Feature): number {
     const rowNumber = this.featuresMap.get(feature);
     return this.getOffset() + this._rowHeight * rowNumber + 2 * this._padding;
   }
 
-  getFeatureHeight() {
+  getFeatureHeight(): number {
     return this._rowHeight - 2 * this._padding;
   }
 }

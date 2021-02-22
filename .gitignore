@@ -9,3 +9,4 @@ package-lock.json
 *.tgz
 .DS_Store
 .vscode
+lerna-debug.log

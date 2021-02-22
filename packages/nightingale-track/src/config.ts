@@ -1,5 +1,18 @@
-// eslint-disable-next-line
-export const config = {
+import { Shape } from "./nightingale-track";
+
+export type Color = string;
+
+export type ConfigItem = {
+  name: string;
+  label: string;
+  tooltip: string;
+  shape: Shape;
+  color: Color;
+};
+
+export type Config = Record<string, ConfigItem>;
+
+const config: Config = {
   CHAIN: {
     name: "chain",
     label: "Chain",
@@ -321,3 +334,5 @@ export const config = {
     color: "#669966",
   },
 };
+
+export default config;

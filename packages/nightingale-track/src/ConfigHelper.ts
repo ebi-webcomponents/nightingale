@@ -1,6 +1,8 @@
-import { config } from "./config";
+import config, { Color } from "./config";
 
-export const getShapeByType = (type) => {
+import { Shape } from "./nightingale-track";
+
+export const getShapeByType = (type: string): Shape => {
   if (config[type.toUpperCase()]) {
     return config[type.toUpperCase()].shape;
   }
@@ -13,7 +15,7 @@ export const getShapeByType = (type) => {
   return "rectangle";
 };
 
-export const getColorByType = (type) => {
+export const getColorByType = (type: string): Color => {
   if (config[type.toUpperCase()]) {
     return config[type.toUpperCase()].color;
   }

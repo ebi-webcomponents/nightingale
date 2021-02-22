@@ -8,8 +8,10 @@ export interface WithHighlightI extends NightingaleBaseElement {
   highlight?: string;
 }
 
-const withHighlight = (Element: typeof NightingaleBaseElement): any => {
-  class ElementWithManager extends Element {
+const withHighlight = <T extends typeof NightingaleBaseElement>(
+  Element: T
+): WithHighlightI => {
+  class ElementWithManager extends (Element as any) {
     trackHighlighter: TrackHighlighter;
 
     _highlightEvent: string;
@@ -66,4 +68,5 @@ const withHighlight = (Element: typeof NightingaleBaseElement): any => {
   }
   return ElementWithManager;
 };
+
 export default withHighlight;
