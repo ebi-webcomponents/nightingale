@@ -35,7 +35,7 @@
   "dependencies": {
     "@nightingale-elements/nightingale-feature-adapter": "^3.2.1",
     "@nightingale-elements/types": "^1.0.0",
-    "@nightingale-elements/nightingale-core": "^0.0.1",
+    "@nightingale-elements/nightingale-core": "^1.0.0",
     "uuid": "^8.3.2"
   }
 }

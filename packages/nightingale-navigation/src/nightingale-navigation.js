@@ -7,92 +7,50 @@ import {
   event as d3Event,
 } from "d3";
 
-import { withMargin } from "@nightingale-elements/utils";
+import NightingaleElement, {
+  withDimensions,
+  withPosition,
+  withMargin,
+  withResizable,
+  withManager,
+} from "@nightingale-elements/nightingale-core";
 
-class NightingaleNavigation extends HTMLElement {
+class NightingaleNavigation extends NightingaleElement {
   static is = "nightingale-navigation";
 
   constructor() {
     super();
     this._x = null;
-    this._padding = 0;
-    this.height = 40;
+    this._padding = 10;
     this.dontDispatch = false;
   }
 
-  _refreshWidth() {
-    this.style.display = "block";
-    this.style.width = "100%";
-    this.width = this.offsetWidth - this.margin.left - this.margin.right;
-    if (this.width > 0) {
-      this._padding = 10;
-    }
-  }
-
   connectedCallback() {
-    this._refreshWidth();
-    if (this.closest("nightingale-manager")) {
-      this.manager = this.closest("nightingale-manager");
-      this.manager.register(this);
-    }
-    this._length = parseFloat(this.getAttribute("length"));
-    this._displaystart = parseFloat(this.getAttribute("displaystart")) || 1;
-    this._displayend =
-      parseFloat(this.getAttribute("displayend")) || this._length;
-    this._highlightStart = parseFloat(this.getAttribute("highlightStart"));
-    this._highlightEnd = parseFloat(this.getAttribute("highlightEnd"));
     this._rulerstart = parseFloat(this.getAttribute("rulerStart")) || 1;
-
-    this._onResize = this._onResize.bind(this);
-
     this._createNavRuler();
   }
 
-  disconnectedCallback() {
-    if (this.manager) {
-      this.manager.unregister(this);
-    }
-    if (this._ro) {
-      this._ro.unobserve(this);
-    }
-    window.removeEventListener("resize", this._onResize);
-  }
+  // TODO: This is here to pass the tests, not sure why is needed.
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-empty-function
+  disconnectedCallback() {}
 
   static get observedAttributes() {
-    return [
-      "length",
-      "displaystart",
-      "displayend",
-      "highlightStart",
-      "highlightEnd",
-      "width",
-      "rulerstart",
-    ];
+    return ["rulerstart"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      this[`_${name}`] = parseFloat(newValue);
-      this._updateNavRuler();
+    if (oldValue !== newValue && name === "rulerstart") {
+      this._rulerstart = parseFloat(newValue);
+      this.render();
     }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  get margin() {
-    return { bottom: 0, left: 0, top: 0, right: 0 };
-  }
-
-  get width() {
-    return this._width;
-  }
-
-  set width(width) {
-    this._width = width;
   }
 
   _createNavRuler() {
     this._x = scaleLinear().range([this._padding, this.width - this._padding]);
-    this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
+    this._x.domain([
+      this._rulerstart,
+      this._rulerstart + this.sequenceLength - 1,
+    ]);
 
     this._container = select(this).append("div").attr("class", "container");
 
@@ -164,35 +122,32 @@ class NightingaleNavigation extends HTMLElement {
       .attr("class", "zoom-polygon")
       .attr("fill", "#777")
       .attr("fill-opacity", "0.3");
-    this._updateNavRuler();
-
-    if ("ResizeObserver" in window) {
-      this._ro = new ResizeObserver(this._onResize);
-      this._ro.observe(this);
-    }
-    window.addEventListener("resize", this._onResize);
+    this.render();
   }
 
-  _onResize() {
-    this._refreshWidth();
-    this._x = this._x.range([this._padding, this.width - this._padding]);
+  onWidthChange() {
+    if (!this._x) return;
+    this._x.range([this._padding, this.width - this._padding]);
     this._svg.attr("width", this.width);
     this._viewport.extent([
       [this._padding, 0],
       [this.width - this._padding, this.height * 0.51],
     ]);
     this._brushG.call(this._viewport);
-    this._updateNavRuler();
+    this.render();
   }
 
-  _updateNavRuler() {
+  render() {
     if (this._x) {
       this._container
         .style("padding-left", `${this.margin.left}px`)
         .style("padding-right", `${this.margin.right}px`)
         .style("padding-top", `${this.margin.top}px`)
         .style("padding-bottom", `${this.margin.bottom}px`);
-      this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
+      this._x.domain([
+        this._rulerstart,
+        this._rulerstart + this.sequenceLength - 1,
+      ]);
       this._axis.call(this._xAxis);
       this._updatePolygon();
       this._updateLabels();
@@ -226,4 +181,15 @@ class NightingaleNavigation extends HTMLElement {
   }
 }
 
-export default withMargin(NightingaleNavigation);
+export default withManager(
+  withResizable(
+    withMargin(
+      withPosition(
+        withDimensions(NightingaleNavigation, {
+          width: 0,
+          height: 40,
+        })
+      )
+    )
+  )
+);

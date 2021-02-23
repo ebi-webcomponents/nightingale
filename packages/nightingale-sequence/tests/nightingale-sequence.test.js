@@ -26,8 +26,7 @@ describe("nightingale-sequence tests", () => {
   });
 
   test("it should display the sequence correctly after highlight", (done) => {
-    rendered.setAttribute("highlightstart", "2");
-    rendered.setAttribute("highlightstart", "4");
+    rendered.setAttribute("highlight", "2:5");
     window.requestAnimationFrame(() => {
       expect(rendered).toMatchSnapshot();
       done();

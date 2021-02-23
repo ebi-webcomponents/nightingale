@@ -10,7 +10,7 @@ import "@nightingale-elements/nightingale-variation";
 import "@nightingale-elements/nightingale-variation-graph";
 import "@nightingale-elements/nightingale-variation-adapter";
 import "@nightingale-elements/nightingale-interpro-track";
-import "@nightingale-elements/nightingale-links";
+// import "@nightingale-elements/nightingale-links";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
@@ -36,7 +36,7 @@ class NightingaleManagerWrapper extends Component {
     document.querySelector("#sequence-coloured-track-iso").data = sequence;
     document.querySelector("#sequence-coloured-track-iso").fixedHighlight =
       "400:600";
-    document.querySelector("#links-track").data = rawContactsHC;
+    // document.querySelector("#links-track").data = rawContactsHC;
     document.querySelector("#track1").fixedHighlight = "400:600";
     document.querySelector("#track2").fixedHighlight = "400:600";
     document.querySelector("#track3").data = secondaryStructureData;
@@ -79,12 +79,7 @@ class NightingaleManagerWrapper extends Component {
           <button>Download Just Tracks</button>
         </nightingale-saver>
         <nightingale-overlay for="just-tracks" />
-        <nightingale-manager
-          attributes="variantfilters"
-          displaystart="1"
-          displayend="100"
-          id="example"
-        >
+        <nightingale-manager displaystart="1" displayend="100" id="example">
           <nightingale-zoom-tool length="770" style={{ float: "right" }} />
           <nightingale-navigation length="770" />
           <div id="just-tracks">
@@ -111,14 +106,19 @@ class NightingaleManagerWrapper extends Component {
               use-ctrl-to-zoom
             />
 
-            <nightingale-links
+            {/* <nightingale-links
               id="links-track"
               length="770"
               height={20}
               use-ctrl-to-zoom
-            />
+            /> */}
 
-            <nightingale-track id="track1" length="770" use-ctrl-to-zoom>
+            <nightingale-track
+              id="track1"
+              length="770"
+              use-ctrl-to-zoom
+              highlight-event="onclick"
+            >
               <nightingale-feature-adapter id="adapter1">
                 <data-loader>
                   <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM" />
@@ -130,6 +130,7 @@ class NightingaleManagerWrapper extends Component {
               length="770"
               layout="non-overlapping"
               use-ctrl-to-zoom
+              highlight-event="onclick"
             >
               <nightingale-feature-adapter id="adapter1">
                 <data-loader>
@@ -144,6 +145,7 @@ class NightingaleManagerWrapper extends Component {
               displayend="80"
               layout="non-overlapping"
               use-ctrl-to-zoom
+              highlight-event="onclick"
             />
             <nightingale-interpro-track
               id="interpro-track"
@@ -177,6 +179,7 @@ class NightingaleManagerWrapper extends Component {
               id="variation-track"
               length="770"
               use-ctrl-to-zoom
+              highlight-event="onclick"
             />
           </div>
         </nightingale-manager>

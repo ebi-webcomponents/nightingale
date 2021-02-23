@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "@nightingale-elements/data-loader";
 import "@nightingale-elements/nightingale-variation";
