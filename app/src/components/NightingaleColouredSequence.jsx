@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "@nightingale-elements/nightingale-coloured-sequence";
+import element from "../../../packages/nightingale-coloured-sequence";
 
 import readmeContent from "../../../packages/nightingale-coloured-sequence/README.md";
 import Readme from "./Readme";
@@ -22,7 +22,7 @@ class NightingaleColouredSequenceWrapper extends Component {
         <Readme content={readmeContent} />
         <h4>Same Scale - different levels of zoom</h4>
 
-        <nightingale-coloured-sequence
+        <element.is
           id="seq1"
           length="223"
           displaystart="1"
@@ -30,7 +30,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           height="10"
           scale="hydrophobicity-scale"
         />
-        <nightingale-coloured-sequence
+        <element.is
           id="seq2"
           length="223"
           height="10"
@@ -38,7 +38,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           displayend="150"
           scale="hydrophobicity-scale"
         />
-        <nightingale-coloured-sequence
+        <element.is
           id="seq3"
           length="223"
           height="10"
@@ -48,7 +48,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           highlightEnd="45"
           scale="hydrophobicity-scale"
         />
-        <nightingale-coloured-sequence
+        <element.is
           id="seq4"
           length="223"
           height="10"
@@ -56,7 +56,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           displayend="70"
           scale="hydrophobicity-scale"
         />
-        <nightingale-coloured-sequence
+        <element.is
           id="seq5"
           length="223"
           height="10"
@@ -64,7 +64,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           displayend="220"
           scale="hydrophobicity-scale"
         />
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           height="10"
@@ -75,7 +75,7 @@ class NightingaleColouredSequenceWrapper extends Component {
         <br />
         <h4>Testing Scales</h4>
         <h5>hydrophobicity-scale</h5>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -83,7 +83,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           scale="hydrophobicity-scale"
         />
         <h5>hydrophobicity-interface-scale</h5>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -91,7 +91,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           scale="hydrophobicity-interface-scale"
         />
         <h5>hydrophobicity-octanol-scale</h5>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -99,7 +99,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           scale="hydrophobicity-octanol-scale"
         />
         <h5>isoelectric-point-scale</h5>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -109,7 +109,7 @@ class NightingaleColouredSequenceWrapper extends Component {
         />
         <h5>custom-scale</h5>
         <pre>"T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2"</pre>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -118,7 +118,7 @@ class NightingaleColouredSequenceWrapper extends Component {
         />
         <h4>Testing other colors</h4>
         <h5>hydrophobicity-scale - same colors on a wider scale</h5>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -127,7 +127,7 @@ class NightingaleColouredSequenceWrapper extends Component {
           color_range="#ffdd00:-5,#0000FF:5"
         />
         <h5>hydrophobicity-scale - same colors but white inzero values</h5>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
@@ -137,7 +137,7 @@ class NightingaleColouredSequenceWrapper extends Component {
         />
         <h5>hydrophobicity-scale - changing completely the color scale. </h5>
         <pre>"red:-3,#FFFFFF:0,#00FF00:3"</pre>
-        <nightingale-coloured-sequence
+        <element.is
           sequence={data}
           length="223"
           displaystart="1"
