@@ -72,15 +72,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       />
       <g
         class="highlighted"
-      >
-        <rect
-          fill="rgba(255, 235, 59, 0.8)"
-          height="44"
-          style="opacity: 0.5; pointer-events: none;"
-          width="0"
-          x="10"
-        />
-      </g>
+      />
     </svg>
   </div>
 </nightingale-sequence>
@@ -337,15 +329,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </g>
       <g
         class="highlighted"
-      >
-        <rect
-          fill="rgba(255, 235, 59, 0.8)"
-          height="44"
-          style="opacity: 0.5; pointer-events: none;"
-          width="0"
-          x="-16.666666666666664"
-        />
-      </g>
+      />
     </svg>
   </div>
 </nightingale-sequence>
