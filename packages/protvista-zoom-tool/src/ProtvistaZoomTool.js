@@ -38,10 +38,7 @@ class ProtvistaZoomTool extends HTMLElement {
     } else if (operation === "zoom-out") {
       k = -this._scaleFactor;
     } else if (operation === "zoom-in-seq") {
-      k =
-        this._displayend -
-        this._displaystart -
-        (this._displaystart === 1 ? 29 : 30);
+      k = this._displayend - this._displaystart - 29;
     }
     const newEnd = this._displayend - k;
     let newStart = this._displaystart;
