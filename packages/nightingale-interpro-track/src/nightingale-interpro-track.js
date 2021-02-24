@@ -43,7 +43,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     this._contributors = NightingaleInterproTrack.normalizeLocations(
       contributors
     );
-    this._coverage = getCoverage(this._contributors, this._length);
+    this._coverage = getCoverage(this._contributors, this.sequenceLength);
     if (this._data) this._createTrack();
   }
 

@@ -6,6 +6,11 @@ import _groupBy from "lodash-es/groupBy";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
 
+const margin = {
+  top: 10,
+  bottom: 10,
+};
+
 const aaList = [
   "G",
   "A",
@@ -61,7 +66,7 @@ class NightingaleVariation extends NightingaleTrack {
     // scale for Amino Acids
     this._yScale = scalePoint()
       .domain(aaList)
-      .range([0, this._height - this.margin.top - this.margin.bottom]);
+      .range([0, this._height - margin.top - margin.bottom]);
   }
 
   processData(data) {
@@ -112,7 +117,7 @@ class NightingaleVariation extends NightingaleTrack {
 
     // clip path prevents drawing outside of it
     const chartArea = mainChart
-      .attr("transform", `translate(0, ${this.margin.top})`)
+      .attr("transform", `translate(0, ${margin.top})`)
       .append("g")
       .attr("clip-path", "url(#plotAreaClip)");
 
@@ -122,7 +127,7 @@ class NightingaleVariation extends NightingaleTrack {
       .append("rect")
       .attr("width", this.getWidthWithMargins())
       .attr("height", this._height)
-      .attr("transform", `translate(0, -${this.margin.top})`);
+      .attr("transform", `translate(0, -${margin.top})`);
 
     // This is calling the data series render code for each of the items in the data
     this._series = chartArea.datum(this._data);
@@ -163,6 +168,7 @@ class NightingaleVariation extends NightingaleTrack {
 
   set colorConfig(colorConfig) {
     this._colorConfig = colorConfig;
+    this.refresh();
   }
 
   get colorConfig() {

@@ -8,10 +8,10 @@ class NightingaleZoomTool extends HTMLElement {
       this.manager = this.closest("nightingale-manager");
       this.manager.register(this);
     }
-    this._length = parseFloat(this.getAttribute("length"));
+    this.sequenceLength = parseFloat(this.getAttribute("length"));
     this._displaystart = parseFloat(this.getAttribute("displaystart")) || 1;
     this._displayend =
-      parseFloat(this.getAttribute("displayend")) || this._length;
+      parseFloat(this.getAttribute("displayend")) || this.sequenceLength;
     this._scaleFactor = parseFloat(this.getAttribute("scalefactor")) || 10;
 
     this.renderContent();
@@ -41,7 +41,7 @@ class NightingaleZoomTool extends HTMLElement {
         new CustomEvent("change", {
           detail: {
             displaystart: Math.max(1, newStart),
-            displayend: Math.min(newEnd, this._length),
+            displayend: Math.min(newEnd, this.sequenceLength),
           },
           bubbles: true,
           cancelable: true,

@@ -8,12 +8,12 @@ import hydroOctanoleScale from "./hydrophobicity-octanol-scale.json";
 import hydroScale from "./hydrophobicity-scale.json";
 import isoelectricPointScale from "./isoelectric-point-scale.json";
 
-const supportedScales = [
-  "hydrophobicity-interface-scale",
-  "hydrophobicity-octanol-scale",
-  "hydrophobicity-scale",
-  "isoelectric-point-scale",
-];
+const supportedScales = new Map([
+  ["hydrophobicity-interface-scale", hydroInterfaceScale],
+  ["hydrophobicity-octanol-scale", hydroOctanoleScale],
+  ["hydrophobicity-scale", hydroScale],
+  ["isoelectric-point-scale", isoelectricPointScale],
+]);
 
 const defaultScale = {
   domain: [-2, 2],
@@ -23,6 +23,8 @@ const defaultScale = {
 const MIN_BASE_SIZE = 8;
 
 class NightingaleColouredSequence extends NightingaleSequence {
+  static is = "nightingale-coloured-sequence";
+
   static get observedAttributes() {
     return NightingaleSequence.observedAttributes.concat(
       "scale", // One of the supported scales. Ora custom scale given in the following format. e.g. A:0.5,M:-3,P:3
@@ -60,32 +62,25 @@ class NightingaleColouredSequence extends NightingaleSequence {
 
   getScaleFromAttribute() {
     let scale = null;
-    if (supportedScales.indexOf(this._scale) >= 0) {
-      switch (this._scale) {
-        case "hydrophobicity-scale":
-          return hydroScale;
-        case "hydrophobicity-interface-scale":
-          return hydroInterfaceScale;
-        case "isoelectric-point-scale":
-          return isoelectricPointScale;
-        case "hydrophobicity-octanol-scale":
-          return hydroOctanoleScale;
-        default:
-          return null;
-      }
+    const attributeScale = this.getAttribute("scale");
+    if (supportedScales.has(attributeScale)) {
+      return supportedScales.get(attributeScale);
     }
     if (
       /([ILFVMPWHTEQCYASNDRGK]:-?\d+\.?\d*)(,[ILFVMPWHTEQCYASNDRGK]:-?\d+\.?\d*)*/.test(
-        this._scale
+        attributeScale
       )
     ) {
       try {
-        scale = String2Object(this._scale, {
+        scale = String2Object(attributeScale, {
           keyFormatter: (x) => x.toUpperCase(),
           valueFormatter: (x) => parseFloat(x),
         });
       } catch (error) {
-        console.error(`Couldn't parse the given scale ${this._scale}`, error);
+        console.error(
+          `Couldn't parse the given scale "${attributeScale}"`,
+          error
+        );
       }
     }
     return scale;

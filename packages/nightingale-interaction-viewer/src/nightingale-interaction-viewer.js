@@ -72,6 +72,8 @@ class InteractionViewer extends HTMLElement {
     this.getNodeByAccession = this.getNodeByAccession.bind(this);
   }
 
+  static is = "nightingale-interaction-viewer";
+
   connectedCallback() {
     this._accession = this.getAttribute("accession");
     this.render();

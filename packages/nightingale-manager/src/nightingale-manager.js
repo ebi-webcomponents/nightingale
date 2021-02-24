@@ -67,7 +67,7 @@ class NightingaleManager extends HTMLElement {
         );
       } else {
         if (name === LENGTH) {
-          this.length = newValue;
+          this.sequenceLength = newValue;
         }
         if (name === DISPLAY_START) {
           this.displaystart = newValue;
