@@ -9,3 +9,5 @@ package-lock.json
 *.tgz
 .DS_Store
 .vscode
+# Local Netlify folder
+.netlify
