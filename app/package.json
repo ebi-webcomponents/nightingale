@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
