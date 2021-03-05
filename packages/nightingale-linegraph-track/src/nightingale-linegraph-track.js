@@ -1,28 +1,8 @@
 import ProtvistaTrack from "protvista-track";
-import {
-  scaleLinear,
-  select,
-  line,
-  max,
-  min,
-  curveCatmullRom,
-  interpolateRainbow,
-} from "d3";
+import * as d3 from "d3";
+import { scaleLinear, select, line, max, min, interpolateRainbow } from "d3";
 
 class NightingaleLinegraphTrack extends ProtvistaTrack {
-  constructor() {
-    super();
-    // Linear curve by default
-    this.line = line()
-      .x((d) => this._xScale(d.position))
-      .y((d) => this._yScale(d.value));
-
-    this.curve = line()
-      .x((d) => this._xScale(d.position))
-      .y((d) => this._yScale(d.value))
-      .curve(curveCatmullRom.alpha(0.5));
-  }
-
   connectedCallback() {
     super.connectedCallback();
 
@@ -46,7 +26,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       .attr("height", this._height);
     this.trackHighlighter.appendHighlightTo(this.svg);
 
-    let range = [];
+    const range = [];
     this._data.map((d) => range.push(...d.range));
     this.minRange = min(range);
     this.maxRange = max(range);
@@ -72,13 +52,25 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
   }
 
   drawLine(d) {
-    const lineCurve = d.lineCurve || "linear";
+    this._curve = d.lineCurve || "curveLinear";
+
+    this.line = line()
+      .x((d) => this._xScale(d.position))
+      .y((d) => this._yScale(d.value));
+
+    this.curve = line()
+      .x((d) => this._xScale(d.position))
+      .y((d) => this._yScale(d.value))
+      .curve(d3[this._curve]);
+
     this.svg
       .append("path")
       .attr("class", d.name)
       .attr(
         "d",
-        lineCurve === "linear" ? this.line(d.values) : this.curve(d.values)
+        this._curve === "curveLinear"
+          ? this.line(d.values)
+          : this.curve(d.values)
       )
       .attr("fill", "none")
       .attr("stroke", d.colour || interpolateRainbow(Math.random()))

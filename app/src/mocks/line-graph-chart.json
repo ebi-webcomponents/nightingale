@@ -93,7 +93,7 @@
   {
     "name": "chart2",
     "range": [0, 100],
-    "lineCurve": "curve",
+    "lineCurve": "curveStep",
     "values": [
       {
         "position": 41,

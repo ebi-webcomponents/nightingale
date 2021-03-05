@@ -27,7 +27,7 @@ The data expects the following structure.
     name: String,
     range:[min, max],
     colour?: Any colour,
-    lineCurve?: linear(default),
+    lineCurve?: 'curveLinear'(default)|'curveBasis'|'curveCardinal'|'curveStep'|'curveNatural',
     values: [
         {
             position: Number,
