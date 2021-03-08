@@ -28,6 +28,7 @@ The data expects the following structure.
     range:[min, max],
     colour?: Any colour,
     lineCurve?: 'curveLinear'(default)|'curveBasis'|'curveCardinal'|'curveStep'|'curveNatural',
+        (More curves - https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curves)
     values: [
         {
             position: Number,

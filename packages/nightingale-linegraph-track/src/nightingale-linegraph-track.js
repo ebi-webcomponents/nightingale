@@ -37,10 +37,25 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
 
   refresh() {
     if (!this.svg) return;
-    this.svg.selectAll("path").remove();
+    this.svg.selectAll("g.chart-group").remove();
+    const chartGroup = this.svg.append("g").attr("class", "chart-group");
     this._initScales();
 
-    this._data.map((d) => this.drawLine(d));
+    chartGroup
+      .selectAll(".chart")
+      .data(this._data)
+      .enter()
+      .append("path")
+      .attr("class", "chart")
+      .attr("id", (d) => d.name)
+      .attr("d", (d) => {
+        this.drawLine(d);
+        return this.line(d.values);
+      })
+      .attr("fill", "none")
+      .attr("stroke", (d) => d.colour || interpolateRainbow(Math.random()))
+      .attr("transform", "translate(0,0)")
+      .call(this.bindEvents, this);
     this._updateHighlight();
   }
 
@@ -56,25 +71,8 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
 
     this.line = line()
       .x((d) => this._xScale(d.position))
-      .y((d) => this._yScale(d.value));
-
-    this.curve = line()
-      .x((d) => this._xScale(d.position))
       .y((d) => this._yScale(d.value))
       .curve(d3[this._curve]);
-
-    this.svg
-      .append("path")
-      .attr("class", d.name)
-      .attr(
-        "d",
-        this._curve === "curveLinear"
-          ? this.line(d.values)
-          : this.curve(d.values)
-      )
-      .attr("fill", "none")
-      .attr("stroke", d.colour || interpolateRainbow(Math.random()))
-      .attr("transform", "translate(0,0)");
   }
 }
 
