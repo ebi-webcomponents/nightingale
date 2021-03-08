@@ -7,7 +7,6 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     super.connectedCallback();
 
     this._height = Number(this.getAttribute("height")) || 40;
-    this._xScale = scaleLinear();
     this._yScale = scaleLinear();
 
     if (this._data) this._createTrack();
@@ -39,7 +38,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     if (!this.svg) return;
     this.svg.selectAll("g.chart-group").remove();
     const chartGroup = this.svg.append("g").attr("class", "chart-group");
-    this._initScales();
+    this._initYScale();
 
     chartGroup
       .selectAll(".chart")
@@ -59,8 +58,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     this._updateHighlight();
   }
 
-  _initScales() {
-    this._xScale.domain([0, this.width]).range([0, this.width]);
+  _initYScale() {
     this._yScale
       .domain([this.minRange, this.maxRange])
       .range([this._height, 0]);
@@ -70,7 +68,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     this._curve = d.lineCurve || "curveLinear";
 
     this.line = line()
-      .x((d) => this._xScale(d.position))
+      .x((d) => this.getXFromSeqPosition(d.position))
       .y((d) => this._yScale(d.value))
       .curve(d3[this._curve]);
   }

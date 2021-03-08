@@ -14,6 +14,10 @@ Nightingale line graph track component is used to display multiple line graphs (
 
 ### Properties
 
+#### `length: number`
+
+The protein or nucleic acid sequence length.
+
 #### `height: number (optional)`
 
 The height of the track.

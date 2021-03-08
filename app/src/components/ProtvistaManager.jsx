@@ -11,9 +11,11 @@ import ProtvistaVariationGraph from "protvista-variation-graph";
 import ProtvistaVariationAdapter from "protvista-variation-adapter";
 import ProtvistaInterproTrack from "protvista-interpro-track";
 import ProtvistaLinks from "protvista-links";
+import NightingaleLinegraphTrack from "nightingale-linegraph-track";
 import loadWebComponent from "../utils/load-web-component";
 import variantData from "../mocks/variants.json";
 import sequence from "../mocks/sequence.json";
+import linegraphData from "../mocks/line-graph-chart.json";
 import { dataIPR, signatures, withResidues } from "../mocks/interpro";
 import { rawContactsHC } from "../mocks/interpro";
 import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
@@ -26,6 +28,7 @@ import readmeContent from "../../../packages/protvista-manager/README.md";
 class ProtvistaManagerWrapper extends Component {
   componentDidMount() {
     document.querySelector("#variation-track").data = variantData;
+    document.querySelector("#linegraph").data = linegraphData;
     document.querySelector("#interpro-track-residues").data = withResidues;
     document.querySelector("#interpro-track").data = dataIPR;
     document.querySelector("#interpro-track").contributors = signatures;
@@ -82,6 +85,7 @@ class ProtvistaManagerWrapper extends Component {
     loadWebComponent("protvista-overlay", ProtvistaOverlay);
     loadWebComponent("protvista-zoom-tool", ProtvistaZoomTool);
     loadWebComponent("protvista-links", ProtvistaLinks);
+    loadWebComponent("nightingale-linegraph-track", NightingaleLinegraphTrack);
 
     return (
       <Fragment>
@@ -191,6 +195,7 @@ class ProtvistaManagerWrapper extends Component {
               use-ctrl-to-zoom
             />
 
+            <nightingale-linegraph-track id="linegraph" length="770" />
             <protvista-variation-graph
               id="variation-graph"
               length="770"
