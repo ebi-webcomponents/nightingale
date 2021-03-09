@@ -33,59 +33,59 @@
         "value": 17
       },
       {
-        "position": 51,
+        "position": 48,
         "value": 20
       },
       {
-        "position": 62,
+        "position": 49,
         "value": 40
       },
       {
-        "position": 73,
+        "position": 50,
         "value": 10
       },
       {
-        "position": 84,
+        "position": 51,
         "value": 0
       },
       {
-        "position": 95,
+        "position": 52,
         "value": 49
       },
       {
-        "position": 106,
+        "position": 53,
         "value": 34
       },
       {
-        "position": 117,
+        "position": 54,
         "value": 17
       },
       {
-        "position": 121,
+        "position": 55,
         "value": 20
       },
       {
-        "position": 142,
+        "position": 56,
         "value": 40
       },
       {
-        "position": 153,
+        "position": 57,
         "value": 10
       },
       {
-        "position": 164,
+        "position": 58,
         "value": 0
       },
       {
-        "position": 185,
+        "position": 59,
         "value": 49
       },
       {
-        "position": 206,
+        "position": 60,
         "value": 34
       },
       {
-        "position": 217,
+        "position": 61,
         "value": 17
       }
     ]
@@ -96,88 +96,84 @@
     "lineCurve": "curveStep",
     "values": [
       {
-        "position": 41,
+        "position": 51,
         "value": 0
+      },
+      {
+        "position": 52,
+        "value": 10
+      },
+      {
+        "position": 53,
+        "value": 10
       },
       {
         "position": 54,
-        "value": 50
+        "value": 20
+      },
+      {
+        "position": 55,
+        "value": 60
+      },
+      {
+        "position": 56,
+        "value": 100
       },
       {
         "position": 57,
-        "value": 10
-      },
-      {
-        "position": 60,
-        "value": 20
-      },
-      {
-        "position": 63,
-        "value": 60
-      },
-      {
-        "position": 64,
-        "value": 70
-      },
-      {
-        "position": 66,
         "value": 40
       },
       {
-        "position": 75,
+        "position": 58,
         "value": 0
       },
       {
-        "position": 90,
+        "position": 59,
         "value": 50
       },
       {
-        "position": 99,
+        "position": 60,
         "value": 10
       },
       {
-        "position": 100,
+        "position": 61,
         "value": 20
       },
       {
-        "position": 110,
+        "position": 62,
         "value": 60
       },
       {
-        "position": 120,
+        "position": 63,
         "value": 70
       },
       {
-        "position": 130,
+        "position": 64,
         "value": 40
       },
       {
-        "position": 140,
+        "position": 65,
         "value": 30
       },
       {
-        "position": 150,
+        "position": 66,
         "value": 50
       },
       {
-        "position": 160,
+        "position": 67,
         "value": 10
       },
       {
-        "position": 170,
+        "position": 68,
         "value": 20
       },
       {
-        "position": 180,
+        "position": 69,
         "value": 60
       },
       {
-        "position": 200,
+        "position": 70,
         "value": 70
-      },
-      {
-        "position": 210,
-        "value": 40
       }
     ]
   }

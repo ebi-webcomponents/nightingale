@@ -1,6 +1,14 @@
 import ProtvistaTrack from "protvista-track";
 import * as d3 from "d3";
-import { scaleLinear, select, line, max, min, interpolateRainbow } from "d3";
+import {
+  scaleLinear,
+  select,
+  line,
+  max,
+  min,
+  interpolateRainbow,
+  mouse,
+} from "d3";
 
 class NightingaleLinegraphTrack extends ProtvistaTrack {
   connectedCallback() {
@@ -37,24 +45,42 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
   refresh() {
     if (!this.svg) return;
     this.svg.selectAll("g.chart-group").remove();
-    const chartGroup = this.svg.append("g").attr("class", "chart-group");
+    this.chartGroup = this.svg.append("g").attr("class", "chart-group");
     this._initYScale();
+    this._checkSeqBaseWidth();
 
-    chartGroup
+    this.chart = this.chartGroup
       .selectAll(".chart")
       .data(this._data)
       .enter()
+      .append("g")
+      .attr("class", "chart");
+
+    this.chart
       .append("path")
-      .attr("class", "chart")
+      .attr("class", "graph")
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
         this.drawLine(d);
+        d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassign
         return this.line(d.values);
       })
       .attr("fill", "none")
-      .attr("stroke", (d) => d.colour || interpolateRainbow(Math.random()))
+      .attr("stroke", (d) => d.chartColour)
       .attr("transform", "translate(0,0)")
-      .call(this.bindEvents, this);
+      .on("mouseover", (d) => {
+        if (this.isSeqBaseVisible) {
+          const coords = mouse(this);
+          this._createEvent(coords, d, "mouseover");
+        }
+      })
+      .on("click", (d) => {
+        if (this.isSeqBaseVisible) {
+          const coords = mouse(this);
+          this._createEvent(coords, d, "click");
+        }
+      });
+
     this._updateHighlight();
   }
 
@@ -68,9 +94,57 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     this._curve = d.lineCurve || "curveLinear";
 
     this.line = line()
-      .x((d) => this.getXFromSeqPosition(d.position))
+      .x(
+        (d) =>
+          this.getXFromSeqPosition(d.position + 1) -
+          this.getSingleBaseWidth() / 2
+      )
       .y((d) => this._yScale(d.value))
       .curve(d3[this._curve]);
+  }
+
+  _createEvent(coords, data, type) {
+    this.addPointer(coords);
+    const seqPosition = Math.floor(
+      this.xScale.invert(coords[0] - this.getSingleBaseWidth() / 2)
+    );
+    const [value] = data.values.filter((v) => v.position === seqPosition);
+    const detail = {
+      eventtype: type,
+      // coords: coords,
+      feature: value,
+      highlight: `${seqPosition}:${seqPosition}`,
+      bubbles: true,
+      cancelable: true,
+    };
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+  }
+
+  _checkSeqBaseWidth() {
+    const xratio = 0.8;
+    const tempNode = this.svg.append("text").attr("class", "base").text("T");
+    const chWidth = tempNode.node().getBBox().width * xratio;
+    tempNode.remove();
+    const ftWidth = this.getSingleBaseWidth();
+    this.isSeqBaseVisible = ftWidth - chWidth > 1;
+  }
+
+  addPointer(coords) {
+    this.chart.selectAll("circle.pointer").remove();
+    this.chart
+      .append("circle")
+      .attr("class", "pointer")
+      .attr("cx", coords[0])
+      .attr("cy", coords[1])
+      .attr("r", 5)
+      .attr("fill", "green")
+      .attr("stroke", "black");
   }
 }
 

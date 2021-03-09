@@ -15,7 +15,7 @@ const NightingaleLineGraphTrackWrapper = () => {
   return (
     <Fragment>
       <Readme content={readmeContent} />
-      <nightingale-linegraph-track id="track" length="250" height="50" />
+      <nightingale-linegraph-track id="track" length="100" height="50" />
     </Fragment>
   );
 };
