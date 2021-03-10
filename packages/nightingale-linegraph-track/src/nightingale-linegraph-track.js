@@ -114,8 +114,6 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       // coords: coords,
       feature: value,
       highlight: `${seqPosition}:${seqPosition}`,
-      bubbles: true,
-      cancelable: true,
     };
     this.dispatchEvent(
       new CustomEvent("change", {
