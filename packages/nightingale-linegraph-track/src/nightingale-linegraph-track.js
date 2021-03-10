@@ -66,7 +66,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
         return this.line(d.values);
       })
       .attr("fill", "none")
-      .attr("stroke", (d) => d.chartColour)
+      .attr("stroke", (d) => d.colour)
       .attr("transform", "translate(0,0)")
       .on("mouseover", (d) => {
         if (this.isSeqBaseVisible) {
