@@ -39,15 +39,8 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     this.maxRange = max(range);
 
     // Create the visualisation here
-    this.refresh();
-  }
-
-  refresh() {
-    if (!this.svg) return;
-    this.svg.selectAll("g.chart-group").remove();
     this.chartGroup = this.svg.append("g").attr("class", "chart-group");
     this._initYScale();
-    this._checkSeqBaseWidth();
 
     this.chart = this.chartGroup
       .selectAll(".chart")
@@ -61,7 +54,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       .attr("class", "graph")
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
-        d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassignre
+        d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassign
         return this.drawLine(d)(d.values);
       })
       .attr("fill", "none")
@@ -79,8 +72,16 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
           this._createEvent(coords, d, "click");
         }
       });
+  }
 
-    this._updateHighlight();
+  refresh() {
+    if (this.chart) {
+      this._checkSeqBaseWidth();
+      this.chart
+        .selectAll("path.graph")
+        .attr("d", (d) => this.drawLine(d)(d.values));
+      this._updateHighlight();
+    }
   }
 
   _initYScale() {
