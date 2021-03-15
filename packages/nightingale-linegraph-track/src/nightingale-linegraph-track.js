@@ -61,9 +61,8 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       .attr("class", "graph")
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
-        this.drawLine(d);
-        d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassign
-        return this.line(d.values);
+        d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassignre
+        return this.drawLine(d)(d.values);
       })
       .attr("fill", "none")
       .attr("stroke", (d) => d.colour)
@@ -91,16 +90,16 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
   }
 
   drawLine(d) {
-    this._curve = d.lineCurve || "curveLinear";
+    const curve = d.lineCurve || "curveLinear";
 
-    this.line = line()
+    return line()
       .x(
         (d) =>
           this.getXFromSeqPosition(d.position + 1) -
           this.getSingleBaseWidth() / 2
       )
       .y((d) => this._yScale(d.value))
-      .curve(d3[this._curve]);
+      .curve(d3[curve]);
   }
 
   _createEvent(coords, data, type) {
