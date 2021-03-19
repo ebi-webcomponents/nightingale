@@ -83,10 +83,6 @@
       {
         "position": 60,
         "value": 34
-      },
-      {
-        "position": 61,
-        "value": 17
       }
     ]
   },
@@ -96,84 +92,88 @@
     "lineCurve": "curveStep",
     "values": [
       {
-        "position": 51,
+        "position": 41,
         "value": 0
       },
       {
-        "position": 52,
+        "position": 42,
         "value": 10
       },
       {
-        "position": 53,
+        "position": 43,
         "value": 10
       },
       {
-        "position": 54,
+        "position": 44,
         "value": 20
       },
       {
-        "position": 55,
+        "position": 45,
         "value": 60
       },
       {
-        "position": 56,
+        "position": 46,
         "value": 100
       },
       {
-        "position": 57,
+        "position": 47,
         "value": 40
       },
       {
-        "position": 58,
+        "position": 48,
         "value": 0
       },
       {
-        "position": 59,
+        "position": 49,
         "value": 50
       },
       {
-        "position": 60,
+        "position": 50,
         "value": 10
       },
       {
-        "position": 61,
+        "position": 51,
         "value": 20
       },
       {
-        "position": 62,
+        "position": 52,
         "value": 60
       },
       {
-        "position": 63,
+        "position": 53,
         "value": 70
       },
       {
-        "position": 64,
+        "position": 54,
         "value": 40
       },
       {
-        "position": 65,
+        "position": 55,
         "value": 30
       },
       {
-        "position": 66,
+        "position": 56,
         "value": 50
       },
       {
-        "position": 67,
+        "position": 57,
         "value": 10
       },
       {
-        "position": 68,
+        "position": 58,
         "value": 20
       },
       {
-        "position": 69,
+        "position": 59,
         "value": 60
       },
       {
-        "position": 70,
+        "position": 60,
         "value": 70
+      },
+      {
+        "position": 61,
+        "value": 100
       }
     ]
   }
