@@ -122,6 +122,12 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
           const features = [];
           const seqPosition = Math.floor(_this.xScale.invert(mouse[0]));
 
+          d3.selectAll(".mouse-per-line text").text((d) => {
+            const value = d.values.find((v) => v.position === seqPosition);
+            features.push(value);
+            return value ? value.value : "";
+          });
+
           d3.selectAll(".mouse-per-line").attr("transform", (d, i) => {
             let beginning = 0;
             let end = lines.nodes()[i].getTotalLength();
@@ -140,14 +146,6 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
               else if (pos.x < mouse[0]) beginning = target;
               else break; // position found
             }
-
-            const value = d.values.find((v) => v.position === seqPosition);
-            features.push(value);
-
-            d3.select(this)
-              .select("text")
-              .text(value ? value.value : "");
-
             return `translate(${mouse[0]},${pos.y})`;
           });
 
