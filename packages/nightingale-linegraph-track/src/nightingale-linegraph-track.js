@@ -99,16 +99,11 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
         d3.selectAll(".mouse-per-line circle").style("opacity", "0");
         d3.selectAll(".mouse-per-line text").style("opacity", "0");
       })
-      // .on('mouseover', function() { // on mouse in show circles and text
-      //   d3.selectAll(".mouse-per-line circle")
-      //       .style("opacity", "1");
-      //   d3.selectAll(".mouse-per-line text")
-      //       .style("opacity", "1");
-      // })
       .on("mousemove", () => {
         // mouse moving over canvas
         const mouse = d3.mouse(this);
 
+        // Showing the circle and text only when the mouse is moving over the paths
         if (
           mouse[0] < _this.xScale(_this.beginning) ||
           mouse[0] > _this.xScale(_this.end) + _this.getSingleBaseWidth()
@@ -119,12 +114,12 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
           d3.selectAll(".mouse-per-line circle").style("opacity", "1");
           d3.selectAll(".mouse-per-line text").style("opacity", "1");
 
-          const features = [];
+          const features = {};
           const seqPosition = Math.floor(_this.xScale.invert(mouse[0]));
 
           d3.selectAll(".mouse-per-line text").text((d) => {
             const value = d.values.find((v) => v.position === seqPosition);
-            features.push(value);
+            features[d.name] = value;
             return value ? value.value : "";
           });
 
@@ -133,6 +128,10 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
             let end = lines.nodes()[i].getTotalLength();
             let target = null;
             let pos = {};
+            /*
+             Finding the nearest point in the path to the mouse pointer using iterative dichotomy.
+             Example can be found here - https://bl.ocks.org/larsenmtl/e3b8b7c2ca4787f77d78f58d41c3da91
+             */
             while (true) {
               target = Math.floor((beginning + end) / 2);
               pos = lines.nodes()[i].getPointAtLength(target);
