@@ -7,7 +7,7 @@
   ],
   "main": "dist/nightingale-linegraph-track.js",
   "module": "src/nightingale-linegraph-track.js",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "keywords": [
     "nightingale",
     "webcomponents",
