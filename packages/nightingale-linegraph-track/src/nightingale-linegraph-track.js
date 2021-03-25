@@ -7,6 +7,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     super.connectedCallback();
 
     this._height = Number(this.getAttribute("height")) || 40;
+    this._type = this.getAttribute("type") || "line-graph-track";
     this._yScale = scaleLinear();
 
     if (this._data) this._createTrack();
@@ -152,6 +153,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
             eventtype: "mouseover",
             feature: features,
             highlight: `${seqPosition}:${seqPosition}`,
+            type: this._type,
           };
           this.dispatchEvent(
             new CustomEvent("change", {
