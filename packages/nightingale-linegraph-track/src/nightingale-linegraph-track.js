@@ -112,11 +112,18 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
           d3.selectAll(".mouse-per-line circle").style("opacity", "0");
           d3.selectAll(".mouse-per-line text").style("opacity", "0");
         } else {
-          d3.selectAll(".mouse-per-line circle").style("opacity", "1");
-          d3.selectAll(".mouse-per-line text").style("opacity", "1");
-
           const features = {};
           const seqPosition = Math.floor(_this.xScale.invert(mouse[0]));
+
+          d3.selectAll(".mouse-per-line circle").style("opacity", (d) => {
+            // In case there is a gap or break in the graph, circle and text are not shown
+            const value = d.values.find((v) => v.position === seqPosition);
+            if (value) {
+              return value.value ? "1" : "0";
+            }
+            return "0";
+          });
+          d3.selectAll(".mouse-per-line text").style("opacity", "1");
 
           d3.selectAll(".mouse-per-line text").text((d) => {
             const value = d.values.find((v) => v.position === seqPosition);
@@ -154,6 +161,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
             feature: features,
             highlight: `${seqPosition}:${seqPosition}`,
             type: this._type,
+            target: this,
           };
           this.dispatchEvent(
             new CustomEvent("change", {
@@ -185,6 +193,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     const curve = d.lineCurve || "curveLinear";
 
     return line()
+      .defined((d) => d.value !== null) // To have gaps in the line graph
       .x(
         (d) =>
           this.getXFromSeqPosition(d.position + 1) -
