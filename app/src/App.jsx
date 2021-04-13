@@ -33,6 +33,7 @@ const ProtvistaVariationGraph = lazyImport("ProtvistaVariationGraph");
 const ProtvistaMSA = lazyImport("ProtvistaMSA");
 const TextareaSequence = lazyImport("TextareaSequence");
 const NightingaleLineGraphTrack = lazyImport("NightingaleLineGraphTrack");
+const NightingaleContactMap = lazyImport("NightingaleContactMap");
 
 function lazyImport(name) {
   return lazy(() => import(`./components/${name}`));
@@ -154,6 +155,9 @@ const App = (component = ProtvistaNavigation) => (
                     <NavLink to="/msa">Alignments</NavLink>
                   </li>
                   <li>
+                    <NavLink to="/contact-map">Contact Map</NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/textarea-sequence">Textarea Sequence</NavLink>
                   </li>
                 </ul>
@@ -191,6 +195,7 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/playground" component={Playground} />
               <Route path="/tooltip" component={ProtvistaTooltipWrapper} />
               <Route path="/msa" component={ProtvistaMSA} />
+              <Route path="/contact-map" component={NightingaleContactMap} />
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/create-component" component={CreateComponent} />
               <Route path="/create-adapter" component={CreateAdapter} />
