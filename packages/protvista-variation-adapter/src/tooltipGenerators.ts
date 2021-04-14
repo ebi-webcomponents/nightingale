@@ -51,11 +51,13 @@ export const getEnsemblCovidLinks = (variant: Variant) => {
     (location) => location.source === "EnsemblViruses"
   );
   if (shouldGenerateLink) {
-    const { id } = variant.xrefs.find((xref) => xref.name === "ENA");
-    return (
-      `<h5>Ensembl COVID-19</h5>` +
-      `<p><a href="https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=${id}" target="_blank" rel="noopener noreferrer">${id}</a></p>`
-    );
+    const xref = variant.xrefs.find((xref) => xref.name === "ENA");
+    return xref.id
+      ? `<h5>Ensembl COVID-19</h5>
+          <p>
+          <a href="https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=${xref.id}" target="_blank" rel="noopener noreferrer">${xref.id}</a>
+        </p>`
+      : "";
   }
   return "";
 };

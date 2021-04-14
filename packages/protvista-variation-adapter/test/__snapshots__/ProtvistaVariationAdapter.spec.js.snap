@@ -22,7 +22,12 @@ exports[`ProtvistaVariationAdapter should format predictions 1`] = `"<h6>PolyPhe
 
 exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 1`] = `""`;
 
-exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 2`] = `"<h5>Ensembl COVID-19</h5><p><a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a></p>"`;
+exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 2`] = `
+"<h5>Ensembl COVID-19</h5>
+          <p>
+          <a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a>
+        </p>"
+`;
 
 exports[`ProtvistaVariationAdapter should transform the data adequately 1`] = `
 Object {
@@ -250,7 +255,10 @@ Object {
                 
                 
                 
-                <h5>Ensembl COVID-19</h5><p><a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a></p>
+                <h5>Ensembl COVID-19</h5>
+          <p>
+          <a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a>
+        </p>
                 
         ",
       "type": "VARIANT",
