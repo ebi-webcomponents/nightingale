@@ -14,9 +14,13 @@ Nightingale Contact Map component is used to generate a heatmap visualisation fo
 
 ### Properties
 
-#### `dimension: number`
+#### `width: number`
 
-The dimension specifies the width and height of the heat map. Here width and height are equal as it is a square matrix.
+The width specifies the width of the heat map.
+
+#### `height: number`
+
+The height specifies the height of the heat map.
 
 #### `data: Array`
 

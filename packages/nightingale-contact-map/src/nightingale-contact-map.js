@@ -2,17 +2,19 @@ import { select, scaleBand, scaleLinear, axisBottom, axisLeft } from "d3";
 
 class NightingaleContactMap extends HTMLElement {
   connectedCallback() {
-    this._dimension = Number(this.getAttribute("dimension")) || 650;
+    this._width = Number(this.getAttribute("width")) || 650;
+    this._height = Number(this.getAttribute("width")) || 700;
     if (this._data) this.render();
   }
 
   static get observedAttributes() {
-    return ["dimension"];
+    return ["width", "height"];
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
-    if (attrName === "dimension" && oldVal != null && oldVal !== newVal) {
-      this._dimension = newVal;
+    if (oldVal != null && oldVal !== newVal) {
+      if (attrName === "width") this._width = newVal;
+      if (attrName === "height") this._height = newVal;
       this.render();
     }
   }
@@ -39,9 +41,9 @@ class NightingaleContactMap extends HTMLElement {
   }
 
   drawHeatMap(data) {
-    const margin = { top: 80, right: 25, bottom: 30, left: 40 };
-    const width = this._dimension;
-    const height = width;
+    const margin = { top: 30, right: 25, bottom: 30, left: 40 };
+    const width = this._width - margin.left - margin.right;
+    const height = this._height - margin.top - margin.bottom;
 
     const svg = select(this)
       .append("svg")
@@ -77,7 +79,7 @@ class NightingaleContactMap extends HTMLElement {
       position += 50;
     }
 
-    // X axis
+    // Adding axes
     const xAxis = axisBottom(x).tickSize(3).tickValues(tickValues);
     svg
       .append("g")
@@ -86,7 +88,6 @@ class NightingaleContactMap extends HTMLElement {
       .call(xAxis)
       .select(".domain")
       .remove();
-    // Y axis
     const yAxis = axisLeft(y).tickSize(3).tickValues(tickValues);
     svg
       .append("g")
@@ -94,6 +95,21 @@ class NightingaleContactMap extends HTMLElement {
       .call(yAxis)
       .select(".domain")
       .remove();
+
+    // text label for axes
+    svg
+      .append("text")
+      .attr("transform", `translate(${width / 2},${height + margin.top})`)
+      .style("text-anchor", "middle")
+      .text("Residue");
+    svg
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x", 0 - height / 2)
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Residue");
 
     const colorScale = scaleLinear().domain([0, 1]).range(["orange", "blue"]);
 

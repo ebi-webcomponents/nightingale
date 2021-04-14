@@ -15,7 +15,7 @@ class NightingaleContactMapWrapper extends Component {
     return (
       <Fragment>
         <Readme content={readmeContent} />
-        <nightingale-contact-map id="map" dimension={"560"} />
+        <nightingale-contact-map id="map" width={"560"} height={"560"} />
       </Fragment>
     );
   }
