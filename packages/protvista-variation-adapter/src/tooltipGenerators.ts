@@ -46,6 +46,20 @@ export const getPopulationFrequencies = (
     )
     .join("")}`;
 
+export const getEnsemblCovidLinks = (variant: Variant) => {
+  const shouldGenerateLink = variant.locations.some(
+    (location) => location.source === "EnsemblViruses"
+  );
+  if (shouldGenerateLink) {
+    const { id } = variant.xrefs.find((xref) => xref.name === "ENA");
+    return (
+      `<h5>Ensembl COVID-19</h5>` +
+      `<p><a href="https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=${id}" target="_blank" rel="noopener noreferrer">${id}</a></p>`
+    );
+  }
+  return "";
+};
+
 export const getPredictions = (predictions: Prediction[]) => {
   const groupedPredictions = groupBy(predictions, "predAlgorithmNameType");
   const counts = Object.keys(groupedPredictions).map((key) => {
@@ -115,7 +129,7 @@ export const formatTooltip = (variant: Variant) =>
                 ${
                   variant.predictions ? getPredictions(variant.predictions) : ""
                 }
-
+                ${getEnsemblCovidLinks(variant)}
                 
         `;
 
