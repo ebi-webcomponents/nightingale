@@ -40,6 +40,20 @@ class NightingaleContactMap extends HTMLElement {
     }
   }
 
+  _dispatchSelectionPoint(type, target, d) {
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: {
+          type,
+          point: d || null,
+          target: this,
+        },
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+  }
+
   drawHeatMap(data) {
     const margin = { top: 30, right: 25, bottom: 30, left: 40 };
     const width = this._width - margin.left - margin.right;
@@ -124,7 +138,13 @@ class NightingaleContactMap extends HTMLElement {
       .attr("y", (d) => y(d[1]))
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
-      .style("fill", (d) => colorScale(d[2]));
+      .style("fill", (d) => colorScale(d[2]))
+      .on("mouseover", (d) => {
+        this._dispatchSelectionPoint("mouseover", this, d);
+      })
+      .on("mouseout", () => {
+        this._dispatchSelectionPoint("mouseout", this);
+      });
 
     const symmetricHalf = svg
       .selectAll(".symmetric-half")
@@ -137,7 +157,13 @@ class NightingaleContactMap extends HTMLElement {
       .attr("y", (d) => symmetricY(d[0]))
       .attr("width", symmetricX.bandwidth())
       .attr("height", symmetricX.bandwidth())
-      .style("fill", (d) => colorScale(d[2]));
+      .style("fill", (d) => colorScale(d[2]))
+      .on("mouseover", (d) => {
+        this._dispatchSelectionPoint("mouseover", this, d);
+      })
+      .on("mouseout", () => {
+        this._dispatchSelectionPoint("mouseout", this);
+      });
   }
 }
 
