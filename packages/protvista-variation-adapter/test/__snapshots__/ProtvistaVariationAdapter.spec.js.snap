@@ -20,6 +20,15 @@ exports[`ProtvistaVariationAdapter should format population frequencies 1`] = `"
 
 exports[`ProtvistaVariationAdapter should format predictions 1`] = `"<h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging</li></ul>"`;
 
+exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 1`] = `""`;
+
+exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 2`] = `
+"<h5>Ensembl COVID-19</h5>
+          <p>
+          <a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a>
+        </p>"
+`;
+
 exports[`ProtvistaVariationAdapter should transform the data adequately 1`] = `
 Object {
   "sequence": "MLPGLALLLLAAWTARALEVPTDGNAGLLAEPQIAMFCGRLNMHMNVQNGKWDSDPSGTKTCIDTKEGILQYCQEVYPELQITNVVEANQPVTIQNWCKRGRKQCKTHPHFVIPYRCLVGEFVSDALLVPDKCKFLHQERMDVCETHLHWHTVAKETCSEKSTNLHDYGMLLPCGIDKFRGVEFVCCPLAEESDNVDSADAEEDDSDVWWGGADTDYADGSEDKVVEVAEEEEVAEVEEEEADDDEDDEDGDEVEEEAEEPYEEATERTTSIATTTTTTTESVEEVVREVCSEQAETGPCRAMISRWYFDVTEGKCAPFFYGGCGGNRNNFDTEEYCMAVCGSAMSQSLLKTTQEPLARDPVKLPTTAASTPDAVDKYLETPGDENEHAHFQKAKERLEAKHRERMSQVMREWEEAERQAKNLPKADKKAVIQHFQEKVESLEQEAANERQQLVETHMARVEAMLNDRRRLALENYITALQAVPPRPRHVFNMLKKYVRAEQKDRQHTLKHFEHVRMVDPKKAAQIRSQVMTHLRVIYERMNQSLSLLYNVPAVAEEIQDEVDELLQKEQNYSDDVLANMISEPRISYGNDALMPSLTETKTTVELLPVNGEFSLDDLQPWHSFGADSVPANTENEVEPVDARPAADRGLTTRPGSGLTNIKTEEISEVKMDAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIATVIVITLVMLKKKQYTSIHHGVVEVDAAVTPEERHLSKMQQNGYENPTYKFFEQMQN",
@@ -181,7 +190,7 @@ Object {
     
           
                 <h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging</li></ul>
-
+                
                 
         ",
       "type": "VARIANT",
@@ -207,6 +216,61 @@ Object {
           "id": "rs529782627",
           "name": "gnomAD",
           "url": " http://gnomad.broadinstitute.org/awesome?query=rs529782627",
+        },
+      ],
+    },
+    Object {
+      "accession": "NC_045512.2:g.21568T>A",
+      "alternativeSequence": "L",
+      "begin": "2",
+      "codon": "TTT/TTA",
+      "consequenceType": "missense",
+      "end": "2",
+      "genomicLocation": "NC_045512.2:g.21568T>A",
+      "hasPredictions": undefined,
+      "locations": Array [
+        Object {
+          "loc": "p.Phe2Leu",
+          "seqId": "ENSSAST00005000004",
+          "source": "EnsemblViruses",
+        },
+        Object {
+          "loc": "c.6T>A",
+          "seqId": "ENSSAST00005000004",
+          "source": "EnsemblViruses",
+        },
+      ],
+      "mutatedType": "L",
+      "protvistaFeatureId": "uuid_id",
+      "somaticStatus": 0,
+      "sourceType": "large_scale_study",
+      "start": "2",
+      "tooltipContent": "
+                <h5>Variant</h5><p>F > L</p>
+                
+                <h5>Consequence</h5><p>missense</p>
+                
+                <h5>Location</h5><p>NC_045512.2:g.21568T>A</p>
+                
+                
+                
+                
+                <h5>Ensembl COVID-19</h5>
+          <p>
+          <a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a>
+        </p>
+                
+        ",
+      "type": "VARIANT",
+      "variant": "L",
+      "wildType": "F",
+      "xrefNames": Array [
+        "ENA",
+      ],
+      "xrefs": Array [
+        Object {
+          "id": "MN908947.3:21568:T:A",
+          "name": "ENA",
         },
       ],
     },
