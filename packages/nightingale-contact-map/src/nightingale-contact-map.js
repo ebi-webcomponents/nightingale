@@ -1,4 +1,11 @@
-import { select, scaleBand, scaleLinear, axisBottom, axisLeft } from "d3";
+import {
+  select,
+  scaleBand,
+  scaleLinear,
+  axisBottom,
+  axisLeft,
+  event as d3Event,
+} from "d3";
 
 class NightingaleContactMap extends HTMLElement {
   connectedCallback() {
@@ -127,6 +134,16 @@ class NightingaleContactMap extends HTMLElement {
 
     const colorScale = scaleLinear().domain([0, 1]).range(["orange", "blue"]);
 
+    const mouseover = (d) => {
+      select(d3Event.target).style("stroke", "green");
+      this._dispatchSelectionPoint("mouseover", this, d);
+    };
+
+    const mouseout = () => {
+      select(d3Event.target).style("stroke", "none");
+      this._dispatchSelectionPoint("mouseout", this);
+    };
+
     const half = svg
       .selectAll(".half")
       .data(data)
@@ -139,12 +156,8 @@ class NightingaleContactMap extends HTMLElement {
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
       .style("fill", (d) => colorScale(d[2]))
-      .on("mouseover", (d) => {
-        this._dispatchSelectionPoint("mouseover", this, d);
-      })
-      .on("mouseout", () => {
-        this._dispatchSelectionPoint("mouseout", this);
-      });
+      .on("mouseover", mouseover)
+      .on("mouseout", mouseout);
 
     const symmetricHalf = svg
       .selectAll(".symmetric-half")
@@ -158,12 +171,8 @@ class NightingaleContactMap extends HTMLElement {
       .attr("width", symmetricX.bandwidth())
       .attr("height", symmetricX.bandwidth())
       .style("fill", (d) => colorScale(d[2]))
-      .on("mouseover", (d) => {
-        this._dispatchSelectionPoint("mouseover", this, d);
-      })
-      .on("mouseout", () => {
-        this._dispatchSelectionPoint("mouseout", this);
-      });
+      .on("mouseover", mouseover)
+      .on("mouseout", mouseout);
   }
 }
 
