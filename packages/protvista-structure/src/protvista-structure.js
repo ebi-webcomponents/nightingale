@@ -100,11 +100,14 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static _formatHighlight(highlightString) {
-    const highlightArray = highlightString.split(",").map(region => {
+    if (!highlightString) {
+      return [];
+    }
+    const highlightArray = highlightString.split(",").map((region) => {
       const [_start, _end] = region.split(":");
       return {
         start: Number(_start),
-        end: Number(_end)
+        end: Number(_end),
       };
     });
     return highlightArray;
@@ -181,7 +184,7 @@ class ProtvistaStructure extends HTMLElement {
     await this.loadMolecule(id);
     this._selectedMolecule = {
       id,
-      mappings
+      mappings,
     };
     this._planHighlight();
   }
@@ -203,14 +206,14 @@ class ProtvistaStructure extends HTMLElement {
       target: this.querySelector("#litemol-instance"),
       viewportBackground: "#fff",
       layoutState: {
-        hideControls: true
+        hideControls: true,
       },
-      allowAnalytics: false
+      allowAnalytics: false,
     });
 
     this.Event.Molecule.ModelSelect.getStream(
       this._liteMol.context
-    ).subscribe(e => this.propagateHighlight(e));
+    ).subscribe((e) => this.propagateHighlight(e));
   }
 
   loadMolecule(_id) {
@@ -222,42 +225,42 @@ class ProtvistaStructure extends HTMLElement {
       .add(this._liteMol.root, this.Transformer.Data.Download, {
         url: `https://www.ebi.ac.uk/pdbe/coordinates/${_id.toLowerCase()}/full?encoding=BCIF`,
         type: "Binary",
-        _id
+        _id,
       })
       .then(
         this.Transformer.Data.ParseBinaryCif,
         {
-          id: _id
+          id: _id,
         },
         {
           isBinding: true,
-          ref: "cifDict"
+          ref: "cifDict",
         }
       )
       .then(
         this.Transformer.Molecule.CreateFromMmCif,
         {
-          blockIndex: 0
+          blockIndex: 0,
         },
         {
-          isBinding: true
+          isBinding: true,
         }
       )
       .then(
         this.Transformer.Molecule.CreateModel,
         {
-          modelIndex: 0
+          modelIndex: 0,
         },
         {
           isBinding: false,
-          ref: "model"
+          ref: "model",
         }
       )
       .then(this.Transformer.Molecule.CreateMacromoleculeVisual, {
         polymer: true,
         polymerRef: "polymer-visual",
         het: true,
-        water: true
+        water: true,
       });
 
     return this._liteMol.applyTransform(transform);
@@ -269,7 +272,7 @@ class ProtvistaStructure extends HTMLElement {
     colors.set("Selection", this.CoreVis.Color.fromRgb(255, 0, 0));
     colors.set("Highlight", this.CoreVis.Theme.Default.HighlightColor);
     return this.Visualization.Molecule.uniformThemeProvider(undefined, {
-      colors
+      colors,
     });
   }
 
@@ -278,13 +281,13 @@ class ProtvistaStructure extends HTMLElement {
     this._liteMol.command(this.Bootstrap.Command.Toast.Show, {
       key: "UPMessage",
       message,
-      timeoutMs: 30 * 1000
+      timeoutMs: 30 * 1000,
     });
   }
 
   removeMessage() {
     this._liteMol.command(this.Bootstrap.Command.Toast.Hide, {
-      key: "UPMessage"
+      key: "UPMessage",
     });
   }
 
@@ -324,7 +327,7 @@ class ProtvistaStructure extends HTMLElement {
             entity: mapping.entity_id,
             chain: mapping.chain_id,
             start: direction === "UP_PDB" ? start - offset : start + offset,
-            end: direction === "UP_PDB" ? end - offset : end + offset
+            end: direction === "UP_PDB" ? end - offset : end + offset,
           };
         }
       } else {
@@ -341,17 +344,17 @@ class ProtvistaStructure extends HTMLElement {
       return;
     }
     const seqPositions = e.data.residues
-      .map(residue =>
+      .map((residue) =>
         this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)
       )
-      .map(residue => `${residue.start}:${residue.end}`);
+      .map((residue) => `${residue.start}:${residue.end}`);
 
     const event = new CustomEvent("change", {
       detail: {
-        highlight: seqPositions.join(",")
+        highlight: seqPositions.join(","),
       },
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     });
     this.dispatchEvent(event);
   }
@@ -375,21 +378,21 @@ class ProtvistaStructure extends HTMLElement {
 
     const translatedPositions = this._highlight
       .map(({ start, end }) => this.translatePositions(start, end))
-      .filter(translatedPosition => translatedPosition);
+      .filter((translatedPosition) => translatedPosition);
 
     if (!translatedPositions || translatedPositions.length === 0) {
       return;
     }
 
-    const queries = translatedPositions.map(translatedPos =>
+    const queries = translatedPositions.map((translatedPos) =>
       this.Query.sequence(
         translatedPos.entity.toString(),
         translatedPos.chain,
         {
-          seqNumber: translatedPos.start
+          seqNumber: translatedPos.start,
         },
         {
-          seqNumber: translatedPos.end
+          seqNumber: translatedPos.end,
         }
       )
     );
@@ -397,15 +400,15 @@ class ProtvistaStructure extends HTMLElement {
     const theme = this.getTheme();
     const transform = this._liteMol.createTransform();
 
-    queries.forEach(query =>
+    queries.forEach((query) =>
       transform.add(
         visual,
         this.Transformer.Molecule.CreateSelectionFromQuery,
         {
-          query
+          query,
         },
         {
-          ref: "sequence-selection"
+          ref: "sequence-selection",
         }
       )
     );
@@ -413,7 +416,7 @@ class ProtvistaStructure extends HTMLElement {
     this._liteMol.applyTransform(transform).then(() => {
       this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
         visual,
-        theme
+        theme,
       });
     });
     this.removeMessage();
