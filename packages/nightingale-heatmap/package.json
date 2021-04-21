@@ -1,12 +1,12 @@
 {
-  "name": "nightingale-contact-map",
-  "description": "Nightingale Contact Map",
+  "name": "nightingale-heatmap",
+  "description": "Nightingale Heatmap",
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/nightingale-contact-map.js",
-  "module": "src/nightingale-contact-map.js",
+  "main": "dist/nightingale-heatmap.js",
+  "module": "src/nightingale-heatmap.js",
   "version": "3.2.5",
   "keywords": [
     "nightingale",

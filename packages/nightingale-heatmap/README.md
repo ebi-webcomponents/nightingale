@@ -1,13 +1,15 @@
-# nightingale-contact-map
+# nightingale-heatmap
 
 [![Published on NPM](https://img.shields.io/npm/v/nightingale-contact-map.svg)](https://www.npmjs.com/package/nightingale-contact-map)
 
-Nightingale Contact Map component is used to generate a heatmap visualisation for residues contacts data based on the distance.
+Nightingale Heatmap component is used to generate a heatmap visualisation.
 
 ## Usage
 
+The below example is using residues contacts data based on the distance.
+
 ```html
-<nightingale-contact-map></nightingale-contact-map>
+<nightingale-heatmap></nightingale-heatmap>
 ```
 
 ## API Reference

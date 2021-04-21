@@ -1,7 +1,7 @@
-import NightingaleContactMap from "./nightingale-contact-map";
+import NightingaleHeatmap from "./nightingale-heatmap";
 
 const loadComponent = () => {
-  customElements.define("nightingale-contact-map", NightingaleContactMap);
+  customElements.define("nightingale-heatmap", NightingaleHeatmap);
 };
 
 // Conditional loading of polyfill

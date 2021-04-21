@@ -1,24 +1,24 @@
 import React, { Fragment, Component } from "react";
-import NightingaleContactMap from "nightingale-contact-map";
+import NightingaleHeatmap from "nightingale-heatmap";
 import loadWebComponent from "../utils/load-web-component";
 import data from "../mocks/contact-map.json";
 import Readme from "./Readme";
-import readmeContent from "../../../packages/nightingale-contact-map/README.md";
+import readmeContent from "../../../packages/nightingale-heatmap/README.md";
 
-class NightingaleContactMapWrapper extends Component {
+class NightingaleHeatmapWrapper extends Component {
   componentDidMount() {
     document.querySelector("#map").data = data.value;
   }
 
   render() {
-    loadWebComponent("nightingale-contact-map", NightingaleContactMap);
+    loadWebComponent("nightingale-heatmap", NightingaleHeatmap);
     return (
       <Fragment>
         <Readme content={readmeContent} />
-        <nightingale-contact-map id="map" width={"560"} height={"560"} />
+        <nightingale-heatmap id="map" width={"560"} height={"560"} />
       </Fragment>
     );
   }
 }
 
-export default NightingaleContactMapWrapper;
+export default NightingaleHeatmapWrapper;
