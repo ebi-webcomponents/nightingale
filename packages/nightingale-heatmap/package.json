@@ -1,0 +1,32 @@
+{
+  "name": "nightingale-heatmap",
+  "description": "Nightingale Heatmap",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-heatmap.js",
+  "module": "src/nightingale-heatmap.js",
+  "version": "3.2.5",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "heatmap",
+    "contacts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  }
+}
