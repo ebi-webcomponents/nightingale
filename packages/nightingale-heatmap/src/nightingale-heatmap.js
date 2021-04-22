@@ -44,7 +44,7 @@ class NightingaleHeatmap extends HTMLElement {
     select(this).select("canvas").remove();
 
     if (this._data) {
-      this.drawHeatMap(this._data);
+      this.createHeatMap(this._data);
     }
   }
 
@@ -62,10 +62,10 @@ class NightingaleHeatmap extends HTMLElement {
     );
   }
 
-  drawHeatMap(data) {
+  createHeatMap(data) {
     const margin = { top: 30, right: 25, bottom: 30, left: 40 };
-    const canvasWidth = this._width - margin.left - margin.right;
-    const canvasHeight = this._height - margin.top - margin.bottom;
+    this.canvasWidth = this._width - margin.left - margin.right;
+    this.canvasHeight = this._height - margin.top - margin.bottom;
 
     const svg = select(this)
       .append("svg")
@@ -79,27 +79,27 @@ class NightingaleHeatmap extends HTMLElement {
 
     const canvas = select(this)
       .append("canvas")
-      .attr("width", canvasWidth)
-      .attr("height", canvasHeight)
+      .attr("width", this.canvasWidth)
+      .attr("height", this.canvasHeight)
       .style("margin-left", `${margin.left}px`)
       .style("margin-top", `${margin.top}px`)
       .attr("class", "canvas-heatmap")
       .style("position", "absolute");
 
-    const context = canvas.node().getContext("2d");
+    this.context = canvas.node().getContext("2d");
 
     // X scale
-    const x = scaleBand()
-      .range([0, canvasWidth])
+    this.x = scaleBand()
+      .range([0, this.canvasWidth])
       .domain(data.map((value) => value[0]));
 
     // Y scale
-    const y = scaleBand()
-      .range([0, canvasHeight])
+    this.y = scaleBand()
+      .range([0, this.canvasHeight])
       .domain(data.map((value) => value[1]));
 
     // Ticks interval
-    const total = x.domain().length;
+    const total = this.x.domain().length;
     const tickValues = [1];
     let position = 50;
     while (total > 0 && position <= total) {
@@ -108,15 +108,15 @@ class NightingaleHeatmap extends HTMLElement {
     }
 
     // Adding axes
-    const xAxis = axisBottom(x).tickSize(3).tickValues(tickValues);
+    const xAxis = axisBottom(this.x).tickSize(3).tickValues(tickValues);
     svg
       .append("g")
       .style("font-size", 15)
-      .attr("transform", `translate(0,${canvasHeight})`)
+      .attr("transform", `translate(0,${this.canvasHeight})`)
       .call(xAxis)
       .select(".domain")
       .remove();
-    const yAxis = axisLeft(y).tickSize(3).tickValues(tickValues);
+    const yAxis = axisLeft(this.y).tickSize(3).tickValues(tickValues);
     svg
       .append("g")
       .style("font-size", 15)
@@ -129,7 +129,7 @@ class NightingaleHeatmap extends HTMLElement {
       .append("text")
       .attr(
         "transform",
-        `translate(${canvasWidth / 2},${canvasHeight + margin.top})`
+        `translate(${this.canvasWidth / 2},${this.canvasHeight + margin.top})`
       )
       .style("text-anchor", "middle")
       .text("Residue");
@@ -137,57 +137,70 @@ class NightingaleHeatmap extends HTMLElement {
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left)
-      .attr("x", 0 - canvasHeight / 2)
+      .attr("x", 0 - this.canvasHeight / 2)
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .text("Residue");
 
-    const colorScale = scaleLinear().domain([0, 1]).range(["orange", "blue"]);
-
     // Draw on canvas
-    const drawRect = (value, _this) => {
-      context.beginPath();
-      context.fillStyle = colorScale(value[2]);
-      context.fillRect(
-        x(value[0]),
-        y(value[1]),
-        Math.floor(x.bandwidth()),
-        Math.floor(y.bandwidth())
-      );
-      // Symmetric half
-      if (_this.symmetricMap)
-        context.fillRect(
-          x(value[1]),
-          y(value[0]),
-          Math.floor(x.bandwidth()),
-          Math.floor(y.bandwidth())
-        );
-    };
-
-    data.forEach((point) => {
-      drawRect(point, this);
-    });
+    this.refreshHeatmap(data);
 
     const mousemove = () => {
       const xDomainValue = Math.floor(
-        ((x.domain().length - 1) * d3Event.offsetX) / x.range()[1]
+        ((this.x.domain().length - 1) * d3Event.offsetX) / this.x.range()[1]
       );
       const yDomainValue = Math.floor(
-        ((y.domain().length - 1) * d3Event.offsetY) / y.range()[1]
+        ((this.y.domain().length - 1) * d3Event.offsetY) / this.y.range()[1]
       );
       if (xDomainValue >= 0 && yDomainValue >= 0) {
-        const xPoint = x.domain()[xDomainValue];
-        const yPoint = y.domain()[yDomainValue];
+        const xPoint = this.x.domain()[xDomainValue];
+        const yPoint = this.y.domain()[yDomainValue];
+        this.refreshHeatmap(data, [xPoint, yPoint]);
         this._dispatchSelectionPoint("mousemove", this, { xPoint, yPoint });
       }
     };
 
     const mouseout = () => {
+      this.refreshHeatmap(data);
       this._dispatchSelectionPoint("mouseout", this);
     };
 
     select(".canvas-heatmap").on("mousemove", mousemove);
     select(".canvas-heatmap").on("mouseout", mouseout);
+  }
+
+  refreshHeatmap(data, highlightPoint = []) {
+    // Clear the canvas before repainting
+    this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+
+    data.forEach((point) => {
+      this.drawRect(point);
+    });
+
+    if (highlightPoint.length === 2) {
+      this.drawRect(highlightPoint, true);
+    }
+  }
+
+  drawRect(value, highlight = false) {
+    const colorScale = scaleLinear().domain([0, 1]).range(["orange", "blue"]);
+    this.context.beginPath();
+    this.context.fillStyle = highlight ? "black" : colorScale(value[2]);
+    this.context.fillRect(
+      this.x(value[0]),
+      this.y(value[1]),
+      Math.floor(this.x.bandwidth()),
+      Math.floor(this.y.bandwidth())
+    );
+    // Symmetric half
+    if (this.symmetricMap && !highlight)
+      // Dont highlight the symmetrical point
+      this.context.fillRect(
+        this.x(value[1]),
+        this.y(value[0]),
+        Math.floor(this.x.bandwidth()),
+        Math.floor(this.y.bandwidth())
+      );
   }
 }
 
