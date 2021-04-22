@@ -24,6 +24,10 @@ The width specifies the width of the heat map.
 
 The height specifies the height of the heat map.
 
+#### `symmetric: boolean`
+
+It supports symmetric matrix.
+
 #### `data: Array`
 
 The data array is of the following structure.
