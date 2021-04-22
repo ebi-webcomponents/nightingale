@@ -11,6 +11,7 @@ class NightingaleHeatmap extends HTMLElement {
   connectedCallback() {
     this._width = Number(this.getAttribute("width")) || 650;
     this._height = Number(this.getAttribute("width")) || 700;
+    this.symmetricMap = this.hasAttribute("symmetric");
     if (this._data) this.render();
   }
 
@@ -144,7 +145,7 @@ class NightingaleHeatmap extends HTMLElement {
     const colorScale = scaleLinear().domain([0, 1]).range(["orange", "blue"]);
 
     // Draw on canvas
-    const drawRect = (value) => {
+    const drawRect = (value, _this) => {
       context.beginPath();
       context.fillStyle = colorScale(value[2]);
       context.fillRect(
@@ -154,16 +155,17 @@ class NightingaleHeatmap extends HTMLElement {
         Math.floor(y.bandwidth())
       );
       // Symmetric half
-      context.fillRect(
-        x(value[1]),
-        y(value[0]),
-        Math.floor(x.bandwidth()),
-        Math.floor(y.bandwidth())
-      );
+      if (_this.symmetricMap)
+        context.fillRect(
+          x(value[1]),
+          y(value[0]),
+          Math.floor(x.bandwidth()),
+          Math.floor(y.bandwidth())
+        );
     };
 
     data.forEach((point) => {
-      drawRect(point);
+      drawRect(point, this);
     });
 
     const mousemove = () => {

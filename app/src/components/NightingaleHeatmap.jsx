@@ -15,7 +15,12 @@ class NightingaleHeatmapWrapper extends Component {
     return (
       <Fragment>
         <Readme content={readmeContent} />
-        <nightingale-heatmap id="map" width={"560"} height={"560"} />
+        <nightingale-heatmap
+          id="map"
+          width={"560"}
+          height={"560"}
+          symmetric={true}
+        />
       </Fragment>
     );
   }
