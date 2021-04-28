@@ -4,11 +4,13 @@ import {
   scaleLinear,
   axisBottom,
   axisLeft,
+  range,
   event as d3Event,
 } from "d3";
 
 class NightingaleHeatmap extends HTMLElement {
   connectedCallback() {
+    this.length = Number(this.getAttribute("length"));
     this._width = Number(this.getAttribute("width")) || 650;
     this._height = Number(this.getAttribute("width")) || 700;
     this.symmetricMap = this.hasAttribute("symmetric");
@@ -16,19 +18,53 @@ class NightingaleHeatmap extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["width", "height"];
+    return ["length", "width", "height"];
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
     if (oldVal != null && oldVal !== newVal) {
       if (attrName === "width") this._width = newVal;
       if (attrName === "height") this._height = newVal;
+      if (attrName === "length") this.length = newVal;
       this.render();
     }
   }
 
   set data(data) {
-    this._data = data;
+    // If length is not specified, the last value from the data is taken as the dimension for the matrix
+    if (!this.length) {
+      const [lastValue] = data[data.length - 1];
+      this.length = lastValue;
+    }
+
+    // Filling missing values
+    const newArray = [];
+    let i = 1;
+    let j = 1;
+    for (let k = 0; k < data.length; k++) {
+      const value = data[k];
+      // eslint-disable-next-line no-loop-func
+      const fillArray = (newArray) => {
+        if (value[0] === i && value[1] === j) {
+          // If present, push the existing value
+          newArray.push(data[k]);
+        } else {
+          // If not, push the value as 0 and continue with the last checked index 'k' of data
+          newArray.push([i, j, 0]);
+          k--;
+        }
+      };
+
+      if (j <= this.length) {
+        fillArray(newArray);
+        j++;
+      } else {
+        i++;
+        j = this.symmetricMap ? i : 1;
+        fillArray(newArray);
+      }
+    }
+    this._data = newArray;
     this.render();
   }
 
@@ -63,7 +99,7 @@ class NightingaleHeatmap extends HTMLElement {
   }
 
   createHeatMap(data) {
-    const margin = { top: 30, right: 25, bottom: 30, left: 40 };
+    const margin = { top: 40, right: 25, bottom: 40, left: 50 };
     this.canvasWidth = this._width - margin.left - margin.right;
     this.canvasHeight = this._height - margin.top - margin.bottom;
 
@@ -91,12 +127,12 @@ class NightingaleHeatmap extends HTMLElement {
     // X scale
     this.x = scaleBand()
       .range([0, this.canvasWidth])
-      .domain(data.map((value) => value[0]));
+      .domain(range(1, this.length));
 
     // Y scale
     this.y = scaleBand()
       .range([0, this.canvasHeight])
-      .domain(data.map((value) => value[1]));
+      .domain(range(1, this.length));
 
     // Ticks interval
     const total = this.x.domain().length;
@@ -147,10 +183,10 @@ class NightingaleHeatmap extends HTMLElement {
 
     const mousemove = () => {
       const xDomainValue = Math.floor(
-        ((this.x.domain().length - 1) * d3Event.offsetX) / this.x.range()[1]
+        (this.x.domain().length * d3Event.offsetX) / this.x.range()[1]
       );
       const yDomainValue = Math.floor(
-        ((this.y.domain().length - 1) * d3Event.offsetY) / this.y.range()[1]
+        (this.y.domain().length * d3Event.offsetY) / this.y.range()[1]
       );
       if (xDomainValue >= 0 && yDomainValue >= 0) {
         const xPoint = this.x.domain()[xDomainValue];

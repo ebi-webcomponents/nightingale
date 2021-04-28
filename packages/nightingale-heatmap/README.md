@@ -1,6 +1,6 @@
 # nightingale-heatmap
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-contact-map.svg)](https://www.npmjs.com/package/nightingale-contact-map)
+[![Published on NPM](https://img.shields.io/npm/v/nightingale-heatmap.svg)](https://www.npmjs.com/package/nightingale-heatmap)
 
 Nightingale Heatmap component is used to generate a heatmap visualisation.
 
