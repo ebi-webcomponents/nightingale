@@ -25,12 +25,18 @@ export default class TrackHighlighter {
       this.element._highlightend = Number(
         this.element.getAttribute("highlightend")
       );
+      this.element._highlightcolor = Number(
+        this.element.getAttribute("highlightcolor")
+      );
       if (
         this.element._highlightstart !== null &&
         this.element._highlightend !== null &&
         typeof this.element._highlightstart === "number" &&
         typeof this.element._highlightend === "number"
       ) {
+        this.element._highlightcolor = this.element._highlightcolor
+          ? this.element._highlightcolor
+          : "#FFEB3BCC";
         this.element._highlight = `${this.element._highlightstart}:${this.element._highlightend}`;
         this.region.decode(
           combineRegions(this.fixedHighlight, this.element._highlight)
@@ -89,14 +95,14 @@ export default class TrackHighlighter {
       .enter()
       .append("rect")
       .style("opacity", 0.5)
-      .attr("fill", "rgba(255, 235, 59, 0.8)")
       .style("pointer-events", "none")
       .merge(highlighs)
+      .attr("fill", (d) => (d.color ? d.color : this.element._highlightcolor))
       .attr("height", this.element._height)
-      .attr("x", d => this.element.getXFromSeqPosition(d.start))
+      .attr("x", (d) => this.element.getXFromSeqPosition(d.start))
       .attr(
         "width",
-        d => this.element.getSingleBaseWidth() * (d.end - d.start + 1)
+        (d) => this.element.getSingleBaseWidth() * (d.end - d.start + 1)
       );
     highlighs.exit().remove();
   }
