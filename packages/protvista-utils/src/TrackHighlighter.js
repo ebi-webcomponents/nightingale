@@ -25,8 +25,8 @@ export default class TrackHighlighter {
       this.element._highlightend = Number(
         this.element.getAttribute("highlightend")
       );
-      this.element._highlightcolor = Number(
-        this.element.getAttribute("highlightcolor")
+      this.element._highlightcolor = this.element.getAttribute(
+        "highlightcolor"
       );
       if (
         this.element._highlightstart !== null &&
