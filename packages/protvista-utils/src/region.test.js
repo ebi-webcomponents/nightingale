@@ -236,10 +236,10 @@ describe("region decoding", () => {
     } catch (e) {}
   });
 
-  test("Fails decoding because there should be at most 1 ':' per region", () => {
+  test("Fails decoding because there should be at most 2 ':' per region", () => {
     const region = new Region();
     try {
-      region.decode("1:3:4");
+      region.decode("1:3:#000000:5");
       fail("The decoding should fails");
     } catch (e) {}
   });
