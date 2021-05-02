@@ -8,11 +8,11 @@ export default class Region {
 
   encode(full = false) {
     return this.segments
-      .map(({ start, end }) => {
-        if (full) return `${start}:${end}`;
+      .map(({ start, end, color }) => {
+        if (full) return `${start}:${end}:${color ?? "Default"}`;
         const s = start === this.min ? "" : start;
         const e = end === this.max ? "" : end;
-        return `${s}:${e}`;
+        return `${s}:${e}${color ? `:${color}` : ""}`;
       })
       .join(",");
   }
@@ -31,7 +31,7 @@ export default class Region {
         );
       let start = _start ? Number(_start) : this.min;
       let end = _end ? Number(_end) : this.max;
-      const color = _color;
+      const color = _color !== "" ? _color : undefined;
       if (start > end) [start, end] = [end, start];
       if (start < this.min) start = this.min;
       if (end > this.max) end = this.max;
@@ -43,7 +43,7 @@ export default class Region {
         throw new Error(
           `The parsed value of ${_end} is NaN. Region: ${region}`
         );
-      if (color && !color.match(/^#[0-9a-f]{6}$/i))
+      if (color && !color.match(/^#[0-9a-f]{6,8}$/i))
         throw new Error(
           `The parsed value of ${_color} is not a color in hex format. Region: ${region}`
         );
