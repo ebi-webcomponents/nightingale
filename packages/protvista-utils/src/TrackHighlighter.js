@@ -8,6 +8,7 @@ const combineRegions = (region1, region2) => {
 export default class TrackHighlighter {
   constructor({ element, min, max }) {
     this.element = element;
+    this.element._highlightcolor = "#FFEB3BCC";
     this.region = new Region({ min, max });
     this.fixedHighlight = null;
   }
