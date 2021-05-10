@@ -9,7 +9,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
     super.connectedCallback();
     this.sequence = this.getAttribute("sequence");
     const ticks = this.getAttribute("numberofticks");
-    this.numberOfTicks = Number.isInteger(ticks)
+    this.numberOfTicks = Number.isInteger(parseInt(ticks))
       ? ticks
       : DEFAULT_NUMBER_OF_TICKS;
     if (this.sequence) {
