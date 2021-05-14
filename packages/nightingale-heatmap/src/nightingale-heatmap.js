@@ -219,7 +219,9 @@ class NightingaleHeatmap extends HTMLElement {
   }
 
   drawRect(value, highlight = false) {
-    const colorScale = scaleLinear().domain([0, 1]).range(["orange", "blue"]);
+    const colorScale = scaleLinear()
+      .domain([0, 1])
+      .range(["darkblue", "yellow"]);
     this.context.beginPath();
     this.context.fillStyle = highlight ? "black" : colorScale(value[2]);
     this.context.fillRect(
