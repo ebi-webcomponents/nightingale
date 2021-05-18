@@ -57,10 +57,11 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
         d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassign
+        d.fillColor = d.fillColor || d.colour
         return this.drawLine(d)(d.values);
       })
-      .attr("fill", (d) => d.area ? d.colour : "none")
-      .attr("stroke", (d) => d.area ? "none" : d.colour)
+      .attr("fill", (d) => d.fill ? d.fillColor : "none")
+      .attr("stroke", (d) => d.colour)
       .attr("transform", "translate(0,0)");
 
     const mouseG = this.chartGroup
@@ -193,7 +194,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     const curve = d.lineCurve || "curveLinear";
 
     let graph;
-    if (d.area) {
+    if (d.fill) {
       graph = area()
         .y1((d) => this._yScale(d.value))
         .y0(() => this._yScale(0))
