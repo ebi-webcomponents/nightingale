@@ -9,7 +9,7 @@ export default class Region {
   encode(full = false) {
     return this.segments
       .map(({ start, end, color }) => {
-        if (full) return `${start}:${end}:${color ?? "Default"}`;
+        if (full) return `${start}:${end}${color ? `:${color}` : ""}`;
         const s = start === this.min ? "" : start;
         const e = end === this.max ? "" : end;
         return `${s}:${e}${color ? `:${color}` : ""}`;

@@ -13,7 +13,7 @@ describe("region encoding", () => {
     const region = new Region();
     region.decode(":");
     expect(region.segments).toMatchSnapshot();
-    expect(region.encode(true)).toEqual("-Infinity:Infinity:Default");
+    expect(region.encode(true)).toEqual("-Infinity:Infinity");
     expect(region.encode(false)).toEqual(":");
   });
 
@@ -21,14 +21,14 @@ describe("region encoding", () => {
     const region = new Region();
     region.decode("::");
     expect(region.segments).toMatchSnapshot();
-    expect(region.encode(true)).toEqual("-Infinity:Infinity:Default");
+    expect(region.encode(true)).toEqual("-Infinity:Infinity");
     expect(region.encode(false)).toEqual(":");
   });
   test("encode simple region", () => {
     const region = new Region();
     region.decode("2:10");
     expect(region.segments).toMatchSnapshot();
-    expect(region.encode(true)).toEqual("2:10:Default");
+    expect(region.encode(true)).toEqual("2:10");
     expect(region.encode(false)).toEqual("2:10");
   });
   test("encode simple region with color", () => {
@@ -57,9 +57,7 @@ describe("region encoding", () => {
     const txt = "1:5,10:20,30:50,50:100";
     region.decode(txt);
     expect(region.segments).toMatchSnapshot();
-    expect(region.encode(true)).toEqual(
-      "1:5:Default,10:20:Default,30:50:Default,50:100:Default"
-    );
+    expect(region.encode(true)).toEqual("1:5,10:20,30:50,50:100");
     expect(region.encode()).toEqual(":5,10:20,30:50,50:");
   });
   test("encode multiple region with color", () => {
@@ -68,7 +66,7 @@ describe("region encoding", () => {
     region.decode(txt);
     expect(region.segments).toMatchSnapshot();
     expect(region.encode(true)).toEqual(
-      "1:5:#00EE55,10:20:Default,30:50:#00E800AA,50:100:Default"
+      "1:5:#00EE55,10:20,30:50:#00E800AA,50:100"
     );
     expect(region.encode()).toEqual(":5:#00EE55,10:20,30:50:#00E800AA,50:");
   });
@@ -77,9 +75,7 @@ describe("region encoding", () => {
     const region = new Region({ min: 1, max: 100 });
     region.decode(":,:20,30:,50:100,,0:200");
     expect(region.segments).toMatchSnapshot();
-    expect(region.encode(true)).toEqual(
-      "1:100:Default,1:20:Default,30:100:Default,50:100:Default,1:100:Default,1:100:Default"
-    );
+    expect(region.encode(true)).toEqual("1:100,1:20,30:100,50:100,1:100,1:100");
     expect(region.encode()).toEqual(":,:20,30:,50:,:,:");
   });
 
@@ -88,7 +84,7 @@ describe("region encoding", () => {
     region.decode("::#00EE55,:20:#00E800AA,30::#00EE55,50:100,,0:200");
     expect(region.segments).toMatchSnapshot();
     expect(region.encode(true)).toEqual(
-      "1:100:#00EE55,1:20:#00E800AA,30:100:#00EE55,50:100:Default,1:100:Default,1:100:Default"
+      "1:100:#00EE55,1:20:#00E800AA,30:100:#00EE55,50:100,1:100,1:100"
     );
     expect(region.encode()).toEqual(
       "::#00EE55,:20:#00E800AA,30::#00EE55,50:,:,:"

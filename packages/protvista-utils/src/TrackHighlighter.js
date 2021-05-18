@@ -1,5 +1,7 @@
 import Region from "./Region";
 
+const DEFAULT_HIGLIGHT_COLOR = "#FFEB3B66";
+
 const combineRegions = (region1, region2) => {
   if (!region1) return region2;
   if (!region2) return region1;
@@ -8,7 +10,7 @@ const combineRegions = (region1, region2) => {
 export default class TrackHighlighter {
   constructor({ element, min, max }) {
     this.element = element;
-    this.element._highlightcolor = "#FFEB3BCC";
+    this.element._highlightcolor = DEFAULT_HIGLIGHT_COLOR;
     this.region = new Region({ min, max });
     this.fixedHighlight = null;
   }
@@ -26,18 +28,14 @@ export default class TrackHighlighter {
       this.element._highlightend = Number(
         this.element.getAttribute("highlightend")
       );
-      this.element._highlightcolor = this.element.getAttribute(
-        "highlightcolor"
-      );
+      this.element._highlightcolor =
+        this.element.getAttribute("highlightcolor") || DEFAULT_HIGLIGHT_COLOR;
       if (
         this.element._highlightstart !== null &&
         this.element._highlightend !== null &&
         typeof this.element._highlightstart === "number" &&
         typeof this.element._highlightend === "number"
       ) {
-        this.element._highlightcolor = this.element._highlightcolor
-          ? this.element._highlightcolor
-          : "#FFEB3BCC";
         this.element._highlight = `${this.element._highlightstart}:${this.element._highlightend}`;
         this.region.decode(
           combineRegions(this.fixedHighlight, this.element._highlight)
@@ -95,7 +93,6 @@ export default class TrackHighlighter {
     highlighs
       .enter()
       .append("rect")
-      .style("opacity", 0.5)
       .style("pointer-events", "none")
       .merge(highlighs)
       .attr("fill", (d) => (d.color ? d.color : this.element._highlightcolor))
