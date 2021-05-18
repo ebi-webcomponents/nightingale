@@ -192,11 +192,11 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
   drawLine(d) {
     const curve = d.lineCurve || "curveLinear";
 
-    var graph;
+    let graph;
     if (d.area) {
       graph = area()
         .y1((d) => this._yScale(d.value))
-        .y0((d) => this._yScale(0))
+        .y0(() => this._yScale(0))
     } else {
       graph = line()
         .y((d) => this._yScale(d.value))
