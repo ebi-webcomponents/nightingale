@@ -33,6 +33,7 @@ class ProtvistaSequenceWrapper extends Component {
           displayend="150"
           highlightStart="23"
           highlightEnd="45"
+          numberofticks="10"
         />
         <protvista-sequence
           id="seq3"
@@ -57,6 +58,7 @@ class ProtvistaSequenceWrapper extends Component {
           displayend="4"
           highlightStart="2"
           highlightEnd="2"
+          numberofticks="2"
         />
       </Fragment>
     );
