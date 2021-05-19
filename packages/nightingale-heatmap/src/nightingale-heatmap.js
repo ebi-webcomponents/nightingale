@@ -12,7 +12,7 @@ class NightingaleHeatmap extends HTMLElement {
   connectedCallback() {
     this.length = Number(this.getAttribute("length"));
     this._width = Number(this.getAttribute("width")) || 650;
-    this._height = Number(this.getAttribute("width")) || 700;
+    this._height = Number(this.getAttribute("height")) || 700;
     this.symmetricMap = this.hasAttribute("symmetric");
     if (this._data) this.render();
   }
@@ -99,7 +99,7 @@ class NightingaleHeatmap extends HTMLElement {
   }
 
   createHeatMap(data) {
-    const margin = { top: 40, right: 25, bottom: 40, left: 50 };
+    const margin = { top: 50, right: 50, bottom: 50, left: 50 };
     this.canvasWidth = this._width - margin.left - margin.right;
     this.canvasHeight = this._height - margin.top - margin.bottom;
 
@@ -137,10 +137,12 @@ class NightingaleHeatmap extends HTMLElement {
     // Ticks interval
     const total = this.x.domain().length;
     const tickValues = [1];
-    let position = 50;
+    // Showing quarter values in the length as ticks
+    const quarter = total * 0.25 - ((total * 0.25) % 10);
+    let position = quarter;
     while (total > 0 && position <= total) {
       tickValues.push(Math.min(total, position));
-      position += 50;
+      position += quarter;
     }
 
     // Adding axes
@@ -209,9 +211,28 @@ class NightingaleHeatmap extends HTMLElement {
     // Clear the canvas before repainting
     this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-    data.forEach((point) => {
-      this.drawRect(point);
-    });
+    // Check if bandwidth is less than 1, if so calculate the average of the values that fall in 1 pixel
+    if (this.x.bandwidth() < 1) {
+      let acc = [];
+      const np = Math.ceil(1 / this.x.bandwidth());
+      data.forEach((point) => {
+        acc.push(point);
+        if (acc.length === np) {
+          // calculate average point
+          const sum = acc.reduce((current, p) => {
+            return current + p[2];
+          }, 0);
+          const newPoint = [...point];
+          newPoint[2] = sum / np;
+          this.drawRect(newPoint);
+          acc = [];
+        }
+      });
+    } else {
+      data.forEach((point) => {
+        this.drawRect(point);
+      });
+    }
 
     if (highlightPoint.length === 2) {
       this.drawRect(highlightPoint, true);
@@ -227,8 +248,8 @@ class NightingaleHeatmap extends HTMLElement {
     this.context.fillRect(
       this.x(value[0]),
       this.y(value[1]),
-      Math.floor(this.x.bandwidth()),
-      Math.floor(this.y.bandwidth())
+      Math.ceil(this.x.bandwidth()),
+      Math.ceil(this.y.bandwidth())
     );
     // Symmetric half
     if (this.symmetricMap && !highlight)
@@ -236,8 +257,8 @@ class NightingaleHeatmap extends HTMLElement {
       this.context.fillRect(
         this.x(value[1]),
         this.y(value[0]),
-        Math.floor(this.x.bandwidth()),
-        Math.floor(this.y.bandwidth())
+        Math.ceil(this.x.bandwidth()),
+        Math.ceil(this.y.bandwidth())
       );
   }
 }
