@@ -18,7 +18,7 @@ Read our guide [here](/CONTRIBUTING.md) as well as our
 
 ## Installing
 
-Nightingale uses [Lerna](https://lernajs.io/) to manage its packages.
+Nightingale uses [Lerna](https://lerna.js.org/) to manage its packages.
 
 First run `yarn` to install root packages. Then run `yarn bootstrap` to install
 remaining modules and link dependencies.
