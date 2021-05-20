@@ -33,8 +33,10 @@ Why pull requests?
 - Disseminate knowledge
 - Catch potential issues early
 
-Before you submit a pull request, please ensure your code comforms to the [styleguide](#styleguide), that the tests are passing and follow instructions in [the template](https://github.com/ebi-webcomponents/protvista-uniprot/blob/master/pull_request_template.md).
+Before you submit a pull request, please ensure your code comforms to the [styleguide](#styleguide),
+that the tests are passing and follow instructions in [the template](/pull_request_template.md).
 
 ### Styleguide
 
-We follow [airbnb-base](https://github.com/airbnb/javascript) and [prettier](https://github.com/prettier/prettier-eslint). Run `yarn lint` to run the linter in all packages.
+We follow [airbnb-base](https://github.com/airbnb/javascript) and [prettier](https://github.com/prettier/prettier-eslint).
+Run `yarn lint` to run the linter in all packages.
