@@ -5,7 +5,7 @@ import {
   parseToRowData,
   contactObjectToLinkList,
   getContactsObject,
-  filterOverThreshold,
+  filterContacts,
 } from "./links-parser";
 
 const OPACITY_MOUSEOUT = 0.4;
@@ -31,7 +31,9 @@ const getHighlightEvent = (
 };
 
 class ProtvistaLinks extends ProtvistaTrack {
-  _threshold: number;
+  _minDistance: number;
+
+  _minProbability: number;
 
   _rawData?: ArrayOfNumberArray;
 
@@ -62,13 +64,14 @@ class ProtvistaLinks extends ProtvistaTrack {
 
   constructor() {
     super();
-    this._threshold = 0.7;
+    this._minDistance = 0;
+    this._minProbability = 0.7;
     this._rawData = null;
     this._linksData = null;
   }
 
   static get observedAttributes(): Array<string> {
-    return ProtvistaTrack.observedAttributes.concat("threshold");
+    return ProtvistaTrack.observedAttributes.concat("mindistance", "minprobability");
   }
 
   attributeChangedCallback(
@@ -76,8 +79,10 @@ class ProtvistaLinks extends ProtvistaTrack {
     oldValue: string,
     newValue: string
   ): void {
-    if (name === "threshold" && oldValue !== newValue) {
-      this.threshold = +newValue;
+    if (name === "mindistance" && oldValue !== newValue) {
+      this.minDistance = +newValue;
+    } else if (name === "minprobability" && oldValue !== newValue) {
+      this.minProbability = +newValue;
     } else {
       super.attributeChangedCallback(name, oldValue, newValue);
     }
@@ -92,20 +97,34 @@ class ProtvistaLinks extends ProtvistaTrack {
       throw new Error("data is not in a valid format");
     }
     this._data = getContactsObject(
-      filterOverThreshold(this._rawData, this._threshold)
+      filterContacts(this._rawData, this._minDistance, this._minProbability)
     );
     this._createTrack();
   }
 
-  get threshold(): number {
-    return this._threshold;
+  get minDistance(): number {
+    return this._minDistance;
   }
 
-  set threshold(value: number) {
-    this._threshold = +value;
+  set minDistance(value: number) {
+    this._minDistance = +value;
     if (this._rawData) {
       this._data = getContactsObject(
-        filterOverThreshold(this._rawData, this._threshold)
+        filterContacts(this._rawData, this._minDistance, this._minProbability)
+      );
+      this._createTrack();
+    }
+  }
+
+  get minProbability(): number {
+    return this._minProbability;
+  }
+
+  set minProbability(value: number) {
+    this._minProbability = +value;
+    if (this._rawData) {
+      this._data = getContactsObject(
+        filterContacts(this._rawData, this._minDistance, this._minProbability)
       );
       this._createTrack();
     }

@@ -18,16 +18,20 @@ export const parseToRowData = (text: string): ArrayOfNumberArray =>
     })
     .filter(Boolean);
 
-export const filterOverThreshold = (
+export const filterContacts = (
   data: ArrayOfNumberArray,
-  threshold: number
-): ArrayOfNumberArray => data.filter(([_, __, p]) => p > threshold);
+  minDistance: number,
+  minProbability: number
+): ArrayOfNumberArray => data.filter(([n1, n2, p]) => {
+  return Math.abs(n1 - n2) >= minDistance && p > minProbability;
+});
 
 export const parseLinksAssociative = (
   text: string,
-  threshold: number
+  minDistance: number,
+  minProbability: number
 ): LinksObject => {
-  const rawData = filterOverThreshold(parseToRowData(text), threshold);
+  const rawData = filterContacts(parseToRowData(text), minDistance, minProbability);
   const n2set: NumberArray = {};
   const sets: ArrayOfNumberArray = [];
   rawData.forEach(([n1, n2]) => {
@@ -54,9 +58,13 @@ export const parseLinksAssociative = (
       .map((s) => s.sort((x, y) => x - y)),
   };
 };
-export const parseLinks = (text: string, threshold: number): ContactObject => {
+export const parseLinks = (
+  text: string,
+  minDistance: number,
+  minProbability: number
+): ContactObject => {
   const rawData = parseToRowData(text);
-  return getContactsObject(filterOverThreshold(rawData, threshold));
+  return getContactsObject(filterContacts(rawData, minDistance, minProbability));
 };
 
 export const getContactsObject = (
