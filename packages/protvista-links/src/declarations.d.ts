@@ -5,6 +5,8 @@ interface LinksObject {
 interface ContactObject {
   contacts: Contacts;
   maxNumberOfContacts: number;
+  selected?: number;
+  isHold?: boolean;
 }
 
 interface NumberArray {

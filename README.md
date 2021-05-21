@@ -18,7 +18,7 @@ Read our guide [here](/CONTRIBUTING.md) as well as our
 
 ## Installing
 
-Nightingale uses [Lerna](https://lernajs.io/) to manage its packages.
+Nightingale uses [Lerna](https://lerna.js.org/) to manage its packages.
 
 First run `yarn` to install root packages. Then run `yarn bootstrap` to install
 remaining modules and link dependencies.
@@ -69,6 +69,12 @@ Run `yarn build` to build the application ready for deployment.
 
 [protvista-coloured-sequence](packages/protvista-coloured-sequence): Track that uses the sequence to paint a color depending on each residue. Extends `protvista-sequence`.
 [![npm version](https://badge.fury.io/js/protvista-coloured-sequence.svg)](https://badge.fury.io/js/protvista-coloured-sequence)
+
+[protvista-msa](packages/protvista-msa): an element displaying multiple sequence alignments. Extends. `protvista-zoomable`.
+[![npm version](https://badge.fury.io/js/protvista-msa.svg)](https://badge.fury.io/js/protvista-msa)
+
+[protvista-links](packages/protvista-links): a track representing inter-residue contacts with arcs. Extends. `protvista-track`.
+[![npm version](https://badge.fury.io/js/protvista-links.svg)](https://badge.fury.io/js/protvista-links)
 
 #### Data loading and adapters
 
