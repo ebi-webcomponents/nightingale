@@ -23,7 +23,7 @@
   "module": "src/protvista-navigation.js",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80",
   "dependencies": {
     "lodash-es": "^4.17.11",
     "protvista-utils": "^3.2.13"

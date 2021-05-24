@@ -32,5 +32,6 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
 }

@@ -32,5 +32,6 @@
     "protvista-variation": "^3.2.13",
     "protvista-variation-adapter": "^3.2.13",
     "vcftojson": "^1.1.0"
-  }
+  },
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
 }
