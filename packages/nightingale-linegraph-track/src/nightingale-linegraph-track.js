@@ -1,6 +1,6 @@
 import ProtvistaTrack from "protvista-track";
 import * as d3 from "d3";
-import { scaleLinear, select, line, max, min, interpolateRainbow } from "d3";
+import { scaleLinear, select, line, area, max, min, interpolateRainbow } from "d3";
 
 class NightingaleLinegraphTrack extends ProtvistaTrack {
   connectedCallback() {
@@ -57,9 +57,10 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
         d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassign
+        d.fill = d.fill || "none"
         return this.drawLine(d)(d.values);
       })
-      .attr("fill", "none")
+      .attr("fill", (d) => d.fill)
       .attr("stroke", (d) => d.colour)
       .attr("transform", "translate(0,0)");
 
@@ -192,14 +193,23 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
   drawLine(d) {
     const curve = d.lineCurve || "curveLinear";
 
-    return line()
+    let graph;
+    if (d.fill != "none") {
+      graph = area()
+        .y1((d) => this._yScale(d.value))
+        .y0(() => this._yScale(0))
+    } else {
+      graph = line()
+        .y((d) => this._yScale(d.value))
+    }
+
+    return graph
       .defined((d) => d.value !== null) // To have gaps in the line graph
       .x(
         (d) =>
           this.getXFromSeqPosition(d.position + 1) -
           this.getSingleBaseWidth() / 2
       )
-      .y((d) => this._yScale(d.value))
       .curve(d3[curve]);
   }
 }

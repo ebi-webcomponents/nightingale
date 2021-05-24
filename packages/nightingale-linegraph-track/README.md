@@ -30,7 +30,9 @@ The data expects the following structure.
 {
     name: String,
     range:[min, max],
-    colour?: Any colour,
+    colour?: Line colour,
+        (Colour will be assigned if not provided. Use "none" for no line colour)
+    fill?: Create area plot using given fill colour (default "none"),
     lineCurve?: 'curveLinear'(default)|'curveBasis'|'curveCardinal'|'curveStep'|'curveNatural',
         (More curves - https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curves)
     values: [
