@@ -37,4 +37,8 @@ The sequence to display
 
 The protein or nucleic acid sequence length.
 
+#### `numberofticks: number`
+
+The number of ticks in the displayed sequence.
+
 #### also see [protvista-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/protvista-zoomable/README.md#properties)
