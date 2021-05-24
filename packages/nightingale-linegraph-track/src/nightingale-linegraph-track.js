@@ -1,6 +1,14 @@
 import ProtvistaTrack from "protvista-track";
 import * as d3 from "d3";
-import { scaleLinear, select, line, area, max, min, interpolateRainbow } from "d3";
+import {
+  scaleLinear,
+  select,
+  line,
+  area,
+  max,
+  min,
+  interpolateRainbow,
+} from "d3";
 
 class NightingaleLinegraphTrack extends ProtvistaTrack {
   connectedCallback() {
@@ -57,7 +65,8 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
         d.colour = d.colour || interpolateRainbow(Math.random()); // eslint-disable-line no-param-reassign
-        d.fill = d.fill || "none"
+        // eslint-disable-next-line no-param-reassign
+        d.fill = d.fill || "none";
         return this.drawLine(d)(d.values);
       })
       .attr("fill", (d) => d.fill)
@@ -141,6 +150,7 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
              Finding the nearest point in the path to the mouse pointer using iterative dichotomy.
              Example can be found here - https://bl.ocks.org/larsenmtl/e3b8b7c2ca4787f77d78f58d41c3da91
              */
+            // eslint-disable-next-line no-constant-condition
             while (true) {
               target = Math.floor((beginning + end) / 2);
               pos = lines.nodes()[i].getPointAtLength(target);
@@ -194,13 +204,12 @@ class NightingaleLinegraphTrack extends ProtvistaTrack {
     const curve = d.lineCurve || "curveLinear";
 
     let graph;
-    if (d.fill != "none") {
+    if (d.fill !== "none") {
       graph = area()
         .y1((d) => this._yScale(d.value))
-        .y0(() => this._yScale(0))
+        .y0(() => this._yScale(0));
     } else {
-      graph = line()
-        .y((d) => this._yScale(d.value))
+      graph = line().y((d) => this._yScale(d.value));
     }
 
     return graph
