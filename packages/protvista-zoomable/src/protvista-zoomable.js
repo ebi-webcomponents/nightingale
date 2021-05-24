@@ -76,7 +76,9 @@ class ProtvistaZoomable extends HTMLElement {
     this.addEventListener("error", (e) => {
       console.error(e);
     });
-    this.addEventListener("click", this._resetEventHandler);
+    if (this._highlightEvent !== "none") {
+      this.addEventListener("click", this._resetEventHandler);
+    }
     if (this.hasAttribute("filter-scroll")) {
       document.addEventListener("wheel", this.wheelListener, { capture: true });
     }
@@ -91,7 +93,9 @@ class ProtvistaZoomable extends HTMLElement {
     } else {
       window.removeEventListener("resize", this._onResize);
     }
-    this.removeEventListener("click", this._resetEventHandler);
+    if (this._highlightEvent !== "none") {
+      this.removeEventListener("click", this._resetEventHandler);
+    }
     document.removeEventListener("wheel", this.wheelListener);
   }
 
