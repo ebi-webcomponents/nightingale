@@ -1,6 +1,6 @@
 {
   "name": "protvista-datatable",
-  "version": "3.2.0",
+  "version": "3.2.13",
   "files": [
     "dist",
     "src",
@@ -28,7 +28,7 @@
   "dependencies": {
     "lit-element": "^2.4.0",
     "lit-html": "^1.3.0",
-    "protvista-utils": "^3.0.0",
+    "protvista-utils": "^3.2.13",
     "uuid": "^8.3.1"
   },
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
