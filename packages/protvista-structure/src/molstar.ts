@@ -11,7 +11,12 @@ import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { CellPack } from "molstar/lib/extensions/cellpack";
 import { PDBeStructureQualityReport } from "molstar/lib/extensions/pdbe";
 import { ObjectKeys } from "molstar/lib/mol-util/type-helpers";
-import { StructureSelection } from "molstar/lib/mol-model/structure";
+import {
+  StructureElement,
+  StructureProperties,
+  StructureSelection,
+  Unit,
+} from "molstar/lib/mol-model/structure";
 import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
 import { ANVILMembraneOrientation } from "molstar/lib/extensions/anvil/behavior";
@@ -22,6 +27,7 @@ import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 
 import "../../../node_modules/molstar/build/viewer/molstar.css";
 import { Color } from "molstar/lib/mol-util/color";
+
 // require("../../../node_modules/molstar/lib/mol-plugin-ui/skin/light.scss");
 
 interface LoadStructureOptions {
@@ -137,6 +143,15 @@ class MolStar {
     if (!element)
       throw new Error(`Could not get element with id '${elementOrId}'`);
     this.plugin = createPlugin(element, spec);
+    this.plugin.behaviors.interaction.click.subscribe((event) => {
+      if (StructureElement.Loci.is(event.current.loci)) {
+        const loc = StructureElement.Location.create();
+        StructureElement.Loci.getFirstLocation(event.current.loci, loc);
+        // or loc = StructureElement.Loci.getFirstLocation(event.current.loci) which is ok to use if you dont do many sequential queries
+
+        console.log(StructureProperties.residue.auth_seq_id(loc));
+      }
+    });
     PluginCommands.Canvas3D.SetSettings(this.plugin, {
       settings: (props) => {
         // eslint-disable-next-line no-param-reassign

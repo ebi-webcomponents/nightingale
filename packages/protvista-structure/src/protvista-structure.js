@@ -178,6 +178,7 @@ class ProtvistaStructure extends HTMLElement {
     const mappings = Object.values(pdbEntry)[0].UniProt[this._accession]
       ?.mappings;
 
+    // await this._molStar.loadPdb("1grm".toLowerCase());
     await this._molStar.loadPdb(id.toLowerCase());
     this._selectedMolecule = {
       id,
@@ -193,6 +194,8 @@ class ProtvistaStructure extends HTMLElement {
   // }
 
   // getTheme() {
+  // TODO:  Configure selection and highlight colors when Mol* supports this
+  //        https://github.com/molstar/molstar/blob/410655052fa9b93c2d205d3528bc36914753dd4d/src/mol-plugin-ui/sequence/sequence.tsx#L154
   //   const colors = new Map();
   //   colors.set("Uniform", this.CoreVis.Color.fromRgb(207, 178, 178));
   //   colors.set("Selection", this.CoreVis.Color.fromRgb(255, 0, 0));
