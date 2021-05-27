@@ -363,6 +363,7 @@ class ProtvistaStructure extends HTMLElement {
     if (!sequencePosition) {
       return;
     }
+    // TODO: translate position
     // const seqPositions = e.data.residues
     //   .map((residue) =>
     //     this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)

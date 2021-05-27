@@ -8,9 +8,6 @@ import {
   PdbDownloadProvider,
 } from "molstar/lib/mol-plugin-state/actions/structure";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { CellPack } from "molstar/lib/extensions/cellpack";
-import { PDBeStructureQualityReport } from "molstar/lib/extensions/pdbe";
-import { ObjectKeys } from "molstar/lib/mol-util/type-helpers";
 import {
   StructureElement,
   StructureProperties,
@@ -18,8 +15,6 @@ import {
 } from "molstar/lib/mol-model/structure";
 import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
-import { ANVILMembraneOrientation } from "molstar/lib/extensions/anvil/behavior";
-import { DnatcoConfalPyramids } from "molstar/lib/extensions/dnatco";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 
@@ -32,17 +27,7 @@ interface LoadStructureOptions {
   representationParams?: StructureRepresentationPresetProvider.CommonParams;
 }
 
-const Extensions = {
-  cellpack: PluginSpec.Behavior(CellPack),
-  "dnatco-confal-pyramids": PluginSpec.Behavior(DnatcoConfalPyramids),
-  "pdbe-structure-quality-report": PluginSpec.Behavior(
-    PDBeStructureQualityReport
-  ),
-  "anvil-membrane-orientation": PluginSpec.Behavior(ANVILMembraneOrientation),
-};
-
 const viewerOptions = {
-  extensions: ObjectKeys(Extensions),
   layoutIsExpanded: false,
   layoutShowControls: true,
   layoutShowRemoteState: false,
@@ -70,10 +55,7 @@ class MolStar {
   ) {
     const spec: PluginSpec = {
       actions: [...DefaultPluginSpec.actions],
-      behaviors: [
-        ...DefaultPluginSpec.behaviors,
-        ...viewerOptions.extensions.map((e) => Extensions[e]),
-      ],
+      behaviors: [...DefaultPluginSpec.behaviors],
       animations: [...(DefaultPluginSpec.animations || [])],
       customParamEditors: DefaultPluginSpec.customParamEditors,
       layout: {
@@ -83,8 +65,7 @@ class MolStar {
           controlsDisplay: viewerOptions.layoutControlsDisplay,
         },
         controls: {
-          ...(DefaultPluginSpec.layout && DefaultPluginSpec.layout.controls),
-          //   top: true, // viewerOptions.layoutShowSequence ? undefined : "none",
+          top: "none",
           right: "none",
           bottom: "none",
           left: "none",
@@ -103,20 +84,8 @@ class MolStar {
         [PluginConfig.General.EnableWboit, viewerOptions.enableWboit],
         [PluginConfig.Viewport.ShowExpand, viewerOptions.viewportShowExpand],
         [
-          PluginConfig.Viewport.ShowControls,
-          viewerOptions.viewportShowControls,
-        ],
-        [
-          PluginConfig.Viewport.ShowSettings,
-          viewerOptions.viewportShowSettings,
-        ],
-        [
           PluginConfig.Viewport.ShowSelectionMode,
           viewerOptions.viewportShowSelectionMode,
-        ],
-        [
-          PluginConfig.Viewport.ShowAnimation,
-          viewerOptions.viewportShowAnimation,
         ],
         [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
       ],
