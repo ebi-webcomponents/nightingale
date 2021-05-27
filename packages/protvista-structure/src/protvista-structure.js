@@ -5,6 +5,17 @@ import MolStar from "./molstar";
 const UP_PDB = "UP_PDB";
 const PDB_UP = "PDB_UP";
 
+/*
+  TODO:
+  [x] Remove LiteMol
+  [x] Remove unused plugins in molstar.ts
+  [x] Remove title menu bar
+  [ ] Should Mol* be a peerDependency?
+  [ ] Build doesn’t work (webpack issue with node fs maybe?)
+  [ ] Convert protvista-structure to TS
+  [ ] Translate position in propagateHighlight
+  [ ] Test
+*/
 class ProtvistaStructure extends HTMLElement {
   constructor() {
     super();

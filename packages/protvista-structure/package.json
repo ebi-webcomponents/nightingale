@@ -1,7 +1,7 @@
 {
   "name": "protvista-structure",
   "version": "3.2.7",
-  "description": "A custom element wrapper for LiteMol",
+  "description": "A custom element wrapper for Mol*",
   "main": "dist/protvista-structure.js",
   "module": "src/protvista-structure.js",
   "files": [
@@ -29,9 +29,6 @@
     "molstar": "^1.2.6",
     "ramda": "^0.27.1",
     "whatwg-fetch": "^3.4.1"
-  },
-  "peerDependencies": {
-    "litemol": "^2.4.2"
   },
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
 }

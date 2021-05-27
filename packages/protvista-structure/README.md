@@ -2,7 +2,7 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/protvista-structure.svg)](https://www.npmjs.com/package/protvista-structure)
 
-A native web component wrapper around LiteMol
+A native web component wrapper around Mol\*
 
 ## Usage
 

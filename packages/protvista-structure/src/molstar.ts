@@ -29,7 +29,7 @@ interface LoadStructureOptions {
 
 const viewerOptions = {
   layoutIsExpanded: false,
-  layoutShowControls: true,
+  layoutShowControls: false,
   layoutShowRemoteState: false,
   layoutControlsDisplay: "reactive" as PluginLayoutControlsDisplay,
   layoutShowSequence: false,
@@ -56,19 +56,12 @@ class MolStar {
     const spec: PluginSpec = {
       actions: [...DefaultPluginSpec.actions],
       behaviors: [...DefaultPluginSpec.behaviors],
-      animations: [...(DefaultPluginSpec.animations || [])],
       customParamEditors: DefaultPluginSpec.customParamEditors,
       layout: {
         initial: {
           isExpanded: viewerOptions.layoutIsExpanded,
           showControls: viewerOptions.layoutShowControls,
           controlsDisplay: viewerOptions.layoutControlsDisplay,
-        },
-        controls: {
-          top: "none",
-          right: "none",
-          bottom: "none",
-          left: "none",
         },
       },
       components: {

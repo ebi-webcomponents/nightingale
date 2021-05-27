@@ -125,5 +125,5 @@ Most components use the [Proteins API](https://www.ebi.ac.uk/proteins/api/doc/)
 
 ### 3D structure viewer
 
-[protvista-structure](packages/protvista-structure): A wrapper around the LiteMol component used in UniProt.
+[protvista-structure](packages/protvista-structure): A wrapper around the Mol\* component used in UniProt.
 [![npm version](https://badge.fury.io/js/protvista-structure.svg)](https://badge.fury.io/js/protvista-structure)
