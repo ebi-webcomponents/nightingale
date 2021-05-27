@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import "molstar/lib/mol-util/polyfill";
-import { createPlugin, DefaultPluginSpec } from "molstar/lib/mol-plugin";
+import { createPlugin } from "molstar/lib/mol-plugin-ui";
+import { DefaultPluginUISpec } from "molstar/lib/mol-plugin-ui/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { PluginSpec } from "molstar/lib/mol-plugin/spec";
 import {
@@ -53,20 +54,16 @@ class MolStar {
     elementOrId: string | HTMLElement,
     onHighlightClick: (sequencePosition: number) => void
   ) {
+    const defaultSpec = DefaultPluginUISpec();
     const spec: PluginSpec = {
-      actions: [...DefaultPluginSpec.actions],
-      behaviors: [...DefaultPluginSpec.behaviors],
-      customParamEditors: DefaultPluginSpec.customParamEditors,
+      actions: defaultSpec.actions,
+      behaviors: defaultSpec.behaviors,
       layout: {
         initial: {
           isExpanded: viewerOptions.layoutIsExpanded,
           showControls: viewerOptions.layoutShowControls,
           controlsDisplay: viewerOptions.layoutControlsDisplay,
         },
-      },
-      components: {
-        ...DefaultPluginSpec.components,
-        remoteState: viewerOptions.layoutShowRemoteState ? "default" : "none",
       },
       config: [
         [
@@ -144,8 +141,9 @@ class MolStar {
   }
 
   highlight(ranges: { start: number; end: number }[]): void {
-    const data = this.plugin.managers.structure.hierarchy.current.structures[0]
-      ?.cell.obj?.data;
+    const data =
+      this.plugin.managers.structure.hierarchy.current.structures[0]?.cell.obj
+        ?.data;
     if (!data) return;
     const sel = Script.getStructureSelection(
       (Q) =>

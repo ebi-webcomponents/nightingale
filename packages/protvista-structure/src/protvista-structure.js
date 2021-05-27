@@ -10,8 +10,9 @@ const PDB_UP = "PDB_UP";
   [x] Remove LiteMol
   [x] Remove unused plugins in molstar.ts
   [x] Remove title menu bar
-  [ ] Should Mol* be a peerDependency?
-  [ ] Build doesn’t work (webpack issue with node fs maybe?)
+  [x] Upgrade Mol* to v2
+  [ ] Mol* should be a peerDependency?
+  [ ] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [ ] Convert protvista-structure to TS
   [ ] Translate position in propagateHighlight
   [ ] Test
@@ -177,8 +178,8 @@ class ProtvistaStructure extends HTMLElement {
 
   async selectMolecule(id) {
     const pdbEntry = await this.loadPDBEntry(id);
-    const mappings = Object.values(pdbEntry)[0].UniProt[this._accession]
-      ?.mappings;
+    const mappings =
+      Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
 
     await this._molStar.loadPdb(id.toLowerCase());
     this._selectedMolecule = {
