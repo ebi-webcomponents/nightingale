@@ -83,7 +83,7 @@ class ProtvistaStructure extends HTMLElement {
     molStarDiv.className = "molstar-container";
     molStarDiv.id = "molstar-instance";
     this.appendChild(molStarDiv);
-    this._molStar = new MolStar(molStarDiv);
+    this._molStar = new MolStar(molStarDiv, this.propagateHighlight);
   }
 
   disconnectedCallback() {
@@ -230,9 +230,9 @@ class ProtvistaStructure extends HTMLElement {
       allowAnalytics: false,
     });
 
-    this.Event.Molecule.ModelSelect.getStream(
-      this._liteMol.context
-    ).subscribe((e) => this.propagateHighlight(e));
+    // this.Event.Molecule.ModelSelect.getStream(
+    //   this._liteMol.context
+    // ).subscribe((e) => this.propagateHighlight(e));
   }
 
   loadMolecule(_id) {
@@ -318,6 +318,7 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   translatePositions(start, end, direction = UP_PDB) {
+    console.log(start, end, direction);
     // return if they have been set to 'undefined'
     if (
       typeof this.highlight === "string" ||
@@ -358,22 +359,23 @@ class ProtvistaStructure extends HTMLElement {
     return null;
   }
 
-  propagateHighlight(e) {
-    if (!e.data || !e.data.residues) {
+  propagateHighlight(sequencePosition) {
+    if (!sequencePosition) {
       return;
     }
-    const seqPositions = e.data.residues
-      .map((residue) =>
-        this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)
-      )
-      .map((residue) => `${residue.start}:${residue.end}`);
+    // const seqPositions = e.data.residues
+    //   .map((residue) =>
+    //     this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)
+    //   )
+    //   .map((residue) => `${residue.start}:${residue.end}`);
     const event = new CustomEvent("change", {
       detail: {
-        highlight: seqPositions.join(","),
+        highlight: `${sequencePosition}:${sequencePosition + 1}`,
       },
       bubbles: true,
       cancelable: true,
     });
+    console.log(event);
     this.dispatchEvent(event);
   }
 

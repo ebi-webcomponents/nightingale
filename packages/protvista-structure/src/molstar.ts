@@ -15,13 +15,11 @@ import {
   StructureElement,
   StructureProperties,
   StructureSelection,
-  Unit,
 } from "molstar/lib/mol-model/structure";
 import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
 import { ANVILMembraneOrientation } from "molstar/lib/extensions/anvil/behavior";
 import { DnatcoConfalPyramids } from "molstar/lib/extensions/dnatco";
-import { Mp4Export } from "molstar/lib/extensions/mp4-export";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 
@@ -41,7 +39,6 @@ const Extensions = {
     PDBeStructureQualityReport
   ),
   "anvil-membrane-orientation": PluginSpec.Behavior(ANVILMembraneOrientation),
-  "mp4-export": PluginSpec.Behavior(Mp4Export),
 };
 
 const viewerOptions = {
@@ -62,16 +59,15 @@ const viewerOptions = {
   pdbProvider: "pdbe",
   viewportShowControls: PluginConfig.Viewport.ShowControls.defaultValue,
   viewportShowSettings: PluginConfig.Viewport.ShowSettings.defaultValue,
-  pluginStateServer: PluginConfig.State.DefaultServer.defaultValue,
-  volumeStreamingServer:
-    PluginConfig.VolumeStreaming.DefaultServer.defaultValue,
-  volumeStreamingDisabled: !PluginConfig.VolumeStreaming.Enabled.defaultValue,
 };
 
 class MolStar {
   plugin: PluginContext;
 
-  constructor(elementOrId: string | HTMLElement) {
+  constructor(
+    elementOrId: string | HTMLElement,
+    onHighlightClick: (sequencePosition: number) => void
+  ) {
     const spec: PluginSpec = {
       actions: [...DefaultPluginSpec.actions],
       behaviors: [
@@ -122,16 +118,6 @@ class MolStar {
           PluginConfig.Viewport.ShowAnimation,
           viewerOptions.viewportShowAnimation,
         ],
-        [PluginConfig.State.DefaultServer, viewerOptions.pluginStateServer],
-        [PluginConfig.State.CurrentServer, viewerOptions.pluginStateServer],
-        [
-          PluginConfig.VolumeStreaming.DefaultServer,
-          viewerOptions.volumeStreamingServer,
-        ],
-        [
-          PluginConfig.VolumeStreaming.Enabled,
-          !viewerOptions.volumeStreamingDisabled,
-        ],
         [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
       ],
     };
@@ -147,9 +133,8 @@ class MolStar {
       if (StructureElement.Loci.is(event.current.loci)) {
         const loc = StructureElement.Location.create();
         StructureElement.Loci.getFirstLocation(event.current.loci, loc);
-        // or loc = StructureElement.Loci.getFirstLocation(event.current.loci) which is ok to use if you dont do many sequential queries
-
-        console.log(StructureProperties.residue.auth_seq_id(loc));
+        const sequencePosition = StructureProperties.residue.auth_seq_id(loc);
+        onHighlightClick(sequencePosition);
       }
     });
     PluginCommands.Canvas3D.SetSettings(this.plugin, {
