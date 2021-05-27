@@ -1,6 +1,6 @@
 {
   "name": "protvista-msa",
-  "version": "3.2.0",
+  "version": "3.2.14",
   "files": [
     "dist",
     "src"
@@ -20,8 +20,8 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "dependencies": {
-    "protvista-utils": "^3.0.0",
-    "protvista-zoomable": "^3.0.0",
+    "protvista-utils": "^3.2.14",
+    "protvista-zoomable": "^3.2.14",
     "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.2"
   },
   "devDependencies": {
@@ -32,5 +32,6 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
 }

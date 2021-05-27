@@ -1,6 +1,11 @@
 import { html, render } from "lit-html";
 
 class ProtvistaZoomTool extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+
   connectedCallback() {
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
@@ -10,8 +15,9 @@ class ProtvistaZoomTool extends HTMLElement {
     this._displaystart = parseFloat(this.getAttribute("displaystart")) || 1;
     this._displayend =
       parseFloat(this.getAttribute("displayend")) || this._length;
-    this._scaleFactor = parseFloat(this.getAttribute("scalefactor")) || 10;
-
+    this._scaleFactor =
+      parseFloat(this.getAttribute("scalefactor")) || this._length / 5;
+    this._zoomToSeq = this.querySelector('[slot="zoom-in-seq"]') !== null;
     this.renderContent();
   }
 
@@ -26,75 +32,80 @@ class ProtvistaZoomTool extends HTMLElement {
   }
 
   zoom(operation) {
-    let k;
-    if (operation === "zoom-in") k = this._scaleFactor;
-    else k = -this._scaleFactor;
-    const newStart =
-      this._displaystart === 1
-        ? this._displaystart - 1 + k
-        : this._displaystart + k;
+    let k = 0;
+    if (operation === "zoom-in") {
+      k = this._scaleFactor;
+    } else if (operation === "zoom-out") {
+      k = -this._scaleFactor;
+    } else if (operation === "zoom-in-seq") {
+      k = this._displayend - this._displaystart - 29;
+    }
     const newEnd = this._displayend - k;
-    if (newStart < newEnd) {
+    let newStart = this._displaystart;
+    // if we've reached the end when zooming out, remove from start
+    if (newEnd > this._length) {
+      newStart -= newEnd - this._length;
+    }
+    if (this._displaystart < newEnd) {
       this.dispatchEvent(
         new CustomEvent("change", {
           detail: {
             displaystart: Math.max(1, newStart),
-            displayend: Math.min(newEnd, this._length)
+            displayend: Math.min(newEnd, this._length),
           },
           bubbles: true,
-          cancelable: true
+          cancelable: true,
         })
       );
     }
   }
 
   renderContent() {
-    let zoomInButton = html`
-      <button
-        style="cursor: pointer; border-radius: 4px;"
-        @click=${() => this.zoom("zoom-in")}
-        id="zoom-in"
-        title="Zoom In"
-      >
-        +
-      </button>
-    `;
-    let zoomOutButton = html`
-      <button
-        style="cursor: pointer; border-radius: 4px;"
-        @click=${() => this.zoom("zoom-out")}
-        id="zoom-out"
-        title="Zoom Out"
-      >
-        -
-      </button>
-    `;
-
-    /* The buttons can be customised but they should contain the respective ids -
-     * 'zoom-in' or 'zoom-out'. Otherwise the default buttons are shown
-     * */
-    if (this.hasChildNodes()) {
-      const { children } = this;
-      Array.from(children).forEach(child => {
-        if (child.tagName === "BUTTON") {
-          child.addEventListener("click", () => this.zoom(child.id));
-          if (child.id === "zoom-in")
-            zoomInButton = html`
-              ${child}
-            `;
-          else if (child.id === "zoom-out")
-            zoomOutButton = html`
-              ${child}
-            `;
-        }
-      });
-    }
     const content = html`
-      <div class="zoom-button-div">
-        ${zoomInButton} ${zoomOutButton}
-      </div>
+      <style>
+        button {
+          display: inline-block;
+          border: none;
+          padding: var(--button-padding-v, 0.5rem) var(--button-padding-h, 1rem);
+          margin: var(--button-margin-v, 0) var(--button-margin-h, 0);
+          text-decoration: none;
+          background: var(--button-background, #d3d3d3);
+          color: var(--button-text-color);
+          font-family: var(--button-font-family, sans-serif);
+          font-size: var(--button-font-size, 1rem);
+          border-radius: var(--button-border-radius, 0);
+          cursor: pointer;
+          text-align: center;
+          transition: var(
+            --button-transition,
+            background 250ms ease-in-out,
+            transform 150ms ease
+          );
+          -webkit-appearance: none;
+          -moz-appearance: none;
+        }
+
+        button:hover,
+        button:focus {
+          background: var(--button-background-focus);
+        }
+      </style>
+      <button @click=${() => this.zoom("zoom-out")} title="Zoom Out">
+        <slot name="zoom-out">Zoom out</slot>
+      </button>
+      <button @click=${() => this.zoom("zoom-in")} title="Zoom In">
+        <slot name="zoom-in">Zoom in</slot>
+      </button>
+      ${this._zoomToSeq
+        ? html`<button
+            @click=${() => this.zoom("zoom-in-seq")}
+            title="Zoom to sequence"
+          >
+            <slot name="zoom-in-seq"></slot>
+          </button>`
+        : ""}
     `;
-    render(content, this);
+    render(content, this.shadowRoot);
   }
 }
 

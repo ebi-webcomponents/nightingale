@@ -1,5 +1,7 @@
 import Region from "./Region";
 
+const DEFAULT_HIGLIGHT_COLOR = "#FFEB3B66";
+
 const combineRegions = (region1, region2) => {
   if (!region1) return region2;
   if (!region2) return region1;
@@ -8,6 +10,7 @@ const combineRegions = (region1, region2) => {
 export default class TrackHighlighter {
   constructor({ element, min, max }) {
     this.element = element;
+    this.element._highlightcolor = DEFAULT_HIGLIGHT_COLOR;
     this.region = new Region({ min, max });
     this.fixedHighlight = null;
   }
@@ -25,6 +28,8 @@ export default class TrackHighlighter {
       this.element._highlightend = Number(
         this.element.getAttribute("highlightend")
       );
+      this.element._highlightcolor =
+        this.element.getAttribute("highlightcolor") || DEFAULT_HIGLIGHT_COLOR;
       if (
         this.element._highlightstart !== null &&
         this.element._highlightend !== null &&
@@ -88,15 +93,14 @@ export default class TrackHighlighter {
     highlighs
       .enter()
       .append("rect")
-      .style("opacity", 0.5)
-      .attr("fill", "rgba(255, 235, 59, 0.8)")
       .style("pointer-events", "none")
       .merge(highlighs)
+      .attr("fill", (d) => (d.color ? d.color : this.element._highlightcolor))
       .attr("height", this.element._height)
-      .attr("x", d => this.element.getXFromSeqPosition(d.start))
+      .attr("x", (d) => this.element.getXFromSeqPosition(d.start))
       .attr(
         "width",
-        d => this.element.getSingleBaseWidth() * (d.end - d.start + 1)
+        (d) => this.element.getSingleBaseWidth() * (d.end - d.start + 1)
       );
     highlighs.exit().remove();
   }

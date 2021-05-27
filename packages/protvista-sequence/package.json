@@ -1,6 +1,6 @@
 {
   "name": "protvista-sequence",
-  "version": "3.0.0",
+  "version": "3.2.14",
   "description": "Sequence component for the ProtVista tool",
   "files": [
     "dist",
@@ -23,10 +23,10 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-zoomable": "^3.0.0"
+    "protvista-zoomable": "^3.2.14"
   },
   "devDependencies": {
     "d3": "^5.7.0"

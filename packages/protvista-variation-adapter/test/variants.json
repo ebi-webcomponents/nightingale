@@ -156,6 +156,37 @@
           "sources": ["ClinVar"]
         }
       ]
+    },
+    {
+      "type": "VARIANT",
+      "alternativeSequence": "L",
+      "begin": "2",
+      "end": "2",
+      "xrefs": [
+        {
+          "name": "ENA",
+          "id": "MN908947.3:21568:T:A"
+        }
+      ],
+      "genomicLocation": "NC_045512.2:g.21568T>A",
+      "locations": [
+        {
+          "loc": "p.Phe2Leu",
+          "seqId": "ENSSAST00005000004",
+          "source": "EnsemblViruses"
+        },
+        {
+          "loc": "c.6T>A",
+          "seqId": "ENSSAST00005000004",
+          "source": "EnsemblViruses"
+        }
+      ],
+      "codon": "TTT/TTA",
+      "consequenceType": "missense",
+      "wildType": "F",
+      "mutatedType": "L",
+      "somaticStatus": 0,
+      "sourceType": "large_scale_study"
     }
   ]
 }

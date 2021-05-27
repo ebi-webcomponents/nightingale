@@ -5,6 +5,7 @@ import {
   getDescriptions,
   getPopulationFrequencies,
   getPredictions,
+  getEnsemblCovidLinks,
 } from "../src/tooltipGenerators";
 
 describe("ProtvistaVariationAdapter", () => {
@@ -36,6 +37,14 @@ describe("ProtvistaVariationAdapter", () => {
 
   it("should transform the data adequately", () => {
     const data = transformData(variants);
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should generate the Ensembl covid link only if present", () => {
+    const { features } = variants;
+    let data = getEnsemblCovidLinks(features[0]);
+    expect(data).toMatchSnapshot();
+    data = getEnsemblCovidLinks(features[1]);
     expect(data).toMatchSnapshot();
   });
 });

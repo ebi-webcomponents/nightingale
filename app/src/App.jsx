@@ -32,6 +32,8 @@ const Playground = lazyImport("Playground");
 const ProtvistaVariationGraph = lazyImport("ProtvistaVariationGraph");
 const ProtvistaMSA = lazyImport("ProtvistaMSA");
 const TextareaSequence = lazyImport("TextareaSequence");
+const NightingaleLineGraphTrack = lazyImport("NightingaleLineGraphTrack");
+const NightingaleHeatmap = lazyImport("NightingaleHeatmap");
 
 function lazyImport(name) {
   return lazy(() => import(`./components/${name}`));
@@ -141,6 +143,9 @@ const App = (component = ProtvistaNavigation) => (
                     <NavLink to="/graph">Variation Graph</NavLink>
                   </li>
                   <li>
+                    <NavLink to="/graph1">Line Graph</NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/datatable">Data table</NavLink>
                   </li>
                   <li>
@@ -148,6 +153,9 @@ const App = (component = ProtvistaNavigation) => (
                   </li>
                   <li>
                     <NavLink to="/msa">Alignments</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/heatmap">Heatmap</NavLink>
                   </li>
                   <li>
                     <NavLink to="/textarea-sequence">Textarea Sequence</NavLink>
@@ -182,10 +190,12 @@ const App = (component = ProtvistaNavigation) => (
               <Route path="/interaction-viewer" component={InteractionViewer} />
               <Route path="/filter" component={ProtvistaFilter} />
               <Route path="/graph" component={ProtvistaVariationGraph} />
+              <Route path="/graph1" component={NightingaleLineGraphTrack} />
               <Route path="/datatable" component={ProtvistaDatatable} />
               <Route path="/playground" component={Playground} />
               <Route path="/tooltip" component={ProtvistaTooltipWrapper} />
               <Route path="/msa" component={ProtvistaMSA} />
+              <Route path="/heatmap" component={NightingaleHeatmap} />
               <Route path="/textarea-sequence" component={TextareaSequence} />
               <Route path="/create-component" component={CreateComponent} />
               <Route path="/create-adapter" component={CreateAdapter} />

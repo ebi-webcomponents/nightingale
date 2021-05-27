@@ -97,6 +97,9 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   static _formatHighlight(highlightString) {
+    if (!highlightString) {
+      return [];
+    }
     const highlightArray = highlightString.split(",").map((region) => {
       const [_start, _end] = region.split(":");
       return {
@@ -205,6 +208,115 @@ class ProtvistaStructure extends HTMLElement {
   //   });
   // }
 
+  loadLiteMol() {
+    const { Plugin } = LiteMol;
+    this.Command = LiteMol.Bootstrap.Command;
+    this.Query = LiteMol.Core.Structure.Query;
+    this.Bootstrap = LiteMol.Bootstrap;
+    this.Core = LiteMol.Core;
+    this.Tree = this.Bootstrap.Tree;
+    this.CoreVis = LiteMol.Visualization;
+    this.Transformer = this.Bootstrap.Entity.Transformer;
+    this.Visualization = this.Bootstrap.Visualization;
+    this.Event = this.Bootstrap.Event;
+    this.Context = Plugin.Components.Context;
+
+    this._liteMol = Plugin.create({
+      target: this.querySelector("#litemol-instance"),
+      viewportBackground: "#fff",
+      layoutState: {
+        hideControls: true,
+      },
+      allowAnalytics: false,
+    });
+
+    this.Event.Molecule.ModelSelect.getStream(
+      this._liteMol.context
+    ).subscribe((e) => this.propagateHighlight(e));
+  }
+
+  loadMolecule(_id) {
+    this._liteMol.clear();
+
+    const transform = this._liteMol.createTransform();
+
+    transform
+      .add(this._liteMol.root, this.Transformer.Data.Download, {
+        url: `https://www.ebi.ac.uk/pdbe/coordinates/${_id.toLowerCase()}/full?encoding=BCIF`,
+        type: "Binary",
+        _id,
+      })
+      .then(
+        this.Transformer.Data.ParseBinaryCif,
+        {
+          id: _id,
+        },
+        {
+          isBinding: true,
+          ref: "cifDict",
+        }
+      )
+      .then(
+        this.Transformer.Molecule.CreateFromMmCif,
+        {
+          blockIndex: 0,
+        },
+        {
+          isBinding: true,
+        }
+      )
+      .then(
+        this.Transformer.Molecule.CreateModel,
+        {
+          modelIndex: 0,
+        },
+        {
+          isBinding: false,
+          ref: "model",
+        }
+      )
+      .then(this.Transformer.Molecule.CreateMacromoleculeVisual, {
+        polymer: true,
+        polymerRef: "polymer-visual",
+        het: true,
+        water: true,
+      });
+
+    return this._liteMol.applyTransform(transform);
+  }
+
+  getTheme() {
+    const colors = new Map();
+    colors.set("Uniform", this.CoreVis.Color.fromRgb(207, 178, 178));
+    colors.set("Selection", this.CoreVis.Color.fromRgb(255, 0, 0));
+    colors.set("Highlight", this.CoreVis.Theme.Default.HighlightColor);
+    return this.Visualization.Molecule.uniformThemeProvider(undefined, {
+      colors,
+    });
+  }
+
+  addMessage(message) {
+    this.removeMessage();
+    this._liteMol.command(this.Bootstrap.Command.Toast.Show, {
+      key: "UPMessage",
+      message,
+      timeoutMs: 30 * 1000,
+    });
+  }
+
+  removeMessage() {
+    this._liteMol.command(this.Bootstrap.Command.Toast.Hide, {
+      key: "UPMessage",
+    });
+  }
+
+  processMapping(mappingData) {
+    if (!Object.values(mappingData)[0].UniProt[this._accession]) {
+      return null;
+    }
+    return Object.values(mappingData)[0].UniProt[this._accession].mappings;
+  }
+
   translatePositions(start, end, direction = UP_PDB) {
     // return if they have been set to 'undefined'
     if (
@@ -280,6 +392,42 @@ class ProtvistaStructure extends HTMLElement {
 
     this._molStar.highlight(translatedPositions);
     this._molStar.clearMessages();
+    // const queries = translatedPositions.map((translatedPos) =>
+    //   this.Query.sequence(
+    //     translatedPos.entity.toString(),
+    //     translatedPos.chain,
+    //     {
+    //       seqNumber: translatedPos.start,
+    //     },
+    //     {
+    //       seqNumber: translatedPos.end,
+    //     }
+    //   )
+    // );
+
+    // const theme = this.getTheme();
+    // const transform = this._liteMol.createTransform();
+
+    // queries.forEach((query) =>
+    //   transform.add(
+    //     visual,
+    //     this.Transformer.Molecule.CreateSelectionFromQuery,
+    //     {
+    //       query,
+    //     },
+    //     {
+    //       ref: "sequence-selection",
+    //     }
+    //   )
+    // );
+
+    // this._liteMol.applyTransform(transform).then(() => {
+    //   this.Command.Visual.UpdateBasicTheme.dispatch(this._liteMol.context, {
+    //     visual,
+    //     theme,
+    //   });
+    // });
+    // this.removeMessage();
   }
 }
 

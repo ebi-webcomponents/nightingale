@@ -116,6 +116,7 @@ export enum Source {
   SGD = "SGD",
   JEFFARES_SNPS = "Jeffares_SNPs",
   JEFFARES_INDELS = "Jeffares_Indels",
+  ENSEMBL_VIRUSES = "EnsemblViruses",
 }
 
 export type Evidence = {

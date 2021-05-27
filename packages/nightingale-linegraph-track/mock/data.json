@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Chart name",
+    "colour": "#FFF .. with default taken from the d3 colour scale if nothing passed?",
+    "range": [0, 100],
+    "lineCurve": "default linear??",
+    "values": [
+      {
+        "position": 23,
+        "value": 45
+      }
+    ]
+  }
+]

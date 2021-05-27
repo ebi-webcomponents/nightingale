@@ -1,7 +1,12 @@
 import { scaleLinear } from "d3";
 
 import ProtvistaTrack from "protvista-track";
-import { parseLinks, contactObjectToLinkList } from "./links-parser";
+import {
+  parseToRowData,
+  contactObjectToLinkList,
+  getContactsObject,
+  filterContacts,
+} from "./links-parser";
 
 const OPACITY_MOUSEOUT = 0.4;
 
@@ -26,29 +31,106 @@ const getHighlightEvent = (
 };
 
 class ProtvistaLinks extends ProtvistaTrack {
+  _minDistance: number;
+
+  _minProbability: number;
+
+  _rawData?: ArrayOfNumberArray;
+
+  _linksData?: ArrayOfNumberArray;
+
+  _data?: ContactObject;
+
+  // TODO: this types should be inherit from track
+  width: number;
+
+  height: number;
+
+  _resetEventHandler: (evt: Event) => void;
+
+  _createTrack: () => void;
+
+  getSingleBaseWidth: () => number;
+
+  getXFromSeqPosition: (position: number) => number;
+
+  // TODO: This types should come from D3
+  // eslint-disable-next-line camelcase
+  seq_g?: any;
+
+  _linksGroup: any;
+
+  contactPoints: any;
+
   constructor() {
     super();
-    this._threshold = 0.7;
+    this._minDistance = 0;
+    this._minProbability = 0.7;
     this._rawData = null;
+    this._linksData = null;
+  }
+
+  static get observedAttributes(): Array<string> {
+    return ProtvistaTrack.observedAttributes.concat(
+      "mindistance",
+      "minprobability"
+    );
+  }
+
+  attributeChangedCallback(
+    name: string,
+    oldValue: string,
+    newValue: string
+  ): void {
+    if (name === "mindistance" && oldValue !== newValue) {
+      this.minDistance = +newValue;
+    } else if (name === "minprobability" && oldValue !== newValue) {
+      this.minProbability = +newValue;
+    } else {
+      super.attributeChangedCallback(name, oldValue, newValue);
+    }
   }
 
   set data(data: LinksData) {
-    this._rawData = data;
     if (typeof data === "string") {
-      this._data = parseLinks(data, this._threshold);
+      this._rawData = parseToRowData(data);
     } else if (Array.isArray(data)) {
-      this._data = data;
+      this._rawData = data;
+    } else {
+      throw new Error("data is not in a valid format");
     }
+    this._data = getContactsObject(
+      filterContacts(this._rawData, this._minDistance, this._minProbability)
+    );
     this._createTrack();
   }
 
-  get threshold(): number {
-    return this._threshold;
+  get minDistance(): number {
+    return this._minDistance;
   }
 
-  set threshold(value: number) {
-    this._threshold = +value;
-    this._data = parseLinks(this._rawData, this._threshold);
+  set minDistance(value: number) {
+    this._minDistance = +value;
+    if (this._rawData) {
+      this._data = getContactsObject(
+        filterContacts(this._rawData, this._minDistance, this._minProbability)
+      );
+      this._createTrack();
+    }
+  }
+
+  get minProbability(): number {
+    return this._minProbability;
+  }
+
+  set minProbability(value: number) {
+    this._minProbability = +value;
+    if (this._rawData) {
+      this._data = getContactsObject(
+        filterContacts(this._rawData, this._minDistance, this._minProbability)
+      );
+      this._createTrack();
+    }
   }
 
   _getColor(d: number): string {
@@ -58,9 +140,9 @@ class ProtvistaLinks extends ProtvistaTrack {
     );
   }
 
-  _dispatchSelectNode(d: number) {
+  _dispatchSelectNode(d: number): void {
     this._data.selected = d;
-    this.dispatchEvent(
+    (this as any).dispatchEvent(
       getHighlightEvent(
         "mouseover",
         this,
@@ -72,11 +154,11 @@ class ProtvistaLinks extends ProtvistaTrack {
   }
 
   _createFeatures(): void {
-    this.removeEventListener("click", this._resetEventHandler);
+    (this as any).removeEventListener("click", this._resetEventHandler);
 
     this.seq_g.selectAll("g.contact-group").remove();
     const contactGroup = this.seq_g.append("g").attr("class", "contact-group");
-    const linksGroup = this.seq_g.append("g").attr("class", "links-group");
+    this._linksGroup = this.seq_g.append("g").attr("class", "links-group");
 
     this.contactPoints = contactGroup
       .selectAll(".contact-point")
@@ -95,7 +177,7 @@ class ProtvistaLinks extends ProtvistaTrack {
       .on("mouseout", () => {
         if (this._data.isHold) return;
         this._data.selected = undefined;
-        this.dispatchEvent(getHighlightEvent("mouseout", this));
+        (this as any).dispatchEvent(getHighlightEvent("mouseout", this));
         this.refresh();
       })
       .on("click", (d: number) => {
@@ -103,18 +185,7 @@ class ProtvistaLinks extends ProtvistaTrack {
         if (!this._data.isHold) this._dispatchSelectNode(d);
         this.refresh();
       });
-
-    this.contactLines = linksGroup
-      .selectAll(".contact-link")
-      .data(contactObjectToLinkList(this._data.contacts))
-      .enter()
-      .append("path")
-      .attr("class", "contact-link")
-      .attr("fill", "transparent")
-      .attr("stroke", "black")
-      .style("opacity", 0)
-      .style("pointer-events", "none")
-      .attr("id", ([n1, n2]: Array<number>) => `cn_${n1}_${n2}`);
+    this._linksData = contactObjectToLinkList(this._data.contacts);
   }
 
   getRadius(isSelected: boolean): number {
@@ -128,22 +199,8 @@ class ProtvistaLinks extends ProtvistaTrack {
     const x1 = this.getXFromSeqPosition(d[0]) + this.getSingleBaseWidth() / 2;
     const x2 = this.getXFromSeqPosition(d[1]) + this.getSingleBaseWidth() / 2;
     const h = this.height * 0.5;
-    // const r = (x2 + x1) / 2;
     const p = this.getSingleBaseWidth();
     return `M ${x1} ${h} C ${x1 - p} ${-h / 4} ${x2 + p} ${-h / 4} ${x2} ${h}`;
-    // return `M ${x1} ${h} Q ${r} ${-h + 2} ${x2} ${h}`;
-  }
-
-  isLinkedWithSelected(position: number, selected: number): boolean {
-    return (
-      this.contactLines
-        .data()
-        .filter(
-          ([n1, n2]: Array<number>) =>
-            (n1 === +position && n2 === +selected) ||
-            (n1 === +selected && n2 === +position)
-        ).length > 0
-    );
   }
 
   refresh(): void {
@@ -162,18 +219,30 @@ class ProtvistaLinks extends ProtvistaTrack {
           : undefined
       )
       .style("opacity", (d: number) =>
-        d === this._data.selected ||
-        this.isLinkedWithSelected(d, this._data.selected)
-          ? 1
-          : OPACITY_MOUSEOUT
+        d === this._data.selected ? 1 : OPACITY_MOUSEOUT
       );
-    this.contactLines
-      .attr("d", (d: number[]) => this.arc(d))
-      .transition()
+
+    const selectedLinks = this._data.selected
+      ? this._linksData.filter((link) => link.includes(+this._data.selected))
+      : [];
+
+    const links = this._linksGroup
+      .selectAll(".contact-link")
+      .data(selectedLinks, ([n1, n2]: Array<number>) => `${n1}_${n2}`);
+
+    links.exit().remove();
+    links
+      .enter()
+      .append("path")
+      .attr("class", "contact-link")
+      .attr("fill", "transparent")
       .attr("stroke", this._getColor(this._data.selected))
-      .style("opacity", ([n1, n2]: Array<number>) =>
-        +n1 === +this._data.selected || +n2 === +this._data.selected ? 1 : 0
-      );
+      .style("opacity", 1)
+      .style("pointer-events", "none")
+      .attr("d", (d: number[]) => this.arc(d))
+      .attr("id", ([n1, n2]: Array<number>) => `cn_${n1}_${n2}`);
+
+    links.attr("d", (d: number[]) => this.arc(d));
   }
 }
 

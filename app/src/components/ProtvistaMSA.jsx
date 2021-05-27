@@ -11,7 +11,7 @@ import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme.jsx";
 import readmeContent from "../../../packages/protvista-msa/README.md";
 import Console from "./Console.jsx";
-// import { rawContactsHC } from "../mocks/interpro";
+import { contactsHC } from "../mocks/interpro";
 
 const AllowedColorschemes = [
   "aliphatic",
@@ -122,6 +122,7 @@ const ProtvistaMSAWrapper = () => {
       console.log("on active track change:", trackId);
     };
     document.querySelector("#links-track").data = rawContactsHC;
+    document.querySelector("#links-track-2").data = contactsHC;
     msaTrack.current.features = features;
     msaTrack.current.onFeatureClick = (id) => {
       console.log("on feature click:", id);
@@ -214,6 +215,30 @@ const ProtvistaMSAWrapper = () => {
           </div>
           <protvista-links
             id="links-track"
+            length={sequence.length}
+            height={20}
+            use-ctrl-to-zoom
+          />
+        </div>
+
+        <div style={{ display: "flex", width: "100%" }}>
+          <div
+            style={{
+              width: labelWidth,
+              flexShrink: 0,
+              height: "20px",
+              textAlign: "left",
+              overflow: "hidden",
+              fontWeight: "bold",
+              fontSize: "14px",
+              color: "rgb(0, 99, 154)",
+              textTransform: "uppercase",
+            }}
+          >
+            Contacts2
+          </div>
+          <protvista-links
+            id="links-track-2"
             length={sequence.length}
             height={20}
             use-ctrl-to-zoom
