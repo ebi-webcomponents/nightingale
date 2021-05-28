@@ -15,8 +15,12 @@ const PDB_UP = "PDB_UP";
   [x] Upgrade Mol* to v2
   [x] Rename molstar.ts to structure-viewer.ts
   [x] Translate position in propagateHighlight
-  [-] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
+  [ ] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
+  [ ] Change highlight color in Mol*`
+  [ ] Attribute highlight disappears when amino acid is clicked
+  [ ] Does this need to be imported in structure-viewer: node_modules/molstar/lib/mol-plugin-ui/skin/light.scss
   [ ] Convert protvista-structure to TS
+  [ ] Ensure build passes
   [ ] Remove this TODO list
 */
 

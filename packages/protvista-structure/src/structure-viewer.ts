@@ -22,6 +22,7 @@ import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import "../../../node_modules/molstar/build/viewer/molstar.css";
 import { Color } from "molstar/lib/mol-util/color";
 
+// TODO: is this needed?
 // require("../../../node_modules/molstar/lib/mol-plugin-ui/skin/light.scss");
 
 interface LoadStructureOptions {
