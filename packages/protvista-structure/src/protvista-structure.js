@@ -14,10 +14,12 @@ const PDB_UP = "PDB_UP";
   [x] Remove title menu bar
   [x] Upgrade Mol* to v2
   [x] Rename molstar.ts to structure-viewer.ts
+  [ ] Translate position in propagateHighlight
   [-] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [ ] Convert protvista-structure to TS
-  [ ] Translate position in propagateHighlight
+  [ ] Remove this TODO list
 */
+
 class ProtvistaStructure extends HTMLElement {
   constructor() {
     super();
@@ -34,7 +36,7 @@ class ProtvistaStructure extends HTMLElement {
       margin-right: 1em;
     }
       
-    .molstar-container {
+    .structure-viewer-container {
       position: relative;
       height: ${this._height};
     }
@@ -80,12 +82,12 @@ class ProtvistaStructure extends HTMLElement {
     style.innerHTML = this.css;
     this.appendChild(style);
 
-    const molStarDiv = document.createElement("div");
-    molStarDiv.className = "molstar-container";
-    molStarDiv.id = "molstar-instance";
-    this.appendChild(molStarDiv);
+    const structureViewerDiv = document.createElement("div");
+    structureViewerDiv.className = "structure-viewer-container";
+    structureViewerDiv.id = "structure-viewer-instance";
+    this.appendChild(structureViewerDiv);
     this._structureViewer = new StructureViewer(
-      molStarDiv,
+      structureViewerDiv,
       this.propagateHighlight
     );
   }
@@ -267,7 +269,6 @@ class ProtvistaStructure extends HTMLElement {
       bubbles: true,
       cancelable: true,
     });
-    console.log(event);
     this.dispatchEvent(event);
   }
 
