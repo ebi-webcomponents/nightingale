@@ -52,7 +52,7 @@ class StructureViewer {
 
   constructor(
     elementOrId: string | HTMLElement,
-    onHighlightClick: (sequencePosition: number) => void
+    onHighlightClick: (sequencePositions: number[]) => void
   ) {
     const defaultSpec = DefaultPluginUISpec();
     const spec: PluginSpec = {
@@ -92,8 +92,11 @@ class StructureViewer {
       if (StructureElement.Loci.is(event.current.loci)) {
         const loc = StructureElement.Location.create();
         StructureElement.Loci.getFirstLocation(event.current.loci, loc);
-        const sequencePosition = StructureProperties.residue.auth_seq_id(loc);
-        onHighlightClick(sequencePosition);
+        // TODO: should we ever expect more than one sequencePosition to be clicked/selected? If not, then don't pass an array
+        const sequencePositions = [
+          StructureProperties.residue.auth_seq_id(loc),
+        ];
+        onHighlightClick(sequencePositions);
       }
     });
     PluginCommands.Canvas3D.SetSettings(this.plugin, {

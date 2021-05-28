@@ -14,7 +14,7 @@ const PDB_UP = "PDB_UP";
   [x] Remove title menu bar
   [x] Upgrade Mol* to v2
   [x] Rename molstar.ts to structure-viewer.ts
-  [ ] Translate position in propagateHighlight
+  [x] Translate position in propagateHighlight
   [-] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [ ] Convert protvista-structure to TS
   [ ] Remove this TODO list
@@ -253,19 +253,17 @@ class ProtvistaStructure extends HTMLElement {
     return null;
   }
 
-  propagateHighlight(sequencePosition) {
-    if (!sequencePosition) {
+  propagateHighlight(sequencePositions) {
+    // TODO: assumed for now that sequencePositions may be of type number[], update if this turns out to not be true
+    if (!sequencePositions?.length) {
       return;
     }
-    // TODO: translate position
-    // const seqPositions = e.data.residues
-    //   .map((residue) =>
-    //     this.translatePositions(residue.seqNumber, residue.seqNumber, PDB_UP)
-    //   )
-    //   .map((residue) => `${residue.start}:${residue.end}`);
+    const highlight = sequencePositions
+      .map((pos) => this.translatePositions(pos, pos, PDB_UP))
+      .map((residue) => `${residue.start}:${residue.end}`);
     const event = new CustomEvent("change", {
       detail: {
-        highlight: `${sequencePosition}:${sequencePosition + 1}`,
+        highlight,
       },
       bubbles: true,
       cancelable: true,
