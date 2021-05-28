@@ -206,9 +206,10 @@ class ProtvistaStructure extends HTMLElement {
    * Translate between UniProt and PDBe positions using SIFTs mappings
    * @function translatePositions
    * @private
-   * @param {Number} start            The start index for the sequence (1-based)
-   * @param {Number} end              The end index for the sequence (1-based)
-   * @param {String} mappingDirection Indicates direction of maping: UniProt to PDB or PDB to UniProt
+   * @param  {Number}     start            The start index for the sequence (1-based)
+   * @param  {Number}     end              The end index for the sequence (1-based)
+   * @param  {String}     mappingDirection Indicates direction of maping: UniProt to PDB or PDB to UniProt
+   * @return {Translated}                  Object with: mapped entity ID; mapped chain ID; translated start & end positions
    */
   translatePositions(start, end, mappingDirection = UP_PDB) {
     // return if they have been set to 'undefined'
