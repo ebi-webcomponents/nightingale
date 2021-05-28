@@ -14,11 +14,9 @@ const PDB_UP = "PDB_UP";
   [x] Remove title menu bar
   [x] Upgrade Mol* to v2
   [x] Rename molstar.ts to structure-viewer.ts
-  [ ] Should Mol* should be a peerDependency? v2 used by InterPro but will they use protvista-structure?
   [-] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [ ] Convert protvista-structure to TS
   [ ] Translate position in propagateHighlight
-  [ ] Test
 */
 class ProtvistaStructure extends HTMLElement {
   constructor() {
@@ -202,7 +200,15 @@ class ProtvistaStructure extends HTMLElement {
     return Object.values(mappingData)[0].UniProt[this._accession].mappings;
   }
 
-  translatePositions(start, end, direction = UP_PDB) {
+  /**
+   * Translate between UniProt and PDBe positions using SIFTs mappings
+   * @function translatePositions
+   * @private
+   * @param {Number} start            The start index for the sequence (1-based)
+   * @param {Number} end              The end index for the sequence (1-based)
+   * @param {String} mappingDirection Indicates direction of maping: UniProt to PDB or PDB to UniProt
+   */
+  translatePositions(start, end, mappingDirection = UP_PDB) {
     // return if they have been set to 'undefined'
     if (
       typeof this.highlight === "string" ||
@@ -218,10 +224,10 @@ class ProtvistaStructure extends HTMLElement {
         mapping.end.residue_number - mapping.start.residue_number
       ) {
         if (
-          (direction === UP_PDB &&
+          (mappingDirection === UP_PDB &&
             start >= mapping.unp_start &&
             end <= mapping.unp_end) ||
-          (direction === PDB_UP &&
+          (mappingDirection === PDB_UP &&
             start >= mapping.start.residue_number &&
             end <= mapping.end.residue_number)
         ) {
@@ -229,8 +235,9 @@ class ProtvistaStructure extends HTMLElement {
           return {
             entity: mapping.entity_id,
             chain: mapping.chain_id,
-            start: direction === "UP_PDB" ? start - offset : start + offset,
-            end: direction === "UP_PDB" ? end - offset : end + offset,
+            start:
+              mappingDirection === "UP_PDB" ? start - offset : start + offset,
+            end: mappingDirection === "UP_PDB" ? end - offset : end + offset,
           };
         }
       } else {
