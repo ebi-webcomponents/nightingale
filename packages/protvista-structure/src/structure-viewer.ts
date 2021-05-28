@@ -47,7 +47,7 @@ const viewerOptions = {
   viewportShowSettings: PluginConfig.Viewport.ShowSettings.defaultValue,
 };
 
-class MolStar {
+class StructureViewer {
   plugin: PluginContext;
 
   constructor(
@@ -182,4 +182,4 @@ class MolStar {
   }
 }
 
-export default MolStar;
+export default StructureViewer;

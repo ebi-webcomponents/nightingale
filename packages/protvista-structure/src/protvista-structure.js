@@ -1,18 +1,21 @@
 /* eslint-disable class-methods-use-this */
 import "whatwg-fetch";
-import MolStar from "./molstar";
+import StructureViewer from "./structure-viewer";
 
 const UP_PDB = "UP_PDB";
 const PDB_UP = "PDB_UP";
 
 /*
   TODO:
+  [x] Highlight on amino acid click
+  [x] Highlight sequence from attributes
   [x] Remove LiteMol
   [x] Remove unused plugins in molstar.ts
   [x] Remove title menu bar
   [x] Upgrade Mol* to v2
-  [ ] Mol* should be a peerDependency?
-  [ ] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
+  [x] Rename molstar.ts to structure-viewer.ts
+  [ ] Should Mol* should be a peerDependency? v2 used by InterPro but will they use protvista-structure?
+  [-] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [ ] Convert protvista-structure to TS
   [ ] Translate position in propagateHighlight
   [ ] Test
@@ -83,7 +86,10 @@ class ProtvistaStructure extends HTMLElement {
     molStarDiv.className = "molstar-container";
     molStarDiv.id = "molstar-instance";
     this.appendChild(molStarDiv);
-    this._molStar = new MolStar(molStarDiv, this.propagateHighlight);
+    this._structureViewer = new StructureViewer(
+      molStarDiv,
+      this.propagateHighlight
+    );
   }
 
   disconnectedCallback() {
@@ -171,7 +177,7 @@ class ProtvistaStructure extends HTMLElement {
       );
       return await data.json();
     } catch (e) {
-      this._molStar.showMessage("Error", `Couldn't load PDB entry`);
+      this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
       throw new Error(e);
     }
   }
@@ -181,7 +187,7 @@ class ProtvistaStructure extends HTMLElement {
     const mappings =
       Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
 
-    await this._molStar.loadPdb(id.toLowerCase());
+    await this._structureViewer.loadPdb(id.toLowerCase());
     this._selectedMolecule = {
       id,
       mappings,
@@ -197,7 +203,6 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   translatePositions(start, end, direction = UP_PDB) {
-    console.log(start, end, direction);
     // return if they have been set to 'undefined'
     if (
       typeof this.highlight === "string" ||
@@ -229,7 +234,7 @@ class ProtvistaStructure extends HTMLElement {
           };
         }
       } else {
-        this._molStar.showMessage(
+        this._structureViewer.showMessage(
           "Error",
           "Mismatch between protein sequence and structure residues"
         );
@@ -272,8 +277,8 @@ class ProtvistaStructure extends HTMLElement {
       return;
     }
 
-    this._molStar.highlight(translatedPositions);
-    this._molStar.clearMessages();
+    this._structureViewer.highlight(translatedPositions);
+    this._structureViewer.clearMessages();
   }
 }
 
