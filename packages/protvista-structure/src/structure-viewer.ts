@@ -18,12 +18,9 @@ import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
-
-import "../../../node_modules/molstar/build/viewer/molstar.css";
 import { Color } from "molstar/lib/mol-util/color";
 
-// TODO: is this needed?
-// require("../../../node_modules/molstar/lib/mol-plugin-ui/skin/light.scss");
+import "../../../node_modules/molstar/build/viewer/molstar.css";
 
 interface LoadStructureOptions {
   representationParams?: StructureRepresentationPresetProvider.CommonParams;
@@ -55,7 +52,7 @@ class StructureViewer {
     elementOrId: string | HTMLElement,
     onHighlightClick: (sequencePositions: number[]) => void
   ) {
-    const defaultSpec = DefaultPluginUISpec();
+    const defaultSpec = DefaultPluginUISpec(); // TODO: Make our own to select only essential plugins
     const spec: PluginSpec = {
       actions: defaultSpec.actions,
       behaviors: defaultSpec.behaviors,
@@ -93,7 +90,6 @@ class StructureViewer {
       if (StructureElement.Loci.is(event.current.loci)) {
         const loc = StructureElement.Location.create();
         StructureElement.Loci.getFirstLocation(event.current.loci, loc);
-        // TODO: should we ever expect more than one sequencePosition to be clicked/selected? If not, then don't pass an array
         const sequencePositions = [
           StructureProperties.residue.auth_seq_id(loc),
         ];

@@ -16,12 +16,13 @@ const PDB_UP = "PDB_UP";
   [x] Rename molstar.ts to structure-viewer.ts
   [x] Translate position in propagateHighlight
   [ ] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
-  [ ] Change highlight color in Mol*`
-  [ ] Attribute highlight disappears when amino acid is clicked
-  [ ] Does this need to be imported in structure-viewer: node_modules/molstar/lib/mol-plugin-ui/skin/light.scss
+      [ ] ask when updated
+  [x] Clear highlights on amino acid click
   [ ] Convert protvista-structure to TS
   [ ] Ensure build passes
-  [ ] Remove this TODO list
+
+  [ ] Bundle optimization of Mol* - only load what is used, create query to fetch only what is needed from model server, caching 
+  [ ] Change highlight color in Mol*`
 */
 
 class ProtvistaStructure extends HTMLElement {
@@ -80,7 +81,7 @@ class ProtvistaStructure extends HTMLElement {
     this._height = this.getAttribute("height") || "480px";
     this._highlight =
       this.getAttribute("highlight") &&
-      ProtvistaStructure._formatHighlight(this.getAttribute("highlight"));
+      ProtvistaStructure._parseHighlight(this.getAttribute("highlight"));
 
     const style = document.createElement("style");
     style.innerHTML = this.css;
@@ -106,7 +107,7 @@ class ProtvistaStructure extends HTMLElement {
     return ["highlight", "pdb-id", "height"];
   }
 
-  static _formatHighlight(highlightString) {
+  static _parseHighlight(highlightString) {
     if (!highlightString) {
       return [];
     }
@@ -138,7 +139,7 @@ class ProtvistaStructure extends HTMLElement {
           break;
 
         case "highlight":
-          this._highlight = ProtvistaStructure._formatHighlight(
+          this._highlight = ProtvistaStructure._parseHighlight(
             this.getAttribute("highlight")
           );
           break;
@@ -258,13 +259,16 @@ class ProtvistaStructure extends HTMLElement {
   }
 
   propagateHighlight(sequencePositions) {
-    // TODO: assumed for now that sequencePositions may be of type number[], update if this turns out to not be true
-    if (!sequencePositions?.length) {
+    if (
+      !sequencePositions?.length ||
+      sequencePositions.some((pos) => !Number.isInteger(pos))
+    ) {
       return;
     }
     const highlight = sequencePositions
       .map((pos) => this.translatePositions(pos, pos, PDB_UP))
       .map((residue) => `${residue.start}:${residue.end}`);
+    this.setAttribute("highlight", highlight.join(","));
     const event = new CustomEvent("change", {
       detail: {
         highlight,
