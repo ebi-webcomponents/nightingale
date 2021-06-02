@@ -6,7 +6,7 @@ const UP_PDB = "UP_PDB";
 const PDB_UP = "PDB_UP";
 
 /*
-  TODO:
+  Immediate TODO:
   [x] Highlight on amino acid click
   [x] Highlight sequence from attributes
   [x] Remove LiteMol
@@ -20,6 +20,7 @@ const PDB_UP = "PDB_UP";
   [ ] Convert protvista-structure to TS
   [ ] Ensure build passes
 
+  Future TODO:
   [ ] Molstar/Mol* data fetching optimizations - create query to fetch only what is needed from model server, caching https://www.ebi.ac.uk/panda/jira/browse/TRM-26073
   [ ] Molstar/Mol* bundle optimizations - only load the plugins that are absolutely needed https://www.ebi.ac.uk/panda/jira/browse/TRM-26074
   [ ] Change highlight color in Mol* https://www.ebi.ac.uk/panda/jira/browse/TRM-26075
