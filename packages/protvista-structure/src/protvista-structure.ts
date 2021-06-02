@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import "whatwg-fetch";
+import { NightingaleElement } from "data-loader";
+
 import StructureViewer from "./structure-viewer";
 
-const UP_PDB = "UP_PDB";
-const PDB_UP = "PDB_UP";
+type Direction = "UP_PDB" | "PDB_UP";
 
 /*
   Immediate TODO:
@@ -17,8 +18,8 @@ const PDB_UP = "PDB_UP";
   [x] Translate position in propagateHighlight
   [x] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [x] Clear highlights on amino acid click
-  [ ] Convert protvista-structure to TS
-  [ ] Ensure build passes
+  [x] Convert protvista-structure to TS
+  [x] Ensure build passes
 
   Future TODO:
   [ ] Molstar/Mol* data fetching optimizations - create query to fetch only what is needed from model server, caching https://www.ebi.ac.uk/panda/jira/browse/TRM-26073
@@ -26,7 +27,48 @@ const PDB_UP = "PDB_UP";
   [ ] Change highlight color in Mol* https://www.ebi.ac.uk/panda/jira/browse/TRM-26075
 */
 
-class ProtvistaStructure extends HTMLElement {
+type NightingaleManager = NightingaleElement & {
+  register: (element: NightingaleElement) => void;
+  unregister: (element: NightingaleElement) => void;
+};
+
+type HighLight = Array<{ start: number; end: number }>;
+
+type Mappings = Array<{
+  entity_id: string; // eslint-disable-line camelcase
+  chain_id: string; // eslint-disable-line camelcase
+  unp_end: number; // eslint-disable-line camelcase
+  unp_start: number; // eslint-disable-line camelcase
+  start: {
+    residue_number: number; // eslint-disable-line camelcase
+  };
+  end: {
+    residue_number: number; // eslint-disable-line camelcase
+  };
+}>;
+
+class ProtvistaStructure extends HTMLElement implements NightingaleElement {
+  private _mappings: Mappings;
+
+  private _height: string;
+
+  private _accession: string;
+
+  private _pdbID: string;
+
+  private manager: NightingaleManager;
+
+  private _highlight: HighLight;
+
+  private _structureViewer: StructureViewer;
+
+  private _plannedRender: boolean;
+
+  private _selectedMolecule: {
+    id: string;
+    mappings: Mappings;
+  };
+
   constructor() {
     super();
     this._mappings = [];
@@ -35,7 +77,11 @@ class ProtvistaStructure extends HTMLElement {
     this.propagateHighlight = this.propagateHighlight.bind(this);
   }
 
-  get css() {
+  static get is(): string {
+    return "protvista-structure";
+  }
+
+  get css(): string {
     return `
     protvista-structure h4 {
       display: inline;
@@ -49,35 +95,35 @@ class ProtvistaStructure extends HTMLElement {
     `;
   }
 
-  get accession() {
+  get accession(): string {
     return this._accession;
   }
 
-  set accession(accession) {
+  set accession(accession: string) {
     this.setAttribute("accession", accession);
-    return this._accession;
   }
 
-  get pdbId() {
+  get pdbId(): string {
     return this._pdbID;
   }
 
-  set pdbId(pdbId) {
+  set pdbId(pdbId: string) {
     this.setAttribute("pdbid", pdbId);
     this._pdbID = pdbId;
   }
 
-  get height() {
+  get height(): string {
     return this.getAttribute("height");
   }
 
-  connectedCallback() {
-    if (this.closest("protvista-manager")) {
-      this.manager = this.closest("protvista-manager");
+  connectedCallback(): void {
+    const manager = this.closest<HTMLElement>("protvista-manager");
+    if (manager && "register" in manager && "unregister" in manager) {
+      this.manager = manager as NightingaleManager;
       this.manager.register(this);
     }
 
-    this._pdbId = this.getAttribute("pdb-id");
+    this._pdbID = this.getAttribute("pdb-id");
     this._accession = this.getAttribute("accession");
     this._height = this.getAttribute("height") || "480px";
     this._highlight =
@@ -98,17 +144,17 @@ class ProtvistaStructure extends HTMLElement {
     );
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     if (this.manager) {
       this.manager.unregister(this);
     }
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ["highlight", "pdb-id", "height"];
   }
 
-  static _parseHighlight(highlightString) {
+  static _parseHighlight(highlightString: string): HighLight {
     if (!highlightString) {
       return [];
     }
@@ -122,16 +168,22 @@ class ProtvistaStructure extends HTMLElement {
     return highlightArray;
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
+  attributeChangedCallback(
+    attrName: string,
+    oldVal: string,
+    newVal: string
+  ): void {
     if (oldVal !== newVal) {
       const value = parseFloat(newVal);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore 🤷🏼‍♂️
       this[`_${attrName}`] = typeof value === "number" ? newVal : value;
 
       switch (attrName) {
         case "pdb-id":
           if (newVal !== null) {
-            this._pdbId = newVal;
-            this.selectMolecule(this._pdbId);
+            this._pdbID = newVal;
+            this.selectMolecule(this._pdbID);
           }
           break;
 
@@ -153,7 +205,7 @@ class ProtvistaStructure extends HTMLElement {
           break;
       }
 
-      this._planHighlight(true);
+      this._planHighlight();
     }
   }
 
@@ -176,7 +228,7 @@ class ProtvistaStructure extends HTMLElement {
     });
   }
 
-  async loadPDBEntry(pdbId) {
+  async loadPDBEntry(pdbId: string): Promise<unknown> {
     try {
       const data = await fetch(
         `https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`
@@ -188,7 +240,7 @@ class ProtvistaStructure extends HTMLElement {
     }
   }
 
-  async selectMolecule(id) {
+  async selectMolecule(id: string): Promise<void> {
     const pdbEntry = await this.loadPDBEntry(id);
     const mappings =
       Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
@@ -201,7 +253,7 @@ class ProtvistaStructure extends HTMLElement {
     this._planHighlight();
   }
 
-  processMapping(mappingData) {
+  processMapping(mappingData: unknown) {
     if (!Object.values(mappingData)[0].UniProt[this._accession]) {
       return null;
     }
@@ -217,10 +269,19 @@ class ProtvistaStructure extends HTMLElement {
    * @param  {String}     mappingDirection Indicates direction of maping: UniProt to PDB or PDB to UniProt
    * @return {Translated}                  Object with: mapped entity ID; mapped chain ID; translated start & end positions
    */
-  translatePositions(start, end, mappingDirection = UP_PDB) {
+  translatePositions(
+    start: number,
+    end: number,
+    mappingDirection: Direction = "UP_PDB"
+  ): {
+    start: number;
+    end: number;
+    entity: string;
+    chain: string;
+  } | null {
     // return if they have been set to 'undefined'
     if (
-      typeof this.highlight === "string" ||
+      typeof this._highlight === "string" ||
       Number.isNaN(start) ||
       Number.isNaN(end)
     ) {
@@ -233,10 +294,10 @@ class ProtvistaStructure extends HTMLElement {
         mapping.end.residue_number - mapping.start.residue_number
       ) {
         if (
-          (mappingDirection === UP_PDB &&
+          (mappingDirection === "UP_PDB" &&
             start >= mapping.unp_start &&
             end <= mapping.unp_end) ||
-          (mappingDirection === PDB_UP &&
+          (mappingDirection === "PDB_UP" &&
             start >= mapping.start.residue_number &&
             end <= mapping.end.residue_number)
         ) {
@@ -259,7 +320,7 @@ class ProtvistaStructure extends HTMLElement {
     return null;
   }
 
-  propagateHighlight(sequencePositions) {
+  propagateHighlight(sequencePositions: number[]): void {
     if (
       !sequencePositions?.length ||
       sequencePositions.some((pos) => !Number.isInteger(pos))
@@ -267,7 +328,7 @@ class ProtvistaStructure extends HTMLElement {
       return;
     }
     const highlight = sequencePositions
-      .map((pos) => this.translatePositions(pos, pos, PDB_UP))
+      .map((pos) => this.translatePositions(pos, pos, "PDB_UP"))
       .filter(Boolean)
       .map((residue) => `${residue.start}:${residue.end}`);
     this.setAttribute("highlight", highlight.join(","));
@@ -281,7 +342,7 @@ class ProtvistaStructure extends HTMLElement {
     this.dispatchEvent(event);
   }
 
-  highlightChain() {
+  highlightChain(): void {
     if (!this._highlight) {
       return;
     }

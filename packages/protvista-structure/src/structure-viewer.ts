@@ -20,7 +20,7 @@ import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-st
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
 
-import "../../../node_modules/molstar/build/viewer/molstar.css";
+import "molstar/build/viewer/molstar.css";
 
 interface LoadStructureOptions {
   representationParams?: StructureRepresentationPresetProvider.CommonParams;
