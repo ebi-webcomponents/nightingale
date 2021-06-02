@@ -15,14 +15,14 @@ const PDB_UP = "PDB_UP";
   [x] Upgrade Mol* to v2
   [x] Rename molstar.ts to structure-viewer.ts
   [x] Translate position in propagateHighlight
-  [ ] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
-      [ ] ask when updated
+  [x] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
   [x] Clear highlights on amino acid click
   [ ] Convert protvista-structure to TS
   [ ] Ensure build passes
 
-  [ ] Bundle optimization of Mol* - only load what is used, create query to fetch only what is needed from model server, caching 
-  [ ] Change highlight color in Mol*`
+  [ ] Molstar/Mol* data fetching optimizations - create query to fetch only what is needed from model server, caching https://www.ebi.ac.uk/panda/jira/browse/TRM-26073
+  [ ] Molstar/Mol* bundle optimizations - only load the plugins that are absolutely needed https://www.ebi.ac.uk/panda/jira/browse/TRM-26074
+  [ ] Change highlight color in Mol* https://www.ebi.ac.uk/panda/jira/browse/TRM-26075
 */
 
 class ProtvistaStructure extends HTMLElement {
