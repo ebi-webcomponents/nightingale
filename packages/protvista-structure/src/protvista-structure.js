@@ -268,6 +268,7 @@ class ProtvistaStructure extends HTMLElement {
     }
     const highlight = sequencePositions
       .map((pos) => this.translatePositions(pos, pos, PDB_UP))
+      .filter(Boolean)
       .map((residue) => `${residue.start}:${residue.end}`);
     this.setAttribute("highlight", highlight.join(","));
     const event = new CustomEvent("change", {
