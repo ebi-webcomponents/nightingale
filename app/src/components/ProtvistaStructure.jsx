@@ -4,7 +4,6 @@ import ProtvistaDatatable from "protvista-datatable";
 import ProtvistaManager from "protvista-manager";
 import { html } from "lit-html";
 import loadWebComponent from "../utils/load-web-component";
-import "litemol/dist/css/LiteMol-plugin.css";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/protvista-structure/README.md";
 import xrefData from "../mocks/pdb-xrefs.json";
