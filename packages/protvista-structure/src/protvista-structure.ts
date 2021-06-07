@@ -3,8 +3,10 @@ import "whatwg-fetch";
 import { NightingaleElement } from "data-loader";
 
 import StructureViewer from "./structure-viewer";
-
-type Direction = "UP_PDB" | "PDB_UP";
+import translatePositions, {
+  PositionMappingError,
+  Mappings,
+} from "./position-mapping";
 
 /*
   Immediate TODO:
@@ -33,19 +35,6 @@ type NightingaleManager = NightingaleElement & {
 };
 
 type HighLight = Array<{ start: number; end: number }>;
-
-type Mappings = Array<{
-  entity_id: string; // eslint-disable-line camelcase
-  chain_id: string; // eslint-disable-line camelcase
-  unp_end: number; // eslint-disable-line camelcase
-  unp_start: number; // eslint-disable-line camelcase
-  start: {
-    residue_number: number; // eslint-disable-line camelcase
-  };
-  end: {
-    residue_number: number; // eslint-disable-line camelcase
-  };
-}>;
 
 class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   private _mappings: Mappings;
@@ -209,7 +198,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     }
   }
 
-  _planHighlight() {
+  _planHighlight(): void {
     // If rendering is already planned, skip the rest
     if (this._plannedRender) {
       return;
@@ -260,66 +249,6 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     return Object.values(mappingData)[0].UniProt[this._accession].mappings;
   }
 
-  /**
-   * Translate between UniProt and PDBe positions using SIFTs mappings
-   * @function translatePositions
-   * @private
-   * @param  {Number}     start            The start index for the sequence (1-based)
-   * @param  {Number}     end              The end index for the sequence (1-based)
-   * @param  {String}     mappingDirection Indicates direction of maping: UniProt to PDB or PDB to UniProt
-   * @return {Translated}                  Object with: mapped entity ID; mapped chain ID; translated start & end positions
-   */
-  translatePositions(
-    start: number,
-    end: number,
-    mappingDirection: Direction = "UP_PDB"
-  ): {
-    start: number;
-    end: number;
-    entity: string;
-    chain: string;
-  } | null {
-    // return if they have been set to 'undefined'
-    if (
-      typeof this._highlight === "string" ||
-      Number.isNaN(start) ||
-      Number.isNaN(end)
-    ) {
-      return null;
-    }
-    /* eslint-disable no-restricted-syntax */
-    for (const mapping of this._selectedMolecule.mappings) {
-      if (
-        mapping.unp_end - mapping.unp_start ===
-        mapping.end.residue_number - mapping.start.residue_number
-      ) {
-        if (
-          (mappingDirection === "UP_PDB" &&
-            start >= mapping.unp_start &&
-            end <= mapping.unp_end) ||
-          (mappingDirection === "PDB_UP" &&
-            start >= mapping.start.residue_number &&
-            end <= mapping.end.residue_number)
-        ) {
-          const offset = mapping.unp_start - mapping.start.residue_number;
-          return {
-            entity: mapping.entity_id,
-            chain: mapping.chain_id,
-            start:
-              mappingDirection === "UP_PDB" ? start - offset : start + offset,
-            end: mappingDirection === "UP_PDB" ? end - offset : end + offset,
-          };
-        }
-      } else {
-        this._structureViewer.showMessage(
-          "Error",
-          "Mismatch between protein sequence and structure residues"
-        );
-      }
-    }
-    return null;
-  }
-
   propagateHighlight(sequencePositions: number[]): void {
     if (
       !sequencePositions?.length ||
@@ -327,10 +256,27 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     ) {
       return;
     }
-    const highlight = sequencePositions
-      .map((pos) => this.translatePositions(pos, pos, "PDB_UP"))
-      .filter(Boolean)
-      .map((residue) => `${residue.start}:${residue.end}`);
+
+    let highlight;
+    try {
+      highlight = sequencePositions
+        .map((pos) =>
+          translatePositions(
+            pos,
+            pos,
+            this._selectedMolecule.mappings,
+            "PDB_UP"
+          )
+        )
+        .filter(Boolean)
+        .map((residue) => `${residue.start}:${residue.end}`);
+    } catch (error) {
+      if (error instanceof PositionMappingError) {
+        this._structureViewer.showMessage("Error", error.message);
+      }
+      throw error;
+    }
+
     this.setAttribute("highlight", highlight.join(","));
     const event = new CustomEvent("change", {
       detail: {
@@ -347,10 +293,20 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       return;
     }
 
-    const translatedPositions = this._highlight
-      .map(({ start, end }) => this.translatePositions(start, end))
-      .filter(Boolean);
+    let translatedPositions;
 
+    try {
+      translatedPositions = this._highlight
+        .map(({ start, end }) =>
+          translatePositions(start, end, this._selectedMolecule.mappings)
+        )
+        .filter(Boolean);
+    } catch (error) {
+      if (error instanceof PositionMappingError) {
+        this._structureViewer.showMessage("Error", error.message);
+      }
+      throw error;
+    }
     if (!translatedPositions?.length) {
       return;
     }

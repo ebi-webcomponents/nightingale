@@ -90,10 +90,8 @@ class StructureViewer {
       if (StructureElement.Loci.is(event.current.loci)) {
         const loc = StructureElement.Location.create();
         StructureElement.Loci.getFirstLocation(event.current.loci, loc);
-        const sequencePositions = [
-          StructureProperties.residue.auth_seq_id(loc),
-        ];
-        onHighlightClick(sequencePositions);
+        const sequencePosition = StructureProperties.residue.auth_seq_id(loc);
+        onHighlightClick([sequencePosition]);
       }
     });
     PluginCommands.Canvas3D.SetSettings(this.plugin, {
