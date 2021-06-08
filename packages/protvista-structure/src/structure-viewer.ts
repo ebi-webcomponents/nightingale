@@ -143,7 +143,7 @@ class StructureViewer {
 
   highlight(ranges: { start: number; end: number }[]): void {
     // What nightingale calls "highlight", mol* calls "select"
-    // The query in this method is over label_seq_id so this the provided start & end
+    // The query in this method is over label_seq_id so the provided start & end
     // coordinates must be in PDB space
     const data =
       this.plugin.managers.structure.hierarchy.current.structures[0]?.cell.obj
