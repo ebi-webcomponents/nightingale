@@ -241,14 +241,6 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this._planHighlight();
   }
 
-  processMapping(mappingData: unknown) {
-    if (!Object.values(mappingData)[0].UniProt[this._accession]) {
-      return null;
-    }
-
-    return Object.values(mappingData)[0].UniProt[this._accession].mappings;
-  }
-
   propagateHighlight(sequencePositions: number[]): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
