@@ -165,6 +165,7 @@ class StructureViewer {
       data
     );
     const loci = StructureSelection.toLociWithSourceUnits(sel);
+    console.log("Mol* should highlight:", loci);
     this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
   }
 
