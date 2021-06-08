@@ -19,6 +19,7 @@ import { Script } from "molstar/lib/mol-script/script";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
+import { EmptyLoci } from "molstar/lib/mol-model/loci";
 
 import "molstar/build/viewer/molstar.css";
 
@@ -90,7 +91,9 @@ class StructureViewer {
       if (StructureElement.Loci.is(event.current.loci)) {
         const loc = StructureElement.Location.create();
         StructureElement.Loci.getFirstLocation(event.current.loci, loc);
-        const sequencePosition = StructureProperties.residue.auth_seq_id(loc);
+        // auth_seq_id  : UniProt coordinate space
+        // label_seq_id : PDB coordinate space
+        const sequencePosition = StructureProperties.residue.label_seq_id(loc);
         onHighlightClick([sequencePosition]);
       }
     });
@@ -139,6 +142,9 @@ class StructureViewer {
   }
 
   highlight(ranges: { start: number; end: number }[]): void {
+    // What nightingale calls "highlight", mol* calls "select"
+    // The query in this method is over label_seq_id so this the provided start & end
+    // coordinates must be in PDB space
     const data =
       this.plugin.managers.structure.hierarchy.current.structures[0]?.cell.obj
         ?.data;
@@ -149,7 +155,7 @@ class StructureViewer {
           "residue-test": Q.core.logic.or(
             ranges.map(({ start, end }) =>
               Q.core.rel.inRange([
-                Q.struct.atomProperty.macromolecular.auth_seq_id(),
+                Q.struct.atomProperty.macromolecular.label_seq_id(),
                 start,
                 end,
               ])
@@ -160,6 +166,12 @@ class StructureViewer {
     );
     const loci = StructureSelection.toLociWithSourceUnits(sel);
     this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
+  }
+
+  clearHighlight(): void {
+    this.plugin.managers.interactivity.lociSelects.selectOnly({
+      loci: EmptyLoci,
+    });
   }
 
   showMessage(title: string, message: string, timeoutMs?: number): void {

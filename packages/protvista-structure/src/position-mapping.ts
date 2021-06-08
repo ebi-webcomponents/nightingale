@@ -67,13 +67,18 @@ const translatePositions = (
         "Start or end coordinate outside of mapping range"
       );
     }
-    // TODO: this is wrong because there are gaps in the PDB sequence though if this is the case PositionMappingError would have already been thrown
-    const offset = mapping.unp_start - mapping.start.residue_number;
+    // TODO: this is wrong because there are gaps in the PDB sequence though if
+    // this is the case PositionMappingError would have already been thrown and
+    // we should reach this point.
+    const offset =
+      mappingDirection === "UP_PDB"
+        ? mapping.start.residue_number - mapping.unp_start
+        : mapping.unp_start - mapping.start.residue_number;
     return {
       entity: mapping.entity_id,
       chain: mapping.chain_id,
-      start: mappingDirection === "UP_PDB" ? start - offset : start + offset,
-      end: mappingDirection === "UP_PDB" ? end - offset : end + offset,
+      start: start + offset,
+      end: end + offset,
     };
   }
   return null;

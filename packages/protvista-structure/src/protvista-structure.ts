@@ -233,7 +233,6 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     const pdbEntry = await this.loadPDBEntry(id);
     const mappings =
       Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
-
     await this._structureViewer.loadPdb(id.toLowerCase());
     this._selectedMolecule = {
       id,
@@ -246,10 +245,12 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     if (!Object.values(mappingData)[0].UniProt[this._accession]) {
       return null;
     }
+
     return Object.values(mappingData)[0].UniProt[this._accession].mappings;
   }
 
   propagateHighlight(sequencePositions: number[]): void {
+    // sequencePositions assumed to be in PDB coordinate space
     if (
       !sequencePositions?.length ||
       sequencePositions.some((pos) => !Number.isInteger(pos))
@@ -257,26 +258,21 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       return;
     }
 
-    let highlight;
+    let translated;
     try {
-      highlight = sequencePositions
-        .map((pos) =>
-          translatePositions(
-            pos,
-            pos,
-            this._selectedMolecule.mappings,
-            "PDB_UP"
-          )
-        )
-        .filter(Boolean)
-        .map((residue) => `${residue.start}:${residue.end}`);
+      translated = sequencePositions.map((pos) =>
+        translatePositions(pos, pos, this._selectedMolecule.mappings, "PDB_UP")
+      );
     } catch (error) {
       if (error instanceof PositionMappingError) {
         this._structureViewer.showMessage("Error", error.message);
+        return;
       }
       throw error;
     }
-
+    const highlight = translated
+      .filter(Boolean)
+      .map((residue) => `${residue.start}:${residue.end}`);
     this.setAttribute("highlight", highlight.join(","));
     const event = new CustomEvent("change", {
       detail: {
@@ -289,12 +285,13 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   highlightChain(): void {
+    this._structureViewer.clearMessages();
     if (!this._highlight) {
+      this._structureViewer.clearMessages();
       return;
     }
 
     let translatedPositions;
-
     try {
       translatedPositions = this._highlight
         .map(({ start, end }) =>
@@ -304,6 +301,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     } catch (error) {
       if (error instanceof PositionMappingError) {
         this._structureViewer.showMessage("Error", error.message);
+        return;
       }
       throw error;
     }
