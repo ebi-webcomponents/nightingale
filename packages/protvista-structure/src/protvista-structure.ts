@@ -37,8 +37,6 @@ type NightingaleManager = NightingaleElement & {
 type HighLight = Array<{ start: number; end: number }>;
 
 class ProtvistaStructure extends HTMLElement implements NightingaleElement {
-  private _mappings: Mappings;
-
   private _height: string;
 
   private _accession: string;
@@ -60,8 +58,6 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
 
   constructor() {
     super();
-    this._mappings = [];
-
     this._planHighlight = this._planHighlight.bind(this);
     this.propagateHighlight = this.propagateHighlight.bind(this);
   }
@@ -272,7 +268,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   highlightChain(): void {
-    if (!this._highlight) {
+    if (!this._highlight || typeof this._highlight === "string") {
       return;
     }
 
