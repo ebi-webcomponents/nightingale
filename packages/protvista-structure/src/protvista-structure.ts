@@ -272,9 +272,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   highlightChain(): void {
-    this._structureViewer.clearMessages();
     if (!this._highlight) {
-      this._structureViewer.clearMessages();
       return;
     }
 
