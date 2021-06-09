@@ -163,11 +163,6 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     newVal: string
   ): void {
     if (oldVal !== newVal) {
-      const value = parseFloat(newVal);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore 🤷🏼‍♂️
-      this[`_${attrName}`] = typeof value === "number" ? newVal : value;
-
       switch (attrName) {
         case "pdb-id":
           if (newVal !== null) {
