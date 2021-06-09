@@ -22,16 +22,21 @@ export const filterContacts = (
   data: ArrayOfNumberArray,
   minDistance: number,
   minProbability: number
-): ArrayOfNumberArray => data.filter(([n1, n2, p]) => {
-  return Math.abs(n1 - n2) >= minDistance && p > minProbability;
-});
+): ArrayOfNumberArray =>
+  data.filter(([n1, n2, p]) => {
+    return Math.abs(n1 - n2) >= minDistance && p > minProbability;
+  });
 
 export const parseLinksAssociative = (
   text: string,
   minDistance: number,
   minProbability: number
 ): LinksObject => {
-  const rawData = filterContacts(parseToRowData(text), minDistance, minProbability);
+  const rawData = filterContacts(
+    parseToRowData(text),
+    minDistance,
+    minProbability
+  );
   const n2set: NumberArray = {};
   const sets: ArrayOfNumberArray = [];
   rawData.forEach(([n1, n2]) => {
@@ -64,7 +69,9 @@ export const parseLinks = (
   minProbability: number
 ): ContactObject => {
   const rawData = parseToRowData(text);
-  return getContactsObject(filterContacts(rawData, minDistance, minProbability));
+  return getContactsObject(
+    filterContacts(rawData, minDistance, minProbability)
+  );
 };
 
 export const getContactsObject = (

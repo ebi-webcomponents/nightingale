@@ -43,7 +43,6 @@ const config = {
   externals: {
     d3: "d3",
     quill: "quill",
-    litemol: "LiteMol",
     react: {
       root: "React",
       commonjs2: "react",

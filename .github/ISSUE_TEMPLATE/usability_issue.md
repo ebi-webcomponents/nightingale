@@ -1,11 +1,11 @@
 ---
 name: Usability Issue
 about: Describe a usability and solutions explored
-title: ''
-labels: 'usability'
-assignees: ''
-
+title: ""
+labels: "usability"
+assignees: ""
 ---
+
 **Describe the usability issue**
 A clear and concise description of what the problem is. Ex. Users cannot [...]
 

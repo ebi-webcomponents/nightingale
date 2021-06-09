@@ -71,7 +71,10 @@ class ProtvistaLinks extends ProtvistaTrack {
   }
 
   static get observedAttributes(): Array<string> {
-    return ProtvistaTrack.observedAttributes.concat("mindistance", "minprobability");
+    return ProtvistaTrack.observedAttributes.concat(
+      "mindistance",
+      "minprobability"
+    );
   }
 
   attributeChangedCallback(

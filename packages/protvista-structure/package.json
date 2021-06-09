@@ -1,9 +1,10 @@
 {
   "name": "protvista-structure",
   "version": "3.2.7",
-  "description": "A custom element wrapper for LiteMol",
+  "description": "A custom element wrapper for Mol*",
   "main": "dist/protvista-structure.js",
-  "module": "src/protvista-structure.js",
+  "module": "dist/es/protvista-structure.js",
+  "types": "dist/es/protvista-structure.d.ts",
   "files": [
     "dist",
     "src",
@@ -14,6 +15,9 @@
     "customelements",
     "webcomponents"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -25,11 +29,13 @@
   "author": "xwatkins@ebi.ac.uk",
   "license": "MIT",
   "dependencies": {
-    "lodash-es": "^4.17.11",
-    "whatwg-fetch": "^3.4.1"
+    "data-loader": "^3.0.0",
+    "molstar": "2.0.6",
+    "react": "17.0.2"
   },
-  "peerDependencies": {
-    "litemol": "^2.4.2"
-  },
-  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
+  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
+  "devDependencies": {
+    "@types/react": "17.0.9",
+    "@types/react-dom": "17.0.6"
+  }
 }
