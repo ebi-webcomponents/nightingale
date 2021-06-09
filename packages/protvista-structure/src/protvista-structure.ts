@@ -1,7 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import "whatwg-fetch";
-import { NightingaleElement } from "data-loader";
-
+import { NightingaleElement, load } from "data-loader";
 import StructureViewer from "./structure-viewer";
 import translatePositions, {
   PositionMappingError,
@@ -210,13 +208,13 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
 
   async loadPDBEntry(pdbId: string): Promise<unknown> {
     try {
-      const data = await fetch(
+      const { payload } = await load(
         `https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`
       );
-      return await data.json();
+      return payload;
     } catch (e) {
       this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
-      throw new Error(e);
+      throw e;
     }
   }
 

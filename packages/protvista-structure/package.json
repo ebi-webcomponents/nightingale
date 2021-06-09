@@ -31,8 +31,7 @@
   "dependencies": {
     "data-loader": "^3.0.0",
     "molstar": "2.0.6",
-    "react": "17.0.2",
-    "whatwg-fetch": "3.4.1"
+    "react": "17.0.2"
   },
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "devDependencies": {
