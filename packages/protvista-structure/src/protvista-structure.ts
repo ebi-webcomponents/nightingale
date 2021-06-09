@@ -282,7 +282,12 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     try {
       translatedPositions = this._highlight
         .map(({ start, end }) =>
-          translatePositions(start, end, this._selectedMolecule.mappings)
+          translatePositions(
+            start,
+            end,
+            this._selectedMolecule.mappings,
+            "UP_PDB"
+          )
         )
         .filter(Boolean);
     } catch (error) {

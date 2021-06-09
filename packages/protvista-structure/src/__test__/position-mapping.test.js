@@ -6,7 +6,7 @@ describe("translatePositions", () => {
     if (error) {
       it(`should throw ${error}`, () => {
         expect(() => {
-          translatePositions(uniprot.start, uniprot.end, mappings);
+          translatePositions(uniprot.start, uniprot.end, mappings, "UP_PDB");
         }).toThrow(error);
       });
     } else {

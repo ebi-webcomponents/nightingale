@@ -35,7 +35,7 @@ const translatePositions = (
   start: number,
   end: number,
   mappings: Mappings,
-  mappingDirection: Direction = "UP_PDB"
+  mappingDirection: Direction
 ): {
   start: number;
   end: number;
@@ -69,7 +69,7 @@ const translatePositions = (
     }
     // TODO: this is wrong because there are gaps in the PDB sequence though if
     // this is the case PositionMappingError would have already been thrown and
-    // we should reach this point.
+    // we should not reach this point.
     const offset =
       mappingDirection === "UP_PDB"
         ? mapping.start.residue_number - mapping.unp_start
