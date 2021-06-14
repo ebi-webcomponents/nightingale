@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure",
-  "version": "3.2.7",
+  "version": "3.3.0-alpha.0",
   "description": "A custom element wrapper for Mol*",
   "main": "dist/protvista-structure.js",
   "module": "dist/es/protvista-structure.js",
