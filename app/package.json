@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "3.3.0-alpha.0",
+  "version": "3.2.14",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -24,13 +24,13 @@
     "protvista-feature-adapter": "^3.2.14",
     "protvista-filter": "^3.1.2",
     "protvista-interpro-track": "^3.2.14",
-    "protvista-links": "^3.3.0-alpha.0",
+    "protvista-links": "^3.2.14",
     "protvista-manager": "^3.0.0",
     "protvista-msa": "^3.2.14",
     "protvista-navigation": "^3.2.14",
     "protvista-saver": "^3.1.2",
     "protvista-sequence": "^3.2.14",
-    "protvista-structure": "^3.3.0-alpha.0",
+    "protvista-structure": "^3.2.7",
     "protvista-tooltip": "^3.1.2",
     "protvista-track": "^3.2.14",
     "protvista-uniprot": "^2.0.3",
