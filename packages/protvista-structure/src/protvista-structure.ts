@@ -34,12 +34,32 @@ type NightingaleManager = NightingaleElement & {
 
 type HighLight = Array<{ start: number; end: number }>;
 
+export type PredictionData = {
+  entryId: string;
+  gene?: string;
+  uniprotAccession?: string;
+  uniprotId?: string;
+  uniprotDescription?: string;
+  taxId?: number;
+  organismScientificName?: string;
+  uniprotStart?: number;
+  uniprotEnd?: number;
+  uniprotSequence?: string;
+  modelCreatedDate?: string;
+  latestVersion?: number;
+  allVersions?: number[];
+  bcifUrl?: string;
+  cifUrl?: string;
+  pdbUrl?: string;
+  distogramUrl?: string;
+};
+
 class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   private _height: string;
 
   private _accession: string;
 
-  private _pdbID: string;
+  private _id: string;
 
   private manager: NightingaleManager;
 
@@ -86,13 +106,13 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this.setAttribute("accession", accession);
   }
 
-  get pdbId(): string {
-    return this._pdbID;
+  get id(): string {
+    return this.id;
   }
 
-  set pdbId(pdbId: string) {
-    this.setAttribute("pdbid", pdbId);
-    this._pdbID = pdbId;
+  set id(id: string) {
+    this.setAttribute("id", id);
+    this._id = id;
   }
 
   get height(): string {
@@ -106,7 +126,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       this.manager.register(this);
     }
 
-    this._pdbID = this.getAttribute("pdb-id");
+    this.id = this.getAttribute("id");
     this._accession = this.getAttribute("accession");
     this._height = this.getAttribute("height") || "480px";
     this._highlight =
@@ -134,7 +154,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   static get observedAttributes(): string[] {
-    return ["highlight", "pdb-id", "height"];
+    return ["highlight", "id", "accession", "height"];
   }
 
   static _parseHighlight(highlightString: string): HighLight {
@@ -158,15 +178,16 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   ): void {
     if (oldVal !== newVal) {
       switch (attrName) {
-        case "pdb-id":
+        case "id":
           if (newVal !== null) {
-            this._pdbID = newVal;
-            this.selectMolecule(this._pdbID);
+            this._id = newVal;
           }
+          this.selectMolecule();
           break;
 
         case "accession":
           this._accession = newVal;
+          this.selectMolecule();
           break;
 
         case "highlight":
@@ -213,18 +234,47 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       );
       return payload;
     } catch (e) {
-      this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
+      console.log(e);
+      // this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
       throw e;
     }
   }
 
-  async selectMolecule(id: string): Promise<void> {
-    const pdbEntry = await this.loadPDBEntry(id);
-    const mappings =
-      Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
-    await this._structureViewer.loadPdb(id.toLowerCase());
+  async loadAFEntry(id: string): Promise<PredictionData[]> {
+    try {
+      const { payload } = await load(
+        `https://test.alphafold.ebi.ac.uk/api/prediction/${id}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`
+      );
+      return payload;
+    } catch (e) {
+      console.log(e);
+      // this._structureViewer.showMessage("Error", `Couldn't load AF entry`);
+      throw e;
+    }
+  }
+
+  // https://www.ebi.ac.uk/pdbe/model-server/v1/1cbs/full?encoding=bcif
+  // Use the url above for testing
+  async selectMolecule(): Promise<void> {
+    if (!this._id || !this._accession) {
+      return;
+    }
+    let mappings;
+    if (this._id.startsWith("AF-")) {
+      const afPredictions = await this.loadAFEntry(this._accession);
+      const afInfo = afPredictions.find(
+        (prediction) => prediction.entryId === this._id
+      );
+      await this._structureViewer.loadAF(this._id, afInfo.cifUrl);
+      // mappings = await this._structureViewer.loadAF(afPredictions.b);
+      console.log(afPredictions);
+    } else {
+      const pdbEntry = await this.loadPDBEntry(this._id);
+      mappings = Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
+      await this._structureViewer.loadPdb(this._id.toLowerCase());
+    }
     this._selectedMolecule = {
-      id,
+      id: this._id,
       mappings,
     };
     this._planHighlight();

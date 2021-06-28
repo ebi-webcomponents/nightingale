@@ -141,6 +141,37 @@ class StructureViewer {
       });
   }
 
+  async loadAF(id: string, url: string): Promise<void> {
+    this.plugin.clear();
+    this.showMessage("Loading", id);
+    // const params = DownloadStructure.createDefaultParams(
+    //   this.plugin.state.data.root.obj!,
+    //   this.plugin
+    // );
+    const { plugin } = this;
+
+    const data = await plugin.builders.data.download(
+      { url, isBinary: false },
+      { state: { isGhost: true } }
+    );
+
+    const trajectory = await plugin.builders.structure.parseTrajectory(
+      data,
+      "mmcif"
+    );
+    console.log(`trajectory: ${trajectory}`);
+
+    await this.plugin.builders.structure.hierarchy.applyPreset(
+      trajectory,
+      "all-models",
+      { useDefaultIfSingleModel: true }
+    );
+
+    this.clearMessages();
+
+    return Promise.resolve();
+  }
+
   highlight(ranges: { start: number; end: number }[]): void {
     // What nightingale calls "highlight", mol* calls "select"
     // The query in this method is over label_seq_id so the provided start & end
