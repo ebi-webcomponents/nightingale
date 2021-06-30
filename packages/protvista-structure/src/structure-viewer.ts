@@ -21,6 +21,8 @@ import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
 import { EmptyLoci } from "molstar/lib/mol-model/loci";
 
+import AfConfidenceScore from "./af-confidence/behavior";
+
 import "molstar/build/viewer/molstar.css";
 
 interface LoadStructureOptions {
@@ -56,7 +58,13 @@ class StructureViewer {
     const defaultSpec = DefaultPluginUISpec(); // TODO: Make our own to select only essential plugins
     const spec: PluginSpec = {
       actions: defaultSpec.actions,
-      behaviors: defaultSpec.behaviors,
+      behaviors: [
+        ...defaultSpec.behaviors,
+        PluginSpec.Behavior(AfConfidenceScore, {
+          autoAttach: true,
+          showTooltip: true,
+        }),
+      ],
       layout: {
         initial: {
           isExpanded: viewerOptions.layoutIsExpanded,
@@ -77,6 +85,19 @@ class StructureViewer {
           viewerOptions.viewportShowSelectionMode,
         ],
         [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
+        [
+          PluginConfig.Structure.DefaultRepresentationPresetParams,
+          {
+            theme: {
+              globalName: "af-confidence",
+              carbonByChainId: false,
+              focus: {
+                name: "element-symbol",
+                params: { carbonByChainId: false },
+              },
+            },
+          },
+        ],
       ],
     };
 
@@ -97,6 +118,7 @@ class StructureViewer {
         onHighlightClick([sequencePosition]);
       }
     });
+
     PluginCommands.Canvas3D.SetSettings(this.plugin, {
       settings: (props) => {
         // eslint-disable-next-line no-param-reassign
@@ -144,10 +166,7 @@ class StructureViewer {
   async loadAF(id: string, url: string): Promise<void> {
     this.plugin.clear();
     this.showMessage("Loading", id);
-    // const params = DownloadStructure.createDefaultParams(
-    //   this.plugin.state.data.root.obj!,
-    //   this.plugin
-    // );
+
     const { plugin } = this;
 
     const data = await plugin.builders.data.download(
@@ -159,7 +178,6 @@ class StructureViewer {
       data,
       "mmcif"
     );
-    console.log(`trajectory: ${trajectory}`);
 
     await this.plugin.builders.structure.hierarchy.applyPreset(
       trajectory,

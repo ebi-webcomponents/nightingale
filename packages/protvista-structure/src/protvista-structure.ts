@@ -34,6 +34,18 @@ type NightingaleManager = NightingaleElement & {
 
 type HighLight = Array<{ start: number; end: number }>;
 
+export type StructureData = {
+  dbReferences: {
+    type: "PDB" | string;
+    id: string;
+    properties: {
+      method: string;
+      chains: string;
+      resolution: string;
+    };
+  }[];
+};
+
 export type PredictionData = {
   entryId: string;
   gene?: string;
@@ -234,8 +246,8 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       );
       return payload;
     } catch (e) {
-      console.log(e);
-      // this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
+      // console.log(e);
+      this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
       throw e;
     }
   }
@@ -247,8 +259,8 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       );
       return payload;
     } catch (e) {
-      console.log(e);
-      // this._structureViewer.showMessage("Error", `Couldn't load AF entry`);
+      // console.log(e);
+      this._structureViewer.showMessage("Error", `Couldn't load AF entry`);
       throw e;
     }
   }
@@ -267,7 +279,6 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       );
       await this._structureViewer.loadAF(this._id, afInfo.cifUrl);
       // mappings = await this._structureViewer.loadAF(afPredictions.b);
-      console.log(afPredictions);
     } else {
       const pdbEntry = await this.loadPDBEntry(this._id);
       mappings = Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
