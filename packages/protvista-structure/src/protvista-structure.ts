@@ -265,6 +265,10 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     }
   }
 
+  isAF(): boolean {
+    return this._id.startsWith("AF-");
+  }
+
   // https://www.ebi.ac.uk/pdbe/model-server/v1/1cbs/full?encoding=bcif
   // Use the url above for testing
   async selectMolecule(): Promise<void> {
@@ -272,7 +276,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       return;
     }
     let mappings;
-    if (this._id.startsWith("AF-")) {
+    if (this.isAF()) {
       const afPredictions = await this.loadAFEntry(this._accession);
       const afInfo = afPredictions.find(
         (prediction) => prediction.entryId === this._id
@@ -334,14 +338,20 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     let translatedPositions;
     try {
       translatedPositions = this._highlight
-        .map(({ start, end }) =>
-          translatePositions(
+        .map(({ start, end }) => {
+          if (this.isAF()) {
+            return {
+              start,
+              end,
+            };
+          }
+          return translatePositions(
             start,
             end,
             this._selectedMolecule.mappings,
             "UP_PDB"
-          )
-        )
+          );
+        })
         .filter(Boolean);
     } catch (error) {
       if (error instanceof PositionMappingError) {
