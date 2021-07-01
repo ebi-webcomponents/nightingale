@@ -6,8 +6,12 @@
     "src",
     "resources"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "main": "dist/protvista-datatable.js",
-  "module": "src/protvista-datatable.js",
+  "module": "dist/es/protvista-datatable.js",
+  "types": "dist/es/protvista-datatable.d.ts",
   "license": "Apache-2.0",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk> (https://github.com/xwatkins)",
   "keywords": [

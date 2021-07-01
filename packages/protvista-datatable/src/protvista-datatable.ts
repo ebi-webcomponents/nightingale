@@ -1,25 +1,67 @@
 import { LitElement, html } from "lit-element";
 import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
-/* eslint-disable import/extensions, import/no-extraneous-dependencies */
+
+import { ProtvistaLoadEvent } from "./types/events";
+import { ProtvistaManager } from "./types/manager";
+
 import styles from "./styles";
 
+type DataTableData<Datum> = {
+  start?: number;
+  begin?: number;
+  end: number;
+} & Datum;
+
+type Columns = {
+  [key: string]: {
+    label: string;
+    resolver: (d: any) => HTMLTemplateElement;
+  };
+};
+
 class ProtvistaDatatable extends LitElement {
+  private height: number;
+
+  private _data: DataTableData<any>[]; // or "data"?
+
+  private highlight: [number, number][];
+
+  private columns: Columns;
+
+  private displayStart?: number;
+
+  private displayEnd?: number;
+
+  private selectedid?: string;
+
+  private visibleChildren: string[];
+
+  private noScrollToRow: boolean;
+
+  private noDeselect: boolean;
+
+  private scrollFilter: any; // to replace with type definition from utils when exists
+
+  private wheelListener: (e: WheelEvent) => any;
+
+  private manager: ProtvistaManager;
+
   constructor() {
     super();
     this.height = 25;
     this.visibleChildren = [];
     this.noScrollToRow = false;
     this.noDeselect = false;
-    this.eventHandler = this.eventHandler.bind(this);
     this.scrollFilter = new ScrollFilter(this);
     this.wheelListener = (event) => this.scrollFilter.wheel(event);
+    this.eventHandler = this.eventHandler.bind(this);
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     super.connectedCallback();
-    this.addEventListener("load", (e) => {
-      if (Array.from(this.children).includes(e.target)) {
+    this.addEventListener("load", (e: ProtvistaLoadEvent) => {
+      if (Array.from(this.children).includes(e.target as HTMLElement)) {
         this.data = ProtvistaDatatable.processData(e.detail.payload.features);
       }
     });
@@ -38,7 +80,7 @@ class ProtvistaDatatable extends LitElement {
     }
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     super.disconnectedCallback();
     if (this.manager) {
       this.manager.unregister(this);
@@ -48,17 +90,17 @@ class ProtvistaDatatable extends LitElement {
   }
 
   // Implement our own accessors as we need to transform the data
-  set data(value) {
+  set data(value: DataTableData<any>[]) {
     const oldValue = this._data;
     this._data = ProtvistaDatatable.processData(value);
     this.requestUpdate("data", oldValue);
   }
 
-  get data() {
+  get data(): DataTableData<any> {
     return this._data;
   }
 
-  eventHandler(e) {
+  eventHandler(e: MouseEvent) {
     if (
       !e.target.closest("protvista-datatable") &&
       !e.target.closest(".feature")
