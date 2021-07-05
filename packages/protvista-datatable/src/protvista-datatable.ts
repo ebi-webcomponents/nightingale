@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html, TemplateResult, CSSResult } from "lit-element";
 import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
 
@@ -7,25 +7,29 @@ import { ProtvistaManager } from "./types/manager";
 
 import styles from "./styles";
 
-type DataTableData<Datum> = {
+type DataTableDatum = {
   start?: number;
   begin?: number;
   end: number;
-} & Datum;
+  protvistaFeatureId?: string;
+};
 
 type Columns = {
   [key: string]: {
     label: string;
+    child?: boolean;
+    display?: boolean;
     resolver: (d: any) => HTMLTemplateElement;
   };
 };
 
-class ProtvistaDatatable extends LitElement {
+class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
   private height: number;
 
-  private _data: DataTableData<any>[]; // or "data"?
+  private _data: T[];
 
-  private highlight: [number, number][];
+  // This will eventually be an array of tuples
+  private highlight: [start: number, end: number];
 
   private columns: Columns;
 
@@ -45,6 +49,8 @@ class ProtvistaDatatable extends LitElement {
 
   private wheelListener: (e: WheelEvent) => any;
 
+  private rowClickEvent?: (row: T) => void;
+
   private manager: ProtvistaManager;
 
   constructor() {
@@ -60,9 +66,10 @@ class ProtvistaDatatable extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
     this.addEventListener("load", (e: ProtvistaLoadEvent) => {
       if (Array.from(this.children).includes(e.target as HTMLElement)) {
-        this.data = ProtvistaDatatable.processData(e.detail.payload.features);
+        this.data = e.detail.payload.features;
       }
     });
     if (this.closest("protvista-manager")) {
@@ -90,32 +97,40 @@ class ProtvistaDatatable extends LitElement {
   }
 
   // Implement our own accessors as we need to transform the data
-  set data(value: DataTableData<any>[]) {
+  set data(value: T[]) {
     const oldValue = this._data;
-    this._data = ProtvistaDatatable.processData(value);
+    this._data = this.processData(value);
     this.requestUpdate("data", oldValue);
   }
 
-  get data(): DataTableData<any> {
+  get data(): T[] {
     return this._data;
   }
 
-  eventHandler(e: MouseEvent) {
-    if (
-      !e.target.closest("protvista-datatable") &&
-      !e.target.closest(".feature")
-    ) {
+  eventHandler(e: MouseEvent): void {
+    const target = e.target as HTMLElement;
+    if (!target.closest("protvista-datatable") && !target.closest(".feature")) {
       this.selectedid = null;
     }
   }
 
-  static get properties() {
+  static get properties(): { [key: string]: any } {
     return {
       data: { type: Object },
       highlight: {
-        converter: (value) => {
+        converter: (value: string) => {
           if (value && value !== "null") {
-            return value.split(":").map((d) => Number(d));
+            try {
+              const splitArray = value.split(":").map((d) => Number(d));
+              if (splitArray.length !== 2) {
+                throw new Error(
+                  "Highlight should be only 2 values separated by ':'."
+                );
+              }
+              return [splitArray[0], splitArray[1]];
+            } catch (e) {
+              console.error("Invalid highlight coordinates:", e);
+            }
           }
           return null;
         },
@@ -132,12 +147,13 @@ class ProtvistaDatatable extends LitElement {
     };
   }
 
-  static get styles() {
+  static get styles(): CSSResult {
     return styles;
   }
 
-  static processData(data) {
-    return data
+  // eslint-disable-next-line class-methods-use-this
+  processData(dataToProcess: T[]): T[] {
+    return dataToProcess
       .map((d) => {
         return {
           ...d,
@@ -151,30 +167,40 @@ class ProtvistaDatatable extends LitElement {
       }));
   }
 
-  static isWithinRange(rangeStart, rangeEnd, start, end) {
+  static isWithinRange(
+    rangeStart: number,
+    rangeEnd: number,
+    start: number,
+    end: number
+  ): boolean {
     return (
-      (!start && rangeEnd === Number(end)) ||
-      (!end && rangeStart === Number(start)) ||
+      (!start && rangeEnd === end) ||
+      (!end && rangeStart === start) ||
       (rangeStart <= start && rangeEnd >= end)
     );
   }
 
-  static isOutside(rangeStart, rangeEnd, start, end) {
+  static isOutside(
+    rangeStart: number,
+    rangeEnd: number,
+    start: number,
+    end: number
+  ): boolean {
     return rangeStart > end || rangeEnd < start;
   }
 
-  handleClick(e, row) {
-    if (!e.target.parentNode) {
+  handleClick(e: MouseEvent, row: T): void {
+    const target = e.target as HTMLElement;
+    if (!target.parentNode) {
       return;
     }
     const { start, end } = row;
-    const detail =
-      (typeof this.rowClickEvent === "function" && this.rowClickEvent(row)) ||
-      {};
-    this.selectedid = e.target.parentNode.dataset.id;
-    if (start && end) {
-      detail.highlight = `${start}:${end}`;
+    if (this.rowClickEvent && typeof this.rowClickEvent === "function") {
+      // Note: not sure this is used or is the best way to handle if it is...
+      this.rowClickEvent(row);
     }
+    this.selectedid = (target.parentNode as HTMLElement).dataset.id;
+    const detail = start && end ? { highlight: `${start}:${end}` } : {};
     this.dispatchEvent(
       new CustomEvent("change", {
         detail,
@@ -184,7 +210,7 @@ class ProtvistaDatatable extends LitElement {
     );
   }
 
-  getStyleClass(id, start, end) {
+  getStyleClass(id: string, start: number, end: number): string {
     let className = "";
     if (this.selectedid && this.selectedid === id) {
       className = `${className} active`;
@@ -195,8 +221,8 @@ class ProtvistaDatatable extends LitElement {
       ProtvistaDatatable.isOutside(
         this.displayStart,
         this.displayEnd,
-        start,
-        end
+        Number(start),
+        Number(end)
       )
     ) {
       className = `${className} hidden`;
@@ -206,8 +232,8 @@ class ProtvistaDatatable extends LitElement {
       ProtvistaDatatable.isWithinRange(
         this.highlight[0],
         this.highlight[1],
-        start,
-        end
+        Number(start),
+        Number(end)
       )
     ) {
       className = `${className} overlapped`;
@@ -215,11 +241,11 @@ class ProtvistaDatatable extends LitElement {
     return className;
   }
 
-  hasChildData(rowItems, row) {
+  hasChildData(rowItems: string[], row: T): boolean {
     return rowItems.some((column) => this.columns[column].resolver(row));
   }
 
-  toggleVisibleChild(rowId) {
+  toggleVisibleChild(rowId: string): void {
     if (this.visibleChildren.includes(rowId)) {
       this.visibleChildren = this.visibleChildren.filter(
         (childId) => childId !== rowId
@@ -229,7 +255,7 @@ class ProtvistaDatatable extends LitElement {
     }
   }
 
-  scrollIntoView() {
+  scrollIntoView(): void {
     if (!this.selectedid) {
       return;
     }
@@ -239,7 +265,7 @@ class ProtvistaDatatable extends LitElement {
     element.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  getChildRow(childRowItems, row) {
+  getChildRow(childRowItems: string[], row: T): TemplateResult {
     return html`
       <tr class="child-row">
         <td
@@ -267,7 +293,7 @@ class ProtvistaDatatable extends LitElement {
     `;
   }
 
-  render() {
+  render(): TemplateResult {
     if (!this.data || !this.columns) {
       return html``;
     }
@@ -291,7 +317,7 @@ class ProtvistaDatatable extends LitElement {
             </tr>
           </thead>
           <tbody>
-            ${this.data.map((row, rowIndex) => {
+            ${this.data.map((row, rowIndex: number) => {
               const hasChildData = this.hasChildData(childRowItems, row);
               return html`
                 <tr
@@ -301,7 +327,7 @@ class ProtvistaDatatable extends LitElement {
                     row.start,
                     row.end
                   )} ${rowIndex % 2 === 1 ? "even" : "odd"}"
-                  @click="${(e) => this.handleClick(e, row)}"
+                  @click="${(e: MouseEvent) => this.handleClick(e, row)}"
                 >
                   ${columnsToDisplay.map((column, index) =>
                     hasChildData && index === 0
@@ -334,7 +360,7 @@ class ProtvistaDatatable extends LitElement {
     `;
   }
 
-  updated() {
+  updated(): void {
     if (!this.noScrollToRow) {
       this.scrollIntoView();
     }

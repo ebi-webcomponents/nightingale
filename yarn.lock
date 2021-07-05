@@ -10670,6 +10670,14 @@ protvista-structure-adapter@^2.18.0:
     protvista-feature-adapter "^2.18.0"
     uuid "^8.1.0"
 
+protvista-structure@^3.2.7:
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/protvista-structure/-/protvista-structure-3.2.7.tgz#da763f1a5da55f2546d407a50af7f759a59ed944"
+  integrity sha512-DBsj8+M5tFPABKDWVx/cotR9ZRvExVx24dzQXbZRiHC5oBeN0OeJnP51MxVMU/mYJ+y0+Z2YItHXQjLqTbsf1g==
+  dependencies:
+    lodash-es "^4.17.11"
+    whatwg-fetch "^3.4.1"
+
 protvista-tooltip@^2.18.3:
   version "2.18.3"
   resolved "https://registry.yarnpkg.com/protvista-tooltip/-/protvista-tooltip-2.18.3.tgz#55812e1a6c3011cf9de8c29af11dcca191405673"
