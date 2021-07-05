@@ -53,6 +53,10 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
 
   private manager: ProtvistaManager;
 
+  static get is(): string {
+    return "protvista-datatable";
+  }
+
   constructor() {
     super();
     this.height = 25;
