@@ -138,7 +138,14 @@ class NightingaleHeatmap extends HTMLElement {
     const total = this.x.domain().length;
     const tickValues = [1];
     // Showing quarter values in the length as ticks
-    const quarter = total * 0.25 - ((total * 0.25) % 10);
+    let quarter;
+    if (total >= 100)
+      quarter = total * 0.25 - ((total * 0.25) % 10);
+    else if (total >= 20)
+      quarter = total * 0.25 - ((total * 0.25) % 5);
+    else
+      quarter = Math.floor(total * 0.25);
+
     let position = quarter;
     while (total > 0 && position <= total) {
       tickValues.push(Math.min(total, position));
