@@ -7,8 +7,6 @@ import {
 } from "lit-element";
 import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
-// Not sure why, but eslint doesn't see it...
-// eslint-disable-next-line import/no-unresolved
 import { RequireAtLeastOne } from "type-fest";
 
 import { ProtvistaLoadEvent } from "./types/events";
