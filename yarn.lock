@@ -10997,9 +10997,9 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-"react-msa-viewer@https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.2":
-  version "1.6.2"
-  resolved "https://github.com/ebi-webcomponents/react-msa-viewer#9017df6f0d214fbd27cc5180e71bf9c3f8f626aa"
+"react-msa-viewer@https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.3":
+  version "1.6.3"
+  resolved "https://github.com/ebi-webcomponents/react-msa-viewer#827ae186e11539bbaf211dd8168635c48a1dcc78"
   dependencies:
     lodash-es "4.17.15"
     plotly-icons "1.3.14"
