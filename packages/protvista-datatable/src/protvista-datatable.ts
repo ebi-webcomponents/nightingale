@@ -1,18 +1,30 @@
-import { LitElement, html, TemplateResult, CSSResult } from "lit-element";
+import {
+  LitElement,
+  html,
+  TemplateResult,
+  CSSResult,
+  PropertyDeclarations,
+} from "lit-element";
 import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
+// Not sure why, but eslint doesn't see it...
+// eslint-disable-next-line import/no-unresolved
+import { RequireAtLeastOne } from "type-fest";
 
 import { ProtvistaLoadEvent } from "./types/events";
 import { ProtvistaManager } from "./types/manager";
 
 import styles from "./styles";
 
-type DataTableDatum = {
+type StartTypes = {
   start?: number;
   begin?: number;
+};
+
+type DataTableDatum = {
   end: number;
   protvistaFeatureId?: string;
-};
+} & RequireAtLeastOne<StartTypes, "begin" | "start">;
 
 type Columns = {
   [key: string]: {
@@ -118,7 +130,7 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     }
   }
 
-  static get properties(): { [key: string]: any } {
+  static get properties(): PropertyDeclarations {
     return {
       data: { type: Object },
       highlight: {
