@@ -127,9 +127,14 @@ class StructureViewer {
     });
   }
 
-  loadPdb(pdb: string, options?: LoadStructureOptions): Promise<void> {
+  clear(message?: string): void {
     this.plugin.clear();
-    this.showMessage("Loading", pdb);
+    if (message) {
+      this.showMessage("Loading", message);
+    }
+  }
+
+  loadPdb(pdb: string, options?: LoadStructureOptions): Promise<void> {
     const params = DownloadStructure.createDefaultParams(
       this.plugin.state.data.root.obj!,
       this.plugin
@@ -164,9 +169,6 @@ class StructureViewer {
   }
 
   async loadAF(id: string, url: string): Promise<void> {
-    this.plugin.clear();
-    this.showMessage("Loading", id);
-
     const { plugin } = this;
 
     const data = await plugin.builders.data.download(

@@ -240,6 +240,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   async loadPDBEntry(pdbId: string): Promise<unknown> {
+    this._structureViewer.clear(pdbId);
     try {
       const { payload } = await load(
         `https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`
@@ -253,6 +254,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   async loadAFEntry(id: string): Promise<PredictionData[]> {
+    this._structureViewer.clear(id);
     try {
       const { payload } = await load(
         `https://test.alphafold.ebi.ac.uk/api/prediction/${id}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`
