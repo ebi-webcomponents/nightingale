@@ -71,7 +71,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
 
   private _accession: string;
 
-  private _id: string;
+  private _structureId: string;
 
   private manager: NightingaleManager;
 
@@ -118,13 +118,13 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this.setAttribute("accession", accession);
   }
 
-  get id(): string {
-    return this.id;
+  get structureId(): string {
+    return this.structureId;
   }
 
-  set id(id: string) {
-    this.setAttribute("id", id);
-    this._id = id;
+  set structureId(structureId: string) {
+    this.setAttribute("structureid", structureId);
+    this._structureId = structureId;
   }
 
   get height(): string {
@@ -138,7 +138,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       this.manager.register(this);
     }
 
-    this.id = this.getAttribute("id");
+    this.structureId = this.getAttribute("structureid");
     this._accession = this.getAttribute("accession");
     this._height = this.getAttribute("height") || "480px";
     this._highlight =
@@ -166,7 +166,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   static get observedAttributes(): string[] {
-    return ["highlight", "id", "accession", "height"];
+    return ["highlight", "structureid", "accession", "height"];
   }
 
   static _parseHighlight(highlightString: string): HighLight {
@@ -190,9 +190,9 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   ): void {
     if (oldVal !== newVal) {
       switch (attrName) {
-        case "id":
+        case "structureid":
           if (newVal !== null) {
-            this._id = newVal;
+            this._structureId = newVal;
           }
           this.selectMolecule();
           break;
@@ -268,30 +268,30 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   isAF(): boolean {
-    return this._id.startsWith("AF-");
+    return this._structureId.startsWith("AF-");
   }
 
   // https://www.ebi.ac.uk/pdbe/model-server/v1/1cbs/full?encoding=bcif
   // Use the url above for testing
   async selectMolecule(): Promise<void> {
-    if (!this._id || !this._accession) {
+    if (!this._structureId || !this._accession) {
       return;
     }
     let mappings;
     if (this.isAF()) {
       const afPredictions = await this.loadAFEntry(this._accession);
       const afInfo = afPredictions.find(
-        (prediction) => prediction.entryId === this._id
+        (prediction) => prediction.entryId === this._structureId
       );
-      await this._structureViewer.loadAF(this._id, afInfo.cifUrl);
+      await this._structureViewer.loadAF(this._structureId, afInfo.cifUrl);
       // mappings = await this._structureViewer.loadAF(afPredictions.b);
     } else {
-      const pdbEntry = await this.loadPDBEntry(this._id);
+      const pdbEntry = await this.loadPDBEntry(this._structureId);
       mappings = Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
-      await this._structureViewer.loadPdb(this._id.toLowerCase());
+      await this._structureViewer.loadPdb(this._structureId.toLowerCase());
     }
     this._selectedMolecule = {
-      id: this._id,
+      id: this._structureId,
       mappings,
     };
     this._planHighlight();
