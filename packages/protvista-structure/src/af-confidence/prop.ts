@@ -77,6 +77,7 @@ const tryGetInfoFromCif = (
     );
   if (!timestampField || timestampField.rowCount === 0) return;
 
+  // eslint-disable-next-line consistent-return
   return {
     timestamp_utc: timestampField.str(0) || dateToUtcString(new Date()),
   };
@@ -90,27 +91,32 @@ const fromCif = (
   if (!info) return;
   const data = getCifData(model);
   const metricMap = createScoreMapFromCif(model, data.residues);
+  // eslint-disable-next-line consistent-return
   return { info, data: metricMap };
 };
 
 export async function fromCifOrServer(
   ctx: CustomProperty.Context,
   model: Model,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   props: AfConfidenceProps
 ): Promise<any> {
   const cif = fromCif(ctx, model);
   return { value: cif };
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getConfidenceScore(e: StructureElement.Location) {
   if (!Unit.isAtomic(e.unit)) return [-1, "No Score"];
   const prop = AfConfidenceProvider.get(e.unit.model).value;
   if (!prop || !prop.data) return [-1, "No Score"];
   const rI = e.unit.residueIndex[e.element];
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return prop.data.score.has(rI) ? prop.data.score.get(rI)! : [-1, "No Score"];
 }
 
 const _emptyArray: string[] = [];
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getCategories(structure?: Structure) {
   if (!structure) return _emptyArray;
   const prop = AfConfidenceProvider.get(structure.models[0]).value;
@@ -147,6 +153,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
   }),
   type: "static",
   defaultParams: AfConfidenceParams,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getParams: (data: Model) => AfConfidenceParams,
   isApplicable: (data: Model) => isApplicable(data),
   obtain: async (
