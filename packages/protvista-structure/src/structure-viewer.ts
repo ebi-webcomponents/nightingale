@@ -181,15 +181,9 @@ class StructureViewer {
       "mmcif"
     );
 
-    await this.plugin.builders.structure.hierarchy.applyPreset(
-      trajectory,
-      "all-models",
-      { useDefaultIfSingleModel: true }
-    );
-
-    this.clearMessages();
-
-    return Promise.resolve();
+    return this.plugin.builders.structure.hierarchy
+      .applyPreset(trajectory, "all-models", { useDefaultIfSingleModel: true })
+      .then(() => this.clearMessages());
   }
 
   highlight(ranges: { start: number; end: number }[]): void {
