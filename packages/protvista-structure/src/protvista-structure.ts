@@ -7,21 +7,7 @@ import translatePositions, {
 } from "./position-mapping";
 
 /*
-  Immediate TODO:
-  [x] Highlight on amino acid click
-  [x] Highlight sequence from attributes
-  [x] Remove LiteMol
-  [x] Remove unused plugins in molstar.ts
-  [x] Remove title menu bar
-  [x] Upgrade Mol* to v2
-  [x] Rename molstar.ts to structure-viewer.ts
-  [x] Translate position in propagateHighlight
-  [x] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
-  [x] Clear highlights on amino acid click
-  [x] Convert protvista-structure to TS
-  [x] Ensure build passes
-
-  Future TODO:
+  TODO:
   [ ] Molstar/Mol* data fetching optimizations - create query to fetch only what is needed from model server, caching https://www.ebi.ac.uk/panda/jira/browse/TRM-26073
   [ ] Molstar/Mol* bundle optimizations - only load the plugins that are absolutely needed https://www.ebi.ac.uk/panda/jira/browse/TRM-26074
   [ ] Change highlight color in Mol* https://www.ebi.ac.uk/panda/jira/browse/TRM-26075
@@ -64,6 +50,21 @@ export type PredictionData = {
   cifUrl?: string;
   pdbUrl?: string;
   distogramUrl?: string;
+};
+
+const sendGAEvent = (eventAction: string, label?: string) => {
+  const { ga } = window as Window & {
+    ga?: (
+      action: string,
+      hitType: string,
+      category: string,
+      eventAction: string,
+      label?: string
+    ) => void;
+  };
+  if (ga) {
+    ga("send", "event", "protvista-structure", eventAction, label);
+  }
 };
 
 class ProtvistaStructure extends HTMLElement implements NightingaleElement {
@@ -245,6 +246,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       const { payload } = await load(
         `https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`
       );
+      sendGAEvent("load-PDBe", pdbId);
       return payload;
     } catch (e) {
       // console.log(e);
@@ -259,6 +261,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       const { payload } = await load(
         `https://test.alphafold.ebi.ac.uk/api/prediction/${id}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`
       );
+      sendGAEvent("load-AF", id);
       return payload;
     } catch (e) {
       // console.log(e);
