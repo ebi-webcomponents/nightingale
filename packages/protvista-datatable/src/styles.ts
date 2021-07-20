@@ -1,33 +1,14 @@
 import { css } from "lit-element";
 
 const styles = css`
-  :host {
-    display: block;
-  }
-  .protvista-datatable-container {
-    overflow-y: auto;
-    // Note: overflow-x was set to 'hidden' but changing
-    // to 'auto' doesn't seem to be an issue.
-    overflow-x: auto;
-  }
-
-  :host([scrollable="true"]) .protvista-datatable-container {
-    overflow-y: auto;
-    will-change: scroll;
-  }
-
-  :host([scrollable="false"]) .protvista-datatable-container {
-    overflow-y: hidden;
-  }
-
-  table {
+  protvista-datatable table {
     width: 100%;
     padding: 0;
     margin: 0;
     border-spacing: 0;
   }
 
-  th {
+  protvista-datatable table th {
     position: sticky;
     position: -webkit-sticky;
     position: -moz-sticky;
@@ -40,21 +21,21 @@ const styles = css`
     top: 0;
   }
 
-  td,
+  protvista-datatable table td,
   th {
     padding: 1rem;
     border-bottom: 1px solid #c2c4c4;
   }
 
-  tr:hover:not(.active):not(.child-row) {
+  protvista-datatable table tr:hover:not(.active):not(.child-row) {
     background-color: var(--protvista-datatable__hover, #f1f1f1);
   }
 
-  td {
+  protvista-datatable table td {
     cursor: pointer;
   }
 
-  .withChildren:before {
+  protvista-datatable table .withChildren:before {
     display: inline-block;
     font-family: "Courier New", Courier, monospace;
     width: 1rem;
@@ -68,33 +49,35 @@ const styles = css`
     background-color: var(--protvista-datatable__childToggle, #00639a);
   }
 
-  .plus:before {
+  protvista-datatable table .plus:before {
     content: "+";
   }
 
-  .minus:before {
+  protvista-datatable table .minus:before {
     content: "-";
   }
 
-  td:nth-child(1) {
+  protvista-datatable table td:nth-child(1) {
     border-left: 0.5rem solid transparent;
   }
 
-  .overlapped td:nth-child(1) {
+  protvista-datatable table .overlapped td:nth-child(1) {
     border-left: 0.5rem solid
       var(--protvista-datatable__overlapped, rgba(255, 0, 0, 0.8));
   }
 
-  .active {
+  protvista-datatable table .active {
     background-color: var(
       --protvista-datatable__active,
       rgba(255, 235, 59, 0.3)
     ) !important;
   }
-  .hidden {
+
+  protvista-datatable table .hidden {
     opacity: 0.2;
   }
-  .evidence-tag {
+
+  protvista-datatable table .evidence-tag {
     cursor: pointer;
     font-size: 80%;
     white-space: nowrap;
@@ -104,36 +87,36 @@ const styles = css`
     padding: 0.25rem 0.5rem;
     color: #3a343a;
   }
-  .evidence-tag__label {
+  protvista-datatable table .evidence-tag__label {
     padding-left: 0.25rem;
     text-transform: capitalize;
   }
-  .svg-colour-reviewed svg {
+  protvista-datatable table .svg-colour-reviewed svg {
     color: #c39b00;
   }
-  .svg-colour-unreviewed svg {
+  protvista-datatable table .svg-colour-unreviewed svg {
     color: #c0c0c0;
   }
 
-  .protvista-datatable__child-item {
+  protvista-datatable table .protvista-datatable__child-item {
     display: flex;
   }
 
-  .protvista-datatable__child-item__title {
+  protvista-datatable table .protvista-datatable__child-item__title {
     font-weight: 700;
     flex-basis: 10vw;
     flex-grow: 0;
     margin-right: 1rem;
   }
 
-  .protvista-datatable__child-item__content {
+  protvista-datatable table .protvista-datatable__child-item__content {
   }
 
-  .odd {
+  protvista-datatable table tr:nth-child(odd) {
     background-color: var(--protvista-datatable__odd, #e4e8eb);
   }
 
-  .even {
+  protvista-datatable table tr:nth-child(even) {
     background-color: var(--protvista-datatable__even, #fff);
   }
 `;

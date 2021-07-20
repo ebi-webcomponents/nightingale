@@ -4,15 +4,17 @@ import {
   TemplateResult,
   CSSResult,
   PropertyDeclarations,
+  css,
 } from "lit-element";
 import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
 import { RequireAtLeastOne } from "type-fest";
 
-import { ProtvistaLoadEvent } from "./types/events";
+import { isOutside, isWithinRange, parseColumnFilters } from "./utils";
+
 import { ProtvistaManager } from "./types/manager";
 
-import styles from "./styles";
+import lightDOMstyles from "./styles";
 
 type StartTypes = {
   start?: number;
@@ -23,25 +25,19 @@ type DataTableDatum = {
   end: number;
   protvistaFeatureId?: string;
 } & RequireAtLeastOne<StartTypes, "begin" | "start">;
-
-type Columns = {
-  [key: string]: {
-    label: string;
-    child?: boolean;
-    display?: boolean;
-    resolver: (d: any) => HTMLTemplateElement;
-  };
-};
-
 class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
   private height: number;
 
-  private _data: T[];
+  private columns: NodeListOf<HTMLTableHeaderCellElement>;
+
+  private rows: NodeListOf<HTMLTableRowElement>;
+
+  private filterMap: Map<string, Set<string>>;
+
+  private mutationObserver: MutationObserver;
 
   // This will eventually be an array of tuples
   private highlight: [start: number, end: number];
-
-  private columns: Columns;
 
   private displayStart?: number;
 
@@ -58,8 +54,6 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
   private scrollFilter: any; // to replace with type definition from utils when exists
 
   private wheelListener: (e: WheelEvent) => any;
-
-  private rowClickEvent?: (row: T) => void;
 
   private manager: ProtvistaManager;
 
@@ -81,11 +75,30 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener("load", (e: ProtvistaLoadEvent) => {
-      if (Array.from(this.children).includes(e.target as HTMLElement)) {
-        this.data = e.detail.payload.features;
-      }
+    // The content of the table is dynamically set by the consumer
+    // so we need to lookout for changes
+    this.mutationObserver = new MutationObserver(() => {
+      this.columns =
+        this.querySelectorAll<HTMLTableHeaderCellElement>("table thead th");
+      this.rows = this.querySelectorAll<HTMLTableRowElement>("table tbody tr");
+      this.rows.forEach((row) => {
+        row.addEventListener("click", (e) => this.handleClick(e, row));
+      });
+      this.parseDataForFilters();
     });
+
+    // Observe the element itself as the slot can't be
+    this.mutationObserver.observe(this, {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    });
+
+    // Add style to light DOM to style slot content
+    const styleTag = document.createElement("style");
+    styleTag.innerHTML = lightDOMstyles.toString();
+    document.querySelector("head").appendChild(styleTag);
+
     if (this.closest("protvista-manager")) {
       this.manager = this.closest("protvista-manager");
       this.manager.register(this);
@@ -108,17 +121,24 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     }
     document.removeEventListener("click", this.eventHandler);
     document.removeEventListener("wheel", this.wheelListener);
+    this.mutationObserver.disconnect();
   }
 
-  // Implement our own accessors as we need to transform the data
-  set data(value: T[]) {
-    const oldValue = this._data;
-    this._data = this.processData(value);
-    this.requestUpdate("data", oldValue);
-  }
+  parseDataForFilters(): void {
+    // Initialise map by looking at Column headers
+    const filterMap = parseColumnFilters(this.columns);
 
-  get data(): T[] {
-    return this._data;
+    // Populate map with values
+    this.rows.forEach((row) => {
+      const tableCells = row.childNodes as NodeListOf<HTMLTableDataCellElement>;
+      tableCells.forEach((cell) => {
+        if (cell.dataset.filter) {
+          const filterSet = filterMap.get(cell.dataset.filter);
+          filterSet.add(cell.innerHTML);
+        }
+      });
+    });
+    this.filterMap = filterMap;
   }
 
   eventHandler(e: MouseEvent): void {
@@ -130,7 +150,6 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
 
   static get properties(): PropertyDeclarations {
     return {
-      data: { type: Object },
       highlight: {
         converter: (value: string) => {
           if (value && value !== "null") {
@@ -150,19 +169,36 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
         },
       },
       height: { type: Number },
-      columns: { type: Object },
       displayStart: { type: Number },
       displayEnd: { type: Number },
       visibleChildren: { type: Array },
       selectedid: { type: String },
-      rowClickEvent: { type: Function },
       noScrollToRow: { type: Boolean },
       noDeselect: { type: Boolean },
     };
   }
 
   static get styles(): CSSResult {
-    return styles;
+    return css`
+      :host {
+        display: block;
+      }
+      .protvista-datatable-container {
+        overflow-y: auto;
+        // Note: overflow-x was set to 'hidden' but changing
+        // to 'auto' doesn't seem to be an issue.
+        overflow-x: auto;
+      }
+
+      :host([scrollable="true"]) .protvista-datatable-container {
+        overflow-y: auto;
+        will-change: scroll;
+      }
+
+      :host([scrollable="false"]) .protvista-datatable-container {
+        overflow-y: hidden;
+      }
+    `;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -181,39 +217,9 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
       }));
   }
 
-  static isWithinRange(
-    rangeStart: number,
-    rangeEnd: number,
-    start: number,
-    end: number
-  ): boolean {
-    return (
-      (!start && rangeEnd === end) ||
-      (!end && rangeStart === start) ||
-      (rangeStart <= start && rangeEnd >= end)
-    );
-  }
-
-  static isOutside(
-    rangeStart: number,
-    rangeEnd: number,
-    start: number,
-    end: number
-  ): boolean {
-    return rangeStart > end || rangeEnd < start;
-  }
-
-  handleClick(e: MouseEvent, row: T): void {
-    const target = e.target as HTMLElement;
-    if (!target.parentNode) {
-      return;
-    }
-    const { start, end } = row;
-    if (this.rowClickEvent && typeof this.rowClickEvent === "function") {
-      // Note: not sure this is used or is the best way to handle if it is...
-      this.rowClickEvent(row);
-    }
-    this.selectedid = (target.parentNode as HTMLElement).dataset.id;
+  handleClick(e: MouseEvent, row: HTMLTableRowElement): void {
+    const { start, end, id } = row.dataset;
+    this.selectedid = id;
     const detail = start && end ? { highlight: `${start}:${end}` } : {};
     this.dispatchEvent(
       new CustomEvent("change", {
@@ -224,7 +230,8 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     );
   }
 
-  getStyleClass(id: string, start: number, end: number): string {
+  styleRow(row: HTMLTableRowElement): void {
+    const { id, start, end } = row.dataset;
     let className = "";
     if (this.selectedid && this.selectedid === id) {
       className = `${className} active`;
@@ -232,18 +239,13 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     if (
       this.displayStart &&
       this.displayEnd &&
-      ProtvistaDatatable.isOutside(
-        this.displayStart,
-        this.displayEnd,
-        Number(start),
-        Number(end)
-      )
+      isOutside(this.displayStart, this.displayEnd, Number(start), Number(end))
     ) {
       className = `${className} hidden`;
     }
     if (
       this.highlight &&
-      ProtvistaDatatable.isWithinRange(
+      isWithinRange(
         this.highlight[0],
         this.highlight[1],
         Number(start),
@@ -252,11 +254,8 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     ) {
       className = `${className} overlapped`;
     }
-    return className;
-  }
-
-  hasChildData(rowItems: string[], row: T): boolean {
-    return rowItems.some((column) => this.columns[column].resolver(row));
+    // eslint-disable-next-line no-param-reassign
+    row.className = className;
   }
 
   toggleVisibleChild(rowId: string): void {
@@ -273,103 +272,18 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     if (!this.selectedid) {
       return;
     }
-    const element = this.shadowRoot.querySelector(
-      `[data-id="${this.selectedid}"]`
-    );
+    const element = this.querySelector(`[data-id="${this.selectedid}"]`);
     element.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  getChildRow(childRowItems: string[], row: T): TemplateResult {
-    return html`
-      <tr class="child-row">
-        <td
-          colspan="${Object.values(this.columns).filter(
-            (column) => !column.child
-          ).length + 1}"
-        >
-          ${childRowItems.map((column) => {
-            const data = this.columns[column].resolver(row);
-            return data
-              ? html`
-                  <div class="protvista-datatable__child-item">
-                    <div class="protvista-datatable__child-item__title">
-                      ${this.columns[column].label}
-                    </div>
-                    <div class="protvista-datatable__child-item__content">
-                      ${this.columns[column].resolver(row)}
-                    </div>
-                  </div>
-                `
-              : html``;
-          })}
-        </td>
-      </tr>
-    `;
-  }
-
   render(): TemplateResult {
-    if (!this.data || !this.columns) {
-      return html``;
-    }
-    const childRowItems = Object.keys(this.columns).filter(
-      (column) => this.columns[column].child
-    );
-    const columnsToDisplay = Object.values(this.columns).filter(
-      (column) => !column.child && column.display !== false
-    );
+    this.rows?.forEach((row) => this.styleRow(row));
     return html`
       <div
         class="protvista-datatable-container"
         style="height:${this.height}rem"
       >
-        <table>
-          <thead>
-            <tr>
-              ${columnsToDisplay.map(
-                (column) => html` <th>${column.label}</th> `
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            ${this.data.map((row, rowIndex: number) => {
-              const hasChildData = this.hasChildData(childRowItems, row);
-              return html`
-                <tr
-                  data-id="${row.protvistaFeatureId}"
-                  class="${this.getStyleClass(
-                    row.protvistaFeatureId,
-                    row.start,
-                    row.end
-                  )} ${rowIndex % 2 === 1 ? "even" : "odd"}"
-                  @click="${(e: MouseEvent) => this.handleClick(e, row)}"
-                >
-                  ${columnsToDisplay.map((column, index) =>
-                    hasChildData && index === 0
-                      ? html`
-                          <td
-                            title="View more"
-                            @click="${() =>
-                              this.toggleVisibleChild(row.protvistaFeatureId)}"
-                            class="${this.visibleChildren.includes(
-                              row.protvistaFeatureId
-                            )
-                              ? "withChildren minus"
-                              : "withChildren plus"}"
-                          >
-                            ${column.resolver(row)}
-                          </td>
-                        `
-                      : html` <td>${column.resolver(row)}</td> `
-                  )}
-                </tr>
-                ${hasChildData &&
-                this.visibleChildren.includes(row.protvistaFeatureId)
-                  ? this.getChildRow(childRowItems, row)
-                  : ""}
-              `;
-            })}
-          </tbody>
-        </table>
+        <slot></slot>
       </div>
     `;
   }
