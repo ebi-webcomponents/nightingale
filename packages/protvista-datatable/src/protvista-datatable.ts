@@ -6,9 +6,7 @@ import {
   PropertyDeclarations,
   css,
 } from "lit-element";
-import { v1 } from "uuid";
 import { ScrollFilter } from "protvista-utils";
-import { RequireAtLeastOne } from "type-fest";
 
 import { isOutside, isWithinRange, parseColumnFilters } from "./utils";
 
@@ -16,16 +14,7 @@ import { ProtvistaManager } from "./types/manager";
 
 import lightDOMstyles from "./styles";
 
-type StartTypes = {
-  start?: number;
-  begin?: number;
-};
-
-type DataTableDatum = {
-  end: number;
-  protvistaFeatureId?: string;
-} & RequireAtLeastOne<StartTypes, "begin" | "start">;
-class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
+class ProtvistaDatatable extends LitElement {
   private height: number;
 
   private columns: NodeListOf<HTMLTableHeaderCellElement>;
@@ -82,8 +71,11 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
         this.querySelectorAll<HTMLTableHeaderCellElement>("table thead th");
       this.rows = this.querySelectorAll<HTMLTableRowElement>("table tbody tr");
       this.rows.forEach((row) => {
+        // Add click handlers
         row.addEventListener("click", (e) => this.handleClick(e, row));
       });
+      this.updateRowStyling();
+
       this.parseDataForFilters();
     });
 
@@ -201,24 +193,8 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     `;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  processData(dataToProcess: T[]): T[] {
-    return dataToProcess
-      .map((d) => {
-        return {
-          ...d,
-          start: d.start ? d.start : d.begin,
-        };
-      })
-      .sort((a, b) => a.start - b.start)
-      .map((d) => ({
-        ...d,
-        protvistaFeatureId: d.protvistaFeatureId || v1(),
-      }));
-  }
-
   handleClick(e: MouseEvent, row: HTMLTableRowElement): void {
-    const { start, end, id } = row.dataset;
+    const { id, start, end } = row.dataset;
     this.selectedid = id;
     const detail = start && end ? { highlight: `${start}:${end}` } : {};
     this.dispatchEvent(
@@ -230,32 +206,58 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
     );
   }
 
-  styleRow(row: HTMLTableRowElement): void {
-    const { id, start, end } = row.dataset;
-    let className = "";
-    if (this.selectedid && this.selectedid === id) {
-      className = `${className} active`;
-    }
-    if (
-      this.displayStart &&
-      this.displayEnd &&
-      isOutside(this.displayStart, this.displayEnd, Number(start), Number(end))
-    ) {
-      className = `${className} hidden`;
-    }
-    if (
-      this.highlight &&
-      isWithinRange(
-        this.highlight[0],
-        this.highlight[1],
-        Number(start),
-        Number(end)
-      )
-    ) {
-      className = `${className} overlapped`;
-    }
-    // eslint-disable-next-line no-param-reassign
-    row.className = className;
+  updateRowStyling(): void {
+    let oddOrEvenCount = 0;
+    this.rows?.forEach((row) => {
+      const { start, end } = row.dataset;
+      row.classList.add(oddOrEvenCount % 2 === 0 ? "odd" : "even");
+      // Is the row selected?
+      if (
+        (this.selectedid && this.selectedid === row.dataset.id) ||
+        row.dataset.groupFor
+      ) {
+        row.classList.add("active");
+      } else {
+        // Note: if too expensive, check before
+        row.classList.remove("active");
+      }
+      // Is the row not within ProtVista track range?
+      if (
+        isOutside(
+          this.displayStart,
+          this.displayEnd,
+          Number(start),
+          Number(end)
+        )
+      ) {
+        row.classList.add("transparent");
+      } else {
+        // Note: if too expensive, check before
+        row.classList.remove("transparent");
+      }
+      // Is the row part of the selected range?
+      if (
+        this.highlight &&
+        isWithinRange(
+          this.highlight[0],
+          this.highlight[1],
+          Number(start),
+          Number(end)
+        )
+      ) {
+        row.classList.add("overlapped");
+      } else {
+        row.classList.remove("overlapped");
+      }
+
+      // Hanlde show/hide groups
+      if (row.dataset.groupFor) {
+        row.classList.add("hidden");
+      } else {
+        // Only increment if non grouped row
+        oddOrEvenCount++;
+      }
+    });
   }
 
   toggleVisibleChild(rowId: string): void {
@@ -277,7 +279,6 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
   }
 
   render(): TemplateResult {
-    this.rows?.forEach((row) => this.styleRow(row));
     return html`
       <div
         class="protvista-datatable-container"
@@ -289,6 +290,7 @@ class ProtvistaDatatable<T extends DataTableDatum> extends LitElement {
   }
 
   updated(): void {
+    this.updateRowStyling();
     if (!this.noScrollToRow) {
       this.scrollIntoView();
     }

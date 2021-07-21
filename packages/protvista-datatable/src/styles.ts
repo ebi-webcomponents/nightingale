@@ -73,8 +73,12 @@ const styles = css`
     ) !important;
   }
 
-  protvista-datatable table .hidden {
+  protvista-datatable table .transparent {
     opacity: 0.2;
+  }
+
+  protvista-datatable table .hidden {
+    display: none;
   }
 
   protvista-datatable table .evidence-tag {
@@ -112,11 +116,12 @@ const styles = css`
   protvista-datatable table .protvista-datatable__child-item__content {
   }
 
-  protvista-datatable table tr:nth-child(odd) {
+  // Can't use :nth-child selector here because of column groups
+  protvista-datatable table .odd {
     background-color: var(--protvista-datatable__odd, #e4e8eb);
   }
 
-  protvista-datatable table tr:nth-child(even) {
+  protvista-datatable table .even {
     background-color: var(--protvista-datatable__even, #fff);
   }
 `;

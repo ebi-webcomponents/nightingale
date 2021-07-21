@@ -8,6 +8,7 @@ import { load } from "data-loader";
 import loadWebComponent from "../utils/load-web-component";
 import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
+import { Fragment } from "react";
 
 // const columnConfig = {
 //   consequence: {
@@ -54,7 +55,7 @@ const ProtvistaDatatableWrapper = () => {
           length="770"
           layout="non-overlapping"
         ></protvista-track> */}
-        <protvista-datatable>
+        <protvista-datatable displaystart="0" displayend="600">
           <table>
             <thead>
               <tr>
@@ -65,19 +66,22 @@ const ProtvistaDatatableWrapper = () => {
             </thead>
             <tbody>
               {data?.map((row, i) => (
-                <tr
-                  key={i}
-                  data-start={row.start}
-                  data-end={row.end}
-                  data-id={`${row.start}-${row.end}`}
-                >
-                  <td data-filter="ft_key">{row.type}</td>
-                  <td>{row.description}</td>
-                  <td>
-                    {row.start}-{row.end}
-                  </td>
-                  {/* <td data-collapsed>{row.type}</td> */}
-                </tr>
+                <Fragment key={i}>
+                  <tr
+                    data-id={`${row.start}-${row.end}`}
+                    data-start={row.start}
+                    data-end={row.end}
+                  >
+                    <td data-filter="ft_key">{row.type}</td>
+                    <td>{row.description}</td>
+                    <td>
+                      {row.start}-{row.end}
+                    </td>
+                  </tr>
+                  <tr data-group-for={`${row.start}-${row.end}`}>
+                    <td>Something hidden</td>
+                  </tr>
+                </Fragment>
               ))}
             </tbody>
           </table>
