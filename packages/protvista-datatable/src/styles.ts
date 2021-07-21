@@ -27,7 +27,7 @@ const styles = css`
     border-bottom: 1px solid #c2c4c4;
   }
 
-  protvista-datatable table tr:hover:not(.active):not(.child-row) {
+  protvista-datatable table tr:hover:not(.active):not(.transparent) {
     background-color: var(--protvista-datatable__hover, #f1f1f1);
   }
 
@@ -76,30 +76,13 @@ const styles = css`
   protvista-datatable table .transparent {
     opacity: 0.2;
   }
+  protvista-datatable table .transparent td:hover {
+    cursor: default;
+    background-color: inherit;
+  }
 
   protvista-datatable table .hidden {
     display: none;
-  }
-
-  protvista-datatable table .evidence-tag {
-    cursor: pointer;
-    font-size: 80%;
-    white-space: nowrap;
-    margin-left: 0.5rem;
-    border-radius: 0.5rem;
-    background-color: #f1f1f1;
-    padding: 0.25rem 0.5rem;
-    color: #3a343a;
-  }
-  protvista-datatable table .evidence-tag__label {
-    padding-left: 0.25rem;
-    text-transform: capitalize;
-  }
-  protvista-datatable table .svg-colour-reviewed svg {
-    color: #c39b00;
-  }
-  protvista-datatable table .svg-colour-unreviewed svg {
-    color: #c0c0c0;
   }
 
   protvista-datatable table .protvista-datatable__child-item {

@@ -194,6 +194,10 @@ class ProtvistaDatatable extends LitElement {
   }
 
   handleClick(e: MouseEvent, row: HTMLTableRowElement): void {
+    // Don't select transparent row
+    if (row.classList.contains("transparent")) {
+      return;
+    }
     const { id, start, end } = row.dataset;
     this.selectedid = id;
     const detail = start && end ? { highlight: `${start}:${end}` } : {};
