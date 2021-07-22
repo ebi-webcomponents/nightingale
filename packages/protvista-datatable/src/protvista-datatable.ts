@@ -69,9 +69,32 @@ class ProtvistaDatatable extends LitElement {
     this.mutationObserver = new MutationObserver(() => {
       this.columns =
         this.querySelectorAll<HTMLTableHeaderCellElement>("table thead th");
+      // Add blank column to header for (+/-) if not there alread
+      if (!this.querySelector(".pd-group-column-header")) {
+        // Can't use insertCell as "th"
+        const additionalTH = document.createElement("th");
+        additionalTH.classList.add("pd-group-column-header");
+        const headerTR =
+          this.querySelector<HTMLTableRowElement>("table thead tr");
+        headerTR.insertBefore(additionalTH, headerTR.firstChild);
+      }
       this.rows = this.querySelectorAll<HTMLTableRowElement>("table tbody tr");
       this.rows.forEach((row) => {
-        // Add click handlers
+        // Add extra (+/-) cell - only if it hasn't got it already!!!
+        if (!row.dataset.groupFor && !row.querySelector(".pd-group-trigger")) {
+          const plusMinusCell = row.insertCell(0);
+          plusMinusCell.classList.add("pd-group-trigger");
+          if (this.querySelector("[data-group-for]")) {
+            const plusMinusButton = document.createElement("button");
+            plusMinusButton.dataset.triggerId = row.dataset.id;
+            plusMinusCell.appendChild(plusMinusButton);
+            // Add row click handler
+            plusMinusButton.addEventListener("click", (e) =>
+              this.handleGroupToggle(e)
+            );
+          }
+        }
+        // Add row click handler
         row.addEventListener("click", (e) => this.handleClick(e, row));
       });
       this.updateRowStyling();
@@ -193,6 +216,21 @@ class ProtvistaDatatable extends LitElement {
     `;
   }
 
+  handleGroupToggle(e: MouseEvent): void {
+    const { triggerId } = (e.target as HTMLButtonElement).dataset;
+    if (this.visibleChildren.includes(triggerId)) {
+      this.visibleChildren = this.visibleChildren.filter(
+        (childId) => childId !== triggerId
+      );
+      (e.target as HTMLButtonElement).classList.remove(
+        "pd-group-trigger__minus"
+      );
+    } else {
+      this.visibleChildren = [...this.visibleChildren, triggerId];
+      (e.target as HTMLButtonElement).classList.add("pd-group-trigger__minus");
+    }
+  }
+
   handleClick(e: MouseEvent, row: HTMLTableRowElement): void {
     // Don't select transparent row
     if (row.classList.contains("transparent")) {
@@ -214,7 +252,7 @@ class ProtvistaDatatable extends LitElement {
     let oddOrEvenCount = 0;
     this.rows?.forEach((row) => {
       const { start, end } = row.dataset;
-      row.classList.add(oddOrEvenCount % 2 === 0 ? "odd" : "even");
+      row.classList.add(oddOrEvenCount % 2 === 0 ? "even" : "odd");
       // Is the row selected?
       if (
         (this.selectedid && this.selectedid === row.dataset.id) ||
@@ -254,24 +292,21 @@ class ProtvistaDatatable extends LitElement {
         row.classList.remove("overlapped");
       }
 
-      // Hanlde show/hide groups
+      // Handle show/hide groups
       if (row.dataset.groupFor) {
-        row.classList.add("hidden");
+        const collSpan = this.columns.length + 1; // Add 1 for the  +/- button
+        // eslint-disable-next-line no-param-reassign
+        row.cells[0].colSpan = collSpan - row.cells.length + 1; // Add 1 for column
+        if (this.visibleChildren.includes(row.dataset.groupFor)) {
+          row.classList.remove("hidden");
+        } else {
+          row.classList.add("hidden");
+        }
       } else {
         // Only increment if non grouped row
         oddOrEvenCount++;
       }
     });
-  }
-
-  toggleVisibleChild(rowId: string): void {
-    if (this.visibleChildren.includes(rowId)) {
-      this.visibleChildren = this.visibleChildren.filter(
-        (childId) => childId !== rowId
-      );
-    } else {
-      this.visibleChildren = [...this.visibleChildren, rowId];
-    }
   }
 
   scrollIntoView(): void {

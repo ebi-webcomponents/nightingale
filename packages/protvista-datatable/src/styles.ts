@@ -35,25 +35,34 @@ const styles = css`
     cursor: pointer;
   }
 
-  protvista-datatable table .withChildren:before {
-    display: inline-block;
-    font-family: "Courier New", Courier, monospace;
-    width: 1rem;
-    text-align: center;
-    border-radius: 1rem;
-    line-height: 1rem;
-    font-weight: 700;
-    font-size: 1rem;
-    color: white;
-    border: 2px solid white;
-    background-color: var(--protvista-datatable__childToggle, #00639a);
+  protvista-datatable table .pd-group-trigger button {
+    background: none;
+    border: none;
+    padding: 0.2rem; // increase click area
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
-  protvista-datatable table .plus:before {
+  protvista-datatable table .pd-group-trigger button:before {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    border-radius: 1rem;
+    background: #0069ed;
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 1rem;
     content: "+";
   }
 
-  protvista-datatable table .minus:before {
+  protvista-datatable
+    table
+    .pd-group-trigger
+    button.pd-group-trigger__minus:before {
     content: "-";
   }
 
