@@ -29,7 +29,7 @@
   "author": "xwatkins@ebi.ac.uk",
   "license": "MIT",
   "dependencies": {
-    "data-loader": "^3.0.0",
+    "data-loader": "3.0.0",
     "molstar": "2.0.6",
     "react": "17.0.2"
   },

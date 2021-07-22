@@ -7,21 +7,7 @@ import translatePositions, {
 } from "./position-mapping";
 
 /*
-  Immediate TODO:
-  [x] Highlight on amino acid click
-  [x] Highlight sequence from attributes
-  [x] Remove LiteMol
-  [x] Remove unused plugins in molstar.ts
-  [x] Remove title menu bar
-  [x] Upgrade Mol* to v2
-  [x] Rename molstar.ts to structure-viewer.ts
-  [x] Translate position in propagateHighlight
-  [x] Build doesn’t work (webpack issue with node fs maybe?) this will be disappear when https://github.com/molstar/molstar/commit/45ef00f1d188cc03907be19d20aed5e6aa9d0ee0 is released on npm
-  [x] Clear highlights on amino acid click
-  [x] Convert protvista-structure to TS
-  [x] Ensure build passes
-
-  Future TODO:
+  TODO:
   [ ] Molstar/Mol* data fetching optimizations - create query to fetch only what is needed from model server, caching https://www.ebi.ac.uk/panda/jira/browse/TRM-26073
   [ ] Molstar/Mol* bundle optimizations - only load the plugins that are absolutely needed https://www.ebi.ac.uk/panda/jira/browse/TRM-26074
   [ ] Change highlight color in Mol* https://www.ebi.ac.uk/panda/jira/browse/TRM-26075
@@ -34,12 +20,59 @@ type NightingaleManager = NightingaleElement & {
 
 type HighLight = Array<{ start: number; end: number }>;
 
+export type StructureData = {
+  dbReferences: {
+    type: "PDB" | string;
+    id: string;
+    properties: {
+      method: string;
+      chains: string;
+      resolution: string;
+    };
+  }[];
+};
+
+export type PredictionData = {
+  entryId: string;
+  gene?: string;
+  uniprotAccession?: string;
+  uniprotId?: string;
+  uniprotDescription?: string;
+  taxId?: number;
+  organismScientificName?: string;
+  uniprotStart?: number;
+  uniprotEnd?: number;
+  uniprotSequence?: string;
+  modelCreatedDate?: string;
+  latestVersion?: number;
+  allVersions?: number[];
+  bcifUrl?: string;
+  cifUrl?: string;
+  pdbUrl?: string;
+  distogramUrl?: string;
+};
+
+const sendGAEvent = (eventAction: string, label?: string) => {
+  const { ga } = window as Window & {
+    ga?: (
+      action: string,
+      hitType: string,
+      category: string,
+      eventAction: string,
+      label?: string
+    ) => void;
+  };
+  if (ga) {
+    ga("send", "event", "protvista-structure", eventAction, label);
+  }
+};
+
 class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   private _height: string;
 
   private _accession: string;
 
-  private _pdbID: string;
+  private _structureId: string;
 
   private manager: NightingaleManager;
 
@@ -86,13 +119,13 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this.setAttribute("accession", accession);
   }
 
-  get pdbId(): string {
-    return this._pdbID;
+  get structureId(): string {
+    return this.structureId;
   }
 
-  set pdbId(pdbId: string) {
-    this.setAttribute("pdbid", pdbId);
-    this._pdbID = pdbId;
+  set structureId(structureId: string) {
+    this.setAttribute("structureid", structureId);
+    this._structureId = structureId;
   }
 
   get height(): string {
@@ -106,7 +139,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       this.manager.register(this);
     }
 
-    this._pdbID = this.getAttribute("pdb-id");
+    this.structureId = this.getAttribute("structureid");
     this._accession = this.getAttribute("accession");
     this._height = this.getAttribute("height") || "480px";
     this._highlight =
@@ -134,7 +167,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   static get observedAttributes(): string[] {
-    return ["highlight", "pdb-id", "height"];
+    return ["highlight", "structureid", "accession", "height"];
   }
 
   static _parseHighlight(highlightString: string): HighLight {
@@ -158,15 +191,16 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   ): void {
     if (oldVal !== newVal) {
       switch (attrName) {
-        case "pdb-id":
+        case "structureid":
           if (newVal !== null) {
-            this._pdbID = newVal;
-            this.selectMolecule(this._pdbID);
+            this._structureId = newVal;
           }
+          this.selectMolecule();
           break;
 
         case "accession":
           this._accession = newVal;
+          this.selectMolecule();
           break;
 
         case "highlight":
@@ -207,24 +241,60 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   async loadPDBEntry(pdbId: string): Promise<unknown> {
+    this._structureViewer?.clear(pdbId);
     try {
       const { payload } = await load(
         `https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/${pdbId}`
       );
+      sendGAEvent("load-PDBe", pdbId);
       return payload;
     } catch (e) {
+      // console.log(e);
       this._structureViewer.showMessage("Error", `Couldn't load PDB entry`);
       throw e;
     }
   }
 
-  async selectMolecule(id: string): Promise<void> {
-    const pdbEntry = await this.loadPDBEntry(id);
-    const mappings =
-      Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
-    await this._structureViewer.loadPdb(id.toLowerCase());
+  async loadAFEntry(id: string): Promise<PredictionData[]> {
+    this._structureViewer?.clear(id);
+    try {
+      const { payload } = await load(
+        `https://alphafold.ebi.ac.uk/api/prediction/${id}`
+      );
+      sendGAEvent("load-AF", id);
+      return payload;
+    } catch (e) {
+      // console.log(e);
+      this._structureViewer.showMessage("Error", `Couldn't load AF entry`);
+      throw e;
+    }
+  }
+
+  isAF(): boolean {
+    return this._structureId.startsWith("AF-");
+  }
+
+  // https://www.ebi.ac.uk/pdbe/model-server/v1/1cbs/full?encoding=bcif
+  // Use the url above for testing
+  async selectMolecule(): Promise<void> {
+    if (!this._structureId || !this._accession) {
+      return;
+    }
+    let mappings;
+    if (this.isAF()) {
+      const afPredictions = await this.loadAFEntry(this._accession);
+      const afInfo = afPredictions.find(
+        (prediction) => prediction.entryId === this._structureId
+      );
+      await this._structureViewer.loadAF(this._structureId, afInfo.cifUrl);
+      // mappings = await this._structureViewer.loadAF(afPredictions.b);
+    } else {
+      const pdbEntry = await this.loadPDBEntry(this._structureId);
+      mappings = Object.values(pdbEntry)[0].UniProt[this._accession]?.mappings;
+      await this._structureViewer.loadPdb(this._structureId.toLowerCase());
+    }
     this._selectedMolecule = {
-      id,
+      id: this._structureId,
       mappings,
     };
     this._planHighlight();
@@ -273,23 +343,31 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     let translatedPositions;
     try {
       translatedPositions = this._highlight
-        .map(({ start, end }) =>
-          translatePositions(
+        .map(({ start, end }) => {
+          if (this.isAF()) {
+            return {
+              start,
+              end,
+            };
+          }
+          return translatePositions(
             start,
             end,
             this._selectedMolecule.mappings,
             "UP_PDB"
-          )
-        )
+          );
+        })
         .filter(Boolean);
     } catch (error) {
       if (error instanceof PositionMappingError) {
+        this._structureViewer.clearHighlight();
         this._structureViewer.showMessage("Error", error.message);
         return;
       }
       throw error;
     }
     if (!translatedPositions?.length) {
+      this._structureViewer.clearHighlight();
       return;
     }
 
