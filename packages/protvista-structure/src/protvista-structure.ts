@@ -259,7 +259,7 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this._structureViewer?.clear(id);
     try {
       const { payload } = await load(
-        `https://test.alphafold.ebi.ac.uk/api/prediction/${id}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`
+        `https://alphafold.ebi.ac.uk/api/prediction/${id}`
       );
       sendGAEvent("load-AF", id);
       return payload;
