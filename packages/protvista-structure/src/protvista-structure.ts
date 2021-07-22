@@ -360,12 +360,14 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
         .filter(Boolean);
     } catch (error) {
       if (error instanceof PositionMappingError) {
+        this._structureViewer.clearHighlight();
         this._structureViewer.showMessage("Error", error.message);
         return;
       }
       throw error;
     }
     if (!translatedPositions?.length) {
+      this._structureViewer.clearHighlight();
       return;
     }
 

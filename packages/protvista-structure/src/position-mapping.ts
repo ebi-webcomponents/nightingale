@@ -44,7 +44,7 @@ const translatePositions = (
 } | null => {
   // Return if mappings not ready
   if (!mappings) {
-    return;
+    return null;
   }
   // return if they have been set to 'undefined'
   if (!start || !end || Number.isNaN(start) || Number.isNaN(end)) {

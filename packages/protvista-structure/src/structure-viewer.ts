@@ -19,7 +19,6 @@ import { Script } from "molstar/lib/mol-script/script";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
-import { EmptyLoci } from "molstar/lib/mol-model/loci";
 
 import AfConfidenceScore from "./af-confidence/behavior";
 
@@ -215,9 +214,8 @@ class StructureViewer {
   }
 
   clearHighlight(): void {
-    this.plugin.managers.interactivity.lociSelects.selectOnly({
-      loci: EmptyLoci,
-    });
+    this.plugin.managers.interactivity.lociSelects.deselectAll();
+    PluginCommands.Camera.Reset(this.plugin, {});
   }
 
   showMessage(title: string, message: string, timeoutMs?: number): void {
