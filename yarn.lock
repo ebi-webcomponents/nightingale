@@ -10670,14 +10670,6 @@ protvista-structure-adapter@^2.18.0:
     protvista-feature-adapter "^2.18.0"
     uuid "^8.1.0"
 
-protvista-structure@^3.2.7:
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/protvista-structure/-/protvista-structure-3.2.7.tgz#da763f1a5da55f2546d407a50af7f759a59ed944"
-  integrity sha512-DBsj8+M5tFPABKDWVx/cotR9ZRvExVx24dzQXbZRiHC5oBeN0OeJnP51MxVMU/mYJ+y0+Z2YItHXQjLqTbsf1g==
-  dependencies:
-    lodash-es "^4.17.11"
-    whatwg-fetch "^3.4.1"
-
 protvista-tooltip@^2.18.3:
   version "2.18.3"
   resolved "https://registry.yarnpkg.com/protvista-tooltip/-/protvista-tooltip-2.18.3.tgz#55812e1a6c3011cf9de8c29af11dcca191405673"
@@ -12953,6 +12945,11 @@ type-fest@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
+
+type-fest@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-1.2.2.tgz#1930bc36b2064f7ab4aa307a6d1b65965199c698"
+  integrity sha512-pfkPYCcuV0TJoo/jlsUeWNV8rk7uMU6ocnYNvca1Vu+pyKi8Rl8Zo2scPt9O72gCsXIm+dMxOOWuA3VFDSdzWA==
 
 type-is@~1.6.17, type-is@~1.6.18:
   version "1.6.18"

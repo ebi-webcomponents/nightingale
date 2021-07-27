@@ -8,7 +8,7 @@ import {
 } from "lit-element";
 import { ScrollFilter } from "protvista-utils";
 
-import { isOutside, isWithinRange, parseColumnFilters } from "./utils";
+import { isOutside, isWithinRange } from "./utils";
 
 import { ProtvistaManager } from "./types/manager";
 
@@ -21,7 +21,8 @@ class ProtvistaDatatable extends LitElement {
 
   private rows: NodeListOf<HTMLTableRowElement>;
 
-  private filterMap: Map<string, Set<string>>;
+  // TODO implement filters
+  // private filterMap: Map<string, Set<string>>;
 
   private mutationObserver: MutationObserver;
 
@@ -67,39 +68,7 @@ class ProtvistaDatatable extends LitElement {
     // The content of the table is dynamically set by the consumer
     // so we need to lookout for changes
     this.mutationObserver = new MutationObserver(() => {
-      this.columns =
-        this.querySelectorAll<HTMLTableHeaderCellElement>("table thead th");
-      // Add blank column to header for (+/-) if not there alread
-      if (!this.querySelector(".pd-group-column-header")) {
-        // Can't use insertCell as "th"
-        const additionalTH = document.createElement("th");
-        additionalTH.classList.add("pd-group-column-header");
-        const headerTR =
-          this.querySelector<HTMLTableRowElement>("table thead tr");
-        headerTR.insertBefore(additionalTH, headerTR.firstChild);
-      }
-      this.rows = this.querySelectorAll<HTMLTableRowElement>("table tbody tr");
-      this.rows.forEach((row) => {
-        // Add extra (+/-) cell - only if it hasn't got it already!!!
-        if (!row.dataset.groupFor && !row.querySelector(".pd-group-trigger")) {
-          const plusMinusCell = row.insertCell(0);
-          plusMinusCell.classList.add("pd-group-trigger");
-          if (this.querySelector("[data-group-for]")) {
-            const plusMinusButton = document.createElement("button");
-            plusMinusButton.dataset.triggerId = row.dataset.id;
-            plusMinusCell.appendChild(plusMinusButton);
-            // Add row click handler
-            plusMinusButton.addEventListener("click", (e) =>
-              this.handleGroupToggle(e)
-            );
-          }
-        }
-        // Add row click handler
-        row.addEventListener("click", (e) => this.handleClick(e, row));
-      });
-      this.updateRowStyling();
-
-      this.parseDataForFilters();
+      this.init();
     });
 
     // Observe the element itself as the slot can't be
@@ -127,6 +96,7 @@ class ProtvistaDatatable extends LitElement {
     if (this.hasAttribute("filter-scroll")) {
       document.addEventListener("wheel", this.wheelListener, { capture: true });
     }
+    this.init();
   }
 
   disconnectedCallback(): void {
@@ -139,22 +109,59 @@ class ProtvistaDatatable extends LitElement {
     this.mutationObserver.disconnect();
   }
 
-  parseDataForFilters(): void {
-    // Initialise map by looking at Column headers
-    const filterMap = parseColumnFilters(this.columns);
-
-    // Populate map with values
+  init(): void {
+    this.columns =
+      this.querySelectorAll<HTMLTableHeaderCellElement>("table thead th");
+    // Add blank column to header for (+/-) if not there alread
+    if (!this.querySelector(".pd-group-column-header")) {
+      // Can't use insertCell as "th"
+      const additionalTH = document.createElement("th");
+      additionalTH.classList.add("pd-group-column-header");
+      const headerTR =
+        this.querySelector<HTMLTableRowElement>("table thead tr");
+      headerTR.insertBefore(additionalTH, headerTR.firstChild);
+    }
+    this.rows = this.querySelectorAll<HTMLTableRowElement>("table tbody tr");
     this.rows.forEach((row) => {
-      const tableCells = row.childNodes as NodeListOf<HTMLTableDataCellElement>;
-      tableCells.forEach((cell) => {
-        if (cell.dataset.filter) {
-          const filterSet = filterMap.get(cell.dataset.filter);
-          filterSet.add(cell.innerHTML);
+      // Add extra (+/-) cell - only if it hasn't got it already!!!
+      if (!row.dataset.groupFor && !row.querySelector(".pd-group-trigger")) {
+        const plusMinusCell = row.insertCell(0);
+        plusMinusCell.classList.add("pd-group-trigger");
+        if (this.querySelector("[data-group-for]")) {
+          const plusMinusButton = document.createElement("button");
+          plusMinusButton.dataset.triggerId = row.dataset.id;
+          plusMinusCell.appendChild(plusMinusButton);
+          // Add row click handler
+          plusMinusButton.addEventListener("click", (e) =>
+            this.handleGroupToggle(e)
+          );
         }
-      });
+      }
+      // Add row click handler
+      row.addEventListener("click", (e) => this.handleClick(e, row));
     });
-    this.filterMap = filterMap;
+    this.updateRowStyling();
+
+    // this.parseDataForFilters();
   }
+
+  // TODO implement filters
+  // parseDataForFilters(): void {
+  //   // Initialise map by looking at Column headers
+  //   const filterMap = parseColumnFilters(this.columns);
+
+  //   // Populate map with values
+  //   this.rows.forEach((row) => {
+  //     const tableCells = row.childNodes as NodeListOf<HTMLTableDataCellElement>;
+  //     tableCells.forEach((cell) => {
+  //       if (cell.dataset.filter) {
+  //         const filterSet = filterMap.get(cell.dataset.filter);
+  //         filterSet.add(cell.innerHTML);
+  //       }
+  //     });
+  //   });
+  //   this.filterMap = filterMap;
+  // }
 
   eventHandler(e: MouseEvent): void {
     const target = e.target as HTMLElement;
@@ -241,7 +248,9 @@ class ProtvistaDatatable extends LitElement {
     }
     const { id, start, end } = row.dataset;
     this.selectedid = id;
-    const detail = start && end ? { highlight: `${start}:${end}` } : {};
+    const detail: { [key: string]: string } = {};
+    if (start && end) detail.highlight = `${start}:${end}`;
+    if (this.selectedid) detail.selectedid = this.selectedid;
     this.dispatchEvent(
       new CustomEvent("change", {
         detail,
@@ -259,7 +268,6 @@ class ProtvistaDatatable extends LitElement {
         oddOrEvenCount++;
       }
       const { start, end } = row.dataset;
-      console.log(`${oddOrEvenCount} - ${row.dataset.groupFor}`);
       row.classList.add(oddOrEvenCount % 2 === 0 ? "even" : "odd");
       // Is the row selected?
       if (
