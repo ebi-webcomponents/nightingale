@@ -11,6 +11,7 @@ const testCases = [
       start: undefined,
       end: undefined,
     },
+    mappings: [],
     error: "Invalid start, end coordinates",
   },
   {

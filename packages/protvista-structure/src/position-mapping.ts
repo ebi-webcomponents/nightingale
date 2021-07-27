@@ -42,6 +42,10 @@ const translatePositions = (
   entity: number;
   chain: string;
 } | null => {
+  // Return if mappings not ready
+  if (!mappings) {
+    return null;
+  }
   // return if they have been set to 'undefined'
   if (!start || !end || Number.isNaN(start) || Number.isNaN(end)) {
     throw new PositionMappingError("Invalid start, end coordinates");
