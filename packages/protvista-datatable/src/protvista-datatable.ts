@@ -160,6 +160,7 @@ class ProtvistaDatatable extends LitElement {
     const target = e.target as HTMLElement;
     if (!target.closest("protvista-datatable") && !target.closest(".feature")) {
       this.selectedid = null;
+      this.highlight = null;
     }
   }
 
@@ -223,11 +224,13 @@ class ProtvistaDatatable extends LitElement {
         (childId) => childId !== triggerId
       );
       (e.target as HTMLButtonElement).classList.remove(
-        "pd-group-trigger__minus"
+        "pd-group-trigger__expanded"
       );
     } else {
       this.visibleChildren = [...this.visibleChildren, triggerId];
-      (e.target as HTMLButtonElement).classList.add("pd-group-trigger__minus");
+      (e.target as HTMLButtonElement).classList.add(
+        "pd-group-trigger__expanded"
+      );
     }
   }
 
@@ -251,12 +254,18 @@ class ProtvistaDatatable extends LitElement {
   updateRowStyling(): void {
     let oddOrEvenCount = 0;
     this.rows?.forEach((row) => {
+      // Only increment if non grouped row
+      if (!row.dataset.groupFor) {
+        oddOrEvenCount++;
+      }
       const { start, end } = row.dataset;
+      console.log(`${oddOrEvenCount} - ${row.dataset.groupFor}`);
       row.classList.add(oddOrEvenCount % 2 === 0 ? "even" : "odd");
       // Is the row selected?
       if (
-        (this.selectedid && this.selectedid === row.dataset.id) ||
-        row.dataset.groupFor
+        this.selectedid &&
+        (this.selectedid === row.dataset.id ||
+          row.dataset.groupFor === this.selectedid)
       ) {
         row.classList.add("active");
       } else {
@@ -302,9 +311,6 @@ class ProtvistaDatatable extends LitElement {
         } else {
           row.classList.add("hidden");
         }
-      } else {
-        // Only increment if non grouped row
-        oddOrEvenCount++;
       }
     });
   }

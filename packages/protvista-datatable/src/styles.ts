@@ -19,6 +19,8 @@ const styles = css`
     color: var(--protvista-datable__header-text, #393b42);
     text-overflow: ellipsis;
     top: 0;
+    text-transform: uppercase;
+    z-index: 400;
   }
 
   protvista-datatable table td,
@@ -35,10 +37,15 @@ const styles = css`
     cursor: pointer;
   }
 
+  protvista-datatable table .pd-group-trigger {
+    width: 1rem;
+  }
+
   protvista-datatable table .pd-group-trigger button {
     background: none;
     border: none;
     padding: 0.2rem; // increase click area
+    position: relative;
     text-decoration: none;
     cursor: pointer;
     transition: background 250ms ease-in-out, transform 150ms ease;
@@ -48,22 +55,21 @@ const styles = css`
 
   protvista-datatable table .pd-group-trigger button:before {
     display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    line-height: 1rem;
-    border-radius: 1rem;
-    background: #0069ed;
-    color: #ffffff;
-    font-family: monospace;
-    font-size: 1rem;
-    content: "+";
+    content: " ";
+    border-style: solid;
+    border-width: 0.4rem 0 0.4rem 0.6rem;
+    border-color: transparent transparent transparent #161d39;
+    transition-duration: 0.3s;
+    transition-property: transform;
   }
 
   protvista-datatable
     table
     .pd-group-trigger
-    button.pd-group-trigger__minus:before {
-    content: "-";
+    button.pd-group-trigger__expanded:before {
+    transform: rotate(90deg);
+    // border-width: 0.6rem 0.4rem 0 0.4rem;
+    // border-color: #161d39 transparent transparent transparent;
   }
 
   protvista-datatable table td:nth-child(1) {
@@ -94,18 +100,8 @@ const styles = css`
     display: none;
   }
 
-  protvista-datatable table .protvista-datatable__child-item {
-    display: flex;
-  }
-
-  protvista-datatable table .protvista-datatable__child-item__title {
-    font-weight: 700;
-    flex-basis: 10vw;
-    flex-grow: 0;
-    margin-right: 1rem;
-  }
-
-  protvista-datatable table .protvista-datatable__child-item__content {
+  protvista-datatable table tr[data-group-for] td {
+    padding-left: 2rem;
   }
 
   // Can't use :nth-child selector here because of column groups
