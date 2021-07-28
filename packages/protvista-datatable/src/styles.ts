@@ -1,5 +1,11 @@
 import { css } from "lit-element";
 
+export const EXPANDED = css`pd-group-trigger__expanded`;
+export const ACTIVE = css`active`;
+export const TRANSPARENT = css`transparent`;
+export const OVERLAPPED = css`overlapped`;
+export const HIDDEN = css`hidden`;
+
 const styles = css`
   protvista-datatable table {
     width: 100%;
@@ -29,7 +35,7 @@ const styles = css`
     border-bottom: 1px solid #c2c4c4;
   }
 
-  protvista-datatable table tr:hover:not(.active):not(.transparent) {
+  protvista-datatable table tr:hover:not(.${ACTIVE}):not(.${TRANSPARENT}) {
     background-color: var(--protvista-datatable__hover, #f1f1f1);
   }
 
@@ -63,10 +69,7 @@ const styles = css`
     transition-property: transform;
   }
 
-  protvista-datatable
-    table
-    .pd-group-trigger
-    button.pd-group-trigger__expanded:before {
+  protvista-datatable table .pd-group-trigger button.${EXPANDED}:before {
     transform: rotate(90deg);
     // border-width: 0.6rem 0.4rem 0 0.4rem;
     // border-color: #161d39 transparent transparent transparent;
@@ -76,27 +79,27 @@ const styles = css`
     border-left: 0.5rem solid transparent;
   }
 
-  protvista-datatable table .overlapped td:nth-child(1) {
+  protvista-datatable table .${OVERLAPPED} td:nth-child(1) {
     border-left: 0.5rem solid
       var(--protvista-datatable__overlapped, rgba(255, 0, 0, 0.8));
   }
 
-  protvista-datatable table .active {
+  protvista-datatable table .${ACTIVE} {
     background-color: var(
       --protvista-datatable__active,
       rgba(255, 235, 59, 0.3)
     ) !important;
   }
 
-  protvista-datatable table .transparent {
+  protvista-datatable table .${TRANSPARENT} {
     opacity: 0.2;
   }
-  protvista-datatable table .transparent td:hover {
+  protvista-datatable table .${TRANSPARENT} td:hover {
     cursor: default;
     background-color: inherit;
   }
 
-  protvista-datatable table .hidden {
+  protvista-datatable table .${HIDDEN} {
     display: none;
   }
 

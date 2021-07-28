@@ -12,7 +12,13 @@ import { isOutside, isWithinRange } from "./utils";
 
 import { ProtvistaManager } from "./types/manager";
 
-import lightDOMstyles from "./styles";
+import lightDOMstyles, {
+  ACTIVE,
+  EXPANDED,
+  HIDDEN,
+  OVERLAPPED,
+  TRANSPARENT,
+} from "./styles";
 
 class ProtvistaDatatable extends LitElement {
   private height: number;
@@ -230,14 +236,10 @@ class ProtvistaDatatable extends LitElement {
       this.visibleChildren = this.visibleChildren.filter(
         (childId) => childId !== triggerId
       );
-      (e.target as HTMLButtonElement).classList.remove(
-        "pd-group-trigger__expanded"
-      );
+      (e.target as HTMLButtonElement).classList.remove(EXPANDED.cssText);
     } else {
       this.visibleChildren = [...this.visibleChildren, triggerId];
-      (e.target as HTMLButtonElement).classList.add(
-        "pd-group-trigger__expanded"
-      );
+      (e.target as HTMLButtonElement).classList.add(EXPANDED.cssText);
     }
   }
 
@@ -275,10 +277,10 @@ class ProtvistaDatatable extends LitElement {
         (this.selectedid === row.dataset.id ||
           row.dataset.groupFor === this.selectedid)
       ) {
-        row.classList.add("active");
+        row.classList.add(ACTIVE.cssText);
       } else {
         // Note: if too expensive, check before
-        row.classList.remove("active");
+        row.classList.remove(ACTIVE.cssText);
       }
       // Is the row not within ProtVista track range?
       if (
@@ -289,10 +291,10 @@ class ProtvistaDatatable extends LitElement {
           Number(end)
         )
       ) {
-        row.classList.add("transparent");
+        row.classList.add(TRANSPARENT.cssText);
       } else {
         // Note: if too expensive, check before
-        row.classList.remove("transparent");
+        row.classList.remove(TRANSPARENT.cssText);
       }
       // Is the row part of the selected range?
       if (
@@ -304,9 +306,9 @@ class ProtvistaDatatable extends LitElement {
           Number(end)
         )
       ) {
-        row.classList.add("overlapped");
+        row.classList.add(OVERLAPPED.cssText);
       } else {
-        row.classList.remove("overlapped");
+        row.classList.remove(OVERLAPPED.cssText);
       }
 
       // Handle show/hide groups
@@ -315,9 +317,9 @@ class ProtvistaDatatable extends LitElement {
         // eslint-disable-next-line no-param-reassign
         row.cells[0].colSpan = collSpan - row.cells.length + 1; // Add 1 for column
         if (this.visibleChildren.includes(row.dataset.groupFor)) {
-          row.classList.remove("hidden");
+          row.classList.remove(HIDDEN.cssText);
         } else {
-          row.classList.add("hidden");
+          row.classList.add(HIDDEN.cssText);
         }
       }
     });
