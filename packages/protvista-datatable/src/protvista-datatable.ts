@@ -8,7 +8,7 @@ import {
 } from "lit-element";
 import { ScrollFilter } from "protvista-utils";
 
-import { isOutside, isWithinRange } from "./utils";
+import { isOutside, isWithinRange, parseColumnFilters } from "./utils";
 
 import { ProtvistaManager } from "./types/manager";
 
@@ -27,8 +27,9 @@ class ProtvistaDatatable extends LitElement {
 
   private rows: NodeListOf<HTMLTableRowElement>;
 
-  // TODO implement filters
-  // private filterMap: Map<string, Set<string>>;
+  private filterMap: Map<string, Set<string>>;
+
+  private selectedFilters: Map<string, string>;
 
   private mutationObserver: MutationObserver;
 
@@ -77,8 +78,8 @@ class ProtvistaDatatable extends LitElement {
       this.init();
     });
 
-    // Observe the element itself as the slot can't be
-    this.mutationObserver.observe(this, {
+    // Observe the table body for any changes (e.g. dynamic data)
+    this.mutationObserver.observe(this.querySelector("table tbody"), {
       characterData: true,
       childList: true,
       subtree: true,
@@ -119,6 +120,7 @@ class ProtvistaDatatable extends LitElement {
     this.columns =
       this.querySelectorAll<HTMLTableHeaderCellElement>("table thead th");
     // Add blank column to header for (+/-) if not there alread
+    // Check if added already, otherwise, ∞ loop!!
     if (!this.querySelector(".pd-group-column-header")) {
       // Can't use insertCell as "th"
       const additionalTH = document.createElement("th");
@@ -148,26 +150,61 @@ class ProtvistaDatatable extends LitElement {
     });
     this.updateRowStyling();
 
-    // this.parseDataForFilters();
+    this.selectedFilters = new Map();
+
+    this.filterMap = this.parseDataForFilters();
+    this.addFilterOptions();
   }
 
-  // TODO implement filters
-  // parseDataForFilters(): void {
-  //   // Initialise map by looking at Column headers
-  //   const filterMap = parseColumnFilters(this.columns);
+  parseDataForFilters(): Map<string, Set<string>> {
+    // Initialise map by looking at Column headers
+    const filterMap = parseColumnFilters(this.columns);
 
-  //   // Populate map with values
-  //   this.rows.forEach((row) => {
-  //     const tableCells = row.childNodes as NodeListOf<HTMLTableDataCellElement>;
-  //     tableCells.forEach((cell) => {
-  //       if (cell.dataset.filter) {
-  //         const filterSet = filterMap.get(cell.dataset.filter);
-  //         filterSet.add(cell.innerHTML);
-  //       }
-  //     });
-  //   });
-  //   this.filterMap = filterMap;
-  // }
+    // Populate map with values
+    this.rows.forEach((row) => {
+      const tableCells = row.childNodes as NodeListOf<HTMLTableDataCellElement>;
+      tableCells.forEach((cell) => {
+        if (cell.dataset.filter) {
+          const filterSet = filterMap.get(cell.dataset.filter);
+          filterSet.add(cell.innerHTML);
+        }
+      });
+    });
+    console.log(filterMap);
+    return filterMap;
+  }
+
+  addFilterOptions(): void {
+    this.columns.forEach((column) => {
+      if (column.dataset.filter) {
+        let select: HTMLSelectElement;
+        let wrapper: HTMLSpanElement;
+        // Has this column already been modified?
+        if (column.querySelector(".filter-wrap")) {
+          select = column.querySelector("select");
+          wrapper = column.querySelector(".filter-wrap");
+        } else {
+          wrapper = document.createElement("span");
+          wrapper.className = "filter-wrap";
+          wrapper.innerHTML = column.innerHTML;
+          select = document.createElement("select");
+          select.onchange = (e: Event) =>
+            this.handleFilterChange(e, column.dataset.filter);
+        }
+        select.innerHTML = "<option  selected value>-- Select --</option>";
+        this.filterMap.get(column.dataset.filter).forEach((optionValue) => {
+          const option = document.createElement("option");
+          option.value = optionValue;
+          option.label = optionValue;
+          select.appendChild(option);
+        });
+        // eslint-disable-next-line no-param-reassign
+        column.innerHTML = "";
+        wrapper.appendChild(select);
+        column.appendChild(wrapper);
+      }
+    });
+  }
 
   eventHandler(e: MouseEvent): void {
     const target = e.target as HTMLElement;
@@ -262,9 +299,42 @@ class ProtvistaDatatable extends LitElement {
     );
   }
 
+  handleFilterChange(e: Event, filterName: string): void {
+    const { selectedOptions } = e.target as HTMLSelectElement;
+    // Only 1 can be selected
+    const { value } = selectedOptions.item(0);
+    if (value) {
+      this.selectedFilters.set(filterName, value);
+    } else {
+      this.selectedFilters.delete(filterName);
+    }
+    this.updateRowStyling();
+  }
+
+  isRowVisible(row: HTMLTableRowElement): boolean {
+    if (this.selectedFilters.size <= 0) {
+      return true;
+    }
+    let hasMatch = false;
+    this.selectedFilters.forEach((value, filterName) => {
+      const column = row.querySelector(`[data-filter="${filterName}"]`);
+      if (column && column.innerHTML === value) {
+        hasMatch = true;
+      }
+    });
+    return hasMatch;
+  }
+
   updateRowStyling(): void {
     let oddOrEvenCount = 0;
     this.rows?.forEach((row) => {
+      // Filter visibility
+      const isRowVisible = this.isRowVisible(row);
+      if (isRowVisible) {
+        row.classList.remove(HIDDEN.cssText);
+      } else {
+        row.classList.add(HIDDEN.cssText);
+      }
       // Only increment if non grouped row
       if (!row.dataset.groupFor) {
         oddOrEvenCount++;

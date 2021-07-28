@@ -21,12 +21,22 @@ const styles = css`
     position: -ms-sticky;
     position: -o-sticky;
     text-align: left;
+    vertical-align: top;
     background-color: var(--protvista-datable__header-background, #fff);
     color: var(--protvista-datable__header-text, #393b42);
     text-overflow: ellipsis;
     top: 0;
     text-transform: uppercase;
     z-index: 400;
+  }
+
+  protvista-datatable table th .filter-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  protvista-datatable table th .filter-wrap select {
+    width: fit-content;
   }
 
   protvista-datatable table td,

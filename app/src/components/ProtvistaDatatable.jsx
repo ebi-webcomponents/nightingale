@@ -49,12 +49,6 @@ const ProtvistaDatatableWrapper = () => {
       <Readme content={readmeContent} />
       <h2>Track with data-loader</h2>
       <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
-        {/* <protvista-navigation length="770" />
-        <protvista-track
-          id="my-protvista-track"
-          length="770"
-          layout="non-overlapping"
-        ></protvista-track> */}
         <protvista-datatable displaystart="0" displayend="600">
           <table>
             <thead>
