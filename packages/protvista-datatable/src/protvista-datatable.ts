@@ -164,13 +164,12 @@ class ProtvistaDatatable extends LitElement {
     this.rows.forEach((row) => {
       const tableCells = row.childNodes as NodeListOf<HTMLTableDataCellElement>;
       tableCells.forEach((cell) => {
-        if (cell.dataset.filter) {
+        if (cell.dataset?.filter) {
           const filterSet = filterMap.get(cell.dataset.filter);
           filterSet.add(cell.innerHTML);
         }
       });
     });
-    console.log(filterMap);
     return filterMap;
   }
 
@@ -312,7 +311,7 @@ class ProtvistaDatatable extends LitElement {
   }
 
   isRowVisible(row: HTMLTableRowElement): boolean {
-    if (this.selectedFilters.size <= 0) {
+    if (!this.selectedFilters || this.selectedFilters.size <= 0) {
       return true;
     }
     let hasMatch = false;
