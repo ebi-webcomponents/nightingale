@@ -10,19 +10,6 @@ import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
 import { Fragment } from "react";
 
-// const columnConfig = {
-//   consequence: {
-//     label: "Evidences",
-//     child: true,
-//     resolver: (d) => {
-//     },
-//   },
-//   ftId: {
-//     label: "Feature ID",
-//     child: true,
-//     resolver: (d) => d.ftId,
-//   },
-// };
 const ProtvistaDatatableWrapper = () => {
   const [data, setData] = useState();
 

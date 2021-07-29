@@ -23,6 +23,8 @@ Object.defineProperties(window.HTMLElement.prototype, {
   },
 });
 
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
 // This is to handle getBBox on SVGElements which lack support
 // You can override the mockReturnValue in your tests
 window.SVGElement.prototype.getBBox = jest.fn();
