@@ -1,4 +1,10 @@
-import { fireEvent, getByRole, getByText, waitFor } from "@testing-library/dom";
+import {
+  fireEvent,
+  getByRole,
+  getByTestId,
+  getByText,
+  waitFor,
+} from "@testing-library/dom";
 import "@testing-library/jest-dom/extend-expect";
 
 import ProtvistaDatatable from "../protvista-datatable";
@@ -78,6 +84,55 @@ describe("protvista-datatable", () => {
     fireEvent.click(button);
     await waitFor(() => {
       expect(lr).toBeVisible();
+    });
+  });
+
+  it("should handle filters", async () => {
+    document.documentElement.innerHTML = `
+    <protvista-datatable>
+        <table>
+            <thead>
+                <tr>
+                    <th>Col A</th>
+                    <th data-filter="col_b">Col B</th>
+                    <th>Col C</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-id="id1" data-testid="id1">
+                    <td>Row 1 A</td>
+                    <td data-filter="col_b">Row 1 B</td>
+                    <td>Row 1 C</td>
+                </tr>
+                <tr data-id="id2" data-testid="id2">
+                    <td>Row 2 A</td>
+                    <td data-filter="col_b">Row 2 B</td>
+                    <td>Row 2 C</td>
+                </tr>
+                <tr data-id="id3" data-testid="id3">
+                    <td>Row 3 A</td>
+                    <td data-filter="col_b">Row 3 B</td>
+                    <td>Row 3 C</td>
+                </tr>
+            </tbody>
+    </protvista-datatable>
+        `;
+    const rendered = document.querySelector<HTMLElement>("protvista-datatable");
+    const selectMenu = getByTestId(rendered, "select") as HTMLSelectElement;
+    expect(selectMenu.childNodes.length).toBe(4);
+    // Now change a filter
+    fireEvent.change(selectMenu, { target: { value: "Row 2 B" } });
+    await waitFor(() => {
+      expect(getByTestId(rendered, "id1")).not.toBeVisible();
+      expect(getByTestId(rendered, "id2")).toBeVisible();
+      expect(getByTestId(rendered, "id3")).not.toBeVisible();
+    });
+    // Now reset
+    fireEvent.change(selectMenu, { target: { value: undefined } });
+    await waitFor(() => {
+      expect(getByTestId(rendered, "id1")).toBeVisible();
+      expect(getByTestId(rendered, "id2")).toBeVisible();
+      expect(getByTestId(rendered, "id3")).toBeVisible();
     });
   });
 });

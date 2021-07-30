@@ -187,6 +187,7 @@ class ProtvistaDatatable extends LitElement {
           wrapper.className = "filter-wrap";
           wrapper.innerHTML = column.innerHTML;
           select = document.createElement("select");
+          select.dataset.testid = "select";
           select.onchange = (e: Event) =>
             this.handleFilterChange(e, column.dataset.filter);
         }
@@ -195,6 +196,7 @@ class ProtvistaDatatable extends LitElement {
           const option = document.createElement("option");
           option.value = optionValue;
           option.label = optionValue;
+          option.dataset.testid = "select-option";
           select.appendChild(option);
         });
         // eslint-disable-next-line no-param-reassign
