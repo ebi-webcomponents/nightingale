@@ -74,8 +74,9 @@ describe("protvista-datatable", () => {
                 <tr data-group-for="id1">
                     <td>Long row</td>
                 </tr>
-            </tbody>
-    </protvista-datatable>
+        </tbody>
+    </table>
+</protvista-datatable>
         `;
     const rendered = document.querySelector<HTMLElement>("protvista-datatable");
     const lr = getByText(rendered, "Long row") as HTMLTableCellElement;
