@@ -313,7 +313,7 @@ class ProtvistaDatatable extends LitElement {
   }
 
   isRowVisible(row: HTMLTableRowElement): boolean {
-    if (!this.selectedFilters || this.selectedFilters.size <= 0) {
+    if (!this.selectedFilters || this.selectedFilters.size === 0) {
       return true;
     }
     let hasMatch = false;
