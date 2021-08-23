@@ -46,6 +46,7 @@ describe("protvista-datatable", () => {
                 <td>Row 2 D</td>
             </tr>
         </tbody>
+    </table>
 </protvista-datatable>
     `;
     const rendered = document.querySelector("protvista-datatable");
