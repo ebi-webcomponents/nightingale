@@ -166,7 +166,7 @@ class ProtvistaDatatable extends LitElement {
       tableCells.forEach((cell) => {
         if (cell.dataset?.filter) {
           const filterSet = filterMap.get(cell.dataset.filter);
-          filterSet.add(cell.innerHTML);
+          filterSet.add(cell.innerHTML.replace(/(<([^>]+)>)/gi, ""));
         }
       });
     });
@@ -333,7 +333,7 @@ class ProtvistaDatatable extends LitElement {
       } else {
         column = row.querySelector(`[data-filter="${filterName}"]`);
       }
-      if (column && column.innerHTML === value) {
+      if (column && column.innerHTML.replace(/(<([^>]+)>)/gi, "") === value) {
         hasMatch = true;
       }
     });
