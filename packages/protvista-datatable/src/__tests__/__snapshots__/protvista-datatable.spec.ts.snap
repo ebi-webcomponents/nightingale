@@ -111,8 +111,9 @@ exports[`protvista-datatable it should display the datatable correctly 1`] = `
         
     </tbody>
     
-
     
   </table>
+  
+
 </protvista-datatable>
 `;
