@@ -116,8 +116,9 @@ describe("protvista-datatable", () => {
                     <td data-filter="col_b">Row 3 B</td>
                     <td>Row 3 C</td>
                 </tr>
-            </tbody>
-    </protvista-datatable>
+        </tbody>
+    </table>
+</protvista-datatable>
         `;
     const rendered = document.querySelector<HTMLElement>("protvista-datatable");
     const selectMenu = getByTestId(rendered, "select") as HTMLSelectElement;
