@@ -122,7 +122,7 @@ class ProtvistaDatatable extends LitElement {
     // Add blank column to header for (+/-) if not there alread
     // Check if added already, otherwise, ∞ loop!!
     if (!this.querySelector(".pd-group-column-header")) {
-      // Can't use insertCell as "th"
+      // Can't use insertCell with "th"
       const additionalTH = document.createElement("th");
       additionalTH.classList.add("pd-group-column-header");
       const headerTR =
@@ -313,17 +313,31 @@ class ProtvistaDatatable extends LitElement {
   }
 
   isRowVisible(row: HTMLTableRowElement): boolean {
-    if (!this.selectedFilters || this.selectedFilters.size === 0) {
-      return true;
-    }
-    let hasMatch = false;
-    this.selectedFilters.forEach((value, filterName) => {
-      const column = row.querySelector(`[data-filter="${filterName}"]`);
+    // Handle show/hide groups
+    const isExpandedGroup =
+      !row.dataset.groupFor ||
+      (row.dataset.groupFor &&
+        this.visibleChildren.includes(row.dataset.groupFor));
+
+    // Handle filters
+    // If no filters are selected, consider it a match
+    let hasMatch = !this.selectedFilters || this.selectedFilters.size === 0;
+    this.selectedFilters?.forEach((value, filterName) => {
+      let column;
+      if (row.dataset.groupFor) {
+        // If group, get group row
+        const groupRow = this.querySelector(
+          `[data-id="${row.dataset.groupFor}"]`
+        );
+        column = groupRow.querySelector(`[data-filter="${filterName}"]`);
+      } else {
+        column = row.querySelector(`[data-filter="${filterName}"]`);
+      }
       if (column && column.innerHTML === value) {
         hasMatch = true;
       }
     });
-    return hasMatch;
+    return hasMatch && isExpandedGroup;
   }
 
   updateRowStyling(): void {
@@ -382,16 +396,10 @@ class ProtvistaDatatable extends LitElement {
         row.classList.remove(OVERLAPPED.cssText);
       }
 
-      // Handle show/hide groups
       if (row.dataset.groupFor) {
         const collSpan = this.columns.length + 1; // Add 1 for the  +/- button
         // eslint-disable-next-line no-param-reassign
         row.cells[0].colSpan = collSpan - row.cells.length + 1; // Add 1 for column
-        if (this.visibleChildren.includes(row.dataset.groupFor)) {
-          row.classList.remove(HIDDEN.cssText);
-        } else {
-          row.classList.add(HIDDEN.cssText);
-        }
       }
     });
   }
