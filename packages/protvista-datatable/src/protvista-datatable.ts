@@ -321,8 +321,11 @@ class ProtvistaDatatable extends LitElement {
 
     // Handle filters
     // If no filters are selected, consider it a match
-    let hasMatch = !this.selectedFilters || this.selectedFilters.size === 0;
-    this.selectedFilters?.forEach((value, filterName) => {
+    if (!this.selectedFilters || this.selectedFilters.size === 0) {
+      return isExpandedGroup;
+    }
+
+    for (const [filterName, value] of this.selectedFilters) {
       let column;
       if (row.dataset.groupFor) {
         // If group, get group row
@@ -334,10 +337,10 @@ class ProtvistaDatatable extends LitElement {
         column = row.querySelector(`[data-filter="${filterName}"]`);
       }
       if (column && column.innerHTML.replace(/(<([^>]+)>)/gi, "") === value) {
-        hasMatch = true;
+        return isExpandedGroup;
       }
-    });
-    return hasMatch && isExpandedGroup;
+    }
+    return false;
   }
 
   updateRowStyling(): void {
