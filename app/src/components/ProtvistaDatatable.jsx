@@ -53,7 +53,9 @@ const ProtvistaDatatableWrapper = () => {
                     data-start={row.start}
                     data-end={row.end}
                   >
-                    <td data-filter="ft_key">{row.type}</td>
+                    <td data-filter="ft_key" data-filter-value={row.type}>
+                      {row.type}
+                    </td>
                     <td>{row.description}</td>
                     <td>
                       {row.start}-{row.end}

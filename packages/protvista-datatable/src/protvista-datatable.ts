@@ -166,7 +166,7 @@ class ProtvistaDatatable extends LitElement {
       tableCells.forEach((cell) => {
         if (cell.dataset?.filter) {
           const filterSet = filterMap.get(cell.dataset.filter);
-          filterSet.add(cell.innerHTML.replace(/(<([^>]+)>)/gi, ""));
+          filterSet.add(cell.dataset.filterValue);
         }
       });
     });
@@ -332,11 +332,15 @@ class ProtvistaDatatable extends LitElement {
         const groupRow = this.querySelector(
           `[data-id="${row.dataset.groupFor}"]`
         );
-        column = groupRow.querySelector(`[data-filter="${filterName}"]`);
+        column = groupRow.querySelector<HTMLTableCellElement>(
+          `[data-filter="${filterName}"]`
+        );
       } else {
-        column = row.querySelector(`[data-filter="${filterName}"]`);
+        column = row.querySelector<HTMLTableCellElement>(
+          `[data-filter="${filterName}"]`
+        );
       }
-      if (column && column.innerHTML.replace(/(<([^>]+)>)/gi, "") === value) {
+      if (column && column.dataset.filterValue === value) {
         return isExpandedGroup;
       }
     }

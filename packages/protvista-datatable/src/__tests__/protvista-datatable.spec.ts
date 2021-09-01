@@ -103,17 +103,17 @@ describe("protvista-datatable", () => {
             <tbody>
                 <tr data-id="id1" data-testid="id1">
                     <td>Row 1 A</td>
-                    <td data-filter="col_b">Row 1 B</td>
+                    <td data-filter="col_b" data-filter-value="Row 1 B">Row 1 B</td>
                     <td>Row 1 C</td>
                 </tr>
                 <tr data-id="id2" data-testid="id2">
                     <td>Row 2 A</td>
-                    <td data-filter="col_b">Row 2 B</td>
+                    <td data-filter="col_b" data-filter-value="Row 2 B">Row 2 B</td>
                     <td>Row 2 C</td>
                 </tr>
                 <tr data-id="id3" data-testid="id3">
                     <td>Row 3 A</td>
-                    <td data-filter="col_b">Row 3 B</td>
+                    <td data-filter="col_b" data-filter-value="Row 3 B">Row 3 B</td>
                     <td>Row 3 C</td>
                 </tr>
         </tbody>
