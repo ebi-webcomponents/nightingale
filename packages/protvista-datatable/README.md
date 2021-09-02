@@ -60,6 +60,14 @@ The row id. Also passed in the "change" event triggered on row click
 
 A grouped row is collapsed by default, and a trigger is added to the row with the corresponding `data-id` to collapse/expand it.
 
+#### `data-filter`
+
+Generate a dropdown filter for a given column. A select menu will be populated with values defined in `data-filter-value`. `data-filter` should be set on both the column header cell and the corresponding cells and have the same value to allow mapping.
+
+#### `data-filter-value`
+
+A value used to populate the `data-filter` select menu content. The value should reflect the content of the cell.
+
 ## API Reference
 
 ### Properties

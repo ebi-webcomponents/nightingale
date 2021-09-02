@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`protvista-datatable it should display the datatable correctly 1`] = `
+<protvista-datatable
+  class="feature"
+>
+  
+    
+  <table>
+    
+        
+    <thead>
+      
+            
+      <tr>
+        <th
+          class="pd-group-column-header"
+        />
+        
+                
+        <th>
+          Col A
+        </th>
+        
+                
+        <th>
+          Col B
+        </th>
+        
+                
+        <th>
+          Col C
+        </th>
+        
+                
+        <th>
+          Col D
+        </th>
+        
+            
+      </tr>
+      
+        
+    </thead>
+    
+        
+    <tbody>
+      
+            
+      <tr
+        class="odd"
+      >
+        
+                
+        <td
+          class="pd-group-trigger"
+        />
+        <td>
+          Row 1 A
+        </td>
+        
+                
+        <td>
+          Row 1 B
+        </td>
+        
+                
+        <td>
+          Row 1 C
+        </td>
+        
+                
+        <td>
+          Row 1 D
+        </td>
+        
+            
+      </tr>
+      
+            
+      <tr
+        class="even"
+      >
+        
+                
+        <td
+          class="pd-group-trigger"
+        />
+        <td>
+          Row 2 A
+        </td>
+        
+                
+        <td>
+          Row 2 B
+        </td>
+        
+                
+        <td>
+          Row 2 C
+        </td>
+        
+                
+        <td>
+          Row 2 D
+        </td>
+        
+            
+      </tr>
+      
+        
+    </tbody>
+    
+    
+  </table>
+  
+
+</protvista-datatable>
+`;

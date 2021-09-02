@@ -10,19 +10,6 @@ import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
 import { Fragment } from "react";
 
-// const columnConfig = {
-//   consequence: {
-//     label: "Evidences",
-//     child: true,
-//     resolver: (d) => {
-//     },
-//   },
-//   ftId: {
-//     label: "Feature ID",
-//     child: true,
-//     resolver: (d) => d.ftId,
-//   },
-// };
 const ProtvistaDatatableWrapper = () => {
   const [data, setData] = useState();
 
@@ -49,12 +36,6 @@ const ProtvistaDatatableWrapper = () => {
       <Readme content={readmeContent} />
       <h2>Track with data-loader</h2>
       <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
-        {/* <protvista-navigation length="770" />
-        <protvista-track
-          id="my-protvista-track"
-          length="770"
-          layout="non-overlapping"
-        ></protvista-track> */}
         <protvista-datatable displaystart="0" displayend="600">
           <table>
             <thead>
@@ -72,7 +53,9 @@ const ProtvistaDatatableWrapper = () => {
                     data-start={row.start}
                     data-end={row.end}
                   >
-                    <td data-filter="ft_key">{row.type}</td>
+                    <td data-filter="ft_key" data-filter-value={row.type}>
+                      {row.type}
+                    </td>
                     <td>{row.description}</td>
                     <td>
                       {row.start}-{row.end}

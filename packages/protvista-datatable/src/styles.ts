@@ -21,12 +21,22 @@ const styles = css`
     position: -ms-sticky;
     position: -o-sticky;
     text-align: left;
+    vertical-align: top;
     background-color: var(--protvista-datable__header-background, #fff);
     color: var(--protvista-datable__header-text, #393b42);
     text-overflow: ellipsis;
     top: 0;
     text-transform: uppercase;
     z-index: 400;
+  }
+
+  protvista-datatable table th .filter-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  protvista-datatable table th .filter-wrap select {
+    width: fit-content;
   }
 
   protvista-datatable table td,
@@ -71,8 +81,6 @@ const styles = css`
 
   protvista-datatable table .pd-group-trigger button.${EXPANDED}:before {
     transform: rotate(90deg);
-    // border-width: 0.6rem 0.4rem 0 0.4rem;
-    // border-color: #161d39 transparent transparent transparent;
   }
 
   protvista-datatable table td:nth-child(1) {
@@ -107,7 +115,6 @@ const styles = css`
     padding-left: 2rem;
   }
 
-  // Can't use :nth-child selector here because of column groups
   protvista-datatable table .odd {
     background-color: var(--protvista-datatable__odd, #e4e8eb);
   }

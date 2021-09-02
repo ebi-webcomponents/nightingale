@@ -149,6 +149,9 @@ class ProtVistaManager extends HTMLElement {
   }
 
   _changeListener(e) {
+    if (!e.detail) {
+      return;
+    }
     switch (e.detail.handler) {
       case "property":
         this.propertyValues.set(e.detail.type, e.detail.value);
