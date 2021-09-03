@@ -29,7 +29,6 @@ const ProtvistaDatatableWrapper = () => {
     fetchData();
   }, []);
 
-  // console.log(data);
 
   return (
     <>
