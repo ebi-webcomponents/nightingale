@@ -340,11 +340,11 @@ class ProtvistaDatatable extends LitElement {
           `[data-filter="${filterName}"]`
         );
       }
-      if (column && column.dataset.filterValue === value) {
-        return isExpandedGroup;
+      if (column && column.dataset.filterValue !== value) {
+        return false;
       }
     }
-    return false;
+    return isExpandedGroup;
   }
 
   updateRowStyling(): void {
