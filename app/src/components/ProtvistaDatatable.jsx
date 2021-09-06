@@ -1,86 +1,76 @@
-import React, { Fragment, Component } from "react";
-import { html } from "lit-html";
+import React, { useEffect, useState } from "react";
 import ProtvistaDatatable from "protvista-datatable";
 import ProtvistaTrack from "protvista-track";
 import ProtvistaManager from "protvista-manager";
 import ProtvistaNavigation from "protvista-navigation";
-import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import DataLoader from "data-loader";
+import { transformData } from "protvista-feature-adapter";
+import { load } from "data-loader";
 import loadWebComponent from "../utils/load-web-component";
 import readmeContent from "../../../packages/protvista-datatable/README.md";
 import Readme from "./Readme";
+import { Fragment } from "react";
 
-const columnConfig = {
-  type: {
-    label: "Feature key",
-    resolver: d => d["type"]
-  },
-  description: {
-    label: "Description",
-    resolver: d => d["description"]
-  },
-  positions: {
-    label: "Positions",
-    resolver: d => `${d["start"]}-${d["end"]}`
-  },
-  consequence: {
-    label: "Evidences",
-    child: true,
-    resolver: d => {
-      const evidences = d["evidences"];
-      if (evidences && evidences.length > 0) {
-        return html`
-          <ul>
-            ${evidences.map(
-              evidence =>
-                html`
-                  <li>${evidence.code}</li>
-                `
-            )}
-          </ul>
-        `;
-      }
+const ProtvistaDatatableWrapper = () => {
+  const [data, setData] = useState();
+
+  loadWebComponent("protvista-datatable", ProtvistaDatatable);
+  loadWebComponent("protvista-manager", ProtvistaManager);
+  loadWebComponent("protvista-track", ProtvistaTrack);
+  loadWebComponent("protvista-navigation", ProtvistaNavigation);
+
+  useEffect(() => {
+    async function fetchData() {
+      const loadedData = await load(
+        "https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING"
+      );
+      const transformedData = transformData(loadedData?.payload);
+      setData(transformedData);
     }
-  },
-  ftId: {
-    label: "Feature ID",
-    child: true,
-    resolver: d => d.ftId
-  }
-};
-class ProtvistaDatatableWrapper extends Component {
-  componentDidMount() {
-    document.querySelector("#data-table").columns = columnConfig;
-  }
+    fetchData();
+  }, []);
 
-  render() {
-    loadWebComponent("data-loader", DataLoader);
-    loadWebComponent("protvista-datatable", ProtvistaDatatable);
-    loadWebComponent("protvista-manager", ProtvistaManager);
-    loadWebComponent("protvista-track", ProtvistaTrack);
-    loadWebComponent("protvista-navigation", ProtvistaNavigation);
-    loadWebComponent("protvista-feature-adapter", ProtvistaFeatureAdapter);
-    return (
-      <Fragment>
-        <Readme content={readmeContent} />
-        <h2>Track with data-loader</h2>
-        <protvista-feature-adapter subscribers="#my-protvista-track,#data-table">
-          <data-loader>
-            <source src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING" />
-          </data-loader>
-        </protvista-feature-adapter>
-        <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
-          <protvista-navigation length="770" />
-          <protvista-track
-            id="my-protvista-track"
-            length="770"
-            layout="non-overlapping"
-          ></protvista-track>
-          <protvista-datatable id="data-table"></protvista-datatable>
-        </protvista-manager>
-      </Fragment>
-    );
-  }
-}
+
+  return (
+    <>
+      <Readme content={readmeContent} />
+      <h2>Track with data-loader</h2>
+      <protvista-manager attributes="length displaystart displayend variantfilters highlight selectedid">
+        <protvista-datatable displaystart="0" displayend="600">
+          <table>
+            <thead>
+              <tr>
+                <th data-filter="ft_key">Feature key</th>
+                <th>Description</th>
+                <th>Positions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map((row, i) => (
+                <Fragment key={i}>
+                  <tr
+                    data-id={`${row.start}-${row.end}`}
+                    data-start={row.start}
+                    data-end={row.end}
+                  >
+                    <td data-filter="ft_key" data-filter-value={row.type}>
+                      {row.type}
+                    </td>
+                    <td>{row.description}</td>
+                    <td>
+                      {row.start}-{row.end}
+                    </td>
+                  </tr>
+                  <tr data-group-for={`${row.start}-${row.end}`}>
+                    <td>Something hidden</td>
+                  </tr>
+                </Fragment>
+              ))}
+            </tbody>
+          </table>
+        </protvista-datatable>
+      </protvista-manager>
+    </>
+  );
+};
 
 export default ProtvistaDatatableWrapper;

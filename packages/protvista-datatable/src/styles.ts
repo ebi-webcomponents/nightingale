@@ -1,139 +1,125 @@
 import { css } from "lit-element";
 
+export const EXPANDED = css`pd-group-trigger__expanded`;
+export const ACTIVE = css`active`;
+export const TRANSPARENT = css`transparent`;
+export const OVERLAPPED = css`overlapped`;
+export const HIDDEN = css`hidden`;
+
 const styles = css`
-  :host {
-    display: block;
-  }
-  .protvista-datatable-container {
-    overflow-y: auto;
-    // Note: overflow-x was set to 'hidden' but changing
-    // to 'auto' doesn't seem to be an issue.
-    overflow-x: auto;
-  }
-
-  :host([scrollable="true"]) .protvista-datatable-container {
-    overflow-y: auto;
-    will-change: scroll;
-  }
-
-  :host([scrollable="false"]) .protvista-datatable-container {
-    overflow-y: hidden;
-  }
-
-  table {
+  protvista-datatable table {
     width: 100%;
     padding: 0;
     margin: 0;
     border-spacing: 0;
   }
 
-  th {
+  protvista-datatable table th {
     position: sticky;
     position: -webkit-sticky;
     position: -moz-sticky;
     position: -ms-sticky;
     position: -o-sticky;
     text-align: left;
+    vertical-align: top;
     background-color: var(--protvista-datable__header-background, #fff);
     color: var(--protvista-datable__header-text, #393b42);
     text-overflow: ellipsis;
     top: 0;
+    text-transform: uppercase;
+    z-index: 400;
   }
 
-  td,
+  protvista-datatable table th .filter-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  protvista-datatable table th .filter-wrap select {
+    width: fit-content;
+  }
+
+  protvista-datatable table td,
   th {
     padding: 1rem;
     border-bottom: 1px solid #c2c4c4;
   }
 
-  tr:hover:not(.active):not(.child-row) {
+  protvista-datatable table tr:hover:not(.${ACTIVE}):not(.${TRANSPARENT}) {
     background-color: var(--protvista-datatable__hover, #f1f1f1);
   }
 
-  td {
+  protvista-datatable table td {
     cursor: pointer;
   }
 
-  .withChildren:before {
-    display: inline-block;
-    font-family: "Courier New", Courier, monospace;
+  protvista-datatable table .pd-group-trigger {
     width: 1rem;
-    text-align: center;
-    border-radius: 1rem;
-    line-height: 1rem;
-    font-weight: 700;
-    font-size: 1rem;
-    color: white;
-    border: 2px solid white;
-    background-color: var(--protvista-datatable__childToggle, #00639a);
   }
 
-  .plus:before {
-    content: "+";
+  protvista-datatable table .pd-group-trigger button {
+    background: none;
+    border: none;
+    padding: 0.2rem; // increase click area
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
-  .minus:before {
-    content: "-";
+  protvista-datatable table .pd-group-trigger button:before {
+    display: inline-block;
+    content: " ";
+    border-style: solid;
+    border-width: 0.4rem 0 0.4rem 0.6rem;
+    border-color: transparent transparent transparent #161d39;
+    transition-duration: 0.3s;
+    transition-property: transform;
   }
 
-  td:nth-child(1) {
+  protvista-datatable table .pd-group-trigger button.${EXPANDED}:before {
+    transform: rotate(90deg);
+  }
+
+  protvista-datatable table td:nth-child(1) {
     border-left: 0.5rem solid transparent;
   }
 
-  .overlapped td:nth-child(1) {
+  protvista-datatable table .${OVERLAPPED} td:nth-child(1) {
     border-left: 0.5rem solid
       var(--protvista-datatable__overlapped, rgba(255, 0, 0, 0.8));
   }
 
-  .active {
+  protvista-datatable table .${ACTIVE} {
     background-color: var(
       --protvista-datatable__active,
       rgba(255, 235, 59, 0.3)
     ) !important;
   }
-  .hidden {
+
+  protvista-datatable table .${TRANSPARENT} {
     opacity: 0.2;
   }
-  .evidence-tag {
-    cursor: pointer;
-    font-size: 80%;
-    white-space: nowrap;
-    margin-left: 0.5rem;
-    border-radius: 0.5rem;
-    background-color: #f1f1f1;
-    padding: 0.25rem 0.5rem;
-    color: #3a343a;
-  }
-  .evidence-tag__label {
-    padding-left: 0.25rem;
-    text-transform: capitalize;
-  }
-  .svg-colour-reviewed svg {
-    color: #c39b00;
-  }
-  .svg-colour-unreviewed svg {
-    color: #c0c0c0;
+  protvista-datatable table .${TRANSPARENT} td:hover {
+    cursor: default;
+    background-color: inherit;
   }
 
-  .protvista-datatable__child-item {
-    display: flex;
+  protvista-datatable table .${HIDDEN} {
+    display: none;
   }
 
-  .protvista-datatable__child-item__title {
-    font-weight: 700;
-    flex-basis: 10vw;
-    flex-grow: 0;
-    margin-right: 1rem;
+  protvista-datatable table tr[data-group-for] td {
+    padding-left: 2rem;
   }
 
-  .protvista-datatable__child-item__content {
-  }
-
-  .odd {
+  protvista-datatable table .odd {
     background-color: var(--protvista-datatable__odd, #e4e8eb);
   }
 
-  .even {
+  protvista-datatable table .even {
     background-color: var(--protvista-datatable__even, #fff);
   }
 `;

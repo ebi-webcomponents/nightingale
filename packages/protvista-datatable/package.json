@@ -36,5 +36,9 @@
     "type-fest": "^1.2.1",
     "uuid": "^8.3.1"
   },
-  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80",
+  "devDependencies": {
+    "@testing-library/dom": "^8.1.0",
+    "@testing-library/jest-dom": "^5.14.1"
+  }
 }
