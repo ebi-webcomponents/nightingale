@@ -416,7 +416,7 @@ class ProtvistaDatatable extends LitElement {
       return;
     }
     const element = this.querySelector(`[data-id="${this.selectedid}"]`);
-    element.scrollIntoView({ behavior: "smooth", block: "center" });
+    element?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   render(): TemplateResult {
