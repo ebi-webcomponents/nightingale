@@ -5,7 +5,8 @@
   "files": [
     "dist",
     "style",
-    "src"
+    "src",
+    "types"
   ],
   "main": "dist/protvista-variation.js",
   "module": "src/protvista-variation.js",
