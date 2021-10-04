@@ -1,10 +1,10 @@
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
-import { ProtvistaVariationData } from "protvista-variation";
+import { ProtvistaVariationDatum } from "protvista-variation";
 import { v1 } from "uuid";
 import { NightingaleElement } from "data-loader";
 
 import formatTooltip from "./tooltipGenerators";
-import { ProteinsAPIVariation, Xref, SourceType } from "./variants";
+import { ProteinsAPIVariation, Xref, SourceType, Variant } from "./variants";
 
 const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
@@ -16,7 +16,10 @@ const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
 
 export const transformData = (
   data: ProteinsAPIVariation
-): ProtvistaVariationData => {
+): {
+  sequence: string;
+  variants: (ProtvistaVariationDatum & Variant)[];
+} => {
   const { sequence, features } = data;
   const variants = features.map((variant) => ({
     ...variant,
@@ -34,7 +37,8 @@ export const transformData = (
 
 class ProtvistaVariationAdapter
   extends ProtvistaFeatureAdapter
-  implements NightingaleElement {
+  implements NightingaleElement
+{
   static get is(): string {
     return "protvista-variation-adapter";
   }
