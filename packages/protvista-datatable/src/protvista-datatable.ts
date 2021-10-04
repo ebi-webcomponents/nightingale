@@ -72,6 +72,12 @@ class ProtvistaDatatable extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
+    const tbody = this.querySelector("table tbody");
+    // Return early if no structure
+    if (!tbody) {
+      return;
+    }
+
     // The content of the table is dynamically set by the consumer
     // so we need to lookout for changes
     this.mutationObserver = new MutationObserver(() => {
@@ -79,7 +85,7 @@ class ProtvistaDatatable extends LitElement {
     });
 
     // Observe the table body for any changes (e.g. dynamic data)
-    this.mutationObserver.observe(this.querySelector("table tbody"), {
+    this.mutationObserver.observe(tbody, {
       characterData: true,
       childList: true,
       subtree: true,
