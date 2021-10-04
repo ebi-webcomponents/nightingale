@@ -6,6 +6,8 @@ import { NightingaleElement } from "data-loader";
 import formatTooltip from "./tooltipGenerators";
 import { ProteinsAPIVariation, Xref, SourceType, Variant } from "./variants";
 
+export type TransformedVariant = ProtvistaVariationDatum & Variant;
+
 const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
   const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
   if (sourceType === "uniprot" || sourceType === "mixed") {
@@ -18,7 +20,7 @@ export const transformData = (
   data: ProteinsAPIVariation
 ): {
   sequence: string;
-  variants: (ProtvistaVariationDatum & Variant)[];
+  variants: TransformedVariant[];
 } => {
   const { sequence, features } = data;
   const variants = features.map((variant) => ({
