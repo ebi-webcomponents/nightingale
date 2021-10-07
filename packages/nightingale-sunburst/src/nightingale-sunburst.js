@@ -13,12 +13,14 @@ const partition = (data, radius, attribute) => {
   const h = hierarchy(data).sort((a, b) => b[attribute] - a[attribute]);
   return d3partition().size([2 * Math.PI, radius])(h);
 };
+
 const getColor = (d, colorFn, nameAttribute) => {
   if (d.depth === 1) {
     return colorFn(d.data[nameAttribute]);
   }
   return getColor(d.parent, colorFn, nameAttribute);
 };
+
 const getValue = (d, attributeName) => {
   if (d[attributeName]) return d[attributeName];
   if (!d.children) return 0;
@@ -27,7 +29,8 @@ const getValue = (d, attributeName) => {
     0
   );
 };
-const pruneTree = (node, depth, maxDepth) => {
+
+const prepareTree = (node, depth, maxDepth) => {
   node.value = node.numSequences;
 
   if (depth >= maxDepth) {
@@ -35,11 +38,15 @@ const pruneTree = (node, depth, maxDepth) => {
     node.children = null;
   } else if (node?.children?.length) {
     for (const child of node.children) {
-      pruneTree(child, depth + 1, maxDepth);
+      prepareTree(child, depth + 1, maxDepth);
     }
   }
 };
 
+const getDistanceOfPointsInRadians = (point1, point2) => {
+  const angle = Math.abs(point1.angle - point2.angle) / 2;
+  return 2 * point1.radius * Math.sin(angle);
+};
 class NightingaleSunburst extends LitElement {
   static properties = {
     side: { type: Number },
@@ -60,9 +67,7 @@ class NightingaleSunburst extends LitElement {
   set data(value) {
     if (value !== this._data) {
       this._data = value;
-      if (this["max-depth"] < Infinity) {
-        pruneTree(this._data, 0, this["max-depth"]);
-      }
+      prepareTree(this._data, 0, this["max-depth"]);
       this.colorFn = scaleOrdinal(
         quantize(interpolateRainbow, this._data.children.length + 1)
       );
@@ -145,17 +150,40 @@ class NightingaleSunburst extends LitElement {
       context.translate(width / 2, height / 2);
       context.rotate(angle);
       context.translate(r, 0);
-      // if (angle > Math.PI / 2 && angle < 1.5 * Math.PI) {
-      //   context.rotate(Math.PI);
-      // }
-      context.rotate(Math.PI / 2);
+      let shouldRotate = false;
+      let spaceAvailableToDraw = segment.y1 - segment.y0;
+      // If it's more than a 1/4 of the circle so draw it horizontally
+      if (Math.abs(segment.x1 - segment.x0) > Math.PI / 2) {
+        shouldRotate = true;
+      } else {
+        const availableWidth = getDistanceOfPointsInRadians(
+          { angle: segment.x0, radius: segment.y0 },
+          { angle: segment.x1, radius: segment.y0 }
+        );
+        // If there is more space horizontally than verically then rotate
+        if (availableWidth > segment.y1 - segment.y0) {
+          shouldRotate = true;
+          spaceAvailableToDraw = availableWidth;
+        }
+      }
+      if (shouldRotate) {
+        context.rotate(Math.PI / 2);
+        if (angle > 0 && angle < Math.PI) {
+          context.rotate(Math.PI);
+        }
+      } else {
+        // rotate left side to make it readable
+        if (angle > Math.PI / 2 && angle < 1.5 * Math.PI) {
+          context.rotate(Math.PI);
+        }
+      }
       context.fillText(
         segment.data[this["name-attribute"]],
         0,
         0,
         segment.data.id === this.activeSegment?.data?.id
           ? undefined
-          : segment.y1 - segment.y0 - 2
+          : spaceAvailableToDraw - 2
       );
       context.restore();
     }

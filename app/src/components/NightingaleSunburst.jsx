@@ -24,7 +24,7 @@ class NightingaleSunburstWrapper extends Component {
           weight-attribute="numSequences"
           name-attribute="node"
           ref={this.sunburst}
-          max-depth={5}
+          // max-depth={60}
         />
       </Fragment>
     );
