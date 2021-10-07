@@ -1,0 +1,32 @@
+{
+  "name": "nightingale-sunburst",
+  "version": "0.0.1",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/nightingale-sunburst.js",
+  "module": "src/nightingale-sunburst.js",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "sunburst",
+    "d3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "gsalazar@ebi.ac.uk",
+  "license": "MIT",
+  "dependencies": {
+    "lit-element": "^2.4.0",
+    "lodash-es": "^4.17.11",
+    "d3": "^5.7.0"
+  }
+}
