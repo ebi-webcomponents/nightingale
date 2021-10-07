@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html } from "lit-element";
 import {
   select,
   partition as d3partition,
@@ -6,7 +6,6 @@ import {
   scaleOrdinal,
   quantize,
   interpolateRainbow,
-  event as d3Event,
 } from "d3";
 
 const partition = (data, radius, attribute) => {
@@ -30,15 +29,24 @@ const getValue = (d, attributeName) => {
   );
 };
 
-const prepareTree = (node, depth, maxDepth) => {
-  node.value = node.numSequences;
+const prepareTreeData = (node, depth, maxDepth, weightAttribute) => {
+  if (!node) return;
+  /* eslint-disable no-param-reassign */
 
-  if (depth >= maxDepth) {
+  node.value = node?.[weightAttribute];
+
+  if (depth >= maxDepth && node?.children?.length) {
     node._children = node.children;
     node.children = null;
-  } else if (node?.children?.length) {
+  } else if (node?._children?.length) {
+    node.children = node._children;
+    node._children = null;
+  }
+  /* eslint-enable no-param-reassign */
+
+  if (node?.children?.length) {
     for (const child of node.children) {
-      prepareTree(child, depth + 1, maxDepth);
+      prepareTreeData(child, depth + 1, maxDepth, weightAttribute);
     }
   }
 };
@@ -51,36 +59,49 @@ class NightingaleSunburst extends LitElement {
   static properties = {
     side: { type: Number },
     "weight-attribute": { type: String },
+    "weight-attribute-label": { type: String },
     "name-attribute": { type: String },
     "max-depth": { type: Number },
+    "show-label": { type: Boolean },
   };
 
   constructor() {
     super();
     this.side = 100;
     this["weight-attribute"] = "value";
+    this["weight-attribute-label"] = "Value";
     this["name-attribute"] = "name";
     this["max-depth"] = Infinity;
     this.activeSegment = null;
   }
 
+  prepareTree() {
+    if (!this._data) return;
+    prepareTreeData(this._data, 0, this["max-depth"], this["weight-attribute"]);
+    this.colorFn = scaleOrdinal(
+      quantize(interpolateRainbow, this._data.children.length + 1)
+    );
+    this.root = partition(this._data, this.side / 2, this["weight-attribute"]);
+  }
+
   set data(value) {
     if (value !== this._data) {
       this._data = value;
-      prepareTree(this._data, 0, this["max-depth"]);
-      this.colorFn = scaleOrdinal(
-        quantize(interpolateRainbow, this._data.children.length + 1)
-      );
-      this.root = partition(
-        this._data,
-        this.side / 2,
-        this["weight-attribute"]
-      );
+      this.prepareTree();
+      this.renderCanvas();
     }
   }
-  updated() {
+
+  updated(changedProperties) {
+    if (
+      changedProperties.has("max-depth") ||
+      changedProperties.has("weight-attribute")
+    ) {
+      this.prepareTree();
+    }
     this.renderCanvas();
   }
+
   renderCanvas() {
     const canvas = select(this).select("canvas");
     if (!canvas.node() || !this._data) return;
@@ -93,8 +114,11 @@ class NightingaleSunburst extends LitElement {
     if (!this.root) return;
     this.renderArcs(context, width, height);
     this.renderLabels(context, width, height);
-    this.renderActiveSegmentInfo(context);
+    if (this["show-label"]) {
+      this.renderActiveSegmentInfo(context);
+    }
   }
+
   renderArcs(context, width, height) {
     for (const segment of this.root
       .descendants()
@@ -130,6 +154,7 @@ class NightingaleSunburst extends LitElement {
       context.fill();
     }
   }
+
   renderLabels(context, width, height) {
     context.fillStyle = "black";
     context.font = "10px Arial";
@@ -171,12 +196,12 @@ class NightingaleSunburst extends LitElement {
         if (angle > 0 && angle < Math.PI) {
           context.rotate(Math.PI);
         }
-      } else {
-        // rotate left side to make it readable
-        if (angle > Math.PI / 2 && angle < 1.5 * Math.PI) {
-          context.rotate(Math.PI);
-        }
       }
+      // rotate left side to make it readable
+      else if (angle > Math.PI / 2 && angle < 1.5 * Math.PI) {
+        context.rotate(Math.PI);
+      }
+
       context.fillText(
         segment.data[this["name-attribute"]],
         0,
@@ -188,18 +213,19 @@ class NightingaleSunburst extends LitElement {
       context.restore();
     }
   }
+
   renderActiveSegmentInfo(context) {
     if (this.activeSegment) {
       context.textAlign = "left";
       context.font = "bold 12px Arial";
       context.fillText("Name:", 10, 10);
-      context.fillText("Value:", 10, 25);
+      context.fillText(this["weight-attribute-label"], 10, 40);
       context.font = "12px Arial";
-      context.fillText(this.activeSegment.data[this["name-attribute"]], 50, 10);
+      context.fillText(this.activeSegment.data[this["name-attribute"]], 15, 25);
       context.fillText(
         getValue(this.activeSegment.data, this["weight-attribute"]),
-        50,
-        25
+        15,
+        55
       );
     }
   }
@@ -207,6 +233,7 @@ class NightingaleSunburst extends LitElement {
   createRenderRoot() {
     return this;
   }
+
   firstUpdated() {
     this.getElementsByTagName("canvas")?.[0].addEventListener(
       "mousemove",
@@ -239,10 +266,20 @@ class NightingaleSunburst extends LitElement {
               if (d.x1 > angle && angle > d.x0) this.activeSegment = d;
             }
           });
-        if (prev !== this.activeSegment) this.renderCanvas();
+        if (prev !== this.activeSegment) {
+          this.dispatchEvent(
+            new CustomEvent("taxon-hover", {
+              detail: this.activeSegment?.data,
+              bubbles: true,
+              cancelable: true,
+            })
+          );
+          this.renderCanvas();
+        }
       }
     );
   }
+
   render() {
     return html` <canvas width="${this.side}px" height="${this.side}px">
       Nightingale Sunburst

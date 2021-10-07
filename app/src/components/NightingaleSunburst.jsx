@@ -1,34 +1,74 @@
-import React, { Fragment, Component } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import NightingaleSunburst from "nightingale-sunburst";
 import loadWebComponent from "../utils/load-web-component";
 import data from "../mocks/taxonomy.json";
 // import Readme from "./Readme";
 // import readmeContent from "../../../packages/nightingale-heatmap/README.md";
 
-class NightingaleSunburstWrapper extends Component {
-  constructor() {
-    super();
-    this.sunburst = React.createRef();
-  }
-  componentDidMount() {
-    this.sunburst.current.data = data;
-  }
-
-  render() {
-    loadWebComponent("nightingale-sunburst", NightingaleSunburst);
-    return (
-      <Fragment>
-        {/* <Readme content={readmeContent} /> */}
-        <nightingale-sunburst
-          side={600}
-          weight-attribute="numSequences"
-          name-attribute="node"
-          ref={this.sunburst}
-          // max-depth={60}
+const weigthOptions = {
+  numSequences: "Number of sequences",
+  numDomains: "Number of dominios",
+  numSpecies: "Number of species",
+};
+const NightingaleSunburstWrapper = () => {
+  loadWebComponent("nightingale-sunburst", NightingaleSunburst);
+  const sunburst = useRef(null);
+  const [depth, setDepth] = useState(4);
+  const [weightOption, setWeightOption] = useState("numSequences");
+  const [currentNode, setCurrentNode] = useState(null);
+  useEffect(() => {
+    sunburst.current.data = data;
+    sunburst.current.addEventListener("taxon-hover", (evt) => {
+      setCurrentNode(evt.detail);
+    });
+  }, []);
+  return (
+    <>
+      {/* <Readme content={readmeContent} /> */}
+      <label>
+        Depth [{depth}]:
+        <input
+          type="range"
+          id="Depth"
+          name="depth"
+          min="2"
+          max="7"
+          value={depth}
+          onChange={(evt) => setDepth(evt.target.value)}
         />
-      </Fragment>
-    );
-  }
-}
+      </label>
+      <br />
+      <select onChange={(evt) => setWeightOption(evt.target.value)}>
+        {Object.keys(weigthOptions).map((option) => (
+          <option key={option} value={option}>
+            {weigthOptions[option]}
+          </option>
+        ))}
+      </select>
+      <br />
+      <nightingale-sunburst
+        side={600}
+        weight-attribute={weightOption}
+        weight-attribute-label={weigthOptions[weightOption]}
+        name-attribute="node"
+        ref={sunburst}
+        max-depth={depth}
+        show-label
+      />
+      {currentNode && (
+        <dl>
+          <dt>Name</dt>
+          <dd>{currentNode.node}</dd>
+          <dt>Number of sequences</dt>
+          <dd>{currentNode.numSequences}</dd>
+          <dt>Number of dominios</dt>
+          <dd>{currentNode.numDomains}</dd>
+          <dt>Number of species</dt>
+          <dd>{currentNode.numSpecies}</dd>
+        </dl>
+      )}
+    </>
+  );
+};
 
 export default NightingaleSunburstWrapper;
