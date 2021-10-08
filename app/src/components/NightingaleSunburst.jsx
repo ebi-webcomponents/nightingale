@@ -46,27 +46,34 @@ const NightingaleSunburstWrapper = () => {
         ))}
       </select>
       <br />
-      <nightingale-sunburst
-        side={600}
-        weight-attribute={weightOption}
-        weight-attribute-label={weigthOptions[weightOption]}
-        name-attribute="node"
-        ref={sunburst}
-        max-depth={depth}
-        show-label
-      />
-      {currentNode && (
-        <dl>
-          <dt>Name</dt>
-          <dd>{currentNode.node}</dd>
-          <dt>Number of sequences</dt>
-          <dd>{currentNode.numSequences}</dd>
-          <dt>Number of dominios</dt>
-          <dd>{currentNode.numDomains}</dd>
-          <dt>Number of species</dt>
-          <dd>{currentNode.numSpecies}</dd>
-        </dl>
-      )}
+      <div className="sunburst">
+        <nightingale-sunburst
+          side={600}
+          weight-attribute={weightOption}
+          weight-attribute-label={weigthOptions[weightOption]}
+          name-attribute="node"
+          id-attribute="id"
+          ref={sunburst}
+          max-depth={depth}
+          // show-label
+        />
+        {currentNode && (
+          <dl>
+            <dt>Name</dt>
+            <dd>{currentNode.node}</dd>
+            <dt>Accession</dt>
+            <dd>{currentNode.id}</dd>
+            <dt>Number of sequences</dt>
+            <dd>{currentNode.numSequences}</dd>
+            <dt>Number of dominios</dt>
+            <dd>{currentNode.numDomains}</dd>
+            <dt>Number of species</dt>
+            <dd>{currentNode.numSpecies}</dd>
+            <dt>Lineage</dt>
+            <dd>{currentNode.lineage.map(({ name }) => name).join("; ")}</dd>
+          </dl>
+        )}
+      </div>
     </>
   );
 };

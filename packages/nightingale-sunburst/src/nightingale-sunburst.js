@@ -50,17 +50,36 @@ const prepareTreeData = (node, depth, maxDepth, weightAttribute) => {
     }
   }
 };
+const getLineageFromNode = (node, attributeName, attributeID) => {
+  if (!node.parent) {
+    return [
+      {
+        name: node.data[attributeName],
+        id: node.data[attributeID],
+      },
+    ];
+  }
+  return [
+    ...getLineageFromNode(node.parent, attributeName),
+    {
+      name: node.data[attributeName],
+      id: node.data[attributeID],
+    },
+  ];
+};
 
 const getDistanceOfPointsInRadians = (point1, point2) => {
   const angle = Math.abs(point1.angle - point2.angle) / 2;
   return 2 * point1.radius * Math.sin(angle);
 };
+
 class NightingaleSunburst extends LitElement {
   static properties = {
     side: { type: Number },
     "weight-attribute": { type: String },
     "weight-attribute-label": { type: String },
     "name-attribute": { type: String },
+    "id-attribute": { type: Number },
     "max-depth": { type: Number },
     "show-label": { type: Boolean },
   };
@@ -71,8 +90,10 @@ class NightingaleSunburst extends LitElement {
     this["weight-attribute"] = "value";
     this["weight-attribute-label"] = "Value";
     this["name-attribute"] = "name";
+    this["id-attribute"] = "id";
     this["max-depth"] = Infinity;
     this.activeSegment = null;
+    this.holdSegment = false;
   }
 
   prepareTree() {
@@ -230,52 +251,75 @@ class NightingaleSunburst extends LitElement {
     }
   }
 
+  selectNodeByPosition(x, y) {
+    const h = Math.sqrt(x * x + y * y);
+    const angle1 = x === 0 ? 0 : Math.atan(y / x);
+    const angle2 = y === 0 ? 0 : Math.atan(x / y);
+    const prev = this.activeSegment;
+    this.activeSegment = null;
+    this.root
+      .descendants()
+      .filter((d) => d.depth)
+      .forEach((d) => {
+        // if is in the right ring
+        let angle = 0;
+        if (d.y1 > h && h > d.y0) {
+          if (x > 0 && y > 0) angle = angle1;
+          else if (x < 0 && y > 0) {
+            angle = Math.PI / 2 + Math.abs(angle2);
+          } else if (x < 0 && y < 0) {
+            angle = Math.PI + Math.abs(angle1);
+          } else if (x > 0 && y < 0) {
+            angle = 1.5 * Math.PI + Math.abs(angle2);
+          }
+          if (d.x1 > angle && angle > d.x0) this.activeSegment = d;
+        }
+      });
+    if (prev !== this.activeSegment) {
+      if (this.activeSegment?.data && !this.activeSegment.data.lineage) {
+        this.activeSegment.data.lineage = getLineageFromNode(
+          this.activeSegment,
+          this["name-attribute"],
+          this["id-attribute"]
+        );
+      }
+      this.dispatchEvent(
+        new CustomEvent("taxon-hover", {
+          detail: this.activeSegment?.data,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+      this.renderCanvas();
+    }
+  }
+
   createRenderRoot() {
     return this;
   }
 
   firstUpdated() {
     this.getElementsByTagName("canvas")?.[0].addEventListener(
-      "mousemove",
+      "click",
       (event) => {
         if (!this.root) return;
-        const width = this.side;
-        const height = this.side;
-        const x = event.offsetX - width / 2;
-        const y = event.offsetY - height / 2;
-        const h = Math.sqrt(x * x + y * y);
-        const angle1 = x === 0 ? 0 : Math.atan(y / x);
-        const angle2 = y === 0 ? 0 : Math.atan(x / y);
-        const prev = this.activeSegment;
-        this.activeSegment = null;
-        this.root
-          .descendants()
-          .filter((d) => d.depth)
-          .forEach((d) => {
-            // if is in the right ring
-            let angle = 0;
-            if (d.y1 > h && h > d.y0) {
-              if (x > 0 && y > 0) angle = angle1;
-              else if (x < 0 && y > 0) {
-                angle = Math.PI / 2 + Math.abs(angle2);
-              } else if (x < 0 && y < 0) {
-                angle = Math.PI + Math.abs(angle1);
-              } else if (x > 0 && y < 0) {
-                angle = 1.5 * Math.PI + Math.abs(angle2);
-              }
-              if (d.x1 > angle && angle > d.x0) this.activeSegment = d;
-            }
-          });
-        if (prev !== this.activeSegment) {
-          this.dispatchEvent(
-            new CustomEvent("taxon-hover", {
-              detail: this.activeSegment?.data,
-              bubbles: true,
-              cancelable: true,
-            })
+        this.holdSegment = !this.holdSegment;
+        if (!this.holdSegment) {
+          this.selectNodeByPosition(
+            event.offsetX - this.side / 2,
+            event.offsetY - this.side / 2
           );
-          this.renderCanvas();
         }
+      }
+    );
+    this.getElementsByTagName("canvas")?.[0].addEventListener(
+      "mousemove",
+      (event) => {
+        if (!this.root || (this.activeSegment && this.holdSegment)) return;
+        this.selectNodeByPosition(
+          event.offsetX - this.side / 2,
+          event.offsetY - this.side / 2
+        );
       }
     );
   }
