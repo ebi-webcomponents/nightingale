@@ -8,17 +8,16 @@ import {
   interpolateRainbow,
 } from "d3";
 
+const superkingdoms = ["bacteria", "viruses", "archaea", "eukaryota", null];
+
 const partition = (data, radius, attribute) => {
   const h = hierarchy(data).sort((a, b) => b[attribute] - a[attribute]);
   return d3partition().size([2 * Math.PI, radius])(h);
 };
 
-const getColor = (d, colorFn, nameAttribute) => {
-  if (d.depth === 1) {
-    return colorFn(d.data[nameAttribute]);
-  }
-  return getColor(d.parent, colorFn, nameAttribute);
-};
+const colorFn = scaleOrdinal(
+  quantize(interpolateRainbow, superkingdoms.length + 1)
+).domain(superkingdoms.map((_, i) => i));
 
 const getValue = (d, attributeName) => {
   if (d[attributeName]) return d[attributeName];
@@ -60,7 +59,7 @@ const getLineageFromNode = (node, attributeName, attributeID) => {
     ];
   }
   return [
-    ...getLineageFromNode(node.parent, attributeName),
+    ...getLineageFromNode(node.parent, attributeName, attributeID),
     {
       name: node.data[attributeName],
       id: node.data[attributeID],
@@ -79,7 +78,7 @@ class NightingaleSunburst extends LitElement {
     "weight-attribute": { type: String },
     "weight-attribute-label": { type: String },
     "name-attribute": { type: String },
-    "id-attribute": { type: Number },
+    "id-attribute": { type: String },
     "max-depth": { type: Number },
     "show-label": { type: Boolean },
   };
@@ -94,14 +93,12 @@ class NightingaleSunburst extends LitElement {
     this["max-depth"] = Infinity;
     this.activeSegment = null;
     this.holdSegment = false;
+    this.superkingdoms = superkingdoms;
   }
 
   prepareTree() {
     if (!this._data) return;
     prepareTreeData(this._data, 0, this["max-depth"], this["weight-attribute"]);
-    this.colorFn = scaleOrdinal(
-      quantize(interpolateRainbow, this._data.children.length + 1)
-    );
     this.root = partition(this._data, this.side / 2, this["weight-attribute"]);
   }
 
@@ -113,8 +110,21 @@ class NightingaleSunburst extends LitElement {
     }
   }
 
+  getColor(node) {
+    if (node.depth === 1) {
+      return this.getColorBySuperKingdom(node.data[this["name-attribute"]]);
+    }
+    return this.getColor(node.parent);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getColorBySuperKingdom(name) {
+    return colorFn(superkingdoms.indexOf(name?.toLowerCase() || null));
+  }
+
   updated(changedProperties) {
     if (
+      changedProperties.has("side") ||
       changedProperties.has("max-depth") ||
       changedProperties.has("weight-attribute")
     ) {
@@ -150,11 +160,7 @@ class NightingaleSunburst extends LitElement {
       context.globalAlpha = 0.7;
 
       // Set the color:
-      context.fillStyle = getColor(
-        segment,
-        this.colorFn,
-        this["name-attribute"]
-      );
+      context.fillStyle = this.getColor(segment);
 
       // Build the arc segment
       context.arc(width / 2, height / 2, segment.y1, segment.x0, segment.x1);
@@ -166,7 +172,10 @@ class NightingaleSunburst extends LitElement {
         segment.x0,
         true
       );
-      if (segment.data.id === this.activeSegment?.data?.id) {
+      if (
+        segment.data[this["id-attribute"]] ===
+        this.activeSegment?.data?.[this["id-attribute"]]
+      ) {
         context.lineWidth = 4;
         context.globalAlpha = 0.9;
       }
@@ -224,10 +233,12 @@ class NightingaleSunburst extends LitElement {
       }
 
       context.fillText(
-        segment.data[this["name-attribute"]],
+        segment.data[this["name-attribute"]] ||
+          (segment.data.rank ? `[No ${segment.data.rank}]` : "No name"),
         0,
         0,
-        segment.data.id === this.activeSegment?.data?.id
+        segment.data[this["id-attribute"]] ===
+          this.activeSegment?.data?.[this["id-attribute"]]
           ? undefined
           : spaceAvailableToDraw - 2
       );
