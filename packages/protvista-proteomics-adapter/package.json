@@ -25,10 +25,10 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "version": "3.4.0",
+  "version": "3.4.5",
   "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80",
   "dependencies": {
-    "protvista-feature-adapter": "^3.4.0",
+    "protvista-feature-adapter": "^3.4.5",
     "uuid": "^8.3.1"
   }
 }
