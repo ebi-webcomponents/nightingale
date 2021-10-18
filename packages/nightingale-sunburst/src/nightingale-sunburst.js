@@ -110,6 +110,10 @@ class NightingaleSunburst extends LitElement {
     }
   }
 
+  get data() {
+    return this._data;
+  }
+
   getColor(node) {
     if (node.depth === 1) {
       return this.getColorBySuperKingdom(node.data[this["name-attribute"]]);

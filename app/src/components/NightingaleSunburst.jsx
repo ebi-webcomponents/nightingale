@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import NightingaleSunburst from "nightingale-sunburst";
 import loadWebComponent from "../utils/load-web-component";
 import data from "../mocks/taxonomy.json";
-// import Readme from "./Readme";
-// import readmeContent from "../../../packages/nightingale-heatmap/README.md";
+import Readme from "./Readme";
+import readmeContent from "../../../packages/nightingale-sunburst/README.md";
 
 const weigthOptions = {
   numSequences: "Number of sequences",
@@ -24,7 +24,7 @@ const NightingaleSunburstWrapper = () => {
   }, []);
   return (
     <>
-      {/* <Readme content={readmeContent} /> */}
+      <h2>nightingale-sunburst</h2>
       <label>
         Depth [{depth}]:
         <input
@@ -74,6 +74,7 @@ const NightingaleSunburstWrapper = () => {
           </dl>
         )}
       </div>
+      <Readme content={readmeContent} />
     </>
   );
 };
