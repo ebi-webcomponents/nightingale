@@ -13,8 +13,9 @@ const weigthOptions = {
 const NightingaleSunburstWrapper = () => {
   loadWebComponent("nightingale-sunburst", NightingaleSunburst);
   const sunburst = useRef(null);
-  const [depth, setDepth] = useState(4);
+  const [depth, setDepth] = useState(7);
   const [weightOption, setWeightOption] = useState("numSequences");
+  const [fontSize, setFontSize] = useState(10);
   const [currentNode, setCurrentNode] = useState(null);
   useEffect(() => {
     sunburst.current.data = data;
@@ -38,13 +39,27 @@ const NightingaleSunburstWrapper = () => {
         />
       </label>
       <br />
-      <select onChange={(evt) => setWeightOption(evt.target.value)}>
-        {Object.keys(weigthOptions).map((option) => (
-          <option key={option} value={option}>
-            {weigthOptions[option]}
-          </option>
-        ))}
-      </select>
+      <label>
+        Render By:
+        <select onChange={(evt) => setWeightOption(evt.target.value)}>
+          {Object.keys(weigthOptions).map((option) => (
+            <option key={option} value={option}>
+              {weigthOptions[option]}
+            </option>
+          ))}
+        </select>
+      </label>
+      <br />
+      <label>
+        Font-Size:
+        <select onChange={(evt) => setFontSize(evt.target.value)}>
+          {[10, 12, 14, 16, 18].map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </label>
       <br />
       <div className="sunburst">
         <nightingale-sunburst
@@ -55,6 +70,7 @@ const NightingaleSunburstWrapper = () => {
           id-attribute="id"
           ref={sunburst}
           max-depth={depth}
+          font-size={fontSize}
           // show-label
         />
         {currentNode && (

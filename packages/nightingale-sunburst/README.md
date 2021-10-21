@@ -51,6 +51,12 @@ If not Included the component will go through the whole hierarchy.
 
 default: `Infinity`
 
+##### `font-size: Number`
+
+Font size for the labels drawn over the segments.
+
+default: `10`
+
 ##### `show-label: Boolean`
 
 If `true` the canvas will include some labels on the top-left corner with the information of the current segment. The current segment is the last one the user clicked on, or if none, it would be the segment where the mouse is hovering.

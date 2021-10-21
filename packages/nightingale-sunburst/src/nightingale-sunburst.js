@@ -80,6 +80,7 @@ class NightingaleSunburst extends LitElement {
     "name-attribute": { type: String },
     "id-attribute": { type: String },
     "max-depth": { type: Number },
+    "font-size": { type: Number },
     "show-label": { type: Boolean },
   };
 
@@ -91,6 +92,7 @@ class NightingaleSunburst extends LitElement {
     this["name-attribute"] = "name";
     this["id-attribute"] = "id";
     this["max-depth"] = Infinity;
+    this["font-size"] = 10;
     this.activeSegment = null;
     this.holdSegment = false;
     this.superkingdoms = superkingdoms;
@@ -161,7 +163,7 @@ class NightingaleSunburst extends LitElement {
       // Initialize path
       context.beginPath();
       context.lineWidth = 1;
-      context.globalAlpha = 0.7;
+      context.globalAlpha = 0.9 - (segment.depth - 1) * 0.05;
 
       // Set the color:
       context.fillStyle = this.getColor(segment);
@@ -181,7 +183,7 @@ class NightingaleSunburst extends LitElement {
         this.activeSegment?.data?.[this["id-attribute"]]
       ) {
         context.lineWidth = 4;
-        context.globalAlpha = 0.9;
+        context.globalAlpha = 1;
       }
       // Show the stroke
       context.stroke();
@@ -191,7 +193,7 @@ class NightingaleSunburst extends LitElement {
 
   renderLabels(context, width, height) {
     context.fillStyle = "black";
-    context.font = "10px Arial";
+    context.font = `${this["font-size"]}px Arial`;
     context.textBaseline = "middle";
     context.textAlign = "center";
     const labelsToDisplay = this.root
