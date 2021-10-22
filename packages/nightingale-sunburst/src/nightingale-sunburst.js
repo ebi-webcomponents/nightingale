@@ -162,8 +162,11 @@ class NightingaleSunburst extends LitElement {
       .filter((d) => d.depth && d.depth <= this["max-depth"])) {
       // Initialize path
       context.beginPath();
+
       context.lineWidth = 1;
       context.globalAlpha = 0.9 - (segment.depth - 1) * 0.05;
+      const tmpLineW = context.lineWidth;
+      const tmpAlpha = context.globalAlpha;
 
       // Set the color:
       context.fillStyle = this.getColor(segment);
@@ -188,6 +191,8 @@ class NightingaleSunburst extends LitElement {
       // Show the stroke
       context.stroke();
       context.fill();
+      context.lineWidth = tmpLineW;
+      context.globalAlpha = tmpAlpha;
     }
   }
 
