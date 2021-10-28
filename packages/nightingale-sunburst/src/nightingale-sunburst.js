@@ -15,10 +15,6 @@ const partition = (data, radius, attribute) => {
   return d3partition().size([2 * Math.PI, radius])(h);
 };
 
-const colorFn = scaleOrdinal(
-  quantize(interpolateRainbow, superkingdoms.length + 1)
-).domain(superkingdoms.map((_, i) => i));
-
 const getValue = (d, attributeName) => {
   if (d[attributeName]) return d[attributeName];
   if (!d.children) return 0;
@@ -95,7 +91,7 @@ class NightingaleSunburst extends LitElement {
     this["font-size"] = 10;
     this.activeSegment = null;
     this.holdSegment = false;
-    this.superkingdoms = superkingdoms;
+    this.topOptions = superkingdoms;
   }
 
   prepareTree() {
@@ -116,6 +112,12 @@ class NightingaleSunburst extends LitElement {
     return this._data;
   }
 
+  colorFn() {
+    return scaleOrdinal(
+      quantize(interpolateRainbow, this.topOptions.length + 1)
+    ).domain(this.topOptions.map((_, i) => i));
+  }
+
   getColor(node) {
     if (node.depth === 1) {
       return this.getColorBySuperKingdom(node.data[this["name-attribute"]]);
@@ -125,7 +127,7 @@ class NightingaleSunburst extends LitElement {
 
   // eslint-disable-next-line class-methods-use-this
   getColorBySuperKingdom(name) {
-    return colorFn(superkingdoms.indexOf(name?.toLowerCase() || null));
+    return this.colorFn()(this.topOptions.indexOf(name?.toLowerCase() || null));
   }
 
   updated(changedProperties) {

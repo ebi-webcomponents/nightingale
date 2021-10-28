@@ -87,9 +87,11 @@ The `Node` of the segment the is currrently hovered, or which has been clicked l
 
 Indicates if the `activeSegment` is been held from a recent click, and therefore is ignoring any other segment that has been currently hovered.
 
-##### `superkingdoms Array<String>`
+##### `topOptions Array<String>`
 
-The list of superkingdoms used on the first level of the sunburst, which define the color of its children segments.
+The list of options used on the first level of the sunburst, which define the color of its children segments.
+
+default: `["bacteria", "viruses", "archaea", "eukaryota", null]`
 
 ### Methods
 
