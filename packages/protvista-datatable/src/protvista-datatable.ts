@@ -429,7 +429,7 @@ class ProtvistaDatatable extends LitElement {
     return html`
       <div
         class="protvista-datatable-container"
-        style="height:${this.height}rem"
+        style="max-height:${this.height}rem"
       >
         <slot></slot>
       </div>
