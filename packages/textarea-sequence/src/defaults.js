@@ -38,6 +38,7 @@ export const cleanUpText = (
   caseSensitive = false,
   removeComments = true,
   single = true,
+  disableHeaderCheck = false,
   format = formatSequence
 ) => {
   const sequences = [];
@@ -46,7 +47,9 @@ export const cleanUpText = (
   // Add a header if missing one
   if (!text.trim().startsWith(">")) {
     sequences.push({
-      header: `Generated Header [${Math.round(10000 * Math.random())}]`,
+      header: disableHeaderCheck
+        ? ""
+        : `Generated Header [${Math.round(10000 * Math.random())}]`,
       sequence: "",
       comments: {},
     });
@@ -85,7 +88,10 @@ export const cleanUpText = (
   return (single ? sequences.slice(0, 1) : sequences)
     .map(
       ({ header, sequence, comments }) =>
-        `> ${header}\n${injectComments(format(sequence), comments)}`
+        `${header ? `> ${header}\n` : ""}${injectComments(
+          format(sequence),
+          comments
+        )}`
     )
     .join("\n\n");
   // return newText;

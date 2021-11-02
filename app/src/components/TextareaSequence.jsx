@@ -7,6 +7,11 @@ import readmeContent from "../../../packages/textarea-sequence/README.md";
 const ProtvistaNavigationWrapper = () => {
   const element = useRef(null);
   const [errors, setErrors] = useState({});
+  const [flags, setFlags] = useState({
+    single: true,
+    comments: true,
+    checkHeader: true,
+  });
   const [valid, setValid] = useState(true);
   useEffect(() => {
     element.current.addEventListener("error-change", (e) => {
@@ -15,6 +20,12 @@ const ProtvistaNavigationWrapper = () => {
     });
   }, []);
   loadWebComponent("textarea-sequence", TextareaSequence);
+  const toggleFlag = (flag) => () => {
+    setFlags({
+      ...flags,
+      [flag]: !flags[flag],
+    });
+  };
   return (
     <>
       <h1>textarea-sequence</h1>
@@ -22,11 +33,40 @@ const ProtvistaNavigationWrapper = () => {
         ref={element}
         height="10em"
         min-sequence-length="10"
-        single="true"
-        allow-comments="true"
+        single={flags.single}
+        allow-comments={flags.comments}
         name="example-sequence"
         inner-style="letter-spacing: .01rem;"
+        disable-header-check={flags.checkHeader}
       />
+      <div>
+        <label>
+          <code>single</code>
+          <input
+            type="checkbox"
+            checked={flags.single}
+            onChange={toggleFlag("single")}
+          />
+        </label>
+        <br />
+        <label>
+          <code>allow-comments</code>
+          <input
+            type="checkbox"
+            checked={flags.comments}
+            onChange={toggleFlag("comments")}
+          />
+        </label>
+        <br />
+        <label>
+          <code>disable-header-check</code>
+          <input
+            type="checkbox"
+            checked={flags.checkHeader}
+            onChange={toggleFlag("checkHeader")}
+          />
+        </label>
+      </div>
       <button disabled={valid} onClick={() => element.current.cleanUp()}>
         CleanUp Sequence
       </button>
