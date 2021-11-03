@@ -7,16 +7,16 @@ import { cleanUpText } from "./defaults";
 const isTooShortAndFormat = (quill, seqLength, pos) => {
   if (seqLength !== null && seqLength < quill["min-sequence-length"]) {
     quill.formatText(pos - seqLength - 1, seqLength, {
-      background: "rgb(255, 255, 0)"
+      background: "rgb(255, 255, 0)",
     });
     return true;
   }
   return false;
 };
 
-const any = list => list.reduce((agg, v) => agg || v, false);
+const any = (list) => list.reduce((agg, v) => agg || v, false);
 
-const paintTextareaBorder = quill => {
+const paintTextareaBorder = (quill) => {
   if (quill.getText().trim() === "") {
     quill.container.style.border = "1px solid #ccc";
   } else {
@@ -35,9 +35,10 @@ const format = (quill, force = false) => {
   let hasInvalidCharacters = false;
   let seqLength = 0;
   let tooShort = false;
-  const missingFirstHeader = !text.trim().startsWith(">");
+  const missingFirstHeader =
+    !quill["disable-header-check"] && !text.trim().startsWith(">");
   let secondHeaderPosition = null;
-  text.split("\n").forEach(line => {
+  text.split("\n").forEach((line) => {
     if (line.startsWith(">")) {
       quill.formatText(pos, line.length, "bold", true);
       if (pos !== 0 && isTooShortAndFormat(quill, seqLength, pos))
@@ -63,7 +64,7 @@ const format = (quill, force = false) => {
           quill.formatText(pos + linePos, part.length, {
             color: "rgb(255, 0, 0)",
             background: "rgba(255, 0, 0, 0.5)",
-            bold: true
+            bold: true,
           });
           hasInvalidCharacters = true;
         }
@@ -77,11 +78,13 @@ const format = (quill, force = false) => {
     multipleSequences: numberOfHeaders > 1,
     hasInvalidCharacters,
     missingFirstHeader,
-    tooShort
+    tooShort,
+    headerCheckRequiredForMultipleSequences:
+      quill["disable-header-check"] && !quill.single,
   };
   if (quill.single && errors.multipleSequences && secondHeaderPosition) {
     quill.formatText(secondHeaderPosition, text.length - secondHeaderPosition, {
-      background: "rgba(255, 0, 0, 0.5)"
+      background: "rgba(255, 0, 0, 0.5)",
     });
   }
   if (JSON.stringify(errors) !== JSON.stringify(quill.errors)) {
@@ -101,9 +104,10 @@ export default (
   single,
   minLength,
   allowComments,
-  formatSequence
+  formatSequence,
+  disableHeaderCheck
 ) => {
-  Quill.register("modules/formatter", quill => {
+  Quill.register("modules/formatter", (quill) => {
     quill.on(
       "text-change",
       debounce(() => format(quill), 200)
@@ -115,20 +119,22 @@ export default (
     formats: ["bold", "italic", "color", "background"],
     placeholder: "Enter your sequence",
     modules: {
-      formatter: true
-    }
+      formatter: true,
+    },
   });
 
   quill.errors = {
     multipleSequences: false,
     hasInvalidCharacters: false,
     missingFirstHeader: false,
-    tooShort: false
+    tooShort: false,
+    headerCheckRequiredForMultipleSequences: false,
   };
   quill.alphabet = alphabet;
   quill["case-sensitive"] = checkCase;
   quill["allow-comments"] = allowComments;
   quill["min-sequence-length"] = minLength;
+  quill["disable-header-check"] = disableHeaderCheck;
   quill.single = single;
   quill.formatSequence = formatSequence;
   quill.format = () => format(quill, true);
@@ -139,6 +145,7 @@ export default (
       quill["case-sensitive"],
       !quill["allow-comments"],
       quill.single,
+      quill["disable-header-check"],
       quill.formatSequence
     );
     quill.setText(newText);

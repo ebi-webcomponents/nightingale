@@ -9,6 +9,7 @@ class TextareaSequence extends HTMLElement {
     this["min-sequence-length"] = 1;
     this["case-sensitive"] = false;
     this["allow-comments"] = false;
+    this["disable-header-check"] = false;
     this.single = false;
   }
 
@@ -26,11 +27,17 @@ class TextareaSequence extends HTMLElement {
       "min-sequence-length",
       "allow-comments",
       "inner-style",
+      "disable-header-check",
     ];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    const flags = ["single", "case-sensitive", "allow-comments"];
+    const flags = [
+      "single",
+      "case-sensitive",
+      "allow-comments",
+      "disable-header-check",
+    ];
     const innerDiv = this._getInnerDiv();
     if (!innerDiv || !this.quill) {
       requestAnimationFrame(() =>
@@ -125,7 +132,8 @@ class TextareaSequence extends HTMLElement {
       this.single,
       this["min-sequence-length"],
       this["allow-comments"],
-      formatSequence
+      formatSequence,
+      this["disable-header-check"]
     );
     this.quill.on("text-change", () => {
       this.querySelector(`input[name=${name}]`).value = this.sequence;
