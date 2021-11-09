@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "moduleResolution": "Node",
+    "module": "ES6",
+    "target": "ES6",
+    "declaration": false,
+    "experimentalDecorators": true,
+  }
+}
