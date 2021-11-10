@@ -25,6 +25,7 @@
     "@custom-elements-manifest/analyzer": "0.5.7",
     "@rollup/plugin-node-resolve": "13.0.6",
     "@rollup/plugin-replace": "3.0.0",
+    "@types/d3": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "5.3.1",
     "@web/dev-server": "0.1.28",

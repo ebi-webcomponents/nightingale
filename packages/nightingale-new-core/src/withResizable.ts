@@ -10,7 +10,7 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   class WithResizable extends withDimensions(superClass) {
     #observer: any;
 
-    constructor(...rest) {
+    constructor(...rest: any[]) {
       super(...rest);
       this.onResize = this.onResize.bind(this);
       this.listenForResize = this.listenForResize.bind(this);

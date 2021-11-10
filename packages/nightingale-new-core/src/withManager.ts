@@ -6,7 +6,7 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
 ) => {
   class WithManager extends superClass {
-    #manager: HTMLElement;
+    #manager?: HTMLElement | null;
 
     connectedCallback() {
       if (this.closest("nightingale-manager")) {

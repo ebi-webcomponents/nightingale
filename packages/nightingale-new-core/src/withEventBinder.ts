@@ -6,7 +6,7 @@ export const HIGHLIGHT_EVENT = "highlight-event";
 
 type EventType = "click" | "mouseover" | "mouseout" | "reset";
 interface FeatureInterface {
-  feature?: FeatureInterface;
+  feature?: FeatureInterface|null;
   fragments?: Array<{
     start: number;
     end: number;
@@ -15,20 +15,20 @@ interface FeatureInterface {
   end?: number;
   protvistaFeatureId: string;
 }
-interface detailI {
+interface detailInterface {
   eventtype: EventType;
   // coords: null | [number, number];
-  feature?: FeatureInterface;
+  feature?: FeatureInterface | null;
   target?: HTMLElement;
   highlight?: string;
-  selectedid?: string;
+  selectedid?: string | null;
 }
 
 const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
 ) => {
   class WithNightingaleEvents extends superClass {
-    constructor(...args) {
+    constructor(...args: any[]) {
       super(...args);
       this.resetEventHandler = this.resetEventHandler.bind(this);
     }
@@ -42,7 +42,7 @@ const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
 
     static createEvent(
       type: EventType,
-      feature: FeatureInterface = null,
+      feature: FeatureInterface | null = null,
       withHighlight = false,
       withId = false,
       start?: number,
@@ -54,7 +54,7 @@ const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
         // eslint-disable-next-line no-param-reassign
         feature = feature.feature ? feature.feature : feature;
       }
-      const detail: detailI = {
+      const detail: detailInterface = {
         eventtype: type,
         // TODO: add coordinates
         // coords: WithNightingaleEvents._getClickCoords(),

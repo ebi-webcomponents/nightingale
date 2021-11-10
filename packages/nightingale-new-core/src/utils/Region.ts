@@ -2,7 +2,7 @@ export default class Region {
   segments: { start: number; end: number }[];
   max: number;
   min: number;
-  regionString: string;
+  regionString: string| null;
 
   constructor({ min = -Infinity, max = Infinity } = {}) {
     this.segments = [];

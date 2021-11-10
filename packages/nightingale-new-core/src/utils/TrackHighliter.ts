@@ -9,9 +9,9 @@ const combineRegions = (region1: string, region2: string): string => {
 export default class TrackHighlighter {
   element: Element;
   region: Region;
-  fixedHighlight: string;
+  fixedHighlight: string | null;
 
-  constructor({ element, min, max }) {
+  constructor({ element, min, max }: {element: Element, min: number, max: number}) {
     this.element = element;
     this.region = new Region({ min, max });
     this.fixedHighlight = null;
