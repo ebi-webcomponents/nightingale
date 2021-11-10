@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "moduleResolution": "Node",
-    "module": "ES6",
-    "target": "ES6",
-    "declaration": false,
+    "target": "es2018",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "strict": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "inlineSources": true,
   }
 }
