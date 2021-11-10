@@ -7,7 +7,7 @@
   "module": "my-element.js",
   "type": "module",
   "scripts": {
-    "build": "lerna exec tsc",
+    "build": "lerna exec -- rollup --config ../../rollup.config.js",
     "build:watch": "tsc --watch",
     "clean": "rimraf packages/**/dist",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
@@ -26,6 +26,7 @@
     "@rollup/plugin-node-resolve": "13.0.6",
     "@rollup/plugin-replace": "3.0.0",
     "@types/d3": "^7.1.0",
+    "@rollup/plugin-typescript": "8.3.0",
     "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "5.3.1",
     "@web/dev-server": "0.1.28",
