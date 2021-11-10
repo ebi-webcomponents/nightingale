@@ -1,0 +1,37 @@
+{
+  "name": "@nightingale-elements/nightingale-navigation",
+  "version": "3.0.0",
+  "description": "Navigation component for the Nightingale tool",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "nightingale",
+    "customelements",
+    "webcomponents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "main": "dist/nightingale-navigation.js",
+  "module": "src/index.js",
+  "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
+  "license": "ISC",
+  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "dependencies": {
+    "lodash-es": "^4.17.11",
+    "@nightingale-elements/nightingale-new-core": "^1.0.0"
+  },
+  "devDependencies": {
+    "d3": "^7.0"
+  },
+  "peerDependencies": {
+    "d3": "7.X"
+  }
+}

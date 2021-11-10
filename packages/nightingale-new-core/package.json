@@ -6,9 +6,9 @@
     "dist",
     "src"
   ],
-  "main": "dist/nightingale-core.js",
-  "module": "dist/es/index.js",
-  "types": "dist/es/index.d.ts",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
