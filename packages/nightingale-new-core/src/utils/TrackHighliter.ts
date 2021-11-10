@@ -11,7 +11,15 @@ export default class TrackHighlighter {
   region: Region;
   fixedHighlight: string | null;
 
-  constructor({ element, min, max }: {element: Element, min: number, max: number}) {
+  constructor({
+    element,
+    min,
+    max,
+  }: {
+    element: Element;
+    min: number;
+    max: number;
+  }) {
     this.element = element;
     this.region = new Region({ min, max });
     this.fixedHighlight = null;

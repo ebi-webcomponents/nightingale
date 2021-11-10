@@ -6,7 +6,7 @@ export const HIGHLIGHT_EVENT = "highlight-event";
 
 type EventType = "click" | "mouseover" | "mouseout" | "reset";
 interface FeatureInterface {
-  feature?: FeatureInterface|null;
+  feature?: FeatureInterface | null;
   fragments?: Array<{
     start: number;
     end: number;

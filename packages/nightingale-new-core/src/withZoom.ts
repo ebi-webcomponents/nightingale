@@ -95,7 +95,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     set svg(svg) {
-      if (!svg|| !this._zoom) return;
+      if (!svg || !this._zoom) return;
       this._svg = svg;
       svg.call(this._zoom as any);
       this.applyZoomTranslation();
@@ -135,7 +135,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         .on("zoom", this.zoomed);
     }
 
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    attributeChangedCallback(
+      name: string,
+      oldValue: string | null,
+      newValue: string | null
+    ): void {
       super.attributeChangedCallback(name, oldValue, newValue);
 
       if (!this.zoom) return;
@@ -143,7 +147,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       if (newValue === "null") newValue = null;
       if (oldValue !== newValue && name === "length") {
         this._updateScaleDomain();
-        if (this.xScale){
+        if (this.xScale) {
           this._originXScale = this.xScale.copy();
           this.applyZoomTranslation();
         }
@@ -152,7 +156,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
     zoomed() {
       // Redefines the xScale using the original scale and transform it with the captured event data.
-//      this.xScale = d3Event.transform.rescaleX(this._originXScale);
+      //      this.xScale = d3Event.transform.rescaleX(this._originXScale);
       // If the source event is null the zoom wasn't initiated by this component, don't send event
       if (this.dontDispatch || !this.xScale) return;
       const [start, end] = this.xScale.domain(); // New positions based in the updated scale
@@ -178,10 +182,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       const k = Math.max(
         1,
         // +1 because the displayend base should be included
-        this.length||0 / (1 + (this.displayend ||0) - (this.displaystart||0))
+        this.length ||
+          0 / (1 + (this.displayend || 0) - (this.displaystart || 0))
       );
       // The deltaX gets calculated using the position of the first base to display in original scale
-      const dx = -this._originXScale(this.displaystart||0);
+      const dx = -this._originXScale(this.displaystart || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
       this.svg.call(
         // We trigger a zoom action
