@@ -62,6 +62,7 @@ class ProtVistaSequence extends ProtvistaZoomable {
   }
 
   _createSequence() {
+    select(this).selectAll("div").remove();
     super.svg = select(this)
       .append("div")
       .attr("class", "")

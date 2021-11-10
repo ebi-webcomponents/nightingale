@@ -87,6 +87,7 @@ class ProtVistaNavigation extends HTMLElement {
     this._x = scaleLinear().range([this._padding, this.width - this._padding]);
     this._x.domain([this._rulerstart, this._rulerstart + this._length - 1]);
 
+    select(this).selectAll("div").remove();
     this._container = select(this).append("div").attr("class", "container");
 
     this._svg = this._container
