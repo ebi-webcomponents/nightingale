@@ -4,8 +4,11 @@ import { customElement, property } from "lit/decorators.js";
 import {
   scaleLinear,
   ScaleLinear,
+  Selection,
   axisBottom,
+  Axis,
   brushX,
+  BrushBehavior,
   format,
   select,
   // event as d3Event,
@@ -21,169 +24,193 @@ import NightingaleElement, {
 
 @customElement("nightingale-navigation")
 class NightingaleNavigation extends withManager(
-  withResizable(withMargin(withPosition(NightingaleElement)))
+  withResizable(withMargin(withPosition(withDimensions(NightingaleElement))))
 ) {
   #x: ScaleLinear<any, any> | null;
   #dontDispatch: boolean;
+  #container?: Selection<HTMLElement, any, any, any>;
+  #svg?: Selection<SVGSVGElement, any, any, any>;
+  #displaystartLabel?: Selection<SVGTextElement, any, any, any>;
+  #displayendLabel?: Selection<SVGTextElement, any, any, any>;
+  #axis?: Selection<SVGGElement, any, any, any>;
+  #brushG?: Selection<SVGGElement, any, any, any>;
+  #polygon?: Selection<SVGPolygonElement, any, any, any>;
+  #xAxis?: Axis<any>;
+  #viewport?: BrushBehavior<unknown>;
 
   @property({ type: Number })
   rulerstart: number = 1;
+  @property({ type: Number })
+  padding: number = 10;
 
   constructor() {
     super();
     this.#x = null;
-    // this._padding = 10;
     this.#dontDispatch = false;
   }
+  createRenderRoot() {
+    return this;
+  }
 
-  // // TODO: This is here to pass the tests, not sure why is needed.
-  // // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-empty-function
-  // disconnectedCallback() {}
+  private createNavRuler() {
+    this.#x = scaleLinear().range([this.padding, this.width - this.padding]);
+    this.#x.domain([this.rulerstart, this.rulerstart + (this.length || 0) - 1]);
 
-  // attributeChangedCallback(name, oldValue, newValue) {
-  //   if (oldValue !== newValue && name === "rulerstart") {
-  //     this._rulerstart = parseFloat(newValue);
-  //     this.render();
-  //   }
-  // }
+    this.#container = select(this).select("div");
 
-  // _createNavRuler() {
-  //   this._x = scaleLinear().range([this._padding, this.width - this._padding]);
-  //   this._x.domain([
-  //     this._rulerstart,
-  //     this._rulerstart + this.sequenceLength - 1,
-  //   ]);
+    this.#svg = this.#container
+      .append("svg")
+      .attr("id", "")
+      .attr("width", this.width)
+      .attr("height", this.height);
 
-  //   this._container = select(this).append("div").attr("class", "container");
+    this.#xAxis = axisBottom(this.#x);
 
-  //   this._svg = this._container
-  //     .append("svg")
-  //     .attr("id", "")
-  //     .attr("width", this.width)
-  //     .attr("height", this.height);
+    this.#displaystartLabel = this.#svg
+      .append("text")
+      .attr("class", "start-label")
+      .attr("x", 0)
+      .attr("y", this.height - this.padding);
 
-  //   this._xAxis = axisBottom(this._x);
+    this.#displayendLabel = this.#svg
+      .append("text")
+      .attr("class", "end-label")
+      .attr("x", this.width)
+      .attr("y", this.height - this.padding)
+      .attr("text-anchor", "end");
 
-  //   this._displaystartLabel = this._svg
-  //     .append("text")
-  //     .attr("class", "start-label")
-  //     .attr("x", 0)
-  //     .attr("y", this.height - this._padding);
+    this.#axis = this.#svg
+      .append("g")
+      .attr("class", "x axis")
+      .call(this.#xAxis);
 
-  //   this._displayendLabel = this._svg
-  //     .append("text")
-  //     .attr("class", "end-label")
-  //     .attr("x", this.width)
-  //     .attr("y", this.height - this._padding)
-  //     .attr("text-anchor", "end");
-  //   this._axis = this._svg
-  //     .append("g")
-  //     .attr("class", "x axis")
-  //     .call(this._xAxis);
+    this.#viewport = brushX()
+      .extent([
+        [this.padding, 0],
+        [this.width - this.padding, this.height * 0.51],
+      ])
+      .on("brush", ({ selection, transform }) => {
+        if (selection && this.#x) {
+          this.displaystart =
+            Math.round(this.#x.invert(selection[0]) * 100) / 100;
+          this.displayend =
+            Math.round(this.#x.invert(selection[1]) * 100) / 100;
+          if (!this.#dontDispatch)
+            this.dispatchEvent(
+              new CustomEvent("change", {
+                detail: {
+                  displayend: Math.round(this.displayend),
+                  displaystart: Math.round(this.displaystart),
+                  extra: { transform },
+                },
+                bubbles: true,
+                cancelable: true,
+              })
+            );
+          this.updateLabels();
+          this.updatePolygon();
+        }
+      });
 
-  //   this._viewport = brushX()
-  //     .extent([
-  //       [this._padding, 0],
-  //       [this.width - this._padding, this.height * 0.51],
-  //     ])
-  //     .on("brush", () => {
-  //       if (d3Event.selection) {
-  //         this._displaystart = format("d")(
-  //           this._x.invert(d3Event.selection[0])
-  //         );
-  //         this._displayend = format("d")(this._x.invert(d3Event.selection[1]));
-  //         if (!this.dontDispatch)
-  //           this.dispatchEvent(
-  //             new CustomEvent("change", {
-  //               detail: {
-  //                 displayend: this._displayend,
-  //                 displaystart: this._displaystart,
-  //                 extra: { transform: d3Event.transform },
-  //               },
-  //               bubbles: true,
-  //               cancelable: true,
-  //             })
-  //           );
-  //         this._updateLabels();
-  //         this._updatePolygon();
-  //       }
-  //     });
+    this.#brushG = this.#svg
+      .append("g")
+      .attr("class", "brush")
+      .call(this.#viewport);
 
-  //   this._brushG = this._svg
-  //     .append("g")
-  //     .attr("class", "brush")
-  //     .call(this._viewport);
+    this.#brushG.call(this.#viewport.move, [
+      this.#x(this.getStart()),
+      this.#x(this.getEnd()),
+    ]);
 
-  //   this._brushG.call(this._viewport.move, [
-  //     this._x(this._displaystart),
-  //     this._x(this._displayend),
-  //   ]);
+    this.#polygon = this.#svg
+      .append("polygon")
+      .attr("class", "zoom-polygon")
+      .attr("fill", "#777")
+      .attr("fill-opacity", "0.3");
+    this.renderD3();
+  }
 
-  //   this.polygon = this._svg
-  //     .append("polygon")
-  //     .attr("class", "zoom-polygon")
-  //     .attr("fill", "#777")
-  //     .attr("fill-opacity", "0.3");
-  //   this.render();
-  // }
-
-  // onWidthChange() {
-  //   if (!this._x) return;
-  //   this._x.range([this._padding, this.width - this._padding]);
-  //   this._svg.attr("width", this.width);
-  //   this._viewport.extent([
-  //     [this._padding, 0],
-  //     [this.width - this._padding, this.height * 0.51],
-  //   ]);
-  //   this._brushG.call(this._viewport);
-  //   this.render();
-  // }
+  onWidthChange() {
+    if (!this.#x) return;
+    this.#x.range([this.padding, this.width - this.padding]);
+    this.#svg?.attr("width", this.width);
+    this.#viewport?.extent([
+      [this.padding, 0],
+      [this.width - this.padding, this.height * 0.51],
+    ]);
+    if (this.#viewport) this.#brushG?.call(this.#viewport);
+  }
 
   render() {
-    return html`<div class="container">It works</div>`;
+    return html`<div class="container" />`;
   }
-  firstUpdated() {}
-  //   if (this._x) {
-  //     this._container
-  //       .style("padding-left", `${this.margin.left}px`)
-  //       .style("padding-right", `${this.margin.right}px`)
-  //       .style("padding-top", `${this.margin.top}px`)
-  //       .style("padding-bottom", `${this.margin.bottom}px`);
-  //     this._x.domain([
-  //       this._rulerstart,
-  //       this._rulerstart + this.sequenceLength - 1,
-  //     ]);
-  //     this._axis.call(this._xAxis);
-  //     this._updatePolygon();
-  //     this._updateLabels();
-  //     if (this._brushG) {
-  //       this.dontDispatch = true;
-  //       this._brushG.call(this._viewport.move, [
-  //         this._x(this._displaystart),
-  //         this._x(this._displayend),
-  //       ]);
-  //       this.dontDispatch = false;
-  //     }
-  //   }
-  // }
+  updated(changedProperties: Map<string, unknown>) {
+    if (changedProperties.has("width")) {
+      this.onWidthChange();
+    }
+    this.renderD3();
+    super.updated(changedProperties);
+  }
 
-  // _updateLabels() {
-  //   if (this._displaystartLabel)
-  //     this._displaystartLabel.text(this._displaystart);
-  //   if (this._displayendLabel)
-  //     this._displayendLabel.attr("x", this.width).text(this._displayend);
-  // }
+  firstUpdated() {
+    this.createNavRuler();
+  }
+  renderD3() {
+    if (
+      this.#x &&
+      this.#container &&
+      this.#axis &&
+      this.#xAxis &&
+      this.#viewport
+    ) {
+      this.#container
+        .style("padding-left", `${this["margin-left"]}px`)
+        .style("padding-right", `${this["margin-right"]}px`)
+        .style("padding-top", `${this["margin-top"]}px`)
+        .style("padding-bottom", `${this["margin-bottom"]}px`);
+      this.#x.domain([
+        this.rulerstart,
+        this.rulerstart + (this.length || 0) - 1,
+      ]);
+      this.#axis.call(this.#xAxis);
+      this.updatePolygon();
+      this.updateLabels();
+      if (this.#brushG) {
+        this.#dontDispatch = true;
+        this.#brushG.call(this.#viewport.move, [
+          this.#x(this.getStart()),
+          this.#x(this.getEnd()),
+        ]);
+        this.#dontDispatch = false;
+      }
+    }
+  }
 
-  // _updatePolygon() {
-  //   if (this.polygon)
-  //     this.polygon.attr(
-  //       "points",
-  //       `${this._x(this._displaystart)},${this.height / 2}
-  //       ${this._x(this._displayend)},${this.height / 2}
-  //       ${this.width},${this.height}
-  //       0,${this.height}`
-  //     );
-  // }
+  private updateLabels() {
+    if (this.#displaystartLabel)
+      this.#displaystartLabel.text(Math.round(this.getStart()));
+    if (this.#displayendLabel)
+      this.#displayendLabel
+        .attr("x", this.width)
+        .text(Math.round(this.getEnd()));
+  }
+
+  private updatePolygon() {
+    if (this.#polygon && this.#x)
+      this.#polygon.attr(
+        "points",
+        `${this.#x(this.getStart())},${this.height / 2}
+        ${this.#x(this.getEnd())},${this.height / 2}
+        ${this.width},${this.height}
+        0,${this.height}`
+      );
+  }
+  private getStart(): number {
+    return this.displaystart || 0;
+  }
+  private getEnd(): number {
+    return this.displayend || this.length || 0;
+  }
 }
 
 export default NightingaleNavigation;

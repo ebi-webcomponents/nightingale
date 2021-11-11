@@ -22,11 +22,11 @@ const withPosition = <T extends Constructor<NightingaleBaseElement>>(
   }
 ) => {
   class WithPosition extends superClass {
-    @property()
+    @property({ type: Number })
     displaystart: number = options.displaystart;
-    @property()
+    @property({ type: Number })
     displayend: number = options.displayend;
-    @property()
+    @property({ type: Number })
     length: number = options.length;
   }
   return WithPosition as Constructor<withPositionInterface> & T;
