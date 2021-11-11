@@ -2,8 +2,9 @@
   "name": "@nightingale/nightingale-manager",
   "version": "3.4.0",
   "description": "Event bus component for Nightnale",
-  "main": "dist/nightingale-manager.js",
-  "module": "src/nightingale-manager.js",
+  "main": "src/index.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "src"

@@ -1,14 +1,3 @@
-import ProtVistaManager from "./protvista-manager";
+import NightingaleManager from "./nightingale-manager";
 
-const loadComponent = () => {
-  customElements.define("protvista-manager", ProtVistaManager);
-};
-
-// Conditional loading of polyfill
-if (window.customElements) {
-  loadComponent();
-} else {
-  document.addEventListener("WebComponentsReady", () => {
-    loadComponent();
-  });
-}
+export default NightingaleManager;
