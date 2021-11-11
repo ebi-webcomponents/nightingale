@@ -4,29 +4,29 @@ import NightingaleBaseElement, {
 import { property } from "lit/decorators.js";
 
 export interface withPositionInterface extends NightingaleBaseElement {
-  displaystart?: number;
-  displayend?: number;
+  'display-start'?: number;
+  'display-end'?: number;
   length?: number;
 }
 
 const withPosition = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
   options: {
-    displaystart: number;
-    displayend: number;
+    'display-start': number;
+    'display-end': number;
     length: number;
   } = {
-    displaystart: 1,
-    displayend: 1,
+    'display-start': 1,
+    'display-end': 1,
     length: 0,
   }
 ) => {
   class WithPosition extends superClass {
-    @property()
-    displaystart: number = options.displaystart;
-    @property()
-    displayend: number = options.displayend;
-    @property()
+    @property({ type: Number })
+    'display-start': number = options['display-start'];
+    @property({ type: Number })
+    'display-end': number = options['display-end'];
+    @property({ type: Number })
     length: number = options.length;
   }
   return WithPosition as Constructor<withPositionInterface> & T;
