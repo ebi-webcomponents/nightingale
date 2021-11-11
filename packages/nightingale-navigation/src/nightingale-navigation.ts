@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import {
   scaleLinear,
+  ScaleLinear,
   axisBottom,
   brushX,
   format,
@@ -19,28 +20,25 @@ import NightingaleElement, {
 } from "@nightingale-elements/nightingale-new-core";
 
 @customElement("nightingale-navigation")
-class NightingaleNavigation extends NightingaleElement {
-  // static is = "nightingale-navigation";
+class NightingaleNavigation extends withManager(
+  withResizable(withMargin(withPosition(NightingaleElement)))
+) {
+  #x: ScaleLinear<any, any> | null;
+  #dontDispatch: boolean;
 
-  // constructor() {
-  //   super();
-  //   this._x = null;
-  //   this._padding = 10;
-  //   this.dontDispatch = false;
-  // }
+  @property({ type: Number })
+  rulerstart: number = 1;
 
-  // connectedCallback() {
-  //   this._rulerstart = parseFloat(this.getAttribute("rulerStart")) || 1;
-  //   this._createNavRuler();
-  // }
+  constructor() {
+    super();
+    this.#x = null;
+    // this._padding = 10;
+    this.#dontDispatch = false;
+  }
 
   // // TODO: This is here to pass the tests, not sure why is needed.
   // // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-empty-function
   // disconnectedCallback() {}
-
-  // static get observedAttributes() {
-  //   return ["rulerstart"];
-  // }
 
   // attributeChangedCallback(name, oldValue, newValue) {
   //   if (oldValue !== newValue && name === "rulerstart") {
@@ -142,7 +140,9 @@ class NightingaleNavigation extends NightingaleElement {
   // }
 
   render() {
-    return html`YEBO`;
+    return html`<div class="container">It works</div>`;
+  }
+  firstUpdated() {}
   //   if (this._x) {
   //     this._container
   //       .style("padding-left", `${this.margin.left}px`)
@@ -165,7 +165,7 @@ class NightingaleNavigation extends NightingaleElement {
   //       this.dontDispatch = false;
   //     }
   //   }
-  }
+  // }
 
   // _updateLabels() {
   //   if (this._displaystartLabel)
@@ -186,15 +186,4 @@ class NightingaleNavigation extends NightingaleElement {
   // }
 }
 
-export default withManager(
-  withResizable(
-    withMargin(
-      withPosition(
-        withDimensions(NightingaleNavigation, {
-          width: 0,
-          height: 40,
-        })
-      )
-    )
-  )
-);
+export default NightingaleNavigation;

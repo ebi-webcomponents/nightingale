@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@nightingale-elements/nightingale-new-core": "../../nightingale-new-core/dist/index.js"
+  }
+}

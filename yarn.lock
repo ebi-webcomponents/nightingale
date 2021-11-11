@@ -7280,6 +7280,11 @@ rollup-plugin-filesize@^9.0.2:
     pacote "^11.2.7"
     terser "^5.6.0"
 
+rollup-plugin-import-map@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-import-map/-/rollup-plugin-import-map-2.2.2.tgz#51100713ba379bf6bd077d090af9708f0201e9e7"
+  integrity sha512-y97Myu5kvuIoLrfSxRd90ytjv4wbOFCoWdi1pKVRfE8eOAcJqUOyPCLM4y3gw2u276dB/pLSFi48cl29SatXPw==
+
 rollup-plugin-summary@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-summary/-/rollup-plugin-summary-1.3.0.tgz#bd4a0e4fb20d6041b947304ad3fa7b4d490ccec3"
