@@ -57,5 +57,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "@storybook/addon-a11y": "^6.3.12"
+  }
 }
