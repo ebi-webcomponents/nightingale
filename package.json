@@ -5,7 +5,7 @@
   "description": "A simple web component",
   "scripts": {
     "build": "lerna exec -- rollup --config ../../rollup.config.js",
-    "build:watch": "tsc --watch",
+    "build:watch": "lerna exec --parallel -- rollup --config ../../rollup.config.js --watch",
     "test": "jest",
     "link-all": "lerna exec --parallel yarn link",
     "clean": "rimraf packages/**/dist",

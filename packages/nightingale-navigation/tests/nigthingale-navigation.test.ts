@@ -18,8 +18,8 @@ describe("nightingale-navigation tests", () => {
   });
 
   test("it should display the navigation correctly after zoom", (done) => {
-    rendered.setAttribute("displaystart", "2");
-    rendered.setAttribute("displayend", "4");
+    rendered.setAttribute("display-start", "2");
+    rendered.setAttribute("display-end", "4");
     window.requestAnimationFrame(() => {
       expect(rendered).toMatchSnapshot();
       done();
