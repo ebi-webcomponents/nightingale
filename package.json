@@ -9,7 +9,6 @@
   "scripts": {
     "build": "lerna exec -- rollup --config ../../rollup.config.js",
     "build:watch": "lerna exec --parallel -- rollup --config ../../rollup.config.js --watch",
-    "XXbuild:watch": "tsc --watch",
     "link-all": "lerna exec --parallel yarn link",
     "clean": "rimraf packages/**/dist",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",

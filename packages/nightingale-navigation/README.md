@@ -2,7 +2,7 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/nightingale-navigation.svg)](https://www.npmjs.com/package/nightingale-navigation)
 
-This custom element can be used to zoom and navigate along the sequence displayed in Nightingale. When a user interacts with the component, a `change` event is triggered which <nightingale-manager> uses to change `displaystart` and `displayend` values on relevant custom elements.
+This custom element can be used to zoom and navigate along the sequence displayed in Nightingale. When a user interacts with the component, a `change` event is triggered which <nightingale-manager> uses to change `display-start` and `display-end` values on relevant custom elements.
 
 [Demo](https://ebi-webcomponents.github.io/nightingale/#/navigation)
 
@@ -11,8 +11,8 @@ This custom element can be used to zoom and navigate along the sequence displaye
 ```html
 <nightingale-navigation
   length="456"
-  displaystart="143"
-  displayend="400"
+  display-start="143"
+  display-end="400"
   highlightStart="23"
   highlightEnd="45"
   rulerstart="50"
@@ -25,11 +25,11 @@ This custom element can be used to zoom and navigate along the sequence displaye
 
 The protein or nucleic acid sequence length.
 
-#### `displaystart: number (optional)`
+#### `display-start: number (optional)`
 
 The start position of the selected region.
 
-#### `displayend: number (optional)`
+#### `display-end: number (optional)`
 
 The end position of the selected region.
 

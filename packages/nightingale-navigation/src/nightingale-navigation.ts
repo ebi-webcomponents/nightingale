@@ -91,16 +91,16 @@ class NightingaleNavigation extends withManager(
       ])
       .on("brush", ({ selection, transform }) => {
         if (selection && this.#x) {
-          this.displaystart =
+          this['display-start'] =
             Math.round(this.#x.invert(selection[0]) * 100) / 100;
-          this.displayend =
+          this['display-end'] =
             Math.round(this.#x.invert(selection[1]) * 100) / 100;
           if (!this.#dontDispatch)
             this.dispatchEvent(
               new CustomEvent("change", {
                 detail: {
-                  displayend: Math.round(this.displayend),
-                  displaystart: Math.round(this.displaystart),
+                  'display-end': Math.round(this['display-end']),
+                  'display-start': Math.round(this['display-start']),
                   extra: { transform },
                 },
                 bubbles: true,
@@ -206,10 +206,10 @@ class NightingaleNavigation extends withManager(
       );
   }
   private getStart(): number {
-    return this.displaystart || 0;
+    return this['display-start'] || 0;
   }
   private getEnd(): number {
-    return this.displayend || this.length || 0;
+    return this['display-end'] || this.length || 0;
   }
 }
 

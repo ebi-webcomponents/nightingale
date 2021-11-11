@@ -164,8 +164,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         // Dispatches the event so the manager can propagate this changes to other  components
         new CustomEvent("change", {
           detail: {
-            displaystart: Math.max(1, start),
-            displayend: Math.min(
+            'display-start': Math.max(1, start),
+            'display-end': Math.min(
               this.length || 0,
               Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
             ),
@@ -183,10 +183,10 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         1,
         // +1 because the displayend base should be included
         this.length ||
-          0 / (1 + (this.displayend || 0) - (this.displaystart || 0))
+          0 / (1 + (this['display-end'] || 0) - (this['display-start'] || 0))
       );
       // The deltaX gets calculated using the position of the first base to display in original scale
-      const dx = -this._originXScale(this.displaystart || 0);
+      const dx = -this._originXScale(this['display-start'] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
       this.svg.call(
         // We trigger a zoom action

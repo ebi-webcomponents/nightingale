@@ -14,8 +14,8 @@ const withDimensions = <T extends Constructor<NightingaleBaseElement>>(
     width: number;
     height: number;
   } = {
-    width: 0,
-    height: 0,
+    width: 800,
+    height: 100,
   }
 ) => {
   class WithDimensions extends superClass {
