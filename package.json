@@ -20,14 +20,21 @@
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --node-resolve --watch",
     "serve:prod": "MODE=prod yarn serve",
-    "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js"
+    "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.16.0",
     "@custom-elements-manifest/analyzer": "0.5.7",
     "@rollup/plugin-node-resolve": "13.0.6",
     "@rollup/plugin-replace": "3.0.0",
     "@rollup/plugin-typescript": "8.3.0",
+    "@storybook/addon-actions": "^6.3.12",
+    "@storybook/addon-essentials": "^6.3.12",
+    "@storybook/addon-links": "^6.3.12",
+    "@storybook/web-components": "^6.3.12",
     "@types/d3": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "5.3.1",
@@ -35,6 +42,7 @@
     "@web/dev-server-legacy": "0.1.7",
     "@web/dev-server-rollup": "0.3.13",
     "@webcomponents/webcomponentsjs": "2.6.0",
+    "babel-loader": "^8.2.3",
     "eslint": "8.2.0",
     "lerna": "4.0.0",
     "lit-analyzer": "1.2.1",
@@ -48,5 +56,6 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {}
 }
