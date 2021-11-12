@@ -1,11 +1,11 @@
 import NightingaleNavigation from "../src/index";
 
-let rendered;
+let rendered: NightingaleNavigation;
 
 describe("nightingale-navigation tests", () => {
   beforeEach(() => {
     rendered = new NightingaleNavigation();
-    rendered.setAttribute("height", 15);
+    rendered.setAttribute("height", "15");
     document.documentElement.appendChild(rendered);
   });
 

@@ -1,5 +1,5 @@
 import { customElement, property, state } from "lit/decorators.js";
-import NightingaleElement from "@nightingale-elements/nightingale-new-core/src";
+import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 
 @customElement("nightingale-manager")
 class NightingaleManager extends NightingaleElement {

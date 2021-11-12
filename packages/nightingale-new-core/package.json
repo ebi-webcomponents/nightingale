@@ -2,13 +2,12 @@
   "name": "@nightingale-elements/nightingale-new-core",
   "version": "1.0.0",
   "description": "Base Elements for Nightingale Components",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "src"
   ],
-  "main": "src/index.js",
-  "module": "src/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

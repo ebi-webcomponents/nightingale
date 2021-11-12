@@ -1,9 +1,8 @@
 {
-  "name": "@nightingale/nightingale-manager",
+  "name": "@nightingale-elements/nightingale-manager",
   "version": "3.4.0",
   "description": "Event bus component for Nightnale",
-  "main": "src/index.ts",
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -26,6 +25,7 @@
   "license": "ISC",
   "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^1.0.0",
     "lodash-es": "^4.17.11"
   }
 }
