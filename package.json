@@ -6,7 +6,7 @@
   "scripts": {
     "build": "lerna exec -- rollup --config ../../rollup.config.js",
     "build:watch": "lerna exec --parallel -- rollup --config ../../rollup.config.js --watch",
-    "test": "jest",
+    "test": "lerna exec -- jest --passWithNoTests",
     "link-all": "lerna exec --parallel yarn link",
     "clean": "rimraf packages/**/dist",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
@@ -34,7 +34,6 @@
     "@web/dev-server-rollup": "0.3.13",
     "@webcomponents/webcomponentsjs": "2.6.0",
     "eslint": "8.2.0",
-    "jest": "^27.3.1",
     "lerna": "4.0.0",
     "lit-analyzer": "1.2.1",
     "prettier": "2.4.1",
@@ -43,7 +42,6 @@
     "rollup-plugin-import-map": "2.2.2",
     "rollup-plugin-summary": "1.3.0",
     "rollup-plugin-terser": "7.0.2",
-    "ts-jest": "^27.0.7",
     "typescript": "4.4.4"
   },
   "workspaces": [
