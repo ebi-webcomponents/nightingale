@@ -111,16 +111,7 @@ class ProtvistaVariation extends ProtvistaTrack {
     // clip path prevents drawing outside of it
     const chartArea = mainChart
       .attr("transform", `translate(0, ${this.margin.top})`)
-      .append("g")
-      .attr("clip-path", "url(#plotAreaClip)");
-
-    this._clipPath = mainChart
-      .append("clipPath")
-      .attr("id", "plotAreaClip")
-      .append("rect")
-      .attr("width", this.getWidthWithMargins())
-      .attr("height", this._height)
-      .attr("transform", `translate(0, -${this.margin.top})`);
+      .append("g");
 
     // This is calling the data series render code for each of the items in the data
     this._series = chartArea.datum(this._data);
@@ -170,7 +161,6 @@ class ProtvistaVariation extends ProtvistaTrack {
   // Calling render again
   refresh() {
     if (this._series) {
-      this._clipPath.attr("width", this.getWidthWithMargins());
       this.updateScale();
       this._series.call(this._variationPlot.drawVariationPlot, this);
       this._updateHighlight();
