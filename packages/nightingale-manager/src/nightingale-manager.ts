@@ -4,7 +4,7 @@ import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 @customElement("nightingale-manager")
 class NightingaleManager extends NightingaleElement {
   @property({
-    converter: (value, Object) => {
+    converter: (value) => {
       if (!value) {
         return;
       }
@@ -142,9 +142,9 @@ class NightingaleManager extends NightingaleElement {
   //   }
   // }
 
-  // connectedCallback() {
-  //   this.addEventListener("change", this._changeListener);
-  // }
+  connectedCallback() {
+    //   this.addEventListener("change", this._changeListener);
+  }
 }
 
 export default NightingaleManager;
