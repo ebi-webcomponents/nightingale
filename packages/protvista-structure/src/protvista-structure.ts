@@ -133,6 +133,9 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
   }
 
   connectedCallback(): void {
+    // Cleanup
+    this.innerHTML = "";
+
     const manager = this.closest<HTMLElement>("protvista-manager");
     if (manager && "register" in manager && "unregister" in manager) {
       this.manager = manager as NightingaleManager;
