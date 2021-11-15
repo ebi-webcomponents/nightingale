@@ -18,5 +18,5 @@ module.exports = {
   // moduleNameMapper: {
   //   "^lodash-es$": "lodash",
   // },
-  setupFilesAfterEnv: ["../../setupJest.js"],
+  setupFilesAfterEnv: ["./setupJest.js"],
 };
