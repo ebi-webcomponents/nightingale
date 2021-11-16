@@ -40,8 +40,8 @@ class NightingaleManager extends NightingaleElement {
   @property({ type: Number })
   "display-end"?: number;
 
-  @property()
-  "highlight"?: [start: number, end: number][];
+  @property({ type: String })
+  "highlight"?: string;
 
   @state()
   protvistaElements = new Set<HTMLElement>();
@@ -54,7 +54,12 @@ class NightingaleManager extends NightingaleElement {
     this.addEventListener("change", this._changeListener as EventListener);
   }
 
-  override willUpdate() {
+  override attributeChangedCallback(
+    attr: string,
+    previousValue: any,
+    newValue: any
+  ) {
+    super.attributeChangedCallback(attr, previousValue, newValue);
     this.applyAttributes();
   }
 
@@ -67,6 +72,19 @@ class NightingaleManager extends NightingaleElement {
           element.setAttribute(type, typeof value === "boolean" ? "" : value);
         }
       });
+      // Default properties
+      if (this.length) {
+        element.setAttribute("length", `${this.length}`);
+      }
+      if (this["display-end"]) {
+        element.setAttribute("display-end", `${this["display-end"]}`);
+      }
+      if (this["display-start"]) {
+        element.setAttribute("display-start", `${this["display-start"]}`);
+      }
+      if (this.highlight) {
+        element.setAttribute("highlight", this.highlight);
+      }
     });
   }
 

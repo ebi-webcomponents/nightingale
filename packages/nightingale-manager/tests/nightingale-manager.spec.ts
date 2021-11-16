@@ -44,7 +44,7 @@ describe("nightingale-navigation tests", () => {
     expect(innerElement.getAttribute("item2")).toBe("some text");
   });
 
-  test("It should propagate common attributes", () => {
+  test("It should propagate default attributes", () => {
     const innerElement = document.createElement(
       "div"
     ) as unknown as NightingaleElement;
@@ -53,10 +53,10 @@ describe("nightingale-navigation tests", () => {
     rendered.setAttribute("length", "999");
     rendered.setAttribute("display-start", "100");
     rendered.setAttribute("display-end", "200");
-    rendered.setAttribute("highlight", "131:134,141,142");
+    rendered.setAttribute("highlight", "131:134,141:142");
     expect(innerElement.getAttribute("length")).toBe("999");
     expect(innerElement.getAttribute("display-start")).toBe("100");
     expect(innerElement.getAttribute("display-end")).toBe("200");
-    expect(innerElement.getAttribute("highlight")).toBe("131:134,141,142");
+    expect(innerElement.getAttribute("highlight")).toBe("131:134,141:142");
   });
 });
