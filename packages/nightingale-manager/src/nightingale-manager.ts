@@ -51,7 +51,7 @@ class NightingaleManager extends NightingaleElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener("change", this._changeListener as EventListener);
+    this.addEventListener("change", this.changeListener as EventListener);
   }
 
   override attributeChangedCallback(
@@ -129,7 +129,7 @@ class NightingaleManager extends NightingaleElement {
     );
   }
 
-  _changeListener(e: CustomEvent) {
+  changeListener(e: CustomEvent) {
     if (!e.detail) {
       return;
     }
