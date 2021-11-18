@@ -48,9 +48,6 @@ class NightingaleNavigation extends withManager(
     this.#x = null;
     this.#dontDispatch = false;
   }
-  createRenderRoot() {
-    return this;
-  }
 
   private createNavRuler() {
     this.#x = scaleLinear().range([this.padding, this.width - this.padding]);
@@ -91,16 +88,16 @@ class NightingaleNavigation extends withManager(
       ])
       .on("brush", ({ selection, transform }) => {
         if (selection && this.#x) {
-          this['display-start'] =
+          this["display-start"] =
             Math.round(this.#x.invert(selection[0]) * 100) / 100;
-          this['display-end'] =
+          this["display-end"] =
             Math.round(this.#x.invert(selection[1]) * 100) / 100;
           if (!this.#dontDispatch)
             this.dispatchEvent(
               new CustomEvent("change", {
                 detail: {
-                  'display-end': Math.round(this['display-end']),
-                  'display-start': Math.round(this['display-start']),
+                  "display-end": Math.round(this["display-end"]),
+                  "display-start": Math.round(this["display-start"]),
                   extra: { transform },
                 },
                 bubbles: true,
@@ -206,10 +203,10 @@ class NightingaleNavigation extends withManager(
       );
   }
   private getStart(): number {
-    return this['display-start'] || 0;
+    return this["display-start"] || 0;
   }
   private getEnd(): number {
-    return this['display-end'] || this.length || 0;
+    return this["display-end"] || this.length || 0;
   }
 }
 

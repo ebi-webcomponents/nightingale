@@ -14,6 +14,10 @@
       type="module"
       src="../packages/nightingale-navigation/dist/index.js"
     ></script>
+    <script
+      type="module"
+      src="../packages/nightingale-manager/dist/index.js"
+    ></script>
     <style>
       p {
         border: solid 1px blue;
@@ -22,13 +26,23 @@
     </style>
   </head>
   <body>
-    <nightingale-navigation
-      width="800"
-      height="80"
-      length="100"
-      display-start="10"
-      display-end="40"
-    >
-    </nightingale-navigation>
+    <nightingale-manager>
+      <nightingale-navigation
+        width="800"
+        height="80"
+        length="100"
+        display-start="10"
+        display-end="40"
+      >
+      </nightingale-navigation>
+      <nightingale-navigation
+        width="800"
+        height="80"
+        length="100"
+        display-start="10"
+        display-end="40"
+      >
+      </nightingale-navigation>
+    </nightingale-manager>
   </body>
 </html>

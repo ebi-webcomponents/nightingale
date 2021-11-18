@@ -29,7 +29,7 @@ class NightingaleManager extends NightingaleElement {
       },
     },
   })
-  "reflected-attributes"?: Map<string, null>;
+  "reflected-attributes"?: Map<string, null> = new Map();
 
   @property({ type: Number })
   length?: number;
