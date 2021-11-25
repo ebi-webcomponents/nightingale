@@ -40,7 +40,7 @@ const styles = css`
   }
 
   protvista-datatable table td,
-  th {
+  protvista-datatable table th {
     padding: 1rem;
     border-bottom: 1px solid #c2c4c4;
   }
