@@ -1,30 +1,30 @@
 import ecoMap from "./evidences";
 
-export const renameProperties = features => {
-  return features.map(ft => {
+export const renameProperties = (features) => {
+  return features.map((ft) => {
     const obj = {};
     if (ft.begin) {
       obj.start = ft.begin;
     }
     return {
       ...ft,
-      ...obj
+      ...obj,
     };
   });
 };
 
-const formatSource = source => {
+const formatSource = (source) => {
   return source.name.toLowerCase() === "PubMed".toLowerCase()
     ? `${source.id}&nbsp;(<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>)`
     : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.id}</a>&nbsp;(${source.name})`;
 };
 
-export const getEvidenceFromCodes = evidenceList => {
+export const getEvidenceFromCodes = (evidenceList) => {
   if (!evidenceList) return ``;
   return `
       <ul>${evidenceList
-        .map(ev => {
-          const ecoMatch = ecoMap.find(eco => eco.name === ev.code);
+        .map((ev) => {
+          const ecoMatch = ecoMap.find((eco) => eco.name === ev.code);
           if (!ecoMatch) return ``;
           return `<li title='${
             ecoMatch.description
@@ -36,10 +36,10 @@ export const getEvidenceFromCodes = evidenceList => {
     `;
 };
 
-export const formatXrefs = xrefs => {
+export const formatXrefs = (xrefs) => {
   return `<ul>${xrefs
     .map(
-      xref =>
+      (xref) =>
         `<li style="padding: .25rem 0">${xref.name} ${
           xref.url
             ? `<a href="${xref.url}" style="color:#FFF" target="_blank">${xref.id}</a>`
@@ -49,7 +49,7 @@ export const formatXrefs = xrefs => {
     .join("")}</ul>`;
 };
 
-export const formatTooltip = feature => {
+export const formatTooltip = (feature) => {
   const evidenceHTML = getEvidenceFromCodes(feature.evidences);
   return `
       ${
@@ -72,6 +72,14 @@ export const formatTooltip = feature => {
       ${
         feature.xrefs
           ? `<h5>Cross-references</h5>${formatXrefs(feature.xrefs)}`
+          : ""
+      }
+      ${feature.peptide ? `<h5>Peptide</h5><p>${feature.peptide}</p>` : ""}
+      ${
+        feature.ptms
+          ? `<h5>PTMs</h5><ul>${feature.ptms.map(
+              (item) => `<li>${item.name} - position: ${item.position}</li>`
+            )}</ul>`
           : ""
       }
         `;

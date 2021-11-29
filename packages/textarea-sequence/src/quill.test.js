@@ -59,7 +59,13 @@ describe("textarea-sequence: cleanUpText", () => {
   test("lines of 10 blocks of 5: formatting function", () => {
     const cleaned2 = "> header\nAAAAAAAAAAAAAAAAAAAAA";
     expect(
-      cleanUpText(seq, alphabets.protein, false, true, false, (x) => x)
+      cleanUpText(seq, alphabets.protein, false, true, false, false, (x) => x)
     ).toEqual(cleaned2);
+  });
+  test("diable check header", () => {
+    const seq = "AAAAAAAAAAAAAAAAAAAAA";
+    expect(
+      cleanUpText(seq, alphabets.protein, false, true, false, true)
+    ).toEqual("AAAAAAAAAA AAAAAAAAAA A");
   });
 });

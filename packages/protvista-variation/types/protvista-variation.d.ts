@@ -12,3 +12,7 @@ export type ProtvistaVariationData = {
   sequence: string;
   variants: ProtvistaVariationDatum[];
 };
+
+declare class ProtvistaVariation extends HTMLElement {}
+
+export default ProtvistaVariation;

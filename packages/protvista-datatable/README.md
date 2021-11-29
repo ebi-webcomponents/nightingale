@@ -11,7 +11,35 @@ Wrapping it within `<protvista-manager>` will allow highlighting of features as 
 ## Usage
 
 ```html
-<protvista-datatable />
+<protvista-datatable>
+  <table>
+    <thead>
+      <tr>
+        <th>Col 1</th>
+        <th>Col 2</th>
+        <th>Col 3</th>
+        <th>Col 4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-id="row1">
+        <td>Lorem</td>
+        <td>ipsum</td>
+        <td>dolor</td>
+        <td>sit</td>
+      </tr>
+      <tr data-id="row2">
+        <td>Lorem</td>
+        <td>ipsum</td>
+        <td>dolor</td>
+        <td>sit</td>
+      </tr>
+      <tr data-group-for="row2">
+        <td>amet, consectetur adipiscing elit</td>
+      </tr>
+    </tbody>
+  </table>
+</protvista-datatable>
 ```
 
 ## Styling
@@ -22,26 +50,27 @@ Wrapping it within `<protvista-manager>` will allow highlighting of features as 
 
 `--protvista-datatable__active--clicked`: the background color of a clicked row
 
+## Data attributes
+
+#### `data-id`
+
+The row id. Also passed in the "change" event triggered on row click
+
+#### `data-group-for`
+
+A grouped row is collapsed by default, and a trigger is added to the row with the corresponding `data-id` to collapse/expand it.
+
+#### `data-filter`
+
+Generate a dropdown filter for a given column. A select menu will be populated with values defined in `data-filter-value`. `data-filter` should be set on both the column header cell and the corresponding cells and have the same value to allow mapping.
+
+#### `data-filter-value`
+
+A value used to populate the `data-filter` select menu content. The value should reflect the content of the cell.
+
 ## API Reference
 
 ### Properties
-
-#### `data: Object`
-
-The data to display. `protvistaFeatureId` can be used as an attribute of the `data` object to provide an id for each row. To sort rows by position the `data` object must have either `start` or `begin` as attributes.
-
-#### `columns: Object`
-
-The definition used to display columns. It takes the following form:
-
-```Javascript
-const columns = {
-  column1: {
-    label: "My first column",
-    resolver: d => d["column_name"] //this is used to resolve what to display in the column
-  }
-};
-```
 
 #### `displaystart: number (optional)`
 
@@ -64,10 +93,6 @@ The row id to select. Row ids are attributed based on the `protvistaFeatureId` a
 ### `height: number (optional)`
 
 The height of the table (in `rem`)
-
-### `rowClickEvent: function (optional)`
-
-A callback which will fire when a row is clicked. The data object for the clicked row will be provided in the callback.
 
 ### `noScrollToRow: boolean (false)`
 

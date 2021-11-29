@@ -19,7 +19,8 @@ import { Script } from "molstar/lib/mol-script/script";
 import { StructureRepresentationPresetProvider } from "molstar/lib/mol-plugin-state/builder/structure/representation-preset";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
-import { EmptyLoci } from "molstar/lib/mol-model/loci";
+
+import AfConfidenceScore from "./af-confidence/behavior";
 
 import "molstar/build/viewer/molstar.css";
 
@@ -56,7 +57,13 @@ class StructureViewer {
     const defaultSpec = DefaultPluginUISpec(); // TODO: Make our own to select only essential plugins
     const spec: PluginSpec = {
       actions: defaultSpec.actions,
-      behaviors: defaultSpec.behaviors,
+      behaviors: [
+        ...defaultSpec.behaviors,
+        PluginSpec.Behavior(AfConfidenceScore, {
+          autoAttach: true,
+          showTooltip: true,
+        }),
+      ],
       layout: {
         initial: {
           isExpanded: viewerOptions.layoutIsExpanded,
@@ -77,6 +84,19 @@ class StructureViewer {
           viewerOptions.viewportShowSelectionMode,
         ],
         [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
+        [
+          PluginConfig.Structure.DefaultRepresentationPresetParams,
+          {
+            theme: {
+              globalName: "af-confidence",
+              carbonByChainId: false,
+              focus: {
+                name: "element-symbol",
+                params: { carbonByChainId: false },
+              },
+            },
+          },
+        ],
       ],
     };
 
@@ -97,6 +117,7 @@ class StructureViewer {
         onHighlightClick([sequencePosition]);
       }
     });
+
     PluginCommands.Canvas3D.SetSettings(this.plugin, {
       settings: (props) => {
         // eslint-disable-next-line no-param-reassign
@@ -105,9 +126,14 @@ class StructureViewer {
     });
   }
 
-  loadPdb(pdb: string, options?: LoadStructureOptions): Promise<void> {
+  clear(message?: string): void {
     this.plugin.clear();
-    this.showMessage("Loading", pdb);
+    if (message) {
+      this.showMessage("Loading", message);
+    }
+  }
+
+  loadPdb(pdb: string, options?: LoadStructureOptions): Promise<void> {
     const params = DownloadStructure.createDefaultParams(
       this.plugin.state.data.root.obj!,
       this.plugin
@@ -141,6 +167,24 @@ class StructureViewer {
       });
   }
 
+  async loadAF(id: string, url: string): Promise<void> {
+    const { plugin } = this;
+
+    const data = await plugin.builders.data.download(
+      { url, isBinary: false },
+      { state: { isGhost: true } }
+    );
+
+    const trajectory = await plugin.builders.structure.parseTrajectory(
+      data,
+      "mmcif"
+    );
+
+    return this.plugin.builders.structure.hierarchy
+      .applyPreset(trajectory, "all-models", { useDefaultIfSingleModel: true })
+      .then(() => this.clearMessages());
+  }
+
   highlight(ranges: { start: number; end: number }[]): void {
     // What nightingale calls "highlight", mol* calls "select"
     // The query in this method is over label_seq_id so the provided start & end
@@ -165,14 +209,13 @@ class StructureViewer {
       data
     );
     const loci = StructureSelection.toLociWithSourceUnits(sel);
-    console.log("Mol* should highlight:", loci);
+    this.plugin.managers.camera.focusLoci(loci);
     this.plugin.managers.interactivity.lociSelects.selectOnly({ loci });
   }
 
   clearHighlight(): void {
-    this.plugin.managers.interactivity.lociSelects.selectOnly({
-      loci: EmptyLoci,
-    });
+    this.plugin.managers.interactivity.lociSelects.deselectAll();
+    PluginCommands.Camera.Reset(this.plugin, {});
   }
 
   showMessage(title: string, message: string, timeoutMs?: number): void {

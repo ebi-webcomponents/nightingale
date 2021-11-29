@@ -55,6 +55,15 @@ Indicates if the textarea should only allow a single sequence
 type: `boolean`
 defaultValue: `false`
 
+##### `disable-header-check`
+
+Indicates if the checks against the alphabet should consider the absence of the header.
+This will only makes sense if the attribute `single` is also `true`, if it's not, the value of
+the error `headerCheckRequiredForMultipleSequences` will be true.
+
+type: `boolean`
+defaultValue: `false`
+
 ##### `min-sequence-length`
 
 Defines the minimum number of bases required in the textarea
@@ -114,6 +123,7 @@ Example:
   missingFirstHeader: false,
   multipleSequences: false,
   tooShort: true, // The current sequence is too short
+  headerCheckRequiredForMultipleSequences: false,
 }
 ```
 
