@@ -10,6 +10,7 @@
     "strict": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
+    "allowJs": true, // Required by ts-jest to transform lit
     "experimentalDecorators": true,
     "importHelpers": true,
     "sourceMap": true,

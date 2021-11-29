@@ -1,15 +1,16 @@
-import "../src/index";
+import NightingaleNavigation from "../src/index";
 
-let rendered;
+let rendered: NightingaleNavigation;
 
 describe("nightingale-navigation tests", () => {
   beforeEach(() => {
-    document.documentElement.innerHTML = `<nightingale-navigation length="15"></nightingale-navigation>`;
-    rendered = document.querySelector("nightingale-navigation");
+    rendered = new NightingaleNavigation();
+    rendered.setAttribute("height", "15");
+    document.documentElement.appendChild(rendered);
   });
 
   afterEach(() => {
-    document.querySelector("nightingale-navigation").remove();
+    document.documentElement.removeChild(rendered);
   });
 
   test("it should display the navigation correctly", async () => {
