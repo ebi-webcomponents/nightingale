@@ -15,12 +15,17 @@ describe("nightingale-navigation tests", () => {
 
   test("It should propagate reflected attributes", () => {
     rendered.setAttribute("reflected-attributes", "item1,item2");
-    const innerElement = document.createElement(
+    const innerElement1 = document.createElement(
       "div"
     ) as unknown as NightingaleElement;
-    rendered.appendChild(innerElement);
-    rendered.register(innerElement);
-    innerElement.dispatchEvent(
+    const innerElement2 = document.createElement(
+      "div"
+    ) as unknown as NightingaleElement;
+    rendered.appendChild(innerElement1);
+    rendered.register(innerElement1);
+    rendered.appendChild(innerElement2);
+    rendered.register(innerElement2);
+    innerElement1.dispatchEvent(
       new CustomEvent("change", {
         detail: {
           type: "item1",
@@ -30,7 +35,7 @@ describe("nightingale-navigation tests", () => {
         cancelable: true,
       })
     );
-    innerElement.dispatchEvent(
+    innerElement1.dispatchEvent(
       new CustomEvent("change", {
         detail: {
           type: "item2",
@@ -40,8 +45,10 @@ describe("nightingale-navigation tests", () => {
         cancelable: true,
       })
     );
-    expect(innerElement.getAttribute("item1")).toBe("1234");
-    expect(innerElement.getAttribute("item2")).toBe("some text");
+    expect(innerElement1.getAttribute("item1")).toBe("1234");
+    expect(innerElement1.getAttribute("item2")).toBe("some text");
+    expect(innerElement2.getAttribute("item1")).toBe("1234");
+    expect(innerElement2.getAttribute("item2")).toBe("some text");
   });
 
   test("It should propagate default attributes", () => {
