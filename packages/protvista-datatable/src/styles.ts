@@ -41,7 +41,7 @@ const styles = css`
 
   protvista-datatable table td,
   protvista-datatable table th {
-    padding: 1rem;
+    padding: 0.2rem;
     border-bottom: 1px solid #c2c4c4;
   }
 
@@ -112,7 +112,8 @@ const styles = css`
   }
 
   protvista-datatable table tr[data-group-for] td {
-    padding-left: 2rem;
+    padding-left: 1.7rem;
+    padding-bottom: 0.7rem;
   }
 
   protvista-datatable table .odd {
