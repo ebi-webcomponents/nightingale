@@ -8,7 +8,7 @@ import {
   Variant,
 } from "./variants";
 
-export const getDiseaseAssociations = (associations: Association[]) =>
+export const getDiseaseAssociations = (associations: Association[]): string =>
   associations
     ?.map(
       (association) => `
@@ -30,7 +30,7 @@ export const getDiseaseAssociations = (associations: Association[]) =>
     )
     .join("");
 
-export const getDescriptions = (descriptions: Description[]) =>
+export const getDescriptions = (descriptions: Description[]): string =>
   `<hr/><h5>Description</h5>${descriptions
     .map((description) => `<p>${description.value}</p>`)
     .join("")}
@@ -38,7 +38,7 @@ export const getDescriptions = (descriptions: Description[]) =>
 
 export const getPopulationFrequencies = (
   popFrequencies: PopulationFrequency[]
-) =>
+): string =>
   `<hr/><h5>Population frequencies</h5>${popFrequencies
     .map(
       (freq) =>
@@ -46,7 +46,7 @@ export const getPopulationFrequencies = (
     )
     .join("")}`;
 
-export const getEnsemblCovidLinks = (variant: Variant) => {
+export const getEnsemblCovidLinks = (variant: Variant): string => {
   const shouldGenerateLink = variant.locations.some(
     (location) => location.source === "EnsemblViruses"
   );
@@ -62,7 +62,7 @@ export const getEnsemblCovidLinks = (variant: Variant) => {
   return "";
 };
 
-export const getPredictions = (predictions: Prediction[]) => {
+export const getPredictions = (predictions: Prediction[]): string => {
   const groupedPredictions = groupBy(predictions, "predAlgorithmNameType");
   const counts = Object.keys(groupedPredictions).map((key) => {
     const valueGroups = groupBy(groupedPredictions[key], "predictionValType");
@@ -77,19 +77,17 @@ export const getPredictions = (predictions: Prediction[]) => {
   return counts
     .map(
       (countItem) =>
-        `<h6>${
-          countItem.algorithm
-        }</h6><ul class="no-bullet">${countItem.values
+        `<h6>${countItem.algorithm}</h6><ul class="no-bullet">${countItem.values
           .map((countValue) => `<li>${countValue.name}</li>`)
           .join("")}</ul>`
     )
     .join("");
 };
 
-export const formatTooltip = (variant: Variant) =>
+export const formatTooltip = (variant: Variant): string =>
   `
                 <h5>Variant</h5><p>${variant.wildType} > ${
-    variant.alternativeSequence
+    variant.alternativeSequence || ""
   }</p>
                 ${
                   variant.populationFrequencies

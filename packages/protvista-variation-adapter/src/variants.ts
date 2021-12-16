@@ -14,7 +14,9 @@ export type ProteinsAPIVariation = {
 
 export type Variant = {
   type: string;
+  // Note: one of the 2 following fields will be deprecated - don't know yet
   alternativeSequence?: AminoAcid;
+  mutatedType?: AminoAcid;
   begin: string;
   end: string;
   xrefs: Xref[];
@@ -24,7 +26,6 @@ export type Variant = {
   codon?: string;
   consequenceType: ConsequenceType;
   wildType: AminoAcid;
-  mutatedType?: AminoAcid;
   predictions?: Prediction[];
   somaticStatus: number;
   sourceType: SourceType;

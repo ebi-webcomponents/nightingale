@@ -4,7 +4,13 @@ import { v1 } from "uuid";
 import { NightingaleElement } from "data-loader";
 
 import formatTooltip from "./tooltipGenerators";
-import { ProteinsAPIVariation, Xref, SourceType, Variant } from "./variants";
+import {
+  ProteinsAPIVariation,
+  Xref,
+  SourceType,
+  Variant,
+  AminoAcid,
+} from "./variants";
 
 export type TransformedVariant = ProtvistaVariationDatum & Variant;
 
@@ -26,7 +32,9 @@ export const transformData = (
   const variants = features.map((variant) => ({
     ...variant,
     accession: variant.genomicLocation,
-    variant: variant.alternativeSequence ? variant.alternativeSequence : "-",
+    variant: variant.alternativeSequence
+      ? variant.alternativeSequence
+      : AminoAcid.Empty,
     start: variant.begin,
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),
     hasPredictions: variant.predictions && variant.predictions.length > 0,
