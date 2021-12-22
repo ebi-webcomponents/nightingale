@@ -1,22 +1,15 @@
 import ProtvistaFeatureAdapter, {
-  renameProperties,
-  formatTooltip
+  transformData as featureTransformData,
 } from "protvista-feature-adapter";
-import { v1 } from "uuid";
 
-export const transformData = data => {
-  let adaptedData = [];
-  if (data && data.length !== 0) {
-    adaptedData = data.features.map(feature => {
-      return Object.assign(feature, {
-        category: "PROTEOMICS",
-        type: feature.unique ? "unique" : "non_unique",
-        tooltipContent: formatTooltip(feature),
-        protvistaFeatureId: v1()
-      });
-    });
-    adaptedData = renameProperties(adaptedData);
-  }
+export const transformData = (data) => {
+  // Not using super as this is used in other places
+  let adaptedData = featureTransformData(data);
+  adaptedData = adaptedData.map((feature) => ({
+    ...feature,
+    category: "PROTEOMICS",
+    type: feature.unique ? "unique" : "non_unique",
+  }));
   return adaptedData;
 };
 

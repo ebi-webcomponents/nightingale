@@ -1,9 +1,8 @@
+import { NightingaleElement } from "data-loader";
+import { v1 } from "uuid";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import { ProtvistaVariationDatum } from "protvista-variation";
-import { v1 } from "uuid";
-import { NightingaleElement } from "data-loader";
 
-import formatTooltip from "./tooltipGenerators";
 import {
   ProteinsAPIVariation,
   Xref,
@@ -38,7 +37,7 @@ export const transformData = (
     start: variant.begin,
     xrefNames: getSourceType(variant.xrefs, variant.sourceType),
     hasPredictions: variant.predictions && variant.predictions.length > 0,
-    tooltipContent: formatTooltip(variant),
+    data: variant,
     protvistaFeatureId: v1(),
   }));
   if (!variants) return null;

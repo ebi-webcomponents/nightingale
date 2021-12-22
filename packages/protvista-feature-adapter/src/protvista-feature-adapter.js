@@ -1,5 +1,4 @@
 import { v1 } from "uuid";
-import { formatTooltip, renameProperties } from "./BasicHelper";
 
 export const transformData = (data) => {
   let transformedData = [];
@@ -7,12 +6,14 @@ export const transformData = (data) => {
   if (features && features.length > 0) {
     transformedData = features.map((feature) => {
       return {
-        ...feature,
-        tooltipContent: formatTooltip(feature),
+        accession: data.accession,
+        start: feature.begin,
+        end: feature.end,
+        type: feature.type,
+        data: feature,
         protvistaFeatureId: v1(),
       };
     });
-    transformedData = renameProperties(transformedData);
   }
   return transformedData;
 };
@@ -114,9 +115,3 @@ class ProtvistaFeatureAdapter extends HTMLElement {
 }
 
 export default ProtvistaFeatureAdapter;
-export {
-  formatTooltip,
-  renameProperties,
-  formatXrefs,
-  getEvidenceFromCodes,
-} from "./BasicHelper";

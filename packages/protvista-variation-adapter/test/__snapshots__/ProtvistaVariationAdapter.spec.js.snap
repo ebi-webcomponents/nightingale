@@ -1,34 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ProtvistaVariationAdapter should format descriptions 1`] = `
-"<hr/><h5>Description</h5><p>Alzheimer disease</p>
-  "
-`;
-
-exports[`ProtvistaVariationAdapter should format disease associations 1`] = `
-"
-              <h4>Disease association</h4><p>Alzheimer disease (AD)</p>
-              
-              <h5>Cross-references</h5><ul><li style=\\"padding: .25rem 0\\">MIM <a href=\\"https://www.omim.org/entry/104300\\" style=\\"color:#FFF\\" target=\\"_blank\\">104300</a></li></ul>
-              
-      <ul><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20301340&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20301340' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20301340' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20301414&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20301414' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20301414' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20831773&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20831773' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20831773' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;21500874&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/21500874' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/21500874' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;24829003&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/24829003' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/24829003' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;&nbsp;<a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000813633' style=\\"color:#FFF\\" target='_blank'>RCV000813633</a>&nbsp;(ClinVar)</li></ul>
-    
-          "
-`;
-
-exports[`ProtvistaVariationAdapter should format population frequencies 1`] = `"<hr/><h5>Population frequencies</h5><p>0.0002 - MAF (1000Genomes)</p>"`;
-
-exports[`ProtvistaVariationAdapter should format predictions 1`] = `"<h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging</li></ul>"`;
-
-exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 1`] = `""`;
-
-exports[`ProtvistaVariationAdapter should generate the Ensembl covid link only if present 2`] = `
-"<h5>Ensembl COVID-19</h5>
-          <p>
-          <a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a>
-        </p>"
-`;
-
 exports[`ProtvistaVariationAdapter should transform the data adequately 1`] = `
 Object {
   "sequence": "MLPGLALLLLAAWTARALEVPTDGNAGLLAEPQIAMFCGRLNMHMNVQNGKWDSDPSGTKTCIDTKEGILQYCQEVYPELQITNVVEANQPVTIQNWCKRGRKQCKTHPHFVIPYRCLVGEFVSDALLVPDKCKFLHQERMDVCETHLHWHTVAKETCSEKSTNLHDYGMLLPCGIDKFRGVEFVCCPLAEESDNVDSADAEEDDSDVWWGGADTDYADGSEDKVVEVAEEEEVAEVEEEEADDDEDDEDGDEVEEEAEEPYEEATERTTSIATTTTTTTESVEEVVREVCSEQAETGPCRAMISRWYFDVTEGKCAPFFYGGCGGNRNNFDTEEYCMAVCGSAMSQSLLKTTQEPLARDPVKLPTTAASTPDAVDKYLETPGDENEHAHFQKAKERLEAKHRERMSQVMREWEEAERQAKNLPKADKKAVIQHFQEKVESLEQEAANERQQLVETHMARVEAMLNDRRRLALENYITALQAVPPRPRHVFNMLKKYVRAEQKDRQHTLKHFEHVRMVDPKKAAQIRSQVMTHLRVIYERMNQSLSLLYNVPAVAEEIQDEVDELLQKEQNYSDDVLANMISEPRISYGNDALMPSLTETKTTVELLPVNGEFSLDDLQPWHSFGADSVPANTENEVEPVDARPAADRGLTTRPGSGLTNIKTEEISEVKMDAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIATVIVITLVMLKKKQYTSIHHGVVEVDAAVTPEERHLSKMQQNGYENPTYKFFEQMQN",
@@ -117,6 +88,161 @@ Object {
       "codon": "AAG/AAT",
       "consequenceType": "missense",
       "cytogeneticBand": "21q21.3",
+      "data": Object {
+        "alternativeSequence": "N",
+        "association": Array [
+          Object {
+            "dbReferences": Array [
+              Object {
+                "id": "104300",
+                "name": "MIM",
+                "url": "https://www.omim.org/entry/104300",
+              },
+            ],
+            "disease": true,
+            "evidences": Array [
+              Object {
+                "code": "ECO:0000313",
+                "source": Object {
+                  "alternativeUrl": "https://europepmc.org/abstract/MED/20301340",
+                  "id": "20301340",
+                  "name": "pubmed",
+                  "url": "https://www.ncbi.nlm.nih.gov/pubmed/20301340",
+                },
+              },
+              Object {
+                "code": "ECO:0000313",
+                "source": Object {
+                  "alternativeUrl": "https://europepmc.org/abstract/MED/20301414",
+                  "id": "20301414",
+                  "name": "pubmed",
+                  "url": "https://www.ncbi.nlm.nih.gov/pubmed/20301414",
+                },
+              },
+              Object {
+                "code": "ECO:0000313",
+                "source": Object {
+                  "alternativeUrl": "https://europepmc.org/abstract/MED/20831773",
+                  "id": "20831773",
+                  "name": "pubmed",
+                  "url": "https://www.ncbi.nlm.nih.gov/pubmed/20831773",
+                },
+              },
+              Object {
+                "code": "ECO:0000313",
+                "source": Object {
+                  "alternativeUrl": "https://europepmc.org/abstract/MED/21500874",
+                  "id": "21500874",
+                  "name": "pubmed",
+                  "url": "https://www.ncbi.nlm.nih.gov/pubmed/21500874",
+                },
+              },
+              Object {
+                "code": "ECO:0000313",
+                "source": Object {
+                  "alternativeUrl": "https://europepmc.org/abstract/MED/24829003",
+                  "id": "24829003",
+                  "name": "pubmed",
+                  "url": "https://www.ncbi.nlm.nih.gov/pubmed/24829003",
+                },
+              },
+              Object {
+                "code": "ECO:0000313",
+                "source": Object {
+                  "alternativeUrl": "https://www.ensembl.org/homo_sapiens/Variation/Explore?v=RCV000813633",
+                  "id": "RCV000813633",
+                  "name": "ClinVar",
+                  "url": "https://www.ncbi.nlm.nih.gov/clinvar/RCV000813633",
+                },
+              },
+            ],
+            "name": "Alzheimer disease (AD)",
+          },
+        ],
+        "begin": "51",
+        "clinicalSignificances": Array [
+          Object {
+            "sources": Array [
+              "ClinVar",
+            ],
+            "type": "Variant of uncertain significance",
+          },
+        ],
+        "codon": "AAG/AAT",
+        "consequenceType": "missense",
+        "cytogeneticBand": "21q21.3",
+        "descriptions": Array [
+          Object {
+            "sources": Array [
+              "ClinVar",
+            ],
+            "value": "Alzheimer disease",
+          },
+        ],
+        "end": "51",
+        "genomicLocation": "NC_000021.9:g.26112051C>A",
+        "locations": Array [
+          Object {
+            "loc": "p.Lys51Asn",
+            "seqId": "ENST00000346798",
+            "source": "Ensembl",
+          },
+          Object {
+            "loc": "c.153G>T",
+            "seqId": "ENST00000346798",
+            "source": "Ensembl",
+          },
+        ],
+        "mutatedType": "N",
+        "populationFrequencies": Array [
+          Object {
+            "frequency": 0.0002,
+            "populationName": "MAF",
+            "source": "1000Genomes",
+          },
+        ],
+        "predictions": Array [
+          Object {
+            "predAlgorithmNameType": "PolyPhen",
+            "predictionValType": "probably damaging",
+            "predictorType": "multi coding",
+            "score": 0.983,
+            "sources": Array [
+              "Ensembl",
+            ],
+          },
+          Object {
+            "predAlgorithmNameType": "PolyPhen",
+            "predictionValType": "probably damaging",
+            "predictorType": "multi coding",
+            "score": 0.954,
+            "sources": Array [
+              "Ensembl",
+            ],
+          },
+        ],
+        "somaticStatus": 0,
+        "sourceType": "large_scale_study",
+        "type": "VARIANT",
+        "wildType": "K",
+        "xrefs": Array [
+          Object {
+            "id": "rs529782627",
+            "name": "1000Genomes",
+            "url": "https://www.ensembl.org/homo_sapiens/Variation/Explore?v=rs529782627",
+          },
+          Object {
+            "id": "rs529782627",
+            "name": "ExAC",
+            "url": "https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=rs529782627",
+          },
+          Object {
+            "id": "rs529782627",
+            "name": "gnomAD",
+            "url": " http://gnomad.broadinstitute.org/awesome?query=rs529782627",
+          },
+        ],
+      },
       "descriptions": Array [
         Object {
           "sources": Array [
@@ -172,27 +298,6 @@ Object {
       "somaticStatus": 0,
       "sourceType": "large_scale_study",
       "start": "51",
-      "tooltipContent": "
-                <h5>Variant</h5><p>K > N</p>
-                <hr/><h5>Population frequencies</h5><p>0.0002 - MAF (1000Genomes)</p>
-                <h5>Consequence</h5><p>missense</p>
-                
-                <h5>Location</h5><p>NC_000021.9:g.26112051C>A</p>
-                
-                <hr/><h5>Description</h5><p>Alzheimer disease</p>
-  
-                
-              <h4>Disease association</h4><p>Alzheimer disease (AD)</p>
-              
-              <h5>Cross-references</h5><ul><li style=\\"padding: .25rem 0\\">MIM <a href=\\"https://www.omim.org/entry/104300\\" style=\\"color:#FFF\\" target=\\"_blank\\">104300</a></li></ul>
-              
-      <ul><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20301340&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20301340' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20301340' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20301414&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20301414' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20301414' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;20831773&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/20831773' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/20831773' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;21500874&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/21500874' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/21500874' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;24829003&nbsp;(<a href='https://www.ncbi.nlm.nih.gov/pubmed/24829003' style=\\"color:#FFF\\" target='_blank'>pubmed</a>&nbsp;<a href='https://europepmc.org/abstract/MED/24829003' style=\\"color:#FFF\\" target='_blank'>EuropePMC</a>)</li><li title='Automatic assertion inferred from database entries' style=\\"padding: .25rem 0\\">Imported:&nbsp;&nbsp;<a href='https://www.ncbi.nlm.nih.gov/clinvar/RCV000813633' style=\\"color:#FFF\\" target='_blank'>RCV000813633</a>&nbsp;(ClinVar)</li></ul>
-    
-          
-                <h6>PolyPhen</h6><ul class=\\"no-bullet\\"><li>probably damaging</li></ul>
-                
-                
-        ",
       "type": "VARIANT",
       "variant": "N",
       "wildType": "K",
@@ -225,6 +330,37 @@ Object {
       "begin": "2",
       "codon": "TTT/TTA",
       "consequenceType": "missense",
+      "data": Object {
+        "alternativeSequence": "L",
+        "begin": "2",
+        "codon": "TTT/TTA",
+        "consequenceType": "missense",
+        "end": "2",
+        "genomicLocation": "NC_045512.2:g.21568T>A",
+        "locations": Array [
+          Object {
+            "loc": "p.Phe2Leu",
+            "seqId": "ENSSAST00005000004",
+            "source": "EnsemblViruses",
+          },
+          Object {
+            "loc": "c.6T>A",
+            "seqId": "ENSSAST00005000004",
+            "source": "EnsemblViruses",
+          },
+        ],
+        "mutatedType": "L",
+        "somaticStatus": 0,
+        "sourceType": "large_scale_study",
+        "type": "VARIANT",
+        "wildType": "F",
+        "xrefs": Array [
+          Object {
+            "id": "MN908947.3:21568:T:A",
+            "name": "ENA",
+          },
+        ],
+      },
       "end": "2",
       "genomicLocation": "NC_045512.2:g.21568T>A",
       "hasPredictions": undefined,
@@ -245,22 +381,6 @@ Object {
       "somaticStatus": 0,
       "sourceType": "large_scale_study",
       "start": "2",
-      "tooltipContent": "
-                <h5>Variant</h5><p>F > L</p>
-                
-                <h5>Consequence</h5><p>missense</p>
-                
-                <h5>Location</h5><p>NC_045512.2:g.21568T>A</p>
-                
-                
-                
-                
-                <h5>Ensembl COVID-19</h5>
-          <p>
-          <a href=\\"https://covid-19.ensembl.org/Sars_cov_2/Variation/Explore?v=MN908947.3:21568:T:A\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">MN908947.3:21568:T:A</a>
-        </p>
-                
-        ",
       "type": "VARIANT",
       "variant": "L",
       "wildType": "F",
