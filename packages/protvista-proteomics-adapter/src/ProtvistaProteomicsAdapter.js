@@ -8,7 +8,7 @@ export const transformData = (data) => {
   adaptedData = adaptedData.map((feature) => ({
     ...feature,
     category: "PROTEOMICS",
-    type: feature.unique ? "unique" : "non_unique",
+    type: feature.data.unique ? "unique" : "non_unique",
   }));
   return adaptedData;
 };
