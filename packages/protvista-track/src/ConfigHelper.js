@@ -1,11 +1,11 @@
 import { config } from "./config";
 
-export const getShapeByType = type => {
+export const getShapeByType = (type) => {
   if (config[type.toUpperCase()]) {
     return config[type.toUpperCase()].shape;
   }
   const info = Object.values(config).find(
-    typeInfo => typeInfo.name.toUpperCase() === type.toUpperCase()
+    (typeInfo) => typeInfo.name.toUpperCase() === type.toUpperCase()
   );
   if (info) {
     return info.shape;
@@ -13,15 +13,15 @@ export const getShapeByType = type => {
   return "rectangle";
 };
 
-export const getColorByType = type => {
+export const getColorByType = (type) => {
   if (config[type.toUpperCase()]) {
     return config[type.toUpperCase()].color;
   }
-  const info = Object.values(config).find(typeInfo => {
+  const info = Object.values(config).find((typeInfo) => {
     return typeInfo.name.toUpperCase() === type.toUpperCase();
   });
   if (!info) {
-    console.log(type);
+    console.log(`Missing colour definition for ${type}`);
   }
   if (info) {
     return info.color;
