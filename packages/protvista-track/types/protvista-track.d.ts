@@ -17,6 +17,7 @@ export declare type ProtvistaTrackDatum = {
   accession: string;
   start: number;
   end: number;
+  data?: any;
   color?: string;
   shape?: Shape;
   tooltipContent?: string;

@@ -50,7 +50,7 @@ export const load = (
 };
 
 const getSourceData = (children: HTMLCollection) =>
-  Array.from(children).filter(child =>
+  Array.from(children).filter((child) =>
     child.matches('source[src], script[type="application/json"]')
   );
 
@@ -83,11 +83,11 @@ class DataLoader extends HTMLElement implements NightingaleElement {
             /* eslint-disable no-await-in-loop */
             ...(await load(source.src)),
             srcElement: source,
-            src: (source as HTMLSourceElement).src
+            src: (source as HTMLSourceElement).src,
           };
         } else {
           detail = {
-            payload: JSON.parse(source.textContent)
+            payload: JSON.parse(source.textContent),
           };
         }
 
@@ -105,7 +105,7 @@ class DataLoader extends HTMLElement implements NightingaleElement {
           new CustomEvent("error", {
             detail: errors,
             bubbles: true,
-            cancelable: true
+            cancelable: true,
           })
         );
       } catch (e) {

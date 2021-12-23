@@ -1,4 +1,3 @@
-import { NightingaleElement } from "data-loader";
 import { v1 } from "uuid";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import { ProtvistaVariationDatum } from "protvista-variation";
@@ -44,10 +43,13 @@ export const transformData = (
   return { sequence, variants };
 };
 
-class ProtvistaVariationAdapter
-  extends ProtvistaFeatureAdapter
-  implements NightingaleElement
-{
+class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter<
+  {
+    sequence: string;
+    variants: TransformedVariant[];
+  },
+  ProteinsAPIVariation
+> {
   static get is(): string {
     return "protvista-variation-adapter";
   }
@@ -66,9 +68,9 @@ class ProtvistaVariationAdapter
     }
   }
 
-  parseEntry(data: ProteinsAPIVariation): void {
-    this._adaptedData = transformData(data);
-  }
+  // parseEntry(data: ProteinsAPIVariation): void {
+  //   this._adaptedData = transformData(data);
+  // }
 }
 
 export default ProtvistaVariationAdapter;

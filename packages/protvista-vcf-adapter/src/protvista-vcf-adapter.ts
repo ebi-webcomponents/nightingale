@@ -1,11 +1,18 @@
 import { html, render as litRender } from "lit-html";
+import { ProtvistaVariationDatum } from "protvista-variation";
 import ProtvistaFeatureAdapter from "protvista-feature-adapter";
 import { NightingaleElement } from "data-loader";
 import { vcfToJSON } from "vcftojson";
 
 import transformData from "./dataTransformer";
 
-class VCFAdapter extends ProtvistaFeatureAdapter implements NightingaleElement {
+class VCFAdapter
+  extends ProtvistaFeatureAdapter<
+    ProtvistaVariationDatum[],
+    string | { sequence: string }
+  >
+  implements NightingaleElement
+{
   private accession: string;
 
   private sequence: string;

@@ -27,12 +27,12 @@ const featureData = {
 describe("ProtvistaFeatureAdapter tests", () => {
   it("should correctly transform data", () => {
     const transformedData = transformData(featureData);
-    console.log(JSON.stringify(transformedData));
+    // console.log(JSON.stringify(transformedData));
     expect(transformedData).toEqual([
       {
         accession: "P05067",
-        start: "1",
-        end: "17",
+        start: 1,
+        end: 17,
         type: "SIGNAL",
         data: {
           type: "SIGNAL",

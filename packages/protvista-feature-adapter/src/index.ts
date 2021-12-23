@@ -1,7 +1,7 @@
 import ProtvistaFeatureAdapter from "./protvista-feature-adapter";
 
 if (window.customElements) {
-  customElements.define("protvista-feature-adapter", ProtvistaFeatureAdapter);
+  customElements.define(ProtvistaFeatureAdapter.is, ProtvistaFeatureAdapter);
 }
 
 export default ProtvistaFeatureAdapter;
