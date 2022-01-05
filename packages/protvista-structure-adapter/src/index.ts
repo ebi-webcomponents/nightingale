@@ -1,4 +1,4 @@
-import ProtVistaStructureAdapter from "./ProtVistaStructureAdapter";
+import ProtVistaStructureAdapter from "./protvista-structure-adapter";
 
 if (window.customElements) {
   customElements.define(
