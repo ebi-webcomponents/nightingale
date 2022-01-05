@@ -5,17 +5,19 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: X-ray. Resolution: 1.50 A. ",
-        "end": 0,
-        "source": Object {
-          "id": "1AAP",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AAP",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: X-ray. Resolution: 1.50 A. ",
+          "end": 0,
+          "source": Object {
+            "id": "1AAP",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AAP",
+          },
+          "start": 0,
         },
-        "start": 0,
-      },
-    ],
+      ],
+    },
     "end": 0,
     "start": 0,
     "type": "PDBE_COVER",
@@ -23,44 +25,46 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: NMR. Chains: A=672-699. ",
-        "end": 699,
-        "source": Object {
-          "id": "1AMB",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMB",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: NMR. Chains: A=672-699. ",
+          "end": 699,
+          "source": Object {
+            "id": "1AMB",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMB",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-      Object {
-        "description": "Method: NMR. Chains: A=672-699. ",
-        "end": 699,
-        "source": Object {
-          "id": "1AMC",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMC",
+        Object {
+          "description": "Method: NMR. Chains: A=672-699. ",
+          "end": 699,
+          "source": Object {
+            "id": "1AMC",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMC",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-      Object {
-        "description": "Method: NMR. Chains: A=672-711. ",
-        "end": 711,
-        "source": Object {
-          "id": "1AML",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AML",
+        Object {
+          "description": "Method: NMR. Chains: A=672-711. ",
+          "end": 711,
+          "source": Object {
+            "id": "1AML",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AML",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-      Object {
-        "description": "Method: NMR. Chains: A=672-711. ",
-        "end": 711,
-        "source": Object {
-          "id": "1BA4",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1BA4",
+        Object {
+          "description": "Method: NMR. Chains: A=672-711. ",
+          "end": 711,
+          "source": Object {
+            "id": "1BA4",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1BA4",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-    ],
+      ],
+    },
     "end": 711,
     "start": 672,
     "type": "PDBE_COVER",
@@ -73,17 +77,19 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: X-ray. Resolution: 1.50 A. ",
-        "end": 0,
-        "source": Object {
-          "id": "1AAP",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AAP",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: X-ray. Resolution: 1.50 A. ",
+          "end": 0,
+          "source": Object {
+            "id": "1AAP",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AAP",
+          },
+          "start": 0,
         },
-        "start": 0,
-      },
-    ],
+      ],
+    },
     "end": 0,
     "start": 0,
     "type": "PDBE_COVER",
@@ -91,17 +97,19 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: NMR. Chains: A=672-699. ",
-        "end": 699,
-        "source": Object {
-          "id": "1AMB",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMB",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: NMR. Chains: A=672-699. ",
+          "end": 699,
+          "source": Object {
+            "id": "1AMB",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMB",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-    ],
+      ],
+    },
     "end": 699,
     "start": 672,
     "type": "PDBE_COVER",
@@ -109,17 +117,19 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: NMR. Chains: A=672-699. ",
-        "end": 699,
-        "source": Object {
-          "id": "1AMC",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMC",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: NMR. Chains: A=672-699. ",
+          "end": 699,
+          "source": Object {
+            "id": "1AMC",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AMC",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-    ],
+      ],
+    },
     "end": 699,
     "start": 672,
     "type": "PDBE_COVER",
@@ -127,17 +137,19 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: NMR. Chains: A=672-711. ",
-        "end": 711,
-        "source": Object {
-          "id": "1AML",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AML",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: NMR. Chains: A=672-711. ",
+          "end": 711,
+          "source": Object {
+            "id": "1AML",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1AML",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-    ],
+      ],
+    },
     "end": 711,
     "start": 672,
     "type": "PDBE_COVER",
@@ -145,17 +157,19 @@ Array [
   Object {
     "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "data": Array [
-      Object {
-        "description": "Method: NMR. Chains: A=672-711. ",
-        "end": 711,
-        "source": Object {
-          "id": "1BA4",
-          "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1BA4",
+    "data": Object {
+      "Structures": Array [
+        Object {
+          "description": "Method: NMR. Chains: A=672-711. ",
+          "end": 711,
+          "source": Object {
+            "id": "1BA4",
+            "url": "http://www.ebi.ac.uk/pdbe-srv/view/entry/1BA4",
+          },
+          "start": 672,
         },
-        "start": 672,
-      },
-    ],
+      ],
+    },
     "end": 711,
     "start": 672,
     "type": "PDBE_COVER",

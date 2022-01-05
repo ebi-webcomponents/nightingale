@@ -44,17 +44,19 @@ export const getAllFeatureStructures = (
         end: parsedChain.end,
         type: "PDBE_COVER",
         category: "STRUCTURE_COVERAGE",
-        data: [
-          {
-            description: getDescription(structureReference.properties),
-            start: parsedChain.start,
-            end: parsedChain.end,
-            source: {
-              id: structureReference.id,
-              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structureReference.id}`,
+        data: {
+          Structures: [
+            {
+              description: getDescription(structureReference.properties),
+              start: parsedChain.start,
+              end: parsedChain.end,
+              source: {
+                id: structureReference.id,
+                url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structureReference.id}`,
+              },
             },
-          },
-        ],
+          ],
+        },
       };
     });
 
@@ -79,11 +81,11 @@ export const mergeOverlappingIntervals = (
     // If the end is bigger update the last one
     else if (lastItem.end < structure.end) {
       lastItem.end = structure.end;
-      lastItem.data.push(structure.data[0]);
+      lastItem.data.Structures.push(structure.data.Structures[0]);
     }
     // Otherwise just add to last item
     else {
-      lastItem.data.push(structure.data[0]);
+      lastItem.data.Structures.push(structure.data.Structures[0]);
     }
   });
   return mergedIntervals;
