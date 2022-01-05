@@ -3,11 +3,15 @@
   "version": "3.5.1",
   "description": "A dataloader and parser (ProtVista compliant) for 3D structures",
   "main": "dist/protvista-structure-adapter.js",
-  "module": "src/ProtVistaStructureAdapter.js",
+  "module": "dist/es/protvista-structure-adapter.js",
+  "types": "dist/es/protvista-structure-adapter.d.ts",
   "files": [
     "src",
     "dist"
   ],
+  "scripts": {
+    "build:es": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -34,6 +38,7 @@
   "gitHead": "726779864966d11f966f337f2dd84aa4f58d944a",
   "dependencies": {
     "protvista-feature-adapter": "^3.5.1",
+    "protvista-track": "^3.4.0",
     "uuid": "^8.3.1"
   }
 }

@@ -1,11 +1,10 @@
-const featureType = "PDBE_COVER";
-const featureCategory = "STRUCTURE_COVERAGE";
+import { ProtvistaTrackDatum } from "protvista-track";
+import { UniProtkbEntry } from "./uniprotkbentry";
 
-const capitalizeFirstLetter = word => {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-};
+const capitalizeFirstLetter = (word: string) =>
+  word.charAt(0).toUpperCase() + word.slice(1);
 
-const getDescription = properties => {
+const getDescription = (properties: Record<string, string>) => {
   return Object.keys(properties).reduce(
     (accumulator, propertyKey) =>
       `${accumulator}${capitalizeFirstLetter(propertyKey)}: ${
@@ -15,7 +14,7 @@ const getDescription = properties => {
   );
 };
 
-const parseChainString = value => {
+const parseChainString = (value: string) => {
   const posEqual = value.indexOf("=");
   const posDash = value.indexOf("-");
   if (posEqual === -1 || posDash === -1) {
@@ -23,48 +22,52 @@ const parseChainString = value => {
   }
   return {
     start: +value.slice(posEqual + 1, posDash),
-    end: +value.slice(posDash + 1)
+    end: +value.slice(posDash + 1),
   };
 };
 
 // Iterate over references and extract chain start and end
-export const getAllFeatureStructures = data => {
-  return data.dbReferences
-    .filter(reference => {
+export const getAllFeatureStructures = (
+  data: UniProtkbEntry
+): ProtvistaTrackDatum[] =>
+  data.dbReferences
+    .filter((reference) => {
       return reference.type === "PDB";
     })
-    .map(structureReference => {
+    .map((structureReference) => {
       const parsedChain = structureReference.properties.chains
         ? parseChainString(structureReference.properties.chains)
         : { start: 0, end: 0 };
       return {
-        type: featureType,
-        category: featureCategory,
-        structures: [
+        accession: data.accession,
+        start: parsedChain.start,
+        end: parsedChain.end,
+        type: "PDBE_COVER",
+        category: "STRUCTURE_COVERAGE",
+        data: [
           {
             description: getDescription(structureReference.properties),
             start: parsedChain.start,
             end: parsedChain.end,
             source: {
               id: structureReference.id,
-              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structureReference.id}`
-            }
-          }
+              url: `http://www.ebi.ac.uk/pdbe-srv/view/entry/${structureReference.id}`,
+            },
+          },
         ],
-        start: parsedChain.start,
-        end: parsedChain.end
       };
     });
-};
 
-export const mergeOverlappingIntervals = structures => {
+export const mergeOverlappingIntervals = (
+  structures: ProtvistaTrackDatum[]
+): ProtvistaTrackDatum[] => {
   if (!structures || structures.length <= 0) {
     return [];
   }
   // Sort by start position
   const sortedStructures = structures.sort((a, b) => a.start - b.start);
-  const mergedIntervals = [];
-  sortedStructures.forEach(structure => {
+  const mergedIntervals: ProtvistaTrackDatum[] = [];
+  sortedStructures.forEach((structure) => {
     const lastItem = mergedIntervals[mergedIntervals.length - 1];
     if (
       !lastItem ||
@@ -76,29 +79,12 @@ export const mergeOverlappingIntervals = structures => {
     // If the end is bigger update the last one
     else if (lastItem.end < structure.end) {
       lastItem.end = structure.end;
-      lastItem.structures.push(structure.structures[0]);
+      lastItem.data.push(structure.data[0]);
     }
     // Otherwise just add to last item
     else {
-      lastItem.structures.push(structure.structures[0]);
+      lastItem.data.push(structure.data[0]);
     }
   });
   return mergedIntervals;
-};
-
-export const getStructuresHTML = structureList => {
-  return `<ul>
-            ${structureList
-              .map(
-                structure => `<li style="margin: 0.25rem 0"><a style="color:#FFF" href='${structure.source.url}' target='_blank'>
-            ${structure.source.id}
-        </a> (${structure.start}-${structure.end})</li>`
-              )
-              .join("")}
-        </ul>`;
-};
-
-export const formatTooltip = feature => {
-  const structuresHTML = getStructuresHTML(feature.structures);
-  return `${structuresHTML ? `<h5>Structures</h5>${structuresHTML}` : ``}`;
 };

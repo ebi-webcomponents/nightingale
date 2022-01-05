@@ -3,10 +3,9 @@
 exports[`StructureDataParser should merge Overlapping Intervals 1`] = `
 Array [
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 0,
-    "start": 0,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: X-ray. Resolution: 1.50 A. ",
         "end": 0,
@@ -17,13 +16,14 @@ Array [
         "start": 0,
       },
     ],
+    "end": 0,
+    "start": 0,
     "type": "PDBE_COVER",
   },
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 711,
-    "start": 672,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: NMR. Chains: A=672-699. ",
         "end": 699,
@@ -61,6 +61,8 @@ Array [
         "start": 672,
       },
     ],
+    "end": 711,
+    "start": 672,
     "type": "PDBE_COVER",
   },
 ]
@@ -69,10 +71,9 @@ Array [
 exports[`StructureDataParser should turn structures into features 1`] = `
 Array [
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 0,
-    "start": 0,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: X-ray. Resolution: 1.50 A. ",
         "end": 0,
@@ -83,13 +84,14 @@ Array [
         "start": 0,
       },
     ],
+    "end": 0,
+    "start": 0,
     "type": "PDBE_COVER",
   },
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 699,
-    "start": 672,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: NMR. Chains: A=672-699. ",
         "end": 699,
@@ -100,13 +102,14 @@ Array [
         "start": 672,
       },
     ],
+    "end": 699,
+    "start": 672,
     "type": "PDBE_COVER",
   },
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 699,
-    "start": 672,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: NMR. Chains: A=672-699. ",
         "end": 699,
@@ -117,13 +120,14 @@ Array [
         "start": 672,
       },
     ],
+    "end": 699,
+    "start": 672,
     "type": "PDBE_COVER",
   },
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 711,
-    "start": 672,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: NMR. Chains: A=672-711. ",
         "end": 711,
@@ -134,13 +138,14 @@ Array [
         "start": 672,
       },
     ],
+    "end": 711,
+    "start": 672,
     "type": "PDBE_COVER",
   },
   Object {
+    "accession": "P01234",
     "category": "STRUCTURE_COVERAGE",
-    "end": 711,
-    "start": 672,
-    "structures": Array [
+    "data": Array [
       Object {
         "description": "Method: NMR. Chains: A=672-711. ",
         "end": 711,
@@ -151,6 +156,8 @@ Array [
         "start": 672,
       },
     ],
+    "end": 711,
+    "start": 672,
     "type": "PDBE_COVER",
   },
 ]

@@ -21,6 +21,7 @@ export declare type ProtvistaTrackDatum = {
   color?: string;
   shape?: Shape;
   tooltipContent?: string;
+  protvistaFeatureId?: string;
   locations?: [
     {
       fragments: [
