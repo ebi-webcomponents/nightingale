@@ -22,13 +22,13 @@ const closeTooltip = () => {
     .style("display", "none");
 };
 
-const formatSubcellularLocationInfo = data => {
+const formatSubcellularLocationInfo = (data) => {
   if (data) {
     let formatedString = '<ul class="tree-list">';
     const tree = [];
     data
-      .filter(d => d.locations)
-      .forEach(interactionType => {
+      .filter((d) => d.locations)
+      .forEach((interactionType) => {
         for (const location of interactionType.locations) {
           addStringItem(location.location.value, tree);
           // formatedString += `<p>${location.location.value}</p>`;
@@ -36,7 +36,7 @@ const formatSubcellularLocationInfo = data => {
       });
     traverseTree(
       tree,
-      d =>
+      (d) =>
         (formatedString += `<li style="margin-left:${d.depth}em">${d.name}</li>`)
     );
     return `${formatedString}</ul>`;
@@ -70,7 +70,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     top: 100,
     right: 0,
     bottom: 10,
-    left: 100
+    left: 100,
   };
 
   const width = 18 * nodes.length;
@@ -89,7 +89,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     .attr("class", "interaction-viewer-group")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  x.domain(nodes.map(entry => entry.accession));
+  x.domain(nodes.map((entry) => entry.accession));
   intensity.domain([0, 10]);
 
   // x.domain(nodes.map(entry => entry.accession)); intensity.domain([0,
@@ -99,7 +99,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     return `//www.ebi.ac.uk/intact/query/id:${interactor1} AND id:${interactor2}`;
   };
 
-  const mouseover = p => {
+  const mouseover = (p) => {
     select(this).classed("active-cell", true);
     // selectAll(".interaction-row").classed("active", d => d.accession === p.id);
     // selectAll(".column").classed("active", d => d.accession === p.id);
@@ -132,8 +132,8 @@ const drawAdjacencyGraph = (el, accession, data) => {
   const populateTooltip = (element, data) => {
     element.html("");
 
-    const source = nodes.find(d => d.accession === data.source);
-    const target = nodes.find(d => d.accession === data.id);
+    const source = nodes.find((d) => d.accession === data.source);
+    const target = nodes.find((d) => d.accession === data.id);
 
     element.append("h3").text("Interaction");
     element
@@ -223,7 +223,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
       .text(`${data.interactor1};${data.interactor2}`);
   };
 
-  const mouseclick = p => {
+  const mouseclick = (p) => {
     populateTooltip(selectAll(".tooltip-content"), p);
     tooltip
       .style("opacity", 0.9)
@@ -237,21 +237,19 @@ const drawAdjacencyGraph = (el, accession, data) => {
       return;
     }
 
-    const cell = select(this)
-      .selectAll(".cell")
-      .data(row.interactions);
+    const cell = select(this).selectAll(".cell").data(row.interactions);
 
     const circle = cell.enter().append("circle");
 
     circle
       .attr("class", "cell")
-      .attr("cx", d => {
+      .attr("cx", (d) => {
         return x(d.id) + x.bandwidth() / 2;
       })
       .attr("cy", () => x.bandwidth() / 2)
       .attr("r", x.bandwidth() / 3)
-      .style("fill-opacity", d => intensity(d.experiments))
-      .style("display", d => {
+      .style("fill-opacity", (d) => intensity(d.experiments))
+      .style("display", (d) => {
         // Only show left half of graph
         return x(row.accession) < x(d.id) ? "none" : "";
       })
@@ -268,7 +266,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     .enter()
     .append("g")
     .attr("class", "interaction-row")
-    .attr("transform", d => `translate(0,${x(d.accession)})`)
+    .attr("transform", (d) => `translate(0,${x(d.accession)})`)
     .each(processRow);
 
   row
@@ -297,7 +295,7 @@ const drawAdjacencyGraph = (el, accession, data) => {
     .enter()
     .append("g")
     .attr("class", "column")
-    .attr("transform", d => `translate(${x(d.accession)}, 0)rotate(-90)`);
+    .attr("transform", (d) => `translate(${x(d.accession)}, 0)rotate(-90)`);
 
   column
     .append("rect")

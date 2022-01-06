@@ -13,7 +13,7 @@ const addToTree = (nodes, items, parent) => {
     name: items[0],
     selected: false,
     parent,
-    children: []
+    children: [],
   };
   nodes.push(node);
   addToTree(node.children, items.slice(1), node);
@@ -40,7 +40,7 @@ function traverseTree(data, callback, depth) {
 }
 
 function findNode(tree, target, callback) {
-  traverseTree(tree, t => {
+  traverseTree(tree, (t) => {
     if (t.name === target) {
       return callback(t);
     }

@@ -25,9 +25,7 @@ function drawFilters(
   resetFilter,
   resetAllFilters
 ) {
-  select(el)
-    .selectAll(".interaction-filter-container")
-    .remove();
+  select(el).selectAll(".interaction-filter-container").remove();
   const container = select(el)
     .append("div")
     .attr("class", "interaction-filter-container");
@@ -55,15 +53,15 @@ function drawFilters(
         .text("None")
         .on("click", () => resetFilter(filter.name, filter.label));
       if (filter.type === "tree") {
-        traverseTree(filter.items, d => {
+        traverseTree(filter.items, (d) => {
           d.type = filter.name;
           allFilters.push(d);
           ul.datum(d)
             .append("li")
             .style("padding-left", `${d.depth}em`)
-            .attr("id", d => getNameAsHTMLId(d.name))
-            .text(d => d.name)
-            .on("click", d => clickFilter(d, filter.name));
+            .attr("id", (d) => getNameAsHTMLId(d.name))
+            .text((d) => d.name)
+            .on("click", (d) => clickFilter(d, filter.name));
         });
       } else {
         for (const d of filter.items) {
@@ -75,9 +73,9 @@ function drawFilters(
           .data(filter.items)
           .enter()
           .append("li")
-          .attr("id", d => getNameAsHTMLId(d.name))
-          .text(d => d.name.toLowerCase())
-          .on("click", d => {
+          .attr("id", (d) => getNameAsHTMLId(d.name))
+          .text((d) => d.name.toLowerCase())
+          .on("click", (d) => {
             clickFilter(d, filter.name);
           });
       }

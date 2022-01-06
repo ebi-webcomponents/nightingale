@@ -21,13 +21,13 @@ function getFilters(subcellulartreeMenu, diseases) {
       name: "subcellularLocations",
       label: "Subcellular location",
       type: "tree",
-      items: subcellulartreeMenu
+      items: subcellulartreeMenu,
     },
     {
       name: "diseases",
       label: "Diseases",
-      items: diseases
-    }
+      items: diseases,
+    },
   ];
 }
 
@@ -36,9 +36,9 @@ const dispatchLoadedEvent = (el, error) => {
     new CustomEvent("protvista-event", {
       detail: {
         loaded: true,
-        error
+        error,
       },
-      bubbles: true
+      bubbles: true,
     })
   );
 };
@@ -53,7 +53,7 @@ const hasFilterMatch = (source, target, filters) => {
   return (
     _intersection(
       interactionFilters,
-      filters.map(item => item.name)
+      filters.map((item) => item.name)
     ).length === filters.length
   );
 };
@@ -72,7 +72,11 @@ class InteractionViewer extends HTMLElement {
     this.getNodeByAccession = this.getNodeByAccession.bind(this);
   }
 
-  connectedCallback() {
+  static get is(): string {
+    return "interaction-viewer";
+  }
+
+  connectedCallback(): void {
     this._accession = this.getAttribute("accession");
     this.render();
   }
@@ -99,8 +103,8 @@ class InteractionViewer extends HTMLElement {
   clickFilter(d, filterName) {
     selectAll(".dropdown-pane").style("visibility", "hidden");
     this.filters
-      .filter(d => d.type === filterName)
-      .forEach(d => (d.selected = false));
+      .filter((d) => d.type === filterName)
+      .forEach((d) => (d.selected = false));
     d.selected = !d.selected;
     select(`[data-toggle=iv_${filterName}]`).text(ellipsis(d.name));
     this.updateFilterSelection();
@@ -109,8 +113,8 @@ class InteractionViewer extends HTMLElement {
   resetFilter(filterName, filterLabel) {
     selectAll(".dropdown-pane").style("visibility", "hidden");
     this.filters
-      .filter(d => d.type === filterName)
-      .forEach(d => (d.selected = false));
+      .filter((d) => d.type === filterName)
+      .forEach((d) => (d.selected = false));
     select(`[data-toggle=iv_${filterName}]`).text(filterLabel);
     this.updateFilterSelection();
   }
@@ -124,23 +128,23 @@ class InteractionViewer extends HTMLElement {
   }
 
   resetAllFilters() {
-    this.filters.filter(d => d.selected).forEach(d => (d.selected = false));
-    getFilters().forEach(d => {
+    this.filters.filter((d) => d.selected).forEach((d) => (d.selected = false));
+    getFilters().forEach((d) => {
       select(`[data-toggle=iv_${d.name}]`).text(d.label);
     });
     this.updateFilterSelection();
   }
 
   getNodeByAccession(accession) {
-    return this.nodes.find(node => node.accession === accession);
+    return this.nodes.find((node) => node.accession === accession);
   }
 
   // Hide nodes and labels which don't belong to a visible filter
   filterData() {
-    const activeFilters = this.filters.filter(d => d.selected);
+    const activeFilters = this.filters.filter((d) => d.selected);
 
     const visibleAccessions = [];
-    selectAll(".cell").attr("opacity", d => {
+    selectAll(".cell").attr("opacity", (d) => {
       const source = this.getNodeByAccession(d.source);
       const target = this.getNodeByAccession(d.id);
       const visible = hasFilterMatch(source, target, activeFilters);
@@ -150,7 +154,7 @@ class InteractionViewer extends HTMLElement {
       }
       return visible ? 1 : 0.1;
     });
-    selectAll(".interaction-viewer text").attr("fill-opacity", d => {
+    selectAll(".interaction-viewer text").attr("fill-opacity", (d) => {
       return visibleAccessions.includes(d.accession) ? 1 : 0.1;
     });
   }
@@ -163,21 +167,17 @@ class InteractionViewer extends HTMLElement {
     this.style.minHeight = "6em";
 
     // clear all previous vis
-    select(this)
-      .select(".interaction-title")
-      .remove();
-    select(this)
-      .select("svg")
-      .remove();
-    select(this)
-      .select(".interaction-tooltip")
-      .remove();
+    select(this).select(".interaction-title").remove();
+    select(this).select("svg").remove();
+    select(this).select(".interaction-tooltip").remove();
 
     const data = await load(this._accession);
     if (data) {
-      const { data: processedData, subcellulartreeMenu, diseases } = process(
-        data
-      );
+      const {
+        data: processedData,
+        subcellulartreeMenu,
+        diseases,
+      } = process(data);
       this.nodes = processedData;
       dispatchLoadedEvent(this);
       drawFilters(
