@@ -1,44 +1,49 @@
 /* eslint-disable no-param-reassign */
-import clone from "lodash-es/clone";
-import { addStringItem } from "./treeMenu";
+// import clone from "lodash-es/clone";
+import { APIInteractionData } from "./data";
+import { addStringItem, FilterNode } from "./treeMenu";
 
-function addInteractor(interactor, interactors) {
-  const existingInteractor = interactors.find((i) => interactor.id === i.id);
-  if (existingInteractor) {
-    // Merge objects
-    if (interactor.isoform) {
-      existingInteractor.isoform = interactor.isoform;
-    }
-  } else {
-    interactors.push(interactor);
-  }
-}
+// function addInteractor(interactor, interactors) {
+//   const existingInteractor = interactors.find((i) => interactor.id === i.id);
+//   if (existingInteractor) {
+//     // Merge objects
+//     if (interactor.isoform) {
+//       existingInteractor.isoform = interactor.isoform;
+//     }
+//   } else {
+//     interactors.push(interactor);
+//   }
+// }
 
-export const createGraph = (data) => {
-  const nodes = data.map((node) => ({
-    accession: node.accession,
-    name: node.name,
-    proteinExistence: node.proteinExistence,
-    taxonomy: node.taxonomy,
-  }));
+// export const createGraph = (data: APIInteractionData) => {
+//   const nodes = data.map((node) => ({
+//     accession: node.accession,
+//     name: node.name,
+//     proteinExistence: node.proteinExistence,
+//     taxonomy: node.taxonomy,
+//   }));
 
-  const edges = data.reduce((accumulator, node) => {
-    const interactions = node.interactions ? node.interactions : [];
-    return [
-      ...accumulator,
-      ...interactions.map((interaction) => ({
-        ...interaction,
-        accession1: interaction.accession1
-          ? interaction.accession1
-          : node.accession,
-      })),
-    ];
-  }, []);
-  return { nodes, edges };
-};
+//   const edges = data.reduce((accumulator, node) => {
+//     const interactions = node.interactions ? node.interactions : [];
+//     return [
+//       ...accumulator,
+//       ...interactions.map((interaction) => ({
+//         ...interaction,
+//         accession1: interaction.accession1
+//           ? interaction.accession1
+//           : node.accession,
+//       })),
+//     ];
+//   }, []);
+//   return { nodes, edges };
+// };
 
-export function process(data) {
-  const subcellulartreeMenu = [];
+export function process(data: APIInteractionData[]): {
+  data: APIInteractionData[];
+  subcellulartreeMenu: FilterNode[];
+  diseases: FilterNode[];
+} {
+  const subcellulartreeMenu: FilterNode[] = [];
   const diseases = {};
 
   // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
@@ -48,44 +53,48 @@ export function process(data) {
   });
 
   // Add symmetry if required
-  for (const element of data) {
-    for (const interactor of element.interactions) {
-      const otherInteractor = data.find(
-        (d) => d.accession === interactor.accession2
-      );
-      if (otherInteractor) {
-        if (
-          !otherInteractor.interactions.find((d) => d.id === element.accession)
-        ) {
-          const interactorToAdd = clone(interactor);
-          interactorToAdd.id = element.accession;
-          otherInteractor.interactions.push(interactorToAdd);
-        }
-      }
-    }
-  }
+  // data.forEach((entry) => {
+  //   entry.interactions.forEach((interactor) => {
+  //     const otherInteractor = data.find(
+  //       (entry2) => entry2.accession === interactor.accession2
+  //     );
+  //     if (otherInteractor) {
+  //       if (
+  //         !otherInteractor.interactions.find(
+  //           (d) =>
+  //             d.interactor1 === entry.accession ||
+  //             d.interactor2 === entry.accession
+  //         )
+  //       ) {
+  //         const interactorToAdd = clone(interactor);
+  //         interactorToAdd.id = entry.accession;
+  //         otherInteractor.interactions.push(interactorToAdd);
+  //       }
+  //     }
+  //   });
+  // });
 
   // remove interactions which are not part of current set
-  for (const element of data) {
+  data.forEach((element) => {
     element.filterTerms = [];
     const interactors = [];
-    // Add source  to the nodes
-    for (const interactor of element.interactions) {
-      // Add interaction for SELF
-      if (interactor.interactionType === "SELF") {
-        interactor.source = element.accession;
-        interactor.id = element.accession;
-        addInteractor(interactor, interactors);
-      } else if (
-        data.some((d) => {
-          // Check that interactor is in the data
-          return d.accession === interactor.id;
-        })
-      ) {
-        interactor.source = element.accession;
-        addInteractor(interactor, interactors);
-      }
-    }
+    // // Add source  to the nodes
+    // for (const interactor of element.interactions) {
+    //   // Add interaction for SELF
+    //   if (interactor.interactionType === "SELF") {
+    //     interactor.source = element.accession;
+    //     interactor.id = element.accession;
+    //     addInteractor(interactor, interactors);
+    //   } else if (
+    //     data.some((d) => {
+    //       // Check that interactor is in the data
+    //       return d.accession === interactor.id;
+    //     })
+    //   ) {
+    //     interactor.source = element.accession;
+    //     addInteractor(interactor, interactors);
+    //   }
+    // }
 
     element.interactions = interactors;
 
@@ -111,11 +120,11 @@ export function process(data) {
         }
       }
     }
-  }
+  });
   return { data, subcellulartreeMenu, diseases: Object.values(diseases) };
 }
 
-export function load(accession) {
+export function load(accession: string): Promise<APIInteractionData[]> {
   const url = `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`;
   return fetch(url)
     .then((response) => {

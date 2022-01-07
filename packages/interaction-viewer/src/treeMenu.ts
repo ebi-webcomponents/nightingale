@@ -1,5 +1,18 @@
 /* eslint-disable no-param-reassign */
-const addToTree = (nodes, items, parent) => {
+
+export type FilterNode = {
+  name: string;
+  selected: boolean;
+  parent: FilterNode;
+  children: FilterNode[];
+  depth?: number;
+};
+
+const addToTree = (
+  nodes: FilterNode[],
+  items: string[],
+  parent?: FilterNode
+) => {
   if (items.length <= 0) {
     return;
   }
@@ -9,7 +22,7 @@ const addToTree = (nodes, items, parent) => {
       return;
     }
   }
-  const node = {
+  const node: FilterNode = {
     name: items[0],
     selected: false,
     parent,
@@ -19,17 +32,17 @@ const addToTree = (nodes, items, parent) => {
   addToTree(node.children, items.slice(1), node);
 };
 
-function addStringItem(stringItem, tree) {
+const addStringItem = (stringItem: string, tree: FilterNode[]): void => {
   const splitItems = stringItem.split(", ");
   addToTree(tree, splitItems);
-}
+};
 
-function traverseTree(data, callback, depth) {
-  if (typeof depth === "number") {
-    depth++;
-  } else {
-    depth = 1;
-  }
+const traverseTree = (
+  data: FilterNode[],
+  callback: (node: FilterNode) => void,
+  depth = 1
+): void => {
+  depth++;
   for (const datum of data) {
     datum.depth = depth;
     callback(datum);
@@ -37,9 +50,13 @@ function traverseTree(data, callback, depth) {
       traverseTree(datum.children, callback, depth);
     }
   }
-}
+};
 
-function findNode(tree, target, callback) {
+function findNode(
+  tree: FilterNode[],
+  target: string,
+  callback: (node: FilterNode) => void
+): void {
   traverseTree(tree, (t) => {
     if (t.name === target) {
       return callback(t);
@@ -48,7 +65,7 @@ function findNode(tree, target, callback) {
   });
 }
 
-function getPath(target, path) {
+function getPath(target: FilterNode, path: FilterNode[]): FilterNode[] {
   if (target.parent) {
     path.push(target.parent);
     return getPath(target.parent, path);

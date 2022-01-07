@@ -5,17 +5,29 @@ import _intersection from "lodash-es/intersection";
 import { load, process } from "./apiLoader";
 import drawAdjacencyGraph from "./AdjacencyGraph";
 import drawFilters, { getNameAsHTMLId } from "./filters";
+
 import "../styles/main.css";
+import { APIInteractionData, Interaction } from "./data";
+import { FilterNode } from "./treeMenu";
 
 const ADJACENCY_GRAPH = "ADJACENCY_GRAPH";
 const FORCE_DIRECTED_GRAPH = "FORCE_DIRECTED_GRAPH";
 
-function ellipsis(text) {
-  const n = 25;
-  return text.length > n ? `${text.substr(0, n - 1)}...` : text;
+function ellipsis(text: string, n = 25) {
+  return text.length > n ? `${text.slice(0, n - 1)}...` : text;
 }
 
-function getFilters(subcellulartreeMenu, diseases) {
+type FilterDefinition = {
+  name: string;
+  label: string;
+  items: NodeFilter[];
+  type?: "tree";
+};
+
+function getFilters(
+  subcellulartreeMenu: NodeFilter[],
+  diseases: NodeFilter[]
+): FilterDefinition[] {
   return [
     {
       name: "subcellularLocations",
@@ -31,7 +43,7 @@ function getFilters(subcellulartreeMenu, diseases) {
   ];
 }
 
-const dispatchLoadedEvent = (el, error) => {
+const dispatchLoadedEvent = (el: HTMLElement, error?: string) => {
   el.dispatchEvent(
     new CustomEvent("protvista-event", {
       detail: {
@@ -45,7 +57,11 @@ const dispatchLoadedEvent = (el, error) => {
 
 // Check if either the source or the target contain one of the specified
 // filters. returns true if no filters selected
-const hasFilterMatch = (source, target, filters) => {
+const hasFilterMatch = (
+  source: APIInteractionData,
+  target: APIInteractionData,
+  filters: FilterDefinition[]
+) => {
   if (filters.length <= 0) {
     return true;
   }
@@ -59,11 +75,16 @@ const hasFilterMatch = (source, target, filters) => {
 };
 
 class InteractionViewer extends HTMLElement {
+  private mode = ADJACENCY_GRAPH;
+
+  private filters: FilterNode[] = [];
+
+  private nodes: APIInteractionData[] = null;
+
+  private _accession: string;
+
   constructor() {
     super();
-    this.mode = ADJACENCY_GRAPH;
-    this.filters = [];
-    this.nodes = null;
     this.clickFilter = this.clickFilter.bind(this);
     this.resetFilter = this.resetFilter.bind(this);
     this.resetAllFilters = this.resetAllFilters.bind(this);
@@ -81,45 +102,49 @@ class InteractionViewer extends HTMLElement {
     this.render();
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ["accession"];
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
+  attributeChangedCallback(
+    attrName: string,
+    oldVal: string,
+    newVal: string
+  ): void {
     if (attrName === "accession" && oldVal != null && oldVal !== newVal) {
       this._accession = newVal;
       this.render();
     }
   }
 
-  set accession(accession) {
+  set accession(accession: string) {
     this._accession = accession;
   }
 
-  get accession() {
+  get accession(): string {
     return this._accession;
   }
 
-  clickFilter(d, filterName) {
+  clickFilter(d: FilterNode, filterName: string): void {
     selectAll(".dropdown-pane").style("visibility", "hidden");
     this.filters
-      .filter((d) => d.type === filterName)
+      .filter((d) => d.type === filterName) // TODO check, this should be d.name???
       .forEach((d) => (d.selected = false));
     d.selected = !d.selected;
     select(`[data-toggle=iv_${filterName}]`).text(ellipsis(d.name));
     this.updateFilterSelection();
   }
 
-  resetFilter(filterName, filterLabel) {
+  resetFilter(filterName: string, filterLabel: string): void {
     selectAll(".dropdown-pane").style("visibility", "hidden");
     this.filters
-      .filter((d) => d.type === filterName)
+      .filter((d) => d.type === filterName) // TODO check, this should be d.name???
       .forEach((d) => (d.selected = false));
     select(`[data-toggle=iv_${filterName}]`).text(filterLabel);
     this.updateFilterSelection();
   }
 
-  updateFilterSelection() {
+  updateFilterSelection(): void {
     for (const filter of this.filters) {
       const item = select(`#${getNameAsHTMLId(filter.name)}`);
       item.classed("active", filter.selected);
@@ -127,7 +152,7 @@ class InteractionViewer extends HTMLElement {
     this.filterData();
   }
 
-  resetAllFilters() {
+  resetAllFilters(): void {
     this.filters.filter((d) => d.selected).forEach((d) => (d.selected = false));
     getFilters().forEach((d) => {
       select(`[data-toggle=iv_${d.name}]`).text(d.label);
@@ -135,18 +160,18 @@ class InteractionViewer extends HTMLElement {
     this.updateFilterSelection();
   }
 
-  getNodeByAccession(accession) {
+  getNodeByAccession(accession: string): APIInteractionData {
     return this.nodes.find((node) => node.accession === accession);
   }
 
   // Hide nodes and labels which don't belong to a visible filter
-  filterData() {
+  filterData(): void {
     const activeFilters = this.filters.filter((d) => d.selected);
 
-    const visibleAccessions = [];
-    selectAll(".cell").attr("opacity", (d) => {
-      const source = this.getNodeByAccession(d.source);
-      const target = this.getNodeByAccession(d.id);
+    const visibleAccessions: string[] = [];
+    selectAll(".cell").attr("opacity", (d: Interaction) => {
+      const source = this.getNodeByAccession(d.accession1);
+      const target = this.getNodeByAccession(d.accession2);
       const visible = hasFilterMatch(source, target, activeFilters);
       if (visible) {
         visibleAccessions.push(source.accession);
@@ -154,12 +179,14 @@ class InteractionViewer extends HTMLElement {
       }
       return visible ? 1 : 0.1;
     });
-    selectAll(".interaction-viewer text").attr("fill-opacity", (d) => {
-      return visibleAccessions.includes(d.accession) ? 1 : 0.1;
-    });
+
+    // TODO fix this, which accession should this apply to?
+    // selectAll(".interaction-viewer text").attr("fill-opacity", (d: Interaction) => {
+    //   return visibleAccessions.includes(d.accession) ? 1 : 0.1;
+    // });
   }
 
-  async render() {
+  async render(): Promise<void> {
     if (!this._accession) {
       return;
     }
