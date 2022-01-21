@@ -21,6 +21,29 @@ class InteractionTooltip extends LitElement {
     if (!window.customElements.get("protvista-tooltip")) {
       window.customElements.define("protvista-tooltip", ProtvistaTooltip);
     }
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  handleClickOutside(e: MouseEvent): void {
+    const tagNames = e
+      .composedPath()
+      .map((eventTarget) => (eventTarget as HTMLElement).tagName);
+    if (
+      !tagNames.includes("circle") &&
+      !tagNames.includes("PROTVISTA-TOOLTIP")
+    ) {
+      this.visible = false;
+    }
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener("click", this.handleClickOutside);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener("click", this.handleClickOutside);
   }
 
   render(): TemplateResult {
