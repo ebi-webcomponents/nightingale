@@ -3,7 +3,7 @@ import { select, selectAll, mouse } from "d3-selection";
 import { scaleBand, scaleLinear } from "d3-scale";
 import InteractionTooltip from "./interaction-tooltip";
 import { addStringItem, traverseTree } from "./treeMenu";
-import { APIInteractionData } from "./data";
+import { APIInteractionData, Interaction } from "./data";
 import { html } from "lit";
 
 // const formatDiseaseInfo = (data, acc: string): string => {
@@ -52,6 +52,7 @@ const drawAdjacencyGraph = (
   el: HTMLElement,
   accession: string,
   adjacencyMap: { accession: string; interactors: string[] }[],
+  interactionsMap: Map<string, Interaction>,
   tooltip: InteractionTooltip
 ): void => {
   // const tooltip = select(el)
@@ -104,6 +105,20 @@ const drawAdjacencyGraph = (
   // x.domain(nodes.map(entry => entry.accession)); intensity.domain([0,
   // d3.max(nodes.map(link => link.experiments))]);
 
+  const getInteractionData = (
+    accession1: string,
+    accession2: string
+  ): Interaction => {
+    let data = interactionsMap.get(`${accession1}${accession2}`);
+    if (!data) {
+      data = interactionsMap.get(`${accession2}${accession1}`);
+    }
+    if (!data) {
+      console.error(`Interaction not found for ${accession1}:${accession2}`);
+    }
+    return data;
+  };
+
   const getIntactLink = (interactor1: string, interactor2: string): string => {
     return `//www.ebi.ac.uk/intact/query/id:${interactor1} AND id:${interactor2}`;
   };
@@ -138,107 +153,78 @@ const drawAdjacencyGraph = (
   //   selectAll(".active-row").remove();
   // };
 
-  // const populateTooltip = (element: HTMLElement, data) => {
-  //   element.html("");
+  const getTooltipContent = (accession1: string, accession2: string) => {
+    const data = getInteractionData(accession1, accession2);
 
-  //   const source = nodes.find((d) => d.accession === data.source);
-  //   const target = nodes.find((d) => d.accession === data.id);
+    return html`
+      <a
+        href=${getIntactLink(data.interactor1, data.interactor2)}
+        target="_blank"
+        >Confirmed by ${data.experiments} experiment(s)</a
+      >
 
-  //   select(element).append("h3").text("Interaction");
-  //   element
-  //     .append("p")
-  //     .append("a")
-  //     .attr("href", getIntactLink(data.interactor1, data.interactor2))
-  //     .attr("target", "_blank")
-  //     .text(`Confirmed by ${data.experiments} experiment(s)`);
+      <table>
+        <thead>
+          <tr>
+            <th />
+            <th>Interactor 1</th>
+            <th>Interactor 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td>TODO</td>
+            <td>TODO</td>
+          </tr>
+          <tr>
+            <td>UniProt</td>
+            <td>
+              <a href="//uniprot.org/uniprot/${data.accession1}"
+                >${data.accession1}</a
+              >
+            </td>
+            <td>
+              <a href="//uniprot.org/uniprot/${data.accession2}"
+                >${data.accession2}</a
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>Chain</td>
+            <td>${data.chain1 || "N/A"}</td>
+            <td>${data.chain2 || "N/A"}</td>
+          </tr>
+          <tr>
+            <td>Disease association</td>
+            <td>TODO</td>
+            <td>TODO</td>
+          </tr>
+          <tr>
+            <td>Subcellular localisation</td>
+            <td>TODO</td>
+            <td>TODO</td>
+          </tr>
+          <tr>
+            <td>Intact</td>
+            <td colspan="2">
+              <a
+                href=${getIntactLink(data.interactor1, data.interactor2)}
+                target="_blank"
+                >${data.interactor1};${data.interactor2}</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  };
 
-  //   const table = element
-  //     .append("table")
-  //     .attr("class", "interaction-viewer-table");
-  //   const headerRow = table.append("tr");
-  //   headerRow.append("th");
-  //   headerRow.append("th").text("Interactor 1");
-  //   headerRow.append("th").text("Interactor 2");
-
-  //   const nameRow = table.append("tr");
-  //   nameRow
-  //     .append("td")
-  //     .text("Name")
-  //     .attr("class", "interaction-viewer-table_row-header");
-  //   nameRow.append("td").text(`${source.name}`);
-  //   nameRow.append("td").text(`${target.name}`);
-
-  //   const uniprotRow = table.append("tr");
-  //   uniprotRow
-  //     .append("td")
-  //     .text("UniProtKB")
-  //     .attr("class", "interaction-viewer-table_row-header");
-  //   uniprotRow
-  //     .append("td")
-  //     .append("a")
-  //     .attr("href", `//uniprot.org/uniprot/${source.accession}`)
-  //     .text(`${source.accession}`);
-  //   uniprotRow
-  //     .append("td")
-  //     .append("a")
-  //     .attr("href", `//uniprot.org/uniprot/${target.accession}`)
-  //     .text(`${target.accession}`);
-
-  //   if (data.chain1 || data.chain2) {
-  //     const chainRow = table.append("tr");
-  //     chainRow
-  //       .append("td")
-  //       .text("Chain")
-  //       .attr("class", "interaction-viewer-table_row-header");
-  //     chainRow.append("td").text(`${data.chain1 ? data.chain1 : "N/A"}`);
-  //     chainRow.append("td").text(`${data.chain2 ? data.chain2 : "N/A"}`);
-  //   }
-
-  //   const diseaseRow = table.append("tr");
-  //   diseaseRow
-  //     .append("td")
-  //     .text("Pathology")
-  //     .attr("class", "interaction-viewer-table_row-header");
-  //   diseaseRow
-  //     .append("td")
-  //     .html(formatDiseaseInfo(source.diseases, source.accession));
-  //   diseaseRow
-  //     .append("td")
-  //     .html(formatDiseaseInfo(target.diseases, target.accession));
-
-  //   const subcellRow = table.append("tr");
-  //   subcellRow
-  //     .append("td")
-  //     .text("Subcellular location")
-  //     .attr("class", "interaction-viewer-table_row-header");
-  //   subcellRow
-  //     .append("td")
-  //     .html(formatSubcellularLocationInfo(source.subcellularLocations));
-  //   subcellRow
-  //     .append("td")
-  //     .html(formatSubcellularLocationInfo(target.subcellularLocations));
-
-  //   const intactRow = table.append("tr");
-  //   intactRow
-  //     .append("td")
-  //     .text("IntAct")
-  //     .attr("class", "interaction-viewer-table_row-header");
-  //   intactRow
-  //     .append("td")
-  //     .attr("colspan", 2)
-  //     .append("a")
-  //     .attr("href", getIntactLink(data.interactor1, data.interactor2))
-  //     .attr("target", "_blank")
-  //     .text(`${data.interactor1};${data.interactor2}`);
-  // };
-
-  const mouseclick = () => {
-    console.log(mouse(el));
+  const mouseclick = (accession1: string, accession2: string) => {
     tooltip.x = +mouse(el)[0];
     tooltip.y = +mouse(el)[1];
-    tooltip.content = html`Hello`;
+    tooltip.content = getTooltipContent(accession1, accession2);
     tooltip.visible = true;
-    // populateTooltip(selectAll(".tooltip-content"), p);
   };
 
   function processRow(row: { accession: string; interactors: string[] }) {
@@ -253,12 +239,15 @@ const drawAdjacencyGraph = (
       })
       .attr("cy", () => x.bandwidth() / 2)
       .attr("r", x.bandwidth() / 3)
-      // .style("fill-opacity", (d) => intensity(d.experiments))
+      .style("fill-opacity", (d) => {
+        const data = getInteractionData(accession, d);
+        return intensity(data?.experiments) || 1;
+      })
       // .style("display", (d) => {
       //   // Only show left half of graph
       //   return x(row.accession) < x(d.id) ? "none" : "";
       // })
-      .on("click", mouseclick);
+      .on("click", (e) => mouseclick(accession, e));
     // .on("mouseover", mouseover)
     // .on("mouseout", mouseout)
 

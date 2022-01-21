@@ -13,141 +13,12 @@ Array [
       "P33763",
       "P06703",
       "P05109",
-      "P05109",
-      "P31949",
-      "P29034",
-      "P06703",
-      "P60903",
-      "P33763",
-      "P26447",
-      "P33764",
-    ],
-  },
-  Object {
-    "accession": "P60903",
-    "interactors": Array [
-      "Q8TD43",
-      "Q09666",
-      "P07355",
-      "P46092",
-      "Q14527",
-      "Q8NB16-2",
-      "P60321",
-      "P33764",
-      "Q8WXG8",
-      "Q8TD43",
-      "O75604",
-      "Q8N5A5-2",
-      "P33764",
-    ],
-  },
-  Object {
-    "accession": "P31949",
-    "interactors": Array [
-      "Q8TD43",
-      "Q96HA8",
-      "P04271",
-      "P04637",
-      "Q8TD43",
-    ],
-  },
-  Object {
-    "accession": "P29034",
-    "interactors": Array [
-      "Q8TD43",
-      "Q3SXY8",
-      "P15311",
-      "Q5JX71",
-      "Q02790",
-      "P52292",
-      "Q00987",
-      "O15151",
-      "P35579",
-      "P23297",
-      "P29034",
-      "P29034",
-      "P33764",
-      "P04271",
-      "P04637",
-      "Q8TD43",
-      "P52293",
-      "P26882",
-      "P33764",
-    ],
-  },
-  Object {
-    "accession": "P33764",
-    "interactors": Array [
-      "Q8TD43",
-      "P29034",
-      "P60903",
-      "Q8TBB1",
-      "P23297",
-      "P60903",
-      "P29034",
-      "Q8WXG8",
-      "P04637",
-      "Q8TD43",
-    ],
-  },
-  Object {
-    "accession": "P26447",
-    "interactors": Array [
-      "Q8TD43",
-      "P15514",
-      "P35070",
-      "Q9HB71",
-      "P00533",
-      "P21860",
-      "Q15303",
-      "P15311",
-      "Q00987",
-      "P35579",
-      "P23297",
-      "P26447",
-      "P26447",
-      "P04271",
-      "P04637",
-      "Q8TD43",
-    ],
-  },
-  Object {
-    "accession": "P33763",
-    "interactors": Array [
-      "Q8TD43",
-      "Q9HB71",
-      "P52907",
-      "O15151",
-      "P35579",
-      "P32418",
-      "P04637",
-      "Q8TD43",
-    ],
-  },
-  Object {
-    "accession": "P06703",
-    "interactors": Array [
-      "Q8TD43",
-      "Q9HB71",
-      "O95684",
-      "B3EWG5",
-      "Q02790",
-      "P52292",
-      "Q00987",
-      "P35579",
-      "P50542",
-      "P04271",
-      "P04637",
-      "Q8TD43",
-      "P26882",
+      "Q8TD43-1",
     ],
   },
   Object {
     "accession": "P05109",
     "interactors": Array [
-      "Q8TD43",
-      "P04406",
-      "P06702",
       "Q8TD43",
     ],
   },
@@ -155,254 +26,54 @@ Array [
     "accession": "Q8TD43-1",
     "interactors": Array [
       "Q8TD43-1",
-      "Q8TD43-1",
-      "Q8TD43-1",
-      "Q8TD43-1",
     ],
   },
   Object {
-    "accession": "P04406",
+    "accession": "P31949",
     "interactors": Array [
-      "P05109",
+      "Q8TD43",
     ],
   },
   Object {
-    "accession": "P06702",
+    "accession": "P29034",
     "interactors": Array [
-      "P05109",
-    ],
-  },
-  Object {
-    "accession": "Q96HA8",
-    "interactors": Array [
-      "P31949",
-    ],
-  },
-  Object {
-    "accession": "P04271",
-    "interactors": Array [
-      "P31949",
       "P29034",
-      "P06703",
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "P04637",
-    "interactors": Array [
-      "P31949",
-      "P29034",
-      "P06703",
-      "P33763",
-      "P26447",
       "P33764",
+      "Q8TD43",
     ],
   },
   Object {
-    "accession": "Q3SXY8",
+    "accession": "P06703",
     "interactors": Array [
-      "P29034",
+      "Q8TD43",
     ],
   },
   Object {
-    "accession": "P15311",
-    "interactors": Array [
-      "P29034",
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "Q5JX71",
-    "interactors": Array [
-      "P29034",
-    ],
-  },
-  Object {
-    "accession": "Q02790",
-    "interactors": Array [
-      "P29034",
-      "P06703",
-    ],
-  },
-  Object {
-    "accession": "P52292",
-    "interactors": Array [
-      "P29034",
-      "P06703",
-    ],
-  },
-  Object {
-    "accession": "Q00987",
-    "interactors": Array [
-      "P29034",
-      "P06703",
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "O15151",
-    "interactors": Array [
-      "P29034",
-      "P33763",
-    ],
-  },
-  Object {
-    "accession": "P35579",
-    "interactors": Array [
-      "P29034",
-      "P06703",
-      "P33763",
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "P23297",
-    "interactors": Array [
-      "P29034",
-      "P26447",
-      "P33764",
-    ],
-  },
-  Object {
-    "accession": "P52293",
-    "interactors": Array [
-      "P29034",
-    ],
-  },
-  Object {
-    "accession": "P26882",
-    "interactors": Array [
-      "P29034",
-      "P06703",
-    ],
-  },
-  Object {
-    "accession": "Q9HB71",
-    "interactors": Array [
-      "P06703",
-      "P33763",
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "O95684",
-    "interactors": Array [
-      "P06703",
-    ],
-  },
-  Object {
-    "accession": "B3EWG5",
-    "interactors": Array [
-      "P06703",
-    ],
-  },
-  Object {
-    "accession": "P50542",
-    "interactors": Array [
-      "P06703",
-    ],
-  },
-  Object {
-    "accession": "Q09666",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "P07355",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "P46092",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "Q14527",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "Q8NB16-2",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "P60321",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "Q8WXG8",
-    "interactors": Array [
-      "P60903",
-      "P33764",
-    ],
-  },
-  Object {
-    "accession": "O75604",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "Q8N5A5-2",
-    "interactors": Array [
-      "P60903",
-    ],
-  },
-  Object {
-    "accession": "P52907",
-    "interactors": Array [
-      "P33763",
-    ],
-  },
-  Object {
-    "accession": "P32418",
-    "interactors": Array [
-      "P33763",
-    ],
-  },
-  Object {
-    "accession": "P15514",
-    "interactors": Array [
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "P35070",
-    "interactors": Array [
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "P00533",
-    "interactors": Array [
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "P21860",
-    "interactors": Array [
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "Q15303",
-    "interactors": Array [
-      "P26447",
-    ],
-  },
-  Object {
-    "accession": "Q8TBB1",
+    "accession": "P60903",
     "interactors": Array [
       "P33764",
+      "Q8TD43",
+    ],
+  },
+  Object {
+    "accession": "P33763",
+    "interactors": Array [
+      "Q8TD43",
+    ],
+  },
+  Object {
+    "accession": "P26447",
+    "interactors": Array [
+      "P26447",
+      "Q8TD43",
+    ],
+  },
+  Object {
+    "accession": "P33764",
+    "interactors": Array [
+      "P60903",
+      "P29034",
+      "Q8TD43",
     ],
   },
 ]

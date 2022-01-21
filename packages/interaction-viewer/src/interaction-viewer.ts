@@ -2,16 +2,15 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators";
 import { load } from "data-loader";
-import { select, selectAll } from "d3-selection";
+import { select } from "d3-selection";
 import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";
 import process from "./apiLoader";
 import drawAdjacencyGraph from "./AdjacencyGraph";
-import "./interaction-tooltip";
 // import drawFilters, { getNameAsHTMLId } from "./filters";
 
 import styles from "./styles";
-import { APIInteractionData, Interaction } from "./data";
+import { APIInteractionData } from "./data";
 import { FilterNode } from "./treeMenu";
 import InteractionTooltip from "./interaction-tooltip";
 
@@ -207,6 +206,7 @@ class InteractionViewer extends LitElement {
             container,
             this.accession,
             adjacencyMap,
+            interactionsMap,
             tooltip
             // getFilters(subcellulartreeMenu, diseases)
           );

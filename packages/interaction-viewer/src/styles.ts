@@ -93,12 +93,12 @@ const styles = css`
 
   :host .cell {
     fill: #4a90e2;
+    cursor: pointer;
   }
 
-  :host .cell.active-cell {
-    r: 0.8em;
-    -webkit-transition: all 0.5s;
-    /* Safari */
+  :host .cell:hover {
+    fill: red;
+    fill-opacity: 1;
     transition: all 0.5s;
   }
 

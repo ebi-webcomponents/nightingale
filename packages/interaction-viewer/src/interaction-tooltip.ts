@@ -49,7 +49,7 @@ class InteractionTooltip extends LitElement {
   render(): TemplateResult {
     console.log(this.visible);
     return html`<protvista-tooltip
-      title="My tooltip"
+      title="Interaction"
       x=${this.x}
       y=${this.y}
       ?visible=${this.visible}
