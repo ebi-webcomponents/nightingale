@@ -4,12 +4,12 @@ import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/interaction-viewer/README.md";
 
-const InteractionViewerWrapper = props => {
+const InteractionViewerWrapper = (props) => {
   loadWebComponent("interaction-viewer", InteractionViewer);
   return (
     <Fragment>
       <Readme content={readmeContent} />
-      <interaction-viewer accession="Q8N1B4" />
+      <interaction-viewer accession="Q8TD43" />
     </Fragment>
   );
 };
