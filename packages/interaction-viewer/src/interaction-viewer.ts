@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { LitElement } from "lit";
+import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators";
 import { load } from "data-loader";
 import { select, selectAll } from "d3-selection";
@@ -9,7 +9,7 @@ import process from "./apiLoader";
 import drawAdjacencyGraph from "./AdjacencyGraph";
 // import drawFilters, { getNameAsHTMLId } from "./filters";
 
-// import "../styles/main.css";
+import styles from "./styles";
 import { APIInteractionData, Interaction } from "./data";
 import { FilterNode } from "./treeMenu";
 
@@ -98,6 +98,8 @@ class InteractionViewer extends LitElement {
     this.getNodeByAccession = this.getNodeByAccession.bind(this);
   }
 
+  static styles = styles;
+
   // clickFilter(d: FilterNode, filterName: string): void {
   //   selectAll(".dropdown-pane").style("visibility", "hidden");
   //   this.filters
@@ -159,17 +161,20 @@ class InteractionViewer extends LitElement {
   //   // });
   // }
 
-  async render(): Promise<void> {
+  async updated(): Promise<void> {
     if (!this.accession) {
       return;
     }
-    this.style.display = "block";
-    this.style.minHeight = "6em";
+
+    const container = this.shadowRoot.getElementById("container");
+
+    container.style.display = "block";
+    container.style.minHeight = "6em";
 
     // clear all previous vis
-    select(this).select(".interaction-title").remove();
-    select(this).select("svg").remove();
-    select(this).select(".interaction-tooltip").remove();
+    select(container).select(".interaction-title").remove();
+    select(container).select("svg").remove();
+    select(container).select(".interaction-tooltip").remove();
 
     const response = await load(
       `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this.accession}.json`
@@ -194,7 +199,7 @@ class InteractionViewer extends LitElement {
       switch (this.mode) {
         case ADJACENCY_GRAPH:
           drawAdjacencyGraph(
-            this,
+            container,
             this.accession,
             adjacencyMap
             // getFilters(subcellulartreeMenu, diseases)
@@ -207,6 +212,11 @@ class InteractionViewer extends LitElement {
           break;
       }
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  render(): TemplateResult {
+    return html`<div id="container"></div>`;
   }
 }
 
