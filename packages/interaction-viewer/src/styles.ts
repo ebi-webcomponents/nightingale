@@ -1,26 +1,26 @@
 import { css } from "lit";
 
 const styles = css`
-  interaction-viewer {
+  :host {
     position: relative;
   }
 
-  interaction-viewer text {
+  :host text {
     font-family: "Open Sans", sans-serif;
     fill: black;
     opacity: 0.75;
     font-size: 12px;
   }
 
-  interaction-viewer .active text {
+  :host .active text {
     opacity: 1;
   }
 
-  interaction-viewer .active-row {
+  :host .active-row {
     stroke: #4a90e2;
   }
 
-  interaction-viewer .interaction-tooltip {
+  :host .interaction-tooltip {
     z-index: 99999;
     position: absolute;
     background: #ffffff;
@@ -33,24 +33,21 @@ const styles = css`
     min-width: 36em;
   }
 
-  interaction-viewer .interaction-tooltip .close-interaction-tooltip {
+  :host .interaction-tooltip .close-interaction-tooltip {
     cursor: pointer;
     float: right;
     margin-bottom: 0.8em;
   }
 
-  interaction-viewer .interaction-tooltip .tooltip-content {
+  :host .interaction-tooltip .tooltip-content {
     clear: both;
   }
 
-  interaction-viewer .interaction-filter-container {
+  :host .interaction-filter-container {
     text-align: left;
   }
 
-  interaction-viewer
-    .interaction-filter-container
-    #filter-display
-    .filter-selected {
+  :host .interaction-filter-container #filter-display .filter-selected {
     margin: 0.2em 0.5em;
     padding: 0.3em 0.1em;
     background-color: #f2f2f2;
@@ -60,21 +57,18 @@ const styles = css`
     display: inline-block;
   }
 
-  interaction-viewer
-    .interaction-filter-container
-    #filter-display
-    .filter-selected::after {
+  :host .interaction-filter-container #filter-display .filter-selected::after {
     content: "✖";
     margin: 0 0.3em;
   }
 
-  interaction-viewer .interaction-filter-container .interaction-filter {
+  :host .interaction-filter-container .interaction-filter {
     vertical-align: top;
     margin-bottom: 0.5em;
     display: inline-block;
   }
 
-  interaction-viewer .interaction-filter-container .interaction-filter ul {
+  :host .interaction-filter-container .interaction-filter ul {
     border: #e8e8e8 1px solid;
     max-height: 15em;
     overflow-y: auto;
@@ -83,48 +77,40 @@ const styles = css`
     margin: 0;
   }
 
-  interaction-viewer .interaction-filter-container .interaction-filter ul li {
+  :host .interaction-filter-container .interaction-filter ul li {
     cursor: pointer;
     padding: 0.5em 0.5em;
     border-bottom: #e8e8e8 1px solid;
   }
 
-  interaction-viewer
-    .interaction-filter-container
-    .interaction-filter
-    ul
-    li:hover {
+  :host .interaction-filter-container .interaction-filter ul li:hover {
     background-color: #f2f2f2;
   }
 
-  interaction-viewer
-    .interaction-filter-container
-    .interaction-filter
-    ul
-    li.active {
+  :host .interaction-filter-container .interaction-filter ul li.active {
     font-weight: bold;
   }
 
-  interaction-viewer .interaction-viewer .cell {
+  :host .cell {
     fill: #4a90e2;
   }
 
-  interaction-viewer .interaction-viewer .cell.active-cell {
+  :host .cell.active-cell {
     r: 0.8em;
     -webkit-transition: all 0.5s;
     /* Safari */
     transition: all 0.5s;
   }
 
-  interaction-viewer .interaction-viewer .hidden-side {
+  :host .hidden-side {
     fill: #e8e8e8;
   }
 
-  interaction-viewer .interaction-viewer .main-accession {
+  :host .main-accession {
     font-weight: bold;
   }
 
-  interaction-viewer .interaction-viewer .text-highlight {
+  :host .text-highlight {
     fill: #fff;
     opacity: 0;
     -webkit-transition: all 0.5s;
@@ -132,29 +118,27 @@ const styles = css`
     transition: all 0.5s;
   }
 
-  interaction-viewer .interaction-viewer-table tr:nth-child(even) {
+  :host .:host-table tr:nth-child(even) {
     background: #f2f2f2;
   }
 
-  interaction-viewer .interaction-viewer-table td,
-  interaction-viewer .interaction-viewer-table th {
+  :host .:host-table td,
+  :host .:host-table th {
     padding: 0.5em;
     text-align: center;
   }
 
-  interaction-viewer .interaction-viewer-table th {
+  :host .:host-table th {
     background-color: #e8e8e8;
     white-space: nowrap;
   }
 
-  interaction-viewer
-    .interaction-viewer-table
-    .interaction-viewer-table_row-header {
+  :host .:host-table .:host-table_row-header {
     font-weight: bold;
     text-align: right;
   }
 
-  interaction-viewer .button {
+  :host .button {
     display: inline-block;
     vertical-align: middle;
     margin: 0 1em 0 0;
@@ -172,15 +156,15 @@ const styles = css`
     border: 1px solid #e8e8e8;
   }
 
-  interaction-viewer .iv_reset {
+  :host .iv_reset {
     display: block;
   }
 
-  interaction-viewer .button:hover {
+  :host .button:hover {
     color: #3a343a;
   }
 
-  interaction-viewer .button.dropdown::after {
+  :host .button.dropdown::after {
     display: block;
     width: 0;
     height: 0;
@@ -196,7 +180,7 @@ const styles = css`
     margin-left: 1em;
   }
 
-  interaction-viewer .dropdown-pane {
+  :host .dropdown-pane {
     position: absolute;
     z-index: 10;
     display: block;
@@ -208,12 +192,12 @@ const styles = css`
     background-color: #fefefe;
   }
 
-  interaction-viewer .tree-list {
+  :host .tree-list {
     text-align: left;
     list-style: none;
   }
 
-  interaction-viewer .tree-list li {
+  :host .tree-list li {
     margin: 0.5em 0;
   }
 `;
