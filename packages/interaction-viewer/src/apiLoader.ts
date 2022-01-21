@@ -1,7 +1,4 @@
-/* eslint-disable no-param-reassign */
-// import clone from "lodash-es/clone";
-import { APIInteractionData } from "./data";
-import { addStringItem, FilterNode } from "./treeMenu";
+import { APIInteractionData, Interaction } from "./data";
 
 // function addInteractor(interactor, interactors) {
 //   const existingInteractor = interactors.find((i) => interactor.id === i.id);
@@ -38,109 +35,99 @@ import { addStringItem, FilterNode } from "./treeMenu";
 //   return { nodes, edges };
 // };
 
-export function process(data: APIInteractionData[]): {
-  data: APIInteractionData[];
-  subcellulartreeMenu: FilterNode[];
-  diseases: FilterNode[];
-} {
-  const subcellulartreeMenu: FilterNode[] = [];
-  const diseases = {};
+const process = (
+  data: APIInteractionData[]
+): {
+  adjacencyMap: { accession: string; interactors: string[] }[];
+  interactionsMap: Map<string, Interaction>;
+  // subcellulartreeMenu: FilterNode[];
+  // diseases: FilterNode[];
+} => {
+  // const subcellulartreeMenu: FilterNode[] = [];
+  // const diseases = {};
 
-  // The 2 blocks below are necesserary as there is an issue with the data: it's not symmetrical
-  data = data.map((d) => {
-    if (!d.interactions) d.interactions = [];
-    return d;
-  });
+  const interactionsMap = new Map<string, Interaction>();
+  const adjacencyMap: { accession: string; interactors: string[] }[] = [];
 
-  // Add symmetry if required
-  // data.forEach((entry) => {
-  //   entry.interactions.forEach((interactor) => {
-  //     const otherInteractor = data.find(
-  //       (entry2) => entry2.accession === interactor.accession2
-  //     );
-  //     if (otherInteractor) {
-  //       if (
-  //         !otherInteractor.interactions.find(
-  //           (d) =>
-  //             d.interactor1 === entry.accession ||
-  //             d.interactor2 === entry.accession
-  //         )
-  //       ) {
-  //         const interactorToAdd = clone(interactor);
-  //         interactorToAdd.id = entry.accession;
-  //         otherInteractor.interactions.push(interactorToAdd);
-  //       }
-  //     }
-  //   });
-  // });
+  data.forEach((entry) => {
+    console.log(entry.accession);
+    entry.interactions.forEach((interaction) => {
+      const id = `${interaction.accession1}${interaction.accession2}`;
+      interactionsMap.set(id, interaction);
 
-  // remove interactions which are not part of current set
-  data.forEach((element) => {
-    element.filterTerms = [];
-    const interactors = [];
-    // // Add source  to the nodes
-    // for (const interactor of element.interactions) {
-    //   // Add interaction for SELF
-    //   if (interactor.interactionType === "SELF") {
-    //     interactor.source = element.accession;
-    //     interactor.id = element.accession;
-    //     addInteractor(interactor, interactors);
-    //   } else if (
-    //     data.some((d) => {
-    //       // Check that interactor is in the data
-    //       return d.accession === interactor.id;
-    //     })
-    //   ) {
-    //     interactor.source = element.accession;
-    //     addInteractor(interactor, interactors);
+      const foundEntry = adjacencyMap.find(
+        ({ accession }) => accession === entry.accession
+      );
+      if (foundEntry) {
+        // TODO check unique here. Not using set as it makes things tricky with d3
+        foundEntry.interactors.push(
+          interaction.accession1 === entry.accession
+            ? interaction.accession2
+            : interaction.accession1
+        );
+      } else {
+        adjacencyMap.push({
+          accession: entry.accession,
+          interactors: [
+            interaction.accession1 === entry.accession
+              ? interaction.accession2
+              : interaction.accession1,
+          ],
+        });
+      }
+    });
+    // Parse supporting data for filters
+    // if (entry.subcellularLocations) {
+    //   entry.subcellularLocations
+    //     .filter((d) => d.locations)
+    //     .forEach((location) => {
+    //       for (const actualLocation of location.locations) {
+    //         addStringItem(actualLocation.location.value, subcellulartreeMenu);
+    //         const locationSplit = actualLocation.location.value.split(", ");
+    //         entry.filterTerms = entry.filterTerms.concat(locationSplit);
+    //       }
+    //     });
+    // }
+    // if (entry.diseases) {
+    //   for (const disease of entry.diseases) {
+    //     if (disease.diseaseId) {
+    //       diseases[disease.diseaseId] = {
+    //         name: disease.diseaseId,
+    //         selected: false,
+    //       };
+    //       entry.filterTerms.push(disease.diseaseId);
+    //     }
     //   }
     // }
-
-    element.interactions = interactors;
-
-    if (element.subcellularLocations) {
-      element.subcellularLocations
-        .filter((d) => d.locations)
-        .forEach((location) => {
-          for (const actualLocation of location.locations) {
-            addStringItem(actualLocation.location.value, subcellulartreeMenu);
-            const locationSplit = actualLocation.location.value.split(", ");
-            element.filterTerms = element.filterTerms.concat(locationSplit);
-          }
-        });
-    }
-    if (element.diseases) {
-      for (const disease of element.diseases) {
-        if (disease.diseaseId) {
-          diseases[disease.diseaseId] = {
-            name: disease.diseaseId,
-            selected: false,
-          };
-          element.filterTerms.push(disease.diseaseId);
-        }
-      }
-    }
   });
-  return { data, subcellulartreeMenu, diseases: Object.values(diseases) };
-}
 
-export function load(accession: string): Promise<APIInteractionData[]> {
-  const url = `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${accession}.json`;
-  return fetch(url)
-    .then((response) => {
-      if (response.status === 404) return null;
-      if (!response.ok) {
-        console.error(
-          new Error(
-            `Request Failed: Status = ${
-              response.status
-            }; URI = ${url}; Time = ${new Date()}`
-          )
-        );
-        return null;
-      }
-      if (response.status === 204) return null;
-      return response.json();
-    })
-    .then((json) => json);
-}
+  return { adjacencyMap, interactionsMap };
+
+  // remove interactions which are not part of current set
+  // data.forEach((element) => {
+  //   element.filterTerms = [];
+  //   const interactors = [];
+  // // Add source  to the nodes
+  // for (const interactor of element.interactions) {
+  //   // Add interaction for SELF
+  //   if (interactor.interactionType === "SELF") {
+  //     interactor.source = element.accession;
+  //     interactor.id = element.accession;
+  //     addInteractor(interactor, interactors);
+  //   } else if (
+  //     data.some((d) => {
+  //       // Check that interactor is in the data
+  //       return d.accession === interactor.id;
+  //     })
+  //   ) {
+  //     interactor.source = element.accession;
+  //     addInteractor(interactor, interactors);
+  //   }
+  // }
+
+  // element.interactions = interactors;
+  // });
+  // return { data, subcellulartreeMenu, diseases: Object.values(diseases) };
+};
+
+export default process;

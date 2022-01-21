@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { select } from "d3-selection";
-import { traverseTree } from "./treeMenu";
+import { FilterDefinition } from "./interaction-viewer";
+import { FilterNode, traverseTree } from "./treeMenu";
 
 function toggleFilterVisibility() {
   const id = `#${select(this).attr("data-toggle")}`;
@@ -12,19 +13,18 @@ function toggleFilterVisibility() {
   );
 }
 
-export function getNameAsHTMLId(name) {
-  return name.toLowerCase().replace(/\s|,|^\d/g, "_");
-}
+export const getNameAsHTMLId = (name: string): string =>
+  name.toLowerCase().replace(/\s|,|^\d/g, "_");
 
 // Add a filter to the interface
 function drawFilters(
-  el,
-  filtersToAdd,
-  allFilters,
-  clickFilter,
-  resetFilter,
-  resetAllFilters
-) {
+  el: HTMLElement,
+  filtersToAdd: FilterDefinition[],
+  allFilters: FilterNode[],
+  clickFilter: (d: FilterNode, filterName: string) => void,
+  resetFilter: (filterName: string, filterLabel: string) => void,
+  resetAllFilters: () => void
+): void {
   select(el).selectAll(".interaction-filter-container").remove();
   const container = select(el)
     .append("div")
@@ -89,7 +89,7 @@ function drawFilters(
       resetAllFilters();
       return false;
     });
-  return allFilters;
+  // return allFilters;
 }
 
 export default drawFilters;
