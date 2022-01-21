@@ -1,7 +1,10 @@
+/* eslint-disable no-param-reassign */
 import { select, selectAll, mouse } from "d3-selection";
 import { scaleBand, scaleLinear } from "d3-scale";
+import InteractionTooltip from "./interaction-tooltip";
 import { addStringItem, traverseTree } from "./treeMenu";
 import { APIInteractionData } from "./data";
+import { html } from "lit";
 
 // const formatDiseaseInfo = (data, acc: string): string => {
 //   if (data) {
@@ -48,7 +51,8 @@ import { APIInteractionData } from "./data";
 const drawAdjacencyGraph = (
   el: HTMLElement,
   accession: string,
-  adjacencyMap: { accession: string; interactors: string[] }[]
+  adjacencyMap: { accession: string; interactors: string[] }[],
+  tooltip: InteractionTooltip
 ): void => {
   // const tooltip = select(el)
   //   .append("div")
@@ -228,14 +232,14 @@ const drawAdjacencyGraph = (
   //     .text(`${data.interactor1};${data.interactor2}`);
   // };
 
-  // const mouseclick = (p) => {
-  //   populateTooltip(selectAll(".tooltip-content"), p);
-  //   tooltip
-  //     .style("opacity", 0.9)
-  //     .style("display", "inline")
-  //     .style("left", `${mouse(el)[0] + 10}px`)
-  //     .style("top", `${mouse(el)[1] - 15}px`);
-  // };
+  const mouseclick = () => {
+    console.log(mouse(el));
+    tooltip.x = +mouse(el)[0];
+    tooltip.y = +mouse(el)[1];
+    tooltip.content = html`Hello`;
+    tooltip.visible = true;
+    // populateTooltip(selectAll(".tooltip-content"), p);
+  };
 
   function processRow(row: { accession: string; interactors: string[] }) {
     const cell = select(this).selectAll(".cell").data(row.interactors);
@@ -248,13 +252,13 @@ const drawAdjacencyGraph = (
         return x(d) + x.bandwidth() / 2;
       })
       .attr("cy", () => x.bandwidth() / 2)
-      .attr("r", x.bandwidth() / 3);
-    // .style("fill-opacity", (d) => intensity(d.experiments))
-    // .style("display", (d) => {
-    //   // Only show left half of graph
-    //   return x(row.accession) < x(d.id) ? "none" : "";
-    // })
-    // .on("click", mouseclick)
+      .attr("r", x.bandwidth() / 3)
+      // .style("fill-opacity", (d) => intensity(d.experiments))
+      // .style("display", (d) => {
+      //   // Only show left half of graph
+      //   return x(row.accession) < x(d.id) ? "none" : "";
+      // })
+      .on("click", mouseclick);
     // .on("mouseover", mouseover)
     // .on("mouseout", mouseout)
 

@@ -7,11 +7,13 @@ import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";
 import process from "./apiLoader";
 import drawAdjacencyGraph from "./AdjacencyGraph";
+import "./interaction-tooltip";
 // import drawFilters, { getNameAsHTMLId } from "./filters";
 
 import styles from "./styles";
 import { APIInteractionData, Interaction } from "./data";
 import { FilterNode } from "./treeMenu";
+import InteractionTooltip from "./interaction-tooltip";
 
 const ADJACENCY_GRAPH = "ADJACENCY_GRAPH";
 const FORCE_DIRECTED_GRAPH = "FORCE_DIRECTED_GRAPH";
@@ -167,6 +169,9 @@ class InteractionViewer extends LitElement {
     }
 
     const container = this.shadowRoot.getElementById("container");
+    const tooltip = this.shadowRoot.getElementById(
+      "tooltip"
+    ) as InteractionTooltip;
 
     container.style.display = "block";
     container.style.minHeight = "6em";
@@ -201,7 +206,8 @@ class InteractionViewer extends LitElement {
           drawAdjacencyGraph(
             container,
             this.accession,
-            adjacencyMap
+            adjacencyMap,
+            tooltip
             // getFilters(subcellulartreeMenu, diseases)
           );
           break;
@@ -216,7 +222,8 @@ class InteractionViewer extends LitElement {
 
   // eslint-disable-next-line class-methods-use-this
   render(): TemplateResult {
-    return html`<div id="container"></div>`;
+    return html`<div id="container"></div>
+      <interaction-tooltip id="tooltip"></interaction-tooltip>`;
   }
 }
 

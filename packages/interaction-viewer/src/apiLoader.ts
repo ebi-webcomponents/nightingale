@@ -18,7 +18,6 @@ const process = (
   const accessionList = adjacencyMap.map(({ accession }) => accession);
 
   data.forEach((entry) => {
-    console.log(entry.accession);
     entry.interactions.forEach((interaction) => {
       const id = `${interaction.accession1}${interaction.accession2}`;
       interactionsMap.set(id, interaction);
