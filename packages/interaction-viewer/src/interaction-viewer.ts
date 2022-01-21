@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import { LitElement } from "lit";
+import { customElement, property } from "lit/decorators";
 import { load } from "data-loader";
 import { select, selectAll } from "d3-selection";
 import _union from "lodash-es/union";
@@ -75,14 +77,16 @@ const hasFilterMatch = (
   );
 };
 
-class InteractionViewer extends HTMLElement {
+@customElement("interaction-viewer")
+class InteractionViewer extends LitElement {
   private mode = ADJACENCY_GRAPH;
 
   private filters: FilterNode[] = [];
 
   private nodes: APIInteractionData[] = null;
 
-  private _accession: string;
+  @property()
+  accession: string;
 
   constructor() {
     super();
@@ -92,38 +96,6 @@ class InteractionViewer extends HTMLElement {
     // this.updateFilterSelection = this.updateFilterSelection.bind(this);
     // this.filterData = this.filterData.bind(this);
     this.getNodeByAccession = this.getNodeByAccession.bind(this);
-  }
-
-  static get is(): string {
-    return "interaction-viewer";
-  }
-
-  connectedCallback(): void {
-    this._accession = this.getAttribute("accession");
-    this.render();
-  }
-
-  static get observedAttributes(): string[] {
-    return ["accession"];
-  }
-
-  attributeChangedCallback(
-    attrName: string,
-    oldVal: string,
-    newVal: string
-  ): void {
-    if (attrName === "accession" && oldVal != null && oldVal !== newVal) {
-      this._accession = newVal;
-      this.render();
-    }
-  }
-
-  set accession(accession: string) {
-    this._accession = accession;
-  }
-
-  get accession(): string {
-    return this._accession;
   }
 
   // clickFilter(d: FilterNode, filterName: string): void {
@@ -188,7 +160,7 @@ class InteractionViewer extends HTMLElement {
   // }
 
   async render(): Promise<void> {
-    if (!this._accession) {
+    if (!this.accession) {
       return;
     }
     this.style.display = "block";
@@ -200,7 +172,7 @@ class InteractionViewer extends HTMLElement {
     select(this).select(".interaction-tooltip").remove();
 
     const response = await load(
-      `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this._accession}.json`
+      `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this.accession}.json`
     );
     const data = response.payload as APIInteractionData[];
     if (data) {
@@ -223,7 +195,7 @@ class InteractionViewer extends HTMLElement {
         case ADJACENCY_GRAPH:
           drawAdjacencyGraph(
             this,
-            this._accession,
+            this.accession,
             adjacencyMap
             // getFilters(subcellulartreeMenu, diseases)
           );

@@ -38,6 +38,7 @@
     "d3-scale": "^3.2.3",
     "d3-selection": "^1.4.0",
     "data-loader": "^3.0.0",
+    "lit": "^2.1.1",
     "lodash-es": "^4.17.11",
     "protvista-tooltip": "^3.1.2",
     "whatwg-fetch": "^3.4.1"
