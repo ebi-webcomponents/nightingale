@@ -12,7 +12,11 @@ import drawAdjacencyGraph from "./AdjacencyGraph";
 import styles from "./styles";
 import { APIInteractionData } from "./data";
 import { FilterNode } from "./treeMenu";
+// eslint-disable-next-line import/no-duplicates
+import InteractionTooltip from "./interaction-tooltip";
 
+// Import additional components
+// eslint-disable-next-line import/no-duplicates
 import "./interaction-tooltip";
 
 function ellipsis(text: string, n = 25) {
@@ -77,7 +81,7 @@ const hasFilterMatch = (
 };
 
 @customElement("interaction-viewer")
-class InteractionViewer extends LitElement {
+export default class InteractionViewer extends LitElement {
   private filters: FilterNode[] = [];
 
   private nodes: APIInteractionData[] = null;
@@ -214,4 +218,9 @@ class InteractionViewer extends LitElement {
   }
 }
 
-export default InteractionViewer;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+declare global {
+  interface HTMLElementTagNameMap {
+    "interaction-viewer": InteractionViewer;
+  }
+}

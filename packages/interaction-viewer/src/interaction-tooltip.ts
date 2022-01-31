@@ -57,3 +57,10 @@ export default class InteractionTooltip extends LitElement {
     </protvista-tooltip>`;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+declare global {
+  interface HTMLElementTagNameMap {
+    "interaction-tooltip": InteractionTooltip;
+  }
+}
