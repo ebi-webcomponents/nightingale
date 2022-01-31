@@ -153,7 +153,11 @@ class ProtvistaTooltip extends LitElement {
       :host a,
       :host a:link,
       :host a:active,
-      :host a:hover {
+      :host a:hover,
+      ::slotted(a),
+      ::slotted(a:link),
+      ::slotted(a:active),
+      ::slotted(a:hover) {
         color: #fff;
       }
 
@@ -204,7 +208,8 @@ class ProtvistaTooltip extends LitElement {
     // retrieve all necessary measurements
     const container = document.querySelector(this.container || "html");
     const containerRect = container.getBoundingClientRect();
-    const tooltipRect = this.shadowRoot.firstElementChild.getBoundingClientRect();
+    const tooltipRect =
+      this.shadowRoot.firstElementChild.getBoundingClientRect();
     const style = getComputedStyle(this);
     const triangleWidth = getNumberFromStyleString(
       style.getPropertyValue("--triangle-width"),
