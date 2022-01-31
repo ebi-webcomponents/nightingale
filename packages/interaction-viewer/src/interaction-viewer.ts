@@ -2,9 +2,10 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators";
 import { load } from "data-loader";
-import { select } from "d3-selection";
+import { select } from "d3";
 import _union from "lodash-es/union";
 import _intersection from "lodash-es/intersection";
+
 import process from "./apiLoader";
 import drawAdjacencyGraph from "./AdjacencyGraph";
 // import drawFilters, { getNameAsHTMLId } from "./filters";

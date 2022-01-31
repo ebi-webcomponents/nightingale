@@ -1,10 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { select, selectAll, mouse } from "d3-selection";
-import { scaleBand, scaleLinear } from "d3-scale";
+import { html } from "lit";
+import { select, selectAll, mouse, scaleBand, scaleLinear } from "d3";
 import InteractionTooltip from "./interaction-tooltip";
 import { addStringItem, traverseTree } from "./treeMenu";
 import { APIInteractionData, Interaction } from "./data";
-import { html } from "lit";
 
 // const formatDiseaseInfo = (data, acc: string): string => {
 //   if (data) {
