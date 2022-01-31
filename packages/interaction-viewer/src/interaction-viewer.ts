@@ -64,22 +64,22 @@ const dispatchLoadedEvent = (el: HTMLElement, error?: string) => {
 
 // Check if either the source or the target contain one of the specified
 // filters. returns true if no filters selected
-const hasFilterMatch = (
-  source: APIInteractionData,
-  target: APIInteractionData,
-  filters: FilterDefinition[]
-) => {
-  if (filters.length <= 0) {
-    return true;
-  }
-  const interactionFilters = _union(source.filterTerms, target.filterTerms);
-  return (
-    _intersection(
-      interactionFilters,
-      filters.map((item) => item.name)
-    ).length === filters.length
-  );
-};
+// const hasFilterMatch = (
+//   source: APIInteractionData,
+//   target: APIInteractionData,
+//   filters: FilterDefinition[]
+// ) => {
+//   if (filters.length <= 0) {
+//     return true;
+//   }
+//   const interactionFilters = _union(source.filterTerms, target.filterTerms);
+//   return (
+//     _intersection(
+//       interactionFilters,
+//       filters.map((item) => item.name)
+//     ).length === filters.length
+//   );
+// };
 
 @customElement("interaction-viewer")
 export default class InteractionViewer extends LitElement {
@@ -189,6 +189,7 @@ export default class InteractionViewer extends LitElement {
       const {
         adjacencyMap,
         interactionsMap,
+        entryStore,
         // subcellulartreeMenu,
         // diseases,
       } = process(data);
@@ -206,6 +207,7 @@ export default class InteractionViewer extends LitElement {
         this.accession,
         adjacencyMap,
         interactionsMap,
+        entryStore,
         tooltip
         // getFilters(subcellulartreeMenu, diseases)
       );

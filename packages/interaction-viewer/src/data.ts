@@ -61,5 +61,5 @@ export type APIInteractionData = {
   interactions?: Interaction[];
   diseases?: Disease[];
   subcellularLocations?: SubcellularLocation[];
-  filterTerms?: string[];
+  // filterTerms?: string[];
 };

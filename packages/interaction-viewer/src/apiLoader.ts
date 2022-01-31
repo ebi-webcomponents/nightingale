@@ -1,10 +1,28 @@
-import { APIInteractionData, Interaction } from "./data";
+import {
+  APIInteractionData,
+  Disease,
+  Interaction,
+  SubcellularLocation,
+} from "./data";
+
+export type EntryData = {
+  name: string;
+  proteinExistence: string;
+  taxonomy: number;
+  diseases?: Disease[];
+  subcellularLocations?: SubcellularLocation[];
+  filterTerms?: string[];
+};
+
+export const trimIsoformSuffix = (accession: string): string =>
+  accession.replace(/-\d+/, "");
 
 const process = (
   data: APIInteractionData[]
 ): {
   adjacencyMap: { accession: string; interactors: string[] }[];
   interactionsMap: Map<string, Interaction>;
+  entryStore: Map<string, EntryData>;
   // subcellulartreeMenu: FilterNode[];
   // diseases: FilterNode[];
 } => {
@@ -12,14 +30,26 @@ const process = (
   // const diseases = {};
 
   const interactionsMap = new Map<string, Interaction>();
+  const entryStore = new Map<string, EntryData>();
   const adjacencyMap: { accession: string; interactors: string[] }[] = data.map(
     (entry) => ({ accession: entry.accession, interactors: [] })
   );
   const accessionList = adjacencyMap.map(({ accession }) => accession);
 
   data.forEach((entry) => {
+    entryStore.set(entry.accession, {
+      name: entry.name,
+      proteinExistence: entry.proteinExistence,
+      taxonomy: entry.taxonomy,
+      diseases: entry.diseases,
+      subcellularLocations: entry.subcellularLocations,
+      filterTerms: [],
+    });
+
     entry.interactions.forEach((interaction) => {
-      const id = `${interaction.accession1}${interaction.accession2}`;
+      const id = `${trimIsoformSuffix(
+        interaction.accession1
+      )}${trimIsoformSuffix(interaction.accession2)}`;
       interactionsMap.set(id, interaction);
       const foundEntry = adjacencyMap.find(
         ({ accession }) => accession === entry.accession
@@ -60,7 +90,7 @@ const process = (
     // }
   });
 
-  return { adjacencyMap, interactionsMap };
+  return { adjacencyMap, interactionsMap, entryStore };
 };
 
 export default process;

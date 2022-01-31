@@ -4,6 +4,7 @@ import { select, selectAll, mouse, scaleBand, scaleLinear } from "d3";
 import InteractionTooltip from "./interaction-tooltip";
 import { addStringItem, traverseTree } from "./treeMenu";
 import { APIInteractionData, Interaction } from "./data";
+import { EntryData, trimIsoformSuffix } from "./apiLoader";
 
 // const formatDiseaseInfo = (data, acc: string): string => {
 //   if (data) {
@@ -52,20 +53,9 @@ const drawAdjacencyGraph = (
   accession: string,
   adjacencyMap: { accession: string; interactors: string[] }[],
   interactionsMap: Map<string, Interaction>,
+  entryStore: Map<string, EntryData>,
   tooltip: InteractionTooltip
 ): void => {
-  // const tooltip = select(el)
-  //   .append("div")
-  //   .attr("class", "interaction-tooltip")
-  //   .style("display", "none")
-  //   .style("opacity", 0);
-  // tooltip
-  //   .append("span")
-  //   .attr("class", "close-interaction-tooltip")
-  //   .text("Close ✖")
-  //   .on("click", closeTooltip);
-  // tooltip.append("div").attr("class", "tooltip-content");
-
   select(el)
     .append("p")
     .attr("class", "interaction-title")
@@ -173,8 +163,8 @@ const drawAdjacencyGraph = (
         <tbody>
           <tr>
             <td>Name</td>
-            <td>TODO</td>
-            <td>TODO</td>
+            <td>${entryStore.get(accession1).name}</td>
+            <td>${entryStore.get(accession2).name}</td>
           </tr>
           <tr>
             <td>UniProt</td>
@@ -239,7 +229,10 @@ const drawAdjacencyGraph = (
       .attr("cy", () => x.bandwidth() / 2)
       .attr("r", x.bandwidth() / 3)
       .style("fill-opacity", (d) => {
-        const data = getInteractionData(row.accession, d);
+        const data = getInteractionData(
+          trimIsoformSuffix(row.accession),
+          trimIsoformSuffix(d)
+        );
         return intensity(data?.experiments) || 1;
       })
       // .style("display", (d) => {
@@ -276,8 +269,7 @@ const drawAdjacencyGraph = (
     .attr("dy", ".32em")
     .attr("text-anchor", "end")
     .text((d) => {
-      return d.accession;
-      // return nodes[i].name;
+      return entryStore.get(d.accession).name;
     });
   // .attr("class", (d, i) =>
   //   nodes[i].accession === accession ? "main-accession" : ""
@@ -305,7 +297,7 @@ const drawAdjacencyGraph = (
     .attr("y", x.bandwidth() / 2)
     .attr("dy", ".32em")
     .attr("text-anchor", "start")
-    .text((d) => d.accession);
+    .text((d) => entryStore.get(d.accession).name);
   // .text((d, i) => nodes[i].name)
   // .attr("class", (d, i) =>
   //   nodes[i].accession === accession ? "main-accession" : ""

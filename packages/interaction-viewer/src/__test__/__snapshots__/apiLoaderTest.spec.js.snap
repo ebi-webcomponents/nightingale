@@ -153,7 +153,7 @@ Map {
     "interactor2": "EBI-355281",
     "organismDiffer": false,
   },
-  "Q8TD43-1Q8TD43-1" => Object {
+  "Q8TD43Q8TD43" => Object {
     "accession1": "Q8TD43-1",
     "accession2": "Q8TD43-1",
     "experiments": 2,
@@ -513,7 +513,7 @@ Map {
     "interactor2": "EBI-1045161",
     "organismDiffer": false,
   },
-  "P60903Q8NB16-2" => Object {
+  "P60903Q8NB16" => Object {
     "accession1": "P60903",
     "accession2": "Q8NB16-2",
     "experiments": 3,
@@ -567,7 +567,7 @@ Map {
     "interactor2": "EBI-743272",
     "organismDiffer": false,
   },
-  "P60903Q8N5A5-2" => Object {
+  "P60903Q8N5A5" => Object {
     "accession1": "P60903",
     "accession2": "Q8N5A5-2",
     "experiments": 3,
