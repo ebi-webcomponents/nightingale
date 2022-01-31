@@ -12,10 +12,8 @@ import drawAdjacencyGraph from "./AdjacencyGraph";
 import styles from "./styles";
 import { APIInteractionData } from "./data";
 import { FilterNode } from "./treeMenu";
-import InteractionTooltip from "./interaction-tooltip";
 
-const ADJACENCY_GRAPH = "ADJACENCY_GRAPH";
-const FORCE_DIRECTED_GRAPH = "FORCE_DIRECTED_GRAPH";
+import "./interaction-tooltip";
 
 function ellipsis(text: string, n = 25) {
   return text.length > n ? `${text.slice(0, n - 1)}...` : text;
@@ -80,8 +78,6 @@ const hasFilterMatch = (
 
 @customElement("interaction-viewer")
 class InteractionViewer extends LitElement {
-  private mode = ADJACENCY_GRAPH;
-
   private filters: FilterNode[] = [];
 
   private nodes: APIInteractionData[] = null;
@@ -200,23 +196,14 @@ class InteractionViewer extends LitElement {
       //   this.resetFilter,
       //   this.resetAllFilters
       // );
-      switch (this.mode) {
-        case ADJACENCY_GRAPH:
-          drawAdjacencyGraph(
-            container,
-            this.accession,
-            adjacencyMap,
-            interactionsMap,
-            tooltip
-            // getFilters(subcellulartreeMenu, diseases)
-          );
-          break;
-        case FORCE_DIRECTED_GRAPH:
-          break;
-        //
-        default:
-          break;
-      }
+      drawAdjacencyGraph(
+        container,
+        this.accession,
+        adjacencyMap,
+        interactionsMap,
+        tooltip
+        // getFilters(subcellulartreeMenu, diseases)
+      );
     }
   }
 

@@ -240,14 +240,14 @@ const drawAdjacencyGraph = (
       .attr("cy", () => x.bandwidth() / 2)
       .attr("r", x.bandwidth() / 3)
       .style("fill-opacity", (d) => {
-        const data = getInteractionData(accession, d);
+        const data = getInteractionData(row.accession, d);
         return intensity(data?.experiments) || 1;
       })
       // .style("display", (d) => {
       //   // Only show left half of graph
       //   return x(row.accession) < x(d.id) ? "none" : "";
       // })
-      .on("click", (e) => mouseclick(accession, e));
+      .on("click", (e) => mouseclick(row.accession, e));
     // .on("mouseover", mouseover)
     // .on("mouseout", mouseout)
 

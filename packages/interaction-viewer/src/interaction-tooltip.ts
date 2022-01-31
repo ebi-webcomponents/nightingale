@@ -3,17 +3,17 @@ import { customElement, property } from "lit/decorators";
 import ProtvistaTooltip from "protvista-tooltip";
 
 @customElement("interaction-tooltip")
-class InteractionTooltip extends LitElement {
-  @property()
+export default class InteractionTooltip extends LitElement {
+  @property({ type: Object })
   content: TemplateResult;
 
-  @property()
+  @property({ type: Number })
   x: number;
 
-  @property()
+  @property({ type: Number })
   y: number;
 
-  @property()
+  @property({ type: Boolean })
   visible = false;
 
   constructor() {
@@ -47,7 +47,6 @@ class InteractionTooltip extends LitElement {
   }
 
   render(): TemplateResult {
-    console.log(this.visible);
     return html`<protvista-tooltip
       title="Interaction"
       x=${this.x}
@@ -58,5 +57,3 @@ class InteractionTooltip extends LitElement {
     </protvista-tooltip>`;
   }
 }
-
-export default InteractionTooltip;
