@@ -25,25 +25,30 @@ const getValue = (d, attributeName) => {
 };
 
 const prepareTreeData = (node, depth, maxDepth, weightAttribute) => {
-  if (!node) return;
-  /* eslint-disable no-param-reassign */
+  if (!node) return node;
 
-  node.value = node?.[weightAttribute];
+  const preparedNode = { ...node };
 
-  if (depth >= maxDepth && node?.children?.length) {
-    node._children = node.children;
-    node.children = null;
-  } else if (node?._children?.length) {
-    node.children = node._children;
-    node._children = null;
+  preparedNode.value = node?.[weightAttribute];
+
+  if (depth >= maxDepth && preparedNode?.children?.length) {
+    preparedNode._children = preparedNode.children;
+    preparedNode.children = null;
+  } else if (preparedNode?._children?.length) {
+    preparedNode.children = preparedNode._children;
+    preparedNode._children = null;
   }
-  /* eslint-enable no-param-reassign */
 
-  if (node?.children?.length) {
-    for (const child of node.children) {
-      prepareTreeData(child, depth + 1, maxDepth, weightAttribute);
+  if (preparedNode?.children?.length) {
+    const newChildren = [];
+    for (const child of preparedNode.children) {
+      newChildren.push(
+        prepareTreeData(child, depth + 1, maxDepth, weightAttribute)
+      );
     }
+    preparedNode.children = newChildren;
   }
+  return preparedNode;
 };
 const getLineageFromNode = (node, attributeName, attributeID) => {
   if (!node.parent) {
@@ -92,12 +97,40 @@ class NightingaleSunburst extends LitElement {
     this.activeSegment = null;
     this.holdSegment = false;
     this.topOptions = superkingdoms;
+
+    this.handleMousemove = (event) => {
+      if (!this.root || (this.activeSegment && this.holdSegment)) return;
+      this.selectNodeByPosition(
+        event.offsetX - this.side / 2,
+        event.offsetY - this.side / 2
+      );
+    };
+
+    this.handleClick = (event) => {
+      if (!this.root) return;
+      this.holdSegment = !this.holdSegment;
+      if (!this.holdSegment) {
+        this.selectNodeByPosition(
+          event.offsetX - this.side / 2,
+          event.offsetY - this.side / 2
+        );
+      }
+    };
   }
 
   prepareTree() {
     if (!this._data) return;
-    prepareTreeData(this._data, 0, this["max-depth"], this["weight-attribute"]);
-    this.root = partition(this._data, this.side / 2, this["weight-attribute"]);
+    this.dataWithValues = prepareTreeData(
+      this._data,
+      0,
+      this["max-depth"],
+      this["weight-attribute"]
+    );
+    this.root = partition(
+      this.dataWithValues,
+      this.side / 2,
+      this["weight-attribute"]
+    );
   }
 
   set data(value) {
@@ -325,26 +358,23 @@ class NightingaleSunburst extends LitElement {
   firstUpdated() {
     this.getElementsByTagName("canvas")?.[0].addEventListener(
       "click",
-      (event) => {
-        if (!this.root) return;
-        this.holdSegment = !this.holdSegment;
-        if (!this.holdSegment) {
-          this.selectNodeByPosition(
-            event.offsetX - this.side / 2,
-            event.offsetY - this.side / 2
-          );
-        }
-      }
+      this.handleClick
     );
     this.getElementsByTagName("canvas")?.[0].addEventListener(
       "mousemove",
-      (event) => {
-        if (!this.root || (this.activeSegment && this.holdSegment)) return;
-        this.selectNodeByPosition(
-          event.offsetX - this.side / 2,
-          event.offsetY - this.side / 2
-        );
-      }
+      this.handleMousemove
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.getElementsByTagName("canvas")?.[0].removeEventListener(
+      "click",
+      this.handleClick
+    );
+    this.getElementsByTagName("canvas")?.[0].removeEventListener(
+      "mousemove",
+      this.handleMousemove
     );
   }
 
