@@ -204,7 +204,8 @@ class ProtvistaTooltip extends LitElement {
     // retrieve all necessary measurements
     const container = document.querySelector(this.container || "html");
     const containerRect = container.getBoundingClientRect();
-    const tooltipRect = this.shadowRoot.firstElementChild.getBoundingClientRect();
+    const tooltipRect =
+      this.shadowRoot.firstElementChild.getBoundingClientRect();
     const style = getComputedStyle(this);
     const triangleWidth = getNumberFromStyleString(
       style.getPropertyValue("--triangle-width"),
@@ -267,16 +268,15 @@ class ProtvistaTooltip extends LitElement {
       visible && `transform: translate(${position.x}px, ${position.y}px);`;
 
     return html`
-        <section
-          class="tooltip arrow-${position.horizontal || "left"} arrow-${
-      position.vertical || "up"
-    } ${visible ? "visible" : ""}"
-          style="${style}"
-        >
-          <h1>${this.title}</h1>
-          <div class="tooltip-body"><slot></slot></div>
-        </sectionclass="tooltip>
-      `;
+      <section
+        class="tooltip arrow-${position.horizontal ||
+        "left"} arrow-${position.vertical || "up"} ${visible ? "visible" : ""}"
+        style="${style}"
+      >
+        <h1>${this.title}</h1>
+        <div class="tooltip-body"><slot></slot></div>
+      </section>
+    `;
   }
 }
 
