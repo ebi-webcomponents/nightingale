@@ -14,9 +14,6 @@ export type EntryData = {
   filterTerms?: string[];
 };
 
-export const trimIsoformSuffix = (accession: string): string =>
-  accession.replace(/-\d+/, "");
-
 const process = (
   data: APIInteractionData[]
 ): {
@@ -47,47 +44,53 @@ const process = (
     });
 
     entry.interactions.forEach((interaction) => {
-      const id = `${trimIsoformSuffix(
-        interaction.accession1
-      )}${trimIsoformSuffix(interaction.accession2)}`;
-      interactionsMap.set(id, interaction);
-      const foundEntry = adjacencyMap.find(
-        ({ accession }) => accession === entry.accession
-      );
+      // Filter out rogue isoforms...
       if (
-        accessionList.includes(interaction.accession1) &&
-        accessionList.includes(interaction.accession2)
+        !interaction.accession1.startsWith(`${entry.accession}-`) ||
+        !interaction.accession2.startsWith(`${entry.accession}-`)
       ) {
-        foundEntry.interactors.push(
-          interaction.accession1 === entry.accession
-            ? interaction.accession2
-            : interaction.accession1
+        const id = `${interaction.accession1}${interaction.accession2}`;
+        interactionsMap.set(id, interaction);
+        const foundEntry = adjacencyMap.find(
+          ({ accession }) => accession === entry.accession
         );
+        if (
+          accessionList.includes(interaction.accession1) &&
+          accessionList.includes(interaction.accession2)
+        ) {
+          foundEntry.interactors.push(
+            interaction.accession1 === entry.accession
+              ? interaction.accession2
+              : interaction.accession1
+          );
+        }
       }
     });
     // Parse supporting data for filters
-    // if (entry.subcellularLocations) {
-    //   entry.subcellularLocations
-    //     .filter((d) => d.locations)
-    //     .forEach((location) => {
-    //       for (const actualLocation of location.locations) {
-    //         addStringItem(actualLocation.location.value, subcellulartreeMenu);
-    //         const locationSplit = actualLocation.location.value.split(", ");
-    //         entry.filterTerms = entry.filterTerms.concat(locationSplit);
-    //       }
-    //     });
-    // }
-    // if (entry.diseases) {
-    //   for (const disease of entry.diseases) {
-    //     if (disease.diseaseId) {
-    //       diseases[disease.diseaseId] = {
-    //         name: disease.diseaseId,
-    //         selected: false,
-    //       };
-    //       entry.filterTerms.push(disease.diseaseId);
-    //     }
-    //   }
-    // }
+    if (entry.subcellularLocations) {
+      entry.subcellularLocations
+        .filter((d) => d.locations)
+        .forEach((location) => {
+          for (const actualLocation of location.locations) {
+            console.log(actualLocation.location.value);
+            // addStringItem(actualLocation.location.value, subcellulartreeMenu);
+            // const locationSplit = actualLocation.location.value.split(", ");
+            // entry.filterTerms = entry.filterTerms.concat(locationSplit);
+          }
+        });
+    }
+    if (entry.diseases) {
+      for (const disease of entry.diseases) {
+        if (disease.diseaseId) {
+          console.log(disease.diseaseId);
+          //       diseases[disease.diseaseId] = {
+          //         name: disease.diseaseId,
+          //         selected: false,
+          //       };
+          //       entry.filterTerms.push(disease.diseaseId);
+        }
+      }
+    }
   });
 
   return { adjacencyMap, interactionsMap, entryStore };

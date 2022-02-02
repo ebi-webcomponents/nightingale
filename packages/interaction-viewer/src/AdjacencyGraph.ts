@@ -4,7 +4,7 @@ import { select, selectAll, mouse, scaleBand, scaleLinear } from "d3";
 import InteractionTooltip from "./interaction-tooltip";
 import { addStringItem, traverseTree } from "./treeMenu";
 import { APIInteractionData, Interaction } from "./data";
-import { EntryData, trimIsoformSuffix } from "./apiLoader";
+import { EntryData } from "./apiLoader";
 
 // const formatDiseaseInfo = (data, acc: string): string => {
 //   if (data) {
@@ -18,12 +18,6 @@ import { EntryData, trimIsoformSuffix } from "./apiLoader";
 //     return formatedString;
 //   }
 //   return "N/A";
-// };
-
-// const closeTooltip = () => {
-//   selectAll(".interaction-tooltip")
-//     .style("opacity", 0)
-//     .style("display", "none");
 // };
 
 // const formatSubcellularLocationInfo = (data) => {
@@ -229,10 +223,7 @@ const drawAdjacencyGraph = (
       .attr("cy", () => x.bandwidth() / 2)
       .attr("r", x.bandwidth() / 3)
       .style("fill-opacity", (d) => {
-        const data = getInteractionData(
-          trimIsoformSuffix(row.accession),
-          trimIsoformSuffix(d)
-        );
+        const data = getInteractionData(row.accession, d);
         return intensity(data?.experiments) || 1;
       })
       // .style("display", (d) => {
@@ -270,10 +261,8 @@ const drawAdjacencyGraph = (
     .attr("text-anchor", "end")
     .text((d) => {
       return entryStore.get(d.accession).name;
-    });
-  // .attr("class", (d, i) =>
-  //   nodes[i].accession === accession ? "main-accession" : ""
-  // );
+    })
+    .attr("class", (d) => (d.accession === accession ? "main-accession" : ""));
 
   const column = svg
     .selectAll(".column")
@@ -297,11 +286,8 @@ const drawAdjacencyGraph = (
     .attr("y", x.bandwidth() / 2)
     .attr("dy", ".32em")
     .attr("text-anchor", "start")
-    .text((d) => entryStore.get(d.accession).name);
-  // .text((d, i) => nodes[i].name)
-  // .attr("class", (d, i) =>
-  //   nodes[i].accession === accession ? "main-accession" : ""
-  // );
+    .text((d) => entryStore.get(d.accession).name)
+    .attr("class", (d) => (d.accession === accession ? "main-accession" : ""));
 
   // const points = `${x(nodes[1].accession)} 0,${x(
   //   nodes[nodes.length - 1].accession
