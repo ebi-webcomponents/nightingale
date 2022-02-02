@@ -1,7 +1,7 @@
 {
   "name": "protvista-tooltip",
   "description": "A tooltip for ProtVista webcomponents",
-  "version": "3.1.2",
+  "version": "3.5.7",
   "files": [
     "dist",
     "src"
