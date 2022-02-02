@@ -140,3 +140,29 @@
   /* anchor nodes are required to have non-zero area */
   height: 1px;
 }
+
+div.sunburst {
+  display: flex;
+}
+div.sunburst dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  padding: 0.3em;
+  margin: 0.2em;
+}
+div.sunburst dt {
+  text-align: right;
+  font-weight: 600;
+  padding-left: 1em;
+  background-color: #dddddd;
+}
+div.sunburst dt:nth-child(4n + 1),
+div.sunburst dt:nth-child(4n + 1) + dd {
+  background-color: #eeeeee;
+}
+div.sunburst dd {
+  margin-inline-start: 0;
+  padding: 0 1em;
+  background-color: #dddddd;
+}
