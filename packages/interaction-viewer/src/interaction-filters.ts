@@ -8,6 +8,8 @@ export type FilterDefinition = {
   items: Record<string, string[]>;
 };
 
+export const FILTER_SELECT = "filter-select";
+
 @customElement("interaction-filters")
 export default class InteractionFilters extends LitElement {
   @property({ type: Object })
@@ -17,7 +19,7 @@ export default class InteractionFilters extends LitElement {
     const selectElement = (event.target as HTMLSelectElement).value;
     // TODO also filter out possible values from other filter
     this.dispatchEvent(
-      new CustomEvent("filter-select", {
+      new CustomEvent(FILTER_SELECT, {
         detail: selectElement ? JSON.parse(selectElement) : [],
         composed: true,
       })
@@ -26,7 +28,7 @@ export default class InteractionFilters extends LitElement {
 
   private handleReset(): void {
     this.dispatchEvent(
-      new CustomEvent("filter-select", {
+      new CustomEvent(FILTER_SELECT, {
         detail: [],
         composed: true,
       })
@@ -47,7 +49,7 @@ export default class InteractionFilters extends LitElement {
               id=${filterDefinition.name}
               @change=${this.handleChange}
             >
-              <option value="">--Please choose an option--</option>
+              <option value="">Select...</option>
               ${Object.keys(filterDefinition.items).map(
                 (filterItemKey) => html`
                   <option

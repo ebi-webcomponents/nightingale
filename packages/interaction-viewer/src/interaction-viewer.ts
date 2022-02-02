@@ -15,8 +15,11 @@ import { APIInteractionData } from "./data";
 import { FilterNode } from "./treeMenu";
 // eslint-disable-next-line import/no-duplicates
 import InteractionTooltip from "./interaction-tooltip";
+// eslint-disable-next-line import/no-duplicates
+import { FILTER_SELECT } from "./interaction-filters";
 
 // Import additional components
+// eslint-disable-next-line import/no-duplicates
 import "./interaction-filters";
 // eslint-disable-next-line import/no-duplicates
 import "./interaction-tooltip";
@@ -42,8 +45,10 @@ const filterAdjacencyMap = (
   }
   return adjacencyMap.map(({ accession, interactors }) => ({
     accession,
-    interactors: interactors.filter((interactor) =>
-      filteredAccessions.includes(interactor)
+    interactors: interactors.filter(
+      (interactor) =>
+        filteredAccessions.includes(interactor) ||
+        filteredAccessions.includes(accession)
     ),
   }));
 };
@@ -69,7 +74,7 @@ export default class InteractionViewer extends LitElement {
 
   async connectedCallback(): Promise<void> {
     super.connectedCallback();
-    this.addEventListener("filter-select", this.handleFilterSelection);
+    this.addEventListener(FILTER_SELECT, this.handleFilterSelection);
 
     if (!this.accession) {
       return;
@@ -83,7 +88,7 @@ export default class InteractionViewer extends LitElement {
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
-    this.removeEventListener("filter-select", this.handleFilterSelection);
+    this.removeEventListener(FILTER_SELECT, this.handleFilterSelection);
   }
 
   static styles = styles;

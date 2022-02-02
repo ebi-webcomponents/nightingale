@@ -48,8 +48,7 @@ const drawAdjacencyGraph = (
   processedData: ProcessedData,
   tooltip: InteractionTooltip
 ): void => {
-  const { adjacencyMap, entryStore, interactionsMap, filterConfig } =
-    processedData;
+  const { adjacencyMap, entryStore, interactionsMap } = processedData;
   select(el)
     .append("p")
     .attr("class", "interaction-title")
