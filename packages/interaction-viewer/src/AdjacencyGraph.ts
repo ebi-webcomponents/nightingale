@@ -4,7 +4,7 @@ import { select, selectAll, mouse, scaleBand, scaleLinear } from "d3";
 import InteractionTooltip from "./interaction-tooltip";
 import { addStringItem, traverseTree } from "./treeMenu";
 import { APIInteractionData, Interaction } from "./data";
-import { EntryData } from "./apiLoader";
+import { EntryData, ProcessedData } from "./apiLoader";
 
 // const formatDiseaseInfo = (data, acc: string): string => {
 //   if (data) {
@@ -45,11 +45,11 @@ import { EntryData } from "./apiLoader";
 const drawAdjacencyGraph = (
   el: HTMLElement,
   accession: string,
-  adjacencyMap: { accession: string; interactors: string[] }[],
-  interactionsMap: Map<string, Interaction>,
-  entryStore: Map<string, EntryData>,
+  processedData: ProcessedData,
   tooltip: InteractionTooltip
 ): void => {
+  const { adjacencyMap, entryStore, interactionsMap, filterConfig } =
+    processedData;
   select(el)
     .append("p")
     .attr("class", "interaction-title")

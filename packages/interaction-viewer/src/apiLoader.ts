@@ -4,6 +4,7 @@ import {
   Interaction,
   SubcellularLocation,
 } from "./data";
+import { FilterDefinition } from "./interaction-filters";
 
 export type EntryData = {
   name: string;
@@ -11,20 +12,21 @@ export type EntryData = {
   taxonomy: number;
   diseases?: Disease[];
   subcellularLocations?: SubcellularLocation[];
-  filterTerms?: string[];
+  filterTerms?: Record<string, string[]>;
 };
 
-const process = (
-  data: APIInteractionData[]
-): {
-  adjacencyMap: { accession: string; interactors: string[] }[];
+export type AdjacencyMap = { accession: string; interactors: string[] }[];
+
+export type ProcessedData = {
+  adjacencyMap: AdjacencyMap;
   interactionsMap: Map<string, Interaction>;
   entryStore: Map<string, EntryData>;
-  // subcellulartreeMenu: FilterNode[];
-  // diseases: FilterNode[];
-} => {
-  // const subcellulartreeMenu: FilterNode[] = [];
-  // const diseases = {};
+  filterConfig: FilterDefinition[];
+};
+
+const process = (data: APIInteractionData[]): ProcessedData => {
+  const subcellulartreeMenu: Record<string, string[]> = {};
+  const diseases: Record<string, string[]> = {};
 
   const interactionsMap = new Map<string, Interaction>();
   const entryStore = new Map<string, EntryData>();
@@ -40,7 +42,6 @@ const process = (
       taxonomy: entry.taxonomy,
       diseases: entry.diseases,
       subcellularLocations: entry.subcellularLocations,
-      filterTerms: [],
     });
 
     entry.interactions.forEach((interaction) => {
@@ -72,28 +73,41 @@ const process = (
         .filter((d) => d.locations)
         .forEach((location) => {
           for (const actualLocation of location.locations) {
-            console.log(actualLocation.location.value);
-            // addStringItem(actualLocation.location.value, subcellulartreeMenu);
-            // const locationSplit = actualLocation.location.value.split(", ");
-            // entry.filterTerms = entry.filterTerms.concat(locationSplit);
+            subcellulartreeMenu[actualLocation.location.value] =
+              subcellulartreeMenu[actualLocation.location.value]
+                ? [
+                    ...subcellulartreeMenu[actualLocation.location.value],
+                    entry.accession,
+                  ]
+                : [entry.accession];
           }
         });
     }
     if (entry.diseases) {
       for (const disease of entry.diseases) {
         if (disease.diseaseId) {
-          console.log(disease.diseaseId);
-          //       diseases[disease.diseaseId] = {
-          //         name: disease.diseaseId,
-          //         selected: false,
-          //       };
-          //       entry.filterTerms.push(disease.diseaseId);
+          diseases[disease.diseaseId] = diseases[disease.diseaseId]
+            ? [...diseases[disease.diseaseId], entry.accession]
+            : [entry.accession];
         }
       }
     }
   });
 
-  return { adjacencyMap, interactionsMap, entryStore };
+  const filterConfig = [
+    {
+      name: "subcellularLocations",
+      label: "Subcellular location",
+      type: "tree",
+      items: subcellulartreeMenu,
+    },
+    {
+      name: "diseases",
+      label: "Diseases",
+      items: diseases,
+    },
+  ];
+  return { adjacencyMap, interactionsMap, entryStore, filterConfig };
 };
 
 export default process;
