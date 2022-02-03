@@ -97,35 +97,31 @@ const drawAdjacencyGraph = (
     return `//www.ebi.ac.uk/intact/query/id:${interactor1} AND id:${interactor2}`;
   };
 
-  // const mouseover = (p) => {
-  //   select(this).classed("active-cell", true);
-  //   // selectAll(".interaction-row").classed("active", d => d.accession === p.id);
-  //   // selectAll(".column").classed("active", d => d.accession === p.id);
+  const mouseover = (accession1: string, accession2: string) => {
+    // svg.classed("active-cell", true);
 
-  //   selectAll(".interaction-viewer-group")
-  //     .append("line")
-  //     .attr("class", "active-row")
-  //     .attr("style", "opacity:0.3")
-  //     .attr("x1", 0)
-  //     .attr("y1", x(p.source) + x.bandwidth() / 2)
-  //     .attr("x2", x(p.id))
-  //     .attr("y2", x(p.source) + x.bandwidth() / 2);
+    const group = svg.insert("g", ":first-child").attr("class", "active-group");
 
-  //   selectAll(".interaction-viewer-group")
-  //     .append("line")
-  //     .attr("class", "active-row")
-  //     .attr("style", "opacity:0.3")
-  //     .attr("x1", x(p.id) + x.bandwidth() / 2)
-  //     .attr("y1", 0)
-  //     .attr("x2", x(p.id) + x.bandwidth() / 2)
-  //     .attr("y2", x(p.source));
-  // };
+    group
+      .append("line")
+      .attr("class", "active-row")
+      .attr("x1", 0)
+      .attr("y1", x(accession1) + x.bandwidth() / 2)
+      .attr("x2", x(accession2))
+      .attr("y2", x(accession1) + x.bandwidth() / 2);
 
-  // const mouseout = () => {
-  //   selectAll("g").classed("active", false);
-  //   selectAll("circle").classed("active-cell", false);
-  //   selectAll(".active-row").remove();
-  // };
+    group
+      .append("line")
+      .attr("class", "active-row")
+      .attr("x1", x(accession2) + x.bandwidth() / 2)
+      .attr("y1", 0)
+      .attr("x2", x(accession2) + x.bandwidth() / 2)
+      .attr("y2", x(accession1));
+  };
+
+  const mouseout = () => {
+    svg.selectAll(".active-group").remove();
+  };
 
   const getTooltipContent = (accession1: string, accession2: string) => {
     const data = getInteractionData(accession1, accession2);
@@ -240,9 +236,9 @@ const drawAdjacencyGraph = (
       //   // Only show left half of graph
       //   return x(row.accession) < x(d.id) ? "none" : "";
       // })
-      .on("click", (e) => mouseclick(row.accession, e));
-    // .on("mouseover", mouseover)
-    // .on("mouseout", mouseout)
+      .on("click", (e) => mouseclick(row.accession, e))
+      .on("mouseover", (e) => mouseover(row.accession, e))
+      .on("mouseout", mouseout);
 
     cell.exit().remove();
   }
