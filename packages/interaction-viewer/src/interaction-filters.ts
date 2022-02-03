@@ -36,7 +36,6 @@ export default class InteractionFilters extends LitElement {
   }
 
   render(): TemplateResult {
-    console.log(this.filterConfig);
     return html`
       <form>
         ${this.filterConfig?.map(

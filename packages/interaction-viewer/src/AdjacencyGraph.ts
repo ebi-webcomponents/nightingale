@@ -1,46 +1,38 @@
 /* eslint-disable no-param-reassign */
-import { html } from "lit";
-import { select, selectAll, mouse, scaleBand, scaleLinear } from "d3";
+import { html, TemplateResult } from "lit";
+import { select, mouse, scaleBand, scaleLinear } from "d3";
 import InteractionTooltip from "./interaction-tooltip";
-import { addStringItem, traverseTree } from "./treeMenu";
-import { APIInteractionData, Interaction } from "./data";
-import { EntryData, ProcessedData } from "./apiLoader";
+import { Disease, Interaction, SubcellularLocation } from "./data";
+import { ProcessedData } from "./apiLoader";
 
-// const formatDiseaseInfo = (data, acc: string): string => {
-//   if (data) {
-//     let formatedString = "";
-//     for (const disease of data) {
-//       if (disease.dbReference) {
-//         // Some have only text
-//         formatedString += `<p><a href="//www.uniprot.org/uniprot/${acc}#${disease.acronym}" target="_blank">${disease.diseaseId}</a></p>`;
-//       }
-//     }
-//     return formatedString;
-//   }
-//   return "N/A";
-// };
+const formatDiseaseInfo = (
+  disease: Disease,
+  accession: string
+): TemplateResult => {
+  if (disease.dbReference) {
+    // Some have only text
+    return html`<p>
+      <a
+        href="//www.uniprot.org/uniprot/${accession}#${disease.acronym}"
+        target="_blank"
+        >${disease.diseaseId}</a
+      >
+    </p>`;
+  }
+  return html`<p>${disease.diseaseId}</p>`;
+};
 
-// const formatSubcellularLocationInfo = (data) => {
-//   if (data) {
-//     let formatedString = '<ul class="tree-list">';
-//     const tree = [];
-//     data
-//       .filter((d) => d.locations)
-//       .forEach((interactionType) => {
-//         for (const location of interactionType.locations) {
-//           addStringItem(location.location.value, tree);
-//           // formatedString += `<p>${location.location.value}</p>`;
-//         }
-//       });
-//     traverseTree(
-//       tree,
-//       (d) =>
-//         (formatedString += `<li style="margin-left:${d.depth}em">${d.name}</li>`)
-//     );
-//     return `${formatedString}</ul>`;
-//   }
-//   return "N/A";
-// };
+const formatSubcellularLocationInfo = (
+  subcell: SubcellularLocation
+): TemplateResult =>
+  html`${subcell.locations.map(
+    (location) =>
+      html`<p>
+        ${location.location?.value}${location.topology
+          ? `(${location.topology.value})`
+          : ""}
+      </p>`
+  )}`;
 
 const drawAdjacencyGraph = (
   el: HTMLElement,
@@ -138,6 +130,9 @@ const drawAdjacencyGraph = (
   const getTooltipContent = (accession1: string, accession2: string) => {
     const data = getInteractionData(accession1, accession2);
 
+    const entry1 = entryStore.get(accession1);
+    const entry2 = entryStore.get(accession2);
+
     return html`
       <a
         href=${getIntactLink(data.interactor1, data.interactor2)}
@@ -156,8 +151,8 @@ const drawAdjacencyGraph = (
         <tbody>
           <tr>
             <td>Name</td>
-            <td>${entryStore.get(accession1).name}</td>
-            <td>${entryStore.get(accession2).name}</td>
+            <td>${entry1.name}</td>
+            <td>${entry2.name}</td>
           </tr>
           <tr>
             <td>UniProt</td>
@@ -179,13 +174,29 @@ const drawAdjacencyGraph = (
           </tr>
           <tr>
             <td>Disease association</td>
-            <td>TODO</td>
-            <td>TODO</td>
+            <td>
+              ${entry1.diseases?.map((disease) =>
+                formatDiseaseInfo(disease, data.accession1)
+              )}
+            </td>
+            <td>
+              ${entry2.diseases?.map((disease) =>
+                formatDiseaseInfo(disease, data.accession2)
+              )}
+            </td>
           </tr>
           <tr>
             <td>Subcellular localisation</td>
-            <td>TODO</td>
-            <td>TODO</td>
+            <td>
+              ${entry1.subcellularLocations?.map((subcell) =>
+                formatSubcellularLocationInfo(subcell)
+              )}
+            </td>
+            <td>
+              ${entry2.subcellularLocations?.map((subcell) =>
+                formatSubcellularLocationInfo(subcell)
+              )}
+            </td>
           </tr>
           <tr>
             <td>Intact</td>
