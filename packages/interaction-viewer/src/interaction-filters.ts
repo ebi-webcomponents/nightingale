@@ -38,8 +38,10 @@ export default class InteractionFilters extends LitElement {
   render(): TemplateResult {
     return html`
       <form>
-        ${this.filterConfig?.map(
-          (filterDefinition) => html`
+        <fieldset>
+          <legend>Filter</legend>
+          ${this.filterConfig?.map(
+            (filterDefinition) => html`
             <label for=${filterDefinition.name}
               >${filterDefinition.label}</label
             >
@@ -63,8 +65,9 @@ export default class InteractionFilters extends LitElement {
             </select>
           </form>
         `
-        )}
-        <button type="reset" @click=${this.handleReset}>Clear</button>
+          )}
+          <button type="reset" @click=${this.handleReset}>Clear</button>
+        </fieldset>
       </form>
     `;
   }
