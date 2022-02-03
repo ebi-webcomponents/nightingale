@@ -130,7 +130,22 @@ export default class InteractionViewer extends LitElement {
 
   // eslint-disable-next-line class-methods-use-this
   render(): TemplateResult {
-    return html`<interaction-filters
+    let count;
+
+    if (this.processedData) {
+      const { adjacencyMap } = this.processedData;
+
+      // Filter out itself and its isoforms
+      count = adjacencyMap.filter(
+        ({ accession }) => !accession.startsWith(this.accession)
+      ).length;
+    }
+
+    return html` <p class="interaction-title">
+        ${this.accession} has binary interactions with ${count} proteins
+      </p>
+
+      <interaction-filters
         filterConfig=${JSON.stringify(this.processedData?.filterConfig)}
       ></interaction-filters>
       <div id="container"></div>

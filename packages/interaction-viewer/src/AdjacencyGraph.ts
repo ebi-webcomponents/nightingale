@@ -41,14 +41,6 @@ const drawAdjacencyGraph = (
   tooltip: InteractionTooltip
 ): void => {
   const { adjacencyMap, entryStore, interactionsMap } = processedData;
-  select(el)
-    .append("p")
-    .attr("class", "interaction-title")
-    .text(
-      `${accession} has binary interactions with ${
-        adjacencyMap.length - 1
-      } proteins`
-    );
 
   const margin = {
     top: 100,
