@@ -225,10 +225,10 @@ const drawAdjacencyGraph = (
         const data = getInteractionData(row.accession, d);
         return intensity(data?.experiments) || 1;
       })
-      // .style("display", (d) => {
-      //   // Only show left half of graph
-      //   return x(row.accession) < x(d.id) ? "none" : "";
-      // })
+      .style("display", (d) => {
+        // Only show left half of graph
+        return x(row.accession) < x(d) ? "none" : "";
+      })
       .on("click", (e) => mouseclick(row.accession, e))
       .on("mouseover", (e) => mouseover(row.accession, e))
       .on("mouseout", mouseout);
@@ -288,16 +288,16 @@ const drawAdjacencyGraph = (
     .text((d) => entryStore.get(d.accession).name)
     .attr("class", (d) => (d.accession === accession ? "main-accession" : ""));
 
-  // const points = `${x(nodes[1].accession)} 0,${x(
-  //   nodes[nodes.length - 1].accession
-  // )} 0,${x(nodes[nodes.length - 1].accession)} ${x(
-  //   nodes[nodes.length - 1].accession
-  // )},${x(nodes[0].accession)} 0`;
+  const points = `${x(adjacencyMap[1].accession)} 0,${x(
+    adjacencyMap[adjacencyMap.length - 1].accession
+  )} 0,${x(adjacencyMap[adjacencyMap.length - 1].accession)} ${x(
+    adjacencyMap[adjacencyMap.length - 1].accession
+  )},${x(adjacencyMap[0].accession)} 0`;
 
-  // svg
-  //   .append("polyline")
-  //   .attr("points", points)
-  //   .attr("class", "hidden-side")
-  //   .attr("transform", () => `translate(${x(nodes[1].accession)}, 0)`);
+  svg
+    .append("polyline")
+    .attr("points", points)
+    .attr("class", "hidden-side")
+    .attr("transform", () => `translate(${x(adjacencyMap[1].accession)}, 0)`);
 };
 export default drawAdjacencyGraph;
