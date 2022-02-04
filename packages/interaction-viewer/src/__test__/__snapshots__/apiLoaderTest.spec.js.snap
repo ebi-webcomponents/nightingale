@@ -22,12 +22,6 @@ Array [
     ],
   },
   Object {
-    "accession": "Q8TD43-1",
-    "interactors": Array [
-      "Q8TD43-1",
-    ],
-  },
-  Object {
     "accession": "P31949",
     "interactors": Array [
       "Q8TD43",
@@ -177,15 +171,6 @@ Map {
     "gene": "TRPM4",
     "interactor1": "EBI-355281",
     "interactor2": "EBI-11723041",
-    "organismDiffer": false,
-  },
-  "Q8TD43-1Q8TD43-1" => Object {
-    "accession1": "Q8TD43-1",
-    "accession2": "Q8TD43-1",
-    "experiments": 2,
-    "gene": "TRPM4",
-    "interactor1": "EBI-20594601",
-    "interactor2": "EBI-20594601",
     "organismDiffer": false,
   },
   "P31949Q96HA8" => Object {
@@ -512,15 +497,6 @@ Map {
     "interactor2": "EBI-1045161",
     "organismDiffer": false,
   },
-  "P60903Q8NB16-2" => Object {
-    "accession1": "P60903",
-    "accession2": "Q8NB16-2",
-    "experiments": 3,
-    "gene": "MLKL",
-    "interactor1": "EBI-717048",
-    "interactor2": "EBI-19046912",
-    "organismDiffer": false,
-  },
   "P60903P60321" => Object {
     "accession1": "P60903",
     "accession2": "P60321",
@@ -564,15 +540,6 @@ Map {
     "gene": "USP2",
     "interactor1": "EBI-717048",
     "interactor2": "EBI-743272",
-    "organismDiffer": false,
-  },
-  "P60903Q8N5A5-2" => Object {
-    "accession1": "P60903",
-    "accession2": "Q8N5A5-2",
-    "experiments": 3,
-    "gene": "ZGPAT",
-    "interactor1": "EBI-717048",
-    "interactor2": "EBI-10183064",
     "organismDiffer": false,
   },
   "P33763Q9HB71" => Object {
