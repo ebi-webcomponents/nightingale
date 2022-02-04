@@ -123,7 +123,8 @@ export default class InteractionViewer extends LitElement {
             this.filteredAccessions
           ),
         },
-        tooltip
+        tooltip,
+        this
       );
     }
   }

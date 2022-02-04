@@ -35,10 +35,11 @@ const formatSubcellularLocationInfo = (
   )}`;
 
 const drawAdjacencyGraph = (
-  el: HTMLElement,
+  containerElt: HTMLElement,
   accession: string,
   processedData: ProcessedData,
-  tooltip: InteractionTooltip
+  tooltip: InteractionTooltip,
+  interactionViewerElt: HTMLElement
 ): void => {
   const { adjacencyMap, entryStore, interactionsMap } = processedData;
 
@@ -56,7 +57,7 @@ const drawAdjacencyGraph = (
   const x = scaleBand().rangeRound([0, width]);
   const intensity = scaleLinear().range([0.2, 1]);
 
-  const svg = select(el)
+  const svg = select(containerElt)
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -202,8 +203,8 @@ const drawAdjacencyGraph = (
   };
 
   const mouseclick = (accession1: string, accession2: string) => {
-    tooltip.x = +mouse(el)[0];
-    tooltip.y = +mouse(el)[1];
+    tooltip.x = +mouse(interactionViewerElt)[0];
+    tooltip.y = +mouse(interactionViewerElt)[1];
     tooltip.content = getTooltipContent(accession1, accession2);
     tooltip.visible = true;
   };
