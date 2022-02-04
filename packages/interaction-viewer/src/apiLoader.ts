@@ -30,9 +30,11 @@ const process = (data: APIInteractionData[]): ProcessedData => {
 
   const interactionsMap = new Map<string, Interaction>();
   const entryStore = new Map<string, EntryData>();
-  const adjacencyMap: { accession: string; interactors: string[] }[] = data.map(
-    (entry) => ({ accession: entry.accession, interactors: [] })
-  );
+  const adjacencyMap: { accession: string; interactors: string[] }[] = data
+    // Filter out isoforms
+    .filter((entry) => !entry.accession.includes("-"))
+    .map((entry) => ({ accession: entry.accession, interactors: [] }));
+
   const accessionList = adjacencyMap.map(({ accession }) => accession);
 
   data.forEach((entry) => {
@@ -45,10 +47,10 @@ const process = (data: APIInteractionData[]): ProcessedData => {
     });
 
     entry.interactions.forEach((interaction) => {
-      // Filter out rogue isoforms...
+      // Filter out isoforms again
       if (
-        !interaction.accession1.startsWith(`${entry.accession}-`) ||
-        !interaction.accession2.startsWith(`${entry.accession}-`)
+        !interaction.accession1.includes("-") &&
+        !interaction.accession2.includes("-")
       ) {
         const id = `${interaction.accession1}${interaction.accession2}`;
         interactionsMap.set(id, interaction);
@@ -107,7 +109,13 @@ const process = (data: APIInteractionData[]): ProcessedData => {
       items: diseases,
     },
   ];
-  return { adjacencyMap, interactionsMap, entryStore, filterConfig };
+  return {
+    // Filter empty ones - these happen because they interact with isoforms which have been removed
+    adjacencyMap: adjacencyMap.filter((item) => !!item.interactors.length),
+    interactionsMap,
+    entryStore,
+    filterConfig,
+  };
 };
 
 export default process;
