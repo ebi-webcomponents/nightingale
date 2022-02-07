@@ -39,7 +39,7 @@ const filterAdjacencyMap = (
   adjacencyMap: AdjacencyMap,
   filteredAccessions: string[]
 ): AdjacencyMap => {
-  if (!filteredAccessions.length) {
+  if (!filteredAccessions) {
     return adjacencyMap;
   }
   return adjacencyMap.map(({ accession, interactors }) => ({
@@ -63,10 +63,25 @@ export default class InteractionViewer extends LitElement {
   processedData?: ProcessedData;
 
   @property()
-  filteredAccessions: string[] = [];
+  filteredAccessions?: string[];
 
   private handleFilterSelection(event: CustomEvent): void {
-    this.filteredAccessions = event.detail;
+    if (event.detail.length === 0) {
+      // Reset filters
+      this.filteredAccessions = undefined;
+    } else if (
+      !this.filteredAccessions ||
+      this.filteredAccessions.length === 0
+    ) {
+      // First filter applied
+      this.filteredAccessions = event.detail;
+    } else {
+      // AND additional filters
+      this.filteredAccessions = _intersection(
+        event.detail,
+        this.filteredAccessions
+      );
+    }
   }
 
   async connectedCallback(): Promise<void> {

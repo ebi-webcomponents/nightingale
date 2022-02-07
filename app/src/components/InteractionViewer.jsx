@@ -9,7 +9,7 @@ const InteractionViewerWrapper = (props) => {
   return (
     <Fragment>
       <Readme content={readmeContent} />
-      <interaction-viewer accession="Q8TD43" />
+      <interaction-viewer accession="O00311" />
     </Fragment>
   );
 };
