@@ -1,4 +1,4 @@
-import { html, LitElement, TemplateResult } from "lit";
+import { html, css, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators";
 import ProtvistaTooltip from "protvista-tooltip";
 
@@ -15,6 +15,15 @@ export default class InteractionTooltip extends LitElement {
 
   @property({ type: Boolean })
   visible = false;
+
+  static styles = css`
+    a,
+    a:link,
+    a:active,
+    a:hover {
+      color: #fff;
+    }
+  `;
 
   constructor() {
     super();
