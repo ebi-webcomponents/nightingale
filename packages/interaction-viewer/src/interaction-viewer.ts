@@ -12,7 +12,6 @@ import drawAdjacencyGraph from "./AdjacencyGraph";
 
 import styles from "./styles";
 import { APIInteractionData } from "./data";
-import { FilterNode } from "./treeMenu";
 // eslint-disable-next-line import/no-duplicates
 import InteractionTooltip from "./interaction-tooltip";
 // eslint-disable-next-line import/no-duplicates
@@ -55,8 +54,6 @@ const filterAdjacencyMap = (
 
 @customElement("interaction-viewer")
 export default class InteractionViewer extends LitElement {
-  private filters: FilterNode[] = [];
-
   private nodes: APIInteractionData[] = null;
 
   @property()
