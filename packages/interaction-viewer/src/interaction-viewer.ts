@@ -56,14 +56,14 @@ const filterAdjacencyMap = (
 export default class InteractionViewer extends LitElement {
   private nodes: APIInteractionData[] = null;
 
-  @property()
+  @property({ reflect: true })
   accession: string;
 
   @property()
-  processedData?: ProcessedData;
+  private processedData?: ProcessedData;
 
   @property()
-  filteredAccessions?: string[];
+  private filteredAccessions?: string[];
 
   private handleFilterSelection(event: CustomEvent): void {
     if (event.detail.length === 0) {
@@ -109,7 +109,7 @@ export default class InteractionViewer extends LitElement {
     return this.nodes.find((node) => node.accession === accession);
   }
 
-  async updated(): Promise<void> {
+  updated(): void {
     const container = this.shadowRoot.getElementById("container");
     const tooltip = this.shadowRoot.getElementById(
       "tooltip"
