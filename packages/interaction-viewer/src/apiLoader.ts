@@ -30,10 +30,9 @@ const process = (data: APIInteractionData[]): ProcessedData => {
 
   const interactionsMap = new Map<string, Interaction>();
   const entryStore = new Map<string, EntryData>();
-  const adjacencyMap: { accession: string; interactors: string[] }[] = data
-    // Filter out isoforms
-    .filter((entry) => !entry.accession.includes("-"))
-    .map((entry) => ({ accession: entry.accession, interactors: [] }));
+  const adjacencyMap: { accession: string; interactors: string[] }[] = data.map(
+    (entry) => ({ accession: entry.accession, interactors: [] })
+  );
 
   const accessionList = adjacencyMap.map(({ accession }) => accession);
 
@@ -47,10 +46,10 @@ const process = (data: APIInteractionData[]): ProcessedData => {
     });
 
     entry.interactions.forEach((interaction) => {
-      // Filter out isoforms again
+      // Filter out any interactor not in the original list
       if (
-        !interaction.accession1.includes("-") &&
-        !interaction.accession2.includes("-")
+        accessionList.includes(interaction.accession1) &&
+        accessionList.includes(interaction.accession2)
       ) {
         const id = `${interaction.accession1}${interaction.accession2}`;
         interactionsMap.set(id, interaction);
