@@ -93,7 +93,7 @@ const drawAdjacencyGraph = (
   const mouseover = (accession1: string, accession2: string) => {
     // svg.classed("active-cell", true);
 
-    const group = svg.insert("g", ":first-child").attr("class", "active-group");
+    const group = svg.insert("g").attr("class", "active-group");
 
     group
       .append("line")
