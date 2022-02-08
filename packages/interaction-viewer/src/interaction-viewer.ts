@@ -48,8 +48,11 @@ const filterAdjacencyMap = (
 export default class InteractionViewer extends LitElement {
   private nodes: APIInteractionData[] = null;
 
-  @property({ reflect: true })
+  @property({ type: String, reflect: true })
   accession: string;
+
+  @property({ type: Number, reflect: true })
+  maxInteractors = 50;
 
   @state()
   private processedData?: ProcessedData;
@@ -94,7 +97,7 @@ export default class InteractionViewer extends LitElement {
 
   updated(changedProperties: Map<string, any>): Promise<void> {
     // Only run this if it's the accession that has changed
-    if (Array.from(changedProperties.keys()).includes("accession")) {
+    if (changedProperties.has("accession")) {
       if (!this.accession) {
         return;
       }
@@ -109,6 +112,11 @@ export default class InteractionViewer extends LitElement {
     const tooltip = this.shadowRoot.getElementById(
       "tooltip"
     ) as InteractionTooltip;
+
+    // Return early, this means we are not displaying the visualisation
+    if (!container || !tooltip) {
+      return;
+    }
 
     container.style.display = "block";
     container.style.minHeight = "6em";
@@ -147,6 +155,11 @@ export default class InteractionViewer extends LitElement {
       count = adjacencyMap.filter(
         ({ accession }) => !accession.startsWith(this.accession)
       ).length;
+    }
+
+    // No need to display
+    if (count <= 1 || count > this.maxInteractors) {
+      return html``;
     }
 
     return html` <p class="interaction-title">
