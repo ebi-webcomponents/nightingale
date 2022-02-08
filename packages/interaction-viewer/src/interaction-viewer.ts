@@ -84,7 +84,7 @@ export default class InteractionViewer extends LitElement {
     }
   }
 
-  async connectedCallback(): Promise<void> {
+  connectedCallback(): void {
     super.connectedCallback();
     this.addEventListener(FILTER_SELECT, this.handleFilterSelection);
   }
@@ -100,17 +100,17 @@ export default class InteractionViewer extends LitElement {
     return this.nodes.find((node) => node.accession === accession);
   }
 
-  async updated(changedProperties: Map<string, any>): Promise<void> {
+  updated(changedProperties: Map<string, any>): Promise<void> {
     // Only run this if it's the accession that has changed
     if (Array.from(changedProperties.keys()).includes("accession")) {
       if (!this.accession) {
         return;
       }
-      const response = await load(
+      load(
         `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this.accession}.json`
-      );
-      const data = response.payload as APIInteractionData[];
-      this.processedData = process(data);
+      ).then((response: { payload: APIInteractionData[] }) => {
+        this.processedData = process(response.payload);
+      });
     }
 
     const container = this.shadowRoot.getElementById("container");
