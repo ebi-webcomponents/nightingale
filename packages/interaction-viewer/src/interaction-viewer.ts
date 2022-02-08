@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { html, LitElement, TemplateResult } from "lit";
-import { customElement, property } from "lit/decorators";
+import { customElement, property, state } from "lit/decorators";
 import { load } from "data-loader";
 import { select } from "d3";
 import _union from "lodash-es/union";
@@ -59,10 +59,10 @@ export default class InteractionViewer extends LitElement {
   @property({ reflect: true })
   accession: string;
 
-  @property()
+  @state()
   private processedData?: ProcessedData;
 
-  @property()
+  @state()
   private filteredAccessions?: string[];
 
   private handleFilterSelection(event: CustomEvent): void {
@@ -87,15 +87,6 @@ export default class InteractionViewer extends LitElement {
   async connectedCallback(): Promise<void> {
     super.connectedCallback();
     this.addEventListener(FILTER_SELECT, this.handleFilterSelection);
-
-    if (!this.accession) {
-      return;
-    }
-    const response = await load(
-      `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this.accession}.json`
-    );
-    const data = response.payload as APIInteractionData[];
-    this.processedData = process(data);
   }
 
   disconnectedCallback(): void {
@@ -109,7 +100,19 @@ export default class InteractionViewer extends LitElement {
     return this.nodes.find((node) => node.accession === accession);
   }
 
-  updated(): void {
+  async updated(changedProperties: Map<string, any>): Promise<void> {
+    // Only run this if it's the accession that has changed
+    if (Array.from(changedProperties.keys()).includes("accession")) {
+      if (!this.accession) {
+        return;
+      }
+      const response = await load(
+        `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this.accession}.json`
+      );
+      const data = response.payload as APIInteractionData[];
+      this.processedData = process(data);
+    }
+
     const container = this.shadowRoot.getElementById("container");
     const tooltip = this.shadowRoot.getElementById(
       "tooltip"
