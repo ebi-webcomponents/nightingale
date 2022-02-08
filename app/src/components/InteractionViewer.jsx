@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-import InteractionViewer from "interaction-viewer";
-import loadWebComponent from "../utils/load-web-component";
 import Readme from "./Readme";
 import readmeContent from "../../../packages/interaction-viewer/README.md";
 
+import "interaction-viewer";
+
 const InteractionViewerWrapper = (props) => {
-  loadWebComponent("interaction-viewer", InteractionViewer);
+  // loadWebComponent("interaction-viewer", InteractionViewer);
   return (
     <Fragment>
       <Readme content={readmeContent} />

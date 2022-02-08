@@ -12,16 +12,8 @@ import drawAdjacencyGraph from "./AdjacencyGraph";
 
 import styles from "./styles";
 import { APIInteractionData } from "./data";
-// eslint-disable-next-line import/no-duplicates
 import InteractionTooltip from "./interaction-tooltip";
-// eslint-disable-next-line import/no-duplicates
 import { FILTER_SELECT } from "./interaction-filters";
-
-// Import additional components
-// eslint-disable-next-line import/no-duplicates
-import "./interaction-filters";
-// eslint-disable-next-line import/no-duplicates
-import "./interaction-tooltip";
 
 const dispatchLoadedEvent = (el: HTMLElement, error?: string) => {
   el.dispatchEvent(
