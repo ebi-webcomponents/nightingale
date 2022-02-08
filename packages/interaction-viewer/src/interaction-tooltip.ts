@@ -23,6 +23,10 @@ export default class InteractionTooltip extends LitElement {
     a:hover {
       color: #fff;
     }
+
+    table {
+      color: #fff;
+    }
   `;
 
   constructor() {

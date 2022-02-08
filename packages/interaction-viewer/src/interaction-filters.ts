@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { html, LitElement, TemplateResult } from "lit";
+import { css, html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators";
 
 export type FilterDefinition = {
@@ -14,6 +14,28 @@ export const FILTER_SELECT = "filter-select";
 export default class InteractionFilters extends LitElement {
   @property({ type: Object })
   filterConfig?: FilterDefinition[];
+
+  static styles = css`
+    fieldset {
+      margin: 0;
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      border: none;
+    }
+
+    label,
+    button {
+      margin-bottom: 0.5rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+      margin-right: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+  `;
 
   private handleChange(event: Event): void {
     const selectElement = (event.target as HTMLSelectElement).value;
@@ -42,29 +64,28 @@ export default class InteractionFilters extends LitElement {
           <legend>Filter</legend>
           ${this.filterConfig?.map(
             (filterDefinition) => html`
-            <label for=${filterDefinition.name}
-              >${filterDefinition.label}</label
-            >
-            <select
-              name=${filterDefinition.name}
-              id=${filterDefinition.name}
-              @change=${this.handleChange}
-            >
-              <option value="">Select...</option>
-              ${Object.keys(filterDefinition.items).map(
-                (filterItemKey) => html`
-                  <option
-                    value=${JSON.stringify(
-                      filterDefinition.items[filterItemKey]
-                    )}
-                  >
-                    ${filterItemKey}
-                  </option>
-                `
-              )}
-            </select>
-          </form>
-        `
+              <label for=${filterDefinition.name}
+                >${filterDefinition.label}
+                <select
+                  name=${filterDefinition.name}
+                  id=${filterDefinition.name}
+                  @change=${this.handleChange}
+                >
+                  <option value="">Select...</option>
+                  ${Object.keys(filterDefinition.items).map(
+                    (filterItemKey) => html`
+                      <option
+                        value=${JSON.stringify(
+                          filterDefinition.items[filterItemKey]
+                        )}
+                      >
+                        ${filterItemKey}
+                      </option>
+                    `
+                  )}
+                </select>
+              </label>
+            `
           )}
           <button type="reset" @click=${this.handleReset}>Clear</button>
         </fieldset>
