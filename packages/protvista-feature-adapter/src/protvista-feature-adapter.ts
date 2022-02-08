@@ -102,7 +102,7 @@ class ProtvistaFeatureAdapter<
   }
 
   get subscribers(): string {
-    return this._subscribers.join(",");
+    return this._subscribers?.join(",");
   }
 
   parseEntry(data: APIDataType): void {

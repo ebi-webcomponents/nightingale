@@ -31,15 +31,9 @@
   "license": "MIT",
   "gitHead": "726779864966d11f966f337f2dd84aa4f58d944a",
   "dependencies": {
-    "d3-scale": "^3.2.3",
-    "data-loader": "^3.5.7",
-    "lodash-es": "^4.17.11",
     "protvista-feature-adapter": "^3.5.7",
     "protvista-variation": "^3.5.7",
     "uuid": "^8.3.1"
-  },
-  "peerDependencies": {
-    "d3": "5.X"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.0"

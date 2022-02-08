@@ -68,9 +68,9 @@ class ProtvistaVariationAdapter extends ProtvistaFeatureAdapter<
     }
   }
 
-  // parseEntry(data: ProteinsAPIVariation): void {
-  //   this._adaptedData = transformData(data);
-  // }
+  parseEntry(data: ProteinsAPIVariation): void {
+    this._adaptedData = transformData(data);
+  }
 }
 
 export default ProtvistaVariationAdapter;
