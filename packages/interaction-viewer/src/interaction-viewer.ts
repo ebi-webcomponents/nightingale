@@ -104,7 +104,7 @@ export default class InteractionViewer extends LitElement {
       load(
         `https://www.ebi.ac.uk/proteins/api/proteins/interaction/${this.accession}.json`
       ).then((response: { payload: APIInteractionData[] }) => {
-        this.processedData = process(response.payload);
+        this.processedData = process(response.payload, this.accession);
       });
     }
 

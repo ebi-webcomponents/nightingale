@@ -15,7 +15,9 @@ export type EntryData = {
   filterTerms?: Record<string, string[]>;
 };
 
-export type AdjacencyMap = { accession: string; interactors: string[] }[];
+type AdjacencyMapItem = { accession: string; interactors: string[] };
+
+export type AdjacencyMap = AdjacencyMapItem[];
 
 export type ProcessedData = {
   adjacencyMap: AdjacencyMap;
@@ -24,15 +26,52 @@ export type ProcessedData = {
   filterConfig: FilterDefinition[];
 };
 
-const process = (data: APIInteractionData[]): ProcessedData => {
+const compareAdjacencyEntries = (
+  item1: AdjacencyMapItem,
+  item2: AdjacencyMapItem
+) => {
+  if (item1.accession > item2.accession) {
+    return -1;
+  }
+  if (item1.accession < item2.accession) {
+    return 1;
+  }
+  return 0;
+};
+
+const process = (
+  data: APIInteractionData[],
+  primaryAccession: string
+): ProcessedData => {
   const subcellulartreeMenu: Record<string, string[]> = {};
   const diseases: Record<string, string[]> = {};
 
   const interactionsMap = new Map<string, Interaction>();
   const entryStore = new Map<string, EntryData>();
-  const adjacencyMap: { accession: string; interactors: string[] }[] = data.map(
-    (entry) => ({ accession: entry.accession, interactors: [] })
-  );
+
+  let mainEntry: AdjacencyMapItem;
+  const isoforms: AdjacencyMap = [];
+  const otherEntries: AdjacencyMap = [];
+
+  data.forEach((entry) => {
+    const returnEntry: AdjacencyMapItem = {
+      accession: entry.accession,
+      interactors: [],
+    };
+    if (entry.accession === primaryAccession) {
+      mainEntry = returnEntry;
+    } else if (entry.accession.startsWith(primaryAccession)) {
+      isoforms.push(returnEntry);
+    } else {
+      otherEntries.push(returnEntry);
+    }
+  });
+
+  const adjacencyMap = [
+    mainEntry,
+    ...isoforms.sort(compareAdjacencyEntries),
+    ...otherEntries.sort(compareAdjacencyEntries),
+  ];
 
   const accessionList = adjacencyMap.map(({ accession }) => accession);
 

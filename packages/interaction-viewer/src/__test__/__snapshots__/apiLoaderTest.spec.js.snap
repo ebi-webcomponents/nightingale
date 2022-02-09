@@ -17,15 +17,30 @@ Array [
     ],
   },
   Object {
-    "accession": "P05109",
+    "accession": "Q8TD43-1",
     "interactors": Array [
+      "Q8TD43-1",
+    ],
+  },
+  Object {
+    "accession": "P60903",
+    "interactors": Array [
+      "P33764",
       "Q8TD43",
     ],
   },
   Object {
-    "accession": "Q8TD43-1",
+    "accession": "P33764",
     "interactors": Array [
-      "Q8TD43-1",
+      "P60903",
+      "P29034",
+      "Q8TD43",
+    ],
+  },
+  Object {
+    "accession": "P33763",
+    "interactors": Array [
+      "Q8TD43",
     ],
   },
   Object {
@@ -43,25 +58,6 @@ Array [
     ],
   },
   Object {
-    "accession": "P06703",
-    "interactors": Array [
-      "Q8TD43",
-    ],
-  },
-  Object {
-    "accession": "P60903",
-    "interactors": Array [
-      "P33764",
-      "Q8TD43",
-    ],
-  },
-  Object {
-    "accession": "P33763",
-    "interactors": Array [
-      "Q8TD43",
-    ],
-  },
-  Object {
     "accession": "P26447",
     "interactors": Array [
       "P26447",
@@ -69,10 +65,14 @@ Array [
     ],
   },
   Object {
-    "accession": "P33764",
+    "accession": "P06703",
     "interactors": Array [
-      "P60903",
-      "P29034",
+      "Q8TD43",
+    ],
+  },
+  Object {
+    "accession": "P05109",
+    "interactors": Array [
       "Q8TD43",
     ],
   },

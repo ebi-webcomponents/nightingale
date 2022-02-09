@@ -4,7 +4,7 @@ import diseasesJson from "./resources/diseases.json";
 
 describe("interaction-viewer apiLoader", () => {
   it("should process the data", () => {
-    const { adjacencyMap, interactionsMap } = process(data);
+    const { adjacencyMap, interactionsMap } = process(data, data[0].accession);
     expect(adjacencyMap).toMatchSnapshot();
     expect(interactionsMap).toMatchSnapshot();
   });
