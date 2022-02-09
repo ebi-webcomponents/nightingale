@@ -1,5 +1,6 @@
 import { html, css, LitElement, TemplateResult } from "lit";
-import { customElement, property } from "lit/decorators";
+// eslint-disable-next-line import/extensions
+import { customElement, property } from "lit/decorators.js";
 import ProtvistaTooltip from "protvista-tooltip";
 
 @customElement("interaction-tooltip")

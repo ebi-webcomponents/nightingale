@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { html, LitElement, TemplateResult } from "lit";
-import { customElement, property, state } from "lit/decorators";
+// eslint-disable-next-line import/extensions
+import { customElement, property, state } from "lit/decorators.js";
 import { load } from "data-loader";
 import { select } from "d3";
 import _union from "lodash-es/union";

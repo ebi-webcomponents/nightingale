@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { css, html, LitElement, TemplateResult } from "lit";
-import { customElement, property } from "lit/decorators";
+// eslint-disable-next-line import/extensions
+import { customElement, property } from "lit/decorators.js";
 
 export type FilterDefinition = {
   name: string;
