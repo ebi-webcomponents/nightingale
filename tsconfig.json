@@ -4,6 +4,7 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "target": "ES6",
-    "declaration": true
+    "declaration": true,
+    "experimentalDecorators": true
   }
 }

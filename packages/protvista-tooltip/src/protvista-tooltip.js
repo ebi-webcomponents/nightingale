@@ -153,7 +153,11 @@ class ProtvistaTooltip extends LitElement {
       :host a,
       :host a:link,
       :host a:active,
-      :host a:hover {
+      :host a:hover,
+      ::slotted(a),
+      ::slotted(a:link),
+      ::slotted(a:active),
+      ::slotted(a:hover) {
         color: #fff;
       }
 
