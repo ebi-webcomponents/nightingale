@@ -8,12 +8,12 @@ A native web component wrapper around Mol\*
 
 ```html
 <!-- With UniProt Accession -->
-<protvista-structure accession="P06493" pdb-id="4YC3" />
-<!-- With a specific PDBe entry selected and the entrie table being hidden -->
+<protvista-structure accession="P06493" structureId="4YC3" />
+<!-- With a specific PDBe entry selected and the entry table being hidden -->
 <protvista-structure
   accession="P06493"
   highlight="209:220"
-  pdb-id="4YC3"
+  structureId="4YC3"
   hide-table
 />
 ```
@@ -30,7 +30,7 @@ A UniProt protein accession.
 
 This is a comma separated list of numerical ranges represented as a string e.g. "1-5,10-20". When available, it will highlight all the residues corresponding to the given sequence positions.
 
-#### `pdb-id`
+#### `structureId`
 
 The id of the structure to display for the provided accession.
 
