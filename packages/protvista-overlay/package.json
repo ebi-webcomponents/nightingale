@@ -1,6 +1,6 @@
 {
   "name": "protvista-overlay",
-  "version": "3.5.7",
+  "version": "3.5.10",
   "files": [
     "dist",
     "src"
