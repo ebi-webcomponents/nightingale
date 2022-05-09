@@ -53,7 +53,7 @@ class ProtvistaOverlay extends HTMLElement {
       attributes: false,
       childList: true,
       characterData: false,
-      subtree: true
+      subtree: true,
     });
   }
 
@@ -64,6 +64,15 @@ class ProtvistaOverlay extends HTMLElement {
     if (this.sizeObserver) {
       this.sizeObserver.disconnect();
     }
+  }
+  getOffsetTop(element) {
+    if (element === null) return 0;
+    return element.offsetTop + this.getOffsetTop(element.offsetParent);
+  }
+
+  getOffsetLeft(element) {
+    if (element === null) return 0;
+    return element.offsetLeft + this.getOffsetLeft(element.offsetParent);
   }
 
   render() {
@@ -103,11 +112,13 @@ class ProtvistaOverlay extends HTMLElement {
 
     document.addEventListener("mouseover", ({ pageX, pageY }) => {
       const { height, width } = target.getBoundingClientRect();
+      const offsetTop = this.getOffsetTop(target);
+      const offsetLeft = this.getOffsetLeft(target);
       if (
-        pageX > target.offsetLeft &&
-        pageX < target.offsetLeft + width &&
-        pageY > target.offsetTop &&
-        pageY < target.offsetTop + height
+        pageX > offsetLeft &&
+        pageX < offsetLeft + width &&
+        pageY > offsetTop &&
+        pageY < offsetTop + height
       ) {
         this.over = true;
       } else {
@@ -115,17 +126,17 @@ class ProtvistaOverlay extends HTMLElement {
         this.overlay.style.visibility = "hidden";
       }
     });
-    window.addEventListener("keydown", event => {
+    window.addEventListener("keydown", (event) => {
       if (event.ctrlKey) {
         this.overlay.style.visibility = "hidden";
       }
     });
-    window.addEventListener("keyup", event => {
+    window.addEventListener("keyup", (event) => {
       if (event.keyCode === 17) {
         this.overlay.style.display = "block";
       }
     });
-    window.addEventListener("wheel", event => {
+    window.addEventListener("wheel", (event) => {
       if (!this.ticking && this.over) {
         window.requestAnimationFrame(() => {
           this.overlay.style.visibility = event.ctrlKey ? "hidden" : "visible";
