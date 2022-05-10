@@ -39,9 +39,9 @@ class NightingaleNavigation extends withManager(
   #viewport?: BrushBehavior<unknown>;
 
   @property({ type: Number })
-  rulerstart: number = 1;
+  rulerstart = 1;
   @property({ type: Number })
-  padding: number = 10;
+  padding = 10;
 
   constructor() {
     super();

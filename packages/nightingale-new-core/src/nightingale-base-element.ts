@@ -1,6 +1,6 @@
-import { LitElement, html } from "lit";
+import { LitElement } from "lit";
 
-export type Constructor<T = {}> = new (...args: any[]) => T;
+export type Constructor<T = unknown> = new (...args: any[]) => T;
 
 class NightingaleElement extends LitElement {
   createRenderRoot() {

@@ -10,12 +10,12 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
 
     connectedCallback() {
       if (this.closest("nightingale-manager")) {
-        customElements.whenDefined("nightingale-manager").then(()=>{
+        customElements.whenDefined("nightingale-manager").then(() => {
           this.manager = this.closest("nightingale-manager");
           if (this.manager) {
             (this.manager as any).register(this);
           }
-        })
+        });
       }
       super.connectedCallback();
     }

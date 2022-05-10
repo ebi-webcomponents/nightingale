@@ -7,17 +7,15 @@
     "build": "lerna exec -- rollup --config ../../rollup.config.js",
     "build:watch": "lerna exec --parallel -- rollup --config ../../rollup.config.js --watch",
     "test": "jest --passWithNoTests",
-    "link-all": "lerna exec --parallel yarn link",
     "clean": "rimraf packages/**/dist",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
     "lint:eslint": "eslint 'packages/**/*.ts'",
-    "lint:lit-analyzer": "lit-analyzer",
+    "lint:lit-analyzer": "lit-analyzer packages/*/src/**/*.{js,ts}",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --node-resolve --watch",
-    "serve:prod": "MODE=prod yarn serve",
-    "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js"
+    "serve:prod": "MODE=prod yarn serve"
   },
   "license": "MIT",
   "devDependencies": {
@@ -34,6 +32,7 @@
     "@web/dev-server-rollup": "0.3.13",
     "@webcomponents/webcomponentsjs": "2.6.0",
     "eslint": "8.2.0",
+    "eslint-plugin-jest": "26.1.5",
     "jest": "^27.3.1",
     "lerna": "4.0.0",
     "lit-analyzer": "1.2.1",
@@ -48,5 +47,6 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "customElements": "custom-elements.json"
 }
