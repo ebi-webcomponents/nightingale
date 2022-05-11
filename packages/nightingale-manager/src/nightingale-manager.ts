@@ -56,8 +56,8 @@ class NightingaleManager extends NightingaleElement {
 
   override attributeChangedCallback(
     attr: string,
-    previousValue: any,
-    newValue: any
+    previousValue: string | null,
+    newValue: string | null
   ) {
     super.attributeChangedCallback(attr, previousValue, newValue);
     this.applyAttributes();
@@ -99,21 +99,22 @@ class NightingaleManager extends NightingaleElement {
 
   applyProperties(forElementId: string) {
     if (forElementId) {
-      const element = this.querySelector(`#${forElementId}`) as any;
+      const element = this.querySelector(`#${forElementId}`) as HTMLElement;
       if (!element) {
         return;
       }
       this.propertyValues.forEach((value, type) => {
-        element[type] = value;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (element as any)[type] = value;
       });
     } else {
-      this.protvistaElements.forEach((element: any) => {
+      this.protvistaElements.forEach((element: HTMLElement) => {
         if (!element) {
           return;
         }
         this.propertyValues.forEach((value, type) => {
-          /* eslint-disable no-param-reassign */
-          element[type] = value;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (element as any)[type] = value;
         });
       });
     }

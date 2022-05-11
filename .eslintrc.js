@@ -20,5 +20,6 @@ module.exports = {
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/valid-expect": "error",
+    "@typescript-eslint/ban-types": "off",
   },
 };

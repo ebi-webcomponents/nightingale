@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import {
@@ -9,9 +9,8 @@ import {
   Axis,
   brushX,
   BrushBehavior,
-  format,
   select,
-  // event as d3Event,
+  NumberValue,
 } from "d3";
 
 import NightingaleElement, {
@@ -26,16 +25,26 @@ import NightingaleElement, {
 class NightingaleNavigation extends withManager(
   withResizable(withMargin(withPosition(withDimensions(NightingaleElement))))
 ) {
-  #x: ScaleLinear<any, any> | null;
+  #x: ScaleLinear<number, number> | null;
   #dontDispatch: boolean;
-  #container?: Selection<HTMLElement, any, any, any>;
-  #svg?: Selection<SVGSVGElement, any, any, any>;
-  #displaystartLabel?: Selection<SVGTextElement, any, any, any>;
-  #displayendLabel?: Selection<SVGTextElement, any, any, any>;
-  #axis?: Selection<SVGGElement, any, any, any>;
-  #brushG?: Selection<SVGGElement, any, any, any>;
-  #polygon?: Selection<SVGPolygonElement, any, any, any>;
-  #xAxis?: Axis<any>;
+  #container?: Selection<HTMLElement, unknown, HTMLElement | null, unknown>;
+  #svg?: Selection<SVGSVGElement, unknown, HTMLElement | null, unknown>;
+  #displaystartLabel?: Selection<
+    SVGTextElement,
+    unknown,
+    HTMLElement | null,
+    unknown
+  >;
+  #displayendLabel?: Selection<
+    SVGTextElement,
+    unknown,
+    HTMLElement | null,
+    unknown
+  >;
+  #axis?: Selection<SVGGElement, unknown, HTMLElement | null, unknown>;
+  #brushG?: Selection<SVGGElement, unknown, HTMLElement | null, unknown>;
+  #polygon?: Selection<SVGPolygonElement, unknown, HTMLElement | null, unknown>;
+  #xAxis?: Axis<NumberValue>;
   #viewport?: BrushBehavior<unknown>;
 
   @property({ type: Number })
@@ -56,7 +65,7 @@ class NightingaleNavigation extends withManager(
     this.#container = select(this).select("div");
 
     this.#svg = this.#container
-      .append("svg")
+      ?.append("svg")
       .attr("id", "")
       .attr("width", this.width)
       .attr("height", this.height);

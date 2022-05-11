@@ -13,6 +13,7 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
         customElements.whenDefined("nightingale-manager").then(() => {
           this.manager = this.closest("nightingale-manager");
           if (this.manager) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (this.manager as any).register(this);
           }
         });
@@ -22,6 +23,7 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
 
     disconnectedCallback() {
       if (this.manager) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (this.manager as any).unregister(this);
       }
       super.disconnectedCallback();

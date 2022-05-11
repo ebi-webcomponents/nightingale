@@ -17,17 +17,18 @@ import withMargin from "./withMargin";
 export declare class WithZoomInterface {}
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
-  superClass: T,
-  options: Record<string, unknown> = {}
+  superClass: T
+  // options: Record<string, unknown> = {}
 ) => {
   class WithZoom extends withMargin(withPosition(withDimensions(superClass))) {
     _applyZoomTranslation: () => void;
-    _originXScale?: ScaleLinear<any, any>;
-    _xScale?: ScaleLinear<any, any>;
-    _zoom?: ZoomBehavior<Element, unknown>;
-    _svg?: Selection<HTMLElement, any, HTMLElement, any>;
+    _originXScale?: ScaleLinear<number, number>;
+    _xScale?: ScaleLinear<number, number>;
+    _zoom?: ZoomBehavior<HTMLElement, unknown>;
+    _svg?: Selection<HTMLElement, unknown, HTMLElement, unknown>;
     dontDispatch?: boolean;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
 
@@ -96,7 +97,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     set svg(svg) {
       if (!svg || !this._zoom) return;
       this._svg = svg;
-      svg.call(this._zoom as any);
+      svg.call(this._zoom);
       this.applyZoomTranslation();
     }
 
@@ -112,7 +113,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     _initZoom() {
-      this._zoom = d3zoom()
+      this._zoom = d3zoom<HTMLElement, unknown>()
         .scaleExtent([1, Infinity])
         .translateExtent([
           [0, 0],
@@ -187,13 +188,15 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       // The deltaX gets calculated using the position of the first base to display in original scale
       const dx = -this._originXScale(this["display-start"] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
-      this.svg.call(
-        // We trigger a zoom action
-        (this.zoom as any).transform,
-        zoomIdentity // Identity transformation
-          .scale(k) // Scaled by our scaled factor
-          .translate(dx, 0) // Translated by the delta
-      );
+      if (this.zoom) {
+        this.svg.call(
+          // We trigger a zoom action
+          this.zoom.transform,
+          zoomIdentity // Identity transformation
+            .scale(k) // Scaled by our scaled factor
+            .translate(dx, 0) // Translated by the delta
+        );
+      }
       this.dontDispatch = false;
       super.render();
     }
