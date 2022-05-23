@@ -1,0 +1,244 @@
+import { html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { axisBottom, select, Selection } from "d3";
+
+import NightingaleElement, {
+  withDimensions,
+  withPosition,
+  withMargin,
+  withResizable,
+  withHighlight,
+  withManager,
+  withZoom,
+} from "@nightingale-elements/nightingale-new-core";
+
+const DEFAULT_NUMBER_OF_TICKS = 3;
+
+type BaseType = { position: number; aa: string };
+
+@customElement("nightingale-sequence")
+class NightingaleSequence extends withManager(
+  withZoom(
+    withResizable(
+      withMargin(
+        withPosition(withDimensions(withHighlight(NightingaleElement)))
+      )
+    )
+  )
+) {
+  @property({ type: String })
+  sequence?: string | null;
+  // svg?: Selection<SVGSVGElement, unknown, HTMLElement | null, unknown>;
+  #seq_bg?: Selection<
+    SVGGElement,
+    BaseType | unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
+  #axis?: Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
+  #seq_g?: Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
+  #bases?: Selection<SVGTextElement, BaseType, SVGElement | null, unknown>;
+  numberOfTicks?: number;
+  chWidth?: number;
+  chHeight?: number;
+
+  connectedCallback() {
+    super.connectedCallback();
+    const ticks = parseInt(this.getAttribute("numberofticks") || "", 10);
+    this.numberOfTicks = Number.isInteger(ticks)
+      ? ticks
+      : DEFAULT_NUMBER_OF_TICKS;
+    if (this.sequence) {
+      this.createSequence();
+    }
+    this.addEventListener("load", (e: Event) => {
+      this.data = (e as CustomEvent).detail.payload;
+    });
+  }
+
+  get data() {
+    return this.sequence || "";
+  }
+
+  set data(data: string | Record<string, unknown>) {
+    if (typeof data === "string") this.sequence = data;
+    else if (typeof data?.sequence === "string") this.sequence = data.sequence;
+
+    if (this.sequence && !this.svg) {
+      this.createSequence();
+    } else {
+      this.renderD3();
+    }
+  }
+
+  _getCharSize() {
+    if (!this.#seq_g) return;
+    const xratio = 0.8;
+    const yratio = 1.6;
+    const node = this.#seq_g.select<SVGTextElement>("text.base").node();
+    if (node) {
+      this.chWidth = node.getBBox().width * xratio;
+      this.chHeight = node.getBBox().height * yratio;
+    } else {
+      // Add a dummy node to measure the width
+      const tempNode = this.#seq_g
+        .append("text")
+        .attr("class", "base")
+        .text("T");
+      this.chWidth = (tempNode.node()?.getBBox().width || 0) * xratio;
+      this.chHeight = (tempNode.node()?.getBBox().height || 0) * yratio;
+      tempNode.remove();
+    }
+  }
+
+  private createSequence() {
+    select(this as unknown as NightingaleElement)
+      .selectAll("div")
+      .remove();
+
+    this.svg = select(this as unknown as NightingaleElement)
+      .append("div")
+      .attr("class", "")
+      .append("svg")
+      .attr("id", "")
+      .attr("width", this.width)
+      .attr("height", this.height);
+
+    this.#seq_bg = this.svg?.append("g").attr("class", "background");
+
+    this.#axis = this.svg?.append("g").attr("class", "x axis");
+
+    this.#seq_g = this.svg
+      ?.append("g")
+      .attr("class", "sequence")
+      .attr("transform", `translate(0,${0.75 * this.height})`);
+
+    // this.trackHighlighter.appendHighlightTo(this.svg);
+    requestAnimationFrame(() => {
+      // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
+      this.renderD3();
+    });
+  }
+
+  firstUpdated() {
+    this.createSequence();
+  }
+  render() {
+    return html`<div class="container" />`;
+  }
+  zoomRefreshed() {
+    this.renderD3();
+  }
+
+  renderD3() {
+    this._getCharSize();
+    if (this.#axis) {
+      const ftWidth = this.getSingleBaseWidth();
+      const space = ftWidth - (this.chWidth || 0);
+      const half = ftWidth / 2;
+      const first = Math.round(Math.max(0, this.getStart() - 1));
+      const last = Math.round(
+        Math.min(this.sequence?.length || 0, this.getEnd())
+      );
+      const bases: Array<BaseType> =
+        space < 0
+          ? []
+          : this.sequence
+              ?.slice(first, last)
+              .split("")
+              .map((aa, i) => ({
+                position: 1 + first + i,
+                aa,
+              })) || [];
+
+      // only add axis if there is room
+      if (this.height > (this.chWidth || 0) && this.xScale) {
+        const xAxis = axisBottom(this.xScale)
+          .tickFormat((d) => `${Number.isInteger(d) ? d : ""}`)
+          .ticks(this.numberOfTicks, "s");
+        this.#axis.call(xAxis);
+      }
+
+      this.#axis.attr(
+        "transform",
+        `translate(${this["margin-left"] + half},0)`
+      );
+      this.#axis.select(".domain").remove();
+      this.#axis.selectAll(".tick line").remove();
+      if (this.#seq_g) {
+        this.#bases = this.#seq_g.selectAll("text.base");
+        const textElements = this.#bases.data(
+          bases,
+          (d) => (d as BaseType).position
+        );
+
+        textElements
+          .enter()
+          .append("text")
+          .attr("class", "base")
+          .attr("text-anchor", "middle")
+          .attr("x", (d) => this.getXFromSeqPosition(d.position) + half)
+          .text((d) => d.aa)
+          .style("pointer-events", "none")
+          .style("font-family", "monospace");
+
+        textElements.exit().remove();
+
+        textElements.attr(
+          "x",
+          (d) => this.getXFromSeqPosition(d.position) + half
+        );
+
+        if (this.#seq_bg) {
+          const background = this.#seq_bg
+            .selectAll("rect.base_bg")
+            .data(bases, (d) => (d as BaseType).position);
+          background
+            .enter()
+            .append("rect")
+            .attr("class", "base_bg feature")
+            .attr("height", this.height)
+            .attr("width", ftWidth)
+            .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))
+            .attr("x", (d) => this.getXFromSeqPosition(d.position));
+          // .call(this.bindEvents, this);
+          background
+            .attr("width", ftWidth)
+            .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))
+            .attr("x", (d) => this.getXFromSeqPosition(d.position));
+          // .call(this.bindEvents, this);
+          background.exit().remove();
+
+          this.#seq_g.style("opacity", Math.min(1, space));
+          background.style("opacity", Math.min(1, space));
+        }
+      }
+      // this._updateHighlight();
+    }
+  }
+
+  private getStart(): number {
+    return this["display-start"] || 1;
+  }
+  private getEnd(): number {
+    return (
+      ((this["display-end"] || 0) > 0 ? this["display-end"] : this.length) || 0
+    );
+  }
+
+  // _updateHighlight() {
+  //   this.trackHighlighter.updateHighlight();
+  // }
+}
+
+export default NightingaleSequence;

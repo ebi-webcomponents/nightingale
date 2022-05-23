@@ -4,6 +4,7 @@ import {
   zoomIdentity,
   ScaleLinear,
   ZoomBehavior,
+  D3ZoomEvent,
   Selection,
 } from "d3";
 
@@ -14,7 +15,17 @@ import withDimensions from "./withDimensions";
 import withPosition from "./withPosition";
 import withMargin from "./withMargin";
 
-export declare class WithZoomInterface {}
+export declare class WithZoomInterface {
+  xScale?: ScaleLinear<number, number>;
+  svg?: Selection<
+    SVGSVGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
+  getSingleBaseWidth: () => number;
+  getXFromSeqPosition: (position: number) => number;
+}
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
@@ -145,21 +156,30 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       if (!this.zoom) return;
       // eslint-disable-next-line no-param-reassign
       if (newValue === "null") newValue = null;
-      if (oldValue !== newValue && name === "length") {
-        this._updateScaleDomain();
-        if (this.xScale) {
-          this._originXScale = this.xScale.copy();
-          this.applyZoomTranslation();
+      if (oldValue !== newValue) {
+        // if (name.startsWith("highlight")) {
+        //   this.trackHighlighter.changedCallBack(name, newValue);
+        //   return;
+        // }
+
+        if (name === "length") {
+          this._updateScaleDomain();
+          this._originXScale = this.xScale?.copy();
         }
+        // One of the observable attributes changed, so the scale needs to be redefined.
+        this.applyZoomTranslation();
       }
     }
 
-    zoomed() {
+    zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
       // Redefines the xScale using the original scale and transform it with the captured event data.
-      //      this.xScale = d3Event.transform.rescaleX(this._originXScale);
-      // If the source event is null the zoom wasn't initiated by this component, don't send event
+      if (this._originXScale)
+        this.xScale = d3Event.transform.rescaleX(this._originXScale);
+
+      // New positions based in the updated scale
+      const [start, end] = this?.xScale?.domain() || [0, 0];
+
       if (this.dontDispatch || !this.xScale) return;
-      const [start, end] = this.xScale.domain(); // New positions based in the updated scale
       this.dispatchEvent(
         // Dispatches the event so the manager can propagate this changes to other  components
         new CustomEvent("change", {
@@ -182,8 +202,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       const k = Math.max(
         1,
         // +1 because the displayend base should be included
-        this.length ||
-          0 / (1 + (this["display-end"] || 0) - (this["display-start"] || 0))
+        (this.length || 0) /
+          (1 + (this["display-end"] || 0) - (this["display-start"] || 0))
       );
       // The deltaX gets calculated using the position of the first base to display in original scale
       const dx = -this._originXScale(this["display-start"] || 0);
@@ -198,6 +218,9 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         );
       }
       this.dontDispatch = false;
+      this.zoomRefreshed();
+    }
+    zoomRefreshed() {
       super.render();
     }
 

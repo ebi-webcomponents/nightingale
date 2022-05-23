@@ -27,7 +27,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         x="800"
         y="5"
       >
-        1
+        -1
       </text>
       <g
         class="x axis"
@@ -252,7 +252,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
           shape-rendering="crispEdges"
           stroke="#fff"
           style=""
-          width="0"
+          width="1560"
           x="10"
           y="0"
         />
@@ -271,7 +271,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
           height="13.65"
           style=""
           width="6"
-          x="7"
+          x="1567"
           y="-3"
         />
       </g>
@@ -280,7 +280,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         fill="#777"
         fill-opacity="0.3"
         points="10,7.5
-        10,7.5
+        1570,7.5
         800,15
         0,15"
       />

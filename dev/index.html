@@ -18,6 +18,10 @@
       type="module"
       src="../packages/nightingale-manager/dist/index.js"
     ></script>
+    <script
+      type="module"
+      src="../packages/nightingale-sequence/dist/index.js"
+    ></script>
     <style>
       p {
         border: solid 1px blue;
@@ -26,23 +30,62 @@
     </style>
   </head>
   <body>
+    <h1>Manager</h1>
     <nightingale-manager>
       <nightingale-navigation
         width="800"
         height="80"
-        length="100"
+        length="50"
         display-start="10"
         display-end="40"
       >
       </nightingale-navigation>
-      <nightingale-navigation
+      <nightingale-sequence
+        sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
         width="800"
-        height="80"
-        length="100"
+        height="50"
+        length="50"
         display-start="10"
         display-end="40"
       >
-      </nightingale-navigation>
+      </nightingale-sequence>
     </nightingale-manager>
+    <hr />
+    <h1>Sequence</h1>
+    <h2>Start of sequence [1-5]</h2>
+    <nightingale-sequence
+      sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
+      width="800"
+      height="40"
+      length="50"
+      display-start="1"
+      display-end="5"
+    ></nightingale-sequence>
+
+    <h2>Middle of sequence [10-30]</h2>
+    <nightingale-sequence
+      sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
+      width="800"
+      height="40"
+      length="50"
+      display-start="10"
+      display-end="30"
+    ></nightingale-sequence>
+
+    <h2>End of sequence [43-50]</h2>
+    <nightingale-sequence
+      sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
+      width="800"
+      height="40"
+      length="50"
+      display-start="43"
+      display-end="50"
+    ></nightingale-sequence>
+
+    <h2>Test</h2>
+    <nightingale-sequence
+      sequence="MAMYDDEFDTKASDL"
+      length="15"
+    ></nightingale-sequence>
   </body>
 </html>
