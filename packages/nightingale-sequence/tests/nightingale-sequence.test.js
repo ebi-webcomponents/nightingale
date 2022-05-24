@@ -16,8 +16,6 @@ describe("nightingale-sequence tests", () => {
   });
 
   test("it should display the sequence correctly", async () => {
-    // await new Promise(process.nextTick);
-
     const firstValue = rendered.querySelector(
       ".sequence text.base:first-child"
     ).textContent;

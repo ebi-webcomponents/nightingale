@@ -10,6 +10,7 @@ import NightingaleElement, {
   withHighlight,
   withManager,
   withZoom,
+  bindEvents,
 } from "@nightingale-elements/nightingale-new-core";
 
 const DEFAULT_NUMBER_OF_TICKS = 3;
@@ -81,7 +82,7 @@ class NightingaleSequence extends withManager(
     }
   }
 
-  _getCharSize() {
+  private getCharSize() {
     if (!this.#seq_g) return;
     const xratio = 0.8;
     const yratio = 1.6;
@@ -141,7 +142,7 @@ class NightingaleSequence extends withManager(
   }
 
   renderD3() {
-    this._getCharSize();
+    this.getCharSize();
     if (this.#axis) {
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - (this.chWidth || 0);
@@ -210,8 +211,9 @@ class NightingaleSequence extends withManager(
             .attr("height", this.height)
             .attr("width", ftWidth)
             .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))
-            .attr("x", (d) => this.getXFromSeqPosition(d.position));
-          // .call(this.bindEvents, this);
+            .attr("x", (d) => this.getXFromSeqPosition(d.position))
+            .call(bindEvents, this);
+
           background
             .attr("width", ftWidth)
             .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))

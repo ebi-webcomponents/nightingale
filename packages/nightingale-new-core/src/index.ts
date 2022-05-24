@@ -5,5 +5,6 @@ export { default as withResizable } from "./withResizable";
 export { default as withManager } from "./withManager";
 export { default as withHighlight } from "./withHighlight";
 export { default as withZoom } from "./withZoom";
+export { default as bindEvents } from "./utils/bindEvents";
 import NightingaleElement from "./nightingale-base-element";
 export default NightingaleElement;
