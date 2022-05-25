@@ -48,6 +48,12 @@ class NightingaleSequence extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
+  #highlighted?: Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
   #bases?: Selection<SVGTextElement, BaseType, SVGElement | null, unknown>;
   numberOfTicks?: number;
   chWidth?: number;
@@ -129,6 +135,7 @@ class NightingaleSequence extends withManager(
       // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
       this.renderD3();
     });
+    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
   }
 
   firstUpdated() {
@@ -218,14 +225,13 @@ class NightingaleSequence extends withManager(
             .attr("width", ftWidth)
             .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))
             .attr("x", (d) => this.getXFromSeqPosition(d.position));
-          // .call(this.bindEvents, this);
           background.exit().remove();
 
           this.#seq_g.style("opacity", Math.min(1, space));
           background.style("opacity", Math.min(1, space));
         }
       }
-      // this._updateHighlight();
+      this.renderHighlight();
     }
   }
 
@@ -238,9 +244,29 @@ class NightingaleSequence extends withManager(
     );
   }
 
-  // _updateHighlight() {
-  //   this.trackHighlighter.updateHighlight();
-  // }
+  private renderHighlight() {
+    if (!this.#highlighted) return;
+    const highlighs = this.#highlighted
+      .selectAll<
+        SVGRectElement,
+        {
+          start: number;
+          end: number;
+        }[]
+      >("rect")
+      .data(this.highlightedRegion.segments);
+
+    highlighs
+      .enter()
+      .append("rect")
+      .style("pointer-events", "none")
+      .merge(highlighs)
+      .attr("fill", this["highlight-color"])
+      .attr("height", this.height)
+      .attr("x", (d) => this.getXFromSeqPosition(d.start))
+      .attr("width", (d) => this.getSingleBaseWidth() * (d.end - d.start + 1));
+    highlighs.exit().remove();
+  }
 }
 
 export default NightingaleSequence;

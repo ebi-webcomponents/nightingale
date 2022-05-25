@@ -60,7 +60,7 @@ export function createEvent(
       detail.highlight = ((feature as FeatureData)?.fragments || [])
         .map((fr) => `${fr.start}:${fr.end}`)
         .join(",");
-    } else if ((event as KeyboardEvent).shiftKey && element?.highlight) {
+    } else if ((event as KeyboardEvent)?.shiftKey && element?.highlight) {
       // If holding shift, add to the highlights
       detail.highlight = `${element.highlight},${start}:${end}`;
     } else {
@@ -78,10 +78,10 @@ export function createEvent(
 }
 
 export default function bindEvents<T extends BaseType>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   feature: Selection<T, any, any, any>,
   element: NightingaleBaseElement
 ) {
-  console.log(element.getAttribute(HIGHLIGHT_EVENT));
   feature
     .on("mouseover", function (event: Event, datum: unknown) {
       element.dispatchEvent(
