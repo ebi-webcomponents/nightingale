@@ -27,7 +27,6 @@ class NightingaleNavigation extends withManager(
 ) {
   #x: ScaleLinear<number, number> | null;
   #dontDispatch: boolean;
-  #container?: Selection<HTMLElement, unknown, HTMLElement | null, unknown>;
   #svg?: Selection<SVGSVGElement, unknown, HTMLElement | null, unknown>;
   #displaystartLabel?: Selection<
     SVGTextElement,
@@ -62,10 +61,8 @@ class NightingaleNavigation extends withManager(
     this.#x = scaleLinear().range([this.padding, this.width - this.padding]);
     this.#x.domain([this.rulerstart, this.rulerstart + (this.length || 0) - 1]);
 
-    this.#container = select(this).select("div");
-
-    this.#svg = this.#container
-      ?.append("svg")
+    this.#svg = select(this as unknown as NightingaleElement)
+      .selectAll<SVGSVGElement, unknown>("svg")
       .attr("id", "")
       .attr("width", this.width)
       .attr("height", this.height);
@@ -105,8 +102,8 @@ class NightingaleNavigation extends withManager(
             this.dispatchEvent(
               new CustomEvent("change", {
                 detail: {
-                  "display-end": Math.round(this["display-end"]),
-                  "display-start": Math.round(this["display-start"]),
+                  "display-end": this["display-end"],
+                  "display-start": this["display-start"],
                   extra: { transform },
                 },
                 bubbles: true,
@@ -148,7 +145,7 @@ class NightingaleNavigation extends withManager(
   }
 
   render() {
-    return html`<div class="container" />`;
+    return html`<svg class="container" />`;
   }
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has("width")) {
@@ -162,18 +159,7 @@ class NightingaleNavigation extends withManager(
     this.createNavRuler();
   }
   renderD3() {
-    if (
-      this.#x &&
-      this.#container &&
-      this.#axis &&
-      this.#xAxis &&
-      this.#viewport
-    ) {
-      this.#container
-        .style("padding-left", `${this["margin-left"]}px`)
-        .style("padding-right", `${this["margin-right"]}px`)
-        .style("padding-top", `${this["margin-top"]}px`)
-        .style("padding-bottom", `${this["margin-bottom"]}px`);
+    if (this.#x && this.#axis && this.#xAxis && this.#viewport) {
       this.#x.domain([
         this.rulerstart,
         this.rulerstart + (this.length || 0) - 1,
@@ -207,8 +193,8 @@ class NightingaleNavigation extends withManager(
         "points",
         `${this.#x(this.getStart())},${this.height / 2}
         ${this.#x(this.getEnd())},${this.height / 2}
-        ${this.width},${this.height}
-        0,${this.height}`
+        ${this.width - this["margin-right"]},${this.height}
+        ${this["margin-left"]},${this.height}`
       );
   }
   private getStart(): number {

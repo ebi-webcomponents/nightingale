@@ -54,6 +54,12 @@ class NightingaleSequence extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
+  #margins?: Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
   #bases?: Selection<SVGTextElement, BaseType, SVGElement | null, unknown>;
   numberOfTicks?: number;
   chWidth?: number;
@@ -109,14 +115,8 @@ class NightingaleSequence extends withManager(
   }
 
   private createSequence() {
-    select(this as unknown as NightingaleElement)
-      .selectAll("div")
-      .remove();
-
     this.svg = select(this as unknown as NightingaleElement)
-      .append("div")
-      .attr("class", "")
-      .append("svg")
+      .selectAll<SVGSVGElement, unknown>("svg")
       .attr("id", "")
       .attr("width", this.width)
       .attr("height", this.height);
@@ -128,21 +128,26 @@ class NightingaleSequence extends withManager(
     this.#seq_g = this.svg
       ?.append("g")
       .attr("class", "sequence")
-      .attr("transform", `translate(0,${0.75 * this.height})`);
+      .attr(
+        "transform",
+        `translate(0,${
+          this["margin-top"] + 0.75 * this.getHeightWithMargins()
+        })`
+      );
 
-    // this.trackHighlighter.appendHighlightTo(this.svg);
+    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
+    this.#margins = this.svg.append("g").attr("class", "margin");
     requestAnimationFrame(() => {
       // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
       this.renderD3();
     });
-    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
   }
 
   firstUpdated() {
     this.createSequence();
   }
   render() {
-    return html`<div class="container" />`;
+    return html`<svg class="container" />`;
   }
   zoomRefreshed() {
     this.renderD3();
@@ -154,8 +159,8 @@ class NightingaleSequence extends withManager(
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - (this.chWidth || 0);
       const half = ftWidth / 2;
-      const first = Math.round(Math.max(0, this.getStart() - 1));
-      const last = Math.round(
+      const first = Math.floor(Math.max(0, this.getStart() - 1));
+      const last = Math.ceil(
         Math.min(this.sequence?.length || 0, this.getEnd())
       );
       const bases: Array<BaseType> =
@@ -179,11 +184,18 @@ class NightingaleSequence extends withManager(
 
       this.#axis.attr(
         "transform",
-        `translate(${this["margin-left"] + half},0)`
+        `translate(${this["margin-left"] + half},${this["margin-top"]})`
       );
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
+      this.#axis.selectAll(".tick text").attr("y", 2);
       if (this.#seq_g) {
+        this.#seq_g.attr(
+          "transform",
+          `translate(0,${
+            this["margin-top"] + 0.75 * this.getHeightWithMargins()
+          })`
+        );
         this.#bases = this.#seq_g.selectAll("text.base");
         const textElements = this.#bases.data(
           bases,
@@ -215,16 +227,20 @@ class NightingaleSequence extends withManager(
             .enter()
             .append("rect")
             .attr("class", "base_bg feature")
-            .attr("height", this.height)
+            .attr("height", this.getHeightWithMargins())
             .attr("width", ftWidth)
             .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))
             .attr("x", (d) => this.getXFromSeqPosition(d.position))
+            .attr("y", this["margin-top"])
             .call(bindEvents, this);
 
           background
             .attr("width", ftWidth)
             .attr("fill", (d) => (Math.round(d.position) % 2 ? "#ccc" : "#eee"))
-            .attr("x", (d) => this.getXFromSeqPosition(d.position));
+            .attr("height", this.getHeightWithMargins())
+            .attr("x", (d) => this.getXFromSeqPosition(d.position))
+            .attr("y", this["margin-top"]);
+
           background.exit().remove();
 
           this.#seq_g.style("opacity", Math.min(1, space));
@@ -232,6 +248,7 @@ class NightingaleSequence extends withManager(
         }
       }
       this.renderHighlight();
+      this.renderMarginOnGroup(this.#margins);
     }
   }
 

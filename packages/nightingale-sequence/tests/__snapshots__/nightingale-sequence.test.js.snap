@@ -6,317 +6,367 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
   sequence="MADYDDEFDTKASDL"
 >
   <!---->
-  <div
-    class=""
+  <svg
+    class="container"
+    height="100"
+    id=""
+    width="800"
   >
-    <svg
-      height="100"
-      id=""
-      width="800"
+    <g
+      class="background"
+    >
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="10"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="62"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="114"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="166"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="218"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="270"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="322"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="374"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="426"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="478"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="530"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="582"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="634"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="686"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="738"
+        y="0"
+      />
+    </g>
+    <g
+      class="x axis"
+      fill="none"
+      font-family="sans-serif"
+      font-size="10"
+      text-anchor="middle"
+      transform="translate(36,0)"
     >
       <g
-        class="background"
+        class="tick"
+        opacity="1"
+        transform="translate(208.5,0)"
       >
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="10"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="62"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="114"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="166"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="218"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="270"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="322"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="374"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="426"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="478"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="530"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="582"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="634"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="686"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="738"
-        />
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          5
+        </text>
       </g>
       <g
-        class="x axis"
-        fill="none"
-        font-family="sans-serif"
-        font-size="10"
+        class="tick"
+        opacity="1"
+        transform="translate(468.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          10
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(728.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          15
+        </text>
+      </g>
+    </g>
+    <g
+      class="sequence"
+      style="opacity: 1;"
+      transform="translate(0,75)"
+    >
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        transform="translate(36,0)"
+        x="36"
       >
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(208.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            5
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(468.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            10
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(728.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            15
-          </text>
-        </g>
-      </g>
-      <g
-        class="sequence"
-        style="opacity: 1;"
-        transform="translate(0,75)"
+        M
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="88"
       >
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="36"
-        >
-          M
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="88"
-        >
-          A
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="140"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="192"
-        >
-          Y
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="244"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="296"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="348"
-        >
-          E
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="400"
-        >
-          F
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="452"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="504"
-        >
-          T
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="556"
-        >
-          K
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="608"
-        >
-          A
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="660"
-        >
-          S
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="712"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="764"
-        >
-          L
-        </text>
-      </g>
-      <g
-        class="highlighted"
+        A
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="140"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="192"
+      >
+        Y
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="244"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="296"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="348"
+      >
+        E
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="400"
+      >
+        F
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="452"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="504"
+      >
+        T
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="556"
+      >
+        K
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="608"
+      >
+        A
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="660"
+      >
+        S
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="712"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="764"
+      >
+        L
+      </text>
+    </g>
+    <g
+      class="highlighted"
+    />
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="100"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
       />
-    </svg>
-  </div>
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="100"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="100"
+      />
+    </g>
+  </svg>
 </nightingale-sequence>
 `;
 
@@ -327,325 +377,375 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
   sequence="MADYDDEFDTKASDL"
 >
   <!---->
-  <div
-    class=""
+  <svg
+    class="container"
+    height="100"
+    id=""
+    width="800"
   >
-    <svg
-      height="100"
-      id=""
-      width="800"
+    <g
+      class="background"
+    >
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="10"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="62"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="114"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="166"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="218"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="270"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="322"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="374"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="426"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="478"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="530"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="582"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="634"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="686"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="52"
+        x="738"
+        y="0"
+      />
+    </g>
+    <g
+      class="x axis"
+      fill="none"
+      font-family="sans-serif"
+      font-size="10"
+      text-anchor="middle"
+      transform="translate(36,0)"
     >
       <g
-        class="background"
+        class="tick"
+        opacity="1"
+        transform="translate(208.5,0)"
       >
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="10"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="62"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="114"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="166"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="218"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="270"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="322"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="374"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="426"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="478"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="530"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="582"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="634"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="686"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="52"
-          x="738"
-        />
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          5
+        </text>
       </g>
       <g
-        class="x axis"
-        fill="none"
-        font-family="sans-serif"
-        font-size="10"
+        class="tick"
+        opacity="1"
+        transform="translate(468.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          10
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(728.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          15
+        </text>
+      </g>
+    </g>
+    <g
+      class="sequence"
+      style="opacity: 1;"
+      transform="translate(0,75)"
+    >
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        transform="translate(36,0)"
+        x="36"
       >
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(208.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            5
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(468.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            10
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(728.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            15
-          </text>
-        </g>
-      </g>
-      <g
-        class="sequence"
-        style="opacity: 1;"
-        transform="translate(0,75)"
+        M
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="88"
       >
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="36"
-        >
-          M
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="88"
-        >
-          A
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="140"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="192"
-        >
-          Y
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="244"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="296"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="348"
-        >
-          E
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="400"
-        >
-          F
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="452"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="504"
-        >
-          T
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="556"
-        >
-          K
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="608"
-        >
-          A
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="660"
-        >
-          S
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="712"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="764"
-        >
-          L
-        </text>
-      </g>
-      <g
-        class="highlighted"
+        A
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="140"
       >
-        <rect
-          fill="#FFEB3B66"
-          height="100"
-          style="pointer-events: none;"
-          width="208"
-          x="62"
-        />
-      </g>
-    </svg>
-  </div>
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="192"
+      >
+        Y
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="244"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="296"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="348"
+      >
+        E
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="400"
+      >
+        F
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="452"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="504"
+      >
+        T
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="556"
+      >
+        K
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="608"
+      >
+        A
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="660"
+      >
+        S
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="712"
+      >
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="764"
+      >
+        L
+      </text>
+    </g>
+    <g
+      class="highlighted"
+    >
+      <rect
+        fill="#FFEB3B66"
+        height="100"
+        style="pointer-events: none;"
+        width="208"
+        x="62"
+      />
+    </g>
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="100"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="100"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="100"
+      />
+    </g>
+  </svg>
 </nightingale-sequence>
 `;
 
@@ -657,137 +757,175 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
   sequence="MADYDDEFDTKASDL"
 >
   <!---->
-  <div
-    class=""
+  <svg
+    class="container"
+    height="100"
+    id=""
+    width="800"
   >
-    <svg
-      height="100"
-      id=""
-      width="800"
+    <g
+      class="background"
+    >
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="260"
+        x="10"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#ccc"
+        height="100"
+        style="opacity: 1;"
+        width="260"
+        x="270"
+        y="0"
+      />
+      <rect
+        class="base_bg feature"
+        fill="#eee"
+        height="100"
+        style="opacity: 1;"
+        width="260"
+        x="530"
+        y="0"
+      />
+    </g>
+    <g
+      class="x axis"
+      fill="none"
+      font-family="sans-serif"
+      font-size="10"
+      text-anchor="middle"
+      transform="translate(140,0)"
     >
       <g
-        class="background"
+        class="tick"
+        opacity="1"
+        transform="translate(0.5,0)"
       >
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="260"
-          x="10"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#ccc"
-          height="100"
-          style="opacity: 1;"
-          width="260"
-          x="270"
-        />
-        <rect
-          class="base_bg feature"
-          fill="#eee"
-          height="100"
-          style="opacity: 1;"
-          width="260"
-          x="530"
-        />
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          2
+        </text>
       </g>
       <g
-        class="x axis"
-        fill="none"
-        font-family="sans-serif"
-        font-size="10"
+        class="tick"
+        opacity="1"
+        transform="translate(260.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          3
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(520.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          4
+        </text>
+      </g>
+      <g
+        class="tick"
+        opacity="1"
+        transform="translate(780.5,0)"
+      >
+        <text
+          dy="0.71em"
+          fill="currentColor"
+          y="2"
+        >
+          5
+        </text>
+      </g>
+    </g>
+    <g
+      class="sequence"
+      style="opacity: 1;"
+      transform="translate(0,75)"
+    >
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        transform="translate(140,0)"
+        x="140"
       >
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(0.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            2
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(260.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            3
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(520.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            4
-          </text>
-        </g>
-        <g
-          class="tick"
-          opacity="1"
-          transform="translate(780.5,0)"
-        >
-          <text
-            dy="0.71em"
-            fill="currentColor"
-            y="9"
-          >
-            5
-          </text>
-        </g>
-      </g>
-      <g
-        class="sequence"
-        style="opacity: 1;"
-        transform="translate(0,75)"
+        A
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="400"
       >
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="140"
-        >
-          A
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="400"
-        >
-          D
-        </text>
-        <text
-          class="base"
-          style="pointer-events: none; font-family: monospace;"
-          text-anchor="middle"
-          x="660"
-        >
-          Y
-        </text>
-      </g>
-      <g
-        class="highlighted"
+        D
+      </text>
+      <text
+        class="base"
+        style="pointer-events: none; font-family: monospace;"
+        text-anchor="middle"
+        x="660"
+      >
+        Y
+      </text>
+    </g>
+    <g
+      class="highlighted"
+    />
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="100"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
       />
-    </svg>
-  </div>
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="100"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="100"
+      />
+    </g>
+  </svg>
 </nightingale-sequence>
 `;

@@ -23,12 +23,10 @@
       src="../packages/nightingale-sequence/dist/index.js"
     ></script>
     <script defer>
-      customElements
-        .whenDefined("nightingale-sequence")
-        .then(
-          () =>
-            (document.getElementById("firstSequence").fixedHighlight = "10:20")
-        );
+      customElements.whenDefined("nightingale-sequence").then(() => {
+        if (document.getElementById("firstSequence"))
+          document.getElementById("firstSequence").fixedHighlight = "10:20";
+      });
     </script>
     <style>
       p {
@@ -63,17 +61,16 @@
     </nightingale-manager>
     <hr />
     <h1>Sequence</h1>
-    <h2>Start of sequence [1-5]</h2>
+    <h2>Start of sequence [1.6-5]</h2>
     <nightingale-sequence
       sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
       width="800"
       height="40"
       length="50"
-      display-start="1"
+      display-start="1.6"
       display-end="5"
       highlight="3:4"
     ></nightingale-sequence>
-
     <h2>Middle of sequence [10-30]</h2>
     <nightingale-sequence
       sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
