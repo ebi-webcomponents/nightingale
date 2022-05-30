@@ -146,9 +146,6 @@ class NightingaleSequence extends withManager(
   firstUpdated() {
     this.createSequence();
   }
-  render() {
-    return html`<svg class="container" />`;
-  }
   zoomRefreshed() {
     this.renderD3();
   }
@@ -282,7 +279,11 @@ class NightingaleSequence extends withManager(
       .attr("height", this.height)
       .attr("x", (d) => this.getXFromSeqPosition(d.start))
       .attr("width", (d) => this.getSingleBaseWidth() * (d.end - d.start + 1));
+
     highlighs.exit().remove();
+  }
+  render() {
+    return html`<svg class="container"></svg>`;
   }
 }
 

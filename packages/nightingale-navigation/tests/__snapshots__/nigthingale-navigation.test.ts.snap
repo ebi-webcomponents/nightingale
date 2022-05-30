@@ -13,18 +13,20 @@ exports[`nightingale-navigation tests it should display the navigation correctly
   >
     <text
       class="start-label"
-      x="0"
-      y="5"
+      style="font-family: sans-serif;"
+      x="10"
+      y="13"
     >
       1
     </text>
     <text
       class="end-label"
+      style="font-family: sans-serif;"
       text-anchor="end"
-      x="800"
-      y="5"
+      x="790"
+      y="13"
     >
-      -1
+      1
     </text>
     <g
       class="x axis"
@@ -41,91 +43,6 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <g
         class="tick"
         opacity="1"
-        transform="translate(10.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          1.0
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(88.49999999999999,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.9
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(166.49999999999997,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.8
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(244.50000000000003,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.7
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(322.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.6
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
         transform="translate(400.5,0)"
       >
         <line
@@ -137,92 +54,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
           fill="currentColor"
           y="9"
         >
-          0.5
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(478.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.4
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(556.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.3
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(634.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.2
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(712.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.1
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(790.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.0
+          1
         </text>
       </g>
     </g>
@@ -249,8 +81,8 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         shape-rendering="crispEdges"
         stroke="#fff"
         style=""
-        width="1560"
-        x="10"
+        width="0"
+        x="400"
         y="0"
       />
       <rect
@@ -259,7 +91,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="13.65"
         style=""
         width="6"
-        x="7"
+        x="397"
         y="-3"
       />
       <rect
@@ -268,7 +100,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="13.65"
         style=""
         width="6"
-        x="1567"
+        x="397"
         y="-3"
       />
     </g>
@@ -276,10 +108,51 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       class="zoom-polygon"
       fill="#777"
       fill-opacity="0.3"
-      points="10,7.5
-        1570,7.5
+      points="400,7.5
+        400,7.5
         790,15
         10,15"
+    />
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="15"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="15"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="15"
+      />
+    </g>
+    <g
+      class="highlighted"
     />
   </svg>
 </nightingale-navigation>
@@ -300,18 +173,20 @@ exports[`nightingale-navigation tests it should display the navigation correctly
   >
     <text
       class="start-label"
-      x="0"
-      y="5"
+      style="font-family: sans-serif;"
+      x="10"
+      y="13"
     >
-      2
+      1
     </text>
     <text
       class="end-label"
+      style="font-family: sans-serif;"
       text-anchor="end"
-      x="800"
-      y="5"
+      x="790"
+      y="13"
     >
-      4
+      1
     </text>
     <g
       class="x axis"
@@ -328,91 +203,6 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <g
         class="tick"
         opacity="1"
-        transform="translate(10.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          1.0
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(88.49999999999999,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.9
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(166.49999999999997,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.8
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(244.50000000000003,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.7
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(322.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.6
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
         transform="translate(400.5,0)"
       >
         <line
@@ -424,92 +214,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
           fill="currentColor"
           y="9"
         >
-          0.5
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(478.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.4
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(556.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.3
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(634.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.2
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(712.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.1
-        </text>
-      </g>
-      <g
-        class="tick"
-        opacity="1"
-        transform="translate(790.5,0)"
-      >
-        <line
-          stroke="currentColor"
-          y2="6"
-        />
-        <text
-          dy="0.71em"
-          fill="currentColor"
-          y="9"
-        >
-          0.0
+          1
         </text>
       </g>
     </g>
@@ -536,8 +241,8 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         shape-rendering="crispEdges"
         stroke="#fff"
         style=""
-        width="-1560"
-        x="-770"
+        width="0"
+        x="400"
         y="0"
       />
       <rect
@@ -546,7 +251,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="13.65"
         style=""
         width="6"
-        x="-773"
+        x="397"
         y="-3"
       />
       <rect
@@ -555,7 +260,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="13.65"
         style=""
         width="6"
-        x="-2333"
+        x="397"
         y="-3"
       />
     </g>
@@ -563,10 +268,51 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       class="zoom-polygon"
       fill="#777"
       fill-opacity="0.3"
-      points="-770,7.5
-        -2330,7.5
+      points="400,7.5
+        400,7.5
         790,15
         10,15"
+    />
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="15"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="15"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="15"
+      />
+    </g>
+    <g
+      class="highlighted"
     />
   </svg>
 </nightingale-navigation>

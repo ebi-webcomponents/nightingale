@@ -27,6 +27,10 @@
         if (document.getElementById("firstSequence"))
           document.getElementById("firstSequence").fixedHighlight = "10:20";
       });
+      customElements.whenDefined("nightingale-navigation").then(() => {
+        if (document.getElementById("navigation"))
+          document.getElementById("navigation").fixedHighlight = "10:20";
+      });
     </script>
     <style>
       p {
@@ -37,28 +41,34 @@
   </head>
   <body>
     <h1>Manager</h1>
-    <nightingale-manager>
-      <nightingale-navigation
-        width="800"
-        height="80"
-        length="50"
-        display-start="10"
-        display-end="40"
-      >
-      </nightingale-navigation>
-      <nightingale-sequence
-        id="firstSequence"
-        sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
-        width="800"
-        height="50"
-        length="50"
-        display-start="10"
-        display-end="40"
-        highlight-event="onmouseover"
-        highlight-color="#EB3BFF66"
-      >
-      </nightingale-sequence>
-    </nightingale-manager>
+    <div style="line-height: 0">
+      <nightingale-manager>
+        <nightingale-navigation
+          id="navigation"
+          width="800"
+          height="80"
+          length="50"
+          display-start="10"
+          display-end="20"
+          highlight-color="#EB3BFF22"
+          margin-color="transparent"
+          show-highlight
+        >
+        </nightingale-navigation>
+        <nightingale-sequence
+          id="firstSequence"
+          sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
+          width="800"
+          height="50"
+          length="50"
+          display-start="10"
+          display-end="20"
+          highlight-event="onmouseover"
+          highlight-color="#EB3BFF66"
+        >
+        </nightingale-sequence>
+      </nightingale-manager>
+    </div>
     <hr />
     <h1>Sequence</h1>
     <h2>Start of sequence [1.6-5]</h2>
