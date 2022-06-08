@@ -167,7 +167,7 @@ class StructureViewer {
       });
   }
 
-  async loadAF(id: string, url: string): Promise<void> {
+  async loadCifUrl(id: string, url: string): Promise<void> {
     const { plugin } = this;
 
     const data = await plugin.builders.data.download(
