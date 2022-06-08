@@ -22,7 +22,57 @@
       type="module"
       src="../packages/nightingale-sequence/dist/index.js"
     ></script>
+    <script
+      type="module"
+      src="../packages/nightingale-track/dist/index.js"
+    ></script>
     <script defer>
+      const featuresData = [
+        {
+          accession: "feature1",
+          start: 1,
+          end: 2,
+          color: "blue",
+        },
+        {
+          accession: "feature1",
+          start: 49,
+          end: 50,
+          color: "red",
+        },
+        {
+          accession: "feature1",
+          start: 10,
+          end: 20,
+          color: "#342ea2",
+        },
+        {
+          accession: "feature2",
+          locations: [{ fragments: [{ start: 30, end: 45 }] }],
+          color: "#A42ea2",
+        },
+        {
+          accession: "feature3",
+          locations: [
+            {
+              fragments: [{ start: 15, end: 15 }],
+            },
+            { fragments: [{ start: 18, end: 18 }] },
+          ],
+          color: "#A4Aea2",
+        },
+        {
+          accession: "feature4",
+          locations: [
+            {
+              fragments: [
+                { start: 20, end: 23 },
+                { start: 26, end: 32 },
+              ],
+            },
+          ],
+        },
+      ];
       customElements.whenDefined("nightingale-sequence").then(() => {
         if (document.getElementById("firstSequence"))
           document.getElementById("firstSequence").fixedHighlight = "10:20";
@@ -30,6 +80,21 @@
       customElements.whenDefined("nightingale-navigation").then(() => {
         if (document.getElementById("navigation"))
           document.getElementById("navigation").fixedHighlight = "10:20";
+      });
+      customElements.whenDefined("nightingale-track").then(() => {
+        if (document.getElementById("firstTrack")) {
+          fetch(
+            "http://localhost:8000/packages/nightingale-track/tests/mockData/data.json"
+          )
+            .then((response) => response.json())
+            .then(
+              (data) => (document.getElementById("firstTrack").data = data)
+            );
+        }
+        if (document.getElementById("track")) {
+          document.getElementById("track").data = featuresData;
+          document.getElementById("track").fixedHighlight = "10:20";
+        }
       });
     </script>
     <style>
@@ -48,8 +113,8 @@
           width="800"
           height="80"
           length="50"
-          display-start="10"
-          display-end="20"
+          display-start="5"
+          display-end="25"
           highlight-color="#EB3BFF22"
           margin-color="transparent"
           show-highlight
@@ -61,12 +126,22 @@
           width="800"
           height="50"
           length="50"
-          display-start="10"
-          display-end="20"
+          display-start="5"
+          display-end="25"
           highlight-event="onmouseover"
           highlight-color="#EB3BFF66"
         >
         </nightingale-sequence>
+        <nightingale-track
+          id="track"
+          width="800"
+          height="50"
+          length="50"
+          display-start="5"
+          display-end="25"
+          highlight-event="onmouseover"
+          highlight-color="#EB3BFF66"
+        ></nightingale-track>
       </nightingale-manager>
     </div>
     <hr />
@@ -108,5 +183,15 @@
       sequence="MAMYDDEFDTKASDL"
       length="15"
     ></nightingale-sequence>
+
+    <h1>Track</h1>
+    <nightingale-track
+      length="223"
+      height="400"
+      id="firstTrack"
+      display-start="1"
+      display-end="50"
+      layout="non-overlapping"
+    ></nightingale-track>
   </body>
 </html>

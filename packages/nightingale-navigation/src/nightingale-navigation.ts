@@ -220,6 +220,8 @@ class NightingaleNavigation extends withManager(
     const s2 = scaleLinear()
       .domain([this.rulerstart, this.rulerstart + (this.length || 1)])
       .range([this["margin-left"], this.width - this["margin-right"]]);
+
+    // Highlight Polygon
     const highlighs = this.#highlighted
       .selectAll<
         SVGPolygonElement,
@@ -229,6 +231,7 @@ class NightingaleNavigation extends withManager(
         }[]
       >("polygon")
       .data(this["show-highlight"] ? this.highlightedRegion.segments : []);
+
     highlighs
       .enter()
       .append("polygon")
@@ -246,6 +249,35 @@ class NightingaleNavigation extends withManager(
       });
 
     highlighs.exit().remove();
+    const highlighsRect = this.#highlighted
+      .selectAll<
+        SVGRectElement,
+        {
+          start: number;
+          end: number;
+        }[]
+      >("rect")
+      .data(this["show-highlight"] ? this.highlightedRegion.segments : []);
+
+    // Highlight Rectangle
+    highlighsRect
+      .enter()
+      .append("rect")
+      .attr("class", "highlight-rectangle")
+      .style("pointer-events", "none")
+      .merge(highlighsRect)
+      .attr("fill", this["highlight-color"])
+      .attr("x", (segment) => s2(Math.max(1, segment.start)))
+      .attr(
+        "width",
+        (segment) =>
+          s2(Math.min(this.length || 1, segment.end) + 1) -
+          s2(Math.max(1, segment.start))
+      )
+      .attr("y", this["margin-top"])
+      .attr("height", this.height / 2);
+
+    highlighsRect.exit().remove();
   }
   private updateLabels() {
     if (this.#displaystartLabel)

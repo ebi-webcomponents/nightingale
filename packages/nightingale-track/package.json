@@ -1,15 +1,13 @@
 {
-  "name": "@nightingale-elements/nightingale-sequence",
+  "name": "@nightingale-elements/nightingale-track",
   "version": "4.0.0-alpha",
-  "description": "Sequence component for the Nightingale tool",
+  "description": "Basic track type of the viewer.",
   "files": [
     "dist",
     "src"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "ISC",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -23,6 +21,8 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "MIT",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^1.0.0",
     "lodash-es": "^4.17.11"
