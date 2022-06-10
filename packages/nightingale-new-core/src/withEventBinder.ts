@@ -2,6 +2,8 @@ import NightingaleBaseElement, {
   Constructor,
 } from "./nightingale-base-element";
 
+import { Selection } from "d3";
+
 export const HIGHLIGHT_EVENT = "highlight-event";
 
 type EventType = "click" | "mouseover" | "mouseout" | "reset";
@@ -28,6 +30,7 @@ const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
 ) => {
   class WithNightingaleEvents extends superClass {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
       this.resetEventHandler = this.resetEventHandler.bind(this);
@@ -61,19 +64,19 @@ const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
         feature,
         target,
       };
-      // TODO: Add highlight events
-      // if (withHighlight) {
-      //   if (feature && feature.fragments) {
-      //     detail.highlight = feature.fragments
-      //       .map((fr) => `${fr.start}:${fr.end}`)
-      //       .join(",");
-      //   } else if (d3Event && d3Event.shiftKey && (this as any).highlight) {
-      //     // If holding shift, add to the highlights
-      //     detail.highlight = `${(this as any).highlight},${start}:${end}`;
-      //   } else {
-      //     detail.highlight = start && end ? `${start}:${end}` : null;
-      //   }
-      // }
+      if (withHighlight) {
+        if (feature && feature.fragments) {
+          detail.highlight = feature.fragments
+            .map((fr) => `${fr.start}:${fr.end}`)
+            .join(",");
+          // TODO: Add highlight events
+          // } else if (d3Event && d3Event.shiftKey && (this as any).highlight) {
+          //   // If holding shift, add to the highlights
+          //   detail.highlight = `${(this as any).highlight},${start}:${end}`;
+          // } else {
+          //   detail.highlight = start && end ? `${start}:${end}` : null;
+        }
+      }
       if (withId) {
         detail.selectedid = feature && feature.protvistaFeatureId;
       }
@@ -83,24 +86,30 @@ const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
         cancelable: true,
       });
     }
-    bindEvents(feature: any, element: HTMLElement) {
+    bindEvents(
+      feature: Selection<HTMLElement, unknown, HTMLElement, unknown>,
+      element: NightingaleBaseElement
+    ) {
       feature
-        .on(
-          "mouseover",
-          (f: FeatureInterface, i: number, group: Array<HTMLElement>) => {
-            element.dispatchEvent(
-              WithNightingaleEvents.createEvent(
-                "mouseover",
-                f,
-                element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
-                false,
-                f.start,
-                f.end,
-                group[i]
-              )
-            );
-          }
-        )
+        .on("mouseover", function (event: Event, d: unknown) {
+          const e = feature.nodes();
+          const i = e.indexOf(this);
+          console.log({ THIS: this, d, e, i });
+          // TODO: reenable the code above considering the new method signature
+
+          // (f: FeatureInterface, i: number, group: Array<HTMLElement>)
+          //   element.dispatchEvent(
+          //     WithNightingaleEvents.createEvent(
+          //       "mouseover",
+          //       f,
+          //       element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
+          //       false,
+          //       f.start,
+          //       f.end,
+          //       group[i]
+          //     )
+          //   );
+        })
         .on("mouseout", () => {
           element.dispatchEvent(
             WithNightingaleEvents.createEvent(
@@ -109,23 +118,22 @@ const withNightingaleEvents = <T extends Constructor<NightingaleBaseElement>>(
               element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover"
             )
           );
-        })
-        .on(
-          "click",
-          (f: FeatureInterface, i: number, group: Array<HTMLElement>) => {
-            element.dispatchEvent(
-              WithNightingaleEvents.createEvent(
-                "click",
-                f,
-                element.getAttribute(HIGHLIGHT_EVENT) === "onclick",
-                true,
-                f.start,
-                f.end,
-                group[i]
-              )
-            );
-          }
-        );
+          // })
+          // .on(
+          //   "click",
+          //   (f: FeatureInterface, i: number, group: Array<HTMLElement>) => {
+          //     element.dispatchEvent(
+          //       WithNightingaleEvents.createEvent(
+          //         "click",
+          //         f,
+          //         element.getAttribute(HIGHLIGHT_EVENT) === "onclick",
+          //         true,
+          //         f.start,
+          //         f.end,
+          //         group[i]
+          //       )
+          //     );
+        });
     }
   }
   return WithNightingaleEvents as T;

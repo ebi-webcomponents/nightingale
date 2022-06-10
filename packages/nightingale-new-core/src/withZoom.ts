@@ -1,4 +1,3 @@
-import { property } from "lit/decorators.js";
 import {
   scaleLinear,
   zoom as d3zoom,
@@ -18,17 +17,18 @@ import withMargin from "./withMargin";
 export declare class WithZoomInterface {}
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
-  superClass: T,
-  options: {} = {}
+  superClass: T
+  // options: Record<string, unknown> = {}
 ) => {
   class WithZoom extends withMargin(withPosition(withDimensions(superClass))) {
     _applyZoomTranslation: () => void;
-    _originXScale?: ScaleLinear<any, any>;
-    _xScale?: ScaleLinear<any, any>;
-    _zoom?: ZoomBehavior<Element, unknown>;
-    _svg?: Selection<HTMLElement, any, HTMLElement, any>;
+    _originXScale?: ScaleLinear<number, number>;
+    _xScale?: ScaleLinear<number, number>;
+    _zoom?: ZoomBehavior<HTMLElement, unknown>;
+    _svg?: Selection<HTMLElement, unknown, HTMLElement, unknown>;
     dontDispatch?: boolean;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
 
@@ -97,7 +97,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     set svg(svg) {
       if (!svg || !this._zoom) return;
       this._svg = svg;
-      svg.call(this._zoom as any);
+      svg.call(this._zoom);
       this.applyZoomTranslation();
     }
 
@@ -113,7 +113,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     _initZoom() {
-      this._zoom = d3zoom()
+      this._zoom = d3zoom<HTMLElement, unknown>()
         .scaleExtent([1, Infinity])
         .translateExtent([
           [0, 0],
@@ -164,8 +164,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         // Dispatches the event so the manager can propagate this changes to other  components
         new CustomEvent("change", {
           detail: {
-            'display-start': Math.max(1, start),
-            'display-end': Math.min(
+            "display-start": Math.max(1, start),
+            "display-end": Math.min(
               this.length || 0,
               Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
             ),
@@ -183,18 +183,20 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         1,
         // +1 because the displayend base should be included
         this.length ||
-          0 / (1 + (this['display-end'] || 0) - (this['display-start'] || 0))
+          0 / (1 + (this["display-end"] || 0) - (this["display-start"] || 0))
       );
       // The deltaX gets calculated using the position of the first base to display in original scale
-      const dx = -this._originXScale(this['display-start'] || 0);
+      const dx = -this._originXScale(this["display-start"] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
-      this.svg.call(
-        // We trigger a zoom action
-        (this.zoom as any).transform,
-        zoomIdentity // Identity transformation
-          .scale(k) // Scaled by our scaled factor
-          .translate(dx, 0) // Translated by the delta
-      );
+      if (this.zoom) {
+        this.svg.call(
+          // We trigger a zoom action
+          this.zoom.transform,
+          zoomIdentity // Identity transformation
+            .scale(k) // Scaled by our scaled factor
+            .translate(dx, 0) // Translated by the delta
+        );
+      }
       this.dontDispatch = false;
       super.render();
     }

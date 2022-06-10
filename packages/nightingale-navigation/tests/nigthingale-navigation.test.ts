@@ -17,12 +17,14 @@ describe("nightingale-navigation tests", () => {
     expect(rendered).toMatchSnapshot();
   });
 
-  test("it should display the navigation correctly after zoom", (done) => {
+  test("it should display the navigation correctly after zoom", () => {
     rendered.setAttribute("display-start", "2");
     rendered.setAttribute("display-end", "4");
-    window.requestAnimationFrame(() => {
-      expect(rendered).toMatchSnapshot();
-      done();
+    return new Promise((done) => {
+      window.requestAnimationFrame(() => {
+        expect(rendered).toMatchSnapshot();
+        done(true);
+      });
     });
   });
 });

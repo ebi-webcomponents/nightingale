@@ -10,18 +10,20 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
 
     connectedCallback() {
       if (this.closest("nightingale-manager")) {
-        customElements.whenDefined("nightingale-manager").then(()=>{
+        customElements.whenDefined("nightingale-manager").then(() => {
           this.manager = this.closest("nightingale-manager");
           if (this.manager) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (this.manager as any).register(this);
           }
-        })
+        });
       }
       super.connectedCallback();
     }
 
     disconnectedCallback() {
       if (this.manager) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (this.manager as any).unregister(this);
       }
       super.disconnectedCallback();

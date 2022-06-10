@@ -29,7 +29,7 @@
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
-    "d3": "^7.0"
+    "d3": "^7.4.4"
   },
   "peerDependencies": {
     "d3": "7.X"
