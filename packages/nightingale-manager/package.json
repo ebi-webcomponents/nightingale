@@ -1,7 +1,7 @@
 {
-  "name": "@nightingale-elements/nightingale-navigation",
-  "version": "3.0.0",
-  "description": "Navigation component for the Nightingale tool",
+  "name": "@nightingale-elements/nightingale-manager",
+  "version": "1.0.0",
+  "description": "Event bus component for Nightnale",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -10,8 +10,8 @@
   ],
   "keywords": [
     "nightingale",
-    "customelements",
-    "webcomponents"
+    "webcomponents",
+    "customelements"
   ],
   "repository": {
     "type": "git",
@@ -21,17 +21,11 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^1.0.0",
     "lodash-es": "^4.17.11"
-  },
-  "devDependencies": {
-    "d3": "^7.4.4"
-  },
-  "peerDependencies": {
-    "d3": "7.X"
   }
 }

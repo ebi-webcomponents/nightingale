@@ -7,6 +7,6 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
-    "lit": "2.0.2"
+    "lit": "2.2.3"
   }
 }

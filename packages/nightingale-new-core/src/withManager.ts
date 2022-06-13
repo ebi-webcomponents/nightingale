@@ -6,21 +6,25 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
 ) => {
   class WithManager extends superClass {
-    #manager?: HTMLElement | null;
+    manager?: HTMLElement | null;
 
     connectedCallback() {
       if (this.closest("nightingale-manager")) {
-        this.#manager = this.closest("nightingale-manager");
-        if (this.#manager) {
-          (this.#manager as any).register(this);
-        }
+        customElements.whenDefined("nightingale-manager").then(() => {
+          this.manager = this.closest("nightingale-manager");
+          if (this.manager) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (this.manager as any).register(this);
+          }
+        });
       }
       super.connectedCallback();
     }
 
     disconnectedCallback() {
-      if (this.#manager) {
-        (this.#manager as any).unregister(this);
+      if (this.manager) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (this.manager as any).unregister(this);
       }
       super.disconnectedCallback();
     }

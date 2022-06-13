@@ -1,6 +1,6 @@
 import Region from "./Region";
 
-const combineRegions = (region1: string, region2: string): string => {
+export const combineRegions = (region1: string, region2: string): string => {
   if (!region1) return region2;
   if (!region2) return region1;
   return `${region1},${region2}`;

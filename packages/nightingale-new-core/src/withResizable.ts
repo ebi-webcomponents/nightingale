@@ -1,4 +1,3 @@
-import { property } from "lit/decorators.js";
 import NightingaleBaseElement, {
   Constructor,
 } from "./nightingale-base-element";
@@ -8,8 +7,9 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
 ) => {
   class WithResizable extends withDimensions(superClass) {
-    #observer: any;
+    #observer?: ResizeObserver;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...rest: any[]) {
       super(...rest);
       this.onResize = this.onResize.bind(this);
