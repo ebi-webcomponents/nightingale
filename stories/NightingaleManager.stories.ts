@@ -7,18 +7,20 @@ export default {
 };
 
 const Template = ({ width, height, length }) =>
-  html` <nightingale-manager>
-    <nightingale-navigation
-      width="${width}"
-      height=${height}
-      length="${length}"
-    ></nightingale-navigation>
-    <nightingale-navigation
-      width="${width}"
-      height=${height}
-      length="${length}"
-    ></nightingale-navigation>
-  </nightingale-manager>`;
+  html`
+    <nightingale-manager>
+      <nightingale-navigation
+        width="${width}"
+        height=${height}
+        length="${length}"
+      ></nightingale-navigation>
+      <nightingale-navigation
+        width="${width}"
+        height=${height}
+        length="${length}"
+      ></nightingale-navigation>
+    </nightingale-manager>
+  `;
 
 export const Manager = Template.bind({});
 Manager.args = {

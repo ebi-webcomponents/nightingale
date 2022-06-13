@@ -24,8 +24,8 @@
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@custom-elements-manifest/analyzer": "0.5.7",
-    "@rollup/plugin-replace": "3.0.0",
     "@rollup/plugin-node-resolve": "13.3.0",
+    "@rollup/plugin-replace": "3.0.0",
     "@rollup/plugin-typescript": "8.3.2",
     "@storybook/addon-a11y": "6.5.8",
     "@storybook/addon-actions": "6.5.8",
@@ -54,6 +54,7 @@
     "rollup-plugin-summary": "1.4.0",
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^28.0.2",
+    "ts-loader": "8.4",
     "tslib": "2.4.0",
     "typescript": "4.6.4"
   },
