@@ -1,11 +1,22 @@
+import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../packages/nightingale-sequence/src/index.ts";
 
 export default {
   title: "Nightingale/NightingaleSequence",
-};
+} as Meta;
+
 const defaultSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
-const Template = (args) => {
+
+const Template: Story<{
+  width: number;
+  height: number;
+  length: number;
+  "display-start": number;
+  "display-end": number;
+  highlight: string;
+  sequence: string;
+}> = (args) => {
   const { sequence, width, height, length, highlight } = args;
   return html`<nightingale-sequence
     sequence=${sequence}
@@ -21,20 +32,13 @@ const Template = (args) => {
 export const Sequence = Template.bind({});
 Sequence.args = {
   sequence: defaultSequence,
-  width: "500",
-  height: "100",
+  width: 500,
+  height: 100,
   length: defaultSequence.length,
-  "display-start": "20",
-  "display-end": "40",
+  "display-start": 20,
+  "display-end": 40,
   highlight: "23:45",
 };
-
-// export const DifferentSelection = Template.bind({});
-// DifferentSelection.args = {
-//   ...Navigation.args,
-//   "display-start": "300",
-//   "display-end": "350",
-// };
 
 const coordinates = [
   [1.6, 5],

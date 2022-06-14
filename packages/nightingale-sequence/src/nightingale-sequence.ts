@@ -244,7 +244,7 @@ class NightingaleSequence extends withManager(
           background.style("opacity", Math.min(1, space));
         }
       }
-      this.renderHighlight();
+      this.updateHighlight();
       this.renderMarginOnGroup(this.#margins);
     }
   }
@@ -258,7 +258,7 @@ class NightingaleSequence extends withManager(
     );
   }
 
-  private renderHighlight() {
+  protected updateHighlight() {
     if (!this.#highlighted) return;
     const highlighs = this.#highlighted
       .selectAll<

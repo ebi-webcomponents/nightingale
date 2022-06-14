@@ -1,14 +1,73 @@
+import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../packages/nightingale-navigation/src/index.ts";
 import "../packages/nightingale-manager/src/index.ts";
+import "../packages/nightingale-track/src/index.ts";
 
 export default {
   title: "Nightingale/NightingaleManager",
-};
+} as Meta;
+
 const defaultSequence =
   "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
+const defaultData = [
+  {
+    accession: "feature1",
+    start: 1,
+    end: 2,
+    color: "blue",
+  },
+  {
+    accession: "feature1",
+    start: 49,
+    end: 50,
+    color: "red",
+  },
+  {
+    accession: "feature1",
+    start: 10,
+    end: 20,
+    color: "#342ea2",
+  },
+  {
+    accession: "feature2",
+    locations: [{ fragments: [{ start: 30, end: 45 }] }],
+    color: "#A42ea2",
+  },
+  {
+    accession: "feature3",
+    locations: [
+      {
+        fragments: [{ start: 15, end: 15 }],
+      },
+      { fragments: [{ start: 18, end: 18 }] },
+    ],
+    color: "#A4Aea2",
+  },
+  {
+    accession: "feature4",
+    locations: [
+      {
+        fragments: [
+          { start: 20, end: 23 },
+          { start: 26, end: 32 },
+        ],
+      },
+    ],
+  },
+];
 
-const Template = (args) => {
+const Template: Story<{
+  width: number;
+  height: number;
+  length: number;
+  "display-start": number;
+  "display-end": number;
+  highlight: string;
+  sequence: string;
+  "highlight-color": string;
+  "margin-color": string;
+}> = (args) => {
   const { width, height, length, sequence } = args;
   return html`
     <nightingale-manager>
@@ -41,28 +100,67 @@ const Template = (args) => {
         >
         </nightingale-sequence>
       </div>
+      <div style="line-height: 0">
+        <nightingale-track
+          id="track"
+          width="${width}"
+          height=${height}
+          length="${length}"
+          display-start="${args["display-start"]}"
+          display-end="${args["display-end"]}"
+          highlight-event="onmouseover"
+          highlight-color=${args["highlight-color"]}
+          margin-color=${args["margin-color"]}
+        >
+        </nightingale-track>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-track
+          id="track2"
+          width="${width}"
+          height=${height}
+          length="${length}"
+          display-start="${args["display-start"]}"
+          display-end="${args["display-end"]}"
+          highlight-event="onmouseover"
+          highlight-color=${args["highlight-color"]}
+          margin-color=${args["margin-color"]}
+          layout="non-overlapping"
+        >
+        </nightingale-track>
+      </div>
     </nightingale-manager>
-    <script>
-      customElements.whenDefined("nightingale-sequence").then(() => {
-        if (document.getElementById("sequence"))
-          document.getElementById("sequence").fixedHighlight = "10:20";
-      });
-      customElements.whenDefined("nightingale-navigation").then(() => {
-        if (document.getElementById("navigation"))
-          document.getElementById("navigation").fixedHighlight = "10:20";
-      });
-    </script>
   `;
 };
 
 export const Manager = Template.bind({});
 Manager.args = {
-  width: "800",
-  height: "50",
+  width: 800,
+  height: 50,
   length: defaultSequence.length,
   sequence: defaultSequence,
-  "display-start": "10",
-  "display-end": "80",
+  "display-start": 10,
+  "display-end": 80,
   "highlight-color": "#EB3BFF22",
   "margin-color": "transparent",
+};
+Manager.play = async () => {
+  await customElements.whenDefined("nightingale-sequence");
+  const sequence = document.getElementById("sequence");
+  if (sequence) (sequence as any).fixedHighlight = "10:20";
+
+  await customElements.whenDefined("nightingale-navigation");
+  const nav = document.getElementById("navigation");
+  if (nav) (nav as any).fixedHighlight = "10:20";
+  await customElements.whenDefined("nightingale-track");
+  const track = document.getElementById("track");
+  if (track) {
+    (track as any).fixedHighlight = "10:20";
+    (track as any).data = defaultData;
+  }
+  const track2 = document.getElementById("track2");
+  if (track2) {
+    (track2 as any).fixedHighlight = "10:20";
+    (track2 as any).data = defaultData;
+  }
 };

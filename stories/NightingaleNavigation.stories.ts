@@ -1,11 +1,20 @@
+import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../packages/nightingale-navigation/src/index.ts";
 
 export default {
   title: "Nightingale/NightingaleNavigation",
-};
+} as Meta;
 
-const Template = (args) => {
+const Template: Story<{
+  width: number;
+  height: number;
+  length: number;
+  rulerstart: number;
+  "display-start": number;
+  "display-end": number;
+  highlight: string;
+}> = (args) => {
   const { width, height, length, highlight, rulerstart } = args;
   return html`<nightingale-navigation
     width="${width}"
@@ -20,20 +29,20 @@ const Template = (args) => {
 
 export const Navigation = Template.bind({});
 Navigation.args = {
-  width: "500",
-  height: "100",
-  length: "456",
-  "display-start": "100",
-  "display-end": "200",
+  width: 500,
+  height: 100,
+  length: 456,
+  "display-start": 100,
+  "display-end": 200,
   highlight: "23:45",
-  rulerstart: "50",
+  rulerstart: 50,
 };
 
 export const DifferentSelection = Template.bind({});
 DifferentSelection.args = {
   ...Navigation.args,
-  "display-start": "300",
-  "display-end": "350",
+  "display-start": 300,
+  "display-end": 350,
 };
 
 export const NavigationNoControls = () => html`<nightingale-navigation

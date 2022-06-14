@@ -99,6 +99,7 @@ class NightingaleTrack extends withManager(
 
     if (this.#data) this.createTrack();
 
+    // TODO: re-enable when the dataloadre is implemented
     // this.addEventListener("load", (e) => {
     //   if (_includes(this.children, e.target)) {
     //     this.data = e.detail.payload;
@@ -391,7 +392,7 @@ class NightingaleTrack extends withManager(
 
       // this._updateHighlight();
     }
-    this.renderHighlight();
+    this.updateHighlight();
     this.renderMarginOnGroup(this.#margins);
   }
 
@@ -399,7 +400,7 @@ class NightingaleTrack extends withManager(
   //   this.trackHighlighter.updateHighlight();
   // }
 
-  private renderHighlight() {
+  protected updateHighlight() {
     if (!this.#highlighted) return;
     const highlighs = this.#highlighted
       .selectAll<

@@ -206,7 +206,7 @@ class NightingaleNavigation extends withManager(
       this.renderMarginOnGroup(this.#margins);
     }
   }
-  private updateHighlight() {
+  protected updateHighlight() {
     if (!this.#highlighted) return;
     // Scale to match the range of the tracks [1,length+1]
     const s1 = scaleLinear()
