@@ -18,6 +18,9 @@ jobs:
       - name: 🧪 Test - Lint
         run: |
           yarn lint
+      - name: 📚 Storybook
+        run: |
+          yarn build-storybook
       # - name: Build Site 🏗
       #   run: |
       #     yarn build-site
