@@ -6,41 +6,33 @@ export default {
   title: "Nightingale/NightingaleManager",
 };
 
-const Template = ({ width, height, length }) =>
-  html`
+const Template = (args) => {
+  const { width, height, length } = args;
+  return html`
     <nightingale-manager>
       <nightingale-navigation
         width="${width}"
         height=${height}
         length="${length}"
+        display-start="${args["display-start"]}"
+        display-end="${args["display-end"]}"
       ></nightingale-navigation>
       <nightingale-navigation
         width="${width}"
         height=${height}
         length="${length}"
+        display-start="${args["display-start"]}"
+        display-end="${args["display-end"]}"
       ></nightingale-navigation>
     </nightingale-manager>
   `;
+};
 
 export const Manager = Template.bind({});
 Manager.args = {
   width: "500",
   height: "100",
   length: "456",
+  "display-start": "10",
+  "display-end": "100",
 };
-
-// export const DifferentSelection = Template.bind({});
-// DifferentSelection.args = {
-//   ...Navigation.args,
-//   displaystart: "300",
-//   displayend: "350",
-// };
-
-// export const NavigationNoControls = () => html`<nightingale-navigation
-//   length="456"
-//   displaystart="143"
-//   displayend="400"
-//   highlightStart="23"
-//   highlightEnd="45"
-//   rulerstart="50"
-// />`;

@@ -10,6 +10,9 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-a11y",
   ],
+  typescript: {
+    check: false,
+  },
   webpackFinal: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -23,7 +26,6 @@ module.exports = {
       include: path.resolve(__dirname, "../packages"),
       loader: require.resolve("ts-loader"),
     });
-    // console.log(config.module.rules[0].use);
     return config;
   },
 };
