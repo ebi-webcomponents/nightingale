@@ -67,7 +67,9 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
         }
       }
     }
-    protected updateHighlight() {}
+    protected updateHighlight() {
+      return;
+    }
   }
   return WithHighlight as Constructor<WithHighlightInterface> & T;
 };
