@@ -23,7 +23,7 @@ jobs:
           yarn build-storybook
       - name: Deploy Storybook 🚀
         if: github.ref == 'refs/heads/2022'
-        uses: JamesIves/github-pages-deploy-action@4.3.3
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
