@@ -21,15 +21,11 @@ jobs:
       - name: 📚 Storybook
         run: |
           yarn build-storybook
-      # - name: Build Site 🏗
-      #   run: |
-      #     yarn build-site
-      #     ls -l app/dist
-      # - name: Deploy Site 🚀
-      #   if: github.ref == 'refs/heads/master'
-      #   uses: JamesIves/github-pages-deploy-action@3.7.1
-      #   with:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     BRANCH: gh-pages # The branch the action should deploy to.
-      #     FOLDER: app/dist # The folder the action should deploy.
-      #     CLEAN: true # Automatically remove deleted files from the deploy branch
+      - name: Deploy Storybook 🚀
+        if: github.ref == 'refs/heads/2022'
+        uses: JamesIves/github-pages-deploy-action@4.3.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: storybook-static # The folder the action should deploy.
+          TARGET_FOLDER: 2022
