@@ -1,0 +1,72 @@
+[
+  {
+    "accession": "chain_A",
+    "locations": [
+      {
+        "fragments": [
+          {
+            "start": 45,
+            "end": 100,
+            "shape": "helix",
+            "fill": "transparent",
+            "color": "#f06"
+          },
+          {
+            "start": 110,
+            "end": 200,
+            "shape": "helix",
+            "fill": "transparent",
+            "color": "#f06"
+          },
+          {
+            "start": 5,
+            "end": 15,
+            "shape": "strand",
+            "color": "#fc0"
+          },
+          {
+            "start": 40,
+            "end": 43,
+            "shape": "strand",
+            "color": "#fc0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "accession": "chain_D",
+    "locations": [
+      {
+        "fragments": [
+          {
+            "start": 45,
+            "end": 51,
+            "shape": "helix",
+            "fill": "transparent",
+            "color": "#f06"
+          },
+          {
+            "start": 55,
+            "end": 77,
+            "shape": "helix",
+            "fill": "transparent",
+            "color": "#f06"
+          },
+          {
+            "start": 5,
+            "end": 15,
+            "shape": "strand",
+            "color": "#fc0"
+          },
+          {
+            "start": 19,
+            "end": 26,
+            "shape": "strand",
+            "color": "#fc0"
+          }
+        ]
+      }
+    ]
+  }
+]

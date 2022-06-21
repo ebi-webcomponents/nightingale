@@ -29,3 +29,4 @@ This are the steps I'm doing to migrate a component to the new nightingale
    Then you can put the D3 logic in method that is invoked in `updated()` `firstUpdate()` or whenever it is logically correct in the Lit component flow.
    - Solve all the TS issues!!!!
 4. add the new component to the `dev/import-map.json`
+5. Create a story in `stories/` and you can use storybook to test the component
