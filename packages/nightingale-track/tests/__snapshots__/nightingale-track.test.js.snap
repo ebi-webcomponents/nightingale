@@ -3003,8 +3003,8 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
 
 exports[`nightingale-track tests it should zoom in 1`] = `
 <nightingale-track
-  displayend="4"
-  displaystart="2"
+  display-end="4"
+  display-start="2"
   height="80"
   length="223"
 >
@@ -3029,19 +3029,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L108.4304932735426,0L108.4304932735426,16L0,16Z"
+              d="M0,0L8059.999999999998,0L8059.999999999998,16L0,16Z"
               fill="#342ea2"
               stroke="#342ea2"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(41.47982062780269,32)"
+              transform="translate(2089.9999999999995,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(41.47982062780269,32)"
-              width="108.4304932735426"
+              transform="translate(2089.9999999999995,32)"
+              width="8059.999999999998"
             />
           </g>
         </g>
@@ -3058,19 +3058,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L388.2511210762332,0L388.2511210762332,16L0,16Z"
+              d="M0,0L28859.999999999993,0L28859.999999999993,16L0,16Z"
               fill="#A42ea2"
               stroke="#A42ea2"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(181.39013452914799,32)"
+              transform="translate(12489.999999999996,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(181.39013452914799,32)"
-              width="388.2511210762332"
+              transform="translate(12489.999999999996,32)"
+              width="28859.999999999993"
             />
           </g>
         </g>
@@ -3087,19 +3087,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L3.497757847533632,0L3.497757847533632,16L0,16Z"
+              d="M0,0L259.99999999999994,0L259.99999999999994,16L0,16Z"
               fill="#A4Aea2"
               stroke="#A4Aea2"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(548.6547085201794,32)"
+              transform="translate(39789.999999999985,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(548.6547085201794,32)"
-              width="3.497757847533632"
+              transform="translate(39789.999999999985,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3111,19 +3111,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L3.497757847533632,0L3.497757847533632,16L0,16Z"
+              d="M0,0L259.99999999999994,0L259.99999999999994,16L0,16Z"
               fill="#A4Aea2"
               stroke="#A4Aea2"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(559.1479820627803,32)"
+              transform="translate(40569.999999999985,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(559.1479820627803,32)"
-              width="3.497757847533632"
+              transform="translate(40569.999999999985,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3140,19 +3140,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L17.48878923766816,0L17.48878923766816,16L0,16Z"
+              d="M0,0L1299.9999999999998,0L1299.9999999999998,16L0,16Z"
               fill="gray"
               stroke="gray"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(706.0538116591929,32)"
+              transform="translate(51489.999999999985,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(706.0538116591929,32)"
-              width="17.48878923766816"
+              transform="translate(51489.999999999985,32)"
+              width="1299.9999999999998"
             />
           </g>
           <g
@@ -3160,19 +3160,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L17.48878923766816,0L17.48878923766816,16L0,16Z"
+              d="M0,0L1299.9999999999998,0L1299.9999999999998,16L0,16Z"
               fill="gray"
               stroke="gray"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(727.0403587443947,32)"
+              transform="translate(53049.999999999985,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(727.0403587443947,32)"
-              width="17.48878923766816"
+              transform="translate(53049.999999999985,32)"
+              width="1299.9999999999998"
             />
           </g>
         </g>
@@ -3189,19 +3189,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L10.493273542600896,0L10.493273542600896,16L0,16Z"
+              d="M0,0L779.9999999999998,0L779.9999999999998,16L0,16Z"
               fill="#339"
               stroke="#339"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="10.493273542600896"
+              transform="translate(-249.99999999999994,32)"
+              width="779.9999999999998"
             />
           </g>
         </g>
@@ -3218,19 +3218,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L10.493273542600896,0L10.493273542600896,16L0,16Z"
+              d="M0,0L779.9999999999998,0L779.9999999999998,16L0,16Z"
               fill="#63e"
               stroke="#63e"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="10.493273542600896"
+              transform="translate(-249.99999999999994,32)"
+              width="779.9999999999998"
             />
           </g>
         </g>
@@ -3247,19 +3247,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="rectangle feature"
-              d="M0,0L10.493273542600896,0L10.493273542600896,16L0,16Z"
+              d="M0,0L779.9999999999998,0L779.9999999999998,16L0,16Z"
               fill="#35d"
               stroke="#35d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="10.493273542600896"
+              transform="translate(-249.99999999999994,32)"
+              width="779.9999999999998"
             />
           </g>
         </g>
@@ -3276,19 +3276,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="line feature"
-              d="M0,8 L10.493273542600896,8"
+              d="M0,8 L779.9999999999998,8"
               fill="#35d"
               stroke="#35d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="10.493273542600896"
+              transform="translate(-249.99999999999994,32)"
+              width="779.9999999999998"
             />
           </g>
         </g>
@@ -3305,19 +3305,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="bridge feature"
-              d="M0,16L0,8L1.748878923766816,8L1.748878923766816,0L1.748878923766816,8L3.497757847533632,8L3.497757847533632,16Z"
+              d="M0,16L0,8L129.99999999999997,8L129.99999999999997,0L129.99999999999997,8L259.99999999999994,8L259.99999999999994,16Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3334,19 +3334,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="bridge feature"
-              d="M0,16L0,0L6.995515695067264,0L6.995515695067264,16L6.995515695067264,2L0,2Z"
+              d="M0,16L0,0L519.9999999999999,0L519.9999999999999,16L519.9999999999999,2L0,2Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3363,19 +3363,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="diamond feature"
-              d="M1.748878923766816,0L6.748878923766816,5L1.748878923766816,10L-3.2511210762331837,5Z"
+              d="M129.99999999999997,0L134.99999999999997,5L129.99999999999997,10L124.99999999999997,5Z"
               fill="#33d"
               stroke="#33d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3392,19 +3392,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="diamond feature"
-              d="M3.497757847533632,0L8.497757847533633,5L3.497757847533632,10L-1.5022421524663678,5M0,5L6.995515695067264,5Z"
+              d="M259.99999999999994,0L264.99999999999994,5L259.99999999999994,10L254.99999999999994,5M0,5L519.9999999999999,5Z"
               fill="#33d"
               stroke="#33d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="6.995515695067264"
+              transform="translate(10,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3421,19 +3421,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="chevron feature"
-              d="M1.748878923766816,5L6.748878923766816,0L6.748878923766816,5L1.748878923766816,10L-3.2511210762331837,5L-3.2511210762331837,0Z"
+              d="M129.99999999999997,5L134.99999999999997,0L134.99999999999997,5L129.99999999999997,10L124.99999999999997,5L124.99999999999997,0Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3450,19 +3450,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="chevron feature"
-              d="M3.497757847533632,5L8.497757847533633,0L8.497757847533633,5L3.497757847533632,10L-1.5022421524663678,5L-1.5022421524663678,0L3.497757847533632,5M0,5L6.995515695067264,5ZZ"
+              d="M259.99999999999994,5L264.99999999999994,0L264.99999999999994,5L259.99999999999994,10L254.99999999999994,5L254.99999999999994,0L259.99999999999994,5M0,5L519.9999999999999,5ZZ"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3479,19 +3479,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="catFace feature"
-              d="M-3.2511210762331837,0L-3.2511210762331837,6L-0.2511210762331839,10L3.7488789237668163,10L6.748878923766816,6L6.748878923766816,0L3.7488789237668163,4L-0.2511210762331839,4Z"
+              d="M124.99999999999997,0L124.99999999999997,6L127.99999999999997,10L131.99999999999997,10L134.99999999999997,6L134.99999999999997,0L131.99999999999997,4L127.99999999999997,4Z"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3508,19 +3508,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="catFace feature"
-              d="M-1.5022421524663678,0L-1.5022421524663678,6L1.4977578475336322,10L5.497757847533633,10L8.497757847533633,6L8.497757847533633,0L5.497757847533633,4L1.4977578475336322,4M3.497757847533632,0M0,5L6.995515695067264,5ZZ"
+              d="M254.99999999999994,0L254.99999999999994,6L257.99999999999994,10L261.99999999999994,10L264.99999999999994,6L264.99999999999994,0L261.99999999999994,4L257.99999999999994,4M259.99999999999994,0M0,5L519.9999999999999,5ZZ"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="6.995515695067264"
+              transform="translate(10,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3537,19 +3537,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="triangle feature"
-              d="M1.748878923766816,0L6.748878923766816,10L-3.2511210762331837,10Z"
+              d="M129.99999999999997,0L134.99999999999997,10L124.99999999999997,10Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3566,19 +3566,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="triangle feature"
-              d="M3.497757847533632,0L8.497757847533633,10L-1.5022421524663678,10L3.497757847533632,0M0,5L6.995515695067264,5ZZ"
+              d="M259.99999999999994,0L264.99999999999994,10L254.99999999999994,10L259.99999999999994,0M0,5L519.9999999999999,5ZZ"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3595,19 +3595,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="wave feature"
-              d="M-3.2511210762331837,5A2.5,5 0 1,1 1.748878923766816,5A2.5,5 0 1,0 6.748878923766816,5Z"
+              d="M124.99999999999997,5A2.5,5 0 1,1 129.99999999999997,5A2.5,5 0 1,0 134.99999999999997,5Z"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3624,19 +3624,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="wave feature"
-              d="M-1.5022421524663678,5A2.5,5 0 1,1 3.497757847533632,5A2.5,5 0 1,0 8.497757847533633,5M0,5L6.995515695067264,5ZZ"
+              d="M254.99999999999994,5A2.5,5 0 1,1 259.99999999999994,5A2.5,5 0 1,0 264.99999999999994,5M0,5L519.9999999999999,5ZZ"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="6.995515695067264"
+              transform="translate(10,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3653,19 +3653,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="hexagon feature"
-              d="M 6.748878923766816,5 4.248878923766816,9.330127018922193 -0.751121076233183,9.330127018922195 -3.2511210762331837,5.000000000000001 -0.7511210762331861,0.6698729810778072 4.248878923766816,0.6698729810778072 Z"
+              d="M 134.99999999999997,5 132.49999999999997,9.330127018922193 127.49999999999997,9.330127018922195 124.99999999999997,5.000000000000001 127.49999999999997,0.6698729810778072 132.49999999999997,0.6698729810778072 Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3682,19 +3682,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="hexagon feature"
-              d="M 8.497757847533633,5 5.997757847533633,9.330127018922193 0.9977578475336331,9.330127018922195 -1.5022421524663678,5.000000000000001 0.99775784753363,0.6698729810778072 5.997757847533633,0.6698729810778072  8.497757847533633,5 M0,5L6.995515695067264,5ZZ"
+              d="M 264.99999999999994,5 262.49999999999994,9.330127018922193 257.49999999999994,9.330127018922195 254.99999999999994,5.000000000000001 257.49999999999994,0.6698729810778072 262.49999999999994,0.6698729810778072  264.99999999999994,5 M0,5L519.9999999999999,5ZZ"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3711,19 +3711,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="pentagon feature"
-              d="M 6.748878923766816,5 3.2939638956415536,9.755282581475768 -2.29620604810792,7.938926261462367 -2.296206048107921,2.061073738537635 3.2939638956415522,0.2447174185242318 Z"
+              d="M 134.99999999999997,5 131.5450849718747,9.755282581475768 125.95491502812524,7.938926261462367 125.95491502812523,2.061073738537635 131.5450849718747,0.2447174185242318 Z"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3740,19 +3740,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="pentagon feature"
-              d="M 8.497757847533633,5 5.042842819408369,9.755282581475768 -0.5473271243411042,7.938926261462367 -0.5473271243411051,2.061073738537635 5.042842819408368,0.2447174185242318  8.497757847533633,5 M0,5L6.995515695067264,5ZZ"
+              d="M 264.99999999999994,5 261.5450849718747,9.755282581475768 255.9549150281252,7.938926261462367 255.9549150281252,2.061073738537635 261.5450849718747,0.2447174185242318  264.99999999999994,5 M0,5L519.9999999999999,5ZZ"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="6.995515695067264"
+              transform="translate(10,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3769,19 +3769,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="circle feature"
-              d="M1.748878923766816,0A1.7841241161527712,1.7841241161527712 0 1,1 1.748878923766816,10A1.7841241161527712,1.7841241161527712 0 1,1 1.748878923766816,0Z"
+              d="M129.99999999999997,0A1.7841241161527712,1.7841241161527712 0 1,1 129.99999999999997,10A1.7841241161527712,1.7841241161527712 0 1,1 129.99999999999997,0Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3798,19 +3798,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="circle feature"
-              d="M3.497757847533632,0A1.7841241161527712,1.7841241161527712 0 1,1 3.497757847533632,10A1.7841241161527712,1.7841241161527712 0 1,1 3.497757847533632,0M0,5L6.995515695067264,5ZZ"
+              d="M259.99999999999994,0A1.7841241161527712,1.7841241161527712 0 1,1 259.99999999999994,10A1.7841241161527712,1.7841241161527712 0 1,1 259.99999999999994,0M0,5L519.9999999999999,5ZZ"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3827,19 +3827,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="arrow feature"
-              d="M1.748878923766816,0L0.7488789237668161,0L-3.2511210762331837,4L0.7488789237668161,16L1.748878923766816,16L5.748878923766816,4Z"
+              d="M129.99999999999997,0L128.99999999999997,0L124.99999999999997,4L128.99999999999997,16L129.99999999999997,16L133.99999999999997,4Z"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3856,19 +3856,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="arrow feature"
-              d="M3.497757847533632,0L2.497757847533632,0L-1.5022421524663678,4L2.497757847533632,16L3.497757847533632,16L7.497757847533633,4L3.497757847533632,0M0,5L6.995515695067264,5ZZ"
+              d="M259.99999999999994,0L258.99999999999994,0L254.99999999999994,4L258.99999999999994,16L259.99999999999994,16L263.99999999999994,4L259.99999999999994,0M0,5L519.9999999999999,5ZZ"
               fill="#d3d"
               stroke="#d3d"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="6.995515695067264"
+              transform="translate(10,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3885,19 +3885,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="doubleBar feature"
-              d="M1.748878923766816,0L-3.2511210762331837,10L1.748878923766816,10L6.748878923766816,0Z"
+              d="M129.99999999999997,0L124.99999999999997,10L129.99999999999997,10L134.99999999999997,0Z"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
@@ -3914,19 +3914,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="doubleBar feature"
-              d="M3.497757847533632,0L-1.5022421524663678,10L3.497757847533632,10L8.497757847533633,0L3.497757847533632,0M0,5L6.995515695067264,5ZZ"
+              d="M259.99999999999994,0L254.99999999999994,10L259.99999999999994,10L264.99999999999994,0L259.99999999999994,0M0,5L519.9999999999999,5ZZ"
               fill="#3a3"
               stroke="#3a3"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3943,19 +3943,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="helix feature"
-              d="M0,16 C5,7.5 5,2.5 2.5, 0 C0,2.5 2.5,7.5 5,16"
+              d="M0,16 C5,7.5 5,2.5 2.5, 0 C0,2.5 2.5,7.5 5,16M5,16 C10,7.5 10,2.5 7.5, 0 C5,2.5 7.5,7.5 10,16M10,16 C15,7.5 15,2.5 12.5, 0 C10,2.5 12.5,7.5 15,16M15,16 C20,7.5 20,2.5 17.5, 0 C15,2.5 17.5,7.5 20,16M20,16 C25,7.5 25,2.5 22.5, 0 C20,2.5 22.5,7.5 25,16M25,16 C30,7.5 30,2.5 27.5, 0 C25,2.5 27.5,7.5 30,16M30,16 C35,7.5 35,2.5 32.5, 0 C30,2.5 32.5,7.5 35,16M35,16 C40,7.5 40,2.5 37.5, 0 C35,2.5 37.5,7.5 40,16M40,16 C45,7.5 45,2.5 42.5, 0 C40,2.5 42.5,7.5 45,16M45,16 C50,7.5 50,2.5 47.5, 0 C45,2.5 47.5,7.5 50,16M50,16 C55,7.5 55,2.5 52.5, 0 C50,2.5 52.5,7.5 55,16M55,16 C60,7.5 60,2.5 57.5, 0 C55,2.5 57.5,7.5 60,16M60,16 C65,7.5 65,2.5 62.5, 0 C60,2.5 62.5,7.5 65,16M65,16 C70,7.5 70,2.5 67.5, 0 C65,2.5 67.5,7.5 70,16M70,16 C75,7.5 75,2.5 72.5, 0 C70,2.5 72.5,7.5 75,16M75,16 C80,7.5 80,2.5 77.5, 0 C75,2.5 77.5,7.5 80,16M80,16 C85,7.5 85,2.5 82.5, 0 C80,2.5 82.5,7.5 85,16M85,16 C90,7.5 90,2.5 87.5, 0 C85,2.5 87.5,7.5 90,16M90,16 C95,7.5 95,2.5 92.5, 0 C90,2.5 92.5,7.5 95,16M95,16 C100,7.5 100,2.5 97.5, 0 C95,2.5 97.5,7.5 100,16M100,16 C105,7.5 105,2.5 102.5, 0 C100,2.5 102.5,7.5 105,16M105,16 C110,7.5 110,2.5 107.5, 0 C105,2.5 107.5,7.5 110,16M110,16 C115,7.5 115,2.5 112.5, 0 C110,2.5 112.5,7.5 115,16M115,16 C120,7.5 120,2.5 117.5, 0 C115,2.5 117.5,7.5 120,16M120,16 C125,7.5 125,2.5 122.5, 0 C120,2.5 122.5,7.5 125,16M125,16 C130,7.5 130,2.5 127.5, 0 C125,2.5 127.5,7.5 130,16M130,16 C135,7.5 135,2.5 132.5, 0 C130,2.5 132.5,7.5 135,16M135,16 C140,7.5 140,2.5 137.5, 0 C135,2.5 137.5,7.5 140,16M140,16 C145,7.5 145,2.5 142.5, 0 C140,2.5 142.5,7.5 145,16M145,16 C150,7.5 150,2.5 147.5, 0 C145,2.5 147.5,7.5 150,16M150,16 C155,7.5 155,2.5 152.5, 0 C150,2.5 152.5,7.5 155,16M155,16 C160,7.5 160,2.5 157.5, 0 C155,2.5 157.5,7.5 160,16M160,16 C165,7.5 165,2.5 162.5, 0 C160,2.5 162.5,7.5 165,16M165,16 C170,7.5 170,2.5 167.5, 0 C165,2.5 167.5,7.5 170,16M170,16 C175,7.5 175,2.5 172.5, 0 C170,2.5 172.5,7.5 175,16M175,16 C180,7.5 180,2.5 177.5, 0 C175,2.5 177.5,7.5 180,16M180,16 C185,7.5 185,2.5 182.5, 0 C180,2.5 182.5,7.5 185,16M185,16 C190,7.5 190,2.5 187.5, 0 C185,2.5 187.5,7.5 190,16M190,16 C195,7.5 195,2.5 192.5, 0 C190,2.5 192.5,7.5 195,16M195,16 C200,7.5 200,2.5 197.5, 0 C195,2.5 197.5,7.5 200,16M200,16 C205,7.5 205,2.5 202.5, 0 C200,2.5 202.5,7.5 205,16M205,16 C210,7.5 210,2.5 207.5, 0 C205,2.5 207.5,7.5 210,16M210,16 C215,7.5 215,2.5 212.5, 0 C210,2.5 212.5,7.5 215,16M215,16 C220,7.5 220,2.5 217.5, 0 C215,2.5 217.5,7.5 220,16M220,16 C225,7.5 225,2.5 222.5, 0 C220,2.5 222.5,7.5 225,16M225,16 C230,7.5 230,2.5 227.5, 0 C225,2.5 227.5,7.5 230,16M230,16 C235,7.5 235,2.5 232.5, 0 C230,2.5 232.5,7.5 235,16M235,16 C240,7.5 240,2.5 237.5, 0 C235,2.5 237.5,7.5 240,16M240,16 C245,7.5 245,2.5 242.5, 0 C240,2.5 242.5,7.5 245,16M245,16 C250,7.5 250,2.5 247.5, 0 C245,2.5 247.5,7.5 250,16M250,16 C255,7.5 255,2.5 252.5, 0 C250,2.5 252.5,7.5 255,16M255,16 C260,7.5 260,2.5 257.5, 0 C255,2.5 257.5,7.5 260,16M260,16 C265,7.5 265,2.5 262.5, 0 C260,2.5 262.5,7.5 265,16M265,16 C270,7.5 270,2.5 267.5, 0 C265,2.5 267.5,7.5 270,16M270,16 C275,7.5 275,2.5 272.5, 0 C270,2.5 272.5,7.5 275,16M275,16 C280,7.5 280,2.5 277.5, 0 C275,2.5 277.5,7.5 280,16M280,16 C285,7.5 285,2.5 282.5, 0 C280,2.5 282.5,7.5 285,16M285,16 C290,7.5 290,2.5 287.5, 0 C285,2.5 287.5,7.5 290,16M290,16 C295,7.5 295,2.5 292.5, 0 C290,2.5 292.5,7.5 295,16M295,16 C300,7.5 300,2.5 297.5, 0 C295,2.5 297.5,7.5 300,16M300,16 C305,7.5 305,2.5 302.5, 0 C300,2.5 302.5,7.5 305,16M305,16 C310,7.5 310,2.5 307.5, 0 C305,2.5 307.5,7.5 310,16M310,16 C315,7.5 315,2.5 312.5, 0 C310,2.5 312.5,7.5 315,16M315,16 C320,7.5 320,2.5 317.5, 0 C315,2.5 317.5,7.5 320,16M320,16 C325,7.5 325,2.5 322.5, 0 C320,2.5 322.5,7.5 325,16M325,16 C330,7.5 330,2.5 327.5, 0 C325,2.5 327.5,7.5 330,16M330,16 C335,7.5 335,2.5 332.5, 0 C330,2.5 332.5,7.5 335,16M335,16 C340,7.5 340,2.5 337.5, 0 C335,2.5 337.5,7.5 340,16M340,16 C345,7.5 345,2.5 342.5, 0 C340,2.5 342.5,7.5 345,16M345,16 C350,7.5 350,2.5 347.5, 0 C345,2.5 347.5,7.5 350,16M350,16 C355,7.5 355,2.5 352.5, 0 C350,2.5 352.5,7.5 355,16M355,16 C360,7.5 360,2.5 357.5, 0 C355,2.5 357.5,7.5 360,16M360,16 C365,7.5 365,2.5 362.5, 0 C360,2.5 362.5,7.5 365,16M365,16 C370,7.5 370,2.5 367.5, 0 C365,2.5 367.5,7.5 370,16M370,16 C375,7.5 375,2.5 372.5, 0 C370,2.5 372.5,7.5 375,16M375,16 C380,7.5 380,2.5 377.5, 0 C375,2.5 377.5,7.5 380,16M380,16 C385,7.5 385,2.5 382.5, 0 C380,2.5 382.5,7.5 385,16M385,16 C390,7.5 390,2.5 387.5, 0 C385,2.5 387.5,7.5 390,16M390,16 C395,7.5 395,2.5 392.5, 0 C390,2.5 392.5,7.5 395,16M395,16 C400,7.5 400,2.5 397.5, 0 C395,2.5 397.5,7.5 400,16M400,16 C405,7.5 405,2.5 402.5, 0 C400,2.5 402.5,7.5 405,16M405,16 C410,7.5 410,2.5 407.5, 0 C405,2.5 407.5,7.5 410,16M410,16 C415,7.5 415,2.5 412.5, 0 C410,2.5 412.5,7.5 415,16M415,16 C420,7.5 420,2.5 417.5, 0 C415,2.5 417.5,7.5 420,16M420,16 C425,7.5 425,2.5 422.5, 0 C420,2.5 422.5,7.5 425,16M425,16 C430,7.5 430,2.5 427.5, 0 C425,2.5 427.5,7.5 430,16M430,16 C435,7.5 435,2.5 432.5, 0 C430,2.5 432.5,7.5 435,16M435,16 C440,7.5 440,2.5 437.5, 0 C435,2.5 437.5,7.5 440,16M440,16 C445,7.5 445,2.5 442.5, 0 C440,2.5 442.5,7.5 445,16M445,16 C450,7.5 450,2.5 447.5, 0 C445,2.5 447.5,7.5 450,16M450,16 C455,7.5 455,2.5 452.5, 0 C450,2.5 452.5,7.5 455,16M455,16 C460,7.5 460,2.5 457.5, 0 C455,2.5 457.5,7.5 460,16M460,16 C465,7.5 465,2.5 462.5, 0 C460,2.5 462.5,7.5 465,16M465,16 C470,7.5 470,2.5 467.5, 0 C465,2.5 467.5,7.5 470,16M470,16 C475,7.5 475,2.5 472.5, 0 C470,2.5 472.5,7.5 475,16M475,16 C480,7.5 480,2.5 477.5, 0 C475,2.5 477.5,7.5 480,16M480,16 C485,7.5 485,2.5 482.5, 0 C480,2.5 482.5,7.5 485,16M485,16 C490,7.5 490,2.5 487.5, 0 C485,2.5 487.5,7.5 490,16M490,16 C495,7.5 495,2.5 492.5, 0 C490,2.5 492.5,7.5 495,16M495,16 C500,7.5 500,2.5 497.5, 0 C495,2.5 497.5,7.5 500,16M500,16 C505,7.5 505,2.5 502.5, 0 C500,2.5 502.5,7.5 505,16M505,16 C510,7.5 510,2.5 507.5, 0 C505,2.5 507.5,7.5 510,16M510,16 C515,7.5 515,2.5 512.5, 0 C510,2.5 512.5,7.5 515,16M515,16 C520,7.5 520,2.5 517.5, 0 C515,2.5 517.5,7.5 520,16"
               fill="transparent"
               stroke="#f06"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(10,32)"
+              transform="translate(-249.99999999999994,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(10,32)"
-              width="6.995515695067264"
+              transform="translate(-249.99999999999994,32)"
+              width="519.9999999999999"
             />
           </g>
         </g>
@@ -3972,19 +3972,19 @@ exports[`nightingale-track tests it should zoom in 1`] = `
           >
             <path
               class="strand feature"
-              d="M0,4L0,4L0,12L0,12L0,4M0,0L3.497757847533632,8L0,16Z"
+              d="M0,4L254.99999999999994,4L254.99999999999994,12L0,12L0,4M254.99999999999994,0L259.99999999999994,8L254.99999999999994,16Z"
               fill="#fc0"
               stroke="#fc0"
               style="fill-opacity: 0.9; stroke-opacity: 0.9;"
-              transform="translate(13.497757847533633,32)"
+              transform="translate(10,32)"
             />
             <rect
               class="outer-rectangle feature"
               fill="transparent"
               height="16"
               stroke="transparent"
-              transform="translate(13.497757847533633,32)"
-              width="3.497757847533632"
+              transform="translate(10,32)"
+              width="259.99999999999994"
             />
           </g>
         </g>
