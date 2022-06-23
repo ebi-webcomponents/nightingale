@@ -60,9 +60,10 @@ export default class InterproEntryLayout extends DefaultLayout {
     > = {};
     for (let k = 0; k < features.length; k++) {
       const feature = features[k];
+      const isCollapsible = feature?.residues?.length || children?.length;
       this.#heightMap.set(
         feature.accession,
-        this.expanded ? EXPANDED_HEIGHT : COLLAPSED_HEIGHT
+        isCollapsible && !this.expanded ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT
       );
       this.#yPositionMap.set(feature.accession, this.padding);
       yPos = (this.#heightMap.get(feature.accession) || 0) + 2 * this.padding;
@@ -70,7 +71,7 @@ export default class InterproEntryLayout extends DefaultLayout {
       if (!(feature.accession in residuesPos))
         residuesPos[feature.accession] = {};
       if (feature.residues)
-        yPos = this._initResidues(
+        yPos = this.#initResidues(
           feature.residues,
           feature.accession,
           this.expanded ? yPos : this.#yPositionMap.get(feature.accession) || 0,
@@ -90,17 +91,16 @@ export default class InterproEntryLayout extends DefaultLayout {
             child.accession,
             (this.expanded ? this.maxYPos : innerPadding) + this.padding
           );
-          yPos +=
-            2 * this.padding +
-            (this.expanded
-              ? this.#heightMap.get(child.accession) || EXPANDED_HEIGHT
-              : 0);
+          yPos += this.expanded
+            ? 2 * this.padding +
+              (this.#heightMap.get(child.accession) || EXPANDED_HEIGHT)
+            : 0;
           this.maxYPos = Math.max(this.maxYPos, yPos);
         }
         if (!(child.accession in residuesPos))
           residuesPos[child.accession] = {};
         if (child.residues) {
-          yPos = this._initResidues(
+          yPos = this.#initResidues(
             child.residues,
             child.accession,
             child.expanded
@@ -110,14 +110,14 @@ export default class InterproEntryLayout extends DefaultLayout {
             innerPadding,
             child.locations,
             residuesPos,
-            child.expanded
+            this.expanded && child.expanded
           );
         }
       }
     this.maxYPos += this.padding;
   }
 
-  _initResidues(
+  #initResidues(
     residues: Residue[],
     featureAcc: string,
     yPos: number,
@@ -144,8 +144,8 @@ export default class InterproEntryLayout extends DefaultLayout {
           residuesPos[featureAcc][resGroup.accession][desc] = {
             height: expanded
               ? CHILD_HEIGHT
-              : this.#heightMap.get(featureAcc) ||
-                EXPANDED_HEIGHT - 2 * innerPadding,
+              : (this.#heightMap.get(featureAcc) || EXPANDED_HEIGHT) -
+                2 * innerPadding,
             yPos: expanded ? this.maxYPos + this.padding : yPos + innerPadding,
           };
           yPos = expanded

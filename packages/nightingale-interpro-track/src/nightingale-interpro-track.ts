@@ -153,7 +153,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
       baseG: this.#residuesG,
       getResidueShape: (d) => this.getResidueShape(d),
       getResidueTransform: (d) => this.getResidueTransform(d),
-      getResidueFill: (d) => this.getResidueFill(d),
+      getResidueFill: (d) => this.getResidueFill(d, this.expanded),
       element: this,
     });
 
@@ -227,7 +227,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
         baseG: this.#childResiduesG,
         getResidueShape: (d) => this.getResidueShape(d),
         getResidueTransform: (d) => this.getResidueTransform(d),
-        getResidueFill: (d) => this.getResidueFill(d),
+        getResidueFill: (d) => this.getResidueFill(d, d.feature?.expanded),
         element: this,
       });
       if (this.#coverage?.length)
@@ -255,8 +255,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
         0)
     })`;
   }
-  private getResidueFill(f: ResidueDatum) {
-    return this.getFeatureColor(f);
+  private getResidueFill(f: ResidueDatum, expanded: boolean) {
+    return expanded ? this.getFeatureColor(f) : "white";
   }
 
   private refreshFeatures(base: BaseGroup, expanded = true) {
@@ -330,14 +330,14 @@ class NightingaleInterproTrack extends NightingaleTrack {
         this.#featuresG?.selectAll("g.location-group path.feature") as BaseGroup
       );
 
-      this.#residuesG?.attr("visibility", this.expanded ? "visible" : "hidden");
+      // this.#residuesG?.attr("visibility", this.expanded ? "visible" : "hidden");
       if (this.#residuesG)
         refreshResiduePaths({
           baseG: this.#residuesG,
           expanded: this.expanded,
           getResidueShape: (d) => this.getResidueShape(d),
           getResidueTransform: (d) => this.getResidueTransform(d),
-          getResidueFill: (d) => this.getResidueFill(d),
+          getResidueFill: (d) => this.getResidueFill(d, this.expanded),
         });
 
       if (this.#contributors) {
@@ -369,7 +369,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
             expanded: this.expanded,
             getResidueShape: (d) => this.getResidueShape(d),
             getResidueTransform: (d) => this.getResidueTransform(d),
-            getResidueFill: (d) => this.getResidueFill(d),
+            getResidueFill: (d) => this.getResidueFill(d, d.feature?.expanded),
           });
 
         if (this.#coverage?.length)
@@ -379,8 +379,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
             contributorsLength: this.#contributors?.length,
           });
       }
-      this.updateHighlight();
       this.svg?.attr("height", this.layoutObj.maxYPos);
+      this.updateHighlight();
     }
   }
 }
