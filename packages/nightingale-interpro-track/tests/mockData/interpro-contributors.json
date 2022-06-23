@@ -27,7 +27,10 @@
     "type": "homologous_superfamily",
     "locations": [
       {
-        "fragments": [{ "start": 9, "end": 130 }, { "start": 188, "end": 260 }],
+        "fragments": [
+          { "start": 9, "end": 130 },
+          { "start": 188, "end": 260 }
+        ],
         "model_acc": "1wdkC01",
         "seq_feature": null
       },

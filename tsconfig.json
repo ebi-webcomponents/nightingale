@@ -6,10 +6,7 @@
     "noEmitOnError": true,
     "declaration": true,
     "declarationMap": true,
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "strict": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
