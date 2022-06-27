@@ -7,7 +7,7 @@ let rendered;
 
 describe("nightingale-interpro-track tests", () => {
   beforeEach(async () => {
-    document.documentElement.innerHTML = `<nightingale-interpro-track length="450" height="80"></nightingale-interpro-track>`;
+    document.documentElement.innerHTML = `<nightingale-interpro-track length="450" height="20"></nightingale-interpro-track>`;
     rendered = document.querySelector("nightingale-interpro-track");
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
     await rendered.updateComplete;

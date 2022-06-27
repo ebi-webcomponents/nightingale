@@ -26,6 +26,7 @@ export declare class WithZoomInterface {
   getSingleBaseWidth: () => number;
   getXFromSeqPosition: (position: number) => number;
 }
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
@@ -154,15 +155,9 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       super.attributeChangedCallback(name, oldValue, newValue);
 
       if (!this.zoom) return;
-      // eslint-disable-next-line no-param-reassign
-      if (newValue === "null") newValue = null;
-      if (oldValue !== newValue) {
-        // if (name.startsWith("highlight")) {
-        //   this.trackHighlighter.changedCallBack(name, newValue);
-        //   return;
-        // }
-
-        if (name === "length") {
+      const newV = newValue === "null" ? null : newValue;
+      if (oldValue !== newV) {
+        if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
           this._updateScaleDomain();
           this._originXScale = this.xScale?.copy();
         }

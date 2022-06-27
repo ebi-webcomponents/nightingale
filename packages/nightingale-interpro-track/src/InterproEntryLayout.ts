@@ -38,13 +38,16 @@ export default class InterproEntryLayout extends DefaultLayout {
   #yPositionMap = new Map<string, number>();
   maxYPos = 0;
   expanded = false;
+  padding = 1;
 
   constructor({
     expanded,
+    padding,
     ...otherOptions
-  }: LayoutOptions & { expanded: boolean }) {
+  }: LayoutOptions & { expanded: boolean; padding: number }) {
     super(otherOptions);
     this.expanded = expanded;
+    this.padding = padding;
   }
 
   init(features: InterProFeature[], children?: InterProFeature[]) {

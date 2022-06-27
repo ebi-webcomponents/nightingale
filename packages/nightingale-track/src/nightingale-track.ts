@@ -44,6 +44,9 @@ export type Feature = {
   opacity?: number;
 };
 
+// TODO: height is not triggering a full redrawn when is changed after first render
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
+
 @customElementOnce("nightingale-track")
 class NightingaleTrack extends withManager(
   withZoom(
@@ -93,6 +96,12 @@ class NightingaleTrack extends withManager(
       });
     return new DefaultLayout({
       layoutHeight: this.height,
+      margin: {
+        top: this["margin-top"],
+        bottom: this["margin-bottom"],
+        left: this["margin-left"],
+        right: this["margin-right"],
+      },
     });
   }
 
@@ -155,7 +164,10 @@ class NightingaleTrack extends withManager(
     newValue: string | null
   ): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === "layout") {
+    if (
+      ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) ||
+      name.startsWith("margin-")
+    ) {
       this.applyFilters();
       this.layoutObj = this.getLayout();
       this.createTrack();
@@ -391,16 +403,10 @@ class NightingaleTrack extends withManager(
               this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0
             })`
         );
-
-      // this._updateHighlight();
     }
     this.updateHighlight();
     this.renderMarginOnGroup(this.#margins);
   }
-
-  // _updateHighlight() {
-  //   this.trackHighlighter.updateHighlight();
-  // }
 
   protected updateHighlight() {
     if (!this.#highlighted) return;

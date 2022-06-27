@@ -2,7 +2,7 @@
 
 exports[`nightingale-interpro-track tests it should display the sequence correctly after highlight 1`] = `
 <nightingale-interpro-track
-  height="80"
+  height="20"
   highlight="10:30"
   length="450"
 >
@@ -432,7 +432,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
 
 exports[`nightingale-interpro-track tests it should display the track correctly 1`] = `
 <nightingale-interpro-track
-  height="80"
+  height="20"
   length="450"
 >
   <!---->
@@ -718,7 +718,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
 <nightingale-interpro-track
   display-end="264"
   display-start="260"
-  height="80"
+  height="20"
   length="450"
 >
   <!---->

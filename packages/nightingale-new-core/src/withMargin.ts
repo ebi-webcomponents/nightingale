@@ -42,18 +42,19 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
   }
 ) => {
   class WithMargin extends withDimensions(superClass) {
-    @property()
+    @property({ type: Number })
     "margin-top": number = options["margin-top"];
-    @property()
+    @property({ type: Number })
     "margin-bottom": number = options["margin-bottom"];
-    @property()
+    @property({ type: Number })
     "margin-left": number = options["margin-left"];
-    @property()
+    @property({ type: Number })
     "margin-right": number = options["margin-right"];
     @property({ type: String })
     "margin-color" = options["margin-color"];
 
     #created = false;
+
     getWidthWithMargins() {
       return this.width
         ? this.width - this["margin-left"] - this["margin-right"]

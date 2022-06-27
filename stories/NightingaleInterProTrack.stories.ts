@@ -48,21 +48,6 @@ Track.play = async () => {
   if (track) (track as any).data = data;
 };
 
-export const TrackWithSymbols = Template.bind({});
-TrackWithSymbols.args = {
-  width: 500,
-  height: 500,
-  length: 100,
-  "display-start": 1,
-  "display-end": 50,
-  layout: "non-overlapping",
-};
-TrackWithSymbols.play = async () => {
-  await customElements.whenDefined("nightingale-interpro-track");
-  const track = document.getElementById("track");
-  if (track) (track as any).data = data;
-};
-
 export const SimpleTrackNoControls = () => html`
   <h3>Entry</h3>
   <nightingale-interpro-track

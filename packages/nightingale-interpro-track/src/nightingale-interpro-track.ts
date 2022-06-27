@@ -22,13 +22,6 @@ export type BaseGroup = Selection<
   unknown
 >;
 
-const padding = {
-  top: 2,
-  right: 10,
-  bottom: 2,
-  left: 10,
-};
-
 const MAX_OPACITY_WHILE_COLAPSED = 0.8;
 
 @customElement("nightingale-interpro-track")
@@ -52,6 +45,12 @@ class NightingaleInterproTrack extends NightingaleTrack {
   #residuesG?: ResidueGroup;
   #childResiduesG?: ResidueGroup;
   accession?: string;
+
+  constructor() {
+    super();
+    this["margin-top"] = 2;
+    this["margin-bottom"] = 2;
+  }
 
   protected createTrack() {
     if (!this.layoutObj) return;
@@ -90,7 +89,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return new InterproEntryLayout({
       layoutHeight: this.height,
       expanded: this.expanded,
-      padding: 2,
+      padding: (this["margin-top"] + this["margin-bottom"]) / 2,
     });
   }
 
@@ -250,7 +249,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
   }
   private getResidueTransform(f: ResidueDatum) {
     return `translate(${this.getXFromSeqPosition(f.start || 1)},${
-      padding.top +
+      this["margin-top"] +
       (this.layoutObj?.getFeatureYPos(`${f.accession}_${f.k}_${f.i}_${f.j}`) ||
         0)
     })`;
@@ -288,7 +287,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
         "transform",
         (f) =>
           `translate(${this.getXFromSeqPosition(f.start || 1)},${
-            padding.top +
+            this["margin-top"] +
             (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0)
           })`
       )
@@ -302,14 +301,14 @@ class NightingaleInterproTrack extends NightingaleTrack {
       .attr(
         "y1",
         (f) =>
-          padding.top +
+          this["margin-top"] +
           (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0) +
           (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 0) / 2
       )
       .attr(
         "y2",
         (f) =>
-          padding.top +
+          this["margin-top"] +
           (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0) +
           (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 0) / 2
       )
