@@ -15,10 +15,6 @@ const Template = (args) => {
     val2="${val2}"
     label1="${label1}"
     label2="${label2}"
-    margin-top="${args["margin-top"]}"
-    margin-bottom="${args["margin-bottom"]}"
-    margin-left="${args["margin-left"]}"
-    margin-right="${args["margin-right"]}"
   ></oeb-pie-chart>`;
 };
 
@@ -31,8 +27,4 @@ Navigation.args = {
   label1: "Label 1",
   val2: "3",
   label2: "Label 2",
-  "margin-top": "5",
-  "margin-bottom": "5",
-  "margin-left": "5",
-  "margin-right": "5",
 };
