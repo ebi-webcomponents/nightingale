@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import bb, {pie} from "billboard.js";
+import bb, {Chart, pie} from "billboard.js";
 
 import NightingaleElement, {
   withDimensions,
@@ -25,12 +25,14 @@ class OebPieChart extends withManager(
   @property({ type: String })
   label2 = "Label 2";
 
+  public chart : Chart | undefined;
+
   constructor() {
     super();
   }
 
   private createPieChart() {
-    bb.generate({
+    this.chart = bb.generate({
       size: {
           height: this.height,
           width: this.width,
@@ -69,7 +71,19 @@ class OebPieChart extends withManager(
   }
 
   renderC3() {
-    console.log('re-render');
+    if (this.chart)
+      this.chart.load({
+        columns: [
+          [
+              this.label1,
+              this.val1,
+          ],
+          [
+            this.label2,
+            this.val2
+          ],
+        ],
+		});
   }
 
 }
