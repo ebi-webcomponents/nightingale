@@ -20,7 +20,7 @@ const Template = (args) => {
 
 export const Navigation = Template.bind({});
 Navigation.args = {
-  width: "800",
+  width: "400",
   height: "400",
   title: "Title",
   val1: "7",

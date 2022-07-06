@@ -43,8 +43,8 @@ class OebPieChart extends withManager(
       data: {
           columns: [
               [
-                  this.label1,
-                  this.val1,
+                this.label1,
+                this.val1,
               ],
               [
                 this.label2,

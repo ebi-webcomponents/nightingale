@@ -26,6 +26,9 @@ module.exports = {
       include: path.resolve(__dirname, "../packages"),
       loader: require.resolve("ts-loader"),
     });
+
+    config.node = { fs: 'empty' }
+
     return config;
   },
 };
