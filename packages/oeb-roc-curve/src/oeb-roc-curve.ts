@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js-basic-dist'
 
 import NightingaleElement, {
   withDimensions,
@@ -45,9 +45,14 @@ class OebRocCurve extends withManager(
     type: 'scatter'
   };
 
-  public data: Plotly.Data[] = [
+  @property({ type: String })
+  data = JSON.stringify([
     this.trace1, this.trace2, this.trace3
-  ];
+  ])
+
+  // public data: Plotly.Data[] = [
+  //   this.trace1, this.trace2, this.trace3
+  // ];
 
   public layout = {
     width : 600,
@@ -60,7 +65,7 @@ class OebRocCurve extends withManager(
       range: [0,1]
     },
     yaxis: {
-      title: 'True Positive rate',
+      title: 'True Positive rate (Recall/Sensitivity)',
       mirror: true,
       linecolor: 'black',
       linewidth: 1,
@@ -73,7 +78,7 @@ class OebRocCurve extends withManager(
   }
 
   private createRocChart() {
-    Plotly.newPlot('chart', this.data, this.layout);
+    Plotly.newPlot('chart', JSON.parse(this.data), this.layout);
   }
 
   render() {
