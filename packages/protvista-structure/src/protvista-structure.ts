@@ -139,6 +139,10 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     return this.getAttribute("height");
   }
 
+  set height(height: string): string {
+    this.setAttribute("height", height);
+    this._height = height;
+  }
   updateUrls(): void {
     this._uniProtMappingUrl =
       this.getAttribute("uniprot-mapping-url") || this._uniProtMappingUrl;
