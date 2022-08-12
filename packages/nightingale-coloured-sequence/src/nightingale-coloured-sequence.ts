@@ -43,7 +43,7 @@ class NightingaleColouredSequence extends NightingaleSequence {
   @property({ type: String })
   "color-range" = undefined;
 
-  #uniqueID: string = "";
+  #uniqueID = "";
   #gradient?: Selection<
     SVGLinearGradientElement,
     unknown,
