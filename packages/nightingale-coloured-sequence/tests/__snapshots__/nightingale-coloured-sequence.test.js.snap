@@ -23,7 +23,6 @@ exports[`nightingale-coloured-sequence tests it should display the coloured sequ
     />
     <g
       class="sequence"
-      transform="translate(0,30)"
     >
       <rect
         class="base_bg feature"
@@ -268,6 +267,15 @@ exports[`nightingale-coloured-sequence tests it should display the coloured sequ
         />
       </lineargradient>
     </defs>
+    <rect
+      class="seq-gradient"
+      fill="url(#scale-gradient-xjylrx)"
+      height="40"
+      style="pointer-events: none; opacity: 0.15384615384615385;"
+      width="780"
+      x="10"
+      y="0"
+    />
   </svg>
 </nightingale-coloured-sequence>
 `;
