@@ -4,7 +4,7 @@
 
 Use this component to paint a track that uses the sequence to paint a color depending on each residue.
 
-Useful to display hydrophobicity, isoelectric points, or any feature were a color can represent a residue.
+Useful to display hydrophobicity, isoelectric points, or any feature where a color can represent a residue.
 
 ## Usage
 

@@ -2,29 +2,33 @@ import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../packages/nightingale-coloured-sequence/src/index.ts";
 
+const scales = [
+  "hydrophobicity-interface-scale",
+  "hydrophobicity-octanol-scale",
+  "hydrophobicity-scale",
+  "isoelectric-point-scale",
+  "T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2",
+];
 export default {
   title: "Nightingale/NightingaleColouredSequence",
   argTypes: {
     scale: {
-      options: [
-        "hydrophobicity-interface-scale",
-        "hydrophobicity-octanol-scale",
-        "hydrophobicity-scale",
-        "isoelectric-point-scale",
-      ],
+      options: scales,
       control: { type: "radio" },
     },
   },
 } as Meta;
 
-const defaultSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
+const defaultSequence =
+  "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViuUBRUABBRWOAUVBISVBbcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
 
 const coordinates = [
-  [1.6, 5],
-  [6, 13],
-  [43, 50],
+  [21.6, 24.3],
+  [20, 23],
+  [15, 25],
   [10, 30],
   [1, 50],
+  [1, defaultSequence.length],
 ];
 export const ScalesWithControls: Story<{
   sequence: string;
@@ -63,7 +67,7 @@ export const ColouredSequenceNoControls = () =>
         <nightingale-coloured-sequence
           sequence=${defaultSequence}
           width="800"
-          height="40"
+          height="20"
           length=${defaultSequence.length}
           display-start=${start}
           display-end=${end}
@@ -73,21 +77,60 @@ export const ColouredSequenceNoControls = () =>
       `
     )} `;
 
-export const CustomScale = () =>
-  html`<h3>Custom Scale</h3>
-    <pre>T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2</pre>
-    ${coordinates.map(
-      ([start, end]) => html`
-        <nightingale-coloured-sequence
-          sequence=${defaultSequence}
-          width="800"
-          height="40"
-          length=${defaultSequence.length}
-          display-start=${start}
-          display-end=${end}
-          highlight="3:15"
-          scale="T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2""
-          color-range="#ff0000:-2,#00FF00:2"
-        ></nightingale-coloured-sequence>
+const twoCoordinates = [
+  [20, 30],
+  [1, defaultSequence.length],
+];
+
+export const ChangingScales = () =>
+  html`<h3>Same sequence with different scales</h3>
+    ${scales.map(
+      (scale) => html`
+        <pre>${scale}</pre>
+        ${twoCoordinates.map(
+          ([start, end]) => html`
+            <nightingale-coloured-sequence
+              sequence=${defaultSequence}
+              width="800"
+              height="40"
+              length=${defaultSequence.length}
+              display-start=${start}
+              display-end=${end}
+              highlight="3:15"
+              scale="hydrophobicity-scale"
+            ></nightingale-coloured-sequence>
+          `
+        )}
       `
     )} `;
+
+export const ChangingColorRange = () => {
+  const ranges = [
+    "#ff0000:-2,#00FF00:2",
+    "#ff0000:-2,#FFFFFF:0,#00FF00:2",
+    "#3434ED:-2,#ED3434:2",
+    "yellow:-2,dodgerblue:2",
+    "white:0,dodgerblue:2",
+  ];
+  return html`<h3>Same sequence with different color ranges</h3>
+    ${ranges.map(
+      (range) => html`
+        <pre>${range}</pre>
+        ${twoCoordinates.map(
+          ([start, end]) => html`
+            <nightingale-coloured-sequence
+              sequence=${defaultSequence}
+              width="800"
+              height="40"
+              length=${defaultSequence.length}
+              display-start=${start}
+              display-end=${end}
+              highlight="3:15"
+              scale="hydrophobicity-scale"
+              color-range=${range}
+            ></nightingale-coloured-sequence>
+          `
+        )}
+      `
+    )} `;
+};
