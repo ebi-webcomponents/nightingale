@@ -3,6 +3,8 @@ import { html } from "lit-html";
 import "../packages/nightingale-navigation/src/index.ts";
 import "../packages/nightingale-manager/src/index.ts";
 import "../packages/nightingale-track/src/index.ts";
+import "../packages/nightingale-sequence/src/index.ts";
+import "../packages/nightingale-coloured-sequence/src/index.ts";
 import "../packages/nightingale-interpro-track/src/index.ts";
 
 import iproData from "../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
@@ -104,6 +106,22 @@ const Template: Story<{
           margin-color=${args["margin-color"]}
         >
         </nightingale-sequence>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-coloured-sequence
+          id="sequence"
+          sequence=${sequence}
+          width="${width}"
+          height="10"
+          length="${length}"
+          display-start="${args["display-start"]}"
+          display-end="${args["display-end"]}"
+          highlight-event="onmouseover"
+          highlight-color=${args["highlight-color"]}
+          margin-color=${args["margin-color"]}
+          scale="hydrophobicity-scale"
+        >
+        </nightingale-coloured-sequence>
       </div>
       <div style="line-height: 0">
         <nightingale-track

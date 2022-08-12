@@ -68,10 +68,15 @@ class NightingaleColouredSequence extends NightingaleSequence {
 
     this.#uniqueID = Math.random().toString(36).substring(7);
 
+    this.svg?.select("g.sequence").attr("transform", null);
     this.#gradient = this.svg
       ?.append("defs")
       .append("linearGradient")
       .attr("id", `scale-gradient-${this.#uniqueID}`);
+    this.svg
+      ?.append("rect")
+      .attr("class", "seq-gradient")
+      .style("pointer-events", "none");
   }
 
   getScaleFromAttribute() {
