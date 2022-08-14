@@ -53,7 +53,9 @@ const translatePositions = (
     throw new PositionMappingError("Invalid start, end coordinates");
   }
   // return a translation separately for each chain (if it exists)
-  return Object.entries(groupBy(mappings, (mapping) => mapping.chain_id))
+  const translations = Object.entries(
+    groupBy(mappings, (mapping) => mapping.chain_id)
+  )
     .map(([chain_id, chainMappings]) => {
       let startMapping = null;
       let endMapping = null;
@@ -82,9 +84,9 @@ const translatePositions = (
         }
       }
       if (startMapping === null || endMapping === null) {
-        throw new PositionMappingError(
-          "Start or end coordinate outside of mapping range"
-        );
+        // If we didn't find a mapping for this chain,
+        // return null, it will be filtered out later
+        return null;
       }
       const direction = mappingDirection === "UP_PDB" ? 1 : -1;
       return {
@@ -100,6 +102,14 @@ const translatePositions = (
       };
     })
     .filter(Boolean);
+
+  if (!translations.length) {
+    throw new PositionMappingError(
+      "Start or end coordinate outside of mapping range"
+    );
+  }
+
+  return translations;
 };
 
 export default translatePositions;
