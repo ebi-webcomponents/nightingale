@@ -54,6 +54,42 @@ const mappings = {
       struct_asym_id: "A",
     },
   ],
+  "102L": [
+    {
+      entity_id: 1,
+      end: {
+        author_residue_number: 40,
+        author_insertion_code: "",
+        residue_number: 40,
+      },
+      chain_id: "A",
+      start: {
+        author_residue_number: 1,
+        author_insertion_code: "",
+        residue_number: 1,
+      },
+      unp_end: 40,
+      unp_start: 1,
+      struct_asym_id: "A",
+    },
+    {
+      entity_id: 1,
+      end: {
+        author_residue_number: null,
+        author_insertion_code: "",
+        residue_number: 165,
+      },
+      chain_id: "A",
+      start: {
+        author_residue_number: 41,
+        author_insertion_code: "",
+        residue_number: 42,
+      },
+      unp_end: 164,
+      unp_start: 41,
+      struct_asym_id: "A",
+    },
+  ],
   mismatch: [
     {
       entity_id: 1,
