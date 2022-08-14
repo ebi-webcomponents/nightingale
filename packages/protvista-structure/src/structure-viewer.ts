@@ -52,7 +52,9 @@ class StructureViewer {
 
   constructor(
     elementOrId: string | HTMLElement,
-    onHighlightClick: (sequencePositions: number[]) => void
+    onHighlightClick: (
+      sequencePositions: { chain: string; position: number }[]
+    ) => void
   ) {
     const defaultSpec = DefaultPluginUISpec(); // TODO: Make our own to select only essential plugins
     const spec: PluginSpec = {
@@ -114,7 +116,8 @@ class StructureViewer {
         // auth_seq_id  : UniProt coordinate space
         // label_seq_id : PDB coordinate space
         const sequencePosition = StructureProperties.residue.label_seq_id(loc);
-        onHighlightClick([sequencePosition]);
+        const chain = StructureProperties.chain.auth_asym_id(loc);
+        onHighlightClick([{ position: sequencePosition, chain: chain }]);
       }
     });
 
@@ -185,7 +188,7 @@ class StructureViewer {
       .then(() => this.clearMessages());
   }
 
-  highlight(ranges: { start: number; end: number }[]): void {
+  highlight(ranges: { start: number; end: number; chain: string }[]): void {
     // What nightingale calls "highlight", mol* calls "select"
     // The query in this method is over label_seq_id so the provided start & end
     // coordinates must be in PDB space
@@ -197,11 +200,17 @@ class StructureViewer {
       (Q) =>
         Q.struct.generator.atomGroups({
           "residue-test": Q.core.logic.or(
-            ranges.map(({ start, end }) =>
-              Q.core.rel.inRange([
-                Q.struct.atomProperty.macromolecular.label_seq_id(),
-                start,
-                end,
+            ranges.map(({ start, end, chain }) =>
+              Q.core.logic.and([
+                Q.core.rel.inRange([
+                  Q.struct.atomProperty.macromolecular.label_seq_id(),
+                  start,
+                  end,
+                ]),
+                Q.core.rel.eq([
+                  Q.struct.atomProperty.macromolecular.auth_asym_id(),
+                  chain,
+                ]),
               ])
             )
           ),

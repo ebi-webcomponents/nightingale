@@ -31,7 +31,8 @@
   "dependencies": {
     "data-loader": "^3.5.7",
     "molstar": "2.2.0",
-    "react": "17.0.2"
+    "react": "17.0.2",
+    "lodash-es": "^4.17.11"
   },
   "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
   "devDependencies": {

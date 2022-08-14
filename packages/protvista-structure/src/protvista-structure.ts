@@ -5,6 +5,7 @@ import translatePositions, {
   PositionMappingError,
   Mappings,
 } from "./position-mapping";
+import flatMap from "lodash-es/flatMap";
 
 /*
   TODO:
@@ -327,20 +328,27 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this._planHighlight();
   }
 
-  propagateHighlight(sequencePositions: number[]): void {
+  propagateHighlight(
+    sequencePositions: { chain: string; position: number }[]
+  ): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
       !sequencePositions?.length ||
-      sequencePositions.some((pos) => !Number.isInteger(pos))
+      sequencePositions.some((pos) => !Number.isInteger(pos.position))
     ) {
       return;
     }
 
     let translated;
     try {
-      translated = sequencePositions.map((pos) =>
-        translatePositions(pos, pos, this._selectedMolecule.mappings, "PDB_UP")
-      );
+      translated = flatMap(sequencePositions, (pos) =>
+        translatePositions(
+          pos.position,
+          pos.position,
+          this._selectedMolecule.mappings,
+          "PDB_UP"
+        ).filter((t) => t.chain === pos.chain)
+      ).filter(Boolean);
     } catch (error) {
       if (error instanceof PositionMappingError) {
         this._structureViewer.showMessage("Error", error.message);
@@ -348,9 +356,16 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
       }
       throw error;
     }
-    const highlight = translated
-      .filter(Boolean)
-      .map((residue) => `${residue.start}:${residue.end}`);
+    if (!translated.length) {
+      this._structureViewer.showMessage(
+        "Error",
+        "Residue outside of sequence range"
+      );
+      return;
+    }
+    const highlight = translated.map(
+      (residue) => `${residue.start}:${residue.end}`
+    );
     this.setAttribute("highlight", highlight.join(","));
     const event = new CustomEvent("change", {
       detail: {
@@ -369,22 +384,21 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
 
     let translatedPositions;
     try {
-      translatedPositions = this._highlight
-        .map(({ start, end }) => {
-          if (this.isAF()) {
-            return {
-              start,
-              end,
-            };
-          }
-          return translatePositions(
+      translatedPositions = flatMap(this._highlight, ({ start, end }) => {
+        if (this.isAF()) {
+          return {
             start,
             end,
-            this._selectedMolecule.mappings,
-            "UP_PDB"
-          );
-        })
-        .filter(Boolean);
+            chain: "A",
+          };
+        }
+        return translatePositions(
+          start,
+          end,
+          this._selectedMolecule.mappings,
+          "UP_PDB"
+        );
+      }).filter(Boolean);
     } catch (error) {
       if (error instanceof PositionMappingError) {
         this._structureViewer.clearHighlight();

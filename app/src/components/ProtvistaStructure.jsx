@@ -131,6 +131,15 @@ const ProtvistaStructureWrapper = () => {
         accession="Q9NZC2"
         alphafold-mapping-url="https://alphafold.ebi.ac.uk/api/prediction/"
       />
+
+      <h3>Highlight, mapping with gaps</h3>
+      <protvista-structure
+        structureid="102L"
+        accession="P00720"
+        highlight="37:42"
+        uniprot-mapping-url="https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/"
+        custom-download-url="https://files.rcsb.org/download/"
+      />
     </Fragment>
   );
 };
