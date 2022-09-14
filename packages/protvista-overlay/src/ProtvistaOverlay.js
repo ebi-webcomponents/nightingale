@@ -65,6 +65,7 @@ class ProtvistaOverlay extends HTMLElement {
       this.sizeObserver.disconnect();
     }
   }
+
   getOffsetTop(element) {
     if (element === null) return 0;
     return element.offsetTop + this.getOffsetTop(element.offsetParent);
