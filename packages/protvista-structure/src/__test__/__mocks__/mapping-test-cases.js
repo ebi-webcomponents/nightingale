@@ -64,6 +64,18 @@ const testCases = [
     },
     mappings: mappings["1OWT"],
   },
+  {
+    entry: "102L",
+    pdb: {
+      start: 37,
+      end: 43,
+    },
+    uniprot: {
+      start: 37,
+      end: 42,
+    },
+    mappings: mappings["102L"],
+  },
 ];
 
 export default testCases;

@@ -17,8 +17,8 @@ describe("translatePositions", () => {
           mappings,
           "UP_PDB"
         );
-        expect(translated.start).toEqual(pdb.start);
-        expect(translated.end).toEqual(pdb.end);
+        expect(translated[0].start).toEqual(pdb.start);
+        expect(translated[0].end).toEqual(pdb.end);
       });
       it(`should convert PDB to UniProt for ${entry}`, () => {
         const translated = translatePositions(
@@ -27,8 +27,8 @@ describe("translatePositions", () => {
           mappings,
           "PDB_UP"
         );
-        expect(translated.start).toEqual(uniprot.start);
-        expect(translated.end).toEqual(uniprot.end);
+        expect(translated[0].start).toEqual(uniprot.start);
+        expect(translated[0].end).toEqual(uniprot.end);
       });
     }
   });

@@ -1,3 +1,5 @@
+import groupBy from "lodash-es/groupBy";
+
 export type Direction = "UP_PDB" | "PDB_UP";
 
 /* eslint-disable camelcase */
@@ -41,51 +43,73 @@ const translatePositions = (
   end: number;
   entity: number;
   chain: string;
-} | null => {
+}[] => {
   // Return if mappings not ready
   if (!mappings) {
-    return null;
+    return [];
   }
   // return if they have been set to 'undefined'
   if (!start || !end || Number.isNaN(start) || Number.isNaN(end)) {
     throw new PositionMappingError("Invalid start, end coordinates");
   }
-  /* eslint-disable no-restricted-syntax */
-  for (const mapping of mappings) {
-    if (
-      mapping.unp_end - mapping.unp_start !==
-      mapping.end.residue_number - mapping.start.residue_number
-    ) {
-      throw new PositionMappingError(
-        "Mismatch between protein sequence and structure residues"
-      );
-    }
-    if (
-      (mappingDirection === "UP_PDB" &&
-        (start < mapping.unp_start || end > mapping.unp_end)) ||
-      (mappingDirection === "PDB_UP" &&
-        (start < mapping.start.residue_number ||
-          end > mapping.end.residue_number))
-    ) {
-      throw new PositionMappingError(
-        "Start or end coordinate outside of mapping range"
-      );
-    }
-    // TODO: this is wrong because there are gaps in the PDB sequence though if
-    // this is the case PositionMappingError would have already been thrown and
-    // we should not reach this point.
-    const offset =
-      mappingDirection === "UP_PDB"
-        ? mapping.start.residue_number - mapping.unp_start
-        : mapping.unp_start - mapping.start.residue_number;
-    return {
-      entity: mapping.entity_id,
-      chain: mapping.chain_id,
-      start: start + offset,
-      end: end + offset,
-    };
+  // return a translation separately for each chain (if it exists)
+  const translations = Object.entries(
+    groupBy(mappings, (mapping) => mapping.chain_id)
+  )
+    .map(([chain_id, chainMappings]) => {
+      let startMapping = null;
+      let endMapping = null;
+      for (const mapping of chainMappings) {
+        if (
+          mapping.unp_end - mapping.unp_start !==
+          mapping.end.residue_number - mapping.start.residue_number
+        ) {
+          throw new PositionMappingError(
+            "Mismatch between protein sequence and structure residues"
+          );
+        }
+        const regionStart =
+          mappingDirection === "UP_PDB"
+            ? mapping.unp_start
+            : mapping.start.residue_number;
+        const regionEnd =
+          mappingDirection === "UP_PDB"
+            ? mapping.unp_end
+            : mapping.end.residue_number;
+        if (start >= regionStart && start <= regionEnd) {
+          startMapping = mapping;
+        }
+        if (end >= regionStart && end <= regionEnd) {
+          endMapping = mapping;
+        }
+      }
+      if (startMapping === null || endMapping === null) {
+        // If we didn't find a mapping for this chain,
+        // return null, it will be filtered out later
+        return null;
+      }
+      const direction = mappingDirection === "UP_PDB" ? 1 : -1;
+      return {
+        entity: startMapping.entity_id,
+        chain: startMapping.chain_id,
+        start:
+          start +
+          direction *
+            (startMapping.start.residue_number - startMapping.unp_start),
+        end:
+          end +
+          direction * (endMapping.start.residue_number - endMapping.unp_start),
+      };
+    })
+    .filter(Boolean);
+
+  if (!translations.length) {
+    throw new PositionMappingError(
+      "Start or end coordinate outside of mapping range"
+    );
   }
-  return null;
+
+  return translations;
 };
 
 export default translatePositions;
