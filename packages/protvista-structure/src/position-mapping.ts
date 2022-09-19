@@ -91,6 +91,8 @@ const translatePositions = (
       const direction = mappingDirection === "UP_PDB" ? 1 : -1;
       return {
         entity: startMapping.entity_id,
+        // Note that we iterate through mappings from one chain at a time,
+        // so all mappings are guaranteed to come from the same chain
         chain: startMapping.chain_id,
         start:
           start +

@@ -43,6 +43,19 @@ const testCases = [
   {
     entry: "1AAP",
     pdb: {
+      start: 10,
+      end: 100,
+    },
+    uniprot: {
+      start: 10,
+      end: 100,
+    },
+    error: "Start or end coordinate outside of mapping range",
+    mappings: mappings.different_chains,
+  },
+  {
+    entry: "1AAP",
+    pdb: {
       start: 49,
       end: 53,
     },
