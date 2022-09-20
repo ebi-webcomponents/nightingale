@@ -109,6 +109,42 @@ const mappings = {
       struct_asym_id: "A",
     },
   ],
+  different_chains: [
+    {
+      entity_id: 1,
+      end: {
+        author_residue_number: 50,
+        author_insertion_code: "",
+        residue_number: 50,
+      },
+      chain_id: "A",
+      start: {
+        author_residue_number: 1,
+        author_insertion_code: "",
+        residue_number: 1,
+      },
+      unp_end: 50,
+      unp_start: 1,
+      struct_asym_id: "A",
+    },
+    {
+      entity_id: 1,
+      end: {
+        author_residue_number: 150,
+        author_insertion_code: "",
+        residue_number: 150,
+      },
+      chain_id: "B",
+      start: {
+        author_residue_number: 51,
+        author_insertion_code: "",
+        residue_number: 51,
+      },
+      unp_end: 150,
+      unp_start: 51,
+      struct_asym_id: "B",
+    },
+  ],
 };
 
 export default mappings;
