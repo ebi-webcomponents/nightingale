@@ -1,5 +1,6 @@
+export type SegmentType = { start: number; end: number };
 export default class Region {
-  segments: { start: number; end: number }[];
+  segments: SegmentType[];
   max: number;
   min: number;
   regionString: string | null;
@@ -22,7 +23,7 @@ export default class Region {
       .join(",");
   }
 
-  decode(regionString: string) {
+  decode(regionString: string | null) {
     if (typeof regionString !== "undefined") this.regionString = regionString;
     if (!this.regionString) {
       this.segments = [];
