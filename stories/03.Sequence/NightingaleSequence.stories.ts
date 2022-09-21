@@ -1,9 +1,9 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../packages/nightingale-sequence/src/index.ts";
+import "../../packages/nightingale-sequence/src/index.ts";
 
 export default {
-  title: "Nightingale/NightingaleSequence",
+  title: "Components/Sequence",
 } as Meta;
 
 const defaultSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";

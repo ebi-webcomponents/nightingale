@@ -1,18 +1,18 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../packages/nightingale-navigation/src/index.ts";
-import "../packages/nightingale-manager/src/index.ts";
-import "../packages/nightingale-track/src/index.ts";
-import "../packages/nightingale-sequence/src/index.ts";
-import "../packages/nightingale-coloured-sequence/src/index.ts";
-import "../packages/nightingale-interpro-track/src/index.ts";
+import "../../packages/nightingale-navigation/src/index.ts";
+import "../../packages/nightingale-manager/src/index.ts";
+import "../../packages/nightingale-track/src/index.ts";
+import "../../packages/nightingale-sequence/src/index.ts";
+import "../../packages/nightingale-coloured-sequence/src/index.ts";
+import "../../packages/nightingale-interpro-track/src/index.ts";
 
-import iproData from "../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
-import contributors from "../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
-import residues from "../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
+import iproData from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
+import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
+import residues from "../../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
 
 export default {
-  title: "Nightingale/NightingaleManager",
+  title: "Components/Manager",
 } as Meta;
 
 const defaultSequence =

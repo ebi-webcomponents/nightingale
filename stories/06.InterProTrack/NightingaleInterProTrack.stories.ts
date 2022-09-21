@@ -1,13 +1,13 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../packages/nightingale-interpro-track/src/index.ts";
+import "../../packages/nightingale-interpro-track/src/index.ts";
 
-import data from "../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
-import contributors from "../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
-import residues from "../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
+import data from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
+import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
+import residues from "../../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
 
 export default {
-  title: "Nightingale/NightingaleInterProTrack",
+  title: "Components/InterPro Track",
 } as Meta;
 
 const Template: Story<{
