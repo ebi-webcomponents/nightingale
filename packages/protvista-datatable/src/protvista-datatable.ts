@@ -21,7 +21,7 @@ import lightDOMstyles, {
 } from "./styles";
 
 class ProtvistaDatatable extends LitElement {
-  private height: number;
+  private height: string;
 
   private columns: NodeListOf<HTMLTableHeaderCellElement>;
 
@@ -48,6 +48,8 @@ class ProtvistaDatatable extends LitElement {
 
   private noDeselect: boolean;
 
+  private expandTable?: boolean;
+
   private scrollFilter: any; // to replace with type definition from utils when exists
 
   private wheelListener: (e: WheelEvent) => any;
@@ -60,10 +62,11 @@ class ProtvistaDatatable extends LitElement {
 
   constructor() {
     super();
-    this.height = 25;
+    this.height = "25rem";
     this.visibleChildren = [];
     this.noScrollToRow = false;
     this.noDeselect = false;
+    this.expandTable = false;
     this.scrollFilter = new ScrollFilter(this);
     this.wheelListener = (event) => this.scrollFilter.wheel(event);
     this.eventHandler = this.eventHandler.bind(this);
@@ -241,13 +244,14 @@ class ProtvistaDatatable extends LitElement {
           return null;
         },
       },
-      height: { type: Number },
+      height: { type: String },
       displayStart: { type: Number },
       displayEnd: { type: Number },
       visibleChildren: { type: Array },
       selectedid: { type: String },
       noScrollToRow: { type: Boolean },
       noDeselect: { type: Boolean },
+      expandTable: { type: Boolean },
     };
   }
 
@@ -426,11 +430,13 @@ class ProtvistaDatatable extends LitElement {
   }
 
   render(): TemplateResult {
+    const style =
+      this.expandTable || this.hasAttribute("expand-table")
+        ? "height: auto"
+        : `max-height:${this.height}`;
+
     return html`
-      <div
-        class="protvista-datatable-container"
-        style="max-height:${this.height}rem"
-      >
+      <div class="protvista-datatable-container" style=${style}>
         <slot></slot>
       </div>
     `;

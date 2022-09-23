@@ -90,9 +90,13 @@ Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]
 
 The row id to select. Row ids are attributed based on the `protvistaFeatureId` attribute in each data point. These are added to the data in the various adapters.
 
-### `height: number (optional)`
+### `height: string (optional)`
 
-The height of the table (in `rem`)
+The height of the table
+
+### `expandTable: boolean (false)`
+
+Expands the table to show all the available rows (setting the height to auto instead of the specified/default height)
 
 ### `noScrollToRow: boolean (false)`
 
