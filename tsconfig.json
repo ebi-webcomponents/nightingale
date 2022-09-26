@@ -18,6 +18,7 @@
     "importHelpers": true,
     "sourceMap": true,
     "inlineSources": true,
+    "resolveJsonModule": true,
     "useDefineForClassFields": false
   }
 }

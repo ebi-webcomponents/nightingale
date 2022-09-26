@@ -1,7 +1,7 @@
 {
   "name": "root",
   "private": true,
-  "version": "1.0.0",
+  "version": "4.0.0-alpha",
   "description": "A simple web component",
   "scripts": {
     "build": "lerna exec -- rollup --config ../../rollup.config.js",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@custom-elements-manifest/analyzer": "0.5.7",
+    "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "13.3.0",
     "@rollup/plugin-replace": "3.0.0",
     "@rollup/plugin-typescript": "8.3.2",

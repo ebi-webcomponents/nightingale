@@ -47,6 +47,7 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
       this.highlightedRegion.decode(
         combineRegions(this.highlight || "", this.#fixedHighlight || "")
       );
+      this.updateHighlight();
     }
     attributeChangedCallback(
       name: string,
@@ -65,6 +66,9 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
           );
         }
       }
+    }
+    protected updateHighlight() {
+      return;
     }
   }
   return WithHighlight as Constructor<WithHighlightInterface> & T;
