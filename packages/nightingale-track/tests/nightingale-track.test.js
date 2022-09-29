@@ -21,8 +21,8 @@ describe("nightingale-track tests", () => {
   });
 
   test("it should zoom in", (done) => {
-    rendered.setAttribute("displaystart", "2");
-    rendered.setAttribute("displayend", "4");
+    rendered.setAttribute("display-start", "2");
+    rendered.setAttribute("display-end", "4");
     window.requestAnimationFrame(() => {
       expect(rendered).toMatchSnapshot();
       done();

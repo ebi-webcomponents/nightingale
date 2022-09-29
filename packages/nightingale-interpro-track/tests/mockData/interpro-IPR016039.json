@@ -1,0 +1,17 @@
+[
+  {
+    "accession": "IPR016039",
+    "name": "Thiolase-like",
+    "source_database": "interpro",
+    "locations": [
+      {
+        "fragments": [{ "start": 5, "end": 389 }],
+        "model_acc": null,
+        "seq_feature": null
+      }
+    ],
+    "color": "#84862d",
+    "type": "homologous_superfamily",
+    "k": 0
+  }
+]

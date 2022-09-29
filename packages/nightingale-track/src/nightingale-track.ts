@@ -8,6 +8,7 @@ import NightingaleElement, {
   withManager,
   withZoom,
   bindEvents,
+  customElementOnce,
 } from "@nightingale-elements/nightingale-new-core";
 
 // import _includes from "lodash-es/includes";
@@ -16,12 +17,19 @@ import NightingaleElement, {
 // import _intersection from "lodash-es/intersection";
 
 import { html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
 import FeatureShape, { Shapes } from "./FeatureShape";
 import NonOverlappingLayout from "./NonOverlappingLayout";
 import DefaultLayout from "./DefaultLayout";
 import { getShapeByType, getColorByType } from "./ConfigHelper";
 
+export type FeatureLocation = {
+  fragments: Array<{
+    start: number;
+    end: number;
+  }>;
+};
 export type Feature = {
   accession: string;
   color?: string;
@@ -29,19 +37,17 @@ export type Feature = {
   shape?: Shapes;
   tooltipContent?: string;
   type?: string;
-  locations?: Array<{
-    fragments: Array<{
-      start: number;
-      end: number;
-    }>;
-  }>;
+  locations?: Array<FeatureLocation>;
   feature?: Feature;
   start?: number;
   end?: number;
   opacity?: number;
 };
 
-@customElement("nightingale-track")
+// TODO: height is not triggering a full redrawn when is changed after first render
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
+
+@customElementOnce("nightingale-track")
 class NightingaleTrack extends withManager(
   withZoom(
     withResizable(
@@ -58,13 +64,13 @@ class NightingaleTrack extends withManager(
   @property({ type: String })
   layout?: "non-overlapping" | "default";
 
-  #featureShape = new FeatureShape();
-  #layoutObj?: DefaultLayout | NonOverlappingLayout;
+  protected featureShape = new FeatureShape();
+  protected layoutObj?: DefaultLayout | NonOverlappingLayout;
   #originalData: Feature[] = [];
   #data: Feature[] = [];
   filters = null;
 
-  #seq_g?: Selection<
+  protected seqG?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
@@ -90,13 +96,18 @@ class NightingaleTrack extends withManager(
       });
     return new DefaultLayout({
       layoutHeight: this.height,
+      margin: {
+        top: this["margin-top"],
+        bottom: this["margin-bottom"],
+        left: this["margin-left"],
+        right: this["margin-right"],
+      },
     });
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.#layoutObj = this.getLayout();
-
+    this.layoutObj = this.getLayout();
     if (this.#data) this.createTrack();
 
     // TODO: re-enable when the dataloadre is implemented
@@ -134,7 +145,7 @@ class NightingaleTrack extends withManager(
   set data(data: Feature[]) {
     this.processData(data);
     this.applyFilters();
-    this.#layoutObj = this.getLayout();
+    this.layoutObj = this.getLayout();
     this.createTrack();
   }
   get data() {
@@ -153,14 +164,17 @@ class NightingaleTrack extends withManager(
     newValue: string | null
   ): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === "layout") {
+    if (
+      ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) ||
+      name.startsWith("margin-")
+    ) {
       this.applyFilters();
-      this.#layoutObj = this.getLayout();
+      this.layoutObj = this.getLayout();
       this.createTrack();
     }
   }
 
-  private getFeatureColor(f: Feature | { feature: Feature }): string {
+  protected getFeatureColor(f: Feature | { feature: Feature }): string {
     const defaultColor = "gray";
     if ((f as Feature).color) {
       return (f as Feature).color || defaultColor;
@@ -174,13 +188,13 @@ class NightingaleTrack extends withManager(
     if ((f as Feature).type) {
       return getColorByType((f as Feature).type as string);
     }
-    if ((f as { feature: Feature })?.feature.type) {
+    if ((f as { feature: Feature })?.feature?.type) {
       return getColorByType((f as { feature: Feature }).feature.type as string);
     }
     return defaultColor;
   }
 
-  private getFeatureFillColor(f: Feature | { feature: Feature }) {
+  protected getFeatureFillColor(f: Feature | { feature: Feature }) {
     const defaultColor = "gray";
     if ((f as Feature).fill) {
       return (f as Feature).fill || defaultColor;
@@ -191,12 +205,12 @@ class NightingaleTrack extends withManager(
     return this.getFeatureColor(f);
   }
 
-  private getShape(f: Feature | { feature: Feature }): Shapes {
+  protected getShape(f: Feature | { feature: Feature }): Shapes {
     const defaultShape = "rectangle";
     if ((f as Feature).shape) {
       return (f as Feature).shape || defaultShape;
     }
-    if ((f as { feature: Feature })?.feature.shape) {
+    if ((f as { feature: Feature })?.feature?.shape) {
       return (f as { feature: Feature }).feature.shape || defaultShape;
     }
     if (this.shape) {
@@ -205,7 +219,7 @@ class NightingaleTrack extends withManager(
     if ((f as Feature).type) {
       return getShapeByType((f as Feature).type as string) as Shapes;
     }
-    if ((f as { feature: Feature }).feature.type) {
+    if ((f as { feature: Feature }).feature?.type) {
       return getShapeByType(
         (f as { feature: Feature }).feature.type as string
       ) as Shapes;
@@ -213,11 +227,11 @@ class NightingaleTrack extends withManager(
     return defaultShape;
   }
 
-  private createTrack() {
+  protected createTrack() {
     if (!this.#data) {
       return;
     }
-    this.#layoutObj?.init(this.#data);
+    this.layoutObj?.init(this.#data);
 
     this.svg?.selectAll("g").remove();
 
@@ -227,16 +241,16 @@ class NightingaleTrack extends withManager(
       .attr("height", this.height);
 
     if (!this.svg) return;
-    this.#seq_g = this.svg.append("g").attr("class", "sequence-features");
+    this.seqG = this.svg.append("g").attr("class", "sequence-features");
     this.#highlighted = this.svg.append("g").attr("class", "highlighted");
     this.#margins = this.svg.append("g").attr("class", "margin");
 
     this.createFeatures();
   }
 
-  private createFeatures() {
-    if (!this.#seq_g) return;
-    const featuresG = this.#seq_g.selectAll("g.feature-group").data(this.#data);
+  protected createFeatures() {
+    if (!this.seqG) return;
+    const featuresG = this.seqG.selectAll("g.feature-group").data(this.#data);
 
     const locationsG = featuresG
       .enter()
@@ -272,9 +286,9 @@ class NightingaleTrack extends withManager(
       .append("path")
       .attr("class", (f) => `${this.getShape(f)} feature`)
       .attr("d", (f) =>
-        this.#featureShape.getFeatureShape(
+        this.featureShape.getFeatureShape(
           this.getSingleBaseWidth(),
-          this.#layoutObj?.getFeatureHeight() || 0,
+          this.layoutObj?.getFeatureHeight() || 0,
           f.end ? f.end - f.start + 1 : 1,
           this.getShape(f)
         )
@@ -283,7 +297,7 @@ class NightingaleTrack extends withManager(
         "transform",
         (f) =>
           `translate(${this.getXFromSeqPosition(f.start)},${
-            this.#layoutObj?.getFeatureYPos(f.feature) || 0
+            this.layoutObj?.getFeatureYPos(f.feature) || 0
           })`
       )
       .attr("fill", (f) => this.getFeatureFillColor(f))
@@ -302,12 +316,12 @@ class NightingaleTrack extends withManager(
         "width",
         (f) => this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
       )
-      .attr("height", this.#layoutObj?.getFeatureHeight() || 0)
+      .attr("height", this.layoutObj?.getFeatureHeight() || 0)
       .attr(
         "transform",
         (f) =>
           `translate(${this.getXFromSeqPosition(f.start)},${
-            this.#layoutObj?.getFeatureYPos(f.feature) || 0
+            this.layoutObj?.getFeatureYPos(f.feature) || 0
           })`
       )
       .attr("fill", "transparent")
@@ -334,8 +348,8 @@ class NightingaleTrack extends withManager(
   }
 
   refresh() {
-    if (this.xScale && this.#seq_g) {
-      const fragmentG = this.#seq_g.selectAll("g.fragment-group").data(
+    if (this.xScale && this.seqG) {
+      const fragmentG = this.seqG.selectAll("g.fragment-group").data(
         this.#data.reduce(
           (acc: unknown[], f) =>
             acc.concat(
@@ -358,9 +372,9 @@ class NightingaleTrack extends withManager(
       fragmentG
         .selectAll<SVGPathElement, Feature>("path.feature")
         .attr("d", (f) =>
-          this.#featureShape.getFeatureShape(
+          this.featureShape.getFeatureShape(
             this.getSingleBaseWidth(),
-            this.#layoutObj?.getFeatureHeight() || 0,
+            this.layoutObj?.getFeatureHeight() || 0,
             f?.end && f?.start ? f.end - f.start + 1 : 1,
             this.getShape(f)
           )
@@ -370,7 +384,7 @@ class NightingaleTrack extends withManager(
           (f) =>
             `translate(${this.getXFromSeqPosition(
               f.start || 0
-            )},${this.#layoutObj?.getFeatureYPos(f.feature as Feature)})`
+            )},${this.layoutObj?.getFeatureYPos(f.feature as Feature)})`
         );
 
       fragmentG
@@ -381,24 +395,18 @@ class NightingaleTrack extends withManager(
             this.getSingleBaseWidth() *
             (f?.end && f?.start ? f.end - f.start + 1 : 1)
         )
-        .attr("height", this.#layoutObj?.getFeatureHeight() || 0)
+        .attr("height", this.layoutObj?.getFeatureHeight() || 0)
         .attr(
           "transform",
           (f) =>
             `translate(${this.getXFromSeqPosition(f.start || 0)},${
-              this.#layoutObj?.getFeatureYPos(f.feature as Feature) || 0
+              this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0
             })`
         );
-
-      // this._updateHighlight();
     }
     this.updateHighlight();
     this.renderMarginOnGroup(this.#margins);
   }
-
-  // _updateHighlight() {
-  //   this.trackHighlighter.updateHighlight();
-  // }
 
   protected updateHighlight() {
     if (!this.#highlighted) return;

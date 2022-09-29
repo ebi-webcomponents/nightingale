@@ -3,13 +3,18 @@ import { html } from "lit-html";
 import "../packages/nightingale-navigation/src/index.ts";
 import "../packages/nightingale-manager/src/index.ts";
 import "../packages/nightingale-track/src/index.ts";
+import "../packages/nightingale-interpro-track/src/index.ts";
+
+import iproData from "../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
+import contributors from "../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
+import residues from "../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
 
 export default {
   title: "Nightingale/NightingaleManager",
 } as Meta;
 
 const defaultSequence =
-  "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
+  "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASVCASFU";
 const defaultData = [
   {
     accession: "feature1",
@@ -129,6 +134,22 @@ const Template: Story<{
         >
         </nightingale-track>
       </div>
+      <div style="line-height: 0">
+        <nightingale-interpro-track
+          id="trackIpro"
+          width="${width}"
+          height=${height}
+          length="${length}"
+          display-start="${args["display-start"]}"
+          display-end="${args["display-end"]}"
+          highlight-event="onmouseover"
+          highlight-color=${args["highlight-color"]}
+          margin-color=${args["margin-color"]}
+          shape="roundRectangle"
+          expanded
+        >
+        </nightingale-interpro-track>
+      </div>
     </nightingale-manager>
   `;
 };
@@ -162,5 +183,12 @@ Manager.play = async () => {
   if (track2) {
     (track2 as any).fixedHighlight = "10:20";
     (track2 as any).data = defaultData;
+  }
+  const trackIpro = document.getElementById("trackIpro");
+  if (trackIpro) {
+    (trackIpro as any).fixedHighlight = "10:20";
+    (trackIpro as any).data = iproData;
+    (contributors[0] as any).residues = residues;
+    (trackIpro as any).contributors = contributors;
   }
 };

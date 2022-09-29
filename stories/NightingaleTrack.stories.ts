@@ -59,6 +59,7 @@ const Template: Story<{
   length: number;
   "display-start": number;
   "display-end": number;
+  "margin-top": number;
   highlight: string;
   layout: "non-overlapping" | "default";
 }> = (args) => {
@@ -70,6 +71,7 @@ const Template: Story<{
     length="${length}"
     display-start=${args["display-start"]}
     display-end=${args["display-end"]}
+    margin-top=${args["margin-top"]}
     highlight=${highlight}
     layout=${layout}
   ></nightingale-track>`;
@@ -80,6 +82,7 @@ Track.args = {
   width: 500,
   height: 50,
   length: 100,
+  "margin-top": 1,
   "display-start": 1,
   "display-end": 50,
   highlight: "23:45",
@@ -93,11 +96,8 @@ Track.play = async () => {
 
 export const TrackWithSymbols = Template.bind({});
 TrackWithSymbols.args = {
-  width: 500,
+  ...Track.args,
   height: 500,
-  length: 100,
-  "display-start": 1,
-  "display-end": 50,
   layout: "non-overlapping",
 };
 TrackWithSymbols.play = async () => {

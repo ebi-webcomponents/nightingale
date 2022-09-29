@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
-    "lodash-es": "^4.17.11",
-    "d3": "^7.4.4"
+    "d3": "^7.6.1",
+    "lodash-es": "^4.17.11"
   }
 }

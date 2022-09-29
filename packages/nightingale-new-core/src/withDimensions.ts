@@ -19,11 +19,9 @@ const withDimensions = <T extends Constructor<NightingaleBaseElement>>(
   }
 ) => {
   class WithDimensions extends superClass {
-    @property({
-      type: Number,
-    })
+    @property({ type: Number })
     width: number = options.width;
-    @property()
+    @property({ type: Number })
     height: number = options.height;
   }
   return WithDimensions as Constructor<WithDimensionsInterface> & T;

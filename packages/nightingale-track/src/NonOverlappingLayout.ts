@@ -52,10 +52,15 @@ export default class NonOverlappingLayout extends DefaultLayout {
 
   getFeatureYPos(feature: Feature) {
     const rowNumber = this.featuresMap.get(feature);
-    return this.getOffset() + this.rowHeight * rowNumber + 2 * this.padding;
+    return (
+      this.getOffset() +
+      this.rowHeight * rowNumber +
+      this.margin.top +
+      this.margin.bottom
+    );
   }
 
   getFeatureHeight() {
-    return this.rowHeight - 2 * this.padding;
+    return this.rowHeight - this.margin.top - this.margin.bottom;
   }
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "accession": "SSF53901",
+    "name": "Thiolase-like",
+    "source_database": "ssf",
+    "type": "homologous_superfamily",
+    "locations": [
+      {
+        "fragments": [{ "start": 5, "end": 262 }],
+        "model_acc": "0050445",
+        "seq_feature": null
+      },
+      {
+        "fragments": [{ "start": 266, "end": 389 }],
+        "model_acc": "0049940",
+        "seq_feature": null
+      }
+    ],
+    "color": "#bbd279",
+    "k": 0,
+    "expanded": true
+  },
+  {
+    "accession": "G3DSA:3.40.47.10",
+    "name": "G3DSA:3.40.47.10",
+    "source_database": "cathgene3d",
+    "type": "homologous_superfamily",
+    "locations": [
+      {
+        "fragments": [
+          { "start": 9, "end": 130 },
+          { "start": 188, "end": 260 }
+        ],
+        "model_acc": "1wdkC01",
+        "seq_feature": null
+      },
+      {
+        "fragments": [
+          { "start": 138, "end": 180 },
+          { "start": 272, "end": 384 }
+        ],
+        "model_acc": "1wdkC02",
+        "seq_feature": null
+      }
+    ],
+    "color": "#87c59c",
+    "k": 1,
+    "expanded": true
+  }
+]

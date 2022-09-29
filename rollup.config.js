@@ -11,7 +11,7 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    typescript(),
+    typescript({ target: "es2015", experimentalDecorators: true }),
     nodeResolve(),
     rollupImportMapPlugin("../../dev/import-map.json"),
     json(),

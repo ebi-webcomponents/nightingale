@@ -6,5 +6,6 @@ export { default as withManager } from "./withManager";
 export { default as withHighlight } from "./withHighlight";
 export { default as withZoom } from "./withZoom";
 export { default as bindEvents } from "./utils/bindEvents";
+export { default as customElementOnce } from "./decorators/customElementOnce";
 import NightingaleElement from "./nightingale-base-element";
 export default NightingaleElement;

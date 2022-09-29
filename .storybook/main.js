@@ -14,6 +14,9 @@ module.exports = {
   typescript: {
     check: false,
   },
+  core: {
+    builder: "webpack5",
+  },
   webpackFinal: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -25,7 +28,7 @@ module.exports = {
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       include: path.resolve(__dirname, "../packages"),
-      loader: require.resolve("ts-loader"),
+      loader: "ts-loader",
     });
     return config;
   },

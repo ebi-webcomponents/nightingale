@@ -1,20 +1,13 @@
 {
-  "name": "@nightingale-elements/nightingale-sequence",
+  "name": "@nightingale-elements/nightingale-interpro-track",
   "version": "4.0.0-alpha",
-  "description": "Sequence component for the Nightingale tool",
+  "description": "Interpro extension of the track type.",
   "files": [
     "dist",
     "src"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "ISC",
-  "keywords": [
-    "nightingale",
-    "webcomponents",
-    "customelements"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -23,8 +16,17 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "ISC",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
-    "d3": "^7.6.1"
+    "@nightingale-elements/nightingale-track": "4.0.0-alpha",
+    "d3": "^7.6.1",
+    "lodash-es": "^4.17.11"
   }
 }

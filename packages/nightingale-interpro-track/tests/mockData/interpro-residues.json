@@ -1,0 +1,39 @@
+[
+  {
+    "accession": "cd01991",
+    "name": "Asn_Synthase_B_C",
+    "source_database": "cdd",
+    "locations": [
+      {
+        "description": "Molecular Tunnel",
+        "fragments": [
+          { "residues": "L", "start": 262, "end": 262 },
+          { "residues": "L", "start": 263, "end": 263 },
+          { "residues": "S", "start": 264, "end": 264 },
+          { "residues": "A", "start": 290, "end": 290 },
+          { "residues": "G", "start": 291, "end": 291 },
+          { "residues": "F", "start": 292, "end": 292 },
+          { "residues": "V", "start": 350, "end": 350 },
+          { "residues": "T", "start": 363, "end": 363 },
+          { "residues": "G", "start": 364, "end": 364 },
+          { "residues": "D", "start": 365, "end": 365 }
+        ]
+      },
+      {
+        "description": "Ligand Binding Site",
+        "fragments": [
+          { "residues": "L", "start": 262, "end": 262 },
+          { "residues": "L", "start": 263, "end": 263 },
+          { "residues": "S", "start": 264, "end": 264 },
+          { "residues": "A", "start": 290, "end": 290 },
+          { "residues": "G", "start": 291, "end": 291 },
+          { "residues": "F", "start": 292, "end": 292 },
+          { "residues": "V", "start": 350, "end": 350 },
+          { "residues": "T", "start": 363, "end": 363 },
+          { "residues": "G", "start": 364, "end": 364 },
+          { "residues": "D", "start": 365, "end": 365 }
+        ]
+      }
+    ]
+  }
+]

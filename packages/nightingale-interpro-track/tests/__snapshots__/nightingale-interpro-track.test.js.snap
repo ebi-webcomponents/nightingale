@@ -1,0 +1,1138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nightingale-interpro-track tests it should display the sequence correctly after highlight 1`] = `
+<nightingale-interpro-track
+  height="20"
+  highlight="10:30"
+  length="450"
+>
+  <!---->
+  <svg
+    class="container"
+    height="26"
+    width="800"
+  >
+    <g
+      class="sequence-features"
+    >
+      <g
+        class="feature-group"
+        id="g_IPR016039"
+        mask="url(#mask-IPR016039)"
+      >
+        <g
+          class="location-group"
+        >
+          <line
+            class="cover"
+            stroke="#84862d"
+            visibility="visible"
+            x1="16.933333333333334"
+            x2="684.2666666666667"
+            y1="12"
+            y2="12"
+          />
+          <path
+            class="rectangle feature"
+            d="M0,0L667.3333333333334,0L667.3333333333334,16L0,16Z"
+            fill="#84862d"
+            opacity="1"
+            style="stroke: #84862d; pointer-events: auto;"
+            transform="translate(16.933333333333334,4)"
+          />
+        </g>
+      </g>
+    </g>
+    <g
+      class="highlighted"
+    >
+      <rect
+        fill="#FFEB3B66"
+        height="26"
+        style="pointer-events: none;"
+        width="36.4"
+        x="25.6"
+      />
+    </g>
+    <g
+      class="margin"
+    />
+    <g
+      class="children-features"
+    >
+      <g
+        class="children-group"
+        visibility="hidden"
+      >
+        <g
+          class="child-group"
+        >
+          <g
+            class="child-location-group clg-0"
+          >
+            <line
+              class="cover"
+              stroke="#bbd279"
+              visibility="hidden"
+              x1="16.933333333333334"
+              x2="464.1333333333333"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L447.2,0L447.2,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(16.933333333333334,7)"
+            />
+          </g>
+          <g
+            class="child-location-group clg-1"
+          >
+            <line
+              class="cover"
+              stroke="#bbd279"
+              visibility="hidden"
+              x1="469.33333333333337"
+              x2="684.2666666666667"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L214.93333333333334,0L214.93333333333334,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(469.33333333333337,7)"
+            />
+          </g>
+          <g
+            class="residues-group"
+          >
+            <g
+              class="residues-locations"
+              visibility="hidden"
+            >
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(462.4,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(510.93333333333334,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(512.6666666666667,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(514.4,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(614.9333333333333,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(637.4666666666666,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(639.1999999999999,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(640.9333333333333,10)"
+              />
+            </g>
+            <g
+              class="residues-locations"
+              visibility="hidden"
+            >
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(462.4,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(510.93333333333334,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(512.6666666666667,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(514.4,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(614.9333333333333,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(637.4666666666666,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(639.1999999999999,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(640.9333333333333,10)"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="child-group"
+        >
+          <g
+            class="child-location-group clg-0"
+          >
+            <line
+              class="cover"
+              stroke="#87c59c"
+              visibility="hidden"
+              x1="23.866666666666667"
+              x2="460.66666666666663"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L211.46666666666667,0L211.46666666666667,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(23.866666666666667,7)"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L126.53333333333333,0L126.53333333333333,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(334.1333333333333,7)"
+            />
+          </g>
+          <g
+            class="child-location-group clg-1"
+          >
+            <line
+              class="cover"
+              stroke="#87c59c"
+              visibility="hidden"
+              x1="247.46666666666667"
+              x2="675.6"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L74.53333333333333,0L74.53333333333333,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(247.46666666666667,7)"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L195.86666666666667,0L195.86666666666667,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(479.73333333333335,7)"
+            />
+          </g>
+        </g>
+      </g>
+    </g>
+    <defs>
+      <mask
+        id="mask-IPR016039"
+      >
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.23076923076923075"
+          width="6.933333333333334"
+          x="10"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="6.933333333333334"
+          x="16.933333333333334"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="211.46666666666667"
+          x="23.866666666666667"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="12.133333333333333"
+          x="235.33333333333331"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="74.53333333333333"
+          x="247.46666666666667"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="12.133333333333333"
+          x="322"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="126.53333333333333"
+          x="334.1333333333333"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="3.466666666666667"
+          x="460.66666666666663"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.23076923076923075"
+          width="5.2"
+          x="464.1333333333333"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="10.4"
+          x="469.33333333333337"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="195.86666666666667"
+          x="479.73333333333335"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="8.666666666666668"
+          x="675.6"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.23076923076923075"
+          width="105.73333333333333"
+          x="684.2666666666667"
+          y="0"
+        />
+      </mask>
+    </defs>
+  </svg>
+</nightingale-interpro-track>
+`;
+
+exports[`nightingale-interpro-track tests it should display the track correctly 1`] = `
+<nightingale-interpro-track
+  height="20"
+  length="450"
+>
+  <!---->
+  <svg
+    class="container"
+    height="26"
+    width="800"
+  >
+    <g
+      class="sequence-features"
+    >
+      <g
+        class="feature-group"
+        id="g_IPR016039"
+      >
+        <g
+          class="location-group"
+        >
+          <line
+            class="cover"
+          />
+          <path
+            class="rectangle feature"
+          />
+        </g>
+      </g>
+    </g>
+    <g
+      class="highlighted"
+    />
+    <g
+      class="margin"
+    />
+    <g
+      class="children-features"
+    >
+      <g
+        class="children-group"
+      >
+        <g
+          class="child-group"
+        >
+          <g
+            class="child-location-group clg-0"
+          >
+            <line
+              class="cover"
+            />
+            <path
+              class="rectangle child-fragment feature"
+            />
+          </g>
+          <g
+            class="child-location-group clg-1"
+          >
+            <line
+              class="cover"
+            />
+            <path
+              class="rectangle child-fragment feature"
+            />
+          </g>
+          <g
+            class="residues-group"
+          >
+            <g
+              class="residues-locations"
+            >
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(462.4,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(510.93333333333334,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(512.6666666666667,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(514.4,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(614.9333333333333,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(637.4666666666666,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(639.1999999999999,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(640.9333333333333,25)"
+              />
+            </g>
+            <g
+              class="residues-locations"
+            >
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(462.4,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(510.93333333333334,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(512.6666666666667,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(514.4,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(614.9333333333333,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(637.4666666666666,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(639.1999999999999,25)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                transform="translate(640.9333333333333,25)"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="child-group"
+        >
+          <g
+            class="child-location-group clg-0"
+          >
+            <line
+              class="cover"
+            />
+            <path
+              class="rectangle child-fragment feature"
+            />
+            <path
+              class="rectangle child-fragment feature"
+            />
+          </g>
+          <g
+            class="child-location-group clg-1"
+          >
+            <line
+              class="cover"
+            />
+            <path
+              class="rectangle child-fragment feature"
+            />
+            <path
+              class="rectangle child-fragment feature"
+            />
+          </g>
+        </g>
+      </g>
+    </g>
+    <defs>
+      <mask
+        id="mask-IPR016039"
+      >
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+        <rect
+          height="2"
+          y="0"
+        />
+      </mask>
+    </defs>
+  </svg>
+</nightingale-interpro-track>
+`;
+
+exports[`nightingale-interpro-track tests it should zoom in 1`] = `
+<nightingale-interpro-track
+  display-end="264"
+  display-start="260"
+  height="20"
+  length="450"
+>
+  <!---->
+  <svg
+    class="container"
+    height="26"
+    width="800"
+  >
+    <g
+      class="sequence-features"
+    >
+      <g
+        class="feature-group"
+        id="g_IPR016039"
+        mask="url(#mask-IPR016039)"
+      >
+        <g
+          class="location-group"
+        >
+          <line
+            class="cover"
+            stroke="#84862d"
+            visibility="visible"
+            x1="-39769.99999999955"
+            x2="20289.99999999977"
+            y1="12"
+            y2="12"
+          />
+          <path
+            class="rectangle feature"
+            d="M0,0L60060,0L60060,16L0,16Z"
+            fill="#84862d"
+            opacity="1"
+            style="stroke: #84862d; pointer-events: auto;"
+            transform="translate(-39769.99999999955,4)"
+          />
+        </g>
+      </g>
+    </g>
+    <g
+      class="highlighted"
+    />
+    <g
+      class="margin"
+    />
+    <g
+      class="children-features"
+    >
+      <g
+        class="children-group"
+        visibility="hidden"
+      >
+        <g
+          class="child-group"
+        >
+          <g
+            class="child-location-group clg-0"
+          >
+            <line
+              class="cover"
+              stroke="#bbd279"
+              visibility="hidden"
+              x1="-39769.99999999955"
+              x2="477.9999999999947"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L40248,0L40248,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(-39769.99999999955,7)"
+            />
+          </g>
+          <g
+            class="child-location-group clg-1"
+          >
+            <line
+              class="cover"
+              stroke="#bbd279"
+              visibility="hidden"
+              x1="945.9999999999894"
+              x2="20289.99999999977"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L19344,0L19344,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(945.9999999999894,7)"
+            />
+          </g>
+          <g
+            class="residues-group"
+          >
+            <g
+              class="residues-locations"
+              visibility="hidden"
+            >
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(321.9999999999965,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(4689.999999999946,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(4845.9999999999445,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(5001.999999999944,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(14049.99999999984,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(16077.999999999818,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(16233.999999999814,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(16389.999999999814,10)"
+              />
+            </g>
+            <g
+              class="residues-locations"
+              visibility="hidden"
+            >
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(321.9999999999965,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(4689.999999999946,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(4845.9999999999445,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(5001.999999999944,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(14049.99999999984,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(16077.999999999818,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(16233.999999999814,10)"
+              />
+              <path
+                class="feature rectangle residue"
+                d="M0,0L156,0L156,4L0,4Z"
+                fill="white"
+                stroke="transparent"
+                style="pointer-events: none; stroke: none; opacity: 0.4;"
+                transform="translate(16389.999999999814,10)"
+              />
+            </g>
+          </g>
+        </g>
+        <g
+          class="child-group"
+        >
+          <g
+            class="child-location-group clg-0"
+          >
+            <line
+              class="cover"
+              stroke="#87c59c"
+              visibility="hidden"
+              x1="-39145.999999999556"
+              x2="165.99999999999824"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L19032,0L19032,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(-39145.999999999556,7)"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L11388,0L11388,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(-11221.999999999873,7)"
+            />
+          </g>
+          <g
+            class="child-location-group clg-1"
+          >
+            <line
+              class="cover"
+              stroke="#87c59c"
+              visibility="hidden"
+              x1="-19021.99999999978"
+              x2="19509.999999999778"
+              y1="12"
+              y2="12"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L6708,0L6708,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(-19021.99999999978,7)"
+            />
+            <path
+              class="rectangle child-fragment feature"
+              d="M0,0L17628,0L17628,10L0,10Z"
+              fill="white"
+              opacity="0.4"
+              style="stroke: none; pointer-events: none;"
+              transform="translate(1881.9999999999789,7)"
+            />
+          </g>
+        </g>
+      </g>
+    </g>
+    <defs>
+      <mask
+        id="mask-IPR016039"
+      >
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.23076923076923075"
+          width="624"
+          x="-40393.99999999954"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="624"
+          x="-39769.99999999955"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="19032"
+          x="-39145.999999999556"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="1092"
+          x="-20113.99999999977"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="6708"
+          x="-19021.99999999978"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="1092"
+          x="-12313.99999999986"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="11388"
+          x="-11221.999999999873"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="312"
+          x="165.99999999999824"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.23076923076923075"
+          width="468"
+          x="477.9999999999947"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="936"
+          x="945.9999999999894"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="1"
+          width="17628"
+          x="1881.9999999999789"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.6153846153846154"
+          width="780"
+          x="19509.999999999778"
+          y="0"
+        />
+        <rect
+          fill="white"
+          height="2"
+          opacity="0.23076923076923075"
+          width="9516"
+          x="20289.99999999977"
+          y="0"
+        />
+      </mask>
+    </defs>
+  </svg>
+</nightingale-interpro-track>
+`;
