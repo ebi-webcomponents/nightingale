@@ -302,7 +302,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return expanded ? this.getFeatureColor(f) : "white";
   }
 
-  private getTextLabel(datum: any): string | null {
+  private getTextLabel(datum: Feature): string | null {
     if (this.label?.length) {
       if (this.label.startsWith(".")) {
         return _get(datum, this.label.slice(1), null);
@@ -311,7 +311,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
     }
     return datum?.feature?.accession || null;
   }
-  private refreshLabels(base: LabelGroup, expanded = true) {
+
+  private refreshLabels(base: LabelGroup) {
     base
       .attr("x", (f) => {
         const start = f.start || 0;

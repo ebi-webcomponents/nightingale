@@ -1,3 +1,5 @@
+/* Adapting it from this stack overflow answer: https://stackoverflow.com/a/6511606 */
+
 type ColorProperty = "fill" | "stroke" | "color";
 
 export function contrastingColor(color: number[] | null) {
@@ -14,6 +16,6 @@ export function getColor(
 ): number[] | null {
   const style = getComputedStyle(element);
   const prop = style?.[property];
-  const res = prop?.match(/[\.\d]+/g)?.map(Number) || null;
+  const res = prop?.match(/[.\d]+/g)?.map(Number) || null;
   return res;
 }
