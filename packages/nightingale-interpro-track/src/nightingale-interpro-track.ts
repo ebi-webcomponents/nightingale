@@ -1,8 +1,13 @@
 import { customElement, property } from "lit/decorators.js";
-import { Selection } from "d3";
+import { Selection, select } from "d3";
+import _get from "lodash-es/get";
 import { Feature } from "@nightingale-elements/nightingale-track";
 
-import { bindEvents } from "@nightingale-elements/nightingale-new-core";
+import {
+  bindEvents,
+  contrastingColor,
+  getColor,
+} from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack from "@nightingale-elements/nightingale-track";
 import InterproEntryLayout, { InterProFeature } from "./InterproEntryLayout";
 import { getCoverage, Segment } from "./coverage";
@@ -21,6 +26,12 @@ export type BaseGroup = Selection<
   HTMLElement | SVGElement | null,
   unknown
 >;
+export type LabelGroup = Selection<
+  SVGTextContentElement,
+  InterProFeature,
+  HTMLElement | SVGElement | null,
+  unknown
+>;
 
 const MAX_OPACITY_WHILE_COLAPSED = 0.8;
 
@@ -28,6 +39,10 @@ const MAX_OPACITY_WHILE_COLAPSED = 0.8;
 class NightingaleInterproTrack extends NightingaleTrack {
   @property({ type: Boolean })
   expanded = false;
+  @property({ type: Boolean })
+  "show-label" = false;
+  @property({ type: String })
+  label: string | null = null;
 
   layout = undefined;
   protected layoutObj?: InterproEntryLayout;
@@ -147,6 +162,21 @@ class NightingaleInterproTrack extends NightingaleTrack {
       })
       .call(bindEvents, this);
 
+    locations
+      .selectAll("text.feature-label")
+      .data((d) =>
+        d.fragments.map((loc) => ({
+          ...loc,
+          feature: d.feature,
+          fragments: d.fragments,
+        }))
+      )
+      .enter()
+      .append("text")
+      .attr("class", "feature-label")
+      .attr("dominant-baseline", "middle")
+      .attr("text-anchor", "middle");
+
     this.#residuesG = createResidueGroup(this.#featuresG);
     createResiduePaths({
       baseG: this.#residuesG,
@@ -219,6 +249,20 @@ class NightingaleInterproTrack extends NightingaleTrack {
           f.feature.expanded = !f.feature.expanded;
           this.refresh();
         });
+      locationChildrenG
+        .selectAll("text.child-label")
+        .data((d) =>
+          d.fragments.map((fragment) => ({
+            ...fragment,
+            feature: d.feature,
+            fragments: d.fragments,
+          }))
+        )
+        .enter()
+        .append("text")
+        .attr("class", "child-label")
+        .attr("dominant-baseline", "middle")
+        .attr("text-anchor", "middle");
 
       this.#childResiduesG = createResidueGroup(childGroup);
       // this.child_residuesLoc =
@@ -258,6 +302,50 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return expanded ? this.getFeatureColor(f) : "white";
   }
 
+  private getTextLabel(datum: any): string | null {
+    if (this.label?.length) {
+      if (this.label.startsWith(".")) {
+        return _get(datum, this.label.slice(1), null);
+      }
+      return this.label;
+    }
+    return datum?.feature?.accession || null;
+  }
+  private refreshLabels(base: LabelGroup, expanded = true) {
+    base
+      .attr("x", (f) => {
+        const start = f.start || 0;
+        const end = f.end || 0;
+        return this.getXFromSeqPosition(start + (end - start) / 2 || 1);
+      })
+      .attr(
+        "y",
+        (f) =>
+          this["margin-top"] +
+          (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0) +
+          (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 0) / 2
+      )
+      .attr("fill", (_f, i, nodes) => {
+        const element = nodes[i];
+        const firstPath = element.parentElement?.querySelector("path.feature");
+
+        if (firstPath) {
+          return contrastingColor(getColor(firstPath, "fill"));
+        }
+        return null;
+      })
+      .attr(
+        "font-size",
+        (f) => (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 2) - 2
+      )
+      .text((d) => (this["show-label"] ? this.getTextLabel(d) : null))
+      .each(
+        wrap(
+          (n) => this.getXFromSeqPosition(n),
+          (feature) => this.layoutObj?.getFeatureHeight(feature) || 0
+        )
+      );
+  }
   private refreshFeatures(base: BaseGroup, expanded = true) {
     const numberOfSibillings = new Set(
       base.data().map((f) => f.feature?.accession)
@@ -328,6 +416,11 @@ class NightingaleInterproTrack extends NightingaleTrack {
       this.refreshFeatures(
         this.#featuresG?.selectAll("g.location-group path.feature") as BaseGroup
       );
+      this.refreshLabels(
+        this.#featuresG?.selectAll(
+          "g.location-group text.feature-label"
+        ) as LabelGroup
+      );
 
       // this.#residuesG?.attr("visibility", this.expanded ? "visible" : "hidden");
       if (this.#residuesG)
@@ -359,6 +452,12 @@ class NightingaleInterproTrack extends NightingaleTrack {
           featureChildren as unknown as BaseGroup,
           this.expanded
         );
+        this.refreshLabels(
+          childGroup?.selectAll(
+            "g.child-location-group text.child-label"
+          ) as LabelGroup
+        );
+
         this.#childResiduesG?.attr("visibility", () =>
           this.expanded ? "visible" : "hidden"
         );
@@ -382,5 +481,25 @@ class NightingaleInterproTrack extends NightingaleTrack {
       this.updateHighlight();
     }
   }
+}
+function wrap(
+  getXFromSeqPosition: (x: number) => number,
+  getFeatureHeight: (feature: Feature) => number
+) {
+  function wrapFn(this: SVGTextContentElement, feature: InterProFeature) {
+    const self = select(this);
+    const width = getXFromSeqPosition(
+      (feature.end || 0) - (feature.start || 0)
+    );
+    const padding = getFeatureHeight(feature.feature as Feature) / 2;
+    let textLength = self.node()?.getComputedTextLength?.() || 0;
+    let text = self.text();
+    while (textLength > width - 2 * padding && text.length > 0) {
+      text = text.slice(0, -1);
+      self.text(text + "\u2026");
+      textLength = self.node()?.getComputedTextLength() || 0;
+    }
+  }
+  return wrapFn;
 }
 export default NightingaleInterproTrack;

@@ -164,6 +164,8 @@ const Template: Story<{
           highlight-color=${args["highlight-color"]}
           margin-color=${args["margin-color"]}
           shape="roundRectangle"
+          label=".feature.name"
+          show-label
           expanded
         >
         </nightingale-interpro-track>

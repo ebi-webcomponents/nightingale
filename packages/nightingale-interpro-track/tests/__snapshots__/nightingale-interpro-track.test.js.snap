@@ -40,6 +40,45 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             style="stroke: #84862d; pointer-events: auto;"
             transform="translate(16.933333333333334,4)"
           />
+          <text
+            class="feature-label"
+            dominant-baseline="middle"
+            fill="black"
+            font-size="14"
+            text-anchor="middle"
+            x="349.7333333333333"
+            y="12"
+          />
+        </g>
+        <g
+          class="location-group"
+        >
+          <line
+            class="cover"
+            stroke="#84862d"
+            visibility="visible"
+            x1="701.6"
+            x2="824.6666666666667"
+            y1="12"
+            y2="12"
+          />
+          <path
+            class="rectangle feature"
+            d="M0,0L123.06666666666668,0L123.06666666666668,16L0,16Z"
+            fill="#84862d"
+            opacity="1"
+            style="stroke: #84862d; pointer-events: auto;"
+            transform="translate(701.6,4)"
+          />
+          <text
+            class="feature-label"
+            dominant-baseline="middle"
+            fill="black"
+            font-size="14"
+            text-anchor="middle"
+            x="762.2666666666667"
+            y="12"
+          />
         </g>
       </g>
     </g>
@@ -87,6 +126,15 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               style="stroke: none; pointer-events: none;"
               transform="translate(16.933333333333334,7)"
             />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="239.66666666666669"
+              y="12"
+            />
           </g>
           <g
             class="child-location-group clg-1"
@@ -107,6 +155,15 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
               transform="translate(469.33333333333337,7)"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="575.9333333333333"
+              y="12"
             />
           </g>
           <g
@@ -283,6 +340,24 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               style="stroke: none; pointer-events: none;"
               transform="translate(334.1333333333333,7)"
             />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="128.73333333333335"
+              y="12"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="396.53333333333336"
+              y="12"
+            />
           </g>
           <g
             class="child-location-group clg-1"
@@ -311,6 +386,24 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
               transform="translate(479.73333333333335,7)"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="283.8666666666667"
+              y="12"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="576.8000000000001"
+              y="12"
             />
           </g>
         </g>
@@ -457,6 +550,26 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
           <path
             class="rectangle feature"
           />
+          <text
+            class="feature-label"
+            dominant-baseline="middle"
+            text-anchor="middle"
+          />
+        </g>
+        <g
+          class="location-group"
+        >
+          <line
+            class="cover"
+          />
+          <path
+            class="rectangle feature"
+          />
+          <text
+            class="feature-label"
+            dominant-baseline="middle"
+            text-anchor="middle"
+          />
         </g>
       </g>
     </g>
@@ -484,6 +597,11 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             <path
               class="rectangle child-fragment feature"
             />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            />
           </g>
           <g
             class="child-location-group clg-1"
@@ -493,6 +611,11 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             />
             <path
               class="rectangle child-fragment feature"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              text-anchor="middle"
             />
           </g>
           <g
@@ -635,6 +758,16 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             <path
               class="rectangle child-fragment feature"
             />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            />
           </g>
           <g
             class="child-location-group clg-1"
@@ -647,6 +780,16 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             />
             <path
               class="rectangle child-fragment feature"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              text-anchor="middle"
             />
           </g>
         </g>
@@ -755,6 +898,45 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             style="stroke: #84862d; pointer-events: auto;"
             transform="translate(-39769.99999999955,4)"
           />
+          <text
+            class="feature-label"
+            dominant-baseline="middle"
+            fill="black"
+            font-size="14"
+            text-anchor="middle"
+            x="-9817.999999999889"
+            y="12"
+          />
+        </g>
+        <g
+          class="location-group"
+        >
+          <line
+            class="cover"
+            stroke="#84862d"
+            visibility="visible"
+            x1="21849.99999999975"
+            x2="32925.99999999963"
+            y1="12"
+            y2="12"
+          />
+          <path
+            class="rectangle feature"
+            d="M0,0L11076,0L11076,16L0,16Z"
+            fill="#84862d"
+            opacity="1"
+            style="stroke: #84862d; pointer-events: auto;"
+            transform="translate(21849.99999999975,4)"
+          />
+          <text
+            class="feature-label"
+            dominant-baseline="middle"
+            fill="black"
+            font-size="14"
+            text-anchor="middle"
+            x="27309.99999999969"
+            y="12"
+          />
         </g>
       </g>
     </g>
@@ -794,6 +976,15 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               style="stroke: none; pointer-events: none;"
               transform="translate(-39769.99999999955,7)"
             />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="-19723.999999999774"
+              y="12"
+            />
           </g>
           <g
             class="child-location-group clg-1"
@@ -814,6 +1005,15 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
               transform="translate(945.9999999999894,7)"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="10539.99999999988"
+              y="12"
             />
           </g>
           <g
@@ -990,6 +1190,24 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               style="stroke: none; pointer-events: none;"
               transform="translate(-11221.999999999873,7)"
             />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="-29707.99999999966"
+              y="12"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="-5605.999999999936"
+              y="12"
+            />
           </g>
           <g
             class="child-location-group clg-1"
@@ -1018,6 +1236,24 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
               transform="translate(1881.9999999999789,7)"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="-15745.999999999822"
+              y="12"
+            />
+            <text
+              class="child-label"
+              dominant-baseline="middle"
+              fill="black"
+              font-size="8"
+              text-anchor="middle"
+              x="10617.99999999988"
+              y="12"
             />
           </g>
         </g>

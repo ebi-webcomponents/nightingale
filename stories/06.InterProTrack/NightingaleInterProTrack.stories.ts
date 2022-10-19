@@ -53,11 +53,12 @@ export const SimpleTrackNoControls = () => html`
   <nightingale-interpro-track
     id="track1"
     width="600"
-    length="390"
-    displaystart="1"
-    displayend="390"
+    length="490"
+    display-start="1"
+    display-end="490"
     highlight="20:50,40:80"
     shape="roundRectangle"
+    show-label
   ></nightingale-interpro-track>
 `;
 SimpleTrackNoControls.play = async () => {
@@ -72,9 +73,9 @@ export const TrackAndContributorsNoControls = () => html`
   <nightingale-interpro-track
     id="track2"
     width="600"
-    length="390"
+    length="490"
     display-start="1"
-    display-end="390"
+    display-end="490"
     highlight="20:50,40:80"
     shape="roundRectangle"
     expanded
@@ -93,9 +94,9 @@ export const TrackWithResiduesNoControls = () => html`
   <nightingale-interpro-track
     id="track3"
     width="600"
-    length="390"
+    length="490"
     display-start="1"
-    display-end="390"
+    display-end="490"
     highlight="20:50,40:80"
     shape="roundRectangle"
     expanded
@@ -118,9 +119,9 @@ export const TrackWithContributorsAndResiduesNoControls = () => html`
   <nightingale-interpro-track
     id="track4"
     width="600"
-    length="390"
+    length="490"
     display-start="1"
-    display-end="390"
+    display-end="490"
     highlight="20:50,40:80"
     shape="roundRectangle"
     expanded
@@ -137,5 +138,74 @@ TrackWithContributorsAndResiduesNoControls.play = async () => {
 
     (track4 as any).data = data;
     (track4 as any).contributors = contributorsCopy;
+  }
+};
+
+export const TrackAndLabels = () => html`
+  <h3>Entry with Labels</h3>
+  <h5>Entry with a fix and long label</h5>
+  <nightingale-interpro-track
+    id="track5"
+    width="600"
+    length="490"
+    shape="roundRectangle"
+    show-label
+    label="A very long label that should go on all the locations"
+  ></nightingale-interpro-track>
+  <h5>Entry using default label(accession)</h5>
+  <nightingale-interpro-track
+    id="track6"
+    width="600"
+    length="490"
+    shape="roundRectangle"
+    show-label
+  ></nightingale-interpro-track>
+  <h5>Entry specifying a feature field as label (.feature.name)</h5>
+  <nightingale-interpro-track
+    id="track7"
+    width="600"
+    length="490"
+    shape="roundRectangle"
+    label=".feature.name"
+    show-label
+  ></nightingale-interpro-track>
+  <h5>Entry specifying a feature field as label (.feature.name)</h5>
+  <nightingale-interpro-track
+    id="track7"
+    width="600"
+    length="490"
+    shape="roundRectangle"
+    label=".feature.name"
+    show-label
+  ></nightingale-interpro-track>
+  <h5>Entry contributors and labels</h5>
+  <nightingale-interpro-track
+    id="track8"
+    width="600"
+    length="490"
+    shape="roundRectangle"
+    label=".feature.name"
+    show-label
+    expanded
+  ></nightingale-interpro-track>
+`;
+TrackAndLabels.play = async () => {
+  await customElements.whenDefined("nightingale-interpro-track");
+  const track5 = document.getElementById("track5");
+  if (track5) {
+    (track5 as any).data = data;
+  }
+  const track6 = document.getElementById("track6");
+  if (track6) {
+    (track6 as any).data = data;
+  }
+  const track7 = document.getElementById("track7");
+  if (track7) {
+    (track7 as any).data = data;
+  }
+  const track8 = document.getElementById("track8");
+  if (track8) {
+    (track8 as any).data = data;
+    (track8 as any).contributors = contributors;
   }
 };

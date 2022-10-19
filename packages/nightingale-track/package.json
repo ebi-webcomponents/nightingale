@@ -26,6 +26,6 @@
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
     "d3": "^7.6.1",
-    "lodash-es": "^4.17.11"
+    "lodash-es": "^4.17.15"
   }
 }

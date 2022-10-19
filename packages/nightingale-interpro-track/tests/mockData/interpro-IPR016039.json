@@ -5,7 +5,22 @@
     "source_database": "interpro",
     "locations": [
       {
-        "fragments": [{ "start": 5, "end": 389 }],
+        "fragments": [
+          {
+            "start": 5,
+            "end": 389
+          }
+        ],
+        "model_acc": null,
+        "seq_feature": null
+      },
+      {
+        "fragments": [
+          {
+            "start": 400,
+            "end": 470
+          }
+        ],
         "model_acc": null,
         "seq_feature": null
       }
