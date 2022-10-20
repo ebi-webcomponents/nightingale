@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Chart name",
+    "colour": "red",
+    "range": [
+      0,
+      100
+    ],
+    "lineCurve": "default linear??",
+    "values": [
+      {
+        "position": 1,
+        "value": 45
+      },
+      {
+        "position": 2,
+        "value": 65
+      },
+      {
+        "position": 3,
+        "value": 6
+      },
+      {
+        "position": 4,
+        "value": 36
+      },
+      {
+        "position": 5,
+        "value": 100
+      }
+    ]
+  }
+]
