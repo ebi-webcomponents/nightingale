@@ -1,4 +1,4 @@
-# `nightingale-linegraph-track`
+# nightingale-linegraph-track
 
 [![Published on NPM](https://img.shields.io/npm/v/nightingale-linegraph-track.svg)](https://www.npmjs.com/package/nightingale-linegraph-track)
 

@@ -194,7 +194,6 @@ class NightingaleLinegraphTrack extends withManager(
 
     mousePerLine.append("text").attr("transform", "translate(10,3)");
 
-    const _this = this;
     mouseG
       .append("rect") // append a rect to catch mouse movements on canvas
       .attr("width", this.width) // can't catch mouse events on a g element
@@ -213,7 +212,7 @@ class NightingaleLinegraphTrack extends withManager(
         // Showing the circle and text only when the mouse is moving over the paths
         if (
           mouse[0] < (this.xScale?.(beginning) || 0) ||
-          mouse[0] > (this.xScale?.(end) || 0) + _this.getSingleBaseWidth()
+          mouse[0] > (this.xScale?.(end) || 0) + this.getSingleBaseWidth()
         ) {
           chartGroup.selectAll(".mouse-per-line circle").style("opacity", "0");
           chartGroup.selectAll(".mouse-per-line text").style("opacity", "0");
@@ -318,7 +317,7 @@ class NightingaleLinegraphTrack extends withManager(
       .defined((d) => d.value !== null) // To have gaps in the line graph
       .x(
         (d) =>
-          this.getXFromSeqPosition((d as any as LineValue).position + 1) -
+          this.getXFromSeqPosition(d.position + 1) -
           this.getSingleBaseWidth() / 2
       )
       .curve(curves[curve] || curveLinear);
