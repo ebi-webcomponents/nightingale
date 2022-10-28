@@ -22,6 +22,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
       >
         <g
           class="location-group"
+          style="cursor: pointer;"
         >
           <line
             class="cover"
@@ -45,6 +46,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             dominant-baseline="middle"
             fill="black"
             font-size="14"
+            style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
             x="349.7333333333333"
             y="12"
@@ -52,6 +54,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         </g>
         <g
           class="location-group"
+          style="cursor: pointer;"
         >
           <line
             class="cover"
@@ -75,8 +78,9 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             dominant-baseline="middle"
             fill="black"
             font-size="14"
+            style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="762.2666666666667"
+            x="744.9333333333333"
             y="12"
           />
         </g>
@@ -130,7 +134,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
               x="239.66666666666669"
               y="12"
@@ -160,7 +165,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
               x="575.9333333333333"
               y="12"
@@ -344,7 +350,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
               x="128.73333333333335"
               y="12"
@@ -353,7 +360,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
               x="396.53333333333336"
               y="12"
@@ -391,7 +399,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
               x="283.8666666666667"
               y="12"
@@ -400,7 +409,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
               x="576.8000000000001"
               y="12"
@@ -543,6 +553,7 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
       >
         <g
           class="location-group"
+          style="cursor: pointer;"
         >
           <line
             class="cover"
@@ -553,11 +564,13 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
           <text
             class="feature-label"
             dominant-baseline="middle"
+            style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
           />
         </g>
         <g
           class="location-group"
+          style="cursor: pointer;"
         >
           <line
             class="cover"
@@ -568,6 +581,7 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
           <text
             class="feature-label"
             dominant-baseline="middle"
+            style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
           />
         </g>
@@ -600,6 +614,7 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             <text
               class="child-label"
               dominant-baseline="middle"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
             />
           </g>
@@ -615,6 +630,7 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             <text
               class="child-label"
               dominant-baseline="middle"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
             />
           </g>
@@ -761,11 +777,13 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             <text
               class="child-label"
               dominant-baseline="middle"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
             />
             <text
               class="child-label"
               dominant-baseline="middle"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
             />
           </g>
@@ -784,11 +802,13 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             <text
               class="child-label"
               dominant-baseline="middle"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
             />
             <text
               class="child-label"
               dominant-baseline="middle"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
             />
           </g>
@@ -880,6 +900,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
       >
         <g
           class="location-group"
+          style="cursor: pointer;"
         >
           <line
             class="cover"
@@ -903,13 +924,15 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             dominant-baseline="middle"
             fill="black"
             font-size="14"
+            style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="-9817.999999999889"
+            x="321.9999999999965"
             y="12"
           />
         </g>
         <g
           class="location-group"
+          style="cursor: pointer;"
         >
           <line
             class="cover"
@@ -933,8 +956,9 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             dominant-baseline="middle"
             fill="black"
             font-size="14"
+            style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="27309.99999999969"
+            x="11241.999999999873"
             y="12"
           />
         </g>
@@ -980,9 +1004,10 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="-19723.999999999774"
+              x="165.99999999999824"
               y="12"
             />
           </g>
@@ -1010,9 +1035,10 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="10539.99999999988"
+              x="789.9999999999911"
               y="12"
             />
           </g>
@@ -1194,18 +1220,20 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="-29707.99999999966"
+              x="-10129.999999999885"
               y="12"
             />
             <text
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="-5605.999999999936"
+              x="10"
               y="12"
             />
           </g>
@@ -1241,18 +1269,20 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="-15745.999999999822"
+              x="-6229.999999999929"
               y="12"
             />
             <text
               class="child-label"
               dominant-baseline="middle"
               fill="black"
-              font-size="8"
+              font-size="10"
+              style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="10617.99999999988"
+              x="1257.999999999986"
               y="12"
             />
           </g>

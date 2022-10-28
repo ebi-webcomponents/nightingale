@@ -126,7 +126,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
       .data((d) => d.locations?.map((loc) => ({ ...loc, feature: d })) || [])
       .enter()
       .append("g")
-      .attr("class", "location-group");
+      .attr("class", "location-group")
+      .style("cursor", this.#contributors ? "pointer" : "default");
 
     locations
       .selectAll("line.cover")
@@ -175,7 +176,9 @@ class NightingaleInterproTrack extends NightingaleTrack {
       .append("text")
       .attr("class", "feature-label")
       .attr("dominant-baseline", "middle")
-      .attr("text-anchor", "middle");
+      .attr("text-anchor", "middle")
+      .style("cursor", "inherit")
+      .style("pointer-events", "none");
 
     this.#residuesG = createResidueGroup(this.#featuresG);
     createResiduePaths({
@@ -262,7 +265,9 @@ class NightingaleInterproTrack extends NightingaleTrack {
         .append("text")
         .attr("class", "child-label")
         .attr("dominant-baseline", "middle")
-        .attr("text-anchor", "middle");
+        .attr("text-anchor", "middle")
+        .style("cursor", "default")
+        .style("pointer-events", "none");
 
       this.#childResiduesG = createResidueGroup(childGroup);
       // this.child_residuesLoc =
@@ -302,7 +307,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return expanded ? this.getFeatureColor(f) : "white";
   }
 
-  private getTextLabel(datum: Feature): string | null {
+  private getTextLabel(datum: Feature) {
     if (this.label?.length) {
       if (this.label.startsWith(".")) {
         return _get(datum, this.label.slice(1), null);
@@ -312,7 +317,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return datum?.feature?.accession || null;
   }
 
-  private refreshLabels(base: LabelGroup, padding: number = 2) {
+  private refreshLabels(base: LabelGroup, padding = 2) {
     base
       .attr("x", (f) => {
         const start = getVisibleStart(this["display-start"], f.start);
