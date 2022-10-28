@@ -87,20 +87,6 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
       </g>
     </g>
     <g
-      class="highlighted"
-    >
-      <rect
-        fill="#FFEB3B66"
-        height="26"
-        style="pointer-events: none;"
-        width="36.4"
-        x="25.6"
-      />
-    </g>
-    <g
-      class="margin"
-    />
-    <g
       class="children-features"
     >
       <g
@@ -529,6 +515,20 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
       </mask>
     </defs>
+    <g
+      class="highlighted"
+    >
+      <rect
+        fill="#FFEB3B66"
+        height="26"
+        style="pointer-events: none;"
+        width="36.4"
+        x="25.6"
+      />
+    </g>
+    <g
+      class="margin"
+    />
   </svg>
 </nightingale-interpro-track>
 `;
@@ -587,12 +587,6 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
         </g>
       </g>
     </g>
-    <g
-      class="highlighted"
-    />
-    <g
-      class="margin"
-    />
     <g
       class="children-features"
     >
@@ -873,6 +867,12 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
         />
       </mask>
     </defs>
+    <g
+      class="highlighted"
+    />
+    <g
+      class="margin"
+    />
   </svg>
 </nightingale-interpro-track>
 `;
@@ -964,12 +964,6 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         </g>
       </g>
     </g>
-    <g
-      class="highlighted"
-    />
-    <g
-      class="margin"
-    />
     <g
       class="children-features"
     >
@@ -1399,6 +1393,12 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
       </mask>
     </defs>
+    <g
+      class="highlighted"
+    />
+    <g
+      class="margin"
+    />
   </svg>
 </nightingale-interpro-track>
 `;
