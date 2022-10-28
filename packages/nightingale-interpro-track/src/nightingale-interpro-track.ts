@@ -312,11 +312,11 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return datum?.feature?.accession || null;
   }
 
-  private refreshLabels(base: LabelGroup) {
+  private refreshLabels(base: LabelGroup, padding: number = 2) {
     base
       .attr("x", (f) => {
-        const start = f.start || 0;
-        const end = f.end || 0;
+        const start = getVisibleStart(this["display-start"], f.start);
+        const end = getVisibleEnd(this["display-end"], f.end, this.length);
         return this.getXFromSeqPosition(start + (end - start) / 2 || 1);
       })
       .attr(
@@ -337,11 +337,16 @@ class NightingaleInterproTrack extends NightingaleTrack {
       })
       .attr(
         "font-size",
-        (f) => (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 2) - 2
+        (f) =>
+          (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 2) -
+          padding
       )
       .text((d) => (this["show-label"] ? this.getTextLabel(d) : null))
       .each(
         wrap(
+          this["display-start"],
+          this["display-end"],
+          this["length"],
           (n) => this.getXFromSeqPosition(n),
           (feature) => this.layoutObj?.getFeatureHeight(feature) || 0
         )
@@ -456,7 +461,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
         this.refreshLabels(
           childGroup?.selectAll(
             "g.child-location-group text.child-label"
-          ) as LabelGroup
+          ) as LabelGroup,
+          0
         );
 
         this.#childResiduesG?.attr("visibility", () =>
@@ -484,23 +490,42 @@ class NightingaleInterproTrack extends NightingaleTrack {
   }
 }
 function wrap(
+  displayStart: number | undefined,
+  displayEnd: number | undefined,
+  length: number | undefined,
   getXFromSeqPosition: (x: number) => number,
   getFeatureHeight: (feature: Feature) => number
 ) {
   function wrapFn(this: SVGTextContentElement, feature: InterProFeature) {
     const self = select(this);
-    const width = getXFromSeqPosition(
-      (feature.end || 0) - (feature.start || 0)
-    );
+    const start = getVisibleStart(displayStart, feature.start);
+    const end = getVisibleEnd(displayEnd, feature.end, length);
+    const width = getXFromSeqPosition(end) - getXFromSeqPosition(start);
     const padding = getFeatureHeight(feature.feature as Feature) / 2;
     let textLength = self.node()?.getComputedTextLength?.() || 0;
     let text = self.text();
     while (textLength > width - 2 * padding && text.length > 0) {
       text = text.slice(0, -1);
-      self.text(text + "\u2026");
+      self.text(text.length ? text + "\u2026" : "");
       textLength = self.node()?.getComputedTextLength() || 0;
     }
   }
   return wrapFn;
+}
+
+function getVisibleStart(
+  displayStart: number | undefined,
+  featureStart: number | undefined
+) {
+  const dStart = displayStart && displayStart > 0 ? displayStart : 0;
+  return Math.max(featureStart || 0, dStart);
+}
+function getVisibleEnd(
+  displayEnd: number | undefined,
+  featureEnd: number | undefined,
+  length: number | undefined
+) {
+  const dEnd = displayEnd && displayEnd > 0 ? displayEnd : length || 0;
+  return Math.min(featureEnd || 0, dEnd);
 }
 export default NightingaleInterproTrack;

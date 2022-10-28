@@ -169,15 +169,6 @@ export const TrackAndLabels = () => html`
     label=".feature.name"
     show-label
   ></nightingale-interpro-track>
-  <h5>Entry specifying a feature field as label (.feature.name)</h5>
-  <nightingale-interpro-track
-    id="track7"
-    width="600"
-    length="490"
-    shape="roundRectangle"
-    label=".feature.name"
-    show-label
-  ></nightingale-interpro-track>
   <h5>Entry contributors and labels</h5>
   <nightingale-interpro-track
     id="track8"
