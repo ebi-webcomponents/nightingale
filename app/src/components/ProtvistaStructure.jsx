@@ -140,6 +140,15 @@ const ProtvistaStructureWrapper = () => {
         uniprot-mapping-url="https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/"
         custom-download-url="https://files.rcsb.org/download/"
       />
+
+      <h3>
+        Zoom using ctrl key + scroll (avoids interruptions when scrolling page)
+      </h3>
+      <protvista-structure
+        structureid="5ELI"
+        accession="Q9NZC2"
+        use-ctrl-to-zoom
+      />
     </Fragment>
   );
 };

@@ -180,7 +180,8 @@ class ProtvistaStructure extends HTMLElement implements NightingaleElement {
     this.appendChild(structureViewerDiv);
     this._structureViewer = new StructureViewer(
       structureViewerDiv,
-      this.propagateHighlight
+      this.propagateHighlight,
+      this.hasAttribute("use-ctrl-to-zoom")
     );
   }
 

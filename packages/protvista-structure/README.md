@@ -46,6 +46,6 @@ Optional custom URL for fetching the mapping from PDB to UniProt. The lowercase 
 
 Optional custom URL for fetching the AlphaFold prediction metadata and mapping. The AlphaFold structure ID is appended here.
 
-#### `custom-download-url`
+#### `use-ctrl-to-zoom`
 
-Optional custom URL for downloading cif structure files. The lowercase PDB ID is appended to it, including `.cif` suffix.
+Analogous to `protvista-zoomable`, use control key when scrolling to zoom the viewer
