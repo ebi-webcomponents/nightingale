@@ -82,7 +82,7 @@ class NightingaleTrack extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #margins?: Selection<
+  protected margins?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
@@ -242,10 +242,9 @@ class NightingaleTrack extends withManager(
 
     if (!this.svg) return;
     this.seqG = this.svg.append("g").attr("class", "sequence-features");
-    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
-    this.#margins = this.svg.append("g").attr("class", "margin");
-
     this.createFeatures();
+    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
+    this.margins = this.svg.append("g").attr("class", "margin");
   }
 
   protected createFeatures() {
@@ -405,7 +404,7 @@ class NightingaleTrack extends withManager(
         );
     }
     this.updateHighlight();
-    this.renderMarginOnGroup(this.#margins);
+    this.renderMarginOnGroup(this.margins);
   }
 
   protected updateHighlight() {
