@@ -4,8 +4,8 @@
   "version": "4.0.0-alpha",
   "description": "A simple web component",
   "scripts": {
-    "build": "lerna exec -- rollup --bundleConfigAsCjs --config ../../rollup.config.js",
-    "build:watch": "lerna exec -- rollup --bundleConfigAsCjs --config ../../rollup.config.js --watch",
+    "build": "lerna exec -- rollup --config ../../rollup.config.mjs",
+    "build:watch": "lerna exec -- rollup --config ../../rollup.config.mjs --watch",
     "test": "jest --passWithNoTests",
     "clean": "rimraf packages/**/dist",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
