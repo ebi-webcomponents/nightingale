@@ -5,7 +5,7 @@
   "description": "A simple web component",
   "scripts": {
     "build": "lerna exec -- rollup --bundleConfigAsCjs --config ../../rollup.config.js",
-    "build:watch": "lerna exec-- rollup --bundleConfigAsCjs --config ../../rollup.config.js --watch",
+    "build:watch": "lerna exec -- rollup --bundleConfigAsCjs --config ../../rollup.config.js --watch",
     "test": "jest --passWithNoTests",
     "clean": "rimraf packages/**/dist",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
