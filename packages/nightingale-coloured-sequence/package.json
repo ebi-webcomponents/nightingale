@@ -1,0 +1,31 @@
+{
+  "name": "@nightingale-elements/nightingale-coloured-sequence",
+  "version": "4.0.0-alpha",
+  "description": "Track that colors each base by a given function. The default function is hydrophobicity",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "ISC",
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
+    "@nightingale-elements/nightingale-track": "4.0.0-alpha",
+    "d3": "^7.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "customelements",
+    "webcomponents",
+    "nightingale"
+  ]
+}

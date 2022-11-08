@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { axisBottom, select, Selection } from "d3";
 
 import NightingaleElement, {
@@ -11,13 +11,14 @@ import NightingaleElement, {
   withManager,
   withZoom,
   bindEvents,
+  customElementOnce,
 } from "@nightingale-elements/nightingale-new-core";
 
 const DEFAULT_NUMBER_OF_TICKS = 3;
 
-type BaseType = { position: number; aa: string };
+export type SequenceBaseType = { position: number; aa: string };
 
-@customElement("nightingale-sequence")
+@customElementOnce("nightingale-sequence")
 class NightingaleSequence extends withManager(
   withZoom(
     withResizable(
@@ -32,7 +33,7 @@ class NightingaleSequence extends withManager(
   // svg?: Selection<SVGSVGElement, unknown, HTMLElement | null, unknown>;
   #seq_bg?: Selection<
     SVGGElement,
-    BaseType | unknown,
+    SequenceBaseType | unknown,
     HTMLElement | SVGElement | null,
     unknown
   >;
@@ -42,25 +43,30 @@ class NightingaleSequence extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #seq_g?: Selection<
+  protected seq_g?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #highlighted?: Selection<
+  protected highlighted?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #margins?: Selection<
+  protected margins?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #bases?: Selection<SVGTextElement, BaseType, SVGElement | null, unknown>;
+  #bases?: Selection<
+    SVGTextElement,
+    SequenceBaseType,
+    SVGElement | null,
+    unknown
+  >;
   numberOfTicks?: number;
   chWidth?: number;
   chHeight?: number;
@@ -94,17 +100,17 @@ class NightingaleSequence extends withManager(
     }
   }
 
-  private getCharSize() {
-    if (!this.#seq_g) return;
+  protected getCharSize() {
+    if (!this.seq_g) return;
     const xratio = 0.8;
     const yratio = 1.6;
-    const node = this.#seq_g.select<SVGTextElement>("text.base").node();
+    const node = this.seq_g.select<SVGTextElement>("text.base").node();
     if (node) {
       this.chWidth = node.getBBox().width * xratio;
       this.chHeight = node.getBBox().height * yratio;
     } else {
       // Add a dummy node to measure the width
-      const tempNode = this.#seq_g
+      const tempNode = this.seq_g
         .append("text")
         .attr("class", "base")
         .text("T");
@@ -114,7 +120,7 @@ class NightingaleSequence extends withManager(
     }
   }
 
-  private createSequence() {
+  protected createSequence() {
     this.svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
       .attr("id", "")
@@ -125,7 +131,7 @@ class NightingaleSequence extends withManager(
 
     this.#axis = this.svg?.append("g").attr("class", "x axis");
 
-    this.#seq_g = this.svg
+    this.seq_g = this.svg
       ?.append("g")
       .attr("class", "sequence")
       .attr(
@@ -135,8 +141,8 @@ class NightingaleSequence extends withManager(
         })`
       );
 
-    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
-    this.#margins = this.svg.append("g").attr("class", "margin");
+    this.highlighted = this.svg.append("g").attr("class", "highlighted");
+    this.margins = this.svg.append("g").attr("class", "margin");
     requestAnimationFrame(() => {
       // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
       this.renderD3();
@@ -160,7 +166,7 @@ class NightingaleSequence extends withManager(
       const last = Math.ceil(
         Math.min(this.sequence?.length || 0, this.getEnd())
       );
-      const bases: Array<BaseType> =
+      const bases: Array<SequenceBaseType> =
         space < 0
           ? []
           : this.sequence
@@ -186,17 +192,17 @@ class NightingaleSequence extends withManager(
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
       this.#axis.selectAll(".tick text").attr("y", 2);
-      if (this.#seq_g) {
-        this.#seq_g.attr(
+      if (this.seq_g) {
+        this.seq_g.attr(
           "transform",
           `translate(0,${
             this["margin-top"] + 0.75 * this.getHeightWithMargins()
           })`
         );
-        this.#bases = this.#seq_g.selectAll("text.base");
+        this.#bases = this.seq_g.selectAll("text.base");
         const textElements = this.#bases.data(
           bases,
-          (d) => (d as BaseType).position
+          (d) => (d as SequenceBaseType).position
         );
 
         textElements
@@ -219,7 +225,7 @@ class NightingaleSequence extends withManager(
         if (this.#seq_bg) {
           const background = this.#seq_bg
             .selectAll("rect.base_bg")
-            .data(bases, (d) => (d as BaseType).position);
+            .data(bases, (d) => (d as SequenceBaseType).position);
           background
             .enter()
             .append("rect")
@@ -240,27 +246,27 @@ class NightingaleSequence extends withManager(
 
           background.exit().remove();
 
-          this.#seq_g.style("opacity", Math.min(1, space));
+          this.seq_g.style("opacity", Math.min(1, space));
           background.style("opacity", Math.min(1, space));
         }
       }
       this.updateHighlight();
-      this.renderMarginOnGroup(this.#margins);
+      this.renderMarginOnGroup(this.margins);
     }
   }
 
-  private getStart(): number {
+  protected getStart(): number {
     return this["display-start"] || 1;
   }
-  private getEnd(): number {
+  protected getEnd(): number {
     return (
       ((this["display-end"] || 0) > 0 ? this["display-end"] : this.length) || 0
     );
   }
 
   protected updateHighlight() {
-    if (!this.#highlighted) return;
-    const highlighs = this.#highlighted
+    if (!this.highlighted) return;
+    const highlighs = this.highlighted
       .selectAll<
         SVGRectElement,
         {
