@@ -1,10 +1,10 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../packages/nightingale-track/src/index.ts";
-import mockData from "../packages/nightingale-track/tests/mockData/data.json";
+import "../../packages/nightingale-track/src/index.ts";
+import mockData from "../../packages/nightingale-track/tests/mockData/data.json";
 
 export default {
-  title: "Nightingale/NightingaleTrack",
+  title: "Components/NightingaleTrack",
 } as Meta;
 
 const defaultData = [

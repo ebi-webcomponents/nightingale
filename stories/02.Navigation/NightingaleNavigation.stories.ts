@@ -1,9 +1,9 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../packages/nightingale-navigation/src/index.ts";
+import "../../packages/nightingale-navigation/src/index.ts";
 
 export default {
-  title: "Nightingale/NightingaleNavigation",
+  title: "Components/Navigation",
 } as Meta;
 
 const Template: Story<{

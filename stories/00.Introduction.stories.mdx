@@ -1,0 +1,29 @@
+import { Meta } from "@storybook/addon-docs";
+import logo from "../resources/nightingale_logo.svg";
+
+<Meta title="Introduction" />
+
+<div class="centered">
+  <img src={logo} alt="Image alt" />
+  <h1>Nightingale</h1>
+</div>
+
+---
+
+Nightingale is a library of re-usable data visualisation Web Components, which can
+be used to display protein sequence features, variants, interaction data,
+3D structure, etc. These components are flexible, allowing you to easily view multiple
+data sources (UniProt API, your own resource, etc) within the same context.
+
+## What's new in version 4.0?
+
+We are working on migrating all the components, using [Lit](https://lit.dev/) and
+[TypeScript](https://www.typescriptlang.org/) as our codebase.
+
+All the components are now using the prefix `nightingale-` on their names, so if you
+are using the `protvista-*` means you are still on version `<=3`.
+
+Attribute names now follow the [kebab-case](https://en.wiktionary.org/wiki/kebab_case)
+convention, so there is a chance that if you are upgrading from previous versions,
+you need to change some of the attributes.
+Please check the Readme file for each component for details in valid attributes.

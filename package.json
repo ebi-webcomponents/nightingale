@@ -41,6 +41,7 @@
     "@storybook/web-components": "6.5.10",
     "@types/d3": "7.4.0",
     "@types/jest": "28.1.6",
+    "@types/lodash-es": "4.17.6",
     "@typescript-eslint/eslint-plugin": "5.33.0",
     "@typescript-eslint/parser": "5.33.0",
     "@web/dev-server": "0.1.33",

@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../packages/nightingale-coloured-sequence/src/index.ts";
+import "../../packages/nightingale-coloured-sequence/src/index.ts";
 
 const scales = [
   "hydrophobicity-interface-scale",
@@ -10,7 +10,7 @@ const scales = [
   "T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2",
 ];
 export default {
-  title: "Nightingale/NightingaleColouredSequence",
+  title: "Components/Coloured Sequence",
   argTypes: {
     scale: {
       options: scales,
