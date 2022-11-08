@@ -21,7 +21,7 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
+  "author": "Aurélien Luciani <luciani@ebi.ac.uk>",
   "license": "ISC",
   "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
   "dependencies": {
