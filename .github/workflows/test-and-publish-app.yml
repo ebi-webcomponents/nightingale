@@ -10,9 +10,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: 🔧 Install and Build
+      - name: 🔧 Install
         run: |
           yarn
+      - name: 🔧 Build
+        run: |
+          yarn clean
           yarn build
       - name: 🧪 Test - Unit
         run: |
