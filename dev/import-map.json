@@ -5,6 +5,7 @@
     "@nightingale-elements/nightingale-sequence": "../../nightingale-sequence/src/index.ts",
     "@nightingale-elements/nightingale-track": "../../nightingale-track/src/index.ts",
     "@nightingale-elements/nightingale-interpro-track": "../../nightingale-interpro-track/src/index.ts",
-    "@nightingale-elements/nightingale-coloured-sequence": "../../nightingale-coloured-sequence/src/index.ts"
+    "@nightingale-elements/nightingale-coloured-sequence": "../../nightingale-coloured-sequence/src/index.ts",
+    "@nightingale-elements/nightingale-linegraph-track": "../../nightingale-linegraph-track/src/index.ts"
   }
 }

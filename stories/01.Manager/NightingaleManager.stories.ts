@@ -10,6 +10,7 @@ import "../../packages/nightingale-interpro-track/src/index.ts";
 import iproData from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
 import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
 import residues from "../../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
+import linegraph from "../../packages/nightingale-linegraph-track/tests/mockData/line-graph-chart.json";
 
 export default {
   title: "Components/Manager",
@@ -170,6 +171,19 @@ const Template: Story<{
         >
         </nightingale-interpro-track>
       </div>
+      <div style="line-height: 0">
+        <nightingale-linegraph-track
+          id="linegraph"
+          width="${width}"
+          height=${height}
+          length="${length}"
+          display-start="${args["display-start"]}"
+          display-end="${args["display-end"]}"
+          highlight-event="onmouseover"
+          highlight-color=${args["highlight-color"]}
+          margin-color=${args["margin-color"]}
+        ></nightingale-linegraph-track>
+      </div>
     </nightingale-manager>
   `;
 };
@@ -210,5 +224,9 @@ Manager.play = async () => {
     (trackIpro as any).data = iproData;
     (contributors[0] as any).residues = residues;
     (trackIpro as any).contributors = contributors;
+  }
+  const linegraphTrack = document.getElementById("linegraph");
+  if (linegraphTrack) {
+    (linegraphTrack as any).data = linegraph;
   }
 };

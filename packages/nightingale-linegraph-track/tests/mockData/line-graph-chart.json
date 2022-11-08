@@ -1,0 +1,189 @@
+[
+  {
+    "name": "chart1",
+    "colour": "#0000ee",
+    "fill": "#5555ee",
+    "range": [0, 50],
+    "values": [
+      {
+        "position": 41,
+        "value": 20
+      },
+      {
+        "position": 42,
+        "value": 40
+      },
+      {
+        "position": 43,
+        "value": 10
+      },
+      {
+        "position": 44,
+        "value": 0
+      },
+      {
+        "position": 45,
+        "value": 49
+      },
+      {
+        "position": 46,
+        "value": 34
+      },
+      {
+        "position": 47,
+        "value": 17
+      },
+      {
+        "position": 48,
+        "value": 20
+      },
+      {
+        "position": 49,
+        "value": 40
+      },
+      {
+        "position": 50,
+        "value": 10
+      },
+      {
+        "position": 51,
+        "value": 0
+      },
+      {
+        "position": 52,
+        "value": 49
+      },
+      {
+        "position": 53,
+        "value": 34
+      },
+      {
+        "position": 54,
+        "value": 17
+      },
+      {
+        "position": 55,
+        "value": 20
+      },
+      {
+        "position": 56,
+        "value": 40
+      },
+      {
+        "position": 57,
+        "value": 10
+      },
+      {
+        "position": 58,
+        "value": 0
+      },
+      {
+        "position": 59,
+        "value": 49
+      },
+      {
+        "position": 60,
+        "value": null
+      },
+      {
+        "position": 61,
+        "value": null
+      },
+      {
+        "position": 62,
+        "value": 34
+      },
+      {
+        "position": 63,
+        "value": 34
+      },
+      {
+        "position": 64,
+        "value": 34
+      }
+    ]
+  },
+  {
+    "name": "chart2",
+    "range": [0, 100],
+    "lineCurve": "curveStep",
+    "values": [
+      {
+        "position": 41,
+        "value": 0
+      },
+      {
+        "position": 42,
+        "value": 10
+      },
+      {
+        "position": 43,
+        "value": 10
+      },
+      {
+        "position": 44,
+        "value": 20
+      },
+      {
+        "position": 45,
+        "value": 60
+      },
+      {
+        "position": 46,
+        "value": 100
+      },
+      {
+        "position": 47,
+        "value": 40
+      },
+      {
+        "position": 48,
+        "value": 0
+      },
+      {
+        "position": 49,
+        "value": 50
+      },
+      {
+        "position": 50,
+        "value": 10
+      },
+      {
+        "position": 51,
+        "value": 20
+      },
+      {
+        "position": 52,
+        "value": 60
+      },
+      {
+        "position": 53,
+        "value": 70
+      },
+      {
+        "position": 54,
+        "value": 40
+      },
+      {
+        "position": 55,
+        "value": 30
+      },
+      {
+        "position": 56,
+        "value": 50
+      },
+      {
+        "position": 57,
+        "value": 10
+      },
+      {
+        "position": 58,
+        "value": 20
+      },
+      {
+        "position": 59,
+        "value": 60
+      }
+    ]
+  }
+]

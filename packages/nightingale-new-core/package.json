@@ -30,6 +30,6 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "d3": "7.6.1",
-    "lit": "2.2.8"
+    "lit": "2.4.0"
   }
 }
