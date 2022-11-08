@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="5.20507812%" y1="62.5%" x2="100%" y2="52.1545458%" id="linearGradient-1">
+            <stop stop-color="#F2B3C4" offset="0%"></stop>
+            <stop stop-color="#6DAB49" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="62.5%" x2="0%" y2="52.7912646%" id="linearGradient-2">
+            <stop stop-color="#963197" offset="0%"></stop>
+            <stop stop-color="#635EF2" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="61.1608839%" x2="100%" y2="51.3239698%" id="linearGradient-3">
+            <stop stop-color="#669742" offset="0%"></stop>
+            <stop stop-color="#F20805" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="96.5800781%" y1="60.9362745%" x2="0%" y2="51.725337%" id="linearGradient-4">
+            <stop stop-color="#D7FCB9" offset="0%"></stop>
+            <stop stop-color="#F2B703" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="3.16973161%" x2="0%" y2="43.3176317%" id="linearGradient-5">
+            <stop stop-color="#F2B3C4" offset="0%"></stop>
+            <stop stop-color="#2DA600" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="3.29419424%" y1="100%" x2="100%" y2="50%" id="linearGradient-6">
+            <stop stop-color="#F2B703" offset="0%"></stop>
+            <stop stop-color="#A949AB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Triangle" fill="url(#linearGradient-1)" transform="translate(25.000000, 150.000000) rotate(-90.000000) translate(-25.000000, -150.000000) " points="75 125 75 175 -25 175"></polygon>
+        <polygon id="Triangle-Copy-3" fill="url(#linearGradient-2)" transform="translate(25.000000, 50.000000) rotate(-90.000000) translate(-25.000000, -50.000000) " points="-25 25 75 75 -25 75"></polygon>
+        <polygon id="Triangle-Copy" fill="url(#linearGradient-3)" transform="translate(175.000000, 50.000000) rotate(-270.000000) translate(-175.000000, -50.000000) " points="225 25 225 75 125 75"></polygon>
+        <polygon id="Triangle-Copy-5" fill="url(#linearGradient-4)" transform="translate(175.000000, 150.000000) rotate(-270.000000) translate(-175.000000, -150.000000) " points="125 125 225 175 125 175"></polygon>
+        <polygon id="Triangle" fill="url(#linearGradient-5)" transform="translate(99.592525, 50.407475) rotate(-90.000000) translate(-99.592525, -50.407475) " points="149.592525 0.40747549 49.5925245 100.407475 49.8129132 0.40747549"></polygon>
+        <polygon id="Triangle-Copy-2" fill="url(#linearGradient-6)" transform="translate(100.219975, 150.219975) rotate(-90.000000) translate(-100.219975, -150.219975) " points="150.219975 100.219975 150.219975 200.219975 50.2199755 200.219975"></polygon>
+    </g>
+</svg>
