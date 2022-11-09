@@ -49,3 +49,7 @@ Optional custom URL for fetching the AlphaFold prediction metadata and mapping. 
 #### `custom-download-url`
 
 Optional custom URL for downloading cif structure files. The lowercase PDB ID is appended to it, including `.cif` suffix.
+
+#### `use-ctrl-to-zoom`
+
+Analogous to `protvista-zoomable`, use control key when scrolling to zoom the viewer
