@@ -198,7 +198,6 @@ class NightingaleColouredSequence extends NightingaleSequence {
         .attr("height", this.height)
         .attr(
           "width",()=>{
-            //console.log("nnknk",this.sequence?.length,this.getXFromSeqPosition(this.sequence?.length || 0), this.getXFromSeqPosition(0), this.width)
           return this.getXFromSeqPosition(this.sequence?.length || 0) -
             this.getXFromSeqPosition(0)
           }
