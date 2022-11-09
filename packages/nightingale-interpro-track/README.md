@@ -2,38 +2,45 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/nightingale-interpro-track.svg)](https://www.npmjs.com/package/nightingale-interpro--track)
 
-Interpro adpation of the track
+InterPro extension of the track component
 
 ## Usage
 
 ```html
 <nightingale-interpro-track
-  length="456"
-  start="34"
-  end="400"
+  id="track"
+  width="600"
+  length="490"
+  display-start="1"
+  display-end="490"
+  highlight="20:50,40:80"
+  shape="roundRectangle"
+  expanded
 ></nightingale-interpro-track>
 ```
 
 ## API Reference
 
-### Properties
+### Attributtes
 
-#### `length: number`
+#### `expanded: boolean (default: false)`
 
-The protein or nucleic acid sequence length.
+When `true` the children of the main track (if any), will be displayed. `false` indicates they should be hidden.
 
-#### `start: number (optional)`
+#### `"show-label": boolean (default: false)`
 
-The start position of the selected region.
+Set to `true` if a label should be rendered over each feature.
 
-#### `end: number (optional)`
+#### `label: string | null (default: null)`
 
-The end position of the selected region.
+Defines what to displays as label.
 
-#### `highlight: string (optional)`
+- If this is not set, but `show-label` is true, the component will render the `accession` of the feature as label.
+- If is set, and starts with `"."` it will use its value as a selector in the feature object, for instance if `label=".feature.name"` it will try to get the value of `feature.name` for each particular feature, if the property doesn't exist, it won't render anything as label.
+- If is set with a string that doesn't start with `"."` this string will be used as label.
 
-A comma separated list of regions to highlight.
+### Other attributes and parameters
 
-Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
+This component inherits from `nigthingale-track`.
 
-### Events
+The component implements the following mixins: `withManager`, `withResizable`, `withMargin`, `withPosition`, `withDimensions`, `withHighlight`, and `withZoom`.
