@@ -10,10 +10,10 @@ import {
 
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
-import withDimensions from "./withDimensions";
-import withPosition from "./withPosition";
-import withMargin from "./withMargin";
+} from "../../nightingale-base-element";
+import withDimensions from "../withDimensions";
+import withPosition from "../withPosition";
+import withMargin from "../withMargin";
 
 export declare class WithZoomInterface {
   xScale?: ScaleLinear<number, number>;
@@ -80,19 +80,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       // document.removeEventListener("wheel", this.wheelListener);
       super.disconnectedCallback();
     }
-
-    // set width(width) {
-    //   this._width = width;
-    //   if (!this._zoom) return;
-    //   this._updateScaleDomain();
-    //   this._originXScale = this.xScale.copy();
-    //   if (this.svg) this.svg.attr("width", this.width);
-    //   this._zoom.scaleExtent([1, Infinity]).translateExtent([
-    //     [0, 0],
-    //     [this.getWidthWithMargins(), 0],
-    //   ]);
-    //   this.applyZoomTranslation();
-    // }
 
     get xScale() {
       return this._xScale;
