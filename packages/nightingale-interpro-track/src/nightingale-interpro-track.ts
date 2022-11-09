@@ -494,6 +494,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
       
       
       this.updateHighlight();
+
       this.renderMarginOnGroup(this.margins);
     }
   }

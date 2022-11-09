@@ -297,6 +297,7 @@ class NightingaleLinegraphTrack extends withManager(
         .attr("height", this.height);
 
       this.updateHighlight();
+      
       this.renderMarginOnGroup(this.#margins);
     }
   }

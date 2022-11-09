@@ -55,7 +55,7 @@ class NightingaleSequence extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  protected margins?: Selection<
+  margins?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
@@ -257,6 +257,7 @@ class NightingaleSequence extends withManager(
           background.style("opacity", Math.min(1, space));
         }
       }
+
       this.updateHighlight();
       this.renderMarginOnGroup(this.margins);
     }
