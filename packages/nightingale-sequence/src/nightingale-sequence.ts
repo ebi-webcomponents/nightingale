@@ -203,12 +203,12 @@ class NightingaleSequence extends withManager(
         "transform",
         `translate(${this["margin-left"] + half},${this["margin-top"]})`
       );
-      let fill = 0.9;
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
       this.#axis.selectAll(".tick text").attr("y", 2);
-      let size = (1 / (pixelWidth(this.#axis.selectAll(".tick text").text(), { size: 1 }) / ftWidth)) * fill;
-      size = size > this["margin-top"] + 0.25 * this.getHeightWithMargins() ? this["margin-top"] + 0.25 * this.getHeightWithMargins() : size;
+      let size = (1 / (pixelWidth(this.#axis.selectAll(".tick text").text(), { size: 1 }) / ftWidth)) * 0.9;
+      size = size > this["margin-top"] + 0.25 * this.getHeightWithMargins() ?
+      this["margin-top"] + 0.25 * this.getHeightWithMargins() : size;
       this.#axis.selectAll(".tick text").attr("font-size", size > 10 ? size : 10);
       
       if (this.seq_g) {
