@@ -4,7 +4,9 @@ import { scaleLinear, Selection, select } from "d3";
 import NightingaleSequence, {
   SequenceBaseType,
 } from "@nightingale-elements/nightingale-sequence";
-import NightingaleElement, { bindEvents } from "@nightingale-elements/nightingale-new-core";
+import NightingaleElement, {
+  bindEvents,
+} from "@nightingale-elements/nightingale-new-core";
 
 import ColorScaleParser from "./utils/ColorScaleParser";
 import String2Object from "./utils/String2Object";
@@ -107,14 +109,13 @@ class NightingaleColouredSequence extends NightingaleSequence {
 
   renderD3() {
     if (this.seq_g) {
+      this.svg = select(this as unknown as NightingaleElement)
+        .selectAll<SVGSVGElement, unknown>("svg")
+        .attr("id", "")
+        .attr("width", this.width)
+        .attr("height", this.height);
 
-      this.svg  = select(this as unknown as NightingaleElement)
-      .selectAll<SVGSVGElement, unknown>("svg")
-      .attr("id", "")
-      .attr("width", this.width)
-      .attr("height", this.height);
-
-      this.seq_g.attr("width", this.width)
+      this.seq_g.attr("width", this.width);
 
       const scale = this.getScaleFromAttribute();
       if (scale === null) {
@@ -197,12 +198,10 @@ class NightingaleColouredSequence extends NightingaleSequence {
         .attr("y", 0)
         .attr("height", this.height)
         .attr(
-          "width",()=>{
-          return this.getXFromSeqPosition(this.sequence?.length || 0) -
+          "width",
+          this.getXFromSeqPosition(this.sequence?.length || 0) -
             this.getXFromSeqPosition(0)
-          }
         )
-        // .attr("width",this.width)
         .style("opacity", ftWidth < MIN_BASE_SIZE ? 1 : MIN_BASE_SIZE / ftWidth)
         .attr("fill", `url(#scale-gradient-${this.#uniqueID})`);
 

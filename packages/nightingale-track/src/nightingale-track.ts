@@ -245,7 +245,6 @@ class NightingaleTrack extends withManager(
     this.createFeatures();
     this.#highlighted = this.svg.append("g").attr("class", "highlighted");
     this.margins = this.svg.append("g").attr("class", "margin");
-    
   }
 
   protected createFeatures() {
@@ -347,12 +346,8 @@ class NightingaleTrack extends withManager(
     //   this._data = intersection;
   }
 
-
   refresh() {
-    
-    
     if (this.xScale && this.seqG) {
-      
       const fragmentG = this.seqG.selectAll("g.fragment-group").data(
         this.#data.reduce(
           (acc: unknown[], f) =>
@@ -390,8 +385,6 @@ class NightingaleTrack extends withManager(
               f.start || 0
             )},${this.layoutObj?.getFeatureYPos(f.feature as Feature)})`
         );
-      
-      
 
       fragmentG
         .selectAll<SVGRectElement, Feature>("rect.outer-rectangle")
@@ -413,7 +406,6 @@ class NightingaleTrack extends withManager(
     this.updateHighlight();
 
     this.renderMarginOnGroup(this.margins);
-
   }
 
   protected updateHighlight() {

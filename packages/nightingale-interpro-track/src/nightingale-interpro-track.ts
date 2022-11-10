@@ -490,9 +490,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
           });
       }
       this.svg?.attr("height", this.layoutObj.maxYPos);
-      
-      
-      
+
       this.updateHighlight();
 
       this.renderMarginOnGroup(this.margins);
