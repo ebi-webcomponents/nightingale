@@ -72,8 +72,5 @@
   "workspaces": [
     "packages/*"
   ],
-  "customElements": "custom-elements.json",
-  "dependencies": {
-    "string-pixel-width": "^1.10.0"
-  }
+  "customElements": "custom-elements.json"
 }

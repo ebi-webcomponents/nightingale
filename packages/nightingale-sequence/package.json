@@ -25,6 +25,7 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
-    "d3": "7.6.1"
+    "d3": "7.6.1",
+    "string-pixel-width": "^1.10.0"
   }
 }
