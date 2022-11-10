@@ -1,7 +1,7 @@
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
-import withDimensions from "./withDimensions";
+} from "../../nightingale-base-element";
+import withDimensions from "../withDimensions";
 
 const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
@@ -29,6 +29,7 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
 
     private onResize() {
       this.width = this.offsetWidth;
+      this.height = this.offsetHeight;
     }
 
     private listenForResize() {

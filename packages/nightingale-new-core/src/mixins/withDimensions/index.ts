@@ -1,7 +1,7 @@
 import { property } from "lit/decorators.js";
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
+} from "../../nightingale-base-element";
 
 export declare class WithDimensionsInterface {
   width: number;

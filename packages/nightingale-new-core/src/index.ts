@@ -1,10 +1,10 @@
-export { default as withDimensions } from "./withDimensions";
-export { default as withPosition } from "./withPosition";
-export { default as withMargin } from "./withMargin";
-export { default as withResizable } from "./withResizable";
-export { default as withManager } from "./withManager";
-export { default as withHighlight } from "./withHighlight";
-export { default as withZoom } from "./withZoom";
+export { default as withDimensions } from "./mixins/withDimensions";
+export { default as withPosition } from "./mixins/withPosition";
+export { default as withMargin } from "./mixins/withMargin";
+export { default as withResizable } from "./mixins/withResizable";
+export { default as withManager } from "./mixins/withManager";
+export { default as withHighlight } from "./mixins/withHighlight";
+export { default as withZoom } from "./mixins/withZoom";
 export { default as bindEvents } from "./utils/bindEvents";
 export { contrastingColor, getColor } from "./utils/colors";
 export { default as customElementOnce } from "./decorators/customElementOnce";

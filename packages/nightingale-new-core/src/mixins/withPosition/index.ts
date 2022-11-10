@@ -1,6 +1,6 @@
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
+} from "../../nightingale-base-element";
 import { property } from "lit/decorators.js";
 
 export interface withPositionInterface extends NightingaleBaseElement {

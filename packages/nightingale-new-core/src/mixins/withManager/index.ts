@@ -1,6 +1,6 @@
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
+} from "../../nightingale-base-element";
 
 const withManager = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T

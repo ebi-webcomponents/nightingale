@@ -9,7 +9,16 @@ Useful to display hydrophobicity, isoelectric points, or any feature where a col
 ## Usage
 
 ```html
-<nightingale-coloured-sequence length="770" scale="hydrophobicity-scale" />
+<nightingale-coloured-sequence
+  sequence="EXAMPLESEQUENCE"
+  width="800"
+  height="40"
+  length="15"
+  display-start="7"
+  display-end="13"
+  highlight="3:10"
+  scale="hydrophobicity-scale"
+></nightingale-coloured-sequence>
 ```
 
 ## API Reference
@@ -18,7 +27,7 @@ Useful to display hydrophobicity, isoelectric points, or any feature where a col
 
 #### `data: string`
 
-The sequence to use for the track.
+The sequence to use for the track. As an alternative to the `sequence` attribute inherited from `nightingale-sequence`
 
 #### `scale: string`
 
@@ -40,7 +49,7 @@ For example:
 
 If a residue in the sequence is not defined in the used scale, the value used will be 0.
 
-#### `color_range: string`
+#### `color-range: string`
 
 The color range attribute allow to define the colors to use when painting the values.
 
@@ -54,26 +63,6 @@ For example, `#ffdd00:-2,white:0,#0000FF:2` where `white` is now representing th
 
 Notice that HTML color names are also supported, as in the example above.
 
-#### `start: number (optional)`
+### Other attributes and parameters
 
-The start position of the selected region.
-
-#### `end: number (optional)`
-
-The end position of the selected region.
-
-#### `highlight: string (optional)`
-
-A comma separated list of regions to highlight.
-
-Each region follows the format: `[start]:[end]`, where both `[start]` and `[end]` are optional numbers.
-
-### Events
-
-#### Listens to
-
---
-
-#### Emits
-
-`change` event with highlight start and end in the payload
+This component inherits from `NightingaleSequence`.

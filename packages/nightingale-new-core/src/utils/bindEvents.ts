@@ -1,5 +1,5 @@
 import NightingaleBaseElement from "../nightingale-base-element";
-import { WithHighlightInterface } from "../withHighlight";
+import { WithHighlightInterface } from "../mixins/withHighlight";
 import { Selection, BaseType } from "d3";
 
 export const HIGHLIGHT_EVENT = "highlight-event";
