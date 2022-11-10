@@ -193,7 +193,7 @@ class NightingaleSequence extends withManager(
 
       // only add axis if there is room
       if (this.height > (this.chWidth || 0) && this.xScale) {
-        let roundScale = this.xScale;
+        const roundScale = this.xScale;
         roundScale.domain(roundScale.domain().map((i:number) => Math.round(i)));
         const xAxis = axisBottom(roundScale)
           .tickFormat((d) => `${Number.isInteger(d) ? d : ""}`)
