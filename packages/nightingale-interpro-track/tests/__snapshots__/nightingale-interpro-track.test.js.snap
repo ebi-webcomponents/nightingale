@@ -528,7 +528,42 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
     </g>
     <g
       class="margin"
-    />
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="26"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="26"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="2"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="2"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="24"
+      />
+    </g>
   </svg>
 </nightingale-interpro-track>
 `;
@@ -1398,7 +1433,42 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
     />
     <g
       class="margin"
-    />
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="26"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="26"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="2"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="2"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="24"
+      />
+    </g>
   </svg>
 </nightingale-interpro-track>
 `;

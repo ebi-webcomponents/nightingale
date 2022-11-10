@@ -1,5 +1,9 @@
+import "string-pixel-width";
 import "../src/index";
-
+jest.mock("string-pixel-width", () => ({
+  __esModule: true,
+  default: jest.fn(() => 10),
+}));
 let rendered;
 const sequence = "MADYDDEFDTKASDL";
 

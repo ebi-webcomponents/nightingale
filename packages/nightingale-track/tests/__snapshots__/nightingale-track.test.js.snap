@@ -993,7 +993,42 @@ exports[`nightingale-track tests it should change the layout 1`] = `
     />
     <g
       class="margin"
-    />
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="80"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="80"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="80"
+      />
+    </g>
   </svg>
 </nightingale-track>
 `;
@@ -1999,7 +2034,42 @@ exports[`nightingale-track tests it should display the sequence correctly after 
     </g>
     <g
       class="margin"
-    />
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="80"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="80"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="80"
+      />
+    </g>
   </svg>
 </nightingale-track>
 `;
@@ -3995,7 +4065,42 @@ exports[`nightingale-track tests it should zoom in 1`] = `
     />
     <g
       class="margin"
-    />
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="80"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="80"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="80"
+      />
+    </g>
   </svg>
 </nightingale-track>
 `;
