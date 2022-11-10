@@ -117,7 +117,7 @@ class StructureViewer {
         // label_seq_id : PDB coordinate space
         const sequencePosition = StructureProperties.residue.label_seq_id(loc);
         const chain = StructureProperties.chain.auth_asym_id(loc);
-        onHighlightClick([{ position: sequencePosition, chain: chain }]);
+        onHighlightClick([{ position: sequencePosition, chain }]);
       }
     });
 

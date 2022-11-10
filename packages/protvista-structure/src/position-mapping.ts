@@ -56,7 +56,7 @@ const translatePositions = (
   const translations = Object.entries(
     groupBy(mappings, (mapping) => mapping.chain_id)
   )
-    .map(([chain_id, chainMappings]) => {
+    .map(([_id, chainMappings]) => {
       let startMapping = null;
       let endMapping = null;
       for (const mapping of chainMappings) {
