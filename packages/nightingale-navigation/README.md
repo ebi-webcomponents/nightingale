@@ -20,7 +20,7 @@ This custom element can be used to zoom and navigate along the sequence displaye
 
 ### Attributes
 
-#### `rulerstart: number (default 1)`
+#### `ruler-start: number (default 1)`
 
 The scale of coordinates will start from this value.
 
