@@ -55,7 +55,7 @@ class NightingaleSequence extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  protected margins?: Selection<
+  margins?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
@@ -158,6 +158,13 @@ class NightingaleSequence extends withManager(
 
   renderD3() {
     this.getCharSize();
+
+    this.svg  = select(this as unknown as NightingaleElement)
+      .selectAll<SVGSVGElement, unknown>("svg")
+      .attr("id", "")
+      .attr("width", this.width)
+      .attr("height", this.height);
+
     if (this.#axis) {
       const ftWidth = this.getSingleBaseWidth();
       const space = ftWidth - (this.chWidth || 0);
@@ -250,6 +257,7 @@ class NightingaleSequence extends withManager(
           background.style("opacity", Math.min(1, space));
         }
       }
+
       this.updateHighlight();
       this.renderMarginOnGroup(this.margins);
     }
