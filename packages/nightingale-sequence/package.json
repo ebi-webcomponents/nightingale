@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-sequence",
-  "version": "4.0.0-alpha",
+  "version": "4.0.0-alpha.0",
   "description": "Sequence component for the Nightingale tool",
   "files": [
     "dist",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.0",
     "d3": "7.6.1",
     "string-pixel-width": "^1.10.0"
   }

@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-interpro-track",
-  "version": "4.0.0-alpha",
+  "version": "4.0.0-alpha.0",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",
@@ -24,8 +24,8 @@
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
-    "@nightingale-elements/nightingale-track": "4.0.0-alpha",
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.0",
+    "@nightingale-elements/nightingale-track": "^4.0.0-alpha.0",
     "d3": "7.6.1",
     "lodash-es": "^4.17.15"
   }
