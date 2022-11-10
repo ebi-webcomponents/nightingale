@@ -42,7 +42,7 @@ The sequence to display can be set via this attribute.
 
 #### `data?: string|null (default null)`
 
-For compatibility purposes with other components the sequen can also be set using this property.
+For compatibility purposes with other components the sequence can also be set using this property.
 
 ### Other attributes and parameters
 

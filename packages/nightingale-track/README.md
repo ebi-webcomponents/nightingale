@@ -48,7 +48,7 @@ track.data = myDataObject;
 
 ## API Reference
 
-### Atributtes
+### Atributes
 
 #### `color?: string | null (default: "gray")`
 
@@ -87,7 +87,7 @@ type Feature = {
     | "catFace"
     | "triangle"
     | "wave"
-    | hexagon
+    | "hexagon"
     | "pentagon"
     | "circle"
     | "arrow"

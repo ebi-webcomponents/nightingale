@@ -21,7 +21,7 @@ InterPro extension of the track component
 
 ## API Reference
 
-### Attributtes
+### Attributes
 
 #### `expanded: boolean (default: false)`
 
