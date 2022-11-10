@@ -100,6 +100,7 @@ export async function fromCifOrServer(
   model: Model,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   props: AfConfidenceProps
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   const cif = fromCif(ctx, model);
   return { value: cif };

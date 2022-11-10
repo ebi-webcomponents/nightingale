@@ -14,7 +14,7 @@ import {
   isApplicable,
 } from "./prop";
 
-const ConfidenceColors: any = {
+const ConfidenceColors: Record<string, Color> = {
   "No Score": Color.fromRgb(170, 170, 170), // not applicable
   "Very low": Color.fromRgb(255, 125, 69), // VL
   Low: Color.fromRgb(255, 219, 19), // L

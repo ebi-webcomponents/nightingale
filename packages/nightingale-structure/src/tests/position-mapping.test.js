@@ -1,4 +1,5 @@
 import translatePositions from "../position-mapping";
+
 import testData from "./__mocks__/mapping-test-cases";
 
 describe("translatePositions", () => {

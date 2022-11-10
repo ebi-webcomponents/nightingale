@@ -55,10 +55,10 @@ const translatePositions = (
     throw new PositionMappingError("Invalid start, end coordinates");
   }
   // return a translation separately for each chain (if it exists)
-  const translations: TranslatedPosition[] = Object.entries(
+  const translations: TranslatedPosition[] = Object.values(
     groupBy(mappings, (mapping) => mapping.chain_id)
   )
-    .map(([_chain_id, chainMappings]) => {
+    .map((chainMappings) => {
       let startMapping = null;
       let endMapping = null;
       for (const mapping of chainMappings) {
