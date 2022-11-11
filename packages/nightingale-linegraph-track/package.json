@@ -1,5 +1,5 @@
 {
-  "name": "nightingale-linegraph-track",
+  "name": "@nightingale-elements/nightingale-linegraph-track",
   "description": "Nightingale Line Graph",
   "files": [
     "dist",
