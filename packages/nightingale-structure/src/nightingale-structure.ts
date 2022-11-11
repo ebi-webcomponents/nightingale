@@ -174,7 +174,6 @@ class NightingaleStructure extends withManager(
   }
 
   protected updated(changedProperties: Map<PropertyKey, unknown>): void {
-    console.log(...changedProperties.keys());
     if (changedProperties.has("structure-id")) {
       this.selectMolecule();
     }

@@ -122,31 +122,23 @@ export const getStructureViewer = async (
   });
 
   PluginCommands.Canvas3D.SetSettings(plugin, {
-    settings: ({ renderer }) => {
+    settings: ({ renderer, marking }) => {
       renderer.backgroundColor = Color(0xeeeeee);
+      // For highlight
+      marking.selectEdgeColor = Color(0xffeb3b);
+      // For hover
+      marking.highlightEdgeColor = Color(0xffeb3b);
+      renderer.highlightColor = Color(0xffeb3b);
+      renderer.highlightStrength = 1;
     },
   });
 
   const structureViewer: StructureViewer = {
     plugin,
     async loadPdb(pdb) {
-      const data = await plugin.builders.data.download(
-        {
-          url: `https://www.ebi.ac.uk/pdbe/model-server/v1/${pdb.toLowerCase()}/full?encoding=bcif`,
-          isBinary: true,
-        },
-        { state: { isGhost: true } }
-      );
-
-      const trajectory = await plugin.builders.structure.parseTrajectory(
-        data,
-        "mmcif"
-      );
-
-      await plugin.builders.structure.hierarchy.applyPreset(
-        trajectory,
-        "all-models",
-        { useDefaultIfSingleModel: true }
+      await this.loadCifUrl(
+        `https://www.ebi.ac.uk/pdbe/model-server/v1/${pdb.toLowerCase()}/full?encoding=bcif`,
+        true
       );
     },
     async loadCifUrl(url, isBinary = false): Promise<void> {
@@ -155,14 +147,10 @@ export const getStructureViewer = async (
         { state: { isGhost: true } }
       );
 
-      console.log(data);
-
       const trajectory = await plugin.builders.structure.parseTrajectory(
         data,
         "mmcif"
       );
-
-      console.log(trajectory);
 
       await plugin.builders.structure.hierarchy.applyPreset(
         trajectory,
