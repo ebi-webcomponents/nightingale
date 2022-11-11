@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-navigation",
-  "version": "4.0.0-alpha",
+  "version": "4.0.0-alpha.5",
   "description": "Navigation component for the Nightingale tool",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,9 +23,11 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Aurélien Luciani <luciani@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5",
     "d3": "7.6.1"
   }
 }

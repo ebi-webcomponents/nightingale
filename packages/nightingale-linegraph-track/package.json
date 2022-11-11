@@ -1,5 +1,5 @@
 {
-  "name": "nightingale-linegraph-track",
+  "name": "@nightingale-elements/nightingale-linegraph-track",
   "description": "Nightingale Line Graph",
   "files": [
     "dist",
@@ -7,7 +7,7 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "4.0.0-alpha",
+  "version": "4.0.0-alpha.5",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -23,8 +23,11 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha",
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5",
     "d3": "7.6.1"
   }
 }
