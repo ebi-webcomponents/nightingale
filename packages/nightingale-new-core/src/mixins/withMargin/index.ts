@@ -1,10 +1,10 @@
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
+} from "../../nightingale-base-element";
 import { property } from "lit/decorators.js";
 import { Selection } from "d3";
 
-import withDimensions from "./withDimensions";
+import withDimensions from "../withDimensions";
 
 const DEFAULT_MARGIN_COLOR = "#FFFFFFDD";
 export interface withMarginInterface extends NightingaleBaseElement {
@@ -74,7 +74,8 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
       >
     ) {
       if (!g) return;
-      if (!this.#created) {
+
+      if (!this.#created || g.select("rect").empty()) {
         g.append("rect")
           .style("pointer-events", "none")
           .attr("class", "margin-left")
@@ -93,8 +94,10 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
           .attr("class", "margin-bottom")
           .attr("width", this.width)
           .attr("x", 0);
+
         this.#created = true;
       }
+
       g.select("rect.margin-left")
         .attr("fill", this["margin-color"] || DEFAULT_MARGIN_COLOR)
         .attr("height", this.height)

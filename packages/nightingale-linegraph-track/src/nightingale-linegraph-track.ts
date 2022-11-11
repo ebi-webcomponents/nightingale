@@ -290,7 +290,14 @@ class NightingaleLinegraphTrack extends withManager(
       this.#chart
         .selectAll<SVGPathElement, LineData>("path.graph")
         .attr("d", (d) => this.drawLine(d)(d.values));
+
+      this.svg = select(this as unknown as NightingaleElement)
+        .selectAll<SVGSVGElement, unknown>("svg")
+        .attr("width", this.width)
+        .attr("height", this.height);
+
       this.updateHighlight();
+
       this.renderMarginOnGroup(this.#margins);
     }
   }

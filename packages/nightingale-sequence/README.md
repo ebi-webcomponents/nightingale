@@ -4,37 +4,48 @@
 
 This custom element displays the sequence in the selected region if the zoom level allows it, otherwise it displays the axis legend of the selected region. As it inherits from <nightingale-zoomable>, it supports highlighting.
 
-[Demo](https://ebi-webcomponents.github.io/nightingale/#/sequence)
-
 ## Usage
 
 #### Setting sequence through property
 
 ```html
-<nightingale-sequence length="456" />
+<nightingale-sequence
+  sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
+  width="800"
+  height="40"
+  length="32"
+  display-start="10"
+  display-end="20"
+  highlight="3:15"
+  id="my-nightingale-sequence-id"
+></nightingale-sequence>
 ```
 
-```
-const nightingaleSequence = document.querySelectAll('#my-nightingale-sequence-id');
+Alternatively the sequence can be set as a parameter once the component is loaded.
+
+```javascript
+const nightingaleSequence = document.querySelectAll(
+  "#my-nightingale-sequence-id"
+);
 nightingaleSequence.sequence = proteinSequence;
-```
-
-#### Setting sequence through attribute
-
-```html
-<nightingale-sequence length="456" sequence="RFQAEGSLKK..." />
 ```
 
 ## API Reference
 
-### Properties
+### Attributes
 
-#### `sequence: string`
+#### `sequence?: string|null (default null)`
 
-The sequence to display
+The sequence to display can be set via this attribute.
 
-#### `length: number`
+### Property
 
-The protein or nucleic acid sequence length.
+#### `data?: string|null (default null)`
 
-#### also see [nightingale-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/nightingale-zoomable/README.md#properties)
+For compatibility purposes with other components the sequence can also be set using this property.
+
+### Other attributes and parameters
+
+This component inherits from `NightingaleElement`.
+
+The component implements the following mixins: `withManager`, `withResizable`, `withMargin`, `withPosition`, `withDimensions`, `withHighlight`

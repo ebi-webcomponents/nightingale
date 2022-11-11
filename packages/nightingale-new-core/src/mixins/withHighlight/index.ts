@@ -1,8 +1,8 @@
 import { property } from "lit/decorators.js";
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
-import Region from "./utils/Region";
+} from "../../nightingale-base-element";
+import Region from "../../utils/Region";
 
 const combineRegions = (region1: string, region2: string): string => {
   if (!region1) return region2;

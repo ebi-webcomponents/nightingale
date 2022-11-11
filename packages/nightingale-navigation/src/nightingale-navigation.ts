@@ -62,7 +62,7 @@ class NightingaleNavigation extends withManager(
   >;
 
   @property({ type: Number })
-  rulerstart = 1;
+  "ruler-start" = 1;
   @property({ type: Boolean })
   "show-highlight" = false;
 
@@ -75,7 +75,7 @@ class NightingaleNavigation extends withManager(
   private createNavRuler() {
     this.#x = scaleLinear()
       .range([this["margin-left"], this.width - this["margin-right"]])
-      .domain([this.rulerstart, this.rulerstart + (this.length || 1)]);
+      .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)]);
     this.#svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
       .attr("id", "")
@@ -188,8 +188,8 @@ class NightingaleNavigation extends withManager(
   renderD3() {
     if (this.#x && this.#axis && this.#xAxis && this.#viewport) {
       this.#x.domain([
-        this.rulerstart,
-        this.rulerstart + (this.length || 1) - 1,
+        this["ruler-start"],
+        this["ruler-start"] + (this.length || 1) - 1,
       ]);
       this.#axis.call(this.#xAxis);
       this.updatePolygon();
@@ -218,7 +218,7 @@ class NightingaleNavigation extends withManager(
 
     // Scale to match the range of the navigation brush [1,length]
     const s2 = scaleLinear()
-      .domain([this.rulerstart, this.rulerstart + (this.length || 1)])
+      .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)])
       .range([this["margin-left"], this.width - this["margin-right"]]);
 
     // Highlight Polygon

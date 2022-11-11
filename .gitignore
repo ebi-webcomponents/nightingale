@@ -10,3 +10,4 @@ package-lock.json
 *.tgz
 .DS_Store
 .vscode
+rollup.config-*.cjs

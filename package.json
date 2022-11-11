@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.19.6",
     "@custom-elements-manifest/analyzer": "0.6.4",
+    "@rollup/plugin-commonjs": "23.0.2",
     "@rollup/plugin-json": "5.0.0",
     "@rollup/plugin-node-resolve": "15.0.0",
     "@rollup/plugin-replace": "5.0.0",
@@ -42,6 +43,7 @@
     "@types/d3": "7.4.0",
     "@types/jest": "29.2.0",
     "@types/lodash-es": "4.17.6",
+    "@types/string-pixel-width": "^1.10.0",
     "@typescript-eslint/eslint-plugin": "5.40.1",
     "@typescript-eslint/parser": "5.40.1",
     "@web/dev-server": "0.1.35",

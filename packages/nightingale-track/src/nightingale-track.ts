@@ -404,6 +404,7 @@ class NightingaleTrack extends withManager(
         );
     }
     this.updateHighlight();
+
     this.renderMarginOnGroup(this.margins);
   }
 

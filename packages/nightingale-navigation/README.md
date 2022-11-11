@@ -4,8 +4,6 @@
 
 This custom element can be used to zoom and navigate along the sequence displayed in Nightingale. When a user interacts with the component, a `change` event is triggered which <nightingale-manager> uses to change `display-start` and `display-end` values on relevant custom elements.
 
-[Demo](https://ebi-webcomponents.github.io/nightingale/#/navigation)
-
 ## Usage
 
 ```html
@@ -13,36 +11,25 @@ This custom element can be used to zoom and navigate along the sequence displaye
   length="456"
   display-start="143"
   display-end="400"
-  highlightStart="23"
-  highlightEnd="45"
-  rulerstart="50"
+  highlight="23:45"
+  rulerstart="1"
 />
 ```
 
 ## API Reference
 
-#### `length: number`
+### Attributes
 
-The protein or nucleic acid sequence length.
+#### `ruler-start: number (default 1)`
 
-#### `display-start: number (optional)`
+The scale of coordinates will start from this value.
 
-The start position of the selected region.
+#### `show-highlight: boolean (default false)`
 
-#### `display-end: number (optional)`
+A shade representing a highlighted area can be added over the component.
 
-The end position of the selected region.
+### Other attributes and parameters
 
-#### `highlightStart: number (optional)`
+This component inherits from `NightingaleElement`.
 
-The start position of the highlighted region.
-
-#### `highlightEnd: number (optional)`
-
-The end position of the highlighted region.
-
-#### `rulerstart: number (optional)`
-
-The starting coordinate of the ruler.
-
-#### also see [nightingale-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/nightingale-zoomable/README.md#properties)
+The component implements the following mixins: `withManager`, `withResizable`, `withMargin`, `withPosition`, `withDimensions`, `withHighlight`

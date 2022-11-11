@@ -4,30 +4,36 @@
 
 The `nightingale-track` component is used to display protein features. These features have `start` and `end` positions (these can be the same if the feature only spans one amino-acid), a specific shape (rectangle is the default) and a colour. Features are passed through the `data` property. You can specify shapes and colours at an instance level (through a property) or individually in the feature `data` (see `data` below). In order to establish the scale, it is necessary to set the `length` property (length of the protein sequence in amino-acids).
 
-As `nightingale-track` inherits from `nightingale-zoomable`, it will respond to zooming changes, highlight events and emit events when interacting with features (helpful if you want to display tooltips).
+As `nightingale-track` implements from `withZoom` and `withHighlight`, it will respond to zooming changes, highlight events and emit events when interacting with features (helpful if you want to display tooltips).
 
-Loading data can be done directly through the `data` property, or through the use of a `load` event emitted by one of `nightingale-track`'s children (e.g. a data adapter with `data-loader`).
+Loading data can be done directly through the `data` property.
 
 There are two types of display available for `nightingale-track`:
 
 - overlapping will display all the features on one single line. This means that if a feature overlaps another one, it will be indistinguishable. This layout can be useful to display an overview, or when the data is very dense.
 - non-overlapping will calculate the best vertical positions for each feature so that they don't overlap.
 
-[Demo](https://ebi-webcomponents.github.io/nightingale/#/track)
-
 ## Usage
 
 ```html
-<nightingale-track length="456" />
+<nightingale-track
+  id="my-track-id"
+  length="223"
+  height="100"
+  display-start="1"
+  display-end="50"
+  layout="non-overlapping"
+></nightingale-track>
 ```
 
 #### Setting the data through property
 
-```
-const track = document.querySelector('#my-track-id');
-track.data = myDataObject
+```javascript
+const track = document.querySelector("#my-track-id");
+track.data = myDataObject;
 ```
 
+<!--
 #### Setting data through &lt;data-loader&gt;
 
 ```
@@ -38,39 +44,62 @@ track.data = myDataObject
         </data-loader>
     </nightingale-feature-adapter>
 </nightingale-track>
-```
+``` -->
 
 ## API Reference
 
+### Atributes
+
+#### `color?: string | null (default: "gray")`
+
+Colour of all features within the track. This could be overwriten if the feature in the data specifies its color.
+
+#### `shape?: string | null (default: "rectangle")`
+
+Shape of all features within the track. This could be overwriten if the feature in the data specifies its shape.
+
+#### `layout?: "non-overlapping" | "default" (default: "default")`
+
+The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
+
 ### Properties
-
-#### `length: number`
-
-The protein or nucleic acid sequence length.
 
 #### `data: Array`
 
-Array items take the following shape:
+Array of items of type `Feature` as shown below:
 
 ```javascript
-{
-    accession: String,
-    start: Number,
-    end: Number,
-    color?: String,
-    shape?: rectangle|bridge|diamond|chevron|catFace|triangle|wave|hexagon|pentagon|circle|arrow|doubleBar,
-    tooltipContent?: String
-    locations: [
-        {
-            fragments: [
-                {
-                    start: Number,
-                    end: Number
-                }
-            ]
-        }
-    ]
-}
+type FeatureLocation = {
+  fragments: Array<{
+    start: number,
+    end: number,
+  }>,
+};
+type Feature = {
+  accession: string,
+  color?: string,
+  fill?: string,
+  shape?:
+    | "rectangle"
+    | "bridge"
+    | "diamond"
+    | "chevron"
+    | "catFace"
+    | "triangle"
+    | "wave"
+    | "hexagon"
+    | "pentagon"
+    | "circle"
+    | "arrow"
+    | "doubleBar",
+  tooltipContent?: string,
+  type?: string,
+  locations?: Array<FeatureLocation>,
+  feature?: Feature,
+  start?: number,
+  end?: number,
+  opacity?: number,
+};
 ```
 
 **Note**: `locations` is an alternative to `start`-`stop` attributes, that expresses that a feature can appear in several locations, and also supports the idea of discontinuous features, by allowing to have `fragments`.
@@ -119,16 +148,8 @@ This expresses that the same instance of the feature Z is split in 2 fragments, 
 -ZZZ==ZZZ-
 ```
 
-#### `layout?: overlapping(default)|non-overlapping(optional)`
+### Other attributes and parameters
 
-The track layout. Non-overlapping uses a bumping algorhithm to make sure none of the features overlapp.
+This component inherits from `NightingaleElement`.
 
-#### `shape?: see above`
-
-Shape of all features within the track
-
-#### `color?: see above`
-
-Colour of all features within the track
-
-#### also see [nightingale-zoomable](https://github.com/ebi-webcomponents/nightingale/blob/master/packages/nightingale-zoomable/README.md#properties)
+The component implements the following mixins: `withManager`, `withResizable`, `withMargin`, `withPosition`, `withDimensions`, `withHighlight`

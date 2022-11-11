@@ -23,6 +23,7 @@ exports[`nightingale-coloured-sequence tests it should display the coloured sequ
     />
     <g
       class="sequence"
+      width="800"
     >
       <rect
         class="base_bg feature"
