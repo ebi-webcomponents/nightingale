@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-sequence",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-alpha.5",
   "description": "Sequence component for the Nightingale tool",
   "files": [
     "dist",
@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.4",
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5",
     "d3": "7.6.1",
     "string-pixel-width": "^1.10.0"
   }
