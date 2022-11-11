@@ -23,6 +23,9 @@
   ],
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.4",
     "@nightingale-elements/nightingale-track": "^4.0.0-alpha.4",

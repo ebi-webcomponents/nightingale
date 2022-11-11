@@ -23,6 +23,9 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.4",
     "d3": "7.6.1"

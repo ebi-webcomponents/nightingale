@@ -23,6 +23,9 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.4",
     "d3": "7.6.1",

@@ -28,6 +28,9 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "d3": "7.6.1",
     "lit": "2.4.0"
