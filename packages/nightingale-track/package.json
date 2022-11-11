@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-track",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.3",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -24,7 +24,7 @@
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "MIT",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.2",
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.3",
     "d3": "7.6.1",
     "lodash-es": "^4.17.15"
   }
