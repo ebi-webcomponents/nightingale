@@ -89,6 +89,7 @@ export type StructureViewer = {
   loadCifUrl(url: string, isBinary?: boolean): Promise<void>;
   highlight(ranges: Range[]): void;
   clearHighlight(): void;
+  changeHighlightColor(color: number): void;
   handleResize(): void;
 };
 
@@ -125,10 +126,9 @@ export const getStructureViewer = async (
     settings: ({ renderer, marking }) => {
       renderer.backgroundColor = Color(0xeeeeee);
       // For highlight
-      marking.selectEdgeColor = Color(0xffeb3b);
+      marking.edgeScale = 1.5;
+      renderer.selectStrength = 0;
       // For hover
-      marking.highlightEdgeColor = Color(0xffeb3b);
-      renderer.highlightColor = Color(0xffeb3b);
       renderer.highlightStrength = 1;
     },
   });
@@ -196,6 +196,17 @@ export const getStructureViewer = async (
     clearHighlight() {
       plugin.managers.interactivity.lociSelects.deselectAll();
       PluginCommands.Camera.Reset(plugin, {});
+    },
+    changeHighlightColor(color: number) {
+      PluginCommands.Canvas3D.SetSettings(plugin, {
+        settings: ({ renderer, marking }) => {
+          // For highlight
+          marking.selectEdgeColor = Color(color);
+          // For hover
+          marking.highlightEdgeColor = Color(color);
+          renderer.highlightColor = Color(color);
+        },
+      });
     },
     handleResize() {
       plugin.layout.events.updated.next(null);

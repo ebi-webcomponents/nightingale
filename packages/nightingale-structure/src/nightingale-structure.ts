@@ -104,7 +104,7 @@ class NightingaleStructure extends withManager(
     this.updateHighlight = this.updateHighlight.bind(this);
   }
 
-  render() {
+  protected render() {
     return html`<style>
         /* nightingale-structure h4 {
           display: inline;
@@ -161,13 +161,16 @@ class NightingaleStructure extends withManager(
       </div>`;
   }
 
-  firstUpdated() {
+  protected firstUpdated() {
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
       getStructureViewer(structureViewerDiv, this.updateHighlight).then(
         (structureViewer) => {
           this.#structureViewer = structureViewer;
+          // Remove initial "#" and possible trailing opacity value
+          const color = this["highlight-color"].substring(1, 7);
+          this.#structureViewer.changeHighlightColor(parseInt(color, 16));
         }
       );
     }
@@ -183,10 +186,17 @@ class NightingaleStructure extends withManager(
     ) {
       this.highlightChain();
     }
+    if (changedProperties.has("highlight-color")) {
+      // Remove initial "#" and possible trailing opacity value
+      const color = this["highlight-color"].substring(1, 7);
+      this.#structureViewer?.changeHighlightColor(parseInt(color, 16));
+      this.#structureViewer?.plugin.handleResize();
+    }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    // Clean up
     this.#structureViewer?.plugin.dispose();
   }
 
