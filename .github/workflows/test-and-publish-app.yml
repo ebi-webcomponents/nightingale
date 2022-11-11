@@ -38,5 +38,5 @@ jobs:
         if: github.ref == 'refs/heads/2022' || github.ref == 'refs/heads/main'
         run: |
           gh workflow run workflow --ref v3
-        with:
+        env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
