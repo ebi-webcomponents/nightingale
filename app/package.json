@@ -1,6 +1,6 @@
 {
   "name": "nightingale-showcase-app",
-  "version": "3.8.0",
+  "version": "3.8.1",
   "private": true,
   "description": "A website to showcase all nightingale components",
   "files": [
@@ -30,7 +30,7 @@
     "protvista-navigation": "^3.5.7",
     "protvista-saver": "^3.5.7",
     "protvista-sequence": "^3.5.7",
-    "protvista-structure": "^3.8.0",
+    "protvista-structure": "^3.8.1",
     "protvista-tooltip": "^3.5.8",
     "protvista-track": "^3.5.7",
     "protvista-uniprot": "^2.0.3",
