@@ -1,4 +1,4 @@
-# Getting started
+# Nightingale
 
 Nightingale is a library of re-usable data visualisation Web Components, which
 can be used to display protein sequence features (ProtVista), variants,
@@ -6,10 +6,19 @@ interaction data, 3D structure, etc. These components are flexible, allowing you
 to easily view multiple data sources (UniProt API, your own resource, etc)
 within the same context.
 
+## Versions
+
+This is the landing page for the version 3.0; which we are not longer mantaining, but the components are still available in npm.
+
+We are working on migrating all the components, using [Lit](https://lit.dev/) and
+[TypeScript](https://www.typescriptlang.org/) as our codebase. Read more about the components of version 4.0 [here](https://ebi-webcomponents.github.io/nightingale/) (currently on Beta).
+
+## Getting started (v3)
+
 You can use the components anywhere you use HTML, either natively (see
 [Using a CDN](#using_a_cdn) or [Using modules](#using_modules)), or with a library like React (see [Using a library or framework](#usage_with_popular_libraries_and_frameworks)).
 
-## Using Modules
+## Using Modules (v3)
 
 All components are exported as modules. This means you can import them as any
 other ES6 module in your application:
@@ -232,9 +241,9 @@ export default {
   name: "ProtvistaContainer",
   data() {
     return {
-      sequence: "SEQVENCE"
+      sequence: "SEQVENCE",
     };
-  }
+  },
 };
 </script>
 ```
@@ -259,12 +268,12 @@ export default {
         accession: "NLS",
         start: 1,
         end: 3,
-        color: "#d8b365"
-      }
+        color: "#d8b365",
+      },
     ];
 
     this.$refs.features.data = features;
-  }
+  },
 };
 </script>
 ```

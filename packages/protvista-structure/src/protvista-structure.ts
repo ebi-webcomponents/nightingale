@@ -1,11 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import { NightingaleElement, load } from "data-loader";
+import flatMap from "lodash-es/flatMap";
 import StructureViewer from "./structure-viewer";
 import translatePositions, {
   PositionMappingError,
   Mappings,
 } from "./position-mapping";
-import flatMap from "lodash-es/flatMap";
 
 /*
   TODO:
