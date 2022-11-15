@@ -37,6 +37,6 @@ jobs:
       - name: 📟 Building V3
         if: github.ref == 'refs/heads/2022' || github.ref == 'refs/heads/main'
         run: |
-          gh workflow run workflow --ref v3
+          gh workflow run build --ref v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
