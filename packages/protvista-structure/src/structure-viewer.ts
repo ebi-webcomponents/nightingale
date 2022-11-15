@@ -121,33 +121,35 @@ class StructureViewer {
         onHighlightClick([{ position: sequencePosition, chain: chain }]);
       }
     });
-    PluginCommands.Canvas3D.SetSettings(this.plugin, {
-      settings: (props) => {
-        // eslint-disable-next-line no-param-reassign
-        props.renderer.backgroundColor = Color(0xffffff);
-      },
+    const that = this;
+    this.plugin.behaviors.canvas3d.initialized.subscribe((v) => {
+      if (v) {
+        PluginCommands.Canvas3D.SetSettings(that.plugin, {
+          settings: (props) => {
+            // eslint-disable-next-line no-param-reassign
+            props.renderer.backgroundColor = Color(0xffffff);
+            if (useCtrlToZoom) {
+              // Add ctrl key modifier to scroll zoom trigger
+              props.trackball.bindings.scrollZoom.triggers[0].modifiers.control =
+                true;
+            }
+          },
+        });
+        if (useCtrlToZoom) {
+          // Do not always prevent scrolling, only prevent it if ctrl key is pressed
+          that.plugin.canvas3dContext.input.noScroll = false;
+          element.addEventListener(
+            "wheel",
+            (event) => {
+              if (event.ctrlKey) {
+                event.preventDefault();
+              }
+            },
+            false
+          );
+        }
+      }
     });
-    if (useCtrlToZoom) {
-      // Add ctrl key modifier to scroll zoom trigger
-      PluginCommands.Canvas3D.SetSettings(this.plugin, {
-        settings: (props) => {
-          // eslint-disable-next-line no-param-reassign
-          props.trackball.bindings.scrollZoom.triggers[0].modifiers.control =
-            true;
-        },
-      });
-      // Do not always prevent scrolling, only prevent it if ctrl key is pressed
-      this.plugin.canvas3dContext.input.noScroll = false;
-      element.addEventListener(
-        "wheel",
-        (event) => {
-          if (event.ctrlKey) {
-            event.preventDefault();
-          }
-        },
-        false
-      );
-    }
   }
 
   clear(message?: string): void {
