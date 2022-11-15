@@ -22,6 +22,8 @@ import NightingaleElement, {
   withHighlight,
 } from "@nightingale-elements/nightingale-new-core";
 
+const HANDLE_SIZE = 6;
+
 @customElement("nightingale-navigation")
 class NightingaleNavigation extends withManager(
   withResizable(
@@ -109,8 +111,12 @@ class NightingaleNavigation extends withManager(
     this.#viewport = brushX()
       .extent([
         [this["margin-left"], 0],
-        [this.width - this["margin-right"], this.height * 0.51],
+        [
+          this.width - this["margin-right"],
+          this.height * 0.5 + HANDLE_SIZE / 2,
+        ],
       ])
+      .handleSize(HANDLE_SIZE)
       .on("brush", ({ selection, transform }) => {
         if (selection && this.#x) {
           this["display-start"] =
@@ -166,7 +172,7 @@ class NightingaleNavigation extends withManager(
     this.#svg?.attr("width", this.width);
     this.#viewport?.extent([
       [this["margin-left"], 0],
-      [this.width - this["margin-right"], this.height * 0.51],
+      [this.width - this["margin-right"], this.height * 0.5 + HANDLE_SIZE / 2],
     ]);
     if (this.#viewport) this.#brushG?.call(this.#viewport);
   }
