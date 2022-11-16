@@ -158,12 +158,6 @@ class NightingaleSequence extends withManager(
   }
 
   renderD3() {
-    this.svg = select(this as unknown as NightingaleElement)
-      .selectAll<SVGSVGElement, unknown>("svg")
-      .attr("id", "")
-      .attr("width", this.width)
-      .attr("height", this.height);
-
     this.getCharSize();
 
     this.svg = select(this as unknown as NightingaleElement)
@@ -193,8 +187,11 @@ class NightingaleSequence extends withManager(
 
       // only add axis if there is room
       if (this.height > (this.chWidth || 0) && this.xScale) {
-        const roundScale = this.xScale;
-        roundScale.domain(roundScale.domain().map((i:number) => Math.round(i)));
+        // Copying the scale, and rounding its domain values to avoid bug releated with floats
+        const roundScale = this.xScale.copy();
+        roundScale.domain(
+          roundScale.domain().map((i: number) => Math.round(i))
+        );
         const xAxis = axisBottom(roundScale)
           .tickFormat((d) => `${Number.isInteger(d) ? d : ""}`)
           .ticks(this.numberOfTicks, "s");
@@ -208,11 +205,19 @@ class NightingaleSequence extends withManager(
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
       this.#axis.selectAll(".tick text").attr("y", 2);
-      let size = (1 / (pixelWidth(this.#axis.selectAll(".tick text").text(), { size: 1 }) / ftWidth)) * 0.9;
-      size = size > this["margin-top"] + 0.25 * this.getHeightWithMargins() ?
-      this["margin-top"] + 0.25 * this.getHeightWithMargins() : size;
-      this.#axis.selectAll(".tick text").attr("font-size", size > 10 ? size : 10);
-      
+      let size =
+        (1 /
+          (pixelWidth(this.#axis.selectAll(".tick text").text(), { size: 1 }) /
+            ftWidth)) *
+        0.9;
+      size =
+        size > this["margin-top"] + 0.25 * this.getHeightWithMargins()
+          ? this["margin-top"] + 0.25 * this.getHeightWithMargins()
+          : size;
+      this.#axis
+        .selectAll(".tick text")
+        .attr("font-size", size > 10 ? size : 10);
+
       if (this.seq_g) {
         this.seq_g.attr(
           "transform",
