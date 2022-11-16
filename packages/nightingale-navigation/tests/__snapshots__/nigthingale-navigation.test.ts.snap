@@ -3,6 +3,7 @@
 exports[`nightingale-navigation tests it should display the navigation correctly 1`] = `
 <nightingale-navigation
   height="15"
+  style="display: inline-block;"
 >
   <!---->
   <svg
@@ -163,6 +164,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
   display-end="4"
   display-start="2"
   height="15"
+  style="display: inline-block;"
 >
   <!---->
   <svg

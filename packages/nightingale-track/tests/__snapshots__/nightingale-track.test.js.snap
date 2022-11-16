@@ -5,6 +5,7 @@ exports[`nightingale-track tests it should change the layout 1`] = `
   height="80"
   layout="non-overlapping"
   length="223"
+  style="display: inline-block;"
 >
   <!---->
   <svg
@@ -1038,6 +1039,7 @@ exports[`nightingale-track tests it should display the sequence correctly after 
   height="80"
   highlight="10:30"
   length="223"
+  style="display: inline-block;"
 >
   <!---->
   <svg
@@ -2078,6 +2080,7 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
 <nightingale-track
   height="80"
   length="223"
+  style="display: inline-block;"
 >
   <!---->
   <svg
@@ -3077,6 +3080,7 @@ exports[`nightingale-track tests it should zoom in 1`] = `
   display-start="2"
   height="80"
   length="223"
+  style="display: inline-block;"
 >
   <!---->
   <svg
