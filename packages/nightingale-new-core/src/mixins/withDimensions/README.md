@@ -1,8 +1,8 @@
-#### withDimensions
+### withDimensions
 
 It adds `width` and `height` as parameters.
 
-##### Parameters
+##### Attributes
 
 ###### `height: number (default 100)`
 

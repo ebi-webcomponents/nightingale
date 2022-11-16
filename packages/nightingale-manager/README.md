@@ -2,7 +2,7 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/nightingale-manager.svg)](https://www.npmjs.com/package/nightingale-manager)
 
-It is a container for all the tracks and other inner components (e.g. nightingale-navigation).
+It is a container for all the tracks and other inner components (e.g. `nightingale-navigation`).
 
 This component is in charge of capturing the events that its descendent trigger, and adjust registered element attributes accordingly.
 
@@ -10,12 +10,12 @@ The children should fire events of the type change, and the detail object should
 
 Additionally, there are a set of pre-defined attributes which can be used with this component and will be propagated to descendents: `display-start`, `display-end`, `highlight` and `length`. This is useful if you want to control things like zoom level from outside, for instance directly from your application.
 
-See it running [Here](https://ebi-webcomponents.github.io/nightingale/#/manager).
-
 ## Usage
 
 ```html
-<nightingale-manager reflected-attributes="attr1 attr2"></nightingale-manager>
+<nightingale-manager reflected-attributes="attr1 attr2">
+  <other-nightingale-component attr1="X" attr2="Y" />
+</nightingale-manager>
 ```
 
 Here is an example of how the child components should fire the events:
@@ -35,20 +35,16 @@ this.dispatchEvent(
 
 ### Properties
 
-#### `register(element: NightingaleElement)`: register an element with `nightingale-manager`. Only registered elements get their attributes updated.
+#### `register(element: NightingaleElement)`:
 
-#### `unregister(element: NightingaleElement)`: remove an element from the list of registered elements.
+Register an element with `nightingale-manager`. Only registered elements get their attributes updated.
+
+#### `unregister(element: NightingaleElement)`:
+
+Remove an element from the list of registered elements.
 
 ### Attributes
 
-#### `reflected-attributes: string`: comma-separated list of attributes which should be reflected on the registered child components.
+#### `reflected-attributes: string`:
 
-#### `display-start?: number`
-
-#### `display-end?: number`
-
-#### `highlight?: start:end,start:end,...`
-
-#### `length?: number`
-
-List of attributes that this component will be propagating.
+Comma-separated list of attributes which should be reflected on the registered child components.

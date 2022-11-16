@@ -1,10 +1,10 @@
 import NightingaleBaseElement, {
   Constructor,
-} from "./nightingale-base-element";
+} from "../../nightingale-base-element";
 import { property } from "lit/decorators.js";
 import { Selection } from "d3";
 
-import withDimensions from "./withDimensions";
+import withDimensions from "../withDimensions";
 
 const DEFAULT_MARGIN_COLOR = "#FFFFFFDD";
 export interface withMarginInterface extends NightingaleBaseElement {

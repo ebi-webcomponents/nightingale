@@ -4,6 +4,10 @@ import { LitElement } from "lit";
 export type Constructor<T = {}> = new (...args: any[]) => T;
 
 class NightingaleElement extends LitElement {
+  constructor() {
+    super();
+    this.style.display = "inline-block";
+  }
   createRenderRoot() {
     return this;
   }

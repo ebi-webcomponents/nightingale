@@ -1,8 +1,8 @@
 {
   "name": "root",
   "private": true,
-  "version": "4.0.0-alpha",
-  "description": "A simple web component",
+  "version": "4.0.0-alpha.4",
+  "description": "Nightingale is a library of re-usable data visualisation Web Components",
   "scripts": {
     "build": "lerna exec -- rollup --config ../../rollup.config.mjs",
     "build:watch": "lerna exec -- rollup --config ../../rollup.config.mjs --watch",

@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-manager",
-  "version": "4.0.0-alpha",
+  "version": "4.0.0-alpha.5",
   "description": "Event bus component for Nightnale",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,8 +23,10 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha"
+    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5"
   }
 }
