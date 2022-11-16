@@ -66,7 +66,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <rect
         class="overlay"
         cursor="crosshair"
-        height="7.65"
+        height="10.5"
         pointer-events="all"
         width="780"
         x="10"
@@ -77,7 +77,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         cursor="move"
         fill="#777"
         fill-opacity="0.3"
-        height="7.65"
+        height="10.5"
         shape-rendering="crispEdges"
         stroke="#fff"
         style=""
@@ -88,7 +88,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <rect
         class="handle handle--w"
         cursor="ew-resize"
-        height="13.65"
+        height="16.5"
         style=""
         width="6"
         x="397"
@@ -97,7 +97,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <rect
         class="handle handle--e"
         cursor="ew-resize"
-        height="13.65"
+        height="16.5"
         style=""
         width="6"
         x="397"
@@ -226,7 +226,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <rect
         class="overlay"
         cursor="crosshair"
-        height="7.65"
+        height="10.5"
         pointer-events="all"
         width="780"
         x="10"
@@ -237,7 +237,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         cursor="move"
         fill="#777"
         fill-opacity="0.3"
-        height="7.65"
+        height="10.5"
         shape-rendering="crispEdges"
         stroke="#fff"
         style=""
@@ -248,7 +248,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <rect
         class="handle handle--w"
         cursor="ew-resize"
-        height="13.65"
+        height="16.5"
         style=""
         width="6"
         x="397"
@@ -257,7 +257,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       <rect
         class="handle handle--e"
         cursor="ew-resize"
-        height="13.65"
+        height="16.5"
         style=""
         width="6"
         x="397"

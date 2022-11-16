@@ -6,6 +6,7 @@ exports[`nightingale-coloured-sequence tests it should display the coloured sequ
   length="15"
   scale="hydrophobicity-scale"
   sequence="MADYDDEFDTKASDL"
+  style="display: inline-block;"
   width="800"
 >
   <!---->
