@@ -121,10 +121,9 @@ class StructureViewer {
         onHighlightClick([{ position: sequencePosition, chain: chain }]);
       }
     });
-    const that = this;
     this.plugin.behaviors.canvas3d.initialized.subscribe((v) => {
       if (v) {
-        PluginCommands.Canvas3D.SetSettings(that.plugin, {
+        PluginCommands.Canvas3D.SetSettings(this.plugin, {
           settings: (props) => {
             // eslint-disable-next-line no-param-reassign
             props.renderer.backgroundColor = Color(0xffffff);
@@ -137,7 +136,7 @@ class StructureViewer {
         });
         if (useCtrlToZoom) {
           // Do not always prevent scrolling, only prevent it if ctrl key is pressed
-          that.plugin.canvas3dContext.input.noScroll = false;
+          this.plugin.canvas3dContext.input.noScroll = false;
           element.addEventListener(
             "wheel",
             (event) => {
