@@ -1,6 +1,6 @@
 # nightingale-coloured-sequence
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-coloured-sequence.svg)](https://www.npmjs.com/package/nightingale-coloured-sequence)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-coloured-sequence.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-coloured-sequence)
 
 Use this component to paint a track that uses the sequence to paint a color depending on each residue.
 

@@ -1,6 +1,6 @@
 # nightingale-linegraph-track
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-linegraph-track.svg)](https://www.npmjs.com/package/nightingale-linegraph-track)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-linegraph-track.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-linegraph-track)
 
 Nightingale line graph track component is used to display multiple line graphs (either linear or d3 curves).
 

@@ -1,6 +1,6 @@
 # nightingale-navigation
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-navigation.svg)](https://www.npmjs.com/package/nightingale-navigation)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-navigation.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-navigation)
 
 This custom element can be used to zoom and navigate along the sequence displayed in Nightingale. When a user interacts with the component, a `change` event is triggered which <nightingale-manager> uses to change `display-start` and `display-end` values on relevant custom elements.
 

@@ -1,6 +1,6 @@
 # nightingale-sequence
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-sequence.svg)](https://www.npmjs.com/package/nightingale-sequence)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-sequence.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-sequence)
 
 This custom element displays the sequence in the selected region if the zoom level allows it, otherwise it displays the axis legend of the selected region. As it inherits from <nightingale-zoomable>, it supports highlighting.
 

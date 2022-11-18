@@ -1,6 +1,6 @@
 # nightingale-track
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-track.svg)](https://www.npmjs.com/package/nightingale-track)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-track.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-track)
 
 The `nightingale-track` component is used to display protein features. These features have `start` and `end` positions (these can be the same if the feature only spans one amino-acid), a specific shape (rectangle is the default) and a colour. Features are passed through the `data` property. You can specify shapes and colours at an instance level (through a property) or individually in the feature `data` (see `data` below). In order to establish the scale, it is necessary to set the `length` property (length of the protein sequence in amino-acids).
 
