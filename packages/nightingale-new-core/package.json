@@ -6,6 +6,9 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "files": [
     "dist",
     "src"

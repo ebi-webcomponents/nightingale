@@ -1,6 +1,7 @@
 {
   "name": "@nightingale-elements/nightingale-linegraph-track",
   "description": "Nightingale Line Graph",
+  "version": "4.0.2-alpha.0",
   "files": [
     "dist",
     "src"
@@ -9,7 +10,9 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
-  "version": "4.0.2-alpha.0",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -29,7 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.2-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "*",
     "d3": "7.6.1"
   }
 }

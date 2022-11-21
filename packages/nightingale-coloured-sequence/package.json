@@ -10,11 +10,14 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.2-alpha.0",
-    "@nightingale-elements/nightingale-track": "^4.0.2-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "*",
+    "@nightingale-elements/nightingale-sequence": "*",
     "d3": "7.6.1"
   },
   "repository": {

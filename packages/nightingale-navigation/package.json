@@ -6,6 +6,9 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "files": [
     "dist",
     "src"
@@ -29,7 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.2-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "*",
     "d3": "7.6.1"
   }
 }
