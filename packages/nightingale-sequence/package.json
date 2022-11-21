@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-sequence",
-  "version": "4.0.3-alpha.0",
+  "version": "4.0.3",
   "description": "Sequence component for the Nightingale tool",
   "files": [
     "dist",

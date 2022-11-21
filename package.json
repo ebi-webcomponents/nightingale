@@ -1,13 +1,13 @@
 {
   "name": "root",
   "private": true,
-  "version": "4.0.0-alpha.4",
   "description": "Nightingale is a library of re-usable data visualisation Web Components",
   "scripts": {
     "build": "lerna run build",
     "build:watch": "lerna exec -- rollup --config ../../rollup.config.mjs --watch",
     "test": "jest --passWithNoTests",
     "clean": "rimraf packages/**/dist",
+    "clean:modules": "rimraf node_modules packages/**/node_modules",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
     "lint:eslint": "eslint 'packages/**/*.ts'",
     "lint:lit-analyzer": "lit-analyzer packages/*/src/**/*.{js,ts}",
