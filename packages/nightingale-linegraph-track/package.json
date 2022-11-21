@@ -6,6 +6,8 @@
     "src"
   ],
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
   "version": "4.0.1-alpha.0",
   "keywords": [

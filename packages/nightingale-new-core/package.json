@@ -3,6 +3,8 @@
   "version": "4.0.1-alpha.0",
   "description": "Base Elements for Nightingale Components",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
   "files": [
     "dist",

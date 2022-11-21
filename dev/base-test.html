@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>&lt;my-element> Demo</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/lit/polyfill-support.js"></script>
+    <script
+      type="module"
+      src="../packages/nightingale-new-core/dist/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../packages/nightingale-navigation/dist/index.js"
+    ></script>
+
+    <style>
+      section {
+        border: solid 1px lightgray;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Basic test</h1>
+    <h2><code>nigthingale-new-core</code></h2>
+    <section>
+      <h3>contrastingColor</h3>
+      <p>
+        Basic operation using contrastingColor a simple function part of the
+        core:
+      </p>
+      <div id="core-content"></div>
+    </section>
+    <h2><code>nigthingale-navigation</code></h2>
+    <section>
+      <nightingale-navigation
+        id="navigation"
+        width="800"
+        height="80"
+        length="50"
+        display-start="5"
+        display-end="25"
+        highlight-color="#EB3BFF22"
+        margin-color="transparent"
+        show-highlight
+      ></nightingale-navigation>
+    </section>
+
+    <script type="module">
+      import { contrastingColor } from "../packages/nightingale-new-core/dist/index.js";
+      const coreContent = document.getElementById("core-content");
+      const color = [10, 50, 222];
+      coreContent.innerHTML = `The best contracting color for <code>rgb(${color.join(
+        ","
+      )})</code> is <code>${contrastingColor(color)}</code>`;
+    </script>
+  </body>
+</html>
