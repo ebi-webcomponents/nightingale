@@ -3,6 +3,7 @@
   "private": true,
   "description": "Nightingale is a library of re-usable data visualisation Web Components",
   "scripts": {
+    "prebuild": "npm run clean",
     "build": "lerna run build",
     "build:watch": "lerna exec -- rollup --config ../../rollup.config.mjs --watch",
     "test": "jest --passWithNoTests",
