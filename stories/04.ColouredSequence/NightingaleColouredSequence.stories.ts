@@ -44,8 +44,8 @@ export const ScalesWithControls: Story<{
     <nightingale-coloured-sequence
       sequence=${args.sequence}
       length=${args.sequence.length}
-      width="800"
-      height="40"
+      width=${args.width}
+      height=${args.height}
       display-start=${args["display-start"]}
       display-end=${args["display-end"]}
       color-range=${args["color-range"]}
@@ -66,7 +66,6 @@ export const ColouredSequenceNoControls = () =>
       ([start, end]) => html`
         <nightingale-coloured-sequence
           sequence=${defaultSequence}
-          width="800"
           height="20"
           length=${defaultSequence.length}
           display-start=${start}
@@ -91,7 +90,6 @@ export const ChangingScales = () =>
           ([start, end]) => html`
             <nightingale-coloured-sequence
               sequence=${defaultSequence}
-              width="800"
               height="40"
               length=${defaultSequence.length}
               display-start=${start}
@@ -120,7 +118,6 @@ export const ChangingColorRange = () => {
           ([start, end]) => html`
             <nightingale-coloured-sequence
               sequence=${defaultSequence}
-              width="800"
               height="40"
               length=${defaultSequence.length}
               display-start=${start}

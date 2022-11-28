@@ -10,19 +10,16 @@ export declare class WithDimensionsInterface {
 
 const withDimensions = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
-  options: {
-    width: number;
-    height: number;
-  } = {
-    width: 800,
-    height: 100,
+  options?: {
+    width?: number;
+    height?: number;
   }
 ) => {
   class WithDimensions extends superClass {
     @property({ type: Number })
-    width: number = options.width;
+    width?: number = options?.width;
     @property({ type: Number })
-    height: number = options.height;
+    height?: number = options?.height;
   }
   return WithDimensions as Constructor<WithDimensionsInterface> & T;
 };

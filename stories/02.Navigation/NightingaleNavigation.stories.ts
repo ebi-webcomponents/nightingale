@@ -11,6 +11,7 @@ const Template: Story<{
   height: number;
   length: number;
   "ruler-start": number;
+  "ruler-padding": number;
   "display-start": number;
   "display-end": number;
   highlight: string;
@@ -24,6 +25,7 @@ const Template: Story<{
     display-end=${args["display-end"]}
     highlight=${highlight}
     ruler-start=${args["ruler-start"]}
+    ruler-padding=${args["ruler-padding"]}
   ></nightingale-navigation>`;
 };
 
@@ -36,6 +38,7 @@ Navigation.args = {
   "display-end": 200,
   highlight: "23:45",
   "ruler-start": 50,
+  "ruler-padding": 5,
 };
 
 export const DifferentSelection = Template.bind({});
@@ -51,4 +54,5 @@ export const NavigationNoControls = () => html`<nightingale-navigation
   display-end="400"
   highlight="23:45"
   rulerstart="1"
+  height="60"
 />`;

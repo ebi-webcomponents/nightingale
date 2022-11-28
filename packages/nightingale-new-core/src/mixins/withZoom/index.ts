@@ -14,6 +14,7 @@ import NightingaleBaseElement, {
 import withDimensions from "../withDimensions";
 import withPosition from "../withPosition";
 import withMargin from "../withMargin";
+import withResizable from "../withResizable";
 
 export declare class WithZoomInterface {
   xScale?: ScaleLinear<number, number>;
@@ -23,8 +24,9 @@ export declare class WithZoomInterface {
     HTMLElement | SVGElement | null,
     unknown
   >;
-  getSingleBaseWidth: () => number;
-  getXFromSeqPosition: (position: number) => number;
+  updateScaleDomain(): void;
+  getSingleBaseWidth(): number;
+  getXFromSeqPosition(position: number): number;
 }
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
@@ -32,9 +34,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
   // options: Record<string, unknown> = {}
 ) => {
-  class WithZoom extends withMargin(withPosition(withDimensions(superClass))) {
+  class WithZoom extends withMargin(
+    withPosition(withResizable(withDimensions(superClass)))
+  ) {
     _applyZoomTranslation: () => void;
-    _originXScale?: ScaleLinear<number, number>;
+    private originXScale?: ScaleLinear<number, number>;
     _xScale?: ScaleLinear<number, number>;
     _zoom?: ZoomBehavior<HTMLElement, unknown>;
     _svg?: Selection<HTMLElement, unknown, HTMLElement, unknown>;
@@ -44,7 +48,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     constructor(...args: any[]) {
       super(...args);
 
-      this._updateScaleDomain = this._updateScaleDomain.bind(this);
+      this.updateScaleDomain = this.updateScaleDomain.bind(this);
       this._initZoom = this._initZoom.bind(this);
       this.zoomed = this.zoomed.bind(this);
       this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
@@ -65,10 +69,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     connectedCallback() {
-      this._updateScaleDomain();
-      // The _originXScale is a way to mantain all the future transformations over the same original scale.
-      // It only gets redefined if the size of the component, or the length of the sequence changes.
-      if (this.xScale) this._originXScale = this.xScale.copy();
+      this.updateScaleDomain();
       this._initZoom();
       // if (this.hasAttribute("filter-scroll")) {
       //   document.addEventListener("wheel", this.wheelListener, { capture: true });
@@ -104,11 +105,12 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       return this._svg;
     }
 
-    _updateScaleDomain() {
+    updateScaleDomain() {
       this.xScale = scaleLinear()
         // The max width should match the start of the n+1 base
         .domain([1, (this.length || 0) + 1])
         .range([0, this.getWidthWithMargins()]);
+      this.originXScale = this.xScale?.copy();
     }
 
     _initZoom() {
@@ -145,8 +147,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       const newV = newValue === "null" ? null : newValue;
       if (oldValue !== newV) {
         if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
-          this._updateScaleDomain();
-          this._originXScale = this.xScale?.copy();
+          this.updateScaleDomain();
         }
         // One of the observable attributes changed, so the scale needs to be redefined.
         this.applyZoomTranslation();
@@ -155,8 +156,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
     zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
       // Redefines the xScale using the original scale and transform it with the captured event data.
-      if (this._originXScale)
-        this.xScale = d3Event.transform.rescaleX(this._originXScale);
+      if (this.originXScale)
+        this.xScale = d3Event.transform.rescaleX(this.originXScale);
 
       // New positions based in the updated scale
       const [start, end] = this?.xScale?.domain() || [0, 0];
@@ -179,7 +180,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     applyZoomTranslation() {
-      if (!this.svg || !this._originXScale) return;
+      if (!this.svg || !this.originXScale) return;
       // Calculating the scale factor based in the current start/end coordinates and the length of the sequence.
       const k = Math.max(
         1,
@@ -188,7 +189,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           (1 + (this["display-end"] || 0) - (this["display-start"] || 0))
       );
       // The deltaX gets calculated using the position of the first base to display in original scale
-      const dx = -this._originXScale(this["display-start"] || 0);
+      const dx = -this.originXScale(this["display-start"] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
       if (this.zoom) {
         this.svg.call(
@@ -209,6 +210,13 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     render() {
       this.applyZoomTranslation();
       return super.render();
+    }
+    public override onDimensionsChange() {
+      super.onDimensionsChange();
+      this.svg?.attr("width", this.width);
+      this.svg?.attr("height", this.height);
+      this.updateScaleDomain();
+      this.zoomRefreshed();
     }
 
     getXFromSeqPosition(position: number) {

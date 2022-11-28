@@ -14,7 +14,6 @@ export const LinegraphWithoutControls = () => html`
   <h3>1 line with 5 points(1 to 5)</h3>
   <nightingale-linegraph-track
     id="track"
-    width="600"
     length="5"
   ></nightingale-linegraph-track>
   <h3>2 lines with 20 points(41 to 60)</h3>
