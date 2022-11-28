@@ -4,76 +4,83 @@ const ecoMap = [
     description: "Manual assertion based on experiment",
     shortDescription: "Publication",
     acronym: "EXP",
-    isManual: true
+    isManual: true,
   },
   {
     name: "ECO:0000303",
     description: "Manual assertion based on opinion",
     shortDescription: "Publication",
     acronym: "NAS",
-    isManual: true
+    isManual: true,
   },
   {
     name: "ECO:0000305",
     description: "Manual assertion inferred by curator",
     shortDescription: "Curated",
     acronym: "IC",
-    isManual: true
+    isManual: true,
   },
   {
     name: "ECO:0000250",
     description: "Manual assertion inferred from sequence similarity",
     shortDescription: "By similarity",
     acronym: "ISS",
-    isManual: true
+    isManual: true,
   },
   {
     name: "ECO:0000255",
     description: "Manual assertion according to rules",
     shortDescription: "Sequence Analysis",
     acronym: "ISM",
-    isManual: true
+    isManual: true,
   },
   {
-    name: "ECO:0000244",
+    name: "ECO:0007744",
     description:
       "Manual assertion inferred from combination of experimental and computational evidence",
     shortDescription: "Combined sources",
     acronym: "MIXM",
-    isManual: true
+    isManual: true,
   },
   {
     name: "ECO:0000312",
     description: "Manual assertion inferred from database entries",
     shortDescription: "Imported",
     acronym: "MI",
-    isManual: true
+    isManual: true,
   },
   {
     name: "ECO:0000256",
     description: "Automatic assertion according to rules",
     shortDescription: "Automatic annotation",
-    acronym: "AA"
+    acronym: "AA",
   },
   {
     name: "ECO:0000259",
     description: "Automatic assertion inferred from signature match",
     shortDescription: "Automatic annotation",
-    acronym: "AA"
+    acronym: "AA",
   },
   {
-    name: "ECO:0000213",
+    name: "ECO:0007829",
     description:
       "Automatic assertion inferred from combination of experimental and computational evidence",
     shortDescription: "Combined sources",
-    acronym: "MIXA"
+    acronym: "MIXA",
   },
   {
     name: "ECO:0000313",
     description: "Automatic assertion inferred from database entries",
     shortDescription: "Imported",
-    acronym: "AI"
-  }
+    acronym: "AI",
+  },
+  {
+    name: "ECO:0000260",
+    description: "Manual assertion inferred from signature match",
+    shortDescription: "InterPro annotation",
+    acronym: "SGNM",
+    isManual: true,
+  },
 ];
 
 export default ecoMap;
