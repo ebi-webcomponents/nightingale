@@ -5,13 +5,13 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
   height="20"
   highlight="10:30"
   length="450"
-  style="display: inline-block;"
+  style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
   <svg
     class="container"
     height="26"
-    width="800"
+    width="100"
   >
     <g
       class="sequence-features"
@@ -29,18 +29,18 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             class="cover"
             stroke="#84862d"
             visibility="visible"
-            x1="16.933333333333334"
-            x2="684.2666666666667"
+            x1="10"
+            x2="10"
             y1="12"
             y2="12"
           />
           <path
             class="rectangle feature"
-            d="M0,0L667.3333333333334,0L667.3333333333334,16L0,16Z"
+            d="M0,0L0,0L0,16L0,16Z"
             fill="#84862d"
             opacity="1"
             style="stroke: #84862d; pointer-events: auto;"
-            transform="translate(16.933333333333334,4)"
+            transform="translate(10,4)"
           />
           <text
             class="feature-label"
@@ -49,7 +49,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="349.7333333333333"
+            x="10"
             y="12"
           />
         </g>
@@ -61,18 +61,18 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             class="cover"
             stroke="#84862d"
             visibility="visible"
-            x1="701.6"
-            x2="824.6666666666667"
+            x1="10"
+            x2="10"
             y1="12"
             y2="12"
           />
           <path
             class="rectangle feature"
-            d="M0,0L123.06666666666668,0L123.06666666666668,16L0,16Z"
+            d="M0,0L0,0L0,16L0,16Z"
             fill="#84862d"
             opacity="1"
             style="stroke: #84862d; pointer-events: auto;"
-            transform="translate(701.6,4)"
+            transform="translate(10,4)"
           />
           <text
             class="feature-label"
@@ -81,7 +81,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="744.9333333333333"
+            x="10"
             y="12"
           />
         </g>
@@ -104,18 +104,18 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="cover"
               stroke="#bbd279"
               visibility="hidden"
-              x1="16.933333333333334"
-              x2="464.1333333333333"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L447.2,0L447.2,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(16.933333333333334,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -124,7 +124,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="239.66666666666669"
+              x="10"
               y="12"
             />
           </g>
@@ -135,18 +135,18 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="cover"
               stroke="#bbd279"
               visibility="hidden"
-              x1="469.33333333333337"
-              x2="684.2666666666667"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L214.93333333333334,0L214.93333333333334,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(469.33333333333337,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -155,7 +155,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="575.9333333333333"
+              x="10"
               y="12"
             />
           </g>
@@ -168,67 +168,67 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             >
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(462.4,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(510.93333333333334,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(512.6666666666667,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(514.4,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(614.9333333333333,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(637.4666666666666,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(639.1999999999999,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(640.9333333333333,10)"
+                transform="translate(10,10)"
               />
             </g>
             <g
@@ -237,67 +237,67 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             >
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(462.4,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(510.93333333333334,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(512.6666666666667,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(514.4,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(614.9333333333333,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(637.4666666666666,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(639.1999999999999,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(640.9333333333333,10)"
+                transform="translate(10,10)"
               />
             </g>
           </g>
@@ -312,26 +312,26 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="cover"
               stroke="#87c59c"
               visibility="hidden"
-              x1="23.866666666666667"
-              x2="460.66666666666663"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L211.46666666666667,0L211.46666666666667,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(23.866666666666667,7)"
+              transform="translate(10,7)"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L126.53333333333333,0L126.53333333333333,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(334.1333333333333,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -340,7 +340,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="128.73333333333335"
+              x="10"
               y="12"
             />
             <text
@@ -350,7 +350,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="396.53333333333336"
+              x="10"
               y="12"
             />
           </g>
@@ -361,26 +361,26 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               class="cover"
               stroke="#87c59c"
               visibility="hidden"
-              x1="247.46666666666667"
-              x2="675.6"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L74.53333333333333,0L74.53333333333333,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(247.46666666666667,7)"
+              transform="translate(10,7)"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L195.86666666666667,0L195.86666666666667,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(479.73333333333335,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -389,7 +389,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="283.8666666666667"
+              x="10"
               y="12"
             />
             <text
@@ -399,7 +399,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="576.8000000000001"
+              x="10"
               y="12"
             />
           </g>
@@ -414,7 +414,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
           fill="white"
           height="2"
           opacity="0.23076923076923075"
-          width="6.933333333333334"
+          width="0"
           x="10"
           y="0"
         />
@@ -422,96 +422,96 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="6.933333333333334"
-          x="16.933333333333334"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="211.46666666666667"
-          x="23.866666666666667"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="12.133333333333333"
-          x="235.33333333333331"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="74.53333333333333"
-          x="247.46666666666667"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="12.133333333333333"
-          x="322"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="126.53333333333333"
-          x="334.1333333333333"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="3.466666666666667"
-          x="460.66666666666663"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.23076923076923075"
-          width="5.2"
-          x="464.1333333333333"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="10.4"
-          x="469.33333333333337"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="195.86666666666667"
-          x="479.73333333333335"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="8.666666666666668"
-          x="675.6"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.23076923076923075"
-          width="105.73333333333333"
-          x="684.2666666666667"
+          width="0"
+          x="10"
           y="0"
         />
       </mask>
@@ -523,8 +523,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         fill="#FFEB3B66"
         height="26"
         style="pointer-events: none;"
-        width="36.4"
-        x="25.6"
+        width="0"
+        x="10"
       />
     </g>
     <g
@@ -544,14 +544,14 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         height="26"
         style="pointer-events: none;"
         width="10"
-        x="790"
+        x="90"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="2"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="0"
       />
@@ -560,7 +560,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         fill="#FFFFFFDD"
         height="2"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="24"
       />
@@ -573,13 +573,13 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
 <nightingale-interpro-track
   height="20"
   length="450"
-  style="display: inline-block;"
+  style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
   <svg
     class="container"
     height="26"
-    width="800"
+    width="100"
   >
     <g
       class="sequence-features"
@@ -673,59 +673,59 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             >
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(462.4,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(510.93333333333334,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(512.6666666666667,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(514.4,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(614.9333333333333,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(637.4666666666666,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(639.1999999999999,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(640.9333333333333,25)"
+                transform="translate(10,25)"
               />
             </g>
             <g
@@ -733,59 +733,59 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
             >
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(462.4,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(510.93333333333334,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(512.6666666666667,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(514.4,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(614.9333333333333,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(637.4666666666666,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(639.1999999999999,25)"
+                transform="translate(10,25)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L1.7333333333333334,0L1.7333333333333334,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
-                transform="translate(640.9333333333333,25)"
+                transform="translate(10,25)"
               />
             </g>
           </g>
@@ -920,13 +920,13 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
   display-start="260"
   height="20"
   length="450"
-  style="display: inline-block;"
+  style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
   <svg
     class="container"
     height="26"
-    width="800"
+    width="100"
   >
     <g
       class="sequence-features"
@@ -944,18 +944,18 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             class="cover"
             stroke="#84862d"
             visibility="visible"
-            x1="-39769.99999999955"
-            x2="20289.99999999977"
+            x1="10"
+            x2="10"
             y1="12"
             y2="12"
           />
           <path
             class="rectangle feature"
-            d="M0,0L60060,0L60060,16L0,16Z"
+            d="M0,0L0,0L0,16L0,16Z"
             fill="#84862d"
             opacity="1"
             style="stroke: #84862d; pointer-events: auto;"
-            transform="translate(-39769.99999999955,4)"
+            transform="translate(10,4)"
           />
           <text
             class="feature-label"
@@ -964,7 +964,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="321.9999999999965"
+            x="10"
             y="12"
           />
         </g>
@@ -976,18 +976,18 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             class="cover"
             stroke="#84862d"
             visibility="visible"
-            x1="21849.99999999975"
-            x2="32925.99999999963"
+            x1="10"
+            x2="10"
             y1="12"
             y2="12"
           />
           <path
             class="rectangle feature"
-            d="M0,0L11076,0L11076,16L0,16Z"
+            d="M0,0L0,0L0,16L0,16Z"
             fill="#84862d"
             opacity="1"
             style="stroke: #84862d; pointer-events: auto;"
-            transform="translate(21849.99999999975,4)"
+            transform="translate(10,4)"
           />
           <text
             class="feature-label"
@@ -996,7 +996,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
-            x="11241.999999999873"
+            x="10"
             y="12"
           />
         </g>
@@ -1019,18 +1019,18 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="cover"
               stroke="#bbd279"
               visibility="hidden"
-              x1="-39769.99999999955"
-              x2="477.9999999999947"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L40248,0L40248,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(-39769.99999999955,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -1039,7 +1039,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="165.99999999999824"
+              x="10"
               y="12"
             />
           </g>
@@ -1050,18 +1050,18 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="cover"
               stroke="#bbd279"
               visibility="hidden"
-              x1="945.9999999999894"
-              x2="20289.99999999977"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L19344,0L19344,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(945.9999999999894,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -1070,7 +1070,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="789.9999999999911"
+              x="10"
               y="12"
             />
           </g>
@@ -1083,67 +1083,67 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             >
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(321.9999999999965,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(4689.999999999946,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(4845.9999999999445,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(5001.999999999944,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(14049.99999999984,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(16077.999999999818,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(16233.999999999814,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(16389.999999999814,10)"
+                transform="translate(10,10)"
               />
             </g>
             <g
@@ -1152,67 +1152,67 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             >
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(321.9999999999965,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(4689.999999999946,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(4845.9999999999445,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(5001.999999999944,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(14049.99999999984,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(16077.999999999818,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(16233.999999999814,10)"
+                transform="translate(10,10)"
               />
               <path
                 class="feature rectangle residue"
-                d="M0,0L156,0L156,4L0,4Z"
+                d="M0,0L0,0L0,4L0,4Z"
                 fill="white"
                 stroke="transparent"
                 style="pointer-events: none; stroke: none; opacity: 0.4;"
-                transform="translate(16389.999999999814,10)"
+                transform="translate(10,10)"
               />
             </g>
           </g>
@@ -1227,26 +1227,26 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="cover"
               stroke="#87c59c"
               visibility="hidden"
-              x1="-39145.999999999556"
-              x2="165.99999999999824"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L19032,0L19032,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(-39145.999999999556,7)"
+              transform="translate(10,7)"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L11388,0L11388,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(-11221.999999999873,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -1255,7 +1255,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="-10129.999999999885"
+              x="10"
               y="12"
             />
             <text
@@ -1276,26 +1276,26 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               class="cover"
               stroke="#87c59c"
               visibility="hidden"
-              x1="-19021.99999999978"
-              x2="19509.999999999778"
+              x1="10"
+              x2="10"
               y1="12"
               y2="12"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L6708,0L6708,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(-19021.99999999978,7)"
+              transform="translate(10,7)"
             />
             <path
               class="rectangle child-fragment feature"
-              d="M0,0L17628,0L17628,10L0,10Z"
+              d="M0,0L0,0L0,10L0,10Z"
               fill="white"
               opacity="0.4"
               style="stroke: none; pointer-events: none;"
-              transform="translate(1881.9999999999789,7)"
+              transform="translate(10,7)"
             />
             <text
               class="child-label"
@@ -1304,7 +1304,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="-6229.999999999929"
+              x="10"
               y="12"
             />
             <text
@@ -1314,7 +1314,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
               font-size="10"
               style="cursor: default; pointer-events: none;"
               text-anchor="middle"
-              x="1257.999999999986"
+              x="10"
               y="12"
             />
           </g>
@@ -1329,104 +1329,104 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
           fill="white"
           height="2"
           opacity="0.23076923076923075"
-          width="624"
-          x="-40393.99999999954"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="624"
-          x="-39769.99999999955"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="19032"
-          x="-39145.999999999556"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="1092"
-          x="-20113.99999999977"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="6708"
-          x="-19021.99999999978"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="1092"
-          x="-12313.99999999986"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="11388"
-          x="-11221.999999999873"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="312"
-          x="165.99999999999824"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.23076923076923075"
-          width="468"
-          x="477.9999999999947"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="936"
-          x="945.9999999999894"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="1"
-          width="17628"
-          x="1881.9999999999789"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.6153846153846154"
-          width="780"
-          x="19509.999999999778"
+          width="0"
+          x="10"
           y="0"
         />
         <rect
           fill="white"
           height="2"
           opacity="0.23076923076923075"
-          width="9516"
-          x="20289.99999999977"
+          width="0"
+          x="10"
           y="0"
         />
       </mask>
@@ -1451,14 +1451,14 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         height="26"
         style="pointer-events: none;"
         width="10"
-        x="790"
+        x="90"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="2"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="0"
       />
@@ -1467,7 +1467,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         fill="#FFFFFFDD"
         height="2"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="24"
       />
