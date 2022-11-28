@@ -65,6 +65,8 @@ class NightingaleNavigation extends withManager(
 
   @property({ type: Number })
   "ruler-start" = 1;
+  @property({ type: Number })
+  "ruler-padding" = 10;
   @property({ type: Boolean })
   "show-highlight" = false;
 
@@ -76,7 +78,10 @@ class NightingaleNavigation extends withManager(
 
   private createNavRuler() {
     this.#x = scaleLinear()
-      .range([this["margin-left"], this.width - this["margin-right"]])
+      .range([
+        this["margin-left"] + this["ruler-padding"],
+        this.width - this["margin-right"] - this["ruler-padding"],
+      ])
       .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)]);
     this.#svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
@@ -110,9 +115,9 @@ class NightingaleNavigation extends withManager(
 
     this.#viewport = brushX()
       .extent([
-        [this["margin-left"], 0],
+        [this["margin-left"] + this["ruler-padding"], 0],
         [
-          this.width - this["margin-right"],
+          this.width - this["margin-right"] - this["ruler-padding"],
           this.height * 0.5 + HANDLE_SIZE / 2,
         ],
       ])
@@ -166,13 +171,20 @@ class NightingaleNavigation extends withManager(
     this.updateHighlight();
   }
 
-  onWidthChange() {
+  onDimensionsChange() {
     if (!this.#x) return;
-    this.#x.range([this["margin-left"], this.width - this["margin-right"]]);
+    this.#x.range([
+      this["margin-left"] + this["ruler-padding"],
+      this.width - this["margin-right"] - this["ruler-padding"],
+    ]);
     this.#svg?.attr("width", this.width);
+    this.#svg?.attr("height", this.height);
     this.#viewport?.extent([
-      [this["margin-left"], 0],
-      [this.width - this["margin-right"], this.height * 0.5 + HANDLE_SIZE / 2],
+      [this["margin-left"] + this["ruler-padding"], 0],
+      [
+        this.width - this["margin-right"] - this["ruler-padding"],
+        this.height * 0.5 + HANDLE_SIZE / 2,
+      ],
     ]);
     if (this.#viewport) this.#brushG?.call(this.#viewport);
   }
@@ -181,9 +193,6 @@ class NightingaleNavigation extends withManager(
     return html`<svg class="container"></svg>`;
   }
   updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has("width")) {
-      this.onWidthChange();
-    }
     this.renderD3();
     super.updated(changedProperties);
   }
@@ -220,12 +229,18 @@ class NightingaleNavigation extends withManager(
         this["display-start"] || 1,
         (this["display-end"] || this.length || 1) + 1,
       ])
-      .range([this["margin-left"], this.width - this["margin-right"]]);
+      .range([
+        this["margin-left"] + this["ruler-padding"],
+        this.width - this["margin-right"] - this["ruler-padding"],
+      ]);
 
     // Scale to match the range of the navigation brush [1,length]
     const s2 = scaleLinear()
       .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)])
-      .range([this["margin-left"], this.width - this["margin-right"]]);
+      .range([
+        this["margin-left"] + this["ruler-padding"],
+        this.width - this["margin-right"] - this["ruler-padding"],
+      ]);
 
     // Highlight Polygon
     const highlighs = this.#highlighted

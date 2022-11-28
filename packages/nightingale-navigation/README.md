@@ -24,6 +24,10 @@ This custom element can be used to zoom and navigate along the sequence displaye
 
 The scale of coordinates will start from this value.
 
+#### `ruler-padding: number (default 10)`
+
+a horizontal padding to add on the ruler, to give the component a zooming efect even when the whole sequence is selected
+
 #### `show-highlight: boolean (default false)`
 
 A shade representing a highlighted area can be added over the component.
