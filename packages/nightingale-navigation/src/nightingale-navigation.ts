@@ -229,10 +229,7 @@ class NightingaleNavigation extends withManager(
         this["display-start"] || 1,
         (this["display-end"] || this.length || 1) + 1,
       ])
-      .range([
-        this["margin-left"] + this["ruler-padding"],
-        this.width - this["margin-right"] - this["ruler-padding"],
-      ]);
+      .range([this["margin-left"], this.width - this["margin-right"]]);
 
     // Scale to match the range of the navigation brush [1,length]
     const s2 = scaleLinear()
