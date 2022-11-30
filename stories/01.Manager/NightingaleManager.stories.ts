@@ -105,6 +105,7 @@ const Template: Story<{
           highlight-event="onmouseover"
           highlight-color=${args["highlight-color"]}
           margin-color=${args["margin-color"]}
+          use-ctrl-to-zoom
         >
         </nightingale-sequence>
       </div>
@@ -121,6 +122,7 @@ const Template: Story<{
           highlight-color=${args["highlight-color"]}
           margin-color=${args["margin-color"]}
           scale="hydrophobicity-scale"
+          use-ctrl-to-zoom
         >
         </nightingale-coloured-sequence>
       </div>
@@ -135,6 +137,7 @@ const Template: Story<{
           highlight-event="onmouseover"
           highlight-color=${args["highlight-color"]}
           margin-color=${args["margin-color"]}
+          use-ctrl-to-zoom
         >
         </nightingale-track>
       </div>
@@ -150,6 +153,7 @@ const Template: Story<{
           highlight-color=${args["highlight-color"]}
           margin-color=${args["margin-color"]}
           layout="non-overlapping"
+          use-ctrl-to-zoom
         >
         </nightingale-track>
       </div>
@@ -166,6 +170,7 @@ const Template: Story<{
           margin-color=${args["margin-color"]}
           shape="roundRectangle"
           label=".feature.name"
+          use-ctrl-to-zoom
           show-label
           expanded
         >
@@ -182,6 +187,7 @@ const Template: Story<{
           highlight-event="onmouseover"
           highlight-color=${args["highlight-color"]}
           margin-color=${args["margin-color"]}
+          use-ctrl-to-zoom
         ></nightingale-linegraph-track>
       </div>
     </nightingale-manager>
