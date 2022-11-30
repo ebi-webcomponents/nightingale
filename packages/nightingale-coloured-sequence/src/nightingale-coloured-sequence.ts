@@ -109,11 +109,7 @@ class NightingaleColouredSequence extends NightingaleSequence {
 
   renderD3() {
     if (this.seq_g) {
-      this.svg = select(this as unknown as NightingaleElement)
-        .selectAll<SVGSVGElement, unknown>("svg")
-        .attr("id", "")
-        .attr("width", this.width)
-        .attr("height", this.height);
+      this.svg?.attr("width", this.width).attr("height", this.height);
 
       this.seq_g.attr("width", this.width);
 

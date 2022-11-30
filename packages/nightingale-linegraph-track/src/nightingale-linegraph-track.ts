@@ -291,9 +291,7 @@ class NightingaleLinegraphTrack extends withManager(
         .selectAll<SVGPathElement, LineData>("path.graph")
         .attr("d", (d) => this.drawLine(d)(d.values));
 
-      this.svg = select(this as unknown as NightingaleElement)
-        .selectAll<SVGSVGElement, unknown>("svg")
-        .attr("width", this.width);
+      this.svg?.attr("width", this.width);
 
       this.updateHighlight();
 
