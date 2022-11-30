@@ -10,7 +10,7 @@ const scales = [
   "T:-2,R:-2,Y:-2,F:2,A:2,I:2,L:2",
 ];
 export default {
-  title: "Components/Coloured Sequence",
+  title: "Components/Tracks/Coloured Sequence",
   argTypes: {
     scale: {
       options: scales,

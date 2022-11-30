@@ -188,8 +188,8 @@ const Template: Story<{
   `;
 };
 
-export const Manager = Template.bind({});
-Manager.args = {
+export const AllTracks = Template.bind({});
+AllTracks.args = {
   "min-width": 500,
   height: 50,
   length: defaultSequence.length,
@@ -199,7 +199,7 @@ Manager.args = {
   "highlight-color": "#EB3BFF22",
   "margin-color": "transparent",
 };
-Manager.play = async () => {
+AllTracks.play = async () => {
   await customElements.whenDefined("nightingale-sequence");
   const sequence = document.getElementById("sequence");
   if (sequence) (sequence as any).fixedHighlight = "10:20";
@@ -230,3 +230,16 @@ Manager.play = async () => {
     (linegraphTrack as any).data = linegraph;
   }
 };
+
+export const SimpleNoControls = () =>
+  html`<h3>Manger with onlinavigation and sequence</h3>
+    <nightingale-manager>
+      <div style="line-height: 0">
+        <nightingale-sequence
+          sequence=${defaultSequence}
+          height="40"
+          width="800"
+          length=${defaultSequence.length}
+        ></nightingale-sequence>
+      </div>
+    </nightingale-manager> `;

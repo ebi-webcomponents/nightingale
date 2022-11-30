@@ -3,7 +3,7 @@ import { html } from "lit-html";
 import "../../packages/nightingale-linegraph-track/src/index.ts";
 
 export default {
-  title: "Components/Linegraph Track",
+  title: "Components/Tracks/Linegraph Track",
 } as Meta;
 
 import tinyData from "../../packages/nightingale-linegraph-track/tests/mockData/data.json";

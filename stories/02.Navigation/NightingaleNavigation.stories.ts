@@ -3,7 +3,7 @@ import { html } from "lit-html";
 import "../../packages/nightingale-navigation/src/index.ts";
 
 export default {
-  title: "Components/Navigation",
+  title: "Components/Tracks/Navigation",
 } as Meta;
 
 const Template: Story<{
