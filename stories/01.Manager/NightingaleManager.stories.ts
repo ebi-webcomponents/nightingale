@@ -235,6 +235,17 @@ export const SimpleNoControls = () =>
   html`<h3>Manger with onlinavigation and sequence</h3>
     <nightingale-manager>
       <div style="line-height: 0">
+        <nightingale-navigation
+          id="navigation"
+          height="100"
+          width="800"
+          length=${defaultSequence.length}
+          highlight-color="#EB3BFF22"
+          show-highlight
+        >
+        </nightingale-navigation>
+      </div>
+      <div style="line-height: 0">
         <nightingale-sequence
           sequence=${defaultSequence}
           height="40"

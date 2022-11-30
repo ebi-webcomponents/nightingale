@@ -67,6 +67,8 @@ class NightingaleNavigation extends withManager(
   "ruler-start" = 1;
   @property({ type: Number })
   "ruler-padding" = 10;
+  @property({ type: Number })
+  "scale-factor" = (this.length || 0) / 5 || 10;
   @property({ type: Boolean })
   "show-highlight" = false;
 
@@ -220,6 +222,33 @@ class NightingaleNavigation extends withManager(
       this.updateHighlight();
       this.renderMarginOnGroup(this.#margins);
     }
+  }
+
+  locate(start: number, end: number) {
+    if (this.#brushG && this.#viewport && this.#x)
+      this.#brushG.call(this.#viewport.move, [this.#x(start), this.#x(end)]);
+  }
+  zoomOut() {
+    this.locate(
+      Math.max(
+        this["ruler-start"] || 1,
+        this.getStart() - this["scale-factor"]
+      ),
+      Math.min(
+        (this.length || 1) + this["ruler-start"] - 1,
+        this.getEnd() + this["scale-factor"]
+      )
+    );
+  }
+  zoomIn() {
+    const newStart = Math.min(
+      this.getStart() + this["scale-factor"],
+      this.getEnd() - 1
+    );
+    this.locate(
+      newStart,
+      Math.max(this.getEnd() - this["scale-factor"], newStart + 1)
+    );
   }
   protected updateHighlight() {
     if (!this.#highlighted) return;

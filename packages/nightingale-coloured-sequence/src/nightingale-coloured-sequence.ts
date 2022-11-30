@@ -1,12 +1,10 @@
 import { customElement, property } from "lit/decorators.js";
-import { scaleLinear, Selection, select } from "d3";
+import { scaleLinear, Selection } from "d3";
 
 import NightingaleSequence, {
   SequenceBaseType,
 } from "@nightingale-elements/nightingale-sequence";
-import NightingaleElement, {
-  bindEvents,
-} from "@nightingale-elements/nightingale-new-core";
+import { bindEvents } from "@nightingale-elements/nightingale-new-core";
 
 import ColorScaleParser from "./utils/ColorScaleParser";
 import String2Object from "./utils/String2Object";
