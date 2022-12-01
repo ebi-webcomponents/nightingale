@@ -1,6 +1,6 @@
 {
   "name": "protvista-vcf-adapter",
-  "version": "3.8.4",
+  "version": "3.8.5",
   "files": [
     "dist",
     "types",
@@ -28,9 +28,9 @@
   "dependencies": {
     "data-loader": "^3.8.4",
     "lit-html": "^1.3.0",
-    "protvista-feature-adapter": "^3.8.4",
+    "protvista-feature-adapter": "^3.8.5",
     "protvista-variation": "^3.8.4",
-    "protvista-variation-adapter": "^3.8.4",
+    "protvista-variation-adapter": "^3.8.5",
     "vcftojson": "^1.1.0"
   },
   "gitHead": "726779864966d11f966f337f2dd84aa4f58d944a"
