@@ -68,6 +68,25 @@ const ecoMap = [
     shortDescription: "Combined sources",
     acronym: "MIXA",
   },
+  /* ECO:0007829 replaced ECO:0000213 from release 2022_02. 
+  Some evidences still have the obsolete code. eg: https://www.ebi.ac.uk/proteins/api/antigen/P49841
+  It is better to show the evidence rather than being it empty */
+  {
+    name: "ECO:0000213",
+    description:
+      "Automatic assertion inferred from combination of experimental and computational evidence",
+    shortDescription: "Combined sources",
+    acronym: "MIXA",
+  },
+  // ECO:0007744 replaced ECO:0000244 from release 2022_02. Same as above
+  {
+    name: "ECO:0000244",
+    description:
+      "Manual assertion inferred from combination of experimental and computational evidence",
+    shortDescription: "Combined sources",
+    acronym: "MIXM",
+    isManual: true,
+  },
   {
     name: "ECO:0000313",
     description: "Automatic assertion inferred from database entries",
