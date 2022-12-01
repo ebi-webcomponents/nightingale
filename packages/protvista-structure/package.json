@@ -1,6 +1,6 @@
 {
   "name": "protvista-structure",
-  "version": "3.8.1",
+  "version": "3.8.4",
   "description": "A custom element wrapper for Mol*",
   "main": "dist/protvista-structure.js",
   "module": "dist/es/protvista-structure.js",
@@ -29,7 +29,7 @@
   "author": "xwatkins@ebi.ac.uk",
   "license": "MIT",
   "dependencies": {
-    "data-loader": "^3.5.7",
+    "data-loader": "^3.8.4",
     "lodash-es": "^4.17.11",
     "molstar": "2.2.0",
     "react": "17.0.2"
