@@ -1,5 +1,5 @@
 {
-  "name": "nightingale-saver",
+  "name": "@nightingale-elements/nightingale-saver",
   "version": "4.0.7-alpha.0",
   "description": "Saver component for Nightingale components",
   "files": [
