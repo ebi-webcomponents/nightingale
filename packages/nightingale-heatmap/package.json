@@ -7,7 +7,7 @@
   ],
   "main": "dist/nightingale-heatmap.js",
   "module": "src/nightingale-heatmap.js",
-  "version": "3.5.7",
+  "version": "3.8.4",
   "keywords": [
     "nightingale",
     "webcomponents",

@@ -1,6 +1,6 @@
 {
   "name": "protvista-saver",
-  "version": "3.5.7",
+  "version": "3.8.4",
   "description": "Saver component for ProtVista components",
   "files": [
     "dist",
