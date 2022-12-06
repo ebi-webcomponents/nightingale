@@ -6,6 +6,8 @@ import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 class NightingaleOverlay extends NightingaleElement {
   @property({ type: String })
   for = "";
+  @property({ type: String })
+  label = "Use [CTRL] + scroll to zoom";
 
   private overlay?: HTMLDivElement;
 
@@ -33,29 +35,7 @@ class NightingaleOverlay extends NightingaleElement {
     this.sizeObserver.observe(document.body);
   }
 
-  // renderWhenForElementIsReady() {
-  //   if (this.observer) {
-  //     this.observer.disconnect();
-  //   }
-  //   this.observer = new MutationObserver(() => {
-  //     if (document.getElementById(this.for)) {
-  //       this.render();
-  //       this.observeSizeChangeOfTarget();
-  //       this.observer.disconnect();
-  //     }
-  //   });
-  //   this.observer.observe(document, {
-  //     attributes: false,
-  //     childList: true,
-  //     characterData: false,
-  //     subtree: true,
-  //   });
-  // }
-
   disconnectedCallback() {
-    // if (this.observer) {
-    //   this.observer.disconnect();
-    // }
     if (this.sizeObserver) {
       this.sizeObserver.disconnect();
     }
@@ -103,7 +83,7 @@ class NightingaleOverlay extends NightingaleElement {
           text-shadow: 1px 1px 1px darkslategrey;
         "
         >
-          Use [CTRL] + scroll to zoom
+          ${this.label}
         </header>
       </div>`;
     }
