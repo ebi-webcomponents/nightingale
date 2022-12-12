@@ -47,13 +47,12 @@ const coordinates = [
   [10, 30],
   [1, 50],
 ];
-export const SeqeunceNoControls = () =>
+export const SequenceNoControls = () =>
   html`<h3>Same sequence with different coordinates</h3>
     ${coordinates.map(
       ([start, end]) => html`
         <nightingale-sequence
           sequence=${defaultSequence}
-          width="800"
           height="40"
           length=${defaultSequence.length}
           display-start=${start}

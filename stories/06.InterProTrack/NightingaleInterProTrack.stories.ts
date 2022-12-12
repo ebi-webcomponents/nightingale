@@ -52,7 +52,6 @@ export const SimpleTrackNoControls = () => html`
   <h3>Entry</h3>
   <nightingale-interpro-track
     id="track1"
-    width="600"
     length="490"
     display-start="1"
     display-end="490"
@@ -72,7 +71,6 @@ export const TrackAndContributorsNoControls = () => html`
   <h3>Entry + contributors</h3>
   <nightingale-interpro-track
     id="track2"
-    width="600"
     length="490"
     display-start="1"
     display-end="490"

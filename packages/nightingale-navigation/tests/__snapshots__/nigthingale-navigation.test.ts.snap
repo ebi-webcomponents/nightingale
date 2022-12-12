@@ -3,14 +3,14 @@
 exports[`nightingale-navigation tests it should display the navigation correctly 1`] = `
 <nightingale-navigation
   height="15"
-  style="display: inline-block;"
+  style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
   <svg
     class="container"
     height="15"
     id=""
-    width="800"
+    width="100"
   >
     <text
       class="start-label"
@@ -24,7 +24,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       class="end-label"
       style="font-family: sans-serif;"
       text-anchor="end"
-      x="790"
+      x="90"
       y="13"
     >
       1
@@ -38,13 +38,13 @@ exports[`nightingale-navigation tests it should display the navigation correctly
     >
       <path
         class="domain"
-        d="M10.5,6V0.5H790.5V6"
+        d="M20.5,6V0.5H80.5V6"
         stroke="currentColor"
       />
       <g
         class="tick"
         opacity="1"
-        transform="translate(400.5,0)"
+        transform="translate(50.5,0)"
       >
         <line
           stroke="currentColor"
@@ -69,8 +69,8 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         cursor="crosshair"
         height="10.5"
         pointer-events="all"
-        width="780"
-        x="10"
+        width="60"
+        x="20"
         y="0"
       />
       <rect
@@ -83,7 +83,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         stroke="#fff"
         style=""
         width="0"
-        x="400"
+        x="50"
         y="0"
       />
       <rect
@@ -92,7 +92,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="16.5"
         style=""
         width="6"
-        x="397"
+        x="47"
         y="-3"
       />
       <rect
@@ -101,7 +101,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="16.5"
         style=""
         width="6"
-        x="397"
+        x="47"
         y="-3"
       />
     </g>
@@ -109,9 +109,9 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       class="zoom-polygon"
       fill="#777"
       fill-opacity="0.3"
-      points="400,7.5
-        400,7.5
-        790,15
+      points="50,7.5
+        50,7.5
+        90,15
         10,15"
     />
     <g
@@ -131,14 +131,14 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="15"
         style="pointer-events: none;"
         width="10"
-        x="790"
+        x="90"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="0"
       />
@@ -147,7 +147,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="15"
       />
@@ -164,14 +164,14 @@ exports[`nightingale-navigation tests it should display the navigation correctly
   display-end="4"
   display-start="2"
   height="15"
-  style="display: inline-block;"
+  style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
   <svg
     class="container"
     height="15"
     id=""
-    width="800"
+    width="100"
   >
     <text
       class="start-label"
@@ -185,7 +185,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       class="end-label"
       style="font-family: sans-serif;"
       text-anchor="end"
-      x="790"
+      x="90"
       y="13"
     >
       1
@@ -199,13 +199,13 @@ exports[`nightingale-navigation tests it should display the navigation correctly
     >
       <path
         class="domain"
-        d="M10.5,6V0.5H790.5V6"
+        d="M20.5,6V0.5H80.5V6"
         stroke="currentColor"
       />
       <g
         class="tick"
         opacity="1"
-        transform="translate(400.5,0)"
+        transform="translate(50.5,0)"
       >
         <line
           stroke="currentColor"
@@ -230,8 +230,8 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         cursor="crosshair"
         height="10.5"
         pointer-events="all"
-        width="780"
-        x="10"
+        width="60"
+        x="20"
         y="0"
       />
       <rect
@@ -244,7 +244,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         stroke="#fff"
         style=""
         width="0"
-        x="400"
+        x="50"
         y="0"
       />
       <rect
@@ -253,7 +253,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="16.5"
         style=""
         width="6"
-        x="397"
+        x="47"
         y="-3"
       />
       <rect
@@ -262,7 +262,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="16.5"
         style=""
         width="6"
-        x="397"
+        x="47"
         y="-3"
       />
     </g>
@@ -270,9 +270,9 @@ exports[`nightingale-navigation tests it should display the navigation correctly
       class="zoom-polygon"
       fill="#777"
       fill-opacity="0.3"
-      points="400,7.5
-        400,7.5
-        790,15
+      points="50,7.5
+        50,7.5
+        90,15
         10,15"
     />
     <g
@@ -292,14 +292,14 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         height="15"
         style="pointer-events: none;"
         width="10"
-        x="790"
+        x="90"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="0"
       />
@@ -308,7 +308,7 @@ exports[`nightingale-navigation tests it should display the navigation correctly
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
+        width="100"
         x="0"
         y="15"
       />

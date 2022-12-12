@@ -66,7 +66,7 @@ const defaultData = [
 ];
 
 const Template: Story<{
-  width: number;
+  "min-width": number;
   height: number;
   length: number;
   "display-start": number;
@@ -76,13 +76,13 @@ const Template: Story<{
   "highlight-color": string;
   "margin-color": string;
 }> = (args) => {
-  const { width, height, length, sequence } = args;
+  const { height, length, sequence } = args;
   return html`
     <nightingale-manager>
       <div style="line-height: 0">
         <nightingale-navigation
           id="navigation"
-          width="${width}"
+          min-width="${args["min-width"]}"
           height=${height}
           length="${length}"
           display-start="${args["display-start"]}"
@@ -97,7 +97,7 @@ const Template: Story<{
         <nightingale-sequence
           id="sequence"
           sequence=${sequence}
-          width="${width}"
+          min-width="${args["min-width"]}"
           height=${height}
           length="${length}"
           display-start="${args["display-start"]}"
@@ -112,7 +112,7 @@ const Template: Story<{
         <nightingale-coloured-sequence
           id="sequence"
           sequence=${sequence}
-          width="${width}"
+          min-width="${args["min-width"]}"
           height="10"
           length="${length}"
           display-start="${args["display-start"]}"
@@ -127,7 +127,7 @@ const Template: Story<{
       <div style="line-height: 0">
         <nightingale-track
           id="track"
-          width="${width}"
+          min-width="${args["min-width"]}"
           height=${height}
           length="${length}"
           display-start="${args["display-start"]}"
@@ -141,7 +141,7 @@ const Template: Story<{
       <div style="line-height: 0">
         <nightingale-track
           id="track2"
-          width="${width}"
+          min-width="${args["min-width"]}"
           height=${height}
           length="${length}"
           display-start="${args["display-start"]}"
@@ -156,7 +156,7 @@ const Template: Story<{
       <div style="line-height: 0">
         <nightingale-interpro-track
           id="trackIpro"
-          width="${width}"
+          min-width="${args["min-width"]}"
           height=${height}
           length="${length}"
           display-start="${args["display-start"]}"
@@ -174,7 +174,7 @@ const Template: Story<{
       <div style="line-height: 0">
         <nightingale-linegraph-track
           id="linegraph"
-          width="${width}"
+          min-width="${args["min-width"]}"
           height=${height}
           length="${length}"
           display-start="${args["display-start"]}"
@@ -190,7 +190,7 @@ const Template: Story<{
 
 export const Manager = Template.bind({});
 Manager.args = {
-  width: 800,
+  "min-width": 500,
   height: 50,
   length: defaultSequence.length,
   sequence: defaultSequence,

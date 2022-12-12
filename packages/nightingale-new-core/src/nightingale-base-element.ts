@@ -7,6 +7,7 @@ class NightingaleElement extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.style.display = "inline-block";
+    this.style.lineHeight = "0";
   }
   createRenderRoot() {
     return this;

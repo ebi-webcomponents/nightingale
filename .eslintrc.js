@@ -16,6 +16,8 @@ module.exports = {
 
   rules: {
     "no-empty": ["error", { allowEmptyCatch: true }],
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
