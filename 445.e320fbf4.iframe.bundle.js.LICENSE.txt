@@ -32,6 +32,12 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
+/*! https://mths.be/punycode v1.3.2 by @mathias */
+
+/*! rasterizeHTML.js - v1.3.1 - 2022-01-16
+* http://www.github.com/cburgmer/rasterizeHTML.js
+* Copyright (c) 2022 Christoph Burgmer; Licensed MIT */
+
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
 /**
