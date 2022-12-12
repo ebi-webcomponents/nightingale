@@ -1,7 +1,11 @@
 {
-  "name": "@nightingale-elements/nightingale-navigation",
-  "version": "4.0.7-alpha.0",
-  "description": "Navigation component for the Nightingale tool",
+  "name": "@nightingale-elements/nightingale-saver",
+  "version": "4.0.8-alpha.0",
+  "description": "Saver component for Nightingale components",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
@@ -9,14 +13,15 @@
   "scripts": {
     "build": "rollup --config ../../rollup.config.mjs"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "nightingale",
+    "webcomponents",
     "customelements",
-    "webcomponents"
+    "exporter",
+    "image"
   ],
   "repository": {
     "type": "git",
@@ -26,13 +31,10 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "author": "Aurélien Luciani <luciani@ebi.ac.uk>",
-  "license": "ISC",
-  "publishConfig": {
-    "access": "public"
-  },
+  "author": "Swaathi Kandasaamy",
+  "license": "MIT",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.7-alpha.0",
-    "d3": "7.6.1"
+    "rasterizehtml": "1.3.1"
   }
 }
