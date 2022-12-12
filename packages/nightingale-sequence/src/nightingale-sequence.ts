@@ -160,11 +160,7 @@ class NightingaleSequence extends withManager(
   renderD3() {
     this.getCharSize();
 
-    this.svg = select(this as unknown as NightingaleElement)
-      .selectAll<SVGSVGElement, unknown>("svg")
-      .attr("id", "")
-      .attr("width", this.width)
-      .attr("height", this.height);
+    this.svg?.attr("width", this.width).attr("height", this.height);
 
     if (this.#axis) {
       const ftWidth = this.getSingleBaseWidth();

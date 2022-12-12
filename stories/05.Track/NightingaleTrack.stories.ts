@@ -4,7 +4,7 @@ import "../../packages/nightingale-track/src/index.ts";
 import mockData from "../../packages/nightingale-track/tests/mockData/data.json";
 
 export default {
-  title: "Components/NightingaleTrack",
+  title: "Components/Tracks/NightingaleTrack",
 } as Meta;
 
 const defaultData = [

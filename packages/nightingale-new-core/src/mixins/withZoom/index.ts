@@ -1,3 +1,4 @@
+import { property } from "lit/decorators.js";
 import {
   scaleLinear,
   zoom as d3zoom,
@@ -43,6 +44,9 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     _zoom?: ZoomBehavior<HTMLElement, unknown>;
     _svg?: Selection<HTMLElement, unknown, HTMLElement, unknown>;
     dontDispatch?: boolean;
+
+    @property({ type: Boolean })
+    "use-ctrl-to-zoom" = false;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
@@ -124,15 +128,15 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           [0, 0],
           [this.getWidthWithMargins(), 0],
         ])
-        // TODO: deal with events
-        // .filter(() => {
-        //   if (!(d3Event instanceof WheelEvent)) return true;
-        //   if (this.hasAttribute("scroll-filter")) {
-        //     const scrollableAttribute = this.getAttribute("scrollable");
-        //     if (scrollableAttribute) return scrollableAttribute === "true";
-        //   }
-        //   return !this.hasAttribute("use-ctrl-to-zoom") || d3Event.ctrlKey;
-        // })
+        .filter((event) => {
+          if (!(event.type === "wheel")) return true;
+          // TODO: deal with event filters
+          //   if (this.hasAttribute("scroll-filter")) {
+          //     const scrollableAttribute = this.getAttribute("scrollable");
+          //     if (scrollableAttribute) return scrollableAttribute === "true";
+          //   }
+          return !this["use-ctrl-to-zoom"] || event.ctrlKey;
+        })
         .on("zoom", this.zoomed);
     }
 

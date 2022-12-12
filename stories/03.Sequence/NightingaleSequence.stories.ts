@@ -3,7 +3,7 @@ import { html } from "lit-html";
 import "../../packages/nightingale-sequence/src/index.ts";
 
 export default {
-  title: "Components/Sequence",
+  title: "Components/Tracks/Sequence",
 } as Meta;
 
 const defaultSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";

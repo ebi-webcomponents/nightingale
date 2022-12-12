@@ -3,7 +3,7 @@ import { html } from "lit-html";
 import "../../packages/nightingale-navigation/src/index.ts";
 
 export default {
-  title: "Components/Navigation",
+  title: "Components/Utils/Navigation",
 } as Meta;
 
 const Template: Story<{
@@ -48,11 +48,27 @@ DifferentSelection.args = {
   "display-end": 350,
 };
 
-export const NavigationNoControls = () => html`<nightingale-navigation
-  length="456"
-  display-start="143"
-  display-end="400"
-  highlight="23:45"
-  rulerstart="1"
-  height="60"
-/>`;
+export const NavigationNoControls = () => html`
+  <nightingale-navigation
+    id="navigation"
+    length="456"
+    display-start="143"
+    display-end="400"
+    highlight="23:45"
+    rulerstart="1"
+    height="60"
+  ></nightingale-navigation>
+  <div>
+    <button id="zoom-in">Zoom In</button>
+    <button id="zoom-out">Zoom Out</button>
+  </div>
+  <script>
+    const nav = document.getElementById("navigation");
+    document.getElementById("zoom-in").addEventListener("click", () => {
+      nav.zoomIn();
+    });
+    document.getElementById("zoom-out").addEventListener("click", () => {
+      nav.zoomOut();
+    });
+  </script>
+`;

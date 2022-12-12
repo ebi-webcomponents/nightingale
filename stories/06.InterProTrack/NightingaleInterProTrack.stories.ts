@@ -7,7 +7,7 @@ import contributors from "../../packages/nightingale-interpro-track/tests/mockDa
 import residues from "../../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
 
 export default {
-  title: "Components/InterPro Track",
+  title: "Components/Tracks/InterPro Track",
 } as Meta;
 
 const Template: Story<{
