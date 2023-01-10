@@ -53,7 +53,7 @@ export const formatXrefs = (xrefs) => {
 
 const getPTMEvidence = (ptms) => {
   if (!ptms) return ``;
-  let ids = ptms.map((ptm) => ptm.dbReferences.map((ref) => ref.id));
+  const ids = ptms.map((ptm) => ptm.dbReferences.map((ref) => ref.id));
   const uniqueIds = [...new Set(ids.flat())];
   return `
   <ul>${uniqueIds
