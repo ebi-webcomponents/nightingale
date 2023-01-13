@@ -30,5 +30,19 @@
         ]
       }
     ]
+  },
+  {
+    "accession": "feature5",
+    "start": 40,
+    "end": 80,
+    "color": "#A48ea9",
+    "ptms": [
+      {
+        "position": 4
+      },
+      {
+        "position": 9
+      }
+    ]
   }
 ]
