@@ -183,24 +183,6 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .append("g")
       .attr("class", "fragment-group");
 
-    const residueGroup = fragmentGroup
-      .selectAll("g.residue-group")
-      .data((d) =>
-        d.feature.ptms
-          ? [
-              d.feature.ptms?.map((ptm) =>
-                Object.assign({}, ptm, {
-                  feature: d.feature,
-                  position: ptm.position,
-                })
-              ),
-            ]
-          : []
-      )
-      .enter()
-      .append("g")
-      .attr("class", "residue-group");
-
     fragmentGroup
       .append("path")
       .attr("class", (f) => `${this._getShape(f)} feature`)
@@ -228,36 +210,23 @@ class ProtvistaTrack extends ProtvistaZoomable {
         return feature.opacity ? feature.opacity : 0.9;
       });
 
-    residueGroup
-      .selectAll("g.residue")
-      .data((d) => d)
+    const residueGroup = fragmentGroup
+      .selectAll("g.residue-group")
+      .data((d) =>
+        d.feature.ptms
+          ? [
+              d.feature.ptms?.map((ptm) =>
+                Object.assign({}, ptm, {
+                  feature: d.feature,
+                  position: ptm.position,
+                })
+              ),
+            ]
+          : []
+      )
       .enter()
-      .append("path")
-      .attr("class", (f) => `${this._getShape(f)} residue`)
-      .attr("d", (f) =>
-        this._featureShape.getFeatureShape(
-          this.getSingleBaseWidth(),
-          this._layoutObj.getFeatureHeight(f),
-          1,
-          this._getShape(f)
-        )
-      )
-      .attr(
-        "transform",
-        (f) =>
-          `translate(${this.getXFromSeqPosition(
-            Number(f.feature.start) + Number(f.position)
-          )},${this._layoutObj.getFeatureYPos(f.feature)})`
-      )
-      .attr("fill", (f) => "black")
-      .attr("stroke", (f) => "black")
-      .style("fill-opacity", ({ feature }) =>
-        feature.opacity ? feature.opacity : 0.9
-      )
-      .style("stroke-opacity", ({ feature }) => {
-        return feature.opacity ? feature.opacity : 0.9;
-      })
-      .call(this.bindEvents, this);
+      .append("g")
+      .attr("class", "residue-group");
 
     fragmentGroup
       .append("rect")
@@ -276,6 +245,36 @@ class ProtvistaTrack extends ProtvistaZoomable {
       )
       .attr("fill", "transparent")
       .attr("stroke", "transparent")
+      .call(this.bindEvents, this);
+
+    residueGroup
+      .selectAll("g.residue")
+      .data((d) => d)
+      .enter()
+      .append("path")
+      .attr("class", (f) => `${this._getShape(f)} residue`)
+      .attr("d", (f) =>
+        this._featureShape.getFeatureShape(
+          this.getSingleBaseWidth(),
+          this._layoutObj.getFeatureHeight(),
+          1,
+          this._getShape(f)
+        )
+      )
+      .attr(
+        "transform",
+        (f) =>
+          `translate(${this.getXFromSeqPosition(
+            Number(f.feature.start) + Number(f.position)
+          )},${this._layoutObj.getFeatureYPos(f.feature)})`
+      )
+      .attr("fill", (f) => "#06038D")
+      .style("fill-opacity", ({ feature }) =>
+        feature.opacity ? feature.opacity : 0.9
+      )
+      .style("stroke-opacity", ({ feature }) => {
+        return feature.opacity ? feature.opacity : 0.9;
+      })
       .call(this.bindEvents, this);
   }
 

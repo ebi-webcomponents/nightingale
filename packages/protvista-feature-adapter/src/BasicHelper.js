@@ -131,7 +131,7 @@ export const formatTooltip = (feature) => {
       ${
         feature.xrefs
           ? `<h5>Cross-references</h5>${formatXrefs(feature.xrefs)}`
-          : ""
+          : ``
       }
       ${
         feature.peptide && feature.type === "PROTEOMICS_PTM"
@@ -139,7 +139,12 @@ export const formatTooltip = (feature) => {
               feature.peptide,
               feature.ptms
             )}</p>`
-          : `<h5>Peptide</h5><p>${feature.peptide}</p>`
+          : ``
+      }
+      ${
+        feature.peptide && feature.type !== "PROTEOMICS_PTM"
+          ? `<h5>Peptide</h5><p>${feature.peptide}</p>`
+          : ``
       } 
       ${
         ptms
@@ -156,10 +161,20 @@ export const formatTooltip = (feature) => {
                 ptm.dbReferences
                   .map(
                     (ref) =>
-                      `<li><b>${ref.id}</b></li>
-          <li><b>${findModifiedResidueName(feature, ptm)}</b></li>
+                      `<li ><b>${ref.id}</b></li>
+                      <li style="text-indent: 1em"><b>${findModifiedResidueName(
+                        feature,
+                        ptm
+                      )}</b></li>
           ${Object.entries(ref.properties)
-            .map(([key, value]) => `<li>${key}: ${value}</li>`)
+            .map(
+              ([key, value]) =>
+                `<li style="text-indent: 2em">${key}: ${
+                  key === "Universal Spectrum Id"
+                    ? `<a href="http://proteomecentral.proteomexchange.org/usi/?usi=${value}" style="color:#FFF" target="_blank">View on ProteomeXchange</a>`
+                    : value
+                }</li>`
+            )
             .join("")}
         `
                   )
