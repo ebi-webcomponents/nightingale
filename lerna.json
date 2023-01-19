@@ -2,5 +2,5 @@
   "packages": ["app", "packages/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "3.8.7"
+  "version": "3.8.8"
 }
