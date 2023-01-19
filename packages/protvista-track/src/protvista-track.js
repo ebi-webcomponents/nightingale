@@ -255,7 +255,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr("class", (f) => `${this._getShape(f)} residue`)
       .attr("d", (f) =>
         this._featureShape.getFeatureShape(
-          this.getSingleBaseWidth(),
+          this.getSingleBaseWidth() / 2, // Halve the width of the ptm residue to distinguish between each other if one follows next closely
           this._layoutObj.getFeatureHeight(),
           1,
           this._getShape(f)
@@ -264,9 +264,14 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .attr(
         "transform",
         (f) =>
-          `translate(${this.getXFromSeqPosition(
-            Number(f.feature.start) + Number(f.position)
-          )},${this._layoutObj.getFeatureYPos(f.feature)})`
+          // It is placed in the middle of a single bandwidth
+          `translate(${
+            this.getXFromSeqPosition(
+              Number(f.feature.start) + Number(f.position) - 1
+            ) +
+            this.getSingleBaseWidth() / 4
+          },
+          ${this._layoutObj.getFeatureYPos(f.feature)})`
       )
       .attr("fill", (f) => "#06038D")
       .style("fill-opacity", ({ feature }) =>
@@ -358,7 +363,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
         .selectAll("path.residue")
         .attr("d", (f) =>
           this._featureShape.getFeatureShape(
-            this.getSingleBaseWidth(),
+            this.getSingleBaseWidth() / 2,
             this._layoutObj.getFeatureHeight(f),
             1,
             this._getShape(f)
@@ -367,9 +372,12 @@ class ProtvistaTrack extends ProtvistaZoomable {
         .attr(
           "transform",
           (f) =>
-            `translate(${this.getXFromSeqPosition(
-              Number(f.feature.start) + Number(f.position)
-            )},${this._layoutObj.getFeatureYPos(f.feature)})`
+            `translate(${
+              this.getXFromSeqPosition(
+                Number(f.feature.start) + Number(f.position) - 1
+              ) +
+              this.getSingleBaseWidth() / 4
+            },${this._layoutObj.getFeatureYPos(f.feature)})`
         );
 
       fragmentG
