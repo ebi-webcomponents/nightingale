@@ -1,0 +1,38 @@
+{
+  "name": "@nightingale-elements/nightingale-msa",
+  "version": "4.0.0",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^4.0.7-alpha.0",
+    "shallowequal": "1.1.0"
+  },
+  "devDependencies": {
+    "@types/shallowequal": "1.1.1"
+  }
+}
