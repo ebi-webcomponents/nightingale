@@ -1,4 +1,8 @@
-import { StaticSchemeClass, DynSchemeClass } from "./schemeclass";
+import {
+  StaticSchemeClass,
+  DynSchemeClass,
+  ColorStructure,
+} from "./schemeclass";
 
 import Aliphatic from "./aliphatic";
 import Aromatic from "./aromatic";
@@ -23,7 +27,7 @@ import Turn from "./turn";
 import Zappo from "./zappo";
 
 // TODO: reenable dynamis colors!
-// import pid from "./pid_colors";
+import pid from "./pid_colors";
 
 export const staticSchemes: Record<string, Record<string, string>> = {
   aliphatic: Aliphatic,
@@ -54,8 +58,8 @@ export const staticSchemes: Record<string, Record<string, string>> = {
   zappo: Zappo,
 };
 
-export const dynSchemes: Record<string, any> = {
-  //  conservation: pid,
+export const dynSchemes: Record<string, ColorStructure> = {
+  conservation: pid,
 };
 
 export const defaultSchemes = Object.keys(staticSchemes);
@@ -64,14 +68,14 @@ class Colors {
   private maps = { ...staticSchemes };
   private dyn = { ...dynSchemes };
   private opt;
-  constructor(opt?: any) {
+  constructor(opt?: unknown) {
     this.opt = opt;
   }
   // getScheme  (scheme: string) {
   //   return staticSchemes[scheme];
   // };
   getScheme(scheme: string) {
-    var color = this.maps[scheme];
+    let color = this.maps[scheme];
     if (color === undefined) {
       color = {};
       if (this.dyn[scheme] !== undefined) {
@@ -83,7 +87,7 @@ class Colors {
   addStaticScheme(name: string, scheme: Record<string, string>) {
     this.maps[name] = scheme;
   }
-  addDynScheme(name: string, scheme: any) {
+  addDynScheme(name: string, scheme: ColorStructure) {
     this.dyn[name] = scheme;
   }
 }
@@ -91,15 +95,5 @@ class Colors {
 // Colors.getScheme = function (scheme: string) {
 //   return staticSchemes[scheme];
 // };
-
-// small helper to clone an object
-function clone(obj: Record<string, any>) {
-  if (null == obj || "object" !== typeof obj) return obj;
-  var copy = obj.constructor();
-  for (var attr in obj) {
-    if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-  }
-  return copy;
-}
 
 export default Colors;

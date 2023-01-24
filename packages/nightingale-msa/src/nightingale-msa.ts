@@ -16,6 +16,9 @@ type SequencesMSA = Array<{
 class NightingaleMSA extends withManager(
   withPosition(withZoom(SequenceViewer))
 ) {
+  @property({ type: Boolean })
+  "use-ctrl-to-zoom" = true;
+
   constructor() {
     super();
     this.position = {

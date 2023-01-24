@@ -88,3 +88,5 @@ export type SequencePosition = {
   sequence: RawSequence;
   residue: string;
 };
+
+export type ConservationManager = { progress: number; map: Array<number> };

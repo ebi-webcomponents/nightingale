@@ -8,6 +8,7 @@
 
 import schemes from "../colorschemes";
 import { DynSchemeClass, StaticSchemeClass } from "../colorschemes/schemeclass";
+import { ConservationManager } from "../types/types";
 const schemesMgr = new schemes();
 
 /**
@@ -15,19 +16,19 @@ const schemesMgr = new schemes();
  */
 class ColorScheme {
   scheme: DynSchemeClass | StaticSchemeClass;
-  conservation?: any;
+  conservation?: ConservationManager;
 
   constructor(colorScheme: string) {
     this.scheme = schemesMgr.getScheme(colorScheme);
   }
 
   // TODO: enable conservation
-  updateConservation(conservation: any) {
+  updateConservation(conservation: ConservationManager) {
     this.conservation = conservation;
   }
 
   getColor(element: string, position: number) {
-    if ((this.scheme.type = "dyn")) {
+    if (this.scheme.type === "dyn") {
       return (this.scheme as DynSchemeClass).getColor(
         element,
         position,
@@ -39,11 +40,3 @@ class ColorScheme {
 }
 export default ColorScheme;
 export { ColorScheme };
-
-/**
- * Checks whether the `obj` is a color scheme.
- * Everything that looks like a color scheme is very likely one.
- */
-export function isColorScheme(obj: any) {
-  return obj && typeof obj.getColor === "function";
-}

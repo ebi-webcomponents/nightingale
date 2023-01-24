@@ -1,15 +1,11 @@
 import { property, state } from "lit/decorators.js";
 import { PropertyValues } from "lit";
 
-import { clamp, floor, isEqual, pick } from "lodash-es";
+import { clamp, floor, isEqual } from "lodash-es";
 
 import DraggingComponent from "./DraggingComponent";
 import TilingGrid from "./CanvasTilingGrid";
 import CanvasCache from "./CanvasCache";
-
-// import { movePosition } from "../../store/positionReducers";
-// import msaConnect from "../../store/connect";
-// import withPositionStore from "../../store/withPositionStore";
 
 import Mouse from "../../utils/mouse";
 import { roundMod } from "../../utils/math";
@@ -44,20 +40,18 @@ class SequenceViewerComponent extends DraggingComponent {
   private redrawStarted = 0;
   private redrawnTiles = 0;
   private colorSchemeManager = new ColorScheme(DEFAULT_COLOR_SCHEME);
-  // onResidueMouseEnter?: (e: Event)=>void;
-  // onResidueMouseLeave?: (e: Event)=>void;
 
   @property({
     type: Number,
     attribute: "tile-width",
   })
-  tileWidth: number = 20;
+  tileWidth = 20;
 
   @property({
     type: Number,
     attribute: "tile-height",
   })
-  tileHeight: number = 20;
+  tileHeight = 20;
 
   @property({
     type: String,
@@ -94,7 +88,7 @@ class SequenceViewerComponent extends DraggingComponent {
   set position(position: RawPosition) {
     this._position = {
       xPosOffset: -(position.xPos % this.tileWidth),
-      yPosOffset: -(position.yPos % this.tileWidth),
+      yPosOffset: -(position.yPos % this.tileHeight),
       currentViewSequence: clamp(
         floor(position.yPos / this.tileHeight),
         0,
@@ -107,6 +101,8 @@ class SequenceViewerComponent extends DraggingComponent {
       ),
       ...position,
     };
+    this.x = position.xPos;
+    this.y = position.yPos;
   }
   @state()
   get position(): Position {
@@ -147,6 +143,7 @@ class SequenceViewerComponent extends DraggingComponent {
     // only need to check changed properties for an expensive computation.
     if (
       changedProperties.has("sequences") ||
+      changedProperties.has("tileWidth") ||
       changedProperties.has("width") ||
       changedProperties.has("height")
     ) {
@@ -158,6 +155,8 @@ class SequenceViewerComponent extends DraggingComponent {
             fullHeight: this.tileHeight * this.sequences.length,
           }
         : undefined;
+      this.fullWidth = this.tileWidth * (this.sequences?.maxLength || 0);
+      this.fullHeight = this.tileHeight * (this.sequences?.length || 0);
     }
     if (changedProperties.has("colorScheme")) {
       this.colorSchemeManager = new ColorScheme(this.colorScheme);
@@ -167,6 +166,9 @@ class SequenceViewerComponent extends DraggingComponent {
   firstUpdated() {
     super.firstUpdated();
     this.container?.addEventListener("mousemove", this.onMouseMove);
+    this.addEventListener("fake-scroll", ((e: CustomEvent) => {
+      this.movePosition(e.detail.movement);
+    }) as EventListener);
   }
 
   disconnectedCallback() {
@@ -363,9 +365,10 @@ class SequenceViewerComponent extends DraggingComponent {
   movePosition = (m: Movement) => {
     if (!this.position) throw Error("This method requires position to be set");
     if (!m.xMovement && !m.yMovement) return;
-    this.position.xPos += m.xMovement || 0;
-    this.position.yPos += m.yMovement || 0;
-    // return commonPositionReducer(prevState, movePayload);
+    this.position = {
+      xPos: this.position.xPos + m.xMovement,
+      yPos: this.position.yPos + m.yMovement,
+    };
   };
   onPositionUpdate = (oldPos: RawPosition, newPos: RawPosition) => {
     const relativeMovement = {
@@ -430,7 +433,7 @@ class SequenceViewerComponent extends DraggingComponent {
   /**
    * Only sends an event if the actual function is set.
    */
-  sendEvent(name: string, data: any) {
+  sendEvent(name: string, data: unknown) {
     if (this.ctx) {
       this.ctx.canvas.dispatchEvent(
         new CustomEvent(name, {
@@ -474,7 +477,7 @@ class SequenceViewerComponent extends DraggingComponent {
     // super.onMouseMove(event);
   };
 
-  onMouseLeave = (event: MouseEvent) => {
+  onMouseLeave = (/*event: MouseEvent*/) => {
     this.sendEvent("onResidueMouseLeave", this.currentMouseSequencePosition);
     this.currentMouseSequencePosition = undefined;
     if (this.mouseOverFeatureIds) {
@@ -642,46 +645,5 @@ type SequenceViewerComponentProps = {
   //  */
   //   onResidueDoubleClick: PropTypes.func,
 };
-
-// const mapStateToProps = (state) => {
-//   // Fallback to a smaller size if the given area is too large
-//   const width = Math.min(
-//     state.props.width,
-//     state.sequences.maxLength * state.props.tileWidth
-//   );
-//   const height = Math.min(
-//     state.props.height,
-//     state.sequences.length * state.props.tileHeight
-//   );
-//   return {
-//     sequences: state.sequences,
-//     width,
-//     height,
-//     highlight: state.props.highlight,
-//     tileWidth: state.props.tileWidth,
-//     tileHeight: state.props.tileHeight,
-//     colorScheme: state.props.colorScheme,
-//     overlayConservation: state.props.overlayConservation,
-//     conservation: state.props.overlayConservation
-//       ? state.props.conservation
-//       : null,
-//     nrXTiles: state.sequenceStats.nrXTiles,
-//     nrYTiles: state.sequenceStats.nrYTiles,
-//     fullWidth: state.sequenceStats.fullWidth,
-//     fullHeight: state.sequenceStats.fullHeight,
-//   };
-// };
-
-// const SV = withPositionStore(SequenceViewerComponent, {
-//   withX: true,
-//   withY: true,
-// });
-
-// export default msaConnect(mapStateToProps)(SV);
-
-// export {
-//   SequenceViewerComponent as SequenceViewer,
-//   SV as SequenceViewerWithPosition,
-// };
 
 export default SequenceViewerComponent;

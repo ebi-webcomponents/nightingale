@@ -1,6 +1,6 @@
 import CanvasCache from "./CanvasCache";
 import ColorScheme from "../../utils/ColorScheme";
-import { SequencesType } from "../../types/types";
+import { ConservationManager, SequencesType } from "../../types/types";
 
 type TilingGridOptions = {
   ctx: CanvasRenderingContext2D;
@@ -15,8 +15,8 @@ type TilingGridOptions = {
   residueTileCache: CanvasCache;
   colorScheme: ColorScheme;
   overlayConservation?: boolean;
-  conservation?: any;
-  border: any;
+  conservation?: ConservationManager;
+  border: boolean;
   borderWidth: number;
   borderColor: string;
   textColor: string;
@@ -57,9 +57,9 @@ class CanvasTilingGridComponent {
     if (column >= sequence.length) return undefined;
     const text = sequence[column];
     if (text !== undefined) {
-      const colorScheme = this.props.colorScheme.getColor(text, column);
+      const colorSchemeName = this.props.colorScheme.getColor(text, column);
       const overlayFactor = this.getOverlayFactor(text, column);
-      const key = `${text}-${colorScheme}-${overlayFactor}`;
+      const key = `${text}-${colorSchemeName}-${overlayFactor}`;
       const canvasTile = this.props.residueTileCache.createTile({
         key,
         tileWidth,
@@ -68,9 +68,9 @@ class CanvasTilingGridComponent {
           return this.drawResidue({
             text,
             canvas: ctx,
-            row,
-            column,
-            colorScheme,
+            // row,
+            // column,
+            colorSchemeName,
             overlayFactor,
           });
         },
@@ -105,23 +105,23 @@ class CanvasTilingGridComponent {
   }
 
   drawResidue({
-    row,
-    column,
+    // row,
+    // column,
     canvas,
-    colorScheme,
+    colorSchemeName,
     text,
     overlayFactor = 1,
   }: {
-    row: number;
-    column: number;
+    // row: number;
+    // column: number;
     canvas: CanvasRenderingContext2D;
-    colorScheme: any;
+    colorSchemeName: string;
     text: string;
     overlayFactor: number;
   }) {
     if (!this.props) return;
     canvas.globalAlpha = 0.7 * overlayFactor;
-    canvas.fillStyle = colorScheme;
+    canvas.fillStyle = colorSchemeName;
     canvas.fillRect(0, 0, this.props.tileWidth, this.props.tileHeight);
     const minW = 4;
     const fullOpacityW = 10;

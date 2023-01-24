@@ -14,8 +14,9 @@ export class StaticSchemeClass {
   }
 }
 
-type BaseColorFunction = (base: string, ...args: any[]) => string;
-type ColorStructure = {
+type BaseColorFunction = (base: string, ...args: unknown[]) => string;
+
+export type ColorStructure = {
   init: () => void;
   run: BaseColorFunction;
   map: Record<string, string>;
@@ -24,12 +25,12 @@ type ColorFunction = ColorStructure | BaseColorFunction;
 
 export class DynSchemeClass {
   type = "dyn";
-  opt?: any;
+  opt?: unknown;
   getColor: BaseColorFunction;
   reset?: () => void;
   map?: Record<string, string>;
 
-  constructor(fun: ColorFunction, opt?: any) {
+  constructor(fun: ColorFunction, opt?: unknown) {
     this.opt = opt;
     const funCS = fun as ColorStructure;
     if (funCS.init !== undefined) {
