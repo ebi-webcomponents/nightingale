@@ -1,33 +1,27 @@
 import { html } from "lit";
-import { property, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import NightingaleElement, {
   withDimensions,
+  withZoom,
+  withPosition,
 } from "@nightingale-elements/nightingale-new-core";
 
 import { RawPosition } from "../../types/types";
 import "./FakeScroll";
 import object2style from "../../utils/object2style";
-
+import { select } from "d3";
 /**
 Sub-classes are expected to implement:
 - drawScene
 - onPositionUpdate(oldPos, newPos)
 
 */
-abstract class DraggingComponent extends withDimensions(NightingaleElement) {
-  /**
-   * The internal state is kept in:
-   *
-   * this.mouseMovePosition = [x, y]; // relative to the canvas
-   * this.touchMovePosition = [x, y]; // relative to the canvas
-   *
-   * If no movement is happening, inInDragPhase is undefined
-   */
-  @property({
-    type: Boolean,
-    attribute: "disable-dragging",
-  })
-  disableDragging = false;
+abstract class DraggingComponent extends withZoom(
+  withPosition(withDimensions(NightingaleElement))
+) {
+  "use-ctrl-to-zoom" = true;
+  "margin-right" = 0;
+  "margin-left" = 0;
 
   @state()
   mouse = {
@@ -69,6 +63,10 @@ abstract class DraggingComponent extends withDimensions(NightingaleElement) {
 
   firstUpdated() {
     this.container = document.getElementById(this.uniqueId);
+    window.requestAnimationFrame(() => {
+      this.svg = select(this).select("div");
+    });
+
     this.canvasBuffers = [
       document.getElementById(`${this.uniqueId}-0`) as HTMLCanvasElement,
       document.getElementById(`${this.uniqueId}-1`) as HTMLCanvasElement,
@@ -115,6 +113,11 @@ abstract class DraggingComponent extends withDimensions(NightingaleElement) {
     this.drawScene();
     this.swapContexts();
   }
+
+  zoomRefreshed() {
+    this.handleZooomChanged();
+  }
+  abstract handleZooomChanged(): void;
 
   render() {
     const style = {

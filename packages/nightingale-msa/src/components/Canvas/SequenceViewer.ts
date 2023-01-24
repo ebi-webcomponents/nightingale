@@ -1,4 +1,4 @@
-import { property, state } from "lit/decorators.js";
+import { property, state, customElement } from "lit/decorators.js";
 import { PropertyValues } from "lit";
 
 import { clamp, floor, isEqual } from "lodash-es";
@@ -9,7 +9,6 @@ import CanvasCache from "./CanvasCache";
 
 import Mouse from "../../utils/mouse";
 import { roundMod } from "../../utils/math";
-
 import {
   SequencesType,
   Movement,
@@ -32,6 +31,7 @@ const DEFAULT_COLOR_SCHEME = "clustal";
 /**
  * Component to draw the main sequence alignment.
  */
+@customElement("msa-sequence-viewer")
 class SequenceViewerComponent extends DraggingComponent {
   private tileCache: CanvasCache;
   private residueTileCache: CanvasCache;
@@ -174,6 +174,14 @@ class SequenceViewerComponent extends DraggingComponent {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.container?.removeEventListener("mousemove", this.onMouseMove);
+  }
+
+  handleZooomChanged(): void {
+    this.tileWidth = this.getSingleBaseWidth();
+    this.position = {
+      xPos: ((this["display-start"] || 1) - 1) * this.tileWidth,
+      yPos: this.position.yPos,
+    };
   }
 
   // starts the drawing process
