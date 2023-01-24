@@ -35,6 +35,11 @@ class NightingaleMSA extends withManager(
     attribute: "tile-height",
   })
   tileHeight = 20;
+  @property({
+    attribute: "active-label",
+    reflect: true,
+  })
+  activeLabel = "";
 
   private sequenceViewer?: SequenceViewerComponent | null;
   private labelPanel?: LabelsComponent | null;
@@ -50,17 +55,6 @@ class NightingaleMSA extends withManager(
     if (this.labelPanel)
       this.labelPanel.labels = sequences.map(({ name }) => name);
   }
-  // zoomRefreshed() {
-  //   this.updateAlignmentProps();
-  // }
-  // updateAlignmentProps() {
-  //   if (!this.sequenceViewer) return;
-  //   this.sequenceViewer.tileWidth = this.getSingleBaseWidth();
-  //   this.sequenceViewer.position = {
-  //     xPos: ((this["display-start"] || 1) - 1) * this.sequenceViewer.tileWidth,
-  //     yPos: this.sequenceViewer.position.yPos,
-  //   };
-  // }
 
   render() {
     const containerStyle = {
@@ -95,6 +89,7 @@ class NightingaleMSA extends withManager(
               width=${this.labelWidth}
               height=${this.height}
               tile-height=${this.tileHeight}
+              active-label=${this.activeLabel}
             ></msa-labels>`
           : ""}
 
@@ -128,6 +123,9 @@ class NightingaleMSA extends withManager(
     this.addEventListener("fake-scroll", () => {
       if (this.labelPanel && this.sequenceViewer)
         this.labelPanel.y = this.sequenceViewer.position.yPos;
+    });
+    this.addEventListener("msa-active-label", () => {
+      if (this.labelPanel) this.activeLabel = this.labelPanel.activeLabel;
     });
   }
 }

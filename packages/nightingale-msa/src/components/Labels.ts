@@ -17,6 +17,11 @@ class Labels extends LitElement {
     attribute: "tile-height",
   })
   tileHeight = 20;
+  @property({
+    attribute: "active-label",
+    reflect: true,
+  })
+  activeLabel = "";
 
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("y")) {
@@ -40,7 +45,25 @@ class Labels extends LitElement {
       cursor: "pointer",
     };
     return html`<ul style=${object2style(ulStyle)}>
-      ${this.labels.map((label) => html`<li>${label}</li>`)}
+      ${this.labels.map(
+        (label) =>
+          html`<li
+            style=${`font-weight: ${
+              this.activeLabel === label ? "bold" : "normal"
+            }`}
+            @click=${() => {
+              this.activeLabel = label;
+              this.dispatchEvent(
+                new CustomEvent("msa-active-label", {
+                  bubbles: true,
+                  detail: { label },
+                })
+              );
+            }}
+          >
+            ${label}
+          </li>`
+      )}
     </ul>`;
   }
 }
