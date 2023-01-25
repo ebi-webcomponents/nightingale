@@ -85,6 +85,10 @@ class NightingaleMSA extends withManager(
     this.worker.postMessage({ sequences, sampleSize: this.sampleSize });
   }
 
+  getColorMap() {
+    return this.sequenceViewer?.getColorMap();
+  }
+
   render() {
     const containerStyle = {
       display: "flex",

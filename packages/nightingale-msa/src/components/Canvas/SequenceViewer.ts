@@ -150,6 +150,12 @@ class SequenceViewerComponent extends DraggingComponent {
       this.draw();
     }
   }
+  getColorMap() {
+    return {
+      name: this.colorScheme,
+      map: this.colorSchemeManager.scheme.map,
+    };
+  }
 
   willUpdate(changedProperties: PropertyValues<this>) {
     // only need to check changed properties for an expensive computation.
