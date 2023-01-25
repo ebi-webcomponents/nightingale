@@ -11,11 +11,8 @@ import NightingaleElement, {
   withDimensions,
 } from "@nightingale-elements/nightingale-new-core";
 import object2style from "./utils/object2style";
-
-type SequencesMSA = Array<{
-  name: string;
-  sequence: string;
-}>;
+import { SequencesMSA } from "./types/types";
+// import ConservationWorker from "web-worker:./workers/conservation.worker";
 
 @customElement("nightingale-msa")
 class NightingaleMSA extends withManager(
@@ -40,9 +37,38 @@ class NightingaleMSA extends withManager(
     reflect: true,
   })
   activeLabel = "";
+  @property({
+    type: Number,
+    attribute: "conservation-sample-size",
+  })
+  sampleSize = 20;
+
+  worker = new Worker(
+    new URL("./workers/conservation.worker.ts", import.meta.url)
+  ); //new ConservationWorker();
 
   private sequenceViewer?: SequenceViewerComponent | null;
   private labelPanel?: LabelsComponent | null;
+
+  constructor() {
+    super();
+    this.worker.onmessage = (e) => {
+      this.dispatchEvent(
+        new CustomEvent("conservationProgress", {
+          bubbles: true,
+          detail: e.data,
+        })
+      );
+      if (e.data.progress === 1) {
+        const conservation = {
+          ...e.data,
+          map: e.data.conservation,
+        };
+        this.sequenceViewer?.setProp("conservation", conservation);
+        console.log(conservation);
+      }
+    };
+  }
 
   set data(sequences: SequencesMSA) {
     this.length = Math.max(...sequences.map(({ sequence }) => sequence.length));
@@ -54,6 +80,8 @@ class NightingaleMSA extends withManager(
     if (this.sequenceViewer) this.sequenceViewer.sequences = seqs;
     if (this.labelPanel)
       this.labelPanel.labels = sequences.map(({ name }) => name);
+
+    this.worker.postMessage({ sequences, sampleSize: this.sampleSize });
   }
 
   render() {

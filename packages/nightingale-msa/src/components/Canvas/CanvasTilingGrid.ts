@@ -15,7 +15,7 @@ type TilingGridOptions = {
   residueTileCache: CanvasCache;
   colorScheme: ColorScheme;
   overlayConservation?: boolean;
-  conservation?: ConservationManager;
+  conservation?: ConservationManager | null;
   border: boolean;
   borderWidth: number;
   borderColor: string;

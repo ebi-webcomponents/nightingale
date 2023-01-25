@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2019",
-    "module": "es2015",
+    "module": "ES2020",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "declaration": true,

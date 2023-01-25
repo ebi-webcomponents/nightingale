@@ -3,6 +3,11 @@ import ColorScheme from "../utils/ColorScheme";
 export type RawSequence = {
   sequence: string;
 };
+export type SequencesMSA = Array<{
+  name: string;
+  sequence: string;
+}>;
+
 export type SequencesType = {
   raw: Array<RawSequence>;
   length: number;

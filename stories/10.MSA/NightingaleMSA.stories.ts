@@ -69,7 +69,8 @@ MSA.args = {
 MSA.play = async () => {
   await customElements.whenDefined("nightingale-msa");
   const msa = document.getElementById("msa");
-  if (msa) (msa as any).data = testSequences;
+  if (msa)
+    (msa as any).data = [...testSequences, ...testSequences, ...testSequences];
 };
 
 export const MinimaNightingaleMSA = () => html`

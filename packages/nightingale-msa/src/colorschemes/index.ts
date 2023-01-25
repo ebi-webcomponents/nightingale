@@ -62,7 +62,10 @@ export const dynSchemes: Record<string, ColorStructure> = {
   conservation: pid,
 };
 
-export const defaultSchemes = Object.keys(staticSchemes);
+export const defaultSchemes = [
+  ...Object.keys(staticSchemes),
+  ...Object.keys(dynSchemes),
+];
 
 class Colors {
   private maps = { ...staticSchemes };

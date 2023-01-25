@@ -20,6 +20,7 @@ import {
   SequencePosition,
   ResidueTileOptions,
   TileOptions,
+  ConservationManager,
 } from "../../types/types";
 
 import ColorScheme from "../../utils/ColorScheme";
@@ -77,7 +78,7 @@ class SequenceViewerComponent extends DraggingComponent {
     scrollBarPositionY: "right",
     overlayConservation: false,
     // TODO: deal with conservation
-    // conservation: null,
+    conservation: null,
     sequenceDisableDragging: false,
   };
 
@@ -137,6 +138,17 @@ class SequenceViewerComponent extends DraggingComponent {
     this.onClick = this.onClick.bind(this);
     this.onDoubleClick = this.onDoubleClick.bind(this);
     this.draw = this.draw.bind(this);
+  }
+
+  setProp(key: string, value: unknown) {
+    this.props = {
+      ...this.props,
+      [key]: value,
+    };
+    if (key === "conservation") {
+      this.colorSchemeManager.updateConservation(value as ConservationManager);
+      this.draw();
+    }
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
@@ -266,7 +278,7 @@ class SequenceViewerComponent extends DraggingComponent {
           borderWidth: this.props.borderWidth,
           borderColor: this.props.borderColor,
           overlayConservation: this.props.overlayConservation,
-          // conservation: this.props.conservation,
+          conservation: this.props.conservation,
         });
       },
     });
@@ -527,7 +539,7 @@ class SequenceViewerComponent extends DraggingComponent {
       textFont: this.props.textFont,
       borderColor: this.props.borderColor,
       overlayConservation: this.props.overlayConservation,
-      // conservation: this.props.conservation,
+      conservation: this.props.conservation,
     };
     this.tileCache.updateTileSpecs({
       ...residueTileSpecs,
@@ -619,6 +631,7 @@ type SequenceViewerComponentProps = {
    */
   scrollBarPositionY: "left" | "right";
 
+  conservation?: ConservationManager | null;
   /**
    * The conservation data can be used to define an overlay that
    * defines the opacity of the background color of each residue.
