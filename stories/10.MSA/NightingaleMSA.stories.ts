@@ -54,6 +54,7 @@ const Template: Story<{
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
       label-width="200"
+      highlight="10:19,40:49"
     ></nightingale-msa>
   `;
 };
@@ -91,6 +92,8 @@ export const MinimaNightingaleMSA = () => html`
       display-start="1"
       display-end="90"
       label-width="100"
+      highlight="3:20"
+      highlight-color="red"
     ></nightingale-msa>
   </nightingale-manager>
 `;

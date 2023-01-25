@@ -322,20 +322,20 @@ class SequenceViewerComponent extends DraggingComponent {
     if (this.highlight) {
       if (Array.isArray(this.highlight)) {
         for (const h of this.highlight) {
-          this.drawHighligtedRegion(h);
+          this.drawHighlightedRegion(h);
         }
       } else {
-        this.drawHighligtedRegion(this.highlight);
+        this.drawHighlightedRegion(this.highlight);
       }
     }
     if (this.features) {
       this.features.forEach((feature) => {
-        this.drawHighligtedRegion(feature);
+        this.drawHighlightedRegion(feature);
       });
     }
   }
 
-  drawHighligtedRegion(region: Region) {
+  drawHighlightedRegion(region: Region) {
     if (!this.ctx || !region || !this.position) return;
     const regionWidth =
       this.tileWidth * (1 + region.residues.to - region.residues.from);

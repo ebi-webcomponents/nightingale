@@ -9,14 +9,15 @@ import NightingaleElement, {
   withPosition,
   withMargin,
   withDimensions,
+  withHighlight,
 } from "@nightingale-elements/nightingale-new-core";
 import object2style from "./utils/object2style";
-import { SequencesMSA } from "./types/types";
+import { Region, SequencesMSA } from "./types/types";
 // import ConservationWorker from "web-worker:./workers/conservation.worker";
 
 @customElement("nightingale-msa")
 class NightingaleMSA extends withManager(
-  withMargin(withDimensions(withPosition(NightingaleElement)))
+  withHighlight(withMargin(withDimensions(withPosition(NightingaleElement))))
 ) {
   @property({
     attribute: "color-scheme",
@@ -138,6 +139,24 @@ class NightingaleMSA extends withManager(
         : ""}
     `;
   }
+  updated() {
+    if (!this.sequenceViewer?.sequences) return;
+    this.sequenceViewer.highlight = this.highlightedRegion.segments.map(
+      ({ start, end }) =>
+        ({
+          sequences: {
+            from: 0,
+            to: (this.sequenceViewer?.sequences || []).length - 1,
+          },
+          residues: {
+            from: start,
+            to: end,
+          },
+          fillColor: this["highlight-color"],
+          borderColor: this["highlight-color"],
+        } as Region)
+    );
+  }
   protected firstUpdated() {
     this.sequenceViewer = this.renderRoot.querySelector("msa-sequence-viewer");
     this.labelPanel = this.renderRoot.querySelector("msa-labels");
@@ -148,6 +167,7 @@ class NightingaleMSA extends withManager(
       xPos: 0,
       yPos: 0,
     };
+
     this.addEventListener("fake-scroll", () => {
       if (this.labelPanel && this.sequenceViewer)
         this.labelPanel.y = this.sequenceViewer.position.yPos;
