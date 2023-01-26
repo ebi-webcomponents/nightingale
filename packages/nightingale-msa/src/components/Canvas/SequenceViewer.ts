@@ -178,6 +178,9 @@ class SequenceViewerComponent extends DraggingComponent {
     }
     if (changedProperties.has("colorScheme")) {
       this.colorSchemeManager = new ColorScheme(this.colorScheme);
+      if (this.props.conservation) {
+        this.colorSchemeManager.updateConservation(this.props.conservation);
+      }
     }
   }
 
