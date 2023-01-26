@@ -25,7 +25,7 @@ import {
 
 import ColorScheme from "../../utils/ColorScheme";
 
-const debug = true;
+const debug = false;
 
 const DEFAULT_COLOR_SCHEME = "clustal";
 

@@ -66,7 +66,6 @@ class NightingaleMSA extends withManager(
           map: e.data.conservation,
         };
         this.sequenceViewer?.setProp("conservation", conservation);
-        console.log(conservation);
       }
     };
   }
