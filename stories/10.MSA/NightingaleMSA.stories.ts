@@ -49,7 +49,6 @@ const Template: Story<{
     <nightingale-msa
       id="msa"
       height=${args.height}
-      width=${args.width}
       color-scheme=${args.colorScheme}
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
@@ -75,11 +74,10 @@ MSA.play = async () => {
 };
 
 export const MinimaNightingaleMSA = () => html`
-  <nightingale-manager>
+  <nightingale-manager style="width: 100%">
     <div style="padding-left: 100px">
       <nightingale-navigation
         height="50"
-        width="500"
         length="184"
         id="navigation"
       ></nightingale-navigation>
@@ -87,7 +85,6 @@ export const MinimaNightingaleMSA = () => html`
     <nightingale-msa
       id="msa-2"
       height="200"
-      width="600"
       color-scheme="clustal2"
       display-start="1"
       display-end="90"

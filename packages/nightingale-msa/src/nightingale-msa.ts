@@ -10,6 +10,7 @@ import NightingaleElement, {
   withMargin,
   withDimensions,
   withHighlight,
+  withResizable,
 } from "@nightingale-elements/nightingale-new-core";
 import object2style from "./utils/object2style";
 import { Region, SequencesMSA } from "./types/types";
@@ -17,7 +18,9 @@ import { Region, SequencesMSA } from "./types/types";
 
 @customElement("nightingale-msa")
 class NightingaleMSA extends withManager(
-  withHighlight(withMargin(withDimensions(withPosition(NightingaleElement))))
+  withResizable(
+    withHighlight(withMargin(withDimensions(withPosition(NightingaleElement))))
+  )
 ) {
   @property({
     attribute: "color-scheme",
