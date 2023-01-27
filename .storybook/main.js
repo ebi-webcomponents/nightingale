@@ -30,6 +30,10 @@ module.exports = {
       include: path.resolve(__dirname, "../packages"),
       loader: "ts-loader",
     });
+    config.module.rules.push({
+      test: /\.(tsv)$/,
+      type: "asset/source",
+    });
     return config;
   },
 };
