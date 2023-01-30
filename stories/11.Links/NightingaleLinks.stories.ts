@@ -4,6 +4,7 @@ import "../../packages/nightingale-links/src/index.ts";
 import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
 
+// @ts-ignore
 import rawContactsHC from "../../packages/nightingale-links/tests/example.tsv";
 
 export default {
@@ -15,6 +16,8 @@ const Template: Story<{
   width: number;
   displayStart: number;
   displayEnd: number;
+  minDistance: number;
+  minProbability: number;
 }> = (args) => {
   return html`
     <nightingale-links
@@ -24,6 +27,8 @@ const Template: Story<{
       display-end=${args.displayEnd}
       highlight="10:19,40:49"
       length="100"
+      min-distance=${args.minDistance}
+      min-probability=${args.minProbability}
     ></nightingale-links>
   `;
 };
@@ -34,6 +39,8 @@ BasicLinks.args = {
   width: 800,
   displayStart: 1,
   displayEnd: 50,
+  minDistance: 5,
+  minProbability: 0.9,
 };
 BasicLinks.play = async () => {
   await customElements.whenDefined("nightingale-links");

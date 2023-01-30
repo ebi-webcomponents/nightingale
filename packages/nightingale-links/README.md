@@ -7,7 +7,13 @@ A node-link representation to visualize points of interaction between bases in a
 ## Usage
 
 ```html
-<nightingale-links id="link"></nightingale-links>
+<nightingale-links
+  id="links"
+  height="50"
+  length="100"
+  min-distance="3"
+  min-probability="0.99"
+></nightingale-links>
 ```
 
 ## API Reference
@@ -16,9 +22,11 @@ A node-link representation to visualize points of interaction between bases in a
 
 #### `min-distance: number (default: 0)`
 
+It filters out the links between bases that are closer than the given minimum distance.
+
 #### `min-probability: number (default: 0.7)`
 
-Width reserved to render the labels of the sequences. If the value is `0` the labels won't be rendered.
+It filters out the links that have lessprobability than the given one.
 
 ### Other attributes and parameters
 

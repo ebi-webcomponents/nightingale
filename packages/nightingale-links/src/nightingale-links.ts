@@ -151,9 +151,12 @@ class NightingaleLinks extends NightingaleTrack {
           this.refresh();
         })
         .on("click", (d: number) => {
-          if (!this.#contacts || this.#contacts?.isHold) return;
+          if (!this.#contacts) return;
           this.#contacts.isHold = !this.#contacts.isHold;
-          if (!this.#contacts.isHold) this._dispatchSelectNode(d);
+          if (!this.#contacts.isHold) {
+            this.#contacts.selected = undefined;
+          }
+          this._dispatchSelectNode(d);
           this.refresh();
         });
     this._linksData = contactObjectToLinkList(this.#contacts.contacts);

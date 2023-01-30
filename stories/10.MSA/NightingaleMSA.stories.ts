@@ -6,8 +6,11 @@ import "../../packages/nightingale-manager/src/index.ts";
 
 import { defaultSchemes } from "../../packages/nightingale-msa/src/colorschemes";
 
+// @ts-ignore
+import rawContactsHC from "../../packages/nightingale-links/tests/example.tsv";
+
 export default {
-  title: "Components/Other/Alignments",
+  title: "Components/Tracks/Alignments",
   argTypes: {
     colorScheme: {
       options: defaultSchemes,
@@ -73,7 +76,7 @@ MSA.play = async () => {
     (msa as any).data = [...testSequences, ...testSequences, ...testSequences];
 };
 
-export const MinimaNightingaleMSA = () => html`
+export const MinimalMSA = () => html`
   <nightingale-manager style="width: 100%">
     <div style="padding-left: 100px">
       <nightingale-navigation
@@ -86,15 +89,13 @@ export const MinimaNightingaleMSA = () => html`
       id="msa-2"
       height="200"
       color-scheme="clustal2"
-      display-start="1"
-      display-end="90"
       label-width="100"
       highlight="3:20"
       highlight-color="red"
     ></nightingale-msa>
   </nightingale-manager>
 `;
-MinimaNightingaleMSA.play = async () => {
+MinimalMSA.play = async () => {
   await customElements.whenDefined("nightingale-msa");
   const msa = document.getElementById("msa-2");
   if (msa)
@@ -111,4 +112,40 @@ MinimaNightingaleMSA.play = async () => {
       ...testSequences,
       ...testSequences,
     ];
+};
+export const LinksAndMSA = () => html`
+  <nightingale-manager style="width: 100%">
+    <div style="padding-left: 100px">
+      <nightingale-navigation
+        height="50"
+        length="184"
+        id="navigation"
+      ></nightingale-navigation>
+    </div>
+    <div style="display:flex">
+      <div style="width: 100px">Contacts</div>
+      <div style="flex-grow: 2;">
+        <nightingale-links
+          id="links"
+          height="50"
+          length="184"
+        ></nightingale-links>
+      </div>
+    </div>
+    <nightingale-msa
+      id="msa-3"
+      height="200"
+      color-scheme="clustal2"
+      label-width="100"
+      highlight-color="orange"
+    ></nightingale-msa>
+  </nightingale-manager>
+`;
+LinksAndMSA.play = async () => {
+  await customElements.whenDefined("nightingale-msa");
+  const msa = document.getElementById("msa-3");
+  if (msa) (msa as any).data = testSequences;
+  await customElements.whenDefined("nightingale-links");
+  const links = document.getElementById("links");
+  if (links) (links as any).contacts = rawContactsHC;
 };
