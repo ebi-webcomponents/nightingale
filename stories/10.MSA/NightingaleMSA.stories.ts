@@ -123,7 +123,11 @@ export const LinksAndMSA = () => html`
       ></nightingale-navigation>
     </div>
     <div style="display:flex">
-      <div style="width: 100px">Contacts</div>
+      <div
+        style="width: 100px; line-height:1rem; display: flex; align-items: center;"
+      >
+        Contacts
+      </div>
       <div style="flex-grow: 2;">
         <nightingale-links
           id="links"
