@@ -124,11 +124,11 @@ export const LinksAndMSA = () => html`
     </div>
     <div style="display:flex">
       <div
-        style="width: 100px; line-height:1rem; display: flex; align-items: center;"
+        style="width: 100px; line-height:1rem; flex-grow: 1;display: flex; align-items: center;"
       >
         Contacts
       </div>
-      <div style="flex-grow: 2;">
+      <div style="flex-grow: 1;">
         <nightingale-links
           id="links"
           height="50"
