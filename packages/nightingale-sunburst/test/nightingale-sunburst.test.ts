@@ -9,6 +9,7 @@ describe("nightingale-sunburst tests", () => {
     rendered.setAttribute("size", "200");
     rendered.setAttribute("weight-attribute", "numSpecies");
     document.documentElement.appendChild(rendered);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (rendered as any).data = data;
   });
   afterEach(() => {

@@ -115,21 +115,21 @@ const getDistanceOfPointsInRadians = (
 @customElement("nightingale-sunburst")
 class NightingaleSunburst extends LitElement {
   @property({ type: Number })
-  side: number = 500;
+  side = 500;
   @property({ type: String })
   "weight-attribute": WeightAttributes = "value";
   @property({ type: String })
-  "weight-attribute-label": string = "Value";
+  "weight-attribute-label" = "Value";
   @property({ type: String })
   "name-attribute": NameAttributes = "name";
   @property({ type: String })
   "id-attribute": NameAttributes = "id";
   @property({ type: Number })
-  "max-depth": number = Infinity;
+  "max-depth" = Infinity;
   @property({ type: Number })
-  "font-size": number = 10;
+  "font-size" = 10;
   @property({ type: Boolean })
-  "show-label": boolean = false;
+  "show-label" = false;
 
   #data: Node | null = null;
 
