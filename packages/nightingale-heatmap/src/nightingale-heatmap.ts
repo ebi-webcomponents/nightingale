@@ -1,8 +1,10 @@
+import { PropertyValues, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import {
   select,
   scaleBand,
   scaleLinear,
+  ScaleLinear,
   axisBottom,
   axisLeft,
   range,
@@ -24,18 +26,27 @@ type HeatmapPoint = { xPoint: number; yPoint: number };
 class NightingaleHeatmap extends withResizable(
   withMargin(withPosition(withDimensions(withHighlight(NightingaleElement))))
 ) {
-  @property({ type: Boolean, attribute: "symmetric" })
-  symmetricMap = false;
+  @property({ type: Boolean })
+  symmetric = false;
+  @property({ type: String, attribute: "top-color" })
+  topColor = "yellow";
+  @property({ type: String, attribute: "bottom-color" })
+  bottomColor = "darkblue";
+  @property({ type: String, attribute: "x-label" })
+  xLabel = "Residue";
+  @property({ type: String, attribute: "y-label" })
+  yLabel = "Residue";
 
   #data: HeatmapData = [];
+  #rawData: HeatmapData = [];
   #canvasWidth = 0;
   #canvasHeight = 0;
   #context?: CanvasRenderingContext2D | null;
   #x?: ScaleBand<number>;
   #y?: ScaleBand<number>;
+  colorScale?: ScaleLinear<string, string>;
 
-  set data(data: HeatmapData) {
-    // If length is not specified, the last value from the data is taken as the dimension for the matrix
+  processData(data: HeatmapData): HeatmapData {
     if (!this.length) {
       const [lastValue] = data[data.length - 1];
       this.length = lastValue;
@@ -64,32 +75,85 @@ class NightingaleHeatmap extends withResizable(
         j++;
       } else {
         i++;
-        j = this.symmetricMap ? i : 1;
+        j = this.symmetric ? i : 1;
         fillArray(newArray);
       }
     }
-    this.#data = newArray;
-    this.render();
+    return newArray;
+  }
+  set data(data: HeatmapData) {
+    this.#rawData = data;
+    this.#data = this.processData(this.#rawData);
   }
 
   get data(): HeatmapData {
     return this.#data;
   }
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("symmetric")) {
+      this.#data = this.processData(this.#rawData);
+    }
+  }
 
   render() {
-    if (!this.#data.length) {
-      return;
-    }
     this.style.display = "block";
+    return html`
+      <canvas class="canvas-heatmap" style="position: absolute"></canvas
+      ><svg
+        class="svg-heatmap"
+        width=${this.width}
+        height=${this.height}
+        style="position: absolute; pointer-events: none;"
+      >
+        <g class="svg-heatmap-group">
+          <g class="x-axis"></g>
+          <text class="x-label" style="text-anchor:middle">${this.xLabel}</text>
+          <g class="y-axis"></g>
+          <g class="hovered-area"></g>
+          <text
+            class="y-label"
+            style="text-anchor:middle"
+            transform="rotate(-90)"
+          >
+            ${this.yLabel}
+          </text>
+        </g>
+      </svg>
+    `;
+  }
+  protected firstUpdated(): void {
+    const mousemove = (event: MouseEvent) => {
+      if (!this.#x || !this.#y) return;
+      const xDomainValue = Math.floor(
+        (this.#x.domain().length * event.offsetX) / this.#x.range()[1]
+      );
+      const yDomainValue = Math.floor(
+        (this.#y.domain().length * event.offsetY) / this.#y.range()[1]
+      );
 
-    // clear all previous vis
-    select(this).select(".contact-map").remove();
-    select(this).select("svg").remove();
-    select(this).select("canvas").remove();
+      if (xDomainValue >= 0 && yDomainValue >= 0) {
+        const xPoint = this.#x.domain()[xDomainValue];
+        const yPoint = this.#y.domain()[yDomainValue];
+        this.drawHovered([xPoint, yPoint]);
+        this.#dispatchSelectionPoint("mousemove", { xPoint, yPoint });
+      }
+    };
 
-    if (this.#data.length) {
-      this.createHeatMap(this.#data);
-    }
+    const mouseout = () => {
+      this.drawHovered();
+      this.#dispatchSelectionPoint("mouseout");
+    };
+
+    select(".canvas-heatmap").on("mousemove", mousemove);
+    select(".canvas-heatmap").on("mouseout", mouseout);
+  }
+  protected updated(): void {
+    this.colorScale = scaleLinear<string, string>()
+      .domain([0, 1])
+      .range([this.bottomColor, this.topColor]);
+
+    this.createHeatMap(this.#data);
+    if (this.#data) this.refreshHeatmap(this.#data);
   }
 
   #dispatchSelectionPoint(type: string, d?: HeatmapPoint) {
@@ -117,23 +181,15 @@ class NightingaleHeatmap extends withResizable(
     this.#canvasHeight = this.height - margin.top - margin.bottom;
 
     const svg = select(this)
-      .append("svg")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .attr("class", "svg-heatmap")
-      .style("position", "absolute")
-      .append("g")
-      .attr("class", "svg-heatmap-group")
+      .select("g.svg-heatmap-group")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const canvas = select(this)
-      .append("canvas")
+      .select<HTMLCanvasElement>("canvas.canvas-heatmap")
       .attr("width", this.#canvasWidth)
       .attr("height", this.#canvasHeight)
       .style("margin-left", `${margin.left}px`)
-      .style("margin-top", `${margin.top}px`)
-      .attr("class", "canvas-heatmap")
-      .style("position", "absolute");
+      .style("margin-top", `${margin.top}px`);
 
     this.#context = canvas.node()?.getContext("2d");
 
@@ -165,7 +221,7 @@ class NightingaleHeatmap extends withResizable(
     // Adding axes
     const xAxis = axisBottom(this.#x).tickSize(3).tickValues(tickValues);
     svg
-      .append("g")
+      .select<SVGGElement>("g.x-axis")
       .style("font-size", 15)
       .attr("transform", `translate(0,${this.#canvasHeight})`)
       .call(xAxis)
@@ -173,7 +229,7 @@ class NightingaleHeatmap extends withResizable(
       .remove();
     const yAxis = axisLeft(this.#y).tickSize(3).tickValues(tickValues);
     svg
-      .append("g")
+      .select<SVGGElement>("g.y-axis")
       .style("font-size", 15)
       .call(yAxis)
       .select(".domain")
@@ -181,51 +237,24 @@ class NightingaleHeatmap extends withResizable(
 
     // text label for axes
     svg
-      .append("text")
+      .select<SVGTextElement>("text.x-label")
       .attr(
         "transform",
-        `translate(${this.#canvasWidth / 2},${this.#canvasHeight + margin.top})`
-      )
-      .style("text-anchor", "middle")
-      .text("Residue");
+        `translate(${this.#canvasWidth / 2},${
+          this.#canvasHeight + margin.top + margin.bottom
+        })`
+      );
     svg
-      .append("text")
-      .attr("transform", "rotate(-90)")
+      .select<SVGTextElement>("text.y-label")
       .attr("y", 0 - margin.left)
       .attr("x", 0 - this.#canvasHeight / 2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Residue");
+      .attr("dy", "1em");
 
     // Draw on canvas
     this.refreshHeatmap(data);
-
-    const mousemove = (event: MouseEvent) => {
-      if (!this.#x || !this.#y) return;
-      const xDomainValue = Math.floor(
-        (this.#x.domain().length * event.offsetX) / this.#x.range()[1]
-      );
-      const yDomainValue = Math.floor(
-        (this.#y.domain().length * event.offsetY) / this.#y.range()[1]
-      );
-      if (xDomainValue >= 0 && yDomainValue >= 0) {
-        const xPoint = this.#x.domain()[xDomainValue];
-        const yPoint = this.#y.domain()[yDomainValue];
-        this.refreshHeatmap(data, [xPoint, yPoint]);
-        this.#dispatchSelectionPoint("mousemove", { xPoint, yPoint });
-      }
-    };
-
-    const mouseout = () => {
-      this.refreshHeatmap(data);
-      this.#dispatchSelectionPoint("mouseout");
-    };
-
-    select(".canvas-heatmap").on("mousemove", mousemove);
-    select(".canvas-heatmap").on("mouseout", mouseout);
   }
 
-  refreshHeatmap(data: HeatmapData, highlightPoint: number[] = []) {
+  refreshHeatmap(data: HeatmapData) {
     if (!this.#context || !this.#x) return;
     // Clear the canvas before repainting
     this.#context.clearRect(0, 0, this.#canvasWidth, this.#canvasHeight);
@@ -252,19 +281,39 @@ class NightingaleHeatmap extends withResizable(
         this.drawRect(point);
       });
     }
+  }
 
-    if (highlightPoint.length === 2) {
-      this.drawRect(highlightPoint, true);
+  drawHovered(highlightPoint: number[] = []) {
+    const area = select(this).select("g.hovered-area");
+    area.selectAll("circle").remove();
+    if (!this.#x || !this.#y || highlightPoint.length < 2) return;
+    let dataPoint = this.#data.filter(
+      ([x, y]) => x === highlightPoint[0] && y === highlightPoint[1]
+    );
+
+    if (!dataPoint.length) {
+      if (this.symmetric) {
+        dataPoint = this.#data.filter(
+          ([x, y]) => x === highlightPoint[1] && y === highlightPoint[0]
+        );
+        if (!dataPoint.length) return;
+      } else return;
     }
+    area
+      .append("circle")
+      .attr("cx", this.#x(highlightPoint[0]) || 0)
+      .attr("cy", this.#y(highlightPoint[1]) || 0)
+      .attr("fill", this.colorScale?.(dataPoint[0][2] || 0) || null)
+      .attr("stroke", this["highlight-color"])
+      .attr("r", 10);
   }
 
   drawRect(value: number[], highlight = false) {
     if (!this.#context || !this.#x || !this.#y) return;
-    const colorScale = scaleLinear<string, string>()
-      .domain([0, 1])
-      .range(["darkblue", "yellow"]);
     this.#context.beginPath();
-    this.#context.fillStyle = highlight ? "black" : colorScale(value[2]);
+    this.#context.fillStyle = highlight
+      ? "black"
+      : this.colorScale?.(value[2]) || "black";
     this.#context.fillRect(
       this.#x(value[0]) || 0,
       this.#y(value[1]) || 0,
@@ -272,7 +321,7 @@ class NightingaleHeatmap extends withResizable(
       Math.ceil(this.#y.bandwidth())
     );
     // Symmetric half
-    if (this.symmetricMap && !highlight)
+    if (this.symmetric && !highlight)
       // Dont highlight the symmetrical point
       this.#context.fillRect(
         this.#x(value[1]) || 0,
