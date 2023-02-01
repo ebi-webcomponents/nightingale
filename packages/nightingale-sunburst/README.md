@@ -4,7 +4,7 @@ A custom element that creates a sunburst visualization for a taxonomy tree.
 
 ## Usage
 
-```javascript
+```html
 <nightingale-sunburst
   id="sunburst"
   side="600"
