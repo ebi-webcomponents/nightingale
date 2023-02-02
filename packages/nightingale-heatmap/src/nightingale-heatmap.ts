@@ -20,7 +20,7 @@ import NightingaleElement, {
 } from "@nightingale-elements/nightingale-new-core";
 
 type HeatmapData = Array<[number, number, number]>;
-type HeatmapPoint = { xPoint: number; yPoint: number };
+type HeatmapPoint = { xPoint: number; yPoint: number; value: number | null };
 
 @customElement("nightingale-heatmap")
 class NightingaleHeatmap extends withResizable(
@@ -107,16 +107,14 @@ class NightingaleHeatmap extends withResizable(
       >
         <g class="svg-heatmap-group">
           <g class="x-axis"></g>
-          <text class="x-label" style="text-anchor:middle">${this.xLabel}</text>
+          <text class="x-label" style="text-anchor:middle"></text>
           <g class="y-axis"></g>
           <g class="hovered-area"></g>
           <text
             class="y-label"
             style="text-anchor:middle"
             transform="rotate(-90)"
-          >
-            ${this.yLabel}
-          </text>
+          ></text>
         </g>
       </svg>
     `;
@@ -134,8 +132,8 @@ class NightingaleHeatmap extends withResizable(
       if (xDomainValue >= 0 && yDomainValue >= 0) {
         const xPoint = this.#x.domain()[xDomainValue];
         const yPoint = this.#y.domain()[yDomainValue];
-        this.drawHovered([xPoint, yPoint]);
-        this.#dispatchSelectionPoint("mousemove", { xPoint, yPoint });
+        const value = this.drawHovered([xPoint, yPoint]);
+        this.#dispatchSelectionPoint("mousemove", { xPoint, yPoint, value });
       }
     };
 
@@ -238,6 +236,7 @@ class NightingaleHeatmap extends withResizable(
     // text label for axes
     svg
       .select<SVGTextElement>("text.x-label")
+      .text(this.xLabel)
       .attr(
         "transform",
         `translate(${this.#canvasWidth / 2},${
@@ -246,6 +245,7 @@ class NightingaleHeatmap extends withResizable(
       );
     svg
       .select<SVGTextElement>("text.y-label")
+      .text(this.yLabel)
       .attr("y", 0 - margin.left)
       .attr("x", 0 - this.#canvasHeight / 2)
       .attr("dy", "1em");
@@ -283,10 +283,10 @@ class NightingaleHeatmap extends withResizable(
     }
   }
 
-  drawHovered(highlightPoint: number[] = []) {
+  drawHovered(highlightPoint: number[] = []): number | null {
     const area = select(this).select("g.hovered-area");
     area.selectAll("circle").remove();
-    if (!this.#x || !this.#y || highlightPoint.length < 2) return;
+    if (!this.#x || !this.#y || highlightPoint.length < 2) return null;
     let dataPoint = this.#data.filter(
       ([x, y]) => x === highlightPoint[0] && y === highlightPoint[1]
     );
@@ -296,9 +296,9 @@ class NightingaleHeatmap extends withResizable(
         dataPoint = this.#data.filter(
           ([x, y]) => x === highlightPoint[1] && y === highlightPoint[0]
         );
-        if (!dataPoint.length) return;
-      } else return;
+      }
     }
+    if (!dataPoint.length) return null;
     area
       .append("circle")
       .attr("cx", this.#x(highlightPoint[0]) || 0)
@@ -306,6 +306,7 @@ class NightingaleHeatmap extends withResizable(
       .attr("fill", this.colorScale?.(dataPoint[0][2] || 0) || null)
       .attr("stroke", this["highlight-color"])
       .attr("r", 10);
+    return dataPoint[0][2] || 0;
   }
 
   drawRect(value: number[], highlight = false) {

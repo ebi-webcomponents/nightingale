@@ -17,22 +17,11 @@ export default {
         type: "color",
       },
     },
-    //   weightAttribute: {
-    //     options: ["numSequences", "numSpecies", "numDomains"],
-    //     control: { type: "radio" },
-    //   },
-    //   fontSize: {
-    //     options: [8, 10, 12, 14, 16, 18, 20],
-    //     control: { type: "select" },
-    //   },
-    //   maxDepth: {
-    //     control: { type: "range", min: 1, max: 8, step: 1 },
-    //   },
-    // },
-    // parameters: {
-    //   actions: {
-    //     handles: ["taxon-hover"],
-    //   },
+  },
+  parameters: {
+    actions: {
+      handles: ["change"],
+    },
   },
 } as Meta;
 
