@@ -95,7 +95,7 @@ export const ChangingScales = () =>
               display-start=${start}
               display-end=${end}
               highlight="3:15"
-              scale="hydrophobicity-scale"
+              scale=${scale}
             ></nightingale-coloured-sequence>
           `
         )}

@@ -146,6 +146,7 @@ class NightingaleSequence extends withManager(
     this.margins = this.svg.append("g").attr("class", "margin");
     requestAnimationFrame(() => {
       // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
+      this.applyZoomTranslation();
       this.renderD3();
     });
   }
@@ -158,6 +159,7 @@ class NightingaleSequence extends withManager(
   }
 
   renderD3() {
+    console.log(this["display-start"], this["display-end"]);
     this.getCharSize();
 
     this.svg?.attr("width", this.width).attr("height", this.height);

@@ -56,7 +56,8 @@ class NightingaleHeatmap extends withResizable(
     const newArray: HeatmapData = [];
     let i = 1;
     let j = 1;
-    for (let k = 0; k < data.length; k++) {
+    let k = 0;
+    for (k = 0; k < data.length; k++) {
       const value = data[k];
       // eslint-disable-next-line no-loop-func
       const fillArray = (newData: HeatmapData) => {

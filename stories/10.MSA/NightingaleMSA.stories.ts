@@ -77,7 +77,7 @@ MSA.play = async () => {
 };
 
 export const MinimalMSA = () => html`
-  <nightingale-manager style="width: 100%">
+  <nightingale-manager style="width: 100%" display-start="50" display-end="130">
     <div style="padding-left: 100px">
       <nightingale-navigation
         height="50"

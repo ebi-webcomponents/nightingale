@@ -28,6 +28,7 @@ export declare class WithZoomInterface {
   updateScaleDomain(): void;
   getSingleBaseWidth(): number;
   getXFromSeqPosition(position: number): number;
+  applyZoomTranslation(): void;
 }
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
