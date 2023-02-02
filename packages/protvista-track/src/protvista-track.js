@@ -253,14 +253,19 @@ class ProtvistaTrack extends ProtvistaZoomable {
       .enter()
       .append("path")
       .attr("class", (f) => `${this._getShape(f)} residue`)
-      .attr("d", (f) =>
-        this._featureShape.getFeatureShape(
+      .attr("d", (f) => {
+        let ptmLength = 1;
+        // For longer proteins, the PTMs have to be shown prominent in the first look
+        if (this.length > 500) {
+          ptmLength = this.getSingleBaseWidth() < 4 ? 4 : 1;
+        }
+        return this._featureShape.getFeatureShape(
           this.getSingleBaseWidth() / 2, // Halve the width of the ptm residue to distinguish between each other if one follows next closely
           this._layoutObj.getFeatureHeight(),
-          1,
+          ptmLength,
           this._getShape(f)
-        )
-      )
+        );
+      })
       .attr(
         "transform",
         (f) =>
@@ -273,7 +278,7 @@ class ProtvistaTrack extends ProtvistaZoomable {
           },
           ${this._layoutObj.getFeatureYPos(f.feature)})`
       )
-      .attr("fill", (f) => "#06038D")
+      .attr("fill", "#06038D")
       .style("fill-opacity", ({ feature }) =>
         feature.opacity ? feature.opacity : 0.9
       )
@@ -361,14 +366,18 @@ class ProtvistaTrack extends ProtvistaZoomable {
 
       residueG
         .selectAll("path.residue")
-        .attr("d", (f) =>
-          this._featureShape.getFeatureShape(
+        .attr("d", (f) => {
+          let ptmLength = 1;
+          if (this.length > 500) {
+            ptmLength = this.getSingleBaseWidth() < 4 ? 4 : 1;
+          }
+          return this._featureShape.getFeatureShape(
             this.getSingleBaseWidth() / 2,
             this._layoutObj.getFeatureHeight(f),
-            1,
+            ptmLength,
             this._getShape(f)
-          )
-        )
+          );
+        })
         .attr(
           "transform",
           (f) =>
