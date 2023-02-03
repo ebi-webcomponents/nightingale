@@ -57,7 +57,7 @@ const getPTMEvidence = (ptms) => {
     dbReferences.map((ref) => ref.id)
   );
   const uniqueIds = [...new Set(ids.flat())];
-  // Urls in the payload are not relevant. For 'Glue project' dataset, Dataset ID and publication reference is hardcoded
+  // Urls in the payload are not relevant. For 'Glue project' dataset, Dataset ID and publication reference is hardcoded. Need to be checked in 2024 if it still exists in the payload
   const prideArchive = "https://www.ebi.ac.uk/pride/archive/projects/";
   return `
   <ul>${uniqueIds
