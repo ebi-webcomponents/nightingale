@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-sequence",
-  "version": "4.0.15-alpha.0",
+  "version": "4.0.18-alpha.0",
   "description": "Sequence component for the Nightingale tool",
   "files": [
     "dist",
@@ -32,7 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.15-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "^4.0.18-alpha.0",
     "d3": "7.8.2",
     "string-pixel-width": "https://github.com/adambisek/string-pixel-width"
   }
