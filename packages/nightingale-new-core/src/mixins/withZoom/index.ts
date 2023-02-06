@@ -130,7 +130,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           [this.getWidthWithMargins(), 0],
         ])
         .filter((event) => {
-          if (!(event.type === "wheel")) return true;
+          if (!(event?.type === "wheel")) return true;
           // TODO: deal with event filters
           //   if (this.hasAttribute("scroll-filter")) {
           //     const scrollableAttribute = this.getAttribute("scrollable");

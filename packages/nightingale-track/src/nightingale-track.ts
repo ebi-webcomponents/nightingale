@@ -434,7 +434,7 @@ class NightingaleTrack extends withManager(
   }
 
   zoomRefreshed() {
-    this.refresh();
+    if (this.getWidthWithMargins() > 0) this.refresh();
   }
 
   firstUpdated() {

@@ -159,7 +159,6 @@ class NightingaleSequence extends withManager(
   }
 
   renderD3() {
-    console.log(this["display-start"], this["display-end"]);
     this.getCharSize();
 
     this.svg?.attr("width", this.width).attr("height", this.height);

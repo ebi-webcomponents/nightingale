@@ -21,6 +21,7 @@ module.exports = {
   webpackFinal: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
+      "string-pixel-width": "string-pixel-width/src",
       "@nightingale-elements/nightingale-new-core": path.resolve(
         __dirname,
         "../packages/nightingale-new-core/src/index.ts"
