@@ -15,10 +15,9 @@ module.exports = {
   transformIgnorePatterns: [
     `<rootdir>/node_modules/(?!(${transformIgnoreModules}))/`,
   ],
-  moduleNameMapper: {
-    //   "^lodash-es$": "lodash",
-    "string-pixel-width": "string-pixel-width/src/index.js",
-  },
+  // moduleNameMapper: {
+  //   "^lodash-es$": "lodash",
+  // },
   setupFiles: ["jest-canvas-mock"],
   setupFilesAfterEnv: ["./setupJest.js"],
 };

@@ -17,6 +17,9 @@ import withPosition from "../withPosition";
 import withMargin from "../withMargin";
 import withResizable from "../withResizable";
 
+const NUMBER_OF_TIMES_TO_CHECK_FOR_ZOOM = 20;
+const noop = () => null;
+
 export declare class WithZoomInterface {
   xScale?: ScaleLinear<number, number>;
   svg?: Selection<
@@ -45,6 +48,22 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     _zoom?: ZoomBehavior<HTMLElement, unknown>;
     _svg?: Selection<HTMLElement, unknown, HTMLElement, unknown>;
     dontDispatch?: boolean;
+
+    whenZoomIsReady = new Promise<void>((resolve, reject) => {
+      let intervalID: ReturnType<typeof setInterval>;
+      let times = NUMBER_OF_TIMES_TO_CHECK_FOR_ZOOM;
+      intervalID = setInterval(() => {
+        if (this.zoom) {
+          resolve();
+          clearInterval(intervalID);
+        }
+        times--;
+        if (times === 0) {
+          reject();
+          clearInterval(intervalID);
+        }
+      }, 200);
+    });
 
     @property({ type: Boolean })
     "use-ctrl-to-zoom" = false;
@@ -148,15 +167,18 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     ): void {
       super.attributeChangedCallback(name, oldValue, newValue);
 
-      if (!this.zoom) return;
-      const newV = newValue === "null" ? null : newValue;
-      if (oldValue !== newV) {
-        if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
-          this.updateScaleDomain();
-        }
-        // One of the observable attributes changed, so the scale needs to be redefined.
-        this.applyZoomTranslation();
-      }
+      this.whenZoomIsReady
+        .then(() => {
+          const newV = newValue === "null" ? null : newValue;
+          if (oldValue !== newV) {
+            if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
+              this.updateScaleDomain();
+            }
+            // One of the observable attributes changed, so the scale needs to be redefined.
+            this.applyZoomTranslation();
+          }
+        })
+        .catch(noop);
     }
 
     zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
@@ -196,16 +218,20 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       // The deltaX gets calculated using the position of the first base to display in original scale
       const dx = -this.originXScale(this["display-start"] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
-      if (this.zoom) {
-        this.svg.call(
-          // We trigger a zoom action
-          this.zoom.transform,
-          zoomIdentity // Identity transformation
-            .scale(k) // Scaled by our scaled factor
-            .translate(dx, 0) // Translated by the delta
-        );
-      }
-      this.dontDispatch = false;
+      this.whenZoomIsReady
+        .then(() => {
+          if (this.zoom) {
+            this.svg?.call(
+              // We trigger a zoom action
+              this.zoom.transform,
+              zoomIdentity // Identity transformation
+                .scale(k) // Scaled by our scaled factor
+                .translate(dx, 0) // Translated by the delta
+            );
+          }
+          this.dontDispatch = false;
+        })
+        .catch(noop);
       this.zoomRefreshed();
     }
     zoomRefreshed() {

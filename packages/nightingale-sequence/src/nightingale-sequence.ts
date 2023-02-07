@@ -1,7 +1,6 @@
 import { html } from "lit";
 import { property } from "lit/decorators.js";
 import { axisBottom, select, Selection } from "d3";
-import pixelWidth from "string-pixel-width";
 
 import NightingaleElement, {
   withDimensions,
@@ -144,11 +143,11 @@ class NightingaleSequence extends withManager(
 
     this.highlighted = this.svg.append("g").attr("class", "highlighted");
     this.margins = this.svg.append("g").attr("class", "margin");
-    requestAnimationFrame(() => {
-      // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
-      this.applyZoomTranslation();
-      this.renderD3();
-    });
+    // requestAnimationFrame(() => {
+    //   // just togive the svg a change to catchup with the updated scale if attributes were setbefaore mounted
+    //   // this.applyZoomTranslation();
+    //   this.renderD3();
+    // });
   }
 
   firstUpdated() {
@@ -197,18 +196,14 @@ class NightingaleSequence extends withManager(
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
       this.#axis.selectAll(".tick text").attr("y", 2);
-      let size =
-        (1 /
-          (pixelWidth(this.#axis.selectAll(".tick text").text(), { size: 1 }) /
-            ftWidth)) *
-        0.9;
-      size =
+      let size = this.chWidth || 10;
+      size = Math.max(
+        10,
         size > this["margin-top"] + 0.25 * this.getHeightWithMargins()
           ? this["margin-top"] + 0.25 * this.getHeightWithMargins()
-          : size;
-      this.#axis
-        .selectAll(".tick text")
-        .attr("font-size", size > 10 ? size : 10);
+          : size
+      );
+      this.#axis.selectAll(".tick text").attr("font-size", size);
 
       if (this.seq_g) {
         this.seq_g.attr(
@@ -218,7 +213,7 @@ class NightingaleSequence extends withManager(
           })`
         );
         this.#bases = this.seq_g.selectAll("text.base");
-        this.#bases.attr("font-size", size > 10 ? size : 10);
+        this.#bases.attr("font-size", size);
         const textElements = this.#bases.data(
           bases,
           (d) => (d as SequenceBaseType).position
