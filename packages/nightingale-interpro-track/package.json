@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-interpro-track",
-  "version": "4.0.21-alpha.0",
+  "version": "4.0.22-alpha.0",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",
