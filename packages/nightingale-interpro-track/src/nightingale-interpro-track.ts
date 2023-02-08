@@ -284,7 +284,10 @@ class NightingaleInterproTrack extends NightingaleTrack {
           coverage: this.#coverage,
         });
     }
-    this.svg?.attr("height", this.layoutObj?.maxYPos || 0);
+    this.svg?.attr(
+      "height",
+      (this.layoutObj?.maxYPos || 0) + this["margin-bottom"]
+    );
     this.#haveCreatedFeatures = true;
   }
   private getResidueShape(f: ResidueDatum) {
@@ -489,7 +492,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
             contributorsLength: this.#contributors?.length,
           });
       }
-      this.svg?.attr("height", this.layoutObj.maxYPos);
+      this.svg?.attr("height", this.layoutObj.maxYPos + this["margin-bottom"]);
 
       this.updateHighlight();
 
