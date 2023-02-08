@@ -298,7 +298,9 @@ class NightingaleSequence extends withManager(
       .attr("fill", this["highlight-color"])
       .attr("height", this.height)
       .attr("x", (d) => this.getXFromSeqPosition(d.start))
-      .attr("width", (d) => this.getSingleBaseWidth() * (d.end - d.start + 1));
+      .attr("width", (d) =>
+        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
+      );
 
     highlighs.exit().remove();
   }

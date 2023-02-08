@@ -30,7 +30,8 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.19-alpha.0",
-    "shallowequal": "1.1.0"
+    "shallowequal": "1.1.0",
+    "d3": "7.8.2"
   },
   "devDependencies": {
     "@types/shallowequal": "1.1.1"

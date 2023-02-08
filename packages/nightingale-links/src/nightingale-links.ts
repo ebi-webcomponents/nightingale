@@ -111,9 +111,7 @@ class NightingaleLinks extends NightingaleTrack {
       getHighlightEvent(
         "mouseover",
         this,
-        Array.from(this.#contacts.contacts[d])
-          .concat(+d)
-          .sort()
+        Array.from(this.#contacts.contacts[d]).concat(+d).sort()
       )
     );
   }
