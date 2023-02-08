@@ -116,6 +116,10 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         .domain([1, (this.length || 0) + 1])
         .range([0, this.getWidthWithMargins()]);
       this.originXScale = this.xScale?.copy();
+      this.zoom?.translateExtent([
+        [0, 0],
+        [this.getWidthWithMargins(), 0],
+      ]);
     }
 
     _initZoom() {

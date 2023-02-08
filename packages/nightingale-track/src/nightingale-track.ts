@@ -311,9 +311,11 @@ class NightingaleTrack extends withManager(
     fragmentGroup
       .append("rect")
       .attr("class", "outer-rectangle feature")
-      .attr(
-        "width",
-        (f) => this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
+      .attr("width", (f) =>
+        Math.max(
+          0,
+          this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
+        )
       )
       .attr("height", this.layoutObj?.getFeatureHeight() || 0)
       .attr(
@@ -388,11 +390,12 @@ class NightingaleTrack extends withManager(
 
       fragmentG
         .selectAll<SVGRectElement, Feature>("rect.outer-rectangle")
-        .attr(
-          "width",
-          (f) =>
+        .attr("width", (f) =>
+          Math.max(
+            0,
             this.getSingleBaseWidth() *
-            (f?.end && f?.start ? f.end - f.start + 1 : 1)
+              (f?.end && f?.start ? f.end - f.start + 1 : 1)
+          )
         )
         .attr("height", this.layoutObj?.getFeatureHeight() || 0)
         .attr(
@@ -428,7 +431,9 @@ class NightingaleTrack extends withManager(
       .attr("fill", this["highlight-color"])
       .attr("height", this.height)
       .attr("x", (d) => this.getXFromSeqPosition(d.start))
-      .attr("width", (d) => this.getSingleBaseWidth() * (d.end - d.start + 1));
+      .attr("width", (d) =>
+        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
+      );
 
     highlighs.exit().remove();
   }

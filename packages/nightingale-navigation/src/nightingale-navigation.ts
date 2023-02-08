@@ -207,12 +207,10 @@ class NightingaleNavigation extends withManager(
       this.#axis.call(this.#xAxis);
       this.updatePolygon();
       this.updateLabels();
-      if (this.#brushG) {
+      const position = [this.#x(this.getStart()), this.#x(this.getEnd())];
+      if (this.#brushG && position[0] >= 0 && position[1] >= 0) {
         this.#dontDispatch = true;
-        this.#brushG.call(this.#viewport.move, [
-          this.#x(this.getStart()),
-          this.#x(this.getEnd()),
-        ]);
+        this.#brushG.call(this.#viewport.move, position);
         this.#dontDispatch = false;
       }
       this.updateHighlight();

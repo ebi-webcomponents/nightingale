@@ -209,9 +209,10 @@ class SequenceViewerComponent extends DraggingComponent {
   drawScene() {
     const positions = this.getTilePositions();
     if (!positions) {
-      console.error(
-        "Failed to draw scene because couldn't get the tile positions"
-      );
+      if (debug)
+        console.error(
+          "Failed to draw scene because couldn't get the tile positions"
+        );
       return;
     }
 

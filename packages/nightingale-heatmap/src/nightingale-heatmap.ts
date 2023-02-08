@@ -48,6 +48,7 @@ class NightingaleHeatmap extends withResizable(
 
   processData(data: HeatmapData): HeatmapData {
     if (!this.length) {
+      if (!data.length) return [];
       const [lastValue] = data[data.length - 1];
       this.length = lastValue;
     }
@@ -216,13 +217,13 @@ class NightingaleHeatmap extends withResizable(
       tickValues.push(Math.min(total, position));
       position += quarter;
     }
-
+    if (tickValues.length === 1) return;
     // Adding axes
     const xAxis = axisBottom(this.#x).tickSize(3).tickValues(tickValues);
     svg
       .select<SVGGElement>("g.x-axis")
       .style("font-size", 15)
-      .attr("transform", `translate(0,${this.#canvasHeight})`)
+      .attr("transform", `translate(0,${this.#canvasHeight || 0})`)
       .call(xAxis)
       .select(".domain")
       .remove();
@@ -240,8 +241,8 @@ class NightingaleHeatmap extends withResizable(
       .text(this.xLabel)
       .attr(
         "transform",
-        `translate(${this.#canvasWidth / 2},${
-          this.#canvasHeight + margin.top + margin.bottom
+        `translate(${this.#canvasWidth / 2 || 0},${
+          this.#canvasHeight + margin.top + margin.bottom || 0
         })`
       );
     svg
