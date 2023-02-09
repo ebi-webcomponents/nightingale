@@ -5,25 +5,25 @@ const sequence = "MADYDDEFDTKASDL";
 
 jest.spyOn(Math, "random").mockReturnValue(0.123456789);
 
-describe("nightingale-coloured-sequence tests", () => {
+describe("nightingale-colored-sequence tests", () => {
   beforeEach(async () => {
-    document.documentElement.innerHTML = `<nightingale-coloured-sequence 
+    document.documentElement.innerHTML = `<nightingale-colored-sequence 
       sequence="${sequence}"
       width="800"
       height="40"
       length="${sequence.length}"
       scale="hydrophobicity-scale"
-      ></nightingale-coloured-sequence>`;
-    rendered = document.querySelector("nightingale-coloured-sequence");
+      ></nightingale-colored-sequence>`;
+    rendered = document.querySelector("nightingale-colored-sequence");
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
     await rendered.updateComplete;
   });
 
   afterEach(() => {
-    document.querySelector("nightingale-coloured-sequence").remove();
+    document.querySelector("nightingale-colored-sequence").remove();
   });
 
-  test("it should display the coloured sequence correctly", async () => {
+  test("it should display the colored sequence correctly", async () => {
     const firstValue = rendered.querySelector(
       ".sequence rect.feature:first-child"
     );

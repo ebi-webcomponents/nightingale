@@ -31,13 +31,13 @@ type DataBlock = {
   end: number;
   aa: string;
   value: unknown;
-  colour: number;
+  color: number;
 };
 
 const MIN_BASE_SIZE = 8;
 
-@customElement("nightingale-coloured-sequence")
-class NightingaleColouredSequence extends NightingaleSequence {
+@customElement("nightingale-colored-sequence")
+class NightingaleColoredSequence extends NightingaleSequence {
   @property({ type: String })
   scale = undefined;
   @property({ type: String })
@@ -77,6 +77,9 @@ class NightingaleColouredSequence extends NightingaleSequence {
       ?.append("rect")
       .attr("class", "seq-gradient")
       .style("pointer-events", "none");
+    // margins should be the last thing in the svg so they ar over anything else
+    this.svg?.selectAll("g.margin").remove();
+    this.margins = this.svg?.append("g").attr("class", "margin");
   }
 
   getScaleFromAttribute() {
@@ -140,7 +143,7 @@ class NightingaleColouredSequence extends NightingaleSequence {
               end: 1 + first + i,
               aa,
               value,
-              colour: colorScale(value as number),
+              color: colorScale(value as number),
             };
           }) || [];
 
@@ -157,7 +160,7 @@ class NightingaleColouredSequence extends NightingaleSequence {
         .attr("height", this.height)
         .merge(this.#residues)
         .attr("width", ftWidth)
-        .attr("fill", ({ colour }) => colour)
+        .attr("fill", ({ color }) => color)
         .attr("x", ({ start }) => this.getXFromSeqPosition(start))
         .call(bindEvents, this);
 
@@ -208,4 +211,4 @@ class NightingaleColouredSequence extends NightingaleSequence {
   }
 }
 
-export default NightingaleColouredSequence;
+export default NightingaleColoredSequence;

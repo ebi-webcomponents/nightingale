@@ -4,7 +4,7 @@ import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
 import "../../packages/nightingale-track/src/index.ts";
 import "../../packages/nightingale-sequence/src/index.ts";
-import "../../packages/nightingale-coloured-sequence/src/index.ts";
+import "../../packages/nightingale-colored-sequence/src/index.ts";
 import "../../packages/nightingale-interpro-track/src/index.ts";
 import "../../packages/nightingale-saver/src/index.ts";
 import "../../packages/nightingale-overlay/src/index.ts";
@@ -120,7 +120,7 @@ const Template: Story<{
           </nightingale-sequence>
         </div>
         <div style="line-height: 0">
-          <nightingale-coloured-sequence
+          <nightingale-colored-sequence
             id="sequence"
             sequence=${sequence}
             min-width="${args["min-width"]}"
@@ -134,7 +134,7 @@ const Template: Story<{
             scale="hydrophobicity-scale"
             use-ctrl-to-zoom
           >
-          </nightingale-coloured-sequence>
+          </nightingale-colored-sequence>
         </div>
         <div style="line-height: 0">
           <nightingale-track

@@ -56,8 +56,8 @@ type LineValue = {
 type LineData = {
   name: string;
   range: number[];
-  colour?: string; // (Colour will be assigned if not provided. Use "none" for no line colour)
-  fill?: string; //Create area plot using given fill colour (default "none"),
+  color?: string; // (color will be assigned if not provided. Use "none" for no line color)
+  fill?: string; //Create area plot using given fill color (default "none"),
   lineCurve?: keyof typeof curves; // See https://github.com/d3/d3-shape/#curves
   values: Array<LineValue>;
 };
@@ -164,13 +164,13 @@ class NightingaleLinegraphTrack extends withManager(
       .attr("class", "graph")
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
-        d.colour = d.colour || interpolateRainbow(Math.random());
+        d.color = d.color || interpolateRainbow(Math.random());
         // eslint-disable-next-line no-param-reassign
         d.fill = d.fill || "none";
         return this.drawLine(d)(d.values);
       })
       .attr("fill", (d) => d.fill || null)
-      .attr("stroke", (d) => d.colour || null)
+      .attr("stroke", (d) => d.color || null)
       .attr("transform", "translate(0,0)");
 
     const mouseG = chartGroup.append("g").attr("class", "mouse-over-effects");
@@ -187,7 +187,7 @@ class NightingaleLinegraphTrack extends withManager(
     mousePerLine
       .append("circle")
       .attr("r", 7)
-      .style("stroke", (d) => d.colour || null)
+      .style("stroke", (d) => d.color || null)
       .style("fill", "none")
       .style("stroke-width", "1px")
       .style("opacity", "0");

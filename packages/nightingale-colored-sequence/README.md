@@ -1,6 +1,6 @@
-# nightingale-coloured-sequence
+# nightingale-colored-sequence
 
-[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-coloured-sequence.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-coloured-sequence)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-colored-sequence.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-colored-sequence)
 
 Use this component to paint a track that uses the sequence to paint a color depending on each residue.
 
@@ -9,7 +9,7 @@ Useful to display hydrophobicity, isoelectric points, or any feature where a col
 ## Usage
 
 ```html
-<nightingale-coloured-sequence
+<nightingale-colored-sequence
   sequence="EXAMPLESEQUENCE"
   width="800"
   height="40"
@@ -18,7 +18,7 @@ Useful to display hydrophobicity, isoelectric points, or any feature where a col
   display-end="13"
   highlight="3:10"
   scale="hydrophobicity-scale"
-></nightingale-coloured-sequence>
+></nightingale-colored-sequence>
 ```
 
 ## API Reference
