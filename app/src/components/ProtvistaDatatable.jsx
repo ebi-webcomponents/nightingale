@@ -29,7 +29,6 @@ const ProtvistaDatatableWrapper = () => {
     fetchData();
   }, []);
 
-
   return (
     <>
       <Readme content={readmeContent} />

@@ -129,6 +129,7 @@ class StructureViewer {
             props.renderer.backgroundColor = Color(0xffffff);
             if (useCtrlToZoom) {
               // Add ctrl key modifier to scroll zoom trigger
+              // eslint-disable-next-line no-param-reassign
               props.trackball.bindings.scrollZoom.triggers[0].modifiers.control =
                 true;
             }

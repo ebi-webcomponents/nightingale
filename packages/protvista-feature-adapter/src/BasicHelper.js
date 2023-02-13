@@ -53,15 +53,23 @@ export const formatXrefs = (xrefs) => {
 
 const getPTMEvidence = (ptms) => {
   if (!ptms) return ``;
-  const ids = ptms.map((ptm) => ptm.dbReferences.map((ref) => ref.id));
+  const ids = ptms.flatMap(({ dbReferences }) =>
+    dbReferences.map((ref) => ref.id)
+  );
   const uniqueIds = [...new Set(ids.flat())];
+  // Urls in the payload are not relevant. For 'Glue project' dataset, Dataset ID and publication reference is hardcoded. Need to be checked in 2024 if it still exists in the payload
+  const prideArchive = "https://www.ebi.ac.uk/pride/archive/projects/";
   return `
   <ul>${uniqueIds
-    .map(
-      (id) =>
-        `<li title='${id}' style="padding: .25rem 0">${id}&nbsp;(<a href="https://www.ebi.ac.uk/pride/archive/projects/${id}" style="color:#FFF" target="_blank">PRIDE</a>&nbsp;
-      <a href="http://www.peptideatlas.org/builds/rice/phospho/" style="color:#FFF" target="_blank">PeptideAtlas</a>)</li>`
-    )
+    .map((id) => {
+      const datasetID = id === "Glue project" ? "PXD012174" : id;
+      return `<li title='${datasetID}' style="padding: .25rem 0">${datasetID}&nbsp;(<a href="${prideArchive}${datasetID}" style="color:#FFF" target="_blank">PRIDE</a>
+      ${
+        id === "Glue project"
+          ? `)</li><li title="publication" style="padding: .25rem 0">Publication:&nbsp;31819260&nbsp;(<a href="https://pubmed.ncbi.nlm.nih.gov/31819260" style="color:#FFF" target="_blank">PubMed</a>)</li>`
+          : `&nbsp;<a href="http://www.peptideatlas.org/builds/rice/phospho/" style="color:#FFF" target="_blank">PeptideAtlas</a>)</li>`
+      }`;
+    })
     .join("")}</ul>
 `;
 };
@@ -109,6 +117,13 @@ export const formatTooltip = (feature) => {
   const ptms =
     feature.type === "PROTEOMICS_PTM" &&
     feature.ptms.map((ptm) => findModifiedResidueName(feature, ptm));
+
+  const dataset =
+    feature.type === "PROTEOMICS_PTM" &&
+    feature.ptms.flatMap(({ dbReferences }) =>
+      dbReferences.map((ref) => ref.id)
+    );
+
   try {
     return `
       ${
@@ -127,41 +142,65 @@ export const formatTooltip = (feature) => {
           ? `<h5>Alternative sequence</h5><p>${feature.alternativeSequence}</p>`
           : ``
       }
-      ${evidenceHTML ? `<h5>Evidence</h5>${evidenceHTML}` : ``}
-      ${
-        feature.xrefs
-          ? `<h5>Cross-references</h5>${formatXrefs(feature.xrefs)}`
-          : ""
-      }
-      ${
-        feature.peptide && feature.type === "PROTEOMICS_PTM"
-          ? `<h5>Peptidoform</h5><p>${formatPTMPeptidoform(
-              feature.peptide,
-              feature.ptms
-            )}</p>`
-          : `<h5>Peptide</h5><p>${feature.peptide}</p>`
-      } 
       ${
         ptms
-          ? `<h5>PTMs</h5><ul>${ptms
+          ? `<h5 data-article-id="ptm_processing_section">PTMs</h5><ul>${ptms
               .map((item) => `<li>${item}</li>`)
-              .join("")}</ul><hr />
+              .join("")}</ul>
             `
           : ""
       }
       ${
-        feature.ptms
-          ? `<h5>PTM statistical attributes</h5><ul>${feature.ptms
+        feature.peptide && feature.type === "PROTEOMICS_PTM"
+          ? `<h5 data-article-id="mod_res_large_scale#what-is-the-goldsilverbronze-criterion">Peptidoform</h5><p>${formatPTMPeptidoform(
+              feature.peptide,
+              feature.ptms
+            )}</p>`
+          : ``
+      }
+      ${
+        feature.peptide && feature.type !== "PROTEOMICS_PTM"
+          ? `<h5>Peptide</h5><p>${feature.peptide}</p>`
+          : ``
+      } 
+      ${
+        feature.xrefs
+          ? `<h5>Cross-references</h5>${formatXrefs(feature.xrefs)}`
+          : ``
+      }
+      ${evidenceHTML ? `<h5>Evidence</h5>${evidenceHTML}` : ``}
+      ${
+        feature.ptms && dataset && !dataset.includes("Glue project")
+          ? `<hr /><h5 data-article-id="mod_res_large_scale#what-is-the-goldsilverbronze-criterion">PTM statistical attributes</h5><ul>${feature.ptms
               .map((ptm) =>
                 ptm.dbReferences
                   .map(
                     (ref) =>
                       `<li><b>${ref.id}</b></li>
-          <li><b>${findModifiedResidueName(feature, ptm)}</b></li>
-          ${Object.entries(ref.properties)
-            .map(([key, value]) => `<li>${key}: ${value}</li>`)
-            .join("")}
-        `
+                      <li style="text-indent: 1em"><b>${findModifiedResidueName(
+                        feature,
+                        ptm
+                      )}</b></li>
+                      <li style="text-indent: 2em">PubMed ID: <a href="https://europepmc.org/article/MED/${
+                        ref.properties["Pubmed ID"]
+                      }" style="color:#FFF" target="_blank">
+                      ${ref.properties["Pubmed ID"]}</a>
+                      </li>
+                      <li style="text-indent: 2em"><span data-article-id="mod_res_large_scale#confidence-score">Confidence score</span>: ${
+                        ref.properties["Confidence score"]
+                      }</li>
+                      <li style="text-indent: 2em">Universal Spectrum Id: 
+                      <a href="http://proteomecentral.proteomexchange.org/usi/?usi=${
+                        ref.properties["Universal Spectrum Id"]
+                      }" style="color:#FFF" target="_blank">View on ProteomeXchange</a>
+                      </li>
+                      <li style="text-indent: 2em">PSM Count: ${
+                        ref.properties["PSM Count"]
+                      }</li>
+                      <li style="text-indent: 2em">Site probability: ${
+                        ref.properties["Site probability"]
+                      }</li>
+                      `
                   )
                   .join("")
               )
