@@ -110,7 +110,7 @@ class ProtvistaDatatable extends LitElement {
     this.classList.add("feature");
 
     if (this.hasAttribute("filter-scroll")) {
-      document.addEventListener("wheel", this.wheelListener, { capture: true });
+      document.addEventListener("wheel", this.wheelListener);
     }
     this.init();
   }
@@ -260,16 +260,17 @@ class ProtvistaDatatable extends LitElement {
       :host {
         display: block;
       }
+
       .protvista-datatable-container {
         overflow-y: auto;
         // Note: overflow-x was set to 'hidden' but changing
         // to 'auto' doesn't seem to be an issue.
         overflow-x: auto;
+        scrollbar-gutter: stable;
       }
 
       :host([scrollable="true"]) .protvista-datatable-container {
         overflow-y: auto;
-        will-change: scroll;
       }
 
       :host([scrollable="false"]) .protvista-datatable-container {
