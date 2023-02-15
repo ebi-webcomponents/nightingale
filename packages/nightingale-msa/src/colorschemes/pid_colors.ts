@@ -9,8 +9,9 @@ const pid: ColorStructure = {
   // calculating the conservation is expensive
   // we only want to do it once
   init: function () {},
-  run: function (base: string, ...args: unknown[]) {
+  run: function (baseRaw: string, ...args: unknown[]) {
     const pos = args[0] as number;
+    const base = baseRaw.toUpperCase();
     const conservation = args[1] as ConservationManager;
     if (
       !conservation ||
