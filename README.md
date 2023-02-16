@@ -30,7 +30,7 @@ Run `yarn build`
 
 ### Locally
 
-Run `yarn storybook` to run the application locally.
+Run `yarn build && yarn storybook` to run the application locally.
 
 ### Build
 
