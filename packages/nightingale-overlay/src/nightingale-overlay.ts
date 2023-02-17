@@ -1,4 +1,4 @@
-import { html } from "lit";
+import { html, PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 
@@ -14,31 +14,60 @@ class NightingaleOverlay extends NightingaleElement {
   private ticking = false;
   private over = false;
   private sizeObserver?: ResizeObserver;
+  private currentTarget: HTMLElement | null = null;
 
-  refreshOverlay(elementId: string) {
-    const target = document.getElementById(elementId);
-    return () => {
-      if (!target || !this.overlay) return;
-      const { height, width } = target.getBoundingClientRect();
-      this.overlay.style.height = `${height}px`;
-      this.overlay.style.width = `${width}px`;
-      this.overlay.style.top = `${target.offsetTop}px`;
-      this.overlay.style.left = `${target.offsetLeft}px`;
-    };
+  refreshOverlay() {
+    if (!this.currentTarget || !this.overlay) return;
+    const { height, width } = this.currentTarget.getBoundingClientRect();
+    this.overlay.style.height = `${height}px`;
+    this.overlay.style.width = `${width}px`;
+    this.overlay.style.top = `${this.currentTarget.offsetTop}px`;
+    this.overlay.style.left = `${this.currentTarget.offsetLeft}px`;
   }
 
   observeSizeChangeOfTarget() {
-    const target = document.getElementById(this.for);
-    if (!target) return;
-    this.sizeObserver = new ResizeObserver(this.refreshOverlay(this.for));
-    this.sizeObserver.observe(target);
+    if (!this.currentTarget) return;
+    this.sizeObserver = new ResizeObserver(this.refreshOverlay);
+    this.sizeObserver.observe(this.currentTarget);
     this.sizeObserver.observe(document.body);
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.for) {
+      this.currentTarget = document.getElementById(this.for);
+    }
+    this.addEventListeners();
+  }
+
   disconnectedCallback() {
+    this.removeEventListeners();
+  }
+
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("for")) {
+      this.removeEventListeners();
+      this.currentTarget = document.getElementById(this.for);
+      this.addEventListeners();
+    }
+  }
+
+  addEventListeners() {
+    this.observeSizeChangeOfTarget();
+    this.currentTarget?.addEventListener("mouseover", this.handleMouseOver);
+    window.addEventListener("keydown", this.handleKeyDown);
+    window.addEventListener("keyup", this.handleKeyUp);
+    window.addEventListener("wheel", this.handleWheel);
+  }
+
+  removeEventListeners() {
     if (this.sizeObserver) {
       this.sizeObserver.disconnect();
     }
+    this.currentTarget?.removeEventListener("mouseover", this.handleMouseOver);
+    window.removeEventListener("keydown", this.handleKeyDown);
+    window.removeEventListener("keyup", this.handleKeyUp);
+    window.removeEventListener("wheel", this.handleWheel);
   }
 
   getOffsetTop(element: HTMLElement): number {
@@ -57,85 +86,83 @@ class NightingaleOverlay extends NightingaleElement {
   }
 
   render() {
-    const target = document.getElementById(this.for);
-    if (target) {
-      const { height, width } = target.getBoundingClientRect();
-      return html` <div
-        style="
+    console.log("render???");
+    const rect = this.currentTarget?.getBoundingClientRect();
+    return html` <div
+      style="
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: ${target.offsetTop}px;
-        left: ${target.offsetLeft}px;
-        height: ${height}px;
-        width: ${width}px;
+        top: ${this.currentTarget?.offsetTop || 0}px;
+        left: ${this.currentTarget?.offsetLeft || 0}px;
+        height: ${rect?.height || 0}px;
+        width: ${rect?.width || 0}px;
         background: rgba(0,0,0,0.3);
         pointer-events: none;
         visibility: hidden;
       "
-      >
-        <header
-          style="
+    >
+      <header
+        style="
           text-align: center;
           color: white;
           font-size: 1.3em;
           text-shadow: 1px 1px 1px darkslategrey;
         "
-        >
-          ${this.label}
-        </header>
-      </div>`;
-    }
+      >
+        ${this.label}
+      </header>
+    </div>`;
   }
+
   updated() {
-    const target = document.getElementById(this.for);
-    if (target) {
-      this.observeSizeChangeOfTarget();
-
-      this.overlay = this.getElementsByTagName("div")[0];
-      this.ticking = false;
-
-      document.addEventListener("mouseover", ({ pageX, pageY }) => {
-        const { height, width } = target.getBoundingClientRect();
-        const offsetTop = this.getOffsetTop(target);
-        const offsetLeft = this.getOffsetLeft(target);
-        if (
-          pageX > offsetLeft &&
-          pageX < offsetLeft + width &&
-          pageY > offsetTop &&
-          pageY < offsetTop + height
-        ) {
-          this.over = true;
-        } else {
-          this.over = false;
-          if (this.overlay) this.overlay.style.visibility = "hidden";
-        }
-      });
-      window.addEventListener("keydown", (event) => {
-        if (event.ctrlKey) {
-          if (this.overlay) this.overlay.style.visibility = "hidden";
-        }
-      });
-      window.addEventListener("keyup", (event) => {
-        if (event.ctrlKey) {
-          if (this.overlay) this.overlay.style.display = "block";
-        }
-      });
-      window.addEventListener("wheel", (event) => {
-        if (!this.ticking && this.over) {
-          window.requestAnimationFrame(() => {
-            if (this.overlay)
-              this.overlay.style.visibility = event.ctrlKey
-                ? "hidden"
-                : "visible";
-            this.ticking = false;
-          });
-          this.ticking = true;
-        }
-      });
-    }
+    this.overlay = this.getElementsByTagName("div")[0];
+    this.ticking = false;
   }
+
+  handleKeyDown = (event: KeyboardEvent) => {
+    if (event.ctrlKey) {
+      if (this.overlay) this.overlay.style.visibility = "hidden";
+    }
+  };
+
+  handleKeyUp = (event: KeyboardEvent) => {
+    if (event.ctrlKey) {
+      if (this.overlay) this.overlay.style.display = "block";
+    }
+  };
+
+  handleMouseOver = (event: MouseEvent) => {
+    const { pageX, pageY } = event;
+    if (this.currentTarget) {
+      const { height, width } = this.currentTarget.getBoundingClientRect();
+      const offsetTop = this.getOffsetTop(this.currentTarget);
+      const offsetLeft = this.getOffsetLeft(this.currentTarget);
+      if (
+        pageX > offsetLeft &&
+        pageX < offsetLeft + width &&
+        pageY > offsetTop &&
+        pageY < offsetTop + height
+      ) {
+        this.over = true;
+      } else {
+        this.over = false;
+        if (this.overlay) this.overlay.style.visibility = "hidden";
+      }
+    }
+  };
+
+  handleWheel = (event: WheelEvent) => {
+    if (!this.ticking && this.over) {
+      window.requestAnimationFrame(() => {
+        if (this.overlay)
+          this.overlay.style.visibility = event.ctrlKey ? "hidden" : "visible";
+        this.ticking = false;
+      });
+      this.ticking = true;
+    }
+  };
 }
 
 export default NightingaleOverlay;
