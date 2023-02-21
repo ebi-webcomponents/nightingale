@@ -7,6 +7,7 @@ import "../../packages/nightingale-sequence/src/index.ts";
 import "../../packages/nightingale-coloured-sequence/src/index.ts";
 import "../../packages/nightingale-interpro-track/src/index.ts";
 import "../../packages/nightingale-saver/src/index.ts";
+import "../../packages/nightingale-overlay/src/index.ts";
 
 import iproData from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
 import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
@@ -76,9 +77,12 @@ const Template: Story<{
   sequence: string;
   "highlight-color": string;
   "margin-color": string;
+  useOverlay: boolean;
 }> = (args) => {
-  const { height, length, sequence } = args;
+  const { height, length, sequence, useOverlay } = args;
   return html`
+    ${useOverlay &&
+    html`<nightingale-overlay for="root"></nightingale-overlay>`}
     <nightingale-saver
       element-id="root"
       background-color="white"
@@ -211,6 +215,7 @@ AllTracks.args = {
   "display-end": 80,
   "highlight-color": "#EB3BFF22",
   "margin-color": "transparent",
+  useOverlay: true,
 };
 AllTracks.play = async () => {
   await customElements.whenDefined("nightingale-sequence");
