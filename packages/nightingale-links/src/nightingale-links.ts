@@ -208,12 +208,15 @@ class NightingaleLinks extends NightingaleTrack {
       .attr("class", "contact-link")
       .attr("fill", "transparent")
       .attr("stroke", this._getColor(this.#contacts?.selected || 0))
+      .attr("stroke-width", this.#contacts.isHold ? 3 : 1)
       .style("opacity", 1)
       .style("pointer-events", "none")
       .attr("d", (d: number[]) => this.arc(d))
       .attr("id", ([n1, n2]: Array<number>) => `cn_${n1}_${n2}`);
 
-    links?.attr("d", (d: number[]) => this.arc(d));
+    links
+      ?.attr("d", (d: number[]) => this.arc(d))
+      .attr("stroke-width", this.#contacts.isHold ? 3 : 1);
   }
   refresh(): void {
     if (!this.#contacts || !this.contactPoints) return;
