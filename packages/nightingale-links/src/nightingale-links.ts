@@ -88,7 +88,17 @@ class NightingaleLinks extends NightingaleTrack {
     this.svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
       .attr("width", this.width)
-      .attr("height", this.height);
+      .attr("height", this.height)
+      .on("click", (event: MouseEvent) => {
+        if (!this.#contacts) return;
+        if (
+          !(event.target as HTMLElement)?.classList.contains("contact-point")
+        ) {
+          this.#contacts.selected = undefined;
+          this.#contacts.isHold = false;
+          this.refreshSelected();
+        }
+      });
 
     if (!this.svg) return;
     this.seqG = this.svg.append("g").attr("class", "sequence-features");
@@ -146,12 +156,10 @@ class NightingaleLinks extends NightingaleTrack {
           this.dispatchEvent(getHighlightEvent("mouseout", this));
           this.refreshSelected();
         })
-        .on("click", (_: Event, d: number) => {
+        .on("click", (event: Event, d: number) => {
+          event.preventDefault();
           if (!this.#contacts) return;
-          this.#contacts.isHold = !this.#contacts.isHold;
-          if (!this.#contacts.isHold) {
-            this.#contacts.selected = undefined;
-          }
+          this.#contacts.isHold = true;
           this._dispatchSelectNode(d);
           this.refreshSelected();
         });
