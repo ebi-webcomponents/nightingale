@@ -150,7 +150,7 @@ class NightingaleLinks extends NightingaleTrack {
           this.dispatchEvent(getHighlightEvent("mouseout", this));
           this.refresh();
         })
-        .on("click", (d: number) => {
+        .on("click", (_: Event, d: number) => {
           if (!this.#contacts) return;
           this.#contacts.isHold = !this.#contacts.isHold;
           if (!this.#contacts.isHold) {
