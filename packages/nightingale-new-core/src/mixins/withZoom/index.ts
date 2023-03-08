@@ -102,7 +102,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     set svg(svg) {
       if (!svg || !this._zoom) return;
       this._svg = svg;
-      svg.call(this._zoom);
+      svg.call(this._zoom).on("dblclick.zoom", null);
       this.applyZoomTranslation();
     }
 
@@ -134,13 +134,15 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           [this.getWidthWithMargins(), 0],
         ])
         .filter((event) => {
-          if (!(event?.type === "wheel")) return true;
+          if (event?.type === "wheel") {
+            return !this["use-ctrl-to-zoom"] || event.ctrlKey;
+          }
+          return true;
           // TODO: deal with event filters
           //   if (this.hasAttribute("scroll-filter")) {
           //     const scrollableAttribute = this.getAttribute("scrollable");
           //     if (scrollableAttribute) return scrollableAttribute === "true";
           //   }
-          return !this["use-ctrl-to-zoom"] || event.ctrlKey;
         })
         .on("zoom", this.zoomed);
     }
