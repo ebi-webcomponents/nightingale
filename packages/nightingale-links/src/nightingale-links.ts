@@ -111,7 +111,9 @@ class NightingaleLinks extends NightingaleTrack {
       getHighlightEvent(
         "mouseover",
         this,
-        Array.from(this.#contacts.contacts[d]).concat(+d).sort()
+        Array.from(this.#contacts.contacts[d])
+          .concat(+d)
+          .sort()
       )
     );
   }
@@ -136,13 +138,13 @@ class NightingaleLinks extends NightingaleTrack {
         .on("mouseover", (_: Event, d: number) => {
           if (this.#contacts?.isHold) return;
           this._dispatchSelectNode(d);
-          this.refresh();
+          this.refreshSelected();
         })
         .on("mouseout", () => {
           if (!this.#contacts || this.#contacts?.isHold) return;
           this.#contacts.selected = undefined;
           this.dispatchEvent(getHighlightEvent("mouseout", this));
-          this.refresh();
+          this.refreshSelected();
         })
         .on("click", (_: Event, d: number) => {
           if (!this.#contacts) return;
@@ -151,7 +153,7 @@ class NightingaleLinks extends NightingaleTrack {
             this.#contacts.selected = undefined;
           }
           this._dispatchSelectNode(d);
-          this.refresh();
+          this.refreshSelected();
         });
     this._linksData = contactObjectToLinkList(this.#contacts.contacts);
   }
@@ -171,16 +173,10 @@ class NightingaleLinks extends NightingaleTrack {
     return `M ${x1} ${h} C ${x1 - p} ${-h / 4} ${x2 + p} ${-h / 4} ${x2} ${h}`;
   }
 
-  refresh(): void {
+  refreshSelected(): void {
     if (!this.#contacts || !this.contactPoints) return;
     this.contactPoints
-      .attr(
-        "cx",
-        (d: number) =>
-          this.getXFromSeqPosition(d) + this.getSingleBaseWidth() / 2
-      )
       .transition()
-      .attr("cy", this.height * 0.5)
       .attr("r", (d: number) => this.getRadius(d === this.#contacts?.selected))
       .attr("stroke", (d: number) =>
         d === this.#contacts?.selected && this.#contacts.isHold
@@ -190,7 +186,6 @@ class NightingaleLinks extends NightingaleTrack {
       .style("opacity", (d: number) =>
         d === this.#contacts?.selected ? 1 : OPACITY_MOUSEOUT
       );
-
     const selectedLinks = this.#contacts.selected
       ? this._linksData?.filter((link) =>
           link.includes(+(this.#contacts?.selected || 0))
@@ -219,6 +214,18 @@ class NightingaleLinks extends NightingaleTrack {
       .attr("id", ([n1, n2]: Array<number>) => `cn_${n1}_${n2}`);
 
     links?.attr("d", (d: number[]) => this.arc(d));
+  }
+  refresh(): void {
+    if (!this.#contacts || !this.contactPoints) return;
+    this.contactPoints
+      .attr(
+        "cx",
+        (d: number) =>
+          this.getXFromSeqPosition(d) + this.getSingleBaseWidth() / 2
+      )
+      .attr("cy", this.height * 0.5);
+
+    this.refreshSelected();
   }
 }
 
