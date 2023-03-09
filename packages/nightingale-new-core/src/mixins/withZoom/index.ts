@@ -16,7 +16,6 @@ import withDimensions from "../withDimensions";
 import withPosition from "../withPosition";
 import withMargin from "../withMargin";
 import withResizable from "../withResizable";
-import { PropertyValueMap } from "lit";
 
 export declare class WithZoomInterface {
   xScale?: ScaleLinear<number, number>;
