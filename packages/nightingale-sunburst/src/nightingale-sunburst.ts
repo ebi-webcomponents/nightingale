@@ -49,17 +49,10 @@ const getValue = (d: Node, attributeName: WeightAttributes): number => {
   );
 };
 
-const prepareTreeData = (
-  node: Node,
-  depth: number,
-  maxDepth: number
-  // weightAttribute: WeightAttributes
-): Node => {
+const prepareTreeData = (node: Node, depth: number, maxDepth: number): Node => {
   if (!node) return node;
 
   const preparedNode = { ...node };
-
-  // preparedNode.value = node?.[weightAttribute];
 
   if (depth >= maxDepth && (preparedNode?.children?.length || 0)) {
     preparedNode._children = preparedNode.children;
@@ -72,10 +65,7 @@ const prepareTreeData = (
   if (preparedNode?.children?.length) {
     const newChildren = [];
     for (const child of preparedNode.children) {
-      newChildren.push(
-        prepareTreeData(child, depth + 1, maxDepth)
-        // prepareTreeData(child, depth + 1, maxDepth, weightAttribute)
-      );
+      newChildren.push(prepareTreeData(child, depth + 1, maxDepth));
     }
     preparedNode.children = newChildren;
   }
