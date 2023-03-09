@@ -22,17 +22,17 @@ A custom element that creates a sunburst visualization for a taxonomy tree.
 
 #### `side: number (default: 500)`
 
-This will be use as `width` and `height` of the canvas and as the diameter of the biggest circle in the sunburst.
+This will be used as `width` and `height` of the canvas and as the diameter of the biggest circle in the sunburst.
 
 #### `weight-attribute: string (default: "value")`
 
-The attribute in the `data` nodes that will be use to calculate the proportions of the segments in the sunburst.
+The attribute in the `data` nodes that will be used to calculate the proportions of the segments in the sunburst.
 
 Note: All the nodes in the `data` parameter should have an attribute named as indicated in this attribute.
 
 #### `name-attribute: string (default: "name")`
 
-The attribute in the `data` nodes that will be use to for the labels of each segment.
+The attribute in the `data` nodes that will be used to for the labels of each segment.
 
 Note: All the nodes in the `data` parameter should have an attribute named as indicated in this attribute.
 
@@ -45,7 +45,7 @@ Note: All the nodes in the `data` parameter should have an attribute named as in
 #### `max-depth: number (default: Infinity)`
 
 The number of levels that the sunburst tree will be displayed.
-If not Included the component will go through the whole hierarchy.
+If not included the component will go through the whole hierarchy.
 
 #### `font-size: number (default: 10)`
 
@@ -71,11 +71,11 @@ The hierarchy that will be represented in the sunburst. It should be an object r
 
 #### `activeSegment: Node` **_[Read-Only]_**
 
-The `Node` of the segment the is currrently hovered, or which has been clicked lastly.
+The `Node` of the segment that is currently hovered, or which has been clicked lastly.
 
 #### `holdSegment: Boolean` **_[Read-Only]_**
 
-Indicates if the `activeSegment` is been held from a recent click, and therefore is ignoring any other segment that has been currently hovered.
+Indicates if the `activeSegment` is being held from a recent click, and therefore is ignoring any other segment that has been currently hovered.
 
 ##### `topOptions Array<String>`
 
