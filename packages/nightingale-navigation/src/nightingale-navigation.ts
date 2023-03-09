@@ -62,6 +62,7 @@ class NightingaleNavigation extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
+  #currentSelection: number[] | null = null;
 
   @property({ type: Number })
   "ruler-start" = 1;
@@ -119,8 +120,21 @@ class NightingaleNavigation extends withManager(
         [limit, this.height * 0.5 + HANDLE_SIZE / 2],
       ])
       .handleSize(HANDLE_SIZE)
+      .on("end", ({ selection }) => {
+        // In case is a click outside the brush, reset brush to previous position
+        if (
+          selection === null &&
+          this.#currentSelection &&
+          this.#brushG &&
+          this.#viewport
+        ) {
+          this.#brushG.call(this.#viewport.move, this.#currentSelection);
+        }
+      })
       .on("brush", ({ selection, transform }) => {
+        console.log({ selection });
         if (selection && this.#x) {
+          this.#currentSelection = selection;
           this["display-start"] =
             Math.round(this.#x.invert(selection[0]) * 100) / 100;
           this["display-end"] =
