@@ -60,9 +60,13 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     private onResize() {
+      const w = this.width;
+      const h = this.height;
       this.useAvailableWidth();
       this.useAvailableHeight();
-      this.onDimensionsChange();
+      if (w !== this.width || h !== this.height) {
+        this.onDimensionsChange();
+      }
     }
 
     private listenForResize() {

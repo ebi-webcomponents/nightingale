@@ -52,6 +52,7 @@ class NightingaleManager extends NightingaleElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("change", this.changeListener as EventListener);
+    this.style.display = "unset";
   }
 
   override attributeChangedCallback(
