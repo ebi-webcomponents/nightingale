@@ -129,7 +129,7 @@ class NightingaleSunburst extends LitElement {
   @property({ type: Number })
   "font-size" = 10;
   @property({ type: Boolean })
-  "show-label" = false;
+  "show-tooltip" = false;
 
   #data: Node | null = null;
 
@@ -223,7 +223,7 @@ class NightingaleSunburst extends LitElement {
     if (!this.root) return;
     this.renderArcs(context, width, height);
     this.renderLabels(context, width, height);
-    if (this["show-label"]) {
+    if (this["show-tooltip"]) {
       this.renderActiveSegmentInfo(context);
     }
   }

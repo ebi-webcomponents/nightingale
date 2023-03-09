@@ -42,7 +42,7 @@ const Template: Story<{
       name-attribute=${args.nameAttribute}
       max-depth=${args.maxDepth}
       font-size=${args.fontSize}
-      .show-label=${args.showLabel}
+      .show-tooltip=${args.showLabel}
     ></nightingale-sunburst>
   `;
 };
