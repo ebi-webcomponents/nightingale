@@ -25,33 +25,35 @@ export interface withMarginInterface extends NightingaleBaseElement {
   ) => void;
 }
 
+const defaultOptions = {
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "margin-left": 10,
+  "margin-right": 10,
+  "margin-color": DEFAULT_MARGIN_COLOR,
+};
 const withMargin = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
   options: {
-    "margin-top": number;
-    "margin-bottom": number;
-    "margin-left": number;
-    "margin-right": number;
+    "margin-top"?: number;
+    "margin-bottom"?: number;
+    "margin-left"?: number;
+    "margin-right"?: number;
     "margin-color"?: string | null;
-  } = {
-    "margin-top": 0,
-    "margin-bottom": 0,
-    "margin-left": 10,
-    "margin-right": 10,
-    "margin-color": DEFAULT_MARGIN_COLOR,
-  }
+  } = {}
 ) => {
   class WithMargin extends withDimensions(superClass) {
+    #intitialOptions = { ...defaultOptions, ...options };
     @property({ type: Number })
-    "margin-top": number = options["margin-top"];
+    "margin-top": number = this.#intitialOptions["margin-top"];
     @property({ type: Number })
-    "margin-bottom": number = options["margin-bottom"];
+    "margin-bottom": number = this.#intitialOptions["margin-bottom"];
     @property({ type: Number })
-    "margin-left": number = options["margin-left"];
+    "margin-left": number = this.#intitialOptions["margin-left"];
     @property({ type: Number })
-    "margin-right": number = options["margin-right"];
+    "margin-right": number = this.#intitialOptions["margin-right"];
     @property({ type: String })
-    "margin-color" = options["margin-color"];
+    "margin-color" = this.#intitialOptions["margin-color"];
 
     #created = false;
 

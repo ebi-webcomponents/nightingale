@@ -34,7 +34,6 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
-  // options: Record<string, unknown> = {}
 ) => {
   class WithZoom extends withMargin(
     withPosition(withResizable(withDimensions(superClass)))

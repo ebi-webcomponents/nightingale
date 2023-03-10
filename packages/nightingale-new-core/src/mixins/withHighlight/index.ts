@@ -17,21 +17,23 @@ export declare class WithHighlightInterface {
 }
 const DEFAULT_HIGLIGHT_COLOR = "#FFEB3B66";
 
+const defaultOptions = {
+  highlight: null,
+  "highlight-color": DEFAULT_HIGLIGHT_COLOR,
+};
 const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
   options: {
     highlight?: string | null;
     "highlight-color"?: string | null;
-  } = {
-    highlight: null,
-    "highlight-color": DEFAULT_HIGLIGHT_COLOR,
-  }
+  } = {}
 ) => {
   class WithHighlight extends superClass {
+    #initialOptions = { ...defaultOptions, ...options };
     @property({ type: String })
-    highlight = options.highlight;
+    highlight = this.#initialOptions.highlight;
     @property({ type: String })
-    "highlight-color" = options["highlight-color"];
+    "highlight-color" = this.#initialOptions["highlight-color"];
 
     highlightedRegion: Region;
     #fixedHighlight: string | null;
