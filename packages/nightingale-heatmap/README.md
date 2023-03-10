@@ -38,7 +38,7 @@ It follows the web standard defined in https://developer.mozilla.org/en-US/docs/
 
 #### `bottom-color: string (default: "darkblue")`
 
-The heatmap can interpolate colors from the bottom value (`0.0`) to its top (`1`).
+The heatmap can interpolate colors from the bottom value (`0.0`) to its top (`1.0`).
 This attribute defines the color to paint the **bottom (`0.0`)** value.
 
 It follows the web standard defined in https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
@@ -79,9 +79,9 @@ For instance:
 
 ### Events
 
-##### `changed`
+##### `change`
 
-Is dispatched when a hover over a point in the heatmap.
+Is dispatched when hovering over a point in the heatmap.
 
 The `detail` of the event is a `HeatmapPoint`:
 
