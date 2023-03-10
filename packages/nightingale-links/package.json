@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-links",
-  "version": "4.0.23-alpha.0",
+  "version": "4.0.24-alpha.0",
   "files": [
     "dist",
     "src"
@@ -29,8 +29,8 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.21-alpha.0",
-    "@nightingale-elements/nightingale-track": "^4.0.23-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "^4.0.24-alpha.0",
+    "@nightingale-elements/nightingale-track": "^4.0.24-alpha.0",
     "d3": "7.8.2",
     "lodash-es": "^4.17.15"
   }
