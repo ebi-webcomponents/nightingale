@@ -132,7 +132,6 @@ class NightingaleNavigation extends withManager(
         }
       })
       .on("brush", ({ selection, transform }) => {
-        console.log({ selection });
         if (selection && this.#x) {
           this.#currentSelection = selection;
           this["display-start"] =
