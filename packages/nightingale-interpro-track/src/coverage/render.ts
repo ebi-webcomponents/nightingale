@@ -48,6 +48,7 @@ export const refreshCoverage = ({
     ?.selectAll<SVGRectElement, Segment>("defs mask rect")
     .attr("x", (f) => element.getXFromSeqPosition(f.start))
     .attr("width", (f) => element.getSingleBaseWidth() * (f.end - f.start + 1))
+    .attr("height", element.height)
     .attr("fill", "white")
     .attr("opacity", (f) => {
       return cheapScale((f.value || 0) / (contributorsLength || 1));

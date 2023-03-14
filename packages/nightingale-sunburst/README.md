@@ -1,5 +1,7 @@
 # nightingale-sunburst
 
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-sunburst.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-sunburst)
+
 A custom element that creates a sunburst visualization for a taxonomy tree.
 
 ## Usage

@@ -45,11 +45,6 @@ class NightingaleLinks extends NightingaleTrack {
   _rawData?: ArrayOfNumberArray | null = null;
   _linksData?: ArrayOfNumberArray | null = null;
   #contacts?: ContactObject;
-
-  // _resetEventHandler?: (evt: Event) => void;
-
-  // _createTrack: () => void;
-
   contactPoints?: Selection<SVGCircleElement, number, SVGGElement, unknown>;
 
   willUpdate(changedProperties: PropertyValues<this>) {
@@ -79,12 +74,14 @@ class NightingaleLinks extends NightingaleTrack {
     );
     this.createTrack();
   }
+  get selected() {
+    return this.#contacts?.selected;
+  }
 
   protected createTrack() {
     if (!this.#contacts) {
       return;
     }
-    // this.layoutObj?.init(this.#data);
 
     this.svg?.selectAll("g").remove();
 
@@ -114,16 +111,13 @@ class NightingaleLinks extends NightingaleTrack {
       getHighlightEvent(
         "mouseover",
         this,
-        Array.from(this.#contacts.contacts[d])
-          .concat(+d)
-          .sort()
+        Array.from(this.#contacts.contacts[d]).concat(+d).sort()
       )
     );
   }
 
   createFeatures(): void {
     if (!this.#contacts) return;
-    // this.removeEventListener("click", this._resetEventHandler);
 
     this.seqG?.selectAll("g.contact-group").remove();
     const contactGroup = this.seqG?.append("g").attr("class", "contact-group");

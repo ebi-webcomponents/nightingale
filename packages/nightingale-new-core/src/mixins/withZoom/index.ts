@@ -28,6 +28,7 @@ export declare class WithZoomInterface {
   updateScaleDomain(): void;
   getSingleBaseWidth(): number;
   getXFromSeqPosition(position: number): number;
+  applyZoomTranslation(): void;
 }
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
@@ -115,6 +116,10 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         .domain([1, (this.length || 0) + 1])
         .range([0, this.getWidthWithMargins()]);
       this.originXScale = this.xScale?.copy();
+      this.zoom?.translateExtent([
+        [0, 0],
+        [this.getWidthWithMargins(), 0],
+      ]);
     }
 
     _initZoom() {
@@ -129,7 +134,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           [this.getWidthWithMargins(), 0],
         ])
         .filter((event) => {
-          if (!(event.type === "wheel")) return true;
+          if (!(event?.type === "wheel")) return true;
           // TODO: deal with event filters
           //   if (this.hasAttribute("scroll-filter")) {
           //     const scrollableAttribute = this.getAttribute("scrollable");
@@ -147,7 +152,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     ): void {
       super.attributeChangedCallback(name, oldValue, newValue);
 
-      if (!this.zoom) return;
       const newV = newValue === "null" ? null : newValue;
       if (oldValue !== newV) {
         if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
@@ -220,7 +224,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.svg?.attr("width", this.width);
       this.svg?.attr("height", this.height);
       this.updateScaleDomain();
-      this.zoomRefreshed();
+      this.applyZoomTranslation();
     }
 
     getXFromSeqPosition(position: number) {

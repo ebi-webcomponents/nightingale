@@ -193,8 +193,11 @@ class NightingaleColouredSequence extends NightingaleSequence {
         .attr("height", this.height)
         .attr(
           "width",
-          this.getXFromSeqPosition(this.sequence?.length || 0) -
-            this.getXFromSeqPosition(0)
+          Math.max(
+            0,
+            this.getXFromSeqPosition(this.sequence?.length || 0) -
+              this.getXFromSeqPosition(0)
+          )
         )
         .style("opacity", ftWidth < MIN_BASE_SIZE ? 1 : MIN_BASE_SIZE / ftWidth)
         .attr("fill", `url(#scale-gradient-${this.#uniqueID})`);

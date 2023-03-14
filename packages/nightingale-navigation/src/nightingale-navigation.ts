@@ -79,11 +79,9 @@ class NightingaleNavigation extends withManager(
   }
 
   private createNavRuler() {
+    const limit = this.width - this["margin-right"] - this["ruler-padding"];
     this.#x = scaleLinear()
-      .range([
-        this["margin-left"] + this["ruler-padding"],
-        this.width - this["margin-right"] - this["ruler-padding"],
-      ])
+      .range([this["margin-left"] + this["ruler-padding"], limit])
       .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)]);
     this.#svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
@@ -118,10 +116,7 @@ class NightingaleNavigation extends withManager(
     this.#viewport = brushX()
       .extent([
         [this["margin-left"] + this["ruler-padding"], 0],
-        [
-          this.width - this["margin-right"] - this["ruler-padding"],
-          this.height * 0.5 + HANDLE_SIZE / 2,
-        ],
+        [limit, this.height * 0.5 + HANDLE_SIZE / 2],
       ])
       .handleSize(HANDLE_SIZE)
       .on("brush", ({ selection, transform }) => {
@@ -147,15 +142,16 @@ class NightingaleNavigation extends withManager(
         }
       });
 
-    this.#brushG = this.#svg
-      .append("g")
-      .attr("class", "brush")
-      .call(this.#viewport);
+    this.#brushG = this.#svg.append("g").attr("class", "brush");
 
-    this.#brushG.call(this.#viewport.move, [
-      this.#x(this.getStart()),
-      this.#x(this.getEnd()),
-    ]);
+    if (limit > 0) {
+      this.#brushG.call(this.#viewport);
+
+      this.#brushG.call(this.#viewport.move, [
+        this.#x(this.getStart()),
+        this.#x(this.getEnd()),
+      ]);
+    }
 
     this.#polygon = this.#svg
       .append("polygon")
@@ -211,12 +207,10 @@ class NightingaleNavigation extends withManager(
       this.#axis.call(this.#xAxis);
       this.updatePolygon();
       this.updateLabels();
-      if (this.#brushG) {
+      const position = [this.#x(this.getStart()), this.#x(this.getEnd())];
+      if (this.#brushG && position[0] >= 0 && position[1] >= 0) {
         this.#dontDispatch = true;
-        this.#brushG.call(this.#viewport.move, [
-          this.#x(this.getStart()),
-          this.#x(this.getEnd()),
-        ]);
+        this.#brushG.call(this.#viewport.move, position);
         this.#dontDispatch = false;
       }
       this.updateHighlight();

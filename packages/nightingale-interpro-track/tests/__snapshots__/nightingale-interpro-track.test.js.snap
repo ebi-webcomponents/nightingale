@@ -10,7 +10,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
   <!---->
   <svg
     class="container"
-    height="26"
+    height="28"
     width="100"
   >
     <g
@@ -412,7 +412,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
       >
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.23076923076923075"
           width="0"
           x="10"
@@ -420,7 +420,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -428,7 +428,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -436,7 +436,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -444,7 +444,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -452,7 +452,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -460,7 +460,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -468,7 +468,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -476,7 +476,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.23076923076923075"
           width="0"
           x="10"
@@ -484,7 +484,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -492,7 +492,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -500,7 +500,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -508,7 +508,7 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.23076923076923075"
           width="0"
           x="10"
@@ -578,7 +578,7 @@ exports[`nightingale-interpro-track tests it should display the track correctly 
   <!---->
   <svg
     class="container"
-    height="26"
+    height="28"
     width="100"
   >
     <g
@@ -925,7 +925,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
   <!---->
   <svg
     class="container"
-    height="26"
+    height="28"
     width="100"
   >
     <g
@@ -1327,7 +1327,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
       >
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.23076923076923075"
           width="0"
           x="10"
@@ -1335,7 +1335,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -1343,7 +1343,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -1351,7 +1351,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -1359,7 +1359,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -1367,7 +1367,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -1375,7 +1375,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -1383,7 +1383,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -1391,7 +1391,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.23076923076923075"
           width="0"
           x="10"
@@ -1399,7 +1399,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -1407,7 +1407,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="1"
           width="0"
           x="10"
@@ -1415,7 +1415,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.6153846153846154"
           width="0"
           x="10"
@@ -1423,7 +1423,7 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
         />
         <rect
           fill="white"
-          height="2"
+          height="26"
           opacity="0.23076923076923075"
           width="0"
           x="10"

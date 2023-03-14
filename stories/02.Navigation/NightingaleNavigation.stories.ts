@@ -62,13 +62,17 @@ export const NavigationNoControls = () => html`
     <button id="zoom-in">Zoom In</button>
     <button id="zoom-out">Zoom Out</button>
   </div>
-  <script>
-    const nav = document.getElementById("navigation");
-    document.getElementById("zoom-in").addEventListener("click", () => {
-      nav.zoomIn();
-    });
-    document.getElementById("zoom-out").addEventListener("click", () => {
-      nav.zoomOut();
-    });
-  </script>
+  <script></script>
 `;
+
+NavigationNoControls.play = async () => {
+  const nav = document.getElementById("navigation");
+  document.getElementById("zoom-in")?.addEventListener("click", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (nav as any)?.zoomIn();
+  });
+  document.getElementById("zoom-out")?.addEventListener("click", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (nav as any)?.zoomOut();
+  });
+};

@@ -10,6 +10,7 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-a11y",
     "@storybook/addon-storysource",
+    "@storybook/addon-actions",
   ],
   typescript: {
     check: false,

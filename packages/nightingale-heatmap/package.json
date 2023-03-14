@@ -1,7 +1,6 @@
 {
-  "name": "@nightingale-elements/nightingale-interpro-track",
-  "version": "4.0.22-alpha.0",
-  "description": "Interpro extension of the track type.",
+  "name": "@nightingale-elements/nightingale-heatmap",
+  "version": "4.0.21-alpha.0",
   "files": [
     "dist",
     "src"
@@ -13,6 +12,16 @@
   "scripts": {
     "build": "rollup --config ../../rollup.config.mjs"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "heatmap",
+    "contacts"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -21,20 +30,8 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "keywords": [
-    "nightingale",
-    "webcomponents",
-    "customelements"
-  ],
-  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
-  "license": "ISC",
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.21-alpha.0",
-    "@nightingale-elements/nightingale-track": "^4.0.21-alpha.0",
-    "d3": "7.8.2",
-    "lodash-es": "^4.17.15"
+    "d3": "7.8.2"
   }
 }

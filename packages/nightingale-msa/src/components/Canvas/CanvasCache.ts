@@ -1,4 +1,5 @@
-import shallowEqual from "shallowequal";
+
+import * as shallowEqual from "shallowequal";
 import { minBy } from "lodash-es";
 import { ResidueTileOptions, TileOptions } from "../../types/types";
 

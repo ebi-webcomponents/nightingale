@@ -1,0 +1,28 @@
+import { Meta, Description } from "@storybook/addon-docs";
+
+import Readme from "../../packages/nightingale-heatmap/README.md";
+import ParentReadme from "../../packages/nightingale-new-core/src/nightingale-base-element.md";
+import dimensionsReadme from "../../packages/nightingale-new-core/src/mixins/withDimensions/README.md";
+import highlightReadme from "../../packages/nightingale-new-core/src/mixins/withHighlight/README.md";
+import marginReadme from "../../packages/nightingale-new-core/src/mixins/withMargin/README.md";
+import positionReadme from "../../packages/nightingale-new-core/src/mixins/withPosition/README.md";
+
+<Meta title="Components/Other/Heatmap/Readme" />
+
+<Description>{Readme}</Description>
+
+<hr />
+
+<h2>Mixins</h2>
+
+<p>
+  This component implement the following mixins, and therefore it includes their
+  attributes and properties.
+</p>
+<Description>{dimensionsReadme}</Description>
+<Description>{highlightReadme}</Description>
+<Description>{marginReadme}</Description>
+<Description>{positionReadme}</Description>
+
+<h2>Parent Class</h2>
+<Description>{ParentReadme}</Description>

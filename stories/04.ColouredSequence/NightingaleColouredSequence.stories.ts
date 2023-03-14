@@ -40,7 +40,7 @@ export const ScalesWithControls: Story<{
   highlight: string;
   "color-range": string;
 }> = (args) =>
-  html`<h3>Same Scale - different levels of zoom</h3>
+  html`<h3>Coloured Sequence with controls</h3>
     <nightingale-coloured-sequence
       sequence=${args.sequence}
       length=${args.sequence.length}
@@ -95,7 +95,7 @@ export const ChangingScales = () =>
               display-start=${start}
               display-end=${end}
               highlight="3:15"
-              scale="hydrophobicity-scale"
+              scale=${scale}
             ></nightingale-coloured-sequence>
           `
         )}
