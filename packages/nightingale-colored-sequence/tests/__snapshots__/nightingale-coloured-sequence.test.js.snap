@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`nightingale-coloured-sequence tests it should display the coloured sequence correctly 1`] = `
-<nightingale-coloured-sequence
+exports[`nightingale-colored-sequence tests it should display the colored sequence correctly 1`] = `
+<nightingale-colored-sequence
   height="40"
   length="15"
   scale="hydrophobicity-scale"
@@ -165,44 +165,6 @@ exports[`nightingale-coloured-sequence tests it should display the coloured sequ
     <g
       class="highlighted"
     />
-    <g
-      class="margin"
-    >
-      <rect
-        class="margin-left"
-        fill="#FFFFFFDD"
-        height="40"
-        style="pointer-events: none;"
-        width="10"
-        x="0"
-      />
-      <rect
-        class="margin-right"
-        fill="#FFFFFFDD"
-        height="40"
-        style="pointer-events: none;"
-        width="10"
-        x="790"
-      />
-      <rect
-        class="margin-top"
-        fill="#FFFFFFDD"
-        height="0"
-        style="pointer-events: none;"
-        width="800"
-        x="0"
-        y="0"
-      />
-      <rect
-        class="margin-bottom"
-        fill="#FFFFFFDD"
-        height="0"
-        style="pointer-events: none;"
-        width="800"
-        x="0"
-        y="40"
-      />
-    </g>
     <defs>
       <lineargradient
         id="scale-gradient-xjylrx"
@@ -278,6 +240,44 @@ exports[`nightingale-coloured-sequence tests it should display the coloured sequ
       x="10"
       y="0"
     />
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="40"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="40"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="40"
+      />
+    </g>
   </svg>
-</nightingale-coloured-sequence>
+</nightingale-colored-sequence>
 `;

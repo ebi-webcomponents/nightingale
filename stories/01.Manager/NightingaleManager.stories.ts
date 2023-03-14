@@ -4,7 +4,7 @@ import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
 import "../../packages/nightingale-track/src/index.ts";
 import "../../packages/nightingale-sequence/src/index.ts";
-import "../../packages/nightingale-coloured-sequence/src/index.ts";
+import "../../packages/nightingale-colored-sequence/src/index.ts";
 import "../../packages/nightingale-interpro-track/src/index.ts";
 import "../../packages/nightingale-saver/src/index.ts";
 import "../../packages/nightingale-overlay/src/index.ts";
@@ -120,7 +120,7 @@ const Template: Story<{
           </nightingale-sequence>
         </div>
         <div style="line-height: 0">
-          <nightingale-coloured-sequence
+          <nightingale-colored-sequence
             id="sequence"
             sequence=${sequence}
             min-width="${args["min-width"]}"
@@ -134,7 +134,7 @@ const Template: Story<{
             scale="hydrophobicity-scale"
             use-ctrl-to-zoom
           >
-          </nightingale-coloured-sequence>
+          </nightingale-colored-sequence>
         </div>
         <div style="line-height: 0">
           <nightingale-track
@@ -225,6 +225,7 @@ AllTracks.play = async () => {
   await customElements.whenDefined("nightingale-navigation");
   const nav = document.getElementById("navigation");
   if (nav) (nav as any).fixedHighlight = "10:20";
+
   await customElements.whenDefined("nightingale-track");
   const track = document.getElementById("track");
   if (track) {
@@ -236,21 +237,21 @@ AllTracks.play = async () => {
     (track2 as any).fixedHighlight = "10:20";
     (track2 as any).data = defaultData;
   }
-  const trackIpro = document.getElementById("trackIpro");
-  if (trackIpro) {
-    (trackIpro as any).fixedHighlight = "10:20";
-    (trackIpro as any).data = iproData;
-    (contributors[0] as any).residues = residues;
-    (trackIpro as any).contributors = contributors;
-  }
+  // const trackIpro = document.getElementById("trackIpro");
+  // if (trackIpro) {
+  //   (trackIpro as any).fixedHighlight = "10:20";
+  //   (trackIpro as any).data = iproData;
+  //   (contributors[0] as any).residues = residues;
+  //   (trackIpro as any).contributors = contributors;
+  // }
   const linegraphTrack = document.getElementById("linegraph");
   if (linegraphTrack) {
     (linegraphTrack as any).data = linegraph;
   }
 };
 
-export const SimpleNoControls = () =>
-  html`<h3>Manger with onlinavigation and sequence</h3>
+export const SequenceNoControls = () =>
+  html`<h3>Manger with only navigation and sequence</h3>
     <nightingale-manager>
       <div style="line-height: 0">
         <nightingale-navigation
@@ -272,3 +273,36 @@ export const SimpleNoControls = () =>
         ></nightingale-sequence>
       </div>
     </nightingale-manager> `;
+
+export const TrackNoControls = () =>
+  html`<h3>Manger with only navigation and track</h3>
+    <nightingale-manager>
+      <div style="line-height: 0">
+        <nightingale-navigation
+          id="navigation"
+          height="100"
+          width="800"
+          length="60"
+          highlight-color="#EB3BFF22"
+          show-highlight
+        >
+        </nightingale-navigation>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-track
+          id="track-simple"
+          width="800"
+          length="60"
+          use-ctrl-to-zoom
+        >
+        </nightingale-track>
+      </div>
+    </nightingale-manager> `;
+TrackNoControls.play = async () => {
+  await customElements.whenDefined("nightingale-track");
+  const track = document.getElementById("track-simple");
+  if (track) {
+    (track as any).fixedHighlight = "10:20";
+    (track as any).data = defaultData;
+  }
+};
