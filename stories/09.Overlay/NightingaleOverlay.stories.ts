@@ -1,7 +1,8 @@
 import { Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../../packages/nightingale-navigation/src/index.ts";
-import "../../packages/nightingale-saver/src/index.ts";
+import "../../packages/nightingale-overlay/src/index.ts";
+import "../../packages/nightingale-manager/src/index.ts";
 
 export default {
   title: "Components/Utils/Overlay",
@@ -18,18 +19,28 @@ const Template: Story<{
   label: string;
 }> = (args) => {
   return html`
-    <div id="all">
-      <nightingale-navigation
-        height="50"
-        length="27"
-        id="navigation"
-      ></nightingale-navigation>
-      <nightingale-sequence
-        id="sequence"
-        height="50"
-        sequence="THISISANEXAMPLEFORASEQUENCE"
-        length="27"
-      ></nightingale-sequence>
+    <div
+      id="all"
+      style="
+      height: 200px; 
+      overflow: scroll;
+      border: 7px solid #c7dcec;
+    "
+    >
+      <nightingale-manager>
+        <nightingale-navigation
+          height="50"
+          length="27"
+          id="navigation"
+        ></nightingale-navigation>
+        <nightingale-sequence
+          id="sequence"
+          height="50"
+          sequence="THISISANEXAMPLEFORASEQUENCE"
+          length="27"
+          use-ctrl-to-zoom
+        ></nightingale-sequence>
+      </nightingale-manager>
       <div id="div" style="background:red;width: 300px;height: 300px;"></div>
     </div>
     <nightingale-overlay

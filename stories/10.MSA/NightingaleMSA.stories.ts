@@ -22,7 +22,7 @@ const testSequences = [
   {
     name: "seq1",
     sequence:
-      "R1XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII----XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII",
+      "r1XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII----XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII",
   },
   {
     name: "seq2",
@@ -52,6 +52,7 @@ const Template: Story<{
     <nightingale-msa
       id="msa"
       height=${args.height}
+      width=${args.width}
       color-scheme=${args.colorScheme}
       display-start=${args.displayStart}
       display-end=${args.displayEnd}

@@ -23,7 +23,7 @@ Multiple Sequence Alignment viewer. This component is a stripped-out version of 
 #### `color-scheme: string (default: "clustal2")`
 
 Color Scheme to paint the bases in the alignment. Available options:
-`export, aliphatic, aromatic, buried, buried_index, charged, cinema, clustal2, clustal, helix, helix_propensity, hydro, lesk, mae, negative, nucleotide, polar, positive, purine, purine_pyrimidine, serine_threonine, strand, strand_propensity, taylor, turn, turn_propensity, zappo,, conservation`
+`aliphatic, aromatic, buried, buried_index, charged, cinema, clustal2, clustal, helix, helix_propensity, hydro, lesk, mae, negative, nucleotide, polar, positive, purine, purine_pyrimidine, serine_threonine, strand, strand_propensity, taylor, turn, turn_propensity, zappo,, conservation`
 
 #### `label-width: (default: 0)`
 

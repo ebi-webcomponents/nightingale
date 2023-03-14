@@ -26,7 +26,7 @@ It filters out the links between bases that are closer than the given minimum di
 
 #### `min-probability: number (default: 0.7)`
 
-It filters out the links that have lessprobability than the given one.
+It filters out the links that have less probability than the given one.
 
 ### Other attributes and parameters
 
