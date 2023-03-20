@@ -97,6 +97,12 @@ class NightingaleLinegraphTrack extends withManager(
   #data?: Array<LineData>;
   #minRange?: number;
   #maxRange?: number;
+  #overlay?: Selection<
+    SVGRectElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
 
   constructor() {
     super();
@@ -197,7 +203,7 @@ class NightingaleLinegraphTrack extends withManager(
       .attr("transform", "translate(10,3)")
       .attr("pointer-events", "none");
 
-    mouseG
+    this.#overlay = mouseG
       .append("rect") // append a rect to catch mouse movements on canvas
       .attr("width", this.width) // can't catch mouse events on a g element
       .attr("height", this.height)
@@ -305,6 +311,10 @@ class NightingaleLinegraphTrack extends withManager(
 
       this.renderMarginOnGroup(this.#margins);
     }
+  }
+  onDimensionsChange(): void {
+    super.onDimensionsChange();
+    this.#overlay?.attr("width", this.width).attr("height", this.height);
   }
 
   _initYScale() {
