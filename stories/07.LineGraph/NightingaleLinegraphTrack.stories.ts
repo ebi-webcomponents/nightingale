@@ -16,11 +16,14 @@ export const LinegraphWithoutControls = () => html`
     id="track"
     length="5"
   ></nightingale-linegraph-track>
-  <h3>2 lines with 20 points(41 to 60)</h3>
+  <h3>2 lines with 20 points(41 to 65)</h3>
   <nightingale-linegraph-track
     id="track1"
-    width="600"
-    length="60"
+    width="800"
+    height="200"
+    length="65"
+    display-start="40"
+    display-end="65"
   ></nightingale-linegraph-track>
 `;
 
