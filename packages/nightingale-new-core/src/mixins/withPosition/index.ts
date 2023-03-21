@@ -8,34 +8,28 @@ export interface withPositionInterface extends NightingaleBaseElement {
   "display-end"?: number;
   length?: number;
 }
-const WHOLE_SEQ = -1;
+export const WHOLE_SEQ = -1;
+const defaultOptions = {
+  "display-start": 1,
+  "display-end": WHOLE_SEQ,
+  length: 0,
+};
 const withPosition = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
   options: {
-    "display-start": number;
-    "display-end": number;
-    length: number;
-  } = {
-    "display-start": 1,
-    "display-end": WHOLE_SEQ,
-    length: 0,
-  }
+    "display-start"?: number;
+    "display-end"?: number;
+    length?: number;
+  } = {}
 ) => {
   class WithPosition extends superClass {
+    #intitialOptions = { ...defaultOptions, ...options };
     @property({ type: Number })
-    length?: number = options.length;
+    length?: number = this.#intitialOptions.length;
     @property({ type: Number })
-    "display-start"?: number = options["display-start"];
+    "display-start"?: number = this.#intitialOptions["display-start"];
     @property({ type: Number })
-    "display-end"?: number = options["display-end"];
-
-    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // constructor(...args: any[]) {
-    //   super(...args);
-    //   if (!this.length) this.length = 1;
-    //   if (!this["display-start"]) this["display-start"] = 1;
-    //   if (!this["display-end"]) this["display-end"] = this.length;
-    // }
+    "display-end"?: number = this.#intitialOptions["display-end"];
   }
   return WithPosition as Constructor<withPositionInterface> & T;
 };

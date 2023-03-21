@@ -34,14 +34,23 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
-  // options: Record<string, unknown> = {}
 ) => {
   class WithZoom extends withMargin(
     withPosition(withResizable(withDimensions(superClass)))
   ) {
     _applyZoomTranslation: () => void;
+    /**
+     * Base scale without any transformations, only updated in `updateScaleDomain`
+     */
     private originXScale?: ScaleLinear<number, number>;
-    _xScale?: ScaleLinear<number, number>;
+    /**
+     * Temporary scale. It contains the transformations caused by zoom events, but not yet reflected in `display-start` and `display-end`.
+     */
+    private tmpXScale?: ScaleLinear<number, number>;
+    /**
+     * Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`.
+     */
+    xScale?: ScaleLinear<number, number>;
     _zoom?: ZoomBehavior<HTMLElement, unknown>;
     _svg?: Selection<HTMLElement, unknown, HTMLElement, unknown>;
     dontDispatch?: boolean;
@@ -80,19 +89,12 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       //   document.addEventListener("wheel", this.wheelListener, { capture: true });
       // }
       super.connectedCallback();
+      this.onDimensionsChange();
     }
 
     disconnectedCallback() {
       // document.removeEventListener("wheel", this.wheelListener);
       super.disconnectedCallback();
-    }
-
-    get xScale() {
-      return this._xScale;
-    }
-
-    set xScale(xScale) {
-      this._xScale = xScale;
     }
 
     get zoom() {
@@ -116,6 +118,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         .domain([1, (this.length || 0) + 1])
         .range([0, this.getWidthWithMargins()]);
       this.originXScale = this.xScale?.copy();
+      this.tmpXScale = this.xScale?.copy();
       this.zoom?.translateExtent([
         [0, 0],
         [this.getWidthWithMargins(), 0],
@@ -167,26 +170,31 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
       // Redefines the xScale using the original scale and transform it with the captured event data.
       if (this.originXScale)
-        this.xScale = d3Event.transform.rescaleX(this.originXScale);
+        this.tmpXScale = d3Event.transform.rescaleX(this.originXScale);
 
       // New positions based in the updated scale
-      const [start, end] = this?.xScale?.domain() || [0, 0];
+      const [start, end] = this?.tmpXScale?.domain() || [0, 0];
 
-      if (this.dontDispatch || !this.xScale) return;
-      this.dispatchEvent(
-        // Dispatches the event so the manager can propagate this changes to other  components
-        new CustomEvent("change", {
-          detail: {
-            "display-start": Math.max(1, start),
-            "display-end": Math.min(
-              this.length || 0,
-              Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
-            ),
-          },
-          bubbles: true,
-          cancelable: true,
-        })
-      );
+      if (this.tmpXScale) {
+        if (this.dontDispatch) {
+          this.xScale = this.tmpXScale;
+        } else {
+          this.dispatchEvent(
+            // Dispatches the event so the manager can propagate this changes to other  components
+            new CustomEvent("change", {
+              detail: {
+                "display-start": Math.max(1, start),
+                "display-end": Math.min(
+                  this.length || 0,
+                  Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
+                ),
+              },
+              bubbles: true,
+              cancelable: true,
+            })
+          );
+        }
+      }
     }
 
     applyZoomTranslation() {

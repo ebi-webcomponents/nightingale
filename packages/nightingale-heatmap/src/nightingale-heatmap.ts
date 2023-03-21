@@ -24,14 +24,22 @@ type HeatmapPoint = { xPoint: number; yPoint: number; value: number | null };
 
 @customElement("nightingale-heatmap")
 class NightingaleHeatmap extends withResizable(
-  withMargin(withPosition(withDimensions(withHighlight(NightingaleElement))))
+  withMargin(
+    withPosition(
+      withDimensions(
+        withHighlight(NightingaleElement, {
+          "highlight-color": "#fc1e1e",
+        })
+      )
+    )
+  )
 ) {
   @property({ type: Boolean })
   symmetric = false;
   @property({ type: String, attribute: "top-color" })
-  topColor = "yellow";
+  topColor = "#fff81f";
   @property({ type: String, attribute: "bottom-color" })
-  bottomColor = "darkblue";
+  bottomColor = "#23368a";
   @property({ type: String, attribute: "x-label" })
   xLabel = "Residue";
   @property({ type: String, attribute: "y-label" })
@@ -235,6 +243,10 @@ class NightingaleHeatmap extends withResizable(
       .select(".domain")
       .remove();
 
+    svg
+      .select<SVGGElement>("g.y-axis g.tick")
+      .attr("dominant-baseline", "hanging");
+
     // text label for axes
     svg
       .select<SVGTextElement>("text.x-label")
@@ -307,6 +319,7 @@ class NightingaleHeatmap extends withResizable(
       .attr("cy", this.#y(highlightPoint[1]) || 0)
       .attr("fill", this.colorScale?.(dataPoint[0][2] || 0) || null)
       .attr("stroke", this["highlight-color"])
+      .attr("stroke-width", 2)
       .attr("r", 10);
     return dataPoint[0][2] || 0;
   }

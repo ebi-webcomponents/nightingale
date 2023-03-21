@@ -49,17 +49,10 @@ const getValue = (d: Node, attributeName: WeightAttributes): number => {
   );
 };
 
-const prepareTreeData = (
-  node: Node,
-  depth: number,
-  maxDepth: number
-  // weightAttribute: WeightAttributes
-): Node => {
+const prepareTreeData = (node: Node, depth: number, maxDepth: number): Node => {
   if (!node) return node;
 
   const preparedNode = { ...node };
-
-  // preparedNode.value = node?.[weightAttribute];
 
   if (depth >= maxDepth && (preparedNode?.children?.length || 0)) {
     preparedNode._children = preparedNode.children;
@@ -72,10 +65,7 @@ const prepareTreeData = (
   if (preparedNode?.children?.length) {
     const newChildren = [];
     for (const child of preparedNode.children) {
-      newChildren.push(
-        prepareTreeData(child, depth + 1, maxDepth)
-        // prepareTreeData(child, depth + 1, maxDepth, weightAttribute)
-      );
+      newChildren.push(prepareTreeData(child, depth + 1, maxDepth));
     }
     preparedNode.children = newChildren;
   }
@@ -129,7 +119,7 @@ class NightingaleSunburst extends LitElement {
   @property({ type: Number })
   "font-size" = 10;
   @property({ type: Boolean })
-  "show-label" = false;
+  "show-tooltip" = false;
 
   #data: Node | null = null;
 
@@ -223,7 +213,7 @@ class NightingaleSunburst extends LitElement {
     if (!this.root) return;
     this.renderArcs(context, width, height);
     this.renderLabels(context, width, height);
-    if (this["show-label"]) {
+    if (this["show-tooltip"]) {
       this.renderActiveSegmentInfo(context);
     }
   }

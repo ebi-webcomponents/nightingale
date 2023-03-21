@@ -14,7 +14,7 @@ A custom element that creates a sunburst visualization for a taxonomy tree.
   name-attribute="node"
   max-depth="7"
   font-size="10"
-  show-label
+  show-tooltip
 ></nightingale-sunburst>
 ```
 
@@ -53,13 +53,13 @@ If not included the component will go through the whole hierarchy.
 
 Font size for the labels drawn over the segments.
 
-#### `show-label: boolean (default: false)`
+#### `show-tooltip: boolean (default: false)`
 
-If `true` the canvas will include some labels on the top-left corner with the information of the current segment. The current segment is the last one the user clicked on, or if none, it would be the segment where the mouse is hovering.
+If `true` the canvas will include a tooltip on the top-left corner with the information of the current segment. The current segment is the last one the user clicked on, or if none, it would be the segment where the mouse is hovering.
 
 #### `weight-attribute-label: string (default: 'Value')`
 
-Label to show in the labels. Only relevant if `show-label` is `true`
+Label to show in the labels. Only relevant if `show-tooltip` is `true`
 
 ### Properties
 

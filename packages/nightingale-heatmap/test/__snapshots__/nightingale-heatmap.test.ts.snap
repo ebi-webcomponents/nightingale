@@ -189,6 +189,7 @@ exports[`nightingale-navigation tests it should display the heatmap correctly 1`
       >
         <g
           class="tick"
+          dominant-baseline="hanging"
           opacity="1"
           transform="translate(0,0.6578947368421053)"
         >

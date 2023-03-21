@@ -88,7 +88,17 @@ class NightingaleLinks extends NightingaleTrack {
     this.svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
       .attr("width", this.width)
-      .attr("height", this.height);
+      .attr("height", this.height)
+      .on("click", (event: MouseEvent) => {
+        if (!this.#contacts) return;
+        if (
+          !(event.target as HTMLElement)?.classList.contains("contact-point")
+        ) {
+          this.#contacts.selected = undefined;
+          this.#contacts.isHold = false;
+          this.refreshSelected();
+        }
+      });
 
     if (!this.svg) return;
     this.seqG = this.svg.append("g").attr("class", "sequence-features");
@@ -136,22 +146,20 @@ class NightingaleLinks extends NightingaleTrack {
         .on("mouseover", (_: Event, d: number) => {
           if (this.#contacts?.isHold) return;
           this._dispatchSelectNode(d);
-          this.refresh();
+          this.refreshSelected();
         })
         .on("mouseout", () => {
           if (!this.#contacts || this.#contacts?.isHold) return;
           this.#contacts.selected = undefined;
           this.dispatchEvent(getHighlightEvent("mouseout", this));
-          this.refresh();
+          this.refreshSelected();
         })
-        .on("click", (_: Event, d: number) => {
+        .on("click", (event: Event, d: number) => {
+          event.preventDefault();
           if (!this.#contacts) return;
-          this.#contacts.isHold = !this.#contacts.isHold;
-          if (!this.#contacts.isHold) {
-            this.#contacts.selected = undefined;
-          }
+          this.#contacts.isHold = true;
           this._dispatchSelectNode(d);
-          this.refresh();
+          this.refreshSelected();
         });
     this._linksData = contactObjectToLinkList(this.#contacts.contacts);
   }
@@ -171,17 +179,15 @@ class NightingaleLinks extends NightingaleTrack {
     return `M ${x1} ${h} C ${x1 - p} ${-h / 4} ${x2 + p} ${-h / 4} ${x2} ${h}`;
   }
 
-  refresh(): void {
+  refreshSelected(): void {
     if (!this.#contacts || !this.contactPoints) return;
     this.contactPoints
-      .attr(
-        "cx",
-        (d: number) =>
-          this.getXFromSeqPosition(d) + this.getSingleBaseWidth() / 2
-      )
       .transition()
-      .attr("cy", this.height * 0.5)
-      .attr("r", (d: number) => this.getRadius(d === this.#contacts?.selected))
+      .attr("r", (d: number) =>
+          this.getRadius(
+              d === this.#contacts?.selected || (this.#contacts?.contacts[d].has(this.#contacts?.selected || 0) || false)
+          )
+      )
       .attr("stroke", (d: number) =>
         d === this.#contacts?.selected && this.#contacts.isHold
           ? "rgb(127 255 127)"
@@ -190,7 +196,6 @@ class NightingaleLinks extends NightingaleTrack {
       .style("opacity", (d: number) =>
         d === this.#contacts?.selected ? 1 : OPACITY_MOUSEOUT
       );
-
     const selectedLinks = this.#contacts.selected
       ? this._linksData?.filter((link) =>
           link.includes(+(this.#contacts?.selected || 0))
@@ -213,12 +218,27 @@ class NightingaleLinks extends NightingaleTrack {
       .attr("class", "contact-link")
       .attr("fill", "transparent")
       .attr("stroke", this._getColor(this.#contacts?.selected || 0))
+      .attr("stroke-width", this.#contacts.isHold ? 3 : 1)
       .style("opacity", 1)
       .style("pointer-events", "none")
       .attr("d", (d: number[]) => this.arc(d))
       .attr("id", ([n1, n2]: Array<number>) => `cn_${n1}_${n2}`);
 
-    links?.attr("d", (d: number[]) => this.arc(d));
+    links
+      ?.attr("d", (d: number[]) => this.arc(d))
+      .attr("stroke-width", this.#contacts.isHold ? 3 : 1);
+  }
+  refresh(): void {
+    if (!this.#contacts || !this.contactPoints) return;
+    this.contactPoints
+      .attr(
+        "cx",
+        (d: number) =>
+          this.getXFromSeqPosition(d) + this.getSingleBaseWidth() / 2
+      )
+      .attr("cy", this.height * 0.5);
+
+    this.refreshSelected();
   }
 }
 

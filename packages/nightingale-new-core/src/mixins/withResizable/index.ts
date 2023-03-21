@@ -12,16 +12,24 @@ export declare class WithResizableInterface {
   "min-height": number;
   onDimensionsChange(): void;
 }
-
+const defaultOptions = {
+  "min-width": DEFAULT_MIN_WIDTH,
+  "min-height": DEFAULT_MIN_HEIGHT,
+};
 const withResizable = <T extends Constructor<NightingaleBaseElement>>(
-  superClass: T
+  superClass: T,
+  options: {
+    "min-width"?: number;
+    "min-height"?: number;
+  } = {}
 ) => {
   class WithResizable extends withDimensions(superClass) {
+    #intitialOptions = { ...defaultOptions, ...options };
     #observer?: ResizeObserver;
     @property({ type: Number })
-    "min-width": number = DEFAULT_MIN_WIDTH;
+    "min-width": number = this.#intitialOptions["min-width"];
     @property({ type: Number })
-    "min-height": number = DEFAULT_MIN_HEIGHT;
+    "min-height": number = this.#intitialOptions["min-height"];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...rest: any[]) {
@@ -60,9 +68,13 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     private onResize() {
+      const w = this.width;
+      const h = this.height;
       this.useAvailableWidth();
       this.useAvailableHeight();
-      this.onDimensionsChange();
+      if (w !== this.width || h !== this.height) {
+        this.onDimensionsChange();
+      }
     }
 
     private listenForResize() {
