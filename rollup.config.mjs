@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 import json from "@rollup/plugin-json";
 import webWorkerLoader from "rollup-plugin-web-worker-loader";
+import css from "rollup-plugin-css-only";
 
 export default {
   input: "src/index.ts",
@@ -13,6 +14,7 @@ export default {
     sourcemap: true,
   },
   plugins: [
+    css(),
     typescript(),
     nodeResolve(),
     commonjs(),

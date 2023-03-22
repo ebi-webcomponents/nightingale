@@ -1,0 +1,40 @@
+{
+  "name": "@nightingale-elements/textarea-sequence",
+  "version": "4.0.0",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^4.0.24-alpha.0",
+    "lodash-es": "^4.17.11",
+    "quill": "1.3.7"
+  },
+  "devDependencies": {
+    "@types/quill": "*"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "gitHead": "726779864966d11f966f337f2dd84aa4f58d944a"
+}
