@@ -1,17 +1,21 @@
-import { cleanUpText, formatSequence, alphabets } from "./defaults";
+import { cleanUpText, formatSequence, alphabets } from "../src/defaults";
 
 describe("textarea-sequence: formatSequence", () => {
   test("trims", () => {
     const seq = "   XXXXXXXXXXXXXXX  ";
-    expect(formatSequence(seq, 40, 80)).toEqual(seq.trim());
+    expect(formatSequence(seq, { block: 40, line: 80 })).toEqual(seq.trim());
   });
   test("same line blocks of 5", () => {
     const seq = "   XXXXXXXXXXXXXXX  ";
-    expect(formatSequence(seq, 5, 80)).toEqual("XXXXX XXXXX XXXXX");
+    expect(formatSequence(seq, { block: 5, line: 80 })).toEqual(
+      "XXXXX XXXXX XXXXX"
+    );
   });
   test("lines of 10 blocks of 5", () => {
     const seq = "   XXXXXXXXXXXXXXX  ";
-    expect(formatSequence(seq, 5, 10)).toEqual("XXXXX XXXXX\nXXXXX");
+    expect(formatSequence(seq, { block: 5, line: 10 })).toEqual(
+      "XXXXX XXXXX\nXXXXX"
+    );
   });
 });
 
