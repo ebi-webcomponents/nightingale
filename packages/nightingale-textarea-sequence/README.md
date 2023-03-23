@@ -1,119 +1,60 @@
-# textarea-sequence
+# nightingale-textarea-sequence
+
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-textarea-sequence.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-textarea-sequence)
 
 A custom element that creates a formatted text area to capture sequences. It uses [QuillJS](https://quilljs.com/) to format the textarea.
 
 ## Usage
 
 ```html
-<textarea-sequence
-  id="textareaID"
-  height="10em"
-  min-sequence-length="10"
-  single="true"
-/>
+<nightingale-textarea-sequence
+  id="track"
+  min-sequence-length="5"
+  width="800"
+  height="400"
+></nightingale-textarea-sequence>
 ```
-
-This readme is been use as a road map. A 🚧 emoji indicates that this feature is under construction.
-
-## Features
-
-- Formats the sequence interactively following the FastA format.
-  - ✅ Highlights headers
-  - ✅ Highlights bases/residues that are not part of it's alphabet.
-  - ✅ Highlights if the file includes multiple sequences, when the option `single` is included.
-  - ✅ Greys out comment lines (i.e. starts with `;`)
-- ✅ CleanUp funtionality.
-- ✅ Error reporting.
-- ✅ Highlights the textarea border if there are errors or is valid.
-- ✅ Creates a hidden input that mirrors the value in quill, so it is included when a form is submitted.
 
 ## API reference
 
-### Parameters
+### Attributes
 
-##### `alphabet`
+#### `alphabet?: 'protein'|'dna'|string (default: 'protein')`
 
 Either a `string` explicitly listing the valid characters in the sequence or one of the predefined alphabets:
 
 - `"protein"`: `"ACDEFGHIKLMNPQRSTVWY "`
 - `"dna"`: `"AGTCN "`
 
-type: `enum('dna'|'protein') | string`
-defaultValue: `"protein"`
-
-##### `case-sensitive`
+#### `case-sensitive?: boolean (default: false)`
 
 Indicates if the checks against the alphabet should consider the sequence casing
 
-type: `boolean`
-defaultValue: `false`
-
-##### `single`
+#### `single?: boolean (default: false)`
 
 Indicates if the textarea should only allow a single sequence
 
-type: `boolean`
-defaultValue: `false`
-
-##### `disable-header-check`
+#### `disable-header-check?: boolean (default: false)`
 
 Indicates if the checks against the alphabet should consider the absence of the header.
 This will only makes sense if the attribute `single` is also `true`, if it's not, the value of
-the error `headerCheckRequiredForMultipleSequences` will be true.
+the error `headerCheckRequiredForMultipleSequences` will be `true`.
 
-type: `boolean`
-defaultValue: `false`
-
-##### `min-sequence-length`
+##### `min-sequence-length?: number (default: 1)`
 
 Defines the minimum number of bases required in the textarea
 
-type: `number`
-defaultValue: `0`
-
-##### `height`
-
-Height of the textarea element.
-
-type: `auto|<length>|<percentage>`
-defaultValue: `"auto"`
-
-##### `width`
-
-Width of the textarea element:
-
-type: `auto|<length>|<percentage>`
-defaultValue: `"auto"`
-
-##### `inner-style`
+##### `inner-style?: string (default: '')`
 
 Inline CSS style for the main container. The attributes `width` and `height` would have higher priority of any value for height and width created in the inline style.
 
-type: `<CSSStyleDeclaration>`
-defaultValue:
-
-```
-        border: 1px solid #ccc;
-        font-family: 'Courier New', Courier, monospace; font-size: 1em;
-        letter-spacing: .1rem;
-        height: auto;
-        margin: 0 auto;
-        width: auto;
-```
-
-### Properties
-
-#### `sequence` **_[Read Only]_**
+#### `sequence: string` **_[Read Only]_**
 
 The current value of the text-area.
-
-type: `string`
 
 #### `errors` **_[Read Only]_**
 
 The current value of the error report. In the shape of an object, where the keys are the type of error, and their values are booleans indicating if the current text has that error.
-
-type: `object`
 
 Example:
 
@@ -132,31 +73,27 @@ Example:
 We use quill to apply the formatting of the textarea. The object related to it, is exposed in this parameter.
 See the [Quill API documentation](https://quilljs.com/docs/api/) for more details of what can you do with this object.
 
-type: `object`
-
 #### `formatSequence`
 
 A formatting function to use in the cleanUp method. It should add desired spaces a line splits.
 
 The signature of the function should be:
 
-`<string> formatSequence(<string> sequence)`
+```typescript
+type FormatSequenceFunction = (
+  sequence: string,
+  options?: Record<string, unknown>
+) => string;
+```
 
-type: `function`
 defaultValue: Splits the sequence in lines of 50, adding a space every 10 characters
-
-parameters:
-
-- sequence: type: `string`
-
-Returns
-
-- `string`
 
 **Note:** This parameter can be overwritten, so you can define such format. For example, to avoid any formatting you can pass the identity function:
 
-```javascript
-document.getElementByID("textareaID").formatSequence = (x) => x;
+```js
+document.getElementByID("textareaID").formatSequence = (x) => {
+  return x;
+};
 ```
 
 ### Methods
@@ -201,17 +138,14 @@ element.quill.on("text-change", (e) => {
 
 We have exposed some functions tht can be use without having to load the web component:
 
-#### `formatSequence(sequence, block = 10, line = 50)`
+#### `formatSequence(sequence, options={block: 10, line: 50})`
 
 Splits a string into lines of length `line` with block of `block` length separated by white spaces.
 
 parameters:
 
 - `sequence`: type: `string`
-- `block`: type: `number`
-  default: `10`
-- `line`: type: `number`
-  default: `50`
+- `options`: type `{block: number, line: number}`
 
 Returns:
 
@@ -233,7 +167,7 @@ Takes a sequence and transform it, applying the following heuristics:
 
 - removes any character that's not in the alphabet.
 - Generates a header if the sequence doesn't have one
-- formats the sequence using the goven function. default: blocks of 10 chars separated with a white space and lines of 50 bases.
+- formats the sequence using the given function. default: blocks of 10 chars separated with a white space and lines of 50 bases.
 - If `case_sensitive` is `true` cases mismatches are removed.
 - If `removeComments` is `true`, removes any line that starts with `;`
 - If `single` is `true`, removes any sequence after the first one.
