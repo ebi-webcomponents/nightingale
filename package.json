@@ -72,5 +72,9 @@
   "workspaces": [
     "packages/*"
   ],
-  "customElements": "custom-elements.json"
+  "customElements": "custom-elements.json",
+  "dependencies": {
+    "mdx-embed": "^1.1.2",
+    "storybook-addon-mdx-embed": "^1.1.1"
+  }
 }
