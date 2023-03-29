@@ -10,18 +10,18 @@ This document describes the creation of a basic Nightingale component.
 
 1. Create the folder for your component under the `packages/` folder. This will ensure that the scripts defined in the main `package.json` can operate in the new component.
    ```bash
-   mkdir packages/protvista-hello
+   mkdir packages/nightingale-hello
    ```
 2. Create a folder for your source code `src/` and one for your tests `test/`:
    ```bash
-   mkdir packages/protvista-overlay/src
-   mkdir packages/protvista-overlay/tests
+   mkdir packages/nightingale-hello/src
+   mkdir packages/nightingale-hello/tests
    ```
 3. Create the `package.json` for the new component. Here is an example of its content:
 
    ```javascript
    {
-     "name": "protvista-hello",
+     "name": "nightingale-hello",
      "version": "2.2.14",
      "description": "Basic usage",
      "files": [ "dist", "src" ],
@@ -49,78 +49,53 @@ This document describes the creation of a basic Nightingale component.
 
    ```
 
-4. Create the entrypoint for webpack. The current setup of the nightingale project, looks for `src/index.js`:
+4. Create the entrypoint for webpack. The current setup of the nightingale project, looks for `src/index.ts`:
+
    ```javascript
-   import ProtvistaHello from "./ProtvistaHello";
-   if (window.customElements) {
-     customElements.define("protvista-hello", ProtvistaHello);
-   }
-   export default ProtvistaHello;
+   import NightingaleHello from "./nightingale-hello";
+
+   export default NightingaleHello;
    ```
-5. Create the file where the code of your custom element will be. In our example `src/ProtvistaHello.js`.
+
+5. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
 
    1. To start we can create a Hello world document with this code:
 
       ```javascript
-      class ProtvistaHello extends HTMLElement {
-        connectedCallback() {
-          this.render();
-        }
+      import { LitElement, html } from "lit";
+      import { customElement } from "lit/decorators.js";
+
+      export
+      @customElement("nightingale-hello")
+      class NightingaleHello extends LitElement {
+        @property({ type: String, attribute: "name" })
+        name = "";
 
         render() {
-          this.innerHTML = "Hello World.";
+          return html`<p>Hello ${this.name}!</p>`;
         }
       }
 
-      export default ProtvistaHello;
+      export default NightingaleHello;
       ```
 
       Here are some notes of this code:
 
-      - A very similar code up to this point can be seen in this [commit](https://github.com/ebi-webcomponents/nightingale/commit/8f23f1fe159052598fe59b0aba1f413fcc47bac3), for the `<protvista-overlay>` component.
-      - Nightingale components follow the Custom element standard of [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), hence the class ineriting from `HTMLElement`.
-      - The method `connectedCallback()` is part of the API of custom elements, and is invoked when the component is mounted in the DOM.
-      - The mothod `render()` has not especial meaning in the API and in this case is only called by `connectedCallback()`.
-      - Other components (e.g. `<protvista-saver>`) use [lit-html](https://lit-html.polymer-project.org/), in which case `render()` has an especial meaning.
+      - The library used to build the web components in Nightingale is [Lit](https://lit.dev/docs/).
+      - The `@customElement` decorator is used for defining the custom element following the web component standard of defining and registering the custom elements.
+      - The component rendering is defined by the method `render()`.
 
-   2. You can try out the new component by including it in the logic of the showcase app for nightingale. See below the diff of the file that includes `<protvista-overlay>` as an example, or you can check the [commit in GitHub](https://github.com/ebi-webcomponents/nightingale/commit/16d2e9cbf778c590566518c862bddc959ae4d716).
+   2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component `nightingaleElement`.
+      
+      It is the base element for any Nightingale component which extends the LitElement itself. Any logic that should be shared among all the components are included here.
+      Currently the only thing is doing, is setting the render root of the components in the element itself, instead of shadowDOM, the Lit element default.
 
-      ```diff
-      diff --git a/app/src/components/ProtvistaManager.jsx b/app/src/components/ProtvistaManager.jsx
-      index afe5fb7..3199635 100644
-      --- a/app/src/components/ProtvistaManager.jsx
-      +++ b/app/src/components/ProtvistaManager.jsx
-      @@ -16,6 +16,7 @@ import sequence from "../mocks/sequence.json";
-      import { dataIPR, signatures, withResidues } from "../mocks/interpro";
-      import secondaryStructureData from "../mocks/interpro-secondary-structure.json";
-      import ProtvistaSaver from "protvista-saver";
-      +import ProtvistaOverlay from "protvista-overlay";
-      import Readme from "./Readme";
-      import readmeContent from "../../../packages/protvista-manager/README.md";
-
-      @@ -74,6 +75,7 @@ class ProtvistaManagerWrapper extends Component {
-          loadWebComponent("data-loader", DataLoader);
-          loadWebComponent("protvista-variation-adapter", ProtvistaVariationAdapter);
-          loadWebComponent("protvista-saver", ProtvistaSaver);
-      +    loadWebComponent("protvista-overlay", ProtvistaOverlay);
-          return (
-            <Fragment>
-              <Readme content={readmeContent} />
-      @@ -86,6 +88,7 @@ class ProtvistaManagerWrapper extends Component {
-              >
-                <button>Download Just Tracks</button>
-              </protvista-saver>
-      +        <protvista-overlay />
-              <protvista-manager
-                attributes="length displaystart displayend variantfilters highlight"
-                displaystart="53"
+      ```js
+      import NightingaleElement from "@nightingale-elements/nightingale-new-core";
       ```
 
-   3. Let `yarn` and `lerna` know about your new component by making them check the `package.json` file. For this you just need to:
-      ```bash
-      yarn start
-      ```
-   4. Now you can start the showcase app. This will run `webpack-dev-server` and open the app in your browser, you can then go to the Manager component, and you will see the `"Hello world."` message as part of the example.
-      ```bash
-      yarn start
-      ```
+    3. Event Handling
+    4. Mixins ?
+  6. Add in storybook
+
+    ```
