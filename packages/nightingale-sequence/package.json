@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.0.24-alpha.0",
-    "d3": "7.8.2"
+    "d3": "7.8.3"
   }
 }
