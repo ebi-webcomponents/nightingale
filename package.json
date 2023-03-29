@@ -72,5 +72,8 @@
   "workspaces": [
     "packages/*"
   ],
-  "customElements": "custom-elements.json"
+  "customElements": "custom-elements.json",
+  "dependencies": {
+    "@codesandbox/sandpack-react": "^2.1.11"
+  }
 }

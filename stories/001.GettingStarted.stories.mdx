@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/addon-docs";
+import { Sandpack } from "@codesandbox/sandpack-react"
 
 <Meta title="Getting Started" />
 
@@ -31,74 +32,64 @@ like this:
 Using a component is as easy as importing it to your HTML and using it like you
 would a regular HTML tag. Let's display the `nightingale-sequence` component:
 
-### Loading data
-
-We provide a `data-loader` component, which emmits an event caught by
-`protvista-track` when it is done. It also caches data in the window, preventing
-multiple requests to be made to the same url. Because the data returned by an
-API is not necesseraly in the format expected by `protvista-track`, we also
-provide some components to transform the data. We call these 'data-adapters',
-and there are different ways you can use them:
-
-#### 1. Using events
-
-As both the `data-loader` component and 'data-adapters' emit events that bubble up
-containing the data, they can just sit between the `data-loader` and `protvista-track` components like shown below.
-As the `data-loader` caches requests, it doesn't matter if you call the same
-url multiple times.
-
-```html
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-utils@latest"
-  defer
-></script>
-<script src="https://cdn.jsdelivr.net/npm/data-loader@latest" defer></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-feature-adapter@latest"
-  defer
-></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-zoomable@latest"
-  defer
-></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/protvista-track@latest"
-  defer
-></script>
-
-<protvista-track length="770">
-  <protvista-feature-adapter>
-    <data-loader>
-      <source
-        src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=PTM"
-      />
-    </data-loader>
-  </protvista-feature-adapter>
-</protvista-track>
-```
-
-#### 2. Using subscribers
-
-If you prefer to keep your tracks and your data loading/transformation separate,
-you can do that by using the _subscribers_ attribute, which takes a comma-separated
-list of selectors. This is particularly useful when you want to share the data
-between different components, for instance tracks and data tables.
-
-```html
-<protvista-feature-adapter subscribers="#my-protvista-track">
-  <data-loader>
-    <source
-      src="https://www.ebi.ac.uk/proteins/api/features/P05067?categories=MOLECULE_PROCESSING"
+<Sandpack 
+      template="vanilla"
+      files={{
+        "/index.js": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-track@latest";
+</script>
+<nightingale-sequence
+  sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
+  width="800"
+  height="40"
+  length="32"
+  display-start="10"
+  display-end="20"
+  highlight="3:15"
+  id="my-nightingale-sequence-id"
+></nightingale-sequence>
+}`,
+      }}
     />
-  </data-loader>
-</protvista-feature-adapter>
-<protvista-track length="770" id="my-protvista-track" />
+
+### Setting the data through property
+
+```js
+<nightingale-track
+  id="my-track-id"
+  length="223"
+  height="100"
+  display-start="1"
+  display-end="50"
+  layout="non-overlapping"
+></nightingale-track>
+
+
+const track = document.querySelector("#my-track-id");
+track.data = myDataObject;
 ```
 
-#### 3. Using _data-adapters_ as modules
+### Event listening
+The component should fire events of the type change, and the detail object should contain the attributes type and value to the parent element.
 
-If you prefer to handle the data transformation from whithin your application, each _data-adapter_ exports a
-`transformData(data)` function.
+```js
+this.dispatchEvent(
+  new CustomEvent("change", {
+    detail: {
+      value: "New value",
+      type: "attr1",
+    },
+  })
+);
+```
 
 ## Usage with popular libraries and frameworks
 
@@ -126,7 +117,15 @@ useEffect(()=> {
 }, [data]);
 
 
-return <protvista-track ref={trackContainer}/>;
+return <nightingale-track
+  ref={trackContainer}
+  id="my-track-id"
+  length="223"
+  height="100"
+  display-start="1"
+  display-end="50"
+  layout="non-overlapping"
+></nightingale-track>
 ...
 ```
 
@@ -209,6 +208,7 @@ export default {
 };
 </script>
 ```
+
 
 # Bundling Workflow
 
