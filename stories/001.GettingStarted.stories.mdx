@@ -1,23 +1,26 @@
 import { Meta } from "@storybook/addon-docs";
-import { Sandpack } from "@codesandbox/sandpack-react"
+import { Sandpack } from "@codesandbox/sandpack-react";
 
 <Meta title="Getting Started" />
 
 ---
 
 You can use the components anywhere you use HTML, either natively (see
-[Using a CDN](#using_a_cdn) or [Using modules](#using_modules)), or with a library like React (see [Using a library or framework](#usage_with_popular_libraries_and_frameworks)).
+[Using a CDN](#using_a_cdn) or [Using modules](#using_modules)), or with a library
+like React (see [Using a library or framework](#usage_with_popular_libraries_and_frameworks)).
 
 ## Using a CDN
 
 All the components are compiled down to ES5 before being distributed via
-[jsDelivr](https://jsdelivr.com). In order to resolve imports modules use an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap).
+[jsDelivr](https://jsdelivr.com). In order to resolve imports modules use an
+[import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap).
 
-### Polyfill
+### Polyfills
 
-If you are not using a modern browser you may have to use a [polyfill](https://github.com/guybedford/es-module-shims) for the import maps.
+If you are not using a modern browser you may have to use a [polyfill](https://github.com/guybedford/es-module-shims)
+for the import maps.
 
-### Dependency
+### Dependencies
 
 Most components use D3js. Instead of bundling the library with every component,
 we thought it would be better to load it separately, so you will need to add it
@@ -32,10 +35,10 @@ like this:
 Using a component is as easy as importing it to your HTML and using it like you
 would a regular HTML tag. Let's display the `nightingale-sequence` component:
 
-<Sandpack 
-      template="vanilla"
-      files={{
-        "/index.js": `<script type="importmap">
+<Sandpack
+  template="vanilla"
+  files={{
+    "/index.js": `<script type="importmap">
   {
     "imports": {
       "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
@@ -56,9 +59,9 @@ would a regular HTML tag. Let's display the `nightingale-sequence` component:
   highlight="3:15"
   id="my-nightingale-sequence-id"
 ></nightingale-sequence>
-}`,
-      }}
-    />
+`,
+  }}
+/>
 
 ### Setting the data through property
 
@@ -70,32 +73,17 @@ would a regular HTML tag. Let's display the `nightingale-sequence` component:
   display-start="1"
   display-end="50"
   layout="non-overlapping"
-></nightingale-track>
-
+></nightingale-track>;
 
 const track = document.querySelector("#my-track-id");
 track.data = myDataObject;
 ```
 
-### Event listening
-The component should fire events of the type change, and the detail object should contain the attributes type and value to the parent element.
-
-```js
-this.dispatchEvent(
-  new CustomEvent("change", {
-    detail: {
-      value: "New value",
-      type: "attr1",
-    },
-  })
-);
-```
-
 ## Usage with popular libraries and frameworks
 
 Since this project relies on a web standard, namely
-[custom-elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), its use should be made easier and cross-library bugs and
-unwanted interactions should be reduced grandly.
+[custom-elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements),
+its use should be made easier and cross-library bugs and unwanted interactions should be reduced significantly.
 
 Depending on the library or framework you are using, you might want to consider
 [having a look here](https://custom-elements-everywhere.com/) to check possible
@@ -106,28 +94,43 @@ pitfalls and consider workarounds.
 If you decide to use your own data loaders, the recommended way is to use `ref`s
 so you can then use the component's API to deal with asynchronicity:
 
-```js
-...
+<Sandpack
+  template="react"
+  customSetup={{
+    dependencies: {
+      "@nightingale-elements/nightingale-sequence": "latest",
+      "@nightingale-elements/nightingale-track": "latest",
+    },
+  }}
+  files={{
+    "/App.js": `import { useEffect, useRef } from "react";
+import "@nightingale-elements/nightingale-sequence";
+import "@nightingale-elements/nightingale-track";
+ 
+export default function App() {
+ 
 const trackContainer = useRef(null);
-
-useEffect(()=> {
-  if(trackContainer) {
-    trackContainer.current.data = data;
-  }
-}, [data]);
-
-
-return <nightingale-track
-  ref={trackContainer}
-  id="my-track-id"
-  length="223"
-  height="100"
-  display-start="1"
-  display-end="50"
-  layout="non-overlapping"
-></nightingale-track>
-...
-```
+  
+  const data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
+  
+  useEffect(()=> {
+    if(trackContainer) {
+      trackContainer.current.data = data;
+    }
+  }, [data]);
+   
+  return <nightingale-sequence
+    ref={trackContainer}
+    width="800"
+    height="40"
+    length="32"
+    display-start="10"
+    display-end="20"
+    highlight="3:15"
+  />;
+}`,
+  }}
+/>
 
 Or you can decided to use a helper component that would bridge the gap between
 the React way of doing things and the standard Custom Element's:
@@ -208,7 +211,6 @@ export default {
 };
 </script>
 ```
-
 
 # Bundling Workflow
 
