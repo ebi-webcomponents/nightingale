@@ -87,7 +87,7 @@ This document describes the creation of a basic Nightingale component.
 
    2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component `nightingaleElement`.
       
-      It is the base element for any Nightingale component which extends the LitElement itself. Any logic that should be shared among all the components are included here.
+      It extends the LitElement itself. Any logic that should be shared among all the components are included in it as a `mixin`.
       Currently the only thing is doing, is setting the render root of the components in the element itself, instead of shadowDOM, the Lit element default.
 
       ```js
@@ -95,7 +95,34 @@ This document describes the creation of a basic Nightingale component.
       ```
 
     3. Event Handling
-    4. Mixins ?
-  6. Add in storybook
 
+      If the new component needs to fire events, it has to be of type change and the detail object should contain the attributes `type` and `value`.
+
+      ```html
+      <nightingale-manager reflected-attributes="attr1 attr2">
+        <nightingale-hello attr1="X" attr2="Y" />
+      </nightingale-manager>
+      ```
+
+      Here is an example of how the child component should fire the event:
+
+      ```js
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: {
+            value: "New value",
+            type: "attr1",
+          },
+        })
+      );
+      ```
+
+  6. Let `yarn` and `lerna` know about your new component by making them.
+    ```bash
+    yarn build
     ```
+  7. To view it in the showcase application, create `NightingaleHello.stories.ts` in `stories/` folder. The following command runs the application locally. 
+    ```bash
+    yarn storybook
+    ```
+ ```
