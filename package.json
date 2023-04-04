@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
+    "@codesandbox/sandpack-react": "2.2.9",
     "@custom-elements-manifest/analyzer": "0.6.9",
     "@rollup/plugin-commonjs": "24.0.1",
     "@rollup/plugin-json": "6.0.0",
@@ -72,8 +73,5 @@
   "workspaces": [
     "packages/*"
   ],
-  "customElements": "custom-elements.json",
-  "dependencies": {
-    "@codesandbox/sandpack-react": "^2.1.11"
-  }
+  "customElements": "custom-elements.json"
 }
