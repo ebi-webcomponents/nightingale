@@ -19,10 +19,10 @@ This document describes the creation of a basic Nightingale component.
    ```
 3. Create the `package.json` for the new component. Here is an example of its content:
 
-   ```javascript
+   ```json
    {
      "name": "nightingale-hello",
-     "version": "2.2.14",
+     "version": "4.0.0",
      "description": "Basic usage",
      "files": [ "dist", "src" ],
      "main": "dist/index.js",
@@ -31,6 +31,9 @@ This document describes the creation of a basic Nightingale component.
      "types": "dist/index.d.ts",
      "scripts": {
         "build": "rollup --config ../../rollup.config.mjs"
+      },
+      "publishConfig": {
+        "access": "public"
       },
      "keywords": ["nightingale", "webcomponents", "customelements"],
      "repository": {
@@ -49,19 +52,31 @@ This document describes the creation of a basic Nightingale component.
 
    ```
 
-4. Create the entrypoint for webpack. The current setup of the nightingale project, looks for `src/index.ts`:
+4. All nightingale components are written in TypeScript. We need a file `tsconfig.json` with the following content for TypeScript compilation.
 
-   ```javascript
-   import NightingaleHello from "./nightingale-hello";
-
-   export default NightingaleHello;
+   ```json
+   {
+     "extends": "../../tsconfig.json",
+     "compilerOptions": {
+       "outDir": "./dist"
+     },
+     "include": ["./src"]
+   }
    ```
 
-5. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
+5. Create the entrypoint for webpack. The current setup of the nightingale project looks for `src/index.ts`:
+
+ ```typescript
+ import NightingaleHello from "./nightingale-hello";
+
+ export default NightingaleHello;
+ ```
+
+6. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
 
    1. To start we can create a Hello world document with this code:
 
-      ```javascript
+      ```typescript
       import { LitElement, html } from "lit";
       import { customElement } from "lit/decorators.js";
 
@@ -82,47 +97,91 @@ This document describes the creation of a basic Nightingale component.
       Here are some notes of this code:
 
       - The library used to build the web components in Nightingale is [Lit](https://lit.dev/docs/).
-      - The `@customElement` decorator is used for defining the custom element following the web component standard of defining and registering the custom elements.
+      - The `@customElement` decorator is used for defining the custom element following the web component standard of defining and registering custom elements.
       - The component rendering is defined by the method `render()`.
 
-   2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component `nightingaleElement`.
-      
-      It extends the LitElement itself. Any logic that should be shared among all the components are included in it as a `mixin`.
-      Currently the only thing is doing, is setting the render root of the components in the element itself, instead of shadowDOM, the Lit element default.
+   2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component `NightingaleElement`.
+   It is recommended for any Nightinagle component to extend `NightingaleElement`.
 
-      ```js
+      ```typescript
       import NightingaleElement from "@nightingale-elements/nightingale-new-core";
       ```
 
-    3. Event Handling
+      It extends the LitElement itself. Any logic that should be shared among all the components are included in it as a `mixin`.
 
-      If the new component needs to fire events, it has to be of type change and the detail object should contain the attributes `type` and `value`.
+      For instance, `NightingaleHello` needs to use margin nd highlight mixins, it is inherited as follows:
 
-      ```html
-      <nightingale-manager reflected-attributes="attr1 attr2">
-        <nightingale-hello attr1="X" attr2="Y" />
-      </nightingale-manager>
+      ```typescript
+      class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
+       ...
+      }
+      ```
+      
+      In order to define attributes for the element, use Lit's `@property` decorator. 
+
+      ```typescript
+      @property({ type: String })
       ```
 
-      Here is an example of how the child component should fire the event:
+   3. Event Handling
 
-      ```js
-      this.dispatchEvent(
-        new CustomEvent("change", {
-          detail: {
-            value: "New value",
-            type: "attr1",
-          },
-        })
-      );
-      ```
+   If the new component needs to fire events, it has to be of type change and the detail object should contain the attributes `type` and `value`.
 
-  6. Let `yarn` and `lerna` know about your new component by making them.
-    ```bash
-    yarn build
-    ```
-  7. To view it in the showcase application, create `NightingaleHello.stories.ts` in `stories/` folder. The following command runs the application locally. 
-    ```bash
-    yarn storybook
-    ```
- ```
+   ```html
+   <nightingale-manager reflected-attributes="attr1 attr2">
+
+
+     <nightingale-hello attr1="X" attr2="Y" />
+
+
+   </nightingale-manager>
+   ```
+
+   Here is an example of how the child component should fire the event:
+
+   ```typescript
+   this.dispatchEvent(
+     new CustomEvent("change", {
+       detail: {
+         value: "New value",
+         type: "attr1",
+       },
+     })
+   );
+   ```
+
+7. Let `yarn` and `lerna` know about your new component by making them.
+
+   ```bash
+   yarn build
+   ```
+
+8. To view it in the showcase application, create a story `NightingaleHello.stories.ts` in `stories/` folder. 
+
+  ```typescript
+  import { Meta, Story } from "@storybook/web-components";
+  import { html } from "lit-html";
+  import "../../packages/nightingale-hello/src/index.ts";
+
+  export default {
+    title: "Components/Hello",
+  } as Meta;
+
+  const Template: Story<{
+    "name": string;
+  }> = (args) => {
+    return html`<nightingale-hello name=${args["name"] />`;
+  };
+
+  export const Hellow = Template.bind({});
+  Hello.args = {
+    "name": "xxx",
+  };
+  ```
+
+  The following command runs the storybook locally to test.
+
+   ```bash
+   yarn storybook
+   ```
+```
