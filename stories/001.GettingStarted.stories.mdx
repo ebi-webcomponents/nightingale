@@ -35,7 +35,10 @@ like this:
 Using a component is as easy as importing it to your HTML and using it like you
 would a regular HTML tag. Let's display the `nightingale-sequence` component:
 
-```html
+<Sandpack
+  template="static"
+  files={{
+    "index.html": `
 <script type="importmap">
   {
     "imports": {
@@ -57,7 +60,9 @@ would a regular HTML tag. Let's display the `nightingale-sequence` component:
   highlight="3:15"
   id="my-nightingale-sequence-id"
 ></nightingale-sequence>
-```
+`,
+  }}
+/>
 
 ### Setting the data through property
 
