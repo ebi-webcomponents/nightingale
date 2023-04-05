@@ -65,11 +65,11 @@ This document describes the creation of a basic Nightingale component.
 
 5. Create the entrypoint for webpack. The current setup of the nightingale project looks for `src/index.ts`:
 
-```typescript
-import NightingaleHello from "./nightingale-hello";
+  ```typescript
+  import NightingaleHello from "./nightingale-hello";
 
-export default NightingaleHello;
-```
+  export default NightingaleHello;
+  ```
 
 6. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
 
@@ -99,8 +99,8 @@ export default NightingaleHello;
       - The `@customElement` decorator is used for defining the custom element following the web component standard of defining and registering custom elements.
       - The component rendering is defined by the method `render()`.
 
-   2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component `NightingaleElement`.
-      It is recommended for any Nightinagle component to extend `NightingaleElement`.
+   2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component named `NightingaleElement`.
+      It is recommended for any Nightinagle component to extend the same.
 
       ```typescript
       import NightingaleElement from "@nightingale-elements/nightingale-new-core";
@@ -108,7 +108,7 @@ export default NightingaleHello;
 
       It extends the LitElement itself. Any logic that should be shared among all the components are included in it as a `mixin`.
 
-      For instance, `NightingaleHello` needs to use margin nd highlight mixins, it is inherited as follows:
+      For instance, `NightingaleHello` needs to use margin and highlight mixins, it is inherited as follows:
 
       ```typescript
       class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
@@ -124,26 +124,26 @@ export default NightingaleHello;
 
    3. Event Handling
 
-   If the new component needs to fire events, it has to be of type change and the detail object should contain the attributes `type` and `value`.
+      If the new component needs to fire events, it has to be of type change and the detail object should contain the attributes `type` and `value`.
 
-   ```html
-   <nightingale-manager reflected-attributes="attr1 attr2">
-     <nightingale-hello attr1="X" attr2="Y" />
-   </nightingale-manager>
-   ```
+      ```html
+      <nightingale-manager reflected-attributes="attr1 attr2">
+        <nightingale-hello attr1="X" attr2="Y" />
+      </nightingale-manager>
+      ```
 
-   Here is an example of how the child component should fire the event:
+      Here is an example of how the child component should fire the event:
 
-   ```typescript
-   this.dispatchEvent(
-     new CustomEvent("change", {
-       detail: {
-         value: "New value",
-         type: "attr1",
-       },
-     })
-   );
-   ```
+      ```typescript
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: {
+            value: "New value",
+            type: "attr1",
+          },
+        })
+      );
+      ```
 
 7. Let `yarn` and `lerna` know about your new component by making them.
 
@@ -153,33 +153,33 @@ export default NightingaleHello;
 
 8. To view it in the showcase application, create a story `NightingaleHello.stories.ts` in `stories/` folder.
 
-```typescript
-import { Meta, Story } from "@storybook/web-components";
-import { html } from "lit-html";
-import "../../packages/nightingale-hello/src/index.ts";
+  ```typescript
+  import { Meta, Story } from "@storybook/web-components";
+  import { html } from "lit-html";
+  import "../../packages/nightingale-hello/src/index.ts";
 
-export default {
-  title: "Components/Hello",
-} as Meta;
+  export default {
+    title: "Components/Hello",
+  } as Meta;
 
-const Template: Story<{
-  "name": string;
-}> = (args) => {
-  return html`<nightingale-hello name=${args["name"] />`;
-};
+  const Template: Story<{
+    "name": string;
+  }> = (args) => {
+    return html`<nightingale-hello name=${args["name"] />`;
+  };
 
-export const Hellow = Template.bind({});
-Hello.args = {
-  "name": "xxx",
-};
-```
+  export const Hello = Template.bind({});
+  Hello.args = {
+    "name": "World",
+  };
+  ```
 
-The following command runs the storybook locally to test.
+  The following command runs the storybook locally to test.
 
-```bash
-yarn storybook
-```
+  ```bash
+  yarn storybook
+  ```
 
-```
+  ```
 
 ```
