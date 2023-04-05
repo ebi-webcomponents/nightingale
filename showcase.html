@@ -10,40 +10,111 @@
   import "@nightingale-elements/nightingale-track@latest";
   import "@nightingale-elements/nightingale-manager@latest";
   import "@nightingale-elements/nightingale-navigation@latest";
+  import "@nightingale-elements/nightingale-colored-sequence@latest";
 
-  const accession = 'P05067'
+  /*
+  put tracks in a table for labels
+  padding between table rows
+  try to add the variants
+  
+  */
+  const accession = "P05067";
 
-  const loadEntry = async (accession) => {
-    try {
-      return await (
-        await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${accession}`)
-      ).json();
-    } catch (e) {
-      console.error(`Couldn't load UniProt entry`, e);
-    }
-  }
+  const data = await (
+    await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${accession}`)
+  ).json();
 
-  const entryData = await loadEntry(accession)
-  console.log(entryData)
+  export const renameProperties = (features) =>
+    features.map((ft) => ({ ...ft, start: ft.start || ft.begin }));
 
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    seq.data = data.sequence.sequence;
+  });
+
+  customElements.whenDefined("nightingale-colored-sequence").then(() => {
+    const coloredSeq = document.querySelector("#colored-sequence");
+    coloredSeq.data = data.sequence.sequence;
+  });
+
+  console.log(data);
+
+  customElements.whenDefined("nightingale-track").then(() => {
+    const domain = document.querySelector("#domain");
+    domain.data = renameProperties(
+      data.features.filter(({ type }) => type === "DOMAIN")
+    );
+    const region = document.querySelector("#region");
+    region.data = renameProperties(
+      data.features.filter(({ type }) => type === "REGION")
+    );
+    const site = document.querySelector("#site");
+    site.data = renameProperties(
+      data.features.filter(({ type }) => type === "SITE")
+    );
+    const binding = document.querySelector("#binding");
+    binding.data = renameProperties(
+      data.features.filter(({ type }) => type === "BINDING")
+    );
+  });
 </script>
 <nightingale-manager>
   <nightingale-navigation
     id="navigation"
     min-width="800"
     height="40"
-    length="32"
-    display-start="10"
-    display-end="20"
-    show-highlight
+    length="770"
+    display-start="1"
+    display-end="770"
   ></nightingale-navigation>
   <nightingale-sequence
-    sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
-    width="800"
+    id="sequence"
+    min-width="800"
     height="40"
-    length="32"
-    display-start="10"
-    display-end="20"
-    highlight="3:15"
+    length="770"
+    display-start="1"
+    display-end="770"
   ></nightingale-sequence>
+  <nightingale-colored-sequence
+    id="colored-sequence"
+    min-width="800"
+    height="10"
+    length="770"
+    display-start="1"
+    display-end="770"
+    scale="hydrophobicity-scale"
+  >
+  </nightingale-colored-sequence>
+  <nightingale-track
+    id="domain"
+    min-width="800"
+    height="20"
+    length="770"
+    display-start="1"
+    display-end="770"
+  ></nightingale-track>
+  <nightingale-track
+    id="region"
+    min-width="800"
+    height="20"
+    length="770"
+    display-start="1"
+    display-end="770"
+  ></nightingale-track>
+  <nightingale-track
+    id="site"
+    min-width="800"
+    height="20"
+    length="770"
+    display-start="1"
+    display-end="770"
+  ></nightingale-track>
+  <nightingale-track
+    id="binding"
+    min-width="800"
+    height="20"
+    length="770"
+    display-start="1"
+    display-end="770"
+  ></nightingale-track>
 </nightingale-manager>
