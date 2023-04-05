@@ -73,8 +73,8 @@ it's also possible to load this as a property as seen in the following code snip
   import "@nightingale-elements/nightingale-sequence@latest";
  
   customElements.whenDefined("nightingale-sequence").then(() => {
-    const track = document.querySelector("#my-nightingale-sequence-id");
-    track.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
+    const seq = document.querySelector("#my-nightingale-sequence-id");
+    seq.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
   })
 </script>
 <nightingale-sequence
@@ -117,18 +117,18 @@ import "@nightingale-elements/nightingale-sequence";
  
 export default function App() {
  
-const trackContainer = useRef(null);
+const seqContainer = useRef(null);
   
   const data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
   
   useEffect(()=> {
-    if(trackContainer) {
-      trackContainer.current.data = data;
+    if(seqContainer) {
+      seqContainer.current.data = data;
     }
   }, [data]);
    
   return <nightingale-sequence
-    ref={trackContainer}
+    ref={seqContainer}
     width="800"
     height="40"
     length="32"
@@ -146,7 +146,7 @@ the React way of doing things and the standard Custom Element's:
 - [`<ReactPropertySetter />` to set properties on elements (instead of just the attribute as React does)](https://www.npmjs.com/package/react-property-setter)
 - [`<ReactEventEmitter />` to emit events from data in React](https://www.npmjs.com/package/react-event-emitter)
 
-## Bundling Workflow
+## Bundling workflow
 
 All components are exported as modules. This means you can import them like any
 other ES6 module in your application:
