@@ -20,19 +20,9 @@ All the components are compiled down to ES5 before being distributed via
 If you are not using a modern browser you may have to use a [polyfill](https://github.com/guybedford/es-module-shims)
 for the import maps.
 
-### Dependencies
+### Displaying your first component
 
-Most components use D3js. Instead of bundling the library with every component,
-we thought it would be better to load it separately, so you will need to add it
-like this:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3@7.8.2" defer></script>
-```
-
-### Display your first component
-
-Using a component is as easy as importing it to your HTML and using it like you
+Using a component is as easy as importing it in to your HTML and using it like you
 would a regular HTML tag. Let's display the `nightingale-sequence` component:
 
 <Sandpack
@@ -64,21 +54,39 @@ would a regular HTML tag. Let's display the `nightingale-sequence` component:
   }}
 />
 
-### Setting the data through property
+### Setting the sequence property
 
-```js
-<nightingale-track
-  id="my-track-id"
-  length="223"
-  height="100"
-  display-start="1"
-  display-end="50"
-  layout="non-overlapping"
-></nightingale-track>;
+As well as setting the sequence as an attribute of the `nightingale-sequence`,
+it's also possible to load this as a property as seen in the following code snippet:
 
-const track = document.querySelector("#my-track-id");
-track.data = myDataObject;
-```
+<Sandpack
+  template="static"
+  files={{
+    "index.html": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-track@latest";
+ 
+  const track = document.querySelector("#my-nightingale-sequence-id");
+  track.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
+</script>
+<nightingale-sequence
+  width="800"
+  height="40"
+  length="32"
+  display-start="10"
+  display-end="20"
+  highlight="3:15"
+  id="my-nightingale-sequence-id"
+></nightingale-sequence>`,
+  }}
+/>
 
 ## Usage with popular libraries and frameworks
 
@@ -128,7 +136,7 @@ const trackContainer = useRef(null);
     display-start="10"
     display-end="20"
     highlight="3:15"
-  />;
+  ></nightingale-sequence>;
 }`,
   }}
 />
@@ -141,7 +149,7 @@ the React way of doing things and the standard Custom Element's:
 
 # Bundling Workflow
 
-All components are exported as modules. This means you can import them as any
+All components are exported as modules. This means you can import them like any
 other ES6 module in your application:
 
 ```js
