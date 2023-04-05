@@ -10,6 +10,22 @@
   import "@nightingale-elements/nightingale-track@latest";
   import "@nightingale-elements/nightingale-manager@latest";
   import "@nightingale-elements/nightingale-navigation@latest";
+
+  const accession = 'P05067'
+
+  const loadEntry = async (accession) => {
+    try {
+      return await (
+        await fetch(`https://www.ebi.ac.uk/proteins/api/proteins/${accession}`)
+      ).json();
+    } catch (e) {
+      console.error(`Couldn't load UniProt entry`, e);
+    }
+  }
+
+  const entryData = await loadEntry(accession)
+  console.log(entryData)
+
 </script>
 <nightingale-manager>
   <nightingale-navigation
