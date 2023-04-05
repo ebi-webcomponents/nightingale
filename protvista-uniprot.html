@@ -8,14 +8,26 @@
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
   import "@nightingale-elements/nightingale-track@latest";
+  import "@nightingale-elements/nightingale-manager@latest";
+  import "@nightingale-elements/nightingale-navigation@latest";
 </script>
-<nightingale-sequence
-  sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
-  width="800"
-  height="40"
-  length="32"
-  display-start="10"
-  display-end="20"
-  highlight="3:15"
-  id="my-nightingale-sequence-id"
-></nightingale-sequence>
+<nightingale-manager>
+  <nightingale-navigation
+    id="navigation"
+    min-width="800"
+    height="40"
+    length="32"
+    display-start="10"
+    display-end="20"
+    show-highlight
+  ></nightingale-navigation>
+  <nightingale-sequence
+    sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
+    width="800"
+    height="40"
+    length="32"
+    display-start="10"
+    display-end="20"
+    highlight="3:15"
+  ></nightingale-sequence>
+</nightingale-manager>
