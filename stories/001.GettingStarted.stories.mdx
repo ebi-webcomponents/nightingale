@@ -37,7 +37,6 @@ would a regular HTML tag. Let's display the `nightingale-sequence` component:
 </script>
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
-  import "@nightingale-elements/nightingale-track@latest";
 </script>
 <nightingale-sequence
   sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
@@ -70,7 +69,6 @@ it's also possible to load this as a property as seen in the following code snip
 </script>
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
-  import "@nightingale-elements/nightingale-track@latest";
  
   const track = document.querySelector("#my-nightingale-sequence-id");
   track.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
@@ -107,13 +105,11 @@ so you can then use the component's API to deal with asynchronicity:
   customSetup={{
     dependencies: {
       "@nightingale-elements/nightingale-sequence": "latest",
-      "@nightingale-elements/nightingale-track": "latest",
     },
   }}
   files={{
     "/App.js": `import { useEffect, useRef } from "react";
 import "@nightingale-elements/nightingale-sequence";
-import "@nightingale-elements/nightingale-track";
  
 export default function App() {
  
@@ -152,5 +148,5 @@ All components are exported as modules. This means you can import them like any
 other ES6 module in your application:
 
 ```js
-import NightingaleTrack from "@nightingale-elements/nightingale-track";
+import NightingaleSequence from "@nightingale-elements/nightingale-sequence";
 ```
