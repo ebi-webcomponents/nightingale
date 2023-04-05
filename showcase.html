@@ -5,6 +5,15 @@
     }
   }
 </script>
+<style>
+  td:first-child {
+    font-family: sans-serif;
+  }
+  td {
+    background-color: aliceblue;
+    border: 1px solid white;
+  }
+</style>
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
   import "@nightingale-elements/nightingale-track@latest";
@@ -13,8 +22,6 @@
   import "@nightingale-elements/nightingale-colored-sequence@latest";
 
   /*
-  put tracks in a table for labels
-  padding between table rows
   try to add the variants
   
   */
@@ -59,62 +66,108 @@
   });
 </script>
 <nightingale-manager>
-  <nightingale-navigation
-    id="navigation"
-    min-width="800"
-    height="40"
-    length="770"
-    display-start="1"
-    display-end="770"
-  ></nightingale-navigation>
-  <nightingale-sequence
-    id="sequence"
-    min-width="800"
-    height="40"
-    length="770"
-    display-start="1"
-    display-end="770"
-  ></nightingale-sequence>
-  <nightingale-colored-sequence
-    id="colored-sequence"
-    min-width="800"
-    height="10"
-    length="770"
-    display-start="1"
-    display-end="770"
-    scale="hydrophobicity-scale"
-  >
-  </nightingale-colored-sequence>
-  <nightingale-track
-    id="domain"
-    min-width="800"
-    height="20"
-    length="770"
-    display-start="1"
-    display-end="770"
-  ></nightingale-track>
-  <nightingale-track
-    id="region"
-    min-width="800"
-    height="20"
-    length="770"
-    display-start="1"
-    display-end="770"
-  ></nightingale-track>
-  <nightingale-track
-    id="site"
-    min-width="800"
-    height="20"
-    length="770"
-    display-start="1"
-    display-end="770"
-  ></nightingale-track>
-  <nightingale-track
-    id="binding"
-    min-width="800"
-    height="20"
-    length="770"
-    display-start="1"
-    display-end="770"
-  ></nightingale-track>
+  <table>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-navigation
+            id="navigation"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-navigation>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-sequence
+            id="sequence"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-colored-sequence
+            id="colored-sequence"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            scale="hydrophobicity-scale"
+            margin-color="aliceblue"
+          >
+          </nightingale-colored-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td>
+          <nightingale-track
+            id="domain"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>
+          <nightingale-track
+            id="region"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Site</td>
+        <td>
+          <nightingale-track
+            id="site"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Binding site</td>
+        <td>
+          <nightingale-track
+            id="binding"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </nightingale-manager>
