@@ -5,6 +5,8 @@ import { Sandpack } from "@codesandbox/sandpack-react";
 
 ---
 
+# Getting Started
+
 You can use the components anywhere you use HTML, either natively (see
 [Using a CDN](#using_a_cdn) or [Using modules](#using_modules)), or with a library
 like React (see [Using a library or framework](#usage_with_popular_libraries_and_frameworks)).
@@ -70,8 +72,10 @@ it's also possible to load this as a property as seen in the following code snip
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
  
-  const track = document.querySelector("#my-nightingale-sequence-id");
-  track.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const track = document.querySelector("#my-nightingale-sequence-id");
+    track.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
+  })
 </script>
 <nightingale-sequence
   width="800"
@@ -142,7 +146,7 @@ the React way of doing things and the standard Custom Element's:
 - [`<ReactPropertySetter />` to set properties on elements (instead of just the attribute as React does)](https://www.npmjs.com/package/react-property-setter)
 - [`<ReactEventEmitter />` to emit events from data in React](https://www.npmjs.com/package/react-event-emitter)
 
-# Bundling Workflow
+## Bundling Workflow
 
 All components are exported as modules. This means you can import them like any
 other ES6 module in your application:
