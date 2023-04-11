@@ -12,8 +12,7 @@ This code snippet demonstrates how to load data from the UniProt Proteins API an
 <Sandpack
   template="static"
   files={{
-    "index.html": `
-<script type="importmap">
+    "index.html": `<script type="importmap">
   {
     "imports": {
       "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
@@ -87,8 +86,8 @@ This code snippet demonstrates how to load data from the UniProt Proteins API an
   customElements.whenDefined("nightingale-linegraph-track").then(() => {
     // Count the variants by position
     const count = {};
-    for (let i = 0; i < variationData.features.length; i++) {
-      const position = variationData.features[i].begin;
+    for (const feature of variationData.features) {
+      const position = feature.begin;
       count[position] = count[position] ? count[position] + 1 : 1;
     }
     const max = Math.max(...Object.values(count));
@@ -226,7 +225,6 @@ This code snippet demonstrates how to load data from the UniProt Proteins API an
       </tr>
     </tbody>
   </table>
-</nightingale-manager>
-`,
+</nightingale-manager>`,
   }}
 />
