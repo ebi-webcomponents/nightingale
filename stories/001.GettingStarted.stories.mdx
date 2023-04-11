@@ -24,22 +24,27 @@ for the import maps.
 
 ### Displaying your first component
 
-Using a component is as easy as importing it in to your HTML and using it like you
-would a regular HTML tag. Let's display the `nightingale-sequence` component:
+For this example we will display the `nightingale-sequence` component. Firstly we must create an
+[import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap)
+to resolve es-module imports. After this we can import `nightingale-sequence` within a `<script type="module">`.
+After these steps we can use the component just like you would a regular HTML tag. Complete example below:
 
 <Sandpack
   template="static"
   files={{
-    "index.html": `<script type="importmap">
+    "index.html": `<!-- Firstly create an importmap to resolve module imports -->
+  <script type="importmap">
   {
     "imports": {
       "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
     }
   }
 </script>
+<!-- Import the component -->
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
 </script>
+<!-- Use the component just as you would a regular HTML tag -->
 <nightingale-sequence
   sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
   width="800"
@@ -62,21 +67,26 @@ it's also possible to load this as a property as seen in the following code snip
 <Sandpack
   template="static"
   files={{
-    "index.html": `<script type="importmap">
+    "index.html": `<!-- Firstly create an importmap to resolve module imports -->
+  <script type="importmap">
   {
     "imports": {
       "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
     }
   }
 </script>
+<!-- Import the component -->
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
- 
+</script>
+<script>
+  // Once the element is defined, set the sequence data
   customElements.whenDefined("nightingale-sequence").then(() => {
     const seq = document.querySelector("#my-nightingale-sequence-id");
     seq.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
   })
 </script>
+<!-- Use the component just as you would a regular HTML tag -->
 <nightingale-sequence
   width="800"
   height="40"
