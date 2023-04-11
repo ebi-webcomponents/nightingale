@@ -76,12 +76,12 @@ This document describes the creation of a basic Nightingale component.
    1. To start we can create a Hello world document with this code:
 
       ```typescript
-      import { LitElement, html } from "lit";
-      import { customElement } from "lit/decorators.js";
+      import { html } from "lit";
+      import NightingaleElement from "@nightingale-elements/nightingale-new-core";
+      import { customElement, property } from "lit/decorators.js";
 
-      export
       @customElement("nightingale-hello")
-      class NightingaleHello extends LitElement {
+      class NightingaleHello extends NightingaleElement {
         @property({ type: String, attribute: "name" })
         name = "";
 
@@ -99,16 +99,20 @@ This document describes the creation of a basic Nightingale component.
       - The `@customElement` decorator is used for defining the custom element following the web component standard of defining and registering custom elements.
       - The component rendering is defined by the method `render()`.
 
-   2. The above example inherits from [LitElement](https://lit.dev/docs/api/LitElement/), while there is a base element for any Nightingale component named `NightingaleElement`.
+   2. The above example inherits from `NightingaleElement` which extends the [LitElement](https://lit.dev/docs/api/LitElement/) itself.
       It is recommended for any Nightinagle component to extend the same.
 
+   3. Any logic that should be shared among all the components are included in it as a `mixin`.
+
+      For instance, `NightingaleHello` needs to use margin mixin, it is inherited as follows:
+
       ```typescript
-      import NightingaleElement from "@nightingale-elements/nightingale-new-core";
+      class NightingaleHello extends withMargin(NightingaleElement) {
+       ...
+      }
       ```
 
-      It extends the LitElement itself. Any logic that should be shared among all the components are included in it as a `mixin`.
-
-      For instance, `NightingaleHello` needs to use margin and highlight mixins, it is inherited as follows:
+      If it needs to add more, say highlight behaviour, it is included as:
 
       ```typescript
       class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
@@ -116,15 +120,15 @@ This document describes the creation of a basic Nightingale component.
       }
       ```
 
-      In order to define attributes for the element, use Lit's `@property` decorator.
+   4. In order to define attributes for the element, use Lit's `@property` decorator. The `@property` decorator declares a reactive property and there is no need to capture using `attributeChangedCallback`.
 
       ```typescript
       @property({ type: String })
       ```
 
-   3. Event Handling
+   5. Event Handling
 
-      If the new component needs to fire events, it has to be of type change and the detail object should contain the attributes `type` and `value`.
+      If the new component needs to fire events that other Nightingale components could use via `<nightingale-manager>`, it has to be of type change and the detail object should contain the attributes `type` and `value`.
 
       ```html
       <nightingale-manager reflected-attributes="attr1 attr2">
@@ -143,6 +147,42 @@ This document describes the creation of a basic Nightingale component.
           },
         })
       );
+      ```
+
+   6. Here is a snippet of `nightingale-hello.ts` using mixins and firing events.
+    
+      ```typescript
+      import { html } from "lit";
+      import { customElement, property } from "lit/decorators.js";
+
+      import NightingaleElement, {
+        withMargin,
+        withHighlight,
+      } from "@nightingale-elements/nightingale-new-core";
+      
+      @customElement("nightingale-hello")
+      class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
+        @property({ type: String, attribute: "name" })
+        name = "";
+
+        render() {
+          return html`
+          <p>Hello ${this.name}!</p>
+          <button @click=${() => {
+                this.dispatchEvent(
+                  new CustomEvent("change", {
+                    detail: { 
+                      "name": this.name,
+                    },
+                    bubbles: true,
+                  })
+                );
+              }}> I am here </button>
+          `;
+        }
+      }
+
+      export default NightingaleHello;
       ```
 
 7. Let `yarn` and `lerna` know about your new component by making them.
