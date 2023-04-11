@@ -1,0 +1,232 @@
+import { Meta } from "@storybook/addon-docs";
+import { Sandpack } from "@codesandbox/sandpack-react";
+
+<Meta title="Loading UniProt Data" />
+
+---
+
+# Loading UniProt Data
+
+This code snippet demonstrates how to load data from the UniProt Proteins API and load this in several Nightingale tracks.
+
+<Sandpack
+  template="static"
+  files={{
+    "index.html": `
+<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<style>
+  td {
+    padding: 5px;
+  }
+  td:first-child {
+    background-color: lightcyan;
+    font-family: sans-serif;
+  }
+  td:nth-child(2) {
+    background-color: aliceblue;
+  }
+  tr:nth-child(-n + 3) > td {
+    background-color: transparent;
+  }
+</style>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-track@latest";
+  import "@nightingale-elements/nightingale-manager@latest";
+  import "@nightingale-elements/nightingale-navigation@latest";
+  import "@nightingale-elements/nightingale-colored-sequence@latest";
+  import "@nightingale-elements/nightingale-linegraph-track@latest";
+  
+  const accession = "P05067";
+  
+  // Load feature and variation data from Proteins API
+  const featuresData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/features/" + accession)
+  ).json();
+  const variationData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/variation/" + accession)
+  ).json();
+  
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    seq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-colored-sequence").then(() => {
+    const coloredSeq = document.querySelector("#colored-sequence");
+    coloredSeq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-track").then(() => {
+    // Nightingale expects start rather than the API's begin
+    const features = featuresData.features.map((ft) => ({
+      ...ft,
+      start: ft.start || ft.begin,
+    }));
+  
+    // Filter the data for each feature type and assign to the relevant track data
+    const domain = document.querySelector("#domain");
+    domain.data = features.filter(({ type }) => type === "DOMAIN");
+  
+    const region = document.querySelector("#region");
+    region.data = features.filter(({ type }) => type === "REGION");
+  
+    const site = document.querySelector("#site");
+    site.data = features.filter(({ type }) => type === "SITE");
+  
+    const binding = document.querySelector("#binding");
+    binding.data = features.filter(({ type }) => type === "BINDING");
+  });
+  
+  customElements.whenDefined("nightingale-linegraph-track").then(() => {
+    // Count the variants by position
+    const count = {};
+    for (let i = 0; i < variationData.features.length; i++) {
+      const position = variationData.features[i].begin;
+      count[position] = count[position] ? count[position] + 1 : 1;
+    }
+    const max = Math.max(...Object.values(count));
+    const values = Object.entries(count).map(([position, value]) => ({
+      position: +position,
+      value: +value,
+    }));
+    // Set the variants line graph track data
+    const variants = document.querySelector("#variants");
+    variants.data = [
+      {
+        color: "grey",
+        values,
+        range: [0, max],
+      },
+    ];
+  });
+</script>
+<nightingale-manager>
+  <table>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-navigation
+            id="navigation"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+          ></nightingale-navigation>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-sequence
+            id="sequence"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+          ></nightingale-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-colored-sequence
+            id="colored-sequence"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            scale="hydrophobicity-scale"
+            margin-color="white"
+          >
+          </nightingale-colored-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td>
+          <nightingale-track
+            id="domain"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>
+          <nightingale-track
+            id="region"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Site</td>
+        <td>
+          <nightingale-track
+            id="site"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Binding site</td>
+        <td>
+          <nightingale-track
+            id="binding"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Variants</td>
+        <td>
+          <nightingale-linegraph-track
+            id="variants"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-linegraph-track>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</nightingale-manager>
+`,
+  }}
+/>
