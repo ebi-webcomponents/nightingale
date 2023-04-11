@@ -7,10 +7,13 @@ import { Sandpack } from "@codesandbox/sandpack-react";
 
 # Loading UniProt Data
 
-This code snippet demonstrates how to load data from the UniProt Proteins API and load this in several Nightingale tracks.
+This example demonstrates how to load data from the UniProt Proteins API and present this with several Nightingale tracks inside a `nightingale-manager`.
 
 <Sandpack
   template="static"
+  options={{
+    editorHeight: 500
+  }}
   files={{
     "index.html": `<script type="importmap">
   {
@@ -25,7 +28,8 @@ This code snippet demonstrates how to load data from the UniProt Proteins API an
   }
   td:first-child {
     background-color: lightcyan;
-    font-family: sans-serif;
+    font: 0.8em sans-serif;
+    white-space: nowrap;
   }
   td:nth-child(2) {
     background-color: aliceblue;
@@ -81,6 +85,15 @@ This code snippet demonstrates how to load data from the UniProt Proteins API an
   
     const binding = document.querySelector("#binding");
     binding.data = features.filter(({ type }) => type === "BINDING");
+ 
+    const chain = document.querySelector("#chain");
+    chain.data = features.filter(({ type }) => type === "CHAIN");
+ 
+    const disulfide = document.querySelector("#disulfide-bond");
+    disulfide.data = features.filter(({ type }) => type === "DISULFID");
+ 
+    const betaStrand = document.querySelector("#beta-strand");
+    betaStrand.data = features.filter(({ type }) => type === "STRAND");
   });
   
   customElements.whenDefined("nightingale-linegraph-track").then(() => {
@@ -196,10 +209,54 @@ This code snippet demonstrates how to load data from the UniProt Proteins API an
         </td>
       </tr>
       <tr>
+        <td>Chain</td>
+        <td>
+          <nightingale-track
+            id="chain"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
         <td>Binding site</td>
         <td>
           <nightingale-track
             id="binding"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Disulfide bond</td>
+        <td>
+          <nightingale-track
+            id="disulfide-bond"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Beta strand</td>
+        <td>
+          <nightingale-track
+            id="beta-strand"
             min-width="800"
             height="15"
             length="770"
