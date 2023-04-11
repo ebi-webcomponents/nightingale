@@ -75,11 +75,10 @@ it's also possible to load this as a property as seen in the following code snip
     }
   }
 </script>
-<!-- Import the component -->
 <script type="module">
+  // Import the component
   import "@nightingale-elements/nightingale-sequence@latest";
-</script>
-<script>
+  
   // Once the element is defined, set the sequence data
   customElements.whenDefined("nightingale-sequence").then(() => {
     const seq = document.querySelector("#my-nightingale-sequence-id");
