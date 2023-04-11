@@ -101,7 +101,7 @@ This example demonstrates how to load data from the UniProt Proteins API and pre
     const count = {};
     for (const feature of variationData.features) {
       const position = feature.begin;
-      count[position] = count[position] ? count[position] + 1 : 1;
+      count[position] = (count[position] || 0) + 1;
     }
     const max = Math.max(...Object.values(count));
     const values = Object.entries(count).map(([position, value]) => ({
