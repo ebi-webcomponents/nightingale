@@ -7,27 +7,22 @@ import { Sandpack } from "@codesandbox/sandpack-react";
 
 # Getting Started
 
-You can use the components anywhere you use HTML, either natively (see
-[Using a CDN](#using_a_cdn) or [Using modules](#using_modules)), or with a library
-like React (see [Using a library or framework](#usage_with_popular_libraries_and_frameworks)).
+In this tutorial we will show you how to:
 
-## Using a CDN
+- Use Nightingale within HTML
+- Install from NPM
+- Use Nightingale with React
 
-All the components are compiled down to ES2020 before being distributed via
-[jsDelivr](https://jsdelivr.com). In order to resolve imports modules use an
-[import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap).
+**Note** in this tutorial we will use the `nightingale-sequence` component for the examples but
+the same steps apply for all of the Nightingale components.
 
-### Polyfills
+## Use Nightingale within HTML
 
-If you are not using a modern browser you may have to use a [polyfill](https://github.com/guybedford/es-module-shims)
-for the import maps.
-
-### Displaying your first component
-
-For this example we will display the `nightingale-sequence` component. Firstly we must create an
-[import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap)
-to resolve es-module imports. After this we can import `nightingale-sequence` within a `<script type="module">`.
-After these steps we can use the component just like you would a regular HTML tag. Complete example below:
+We will demonstrate how to use a `nightingale-sequence` within HTML. All nightingale components
+are compiled down to ES2020 before being distributed via [jsDelivr](https://jsdelivr.com).
+So firstly we must create an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap)
+to resolve es-module imports. After this we can import `nightingale-sequence` within a `<script type="module">` element.
+After these steps we can use the component just as you would a regular HTML tag. Complete example below:
 
 <Sandpack
   template="static"
@@ -58,6 +53,11 @@ After these steps we can use the component just like you would a regular HTML ta
 `,
   }}
 />
+
+### Polyfills
+
+If you are not using a modern browser you may have to use a [polyfill](https://github.com/guybedford/es-module-shims)
+for the import maps.
 
 ### Setting the sequence property
 
@@ -99,20 +99,29 @@ it's also possible to load this as a property as seen in the following code snip
   }}
 />
 
-## Usage with popular libraries and frameworks
+## Install from NPM
 
-Since this project relies on a web standard, namely
-[custom-elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements),
-its use should be made easier and cross-library bugs and unwanted interactions should be reduced significantly.
+All components are exported as modules and available from NPM. For example to install the `nightingale-sequence`
+in your project with `npm`:
 
-Depending on the library or framework you are using, you might want to consider
-[having a look here](https://custom-elements-everywhere.com/) to check possible
-pitfalls and consider workarounds.
+```bash
+$ npm install @nightingale-elements/nightingale-sequence
+```
 
-### React
+Then to import in your application as a module:
 
-If you decide to use your own data loaders, the recommended way is to use `ref`s
-so you can then use the component's API to deal with asynchronicity:
+```js
+import NightingaleSequence from "@nightingale-elements/nightingale-sequence";
+```
+
+Note that all of the other Nightingale components can be installed and used in exactly the same way.
+
+## Use Nightingale with React
+
+We will demonstrate how to use a `nightingale-sequence` within a React component and how to load the sequence
+using a reference.
+
+Note that this code snippet depends on `nightingale-sequence` being [installed from NPM](#installing_from_npm).
 
 <Sandpack
   template="react"
@@ -127,15 +136,15 @@ import "@nightingale-elements/nightingale-sequence";
  
 export default function App() {
  
-const seqContainer = useRef(null);
+  const seqContainer = useRef(null);
   
-  const data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
+  const seq = "SEQUENCESEQUENCESEQUENCESEQUENCE";
   
   useEffect(()=> {
     if(seqContainer && customElements.whenDefined("nightingale-sequence")) {
-      seqContainer.current.data = data;
+      seqContainer.current.data = seq;
     }
-  }, [data]);
+  }, [seq]);
    
   return <nightingale-sequence
     ref={seqContainer}
@@ -150,11 +159,12 @@ const seqContainer = useRef(null);
   }}
 />
 
-## Bundling workflow
+### Usage with other popular libraries and frameworks
 
-All components are exported as modules. This means you can import them like any
-other ES6 module in your application:
+Since this project relies on a web standard, namely
+[custom-elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements),
+its use should be made easier and cross-library bugs and unwanted interactions should be reduced significantly.
 
-```js
-import NightingaleSequence from "@nightingale-elements/nightingale-sequence";
-```
+Depending on the library or framework you are using, you might want to consider
+[having a look here](https://custom-elements-everywhere.com/) to check possible
+pitfalls and consider workarounds.
