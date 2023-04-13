@@ -93,7 +93,6 @@ export const cleanUpText = (
         }
       } else {
         sequences[current].sequence += line
-          .trim()
           .replace(/\s/g, "")
           .replace(
             new RegExp(`([^${alphabet}])`, caseSensitive ? "g" : "ig"),

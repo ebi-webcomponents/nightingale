@@ -2,7 +2,7 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-textarea-sequence.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-textarea-sequence)
 
-A custom element that creates a formatted text area to capture sequences. It uses [QuillJS](https://quilljs.com/) to format the textarea.
+A custom element that creates a formatted text box to capture sequences. It uses [QuillJS](https://quilljs.com/) to format the content of the text box.
 
 ## Usage
 
@@ -37,26 +37,26 @@ Indicates if the textarea should only allow a single sequence
 #### `disable-header-check?: boolean (default: false)`
 
 Indicates if the checks against the alphabet should consider the absence of the header.
-This will only makes sense if the attribute `single` is also `true`, if it's not, the value of
+This will only make sense if the attribute `single` is also `true`, if it's not, the value of
 the error `headerCheckRequiredForMultipleSequences` will be `true`.
 
 ##### `min-sequence-length?: number (default: 1)`
 
-Defines the minimum number of bases required in the textarea
+Defines the minimum number of amino or nucleic acids required in the textarea
 
 ##### `inner-style?: string (default: '')`
 
-Inline CSS style for the main container. The attributes `width` and `height` would have higher priority of any value for height and width created in the inline style.
+Inline CSS style for the main container. Please note that the container's height and width should not be set using `inner-style` but with the `height` and `width` attributes (see [Usage](##Usage))
 
 #### `sequence: string` **_[Read Only]_**
 
-The current value of the text-area.
+The current value of the textarea.
 
 #### `errors` **_[Read Only]_**
 
 The current value of the error report. In the shape of an object, where the keys are the type of error, and their values are booleans indicating if the current text has that error.
 
-Example:
+Usage example:
 
 ```javascript
 {
@@ -75,7 +75,7 @@ See the [Quill API documentation](https://quilljs.com/docs/api/) for more detail
 
 #### `formatSequence`
 
-A formatting function to use in the cleanUp method. It should add desired spaces a line splits.
+A formatting function to use in the [cleanUp()](####`cleanUp()`) method. It should add desired spaces a line splits.
 
 The signature of the function should be:
 
@@ -86,7 +86,7 @@ type FormatSequenceFunction = (
 ) => string;
 ```
 
-defaultValue: Splits the sequence in lines of 50, adding a space every 10 characters
+By default, improves the readability by folding sequences to have a maximum of 50 characters per line, and add a space every 10 characters.
 
 **Note:** This parameter can be overwritten, so you can define such format. For example, to avoid any formatting you can pass the identity function:
 
@@ -124,9 +124,9 @@ element.addEventListener("error-change", (e) => {
 
 #### Quill Events
 
-As mentioned before, we use quill, and its instance is exposed in the parameter `quill`. Quill implement some events, that you could also use. See the [Quill API documentation](https://quilljs.com/docs/api/#events) for more details.
+As mentioned before, we use quill, and its instance is exposed in the parameter `quill`. Quill emits several events, that you could also use. See the [Quill API documentation](https://quilljs.com/docs/api/#events) for more details.
 
-Usage Example:
+Usage example:
 
 ```javascript
 element.quill.on("text-change", (e) => {
@@ -136,11 +136,11 @@ element.quill.on("text-change", (e) => {
 
 ### Exposed functions
 
-We have exposed some functions tht can be use without having to load the web component:
+The following functions can be used without having to load the web component:
 
 #### `formatSequence(sequence, options={block: 10, line: 50})`
 
-Splits a string into lines of length `line` with block of `block` length separated by white spaces.
+Splits a string into lines of length `line` with blocks of `block` length separated by white spaces.
 
 parameters:
 
@@ -165,16 +165,16 @@ formatSequence(seq, 5, 10); // 'XXXXX XXXXX\nXXXXX'
 
 Takes a sequence and transform it, applying the following heuristics:
 
-- removes any character that's not in the alphabet.
-- Generates a header if the sequence doesn't have one
-- formats the sequence using the given function. default: blocks of 10 chars separated with a white space and lines of 50 bases.
-- If `case_sensitive` is `true` cases mismatches are removed.
-- If `removeComments` is `true`, removes any line that starts with `;`
-- If `single` is `true`, removes any sequence after the first one.
+- removes any character not in the alphabet
+- generates a header if the sequence does not already have one
+- formats the sequence using the specified function. Default: blocks of 10 characters separated with a white space and lines of 50 characters
+- if `case_sensitive` is `true`, case mismatches are removed
+- if `removeComments` is `true`, lines starting with `;` are removed
+- if `single` is `true`, the first sequence is retained and the subsequent are removed
 
 When all of those things are executed, the string is formatted with the function `format()`.
 
-parameters:
+Parameters:
 
 - `text`: type: `string`
 - `alphabet`: type: `string`
