@@ -29,16 +29,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L11.121076233183857,0L11.121076233183857,80L0,80Z"
-              fill="#342ea2"
               stroke="#342ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #342ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(13.228699551569507,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(13.228699551569507,0)"
               width="11.121076233183857"
             />
@@ -58,16 +57,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L39.82062780269058,0L39.82062780269058,80L0,80Z"
-              fill="#A42ea2"
               stroke="#A42ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A42ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(27.57847533632287,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(27.57847533632287,0)"
               width="39.82062780269058"
             />
@@ -87,16 +85,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L0.35874439461883406,0L0.35874439461883406,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(65.24663677130044,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(65.24663677130044,0)"
               width="0.35874439461883406"
             />
@@ -111,16 +108,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L0.35874439461883406,0L0.35874439461883406,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(66.32286995515696,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(66.32286995515696,0)"
               width="0.35874439461883406"
             />
@@ -140,16 +136,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.7937219730941703,0L1.7937219730941703,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(81.39013452914799,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(81.39013452914799,0)"
               width="1.7937219730941703"
             />
@@ -160,16 +155,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.7937219730941703,0L1.7937219730941703,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(83.54260089686099,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(83.54260089686099,0)"
               width="1.7937219730941703"
             />
@@ -189,16 +183,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#339"
               stroke="#339"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #339; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -218,16 +211,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#63e"
               stroke="#63e"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #63e; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -247,16 +239,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -276,16 +267,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="line feature"
               d="M0,40 L1.0762331838565022,40"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -305,16 +295,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="bridge feature"
               d="M0,80L0,40L0.17937219730941703,40L0.17937219730941703,0L0.17937219730941703,40L0.35874439461883406,40L0.35874439461883406,80Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -334,16 +323,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="bridge feature"
               d="M0,80L0,0L0.7174887892376681,0L0.7174887892376681,80L0.7174887892376681,2L0,2Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -363,16 +351,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="diamond feature"
               d="M0.17937219730941703,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -392,16 +379,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="diamond feature"
               d="M0.35874439461883406,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5M0,5L0.7174887892376681,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -421,16 +407,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="chevron feature"
               d="M0.17937219730941703,5L5.179372197309417,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5L-4.820627802690583,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -450,16 +435,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="chevron feature"
               d="M0.35874439461883406,5L5.358744394618834,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5L-4.641255605381166,0L0.35874439461883406,5M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -479,16 +463,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="catFace feature"
               d="M-4.820627802690583,0L-4.820627802690583,6L-1.8206278026905829,10L2.179372197309417,10L5.179372197309417,6L5.179372197309417,0L2.179372197309417,4L-1.8206278026905829,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -508,16 +491,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="catFace feature"
               d="M-4.641255605381166,0L-4.641255605381166,6L-1.641255605381166,10L2.3587443946188342,10L5.358744394618834,6L5.358744394618834,0L2.3587443946188342,4L-1.641255605381166,4M0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -537,16 +519,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="triangle feature"
               d="M0.17937219730941703,0L5.179372197309417,10L-4.820627802690583,10Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -566,16 +547,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="triangle feature"
               d="M0.35874439461883406,0L5.358744394618834,10L-4.641255605381166,10L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -595,16 +575,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="wave feature"
               d="M-4.820627802690583,5A2.5,5 0 1,1 0.17937219730941703,5A2.5,5 0 1,0 5.179372197309417,5Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -624,16 +603,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="wave feature"
               d="M-4.641255605381166,5A2.5,5 0 1,1 0.35874439461883406,5A2.5,5 0 1,0 5.358744394618834,5M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -653,16 +631,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="hexagon feature"
               d="M 5.179372197309417,5 2.6793721973094176,9.330127018922193 -2.320627802690582,9.330127018922195 -4.820627802690583,5.000000000000001 -2.320627802690585,0.6698729810778072 2.6793721973094176,0.6698729810778072 Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -682,16 +659,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="hexagon feature"
               d="M 5.358744394618834,5 2.8587443946188347,9.330127018922193 -2.141255605381165,9.330127018922195 -4.641255605381166,5.000000000000001 -2.141255605381168,0.6698729810778072 2.8587443946188347,0.6698729810778072  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -711,16 +687,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="pentagon feature"
               d="M 5.179372197309417,5 1.7244571691841544,9.755282581475768 -3.8657127745653193,7.938926261462367 -3.86571277456532,2.061073738537635 1.7244571691841533,0.2447174185242318 Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -740,16 +715,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="pentagon feature"
               d="M 5.358744394618834,5 1.9038293664935713,9.755282581475768 -3.686340577255902,7.938926261462367 -3.686340577255903,2.061073738537635 1.9038293664935702,0.2447174185242318  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -769,16 +743,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="circle feature"
               d="M0.17937219730941703,0A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,10A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -798,16 +771,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="circle feature"
               d="M0.35874439461883406,0A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,10A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -827,16 +799,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="arrow feature"
               d="M0.17937219730941703,0L-0.820627802690583,0L-4.820627802690583,4L-0.820627802690583,80L0.17937219730941703,80L4.179372197309417,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -856,16 +827,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="arrow feature"
               d="M0.35874439461883406,0L-0.641255605381166,0L-4.641255605381166,4L-0.641255605381166,80L0.35874439461883406,80L4.358744394618834,4L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -885,16 +855,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="doubleBar feature"
               d="M0.17937219730941703,0L-4.820627802690583,10L0.17937219730941703,10L5.179372197309417,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -914,16 +883,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="doubleBar feature"
               d="M0.35874439461883406,0L-4.641255605381166,10L0.35874439461883406,10L5.358744394618834,0L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -943,16 +911,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="helix feature"
               d=""
-              fill="transparent"
               stroke="#f06"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: transparent; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -972,16 +939,15 @@ exports[`nightingale-track tests it should change the layout 1`] = `
             <path
               class="strand feature"
               d="M0,20L0,20L0,60L0,60L0,20M0,0L0.35874439461883406,40L0,80Z"
-              fill="#fc0"
               stroke="#fc0"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #fc0; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1063,16 +1029,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L11.121076233183857,0L11.121076233183857,80L0,80Z"
-              fill="#342ea2"
               stroke="#342ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #342ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(13.228699551569507,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(13.228699551569507,0)"
               width="11.121076233183857"
             />
@@ -1092,16 +1057,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L39.82062780269058,0L39.82062780269058,80L0,80Z"
-              fill="#A42ea2"
               stroke="#A42ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A42ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(27.57847533632287,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(27.57847533632287,0)"
               width="39.82062780269058"
             />
@@ -1121,16 +1085,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L0.35874439461883406,0L0.35874439461883406,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(65.24663677130044,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(65.24663677130044,0)"
               width="0.35874439461883406"
             />
@@ -1145,16 +1108,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L0.35874439461883406,0L0.35874439461883406,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(66.32286995515696,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(66.32286995515696,0)"
               width="0.35874439461883406"
             />
@@ -1174,16 +1136,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L1.7937219730941703,0L1.7937219730941703,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(81.39013452914799,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(81.39013452914799,0)"
               width="1.7937219730941703"
             />
@@ -1194,16 +1155,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L1.7937219730941703,0L1.7937219730941703,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(83.54260089686099,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(83.54260089686099,0)"
               width="1.7937219730941703"
             />
@@ -1223,16 +1183,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#339"
               stroke="#339"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #339; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -1252,16 +1211,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#63e"
               stroke="#63e"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #63e; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -1281,16 +1239,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -1310,16 +1267,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="line feature"
               d="M0,40 L1.0762331838565022,40"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -1339,16 +1295,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="bridge feature"
               d="M0,80L0,40L0.17937219730941703,40L0.17937219730941703,0L0.17937219730941703,40L0.35874439461883406,40L0.35874439461883406,80Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1368,16 +1323,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="bridge feature"
               d="M0,80L0,0L0.7174887892376681,0L0.7174887892376681,80L0.7174887892376681,2L0,2Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -1397,16 +1351,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="diamond feature"
               d="M0.17937219730941703,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1426,16 +1379,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="diamond feature"
               d="M0.35874439461883406,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5M0,5L0.7174887892376681,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -1455,16 +1407,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="chevron feature"
               d="M0.17937219730941703,5L5.179372197309417,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5L-4.820627802690583,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1484,16 +1435,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="chevron feature"
               d="M0.35874439461883406,5L5.358744394618834,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5L-4.641255605381166,0L0.35874439461883406,5M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -1513,16 +1463,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="catFace feature"
               d="M-4.820627802690583,0L-4.820627802690583,6L-1.8206278026905829,10L2.179372197309417,10L5.179372197309417,6L5.179372197309417,0L2.179372197309417,4L-1.8206278026905829,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1542,16 +1491,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="catFace feature"
               d="M-4.641255605381166,0L-4.641255605381166,6L-1.641255605381166,10L2.3587443946188342,10L5.358744394618834,6L5.358744394618834,0L2.3587443946188342,4L-1.641255605381166,4M0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -1571,16 +1519,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="triangle feature"
               d="M0.17937219730941703,0L5.179372197309417,10L-4.820627802690583,10Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1600,16 +1547,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="triangle feature"
               d="M0.35874439461883406,0L5.358744394618834,10L-4.641255605381166,10L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -1629,16 +1575,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="wave feature"
               d="M-4.820627802690583,5A2.5,5 0 1,1 0.17937219730941703,5A2.5,5 0 1,0 5.179372197309417,5Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1658,16 +1603,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="wave feature"
               d="M-4.641255605381166,5A2.5,5 0 1,1 0.35874439461883406,5A2.5,5 0 1,0 5.358744394618834,5M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -1687,16 +1631,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="hexagon feature"
               d="M 5.179372197309417,5 2.6793721973094176,9.330127018922193 -2.320627802690582,9.330127018922195 -4.820627802690583,5.000000000000001 -2.320627802690585,0.6698729810778072 2.6793721973094176,0.6698729810778072 Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1716,16 +1659,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="hexagon feature"
               d="M 5.358744394618834,5 2.8587443946188347,9.330127018922193 -2.141255605381165,9.330127018922195 -4.641255605381166,5.000000000000001 -2.141255605381168,0.6698729810778072 2.8587443946188347,0.6698729810778072  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -1745,16 +1687,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="pentagon feature"
               d="M 5.179372197309417,5 1.7244571691841544,9.755282581475768 -3.8657127745653193,7.938926261462367 -3.86571277456532,2.061073738537635 1.7244571691841533,0.2447174185242318 Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1774,16 +1715,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="pentagon feature"
               d="M 5.358744394618834,5 1.9038293664935713,9.755282581475768 -3.686340577255902,7.938926261462367 -3.686340577255903,2.061073738537635 1.9038293664935702,0.2447174185242318  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -1803,16 +1743,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="circle feature"
               d="M0.17937219730941703,0A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,10A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1832,16 +1771,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="circle feature"
               d="M0.35874439461883406,0A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,10A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -1861,16 +1799,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="arrow feature"
               d="M0.17937219730941703,0L-0.820627802690583,0L-4.820627802690583,4L-0.820627802690583,80L0.17937219730941703,80L4.179372197309417,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1890,16 +1827,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="arrow feature"
               d="M0.35874439461883406,0L-0.641255605381166,0L-4.641255605381166,4L-0.641255605381166,80L0.35874439461883406,80L4.358744394618834,4L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -1919,16 +1855,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="doubleBar feature"
               d="M0.17937219730941703,0L-4.820627802690583,10L0.17937219730941703,10L5.179372197309417,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -1948,16 +1883,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="doubleBar feature"
               d="M0.35874439461883406,0L-4.641255605381166,10L0.35874439461883406,10L5.358744394618834,0L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -1977,16 +1911,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="helix feature"
               d=""
-              fill="transparent"
               stroke="#f06"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: transparent; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -2006,16 +1939,15 @@ exports[`nightingale-track tests it should display the sequence correctly after 
             <path
               class="strand feature"
               d="M0,20L0,20L0,60L0,60L0,20M0,0L0.35874439461883406,40L0,80Z"
-              fill="#fc0"
               stroke="#fc0"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #fc0; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2104,16 +2036,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L11.121076233183857,0L11.121076233183857,80L0,80Z"
-              fill="#342ea2"
               stroke="#342ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #342ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(13.228699551569507,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(13.228699551569507,0)"
               width="11.121076233183857"
             />
@@ -2133,16 +2064,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L39.82062780269058,0L39.82062780269058,80L0,80Z"
-              fill="#A42ea2"
               stroke="#A42ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A42ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(27.57847533632287,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(27.57847533632287,0)"
               width="39.82062780269058"
             />
@@ -2162,16 +2092,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L0.35874439461883406,0L0.35874439461883406,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(65.24663677130044,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(65.24663677130044,0)"
               width="0.35874439461883406"
             />
@@ -2186,16 +2115,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L0.35874439461883406,0L0.35874439461883406,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(66.32286995515696,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(66.32286995515696,0)"
               width="0.35874439461883406"
             />
@@ -2215,16 +2143,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.7937219730941703,0L1.7937219730941703,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(81.39013452914799,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(81.39013452914799,0)"
               width="1.7937219730941703"
             />
@@ -2235,16 +2162,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.7937219730941703,0L1.7937219730941703,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(83.54260089686099,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(83.54260089686099,0)"
               width="1.7937219730941703"
             />
@@ -2264,16 +2190,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#339"
               stroke="#339"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #339; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -2293,16 +2218,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#63e"
               stroke="#63e"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #63e; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -2322,16 +2246,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L1.0762331838565022,0L1.0762331838565022,80L0,80Z"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -2351,16 +2274,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="line feature"
               d="M0,40 L1.0762331838565022,40"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="1.0762331838565022"
             />
@@ -2380,16 +2302,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="bridge feature"
               d="M0,80L0,40L0.17937219730941703,40L0.17937219730941703,0L0.17937219730941703,40L0.35874439461883406,40L0.35874439461883406,80Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2409,16 +2330,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="bridge feature"
               d="M0,80L0,0L0.7174887892376681,0L0.7174887892376681,80L0.7174887892376681,2L0,2Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -2438,16 +2358,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="diamond feature"
               d="M0.17937219730941703,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2467,16 +2386,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="diamond feature"
               d="M0.35874439461883406,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5M0,5L0.7174887892376681,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -2496,16 +2414,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="chevron feature"
               d="M0.17937219730941703,5L5.179372197309417,0L5.179372197309417,5L0.17937219730941703,10L-4.820627802690583,5L-4.820627802690583,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2525,16 +2442,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="chevron feature"
               d="M0.35874439461883406,5L5.358744394618834,0L5.358744394618834,5L0.35874439461883406,10L-4.641255605381166,5L-4.641255605381166,0L0.35874439461883406,5M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -2554,16 +2470,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="catFace feature"
               d="M-4.820627802690583,0L-4.820627802690583,6L-1.8206278026905829,10L2.179372197309417,10L5.179372197309417,6L5.179372197309417,0L2.179372197309417,4L-1.8206278026905829,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2583,16 +2498,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="catFace feature"
               d="M-4.641255605381166,0L-4.641255605381166,6L-1.641255605381166,10L2.3587443946188342,10L5.358744394618834,6L5.358744394618834,0L2.3587443946188342,4L-1.641255605381166,4M0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -2612,16 +2526,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="triangle feature"
               d="M0.17937219730941703,0L5.179372197309417,10L-4.820627802690583,10Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2641,16 +2554,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="triangle feature"
               d="M0.35874439461883406,0L5.358744394618834,10L-4.641255605381166,10L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -2670,16 +2582,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="wave feature"
               d="M-4.820627802690583,5A2.5,5 0 1,1 0.17937219730941703,5A2.5,5 0 1,0 5.179372197309417,5Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2699,16 +2610,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="wave feature"
               d="M-4.641255605381166,5A2.5,5 0 1,1 0.35874439461883406,5A2.5,5 0 1,0 5.358744394618834,5M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -2728,16 +2638,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="hexagon feature"
               d="M 5.179372197309417,5 2.6793721973094176,9.330127018922193 -2.320627802690582,9.330127018922195 -4.820627802690583,5.000000000000001 -2.320627802690585,0.6698729810778072 2.6793721973094176,0.6698729810778072 Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2757,16 +2666,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="hexagon feature"
               d="M 5.358744394618834,5 2.8587443946188347,9.330127018922193 -2.141255605381165,9.330127018922195 -4.641255605381166,5.000000000000001 -2.141255605381168,0.6698729810778072 2.8587443946188347,0.6698729810778072  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -2786,16 +2694,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="pentagon feature"
               d="M 5.179372197309417,5 1.7244571691841544,9.755282581475768 -3.8657127745653193,7.938926261462367 -3.86571277456532,2.061073738537635 1.7244571691841533,0.2447174185242318 Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2815,16 +2722,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="pentagon feature"
               d="M 5.358744394618834,5 1.9038293664935713,9.755282581475768 -3.686340577255902,7.938926261462367 -3.686340577255903,2.061073738537635 1.9038293664935702,0.2447174185242318  5.358744394618834,5 M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -2844,16 +2750,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="circle feature"
               d="M0.17937219730941703,0A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,10A1.7841241161527712,1.7841241161527712 0 1,1 0.17937219730941703,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2873,16 +2778,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="circle feature"
               d="M0.35874439461883406,0A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,10A1.7841241161527712,1.7841241161527712 0 1,1 0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -2902,16 +2806,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="arrow feature"
               d="M0.17937219730941703,0L-0.820627802690583,0L-4.820627802690583,4L-0.820627802690583,80L0.17937219730941703,80L4.179372197309417,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2931,16 +2834,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="arrow feature"
               d="M0.35874439461883406,0L-0.641255605381166,0L-4.641255605381166,4L-0.641255605381166,80L0.35874439461883406,80L4.358744394618834,4L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.7174887892376681"
             />
@@ -2960,16 +2862,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="doubleBar feature"
               d="M0.17937219730941703,0L-4.820627802690583,10L0.17937219730941703,10L5.179372197309417,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -2989,16 +2890,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="doubleBar feature"
               d="M0.35874439461883406,0L-4.641255605381166,10L0.35874439461883406,10L5.358744394618834,0L0.35874439461883406,0M0,5L0.7174887892376681,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -3018,16 +2918,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="helix feature"
               d=""
-              fill="transparent"
               stroke="#f06"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: transparent; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="0.7174887892376681"
             />
@@ -3047,16 +2946,15 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
             <path
               class="strand feature"
               d="M0,20L0,20L0,60L0,60L0,20M0,0L0.35874439461883406,40L0,80Z"
-              fill="#fc0"
               stroke="#fc0"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #fc0; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10.358744394618833,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10.358744394618833,0)"
               width="0.35874439461883406"
             />
@@ -3104,16 +3002,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L826.6666666666666,0L826.6666666666666,80L0,80Z"
-              fill="#342ea2"
               stroke="#342ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #342ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(223.33333333333331,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(223.33333333333331,0)"
               width="826.6666666666666"
             />
@@ -3133,16 +3030,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L2959.9999999999995,0L2959.9999999999995,80L0,80Z"
-              fill="#A42ea2"
               stroke="#A42ea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A42ea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(1290,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(1290,0)"
               width="2959.9999999999995"
             />
@@ -3162,16 +3058,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L26.666666666666664,0L26.666666666666664,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(4090,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(4090,0)"
               width="26.666666666666664"
             />
@@ -3186,16 +3081,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L26.666666666666664,0L26.666666666666664,80L0,80Z"
-              fill="#A4Aea2"
               stroke="#A4Aea2"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #A4Aea2; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(4170,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(4170,0)"
               width="26.666666666666664"
             />
@@ -3215,16 +3109,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L133.33333333333331,0L133.33333333333331,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(5290,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(5290,0)"
               width="133.33333333333331"
             />
@@ -3235,16 +3128,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L133.33333333333331,0L133.33333333333331,80L0,80Z"
-              fill="gray"
               stroke="gray"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: gray; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(5450,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(5450,0)"
               width="133.33333333333331"
             />
@@ -3264,16 +3156,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L80,0L80,80L0,80Z"
-              fill="#339"
               stroke="#339"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #339; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="80"
             />
@@ -3293,16 +3184,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L80,0L80,80L0,80Z"
-              fill="#63e"
               stroke="#63e"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #63e; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="80"
             />
@@ -3322,16 +3212,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="rectangle feature"
               d="M0,0L80,0L80,80L0,80Z"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="80"
             />
@@ -3351,16 +3240,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="line feature"
               d="M0,40 L80,40"
-              fill="#35d"
               stroke="#35d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #35d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="80"
             />
@@ -3380,16 +3268,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="bridge feature"
               d="M0,80L0,40L13.333333333333332,40L13.333333333333332,0L13.333333333333332,40L26.666666666666664,40L26.666666666666664,80Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3409,16 +3296,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="bridge feature"
               d="M0,80L0,0L53.33333333333333,0L53.33333333333333,80L53.33333333333333,2L0,2Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -3438,16 +3324,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="diamond feature"
               d="M13.333333333333332,0L18.333333333333332,5L13.333333333333332,10L8.333333333333332,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3467,16 +3352,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="diamond feature"
               d="M26.666666666666664,0L31.666666666666664,5L26.666666666666664,10L21.666666666666664,5M0,5L53.33333333333333,5Z"
-              fill="#33d"
               stroke="#33d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #33d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="53.33333333333333"
             />
@@ -3496,16 +3380,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="chevron feature"
               d="M13.333333333333332,5L18.333333333333332,0L18.333333333333332,5L13.333333333333332,10L8.333333333333332,5L8.333333333333332,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3525,16 +3408,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="chevron feature"
               d="M26.666666666666664,5L31.666666666666664,0L31.666666666666664,5L26.666666666666664,10L21.666666666666664,5L21.666666666666664,0L26.666666666666664,5M0,5L53.33333333333333,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -3554,16 +3436,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="catFace feature"
               d="M8.333333333333332,0L8.333333333333332,6L11.333333333333332,10L15.333333333333332,10L18.333333333333332,6L18.333333333333332,0L15.333333333333332,4L11.333333333333332,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3583,16 +3464,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="catFace feature"
               d="M21.666666666666664,0L21.666666666666664,6L24.666666666666664,10L28.666666666666664,10L31.666666666666664,6L31.666666666666664,0L28.666666666666664,4L24.666666666666664,4M26.666666666666664,0M0,5L53.33333333333333,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="53.33333333333333"
             />
@@ -3612,16 +3492,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="triangle feature"
               d="M13.333333333333332,0L18.333333333333332,10L8.333333333333332,10Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3641,16 +3520,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="triangle feature"
               d="M26.666666666666664,0L31.666666666666664,10L21.666666666666664,10L26.666666666666664,0M0,5L53.33333333333333,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -3670,16 +3548,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="wave feature"
               d="M8.333333333333332,5A2.5,5 0 1,1 13.333333333333332,5A2.5,5 0 1,0 18.333333333333332,5Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3699,16 +3576,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="wave feature"
               d="M21.666666666666664,5A2.5,5 0 1,1 26.666666666666664,5A2.5,5 0 1,0 31.666666666666664,5M0,5L53.33333333333333,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="53.33333333333333"
             />
@@ -3728,16 +3604,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="hexagon feature"
               d="M 18.333333333333332,5 15.833333333333332,9.330127018922193 10.833333333333332,9.330127018922195 8.333333333333332,5.000000000000001 10.83333333333333,0.6698729810778072 15.833333333333332,0.6698729810778072 Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3757,16 +3632,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="hexagon feature"
               d="M 31.666666666666664,5 29.166666666666664,9.330127018922193 24.166666666666664,9.330127018922195 21.666666666666664,5.000000000000001 24.16666666666666,0.6698729810778072 29.166666666666664,0.6698729810778072  31.666666666666664,5 M0,5L53.33333333333333,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -3786,16 +3660,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="pentagon feature"
               d="M 18.333333333333332,5 14.878418305208069,9.755282581475768 9.288248361458596,7.938926261462367 9.288248361458596,2.061073738537635 14.878418305208069,0.2447174185242318 Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3815,16 +3688,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="pentagon feature"
               d="M 31.666666666666664,5 28.2117516385414,9.755282581475768 22.621581694791928,7.938926261462367 22.621581694791928,2.061073738537635 28.2117516385414,0.2447174185242318  31.666666666666664,5 M0,5L53.33333333333333,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="53.33333333333333"
             />
@@ -3844,16 +3716,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="circle feature"
               d="M13.333333333333332,0A1.7841241161527712,1.7841241161527712 0 1,1 13.333333333333332,10A1.7841241161527712,1.7841241161527712 0 1,1 13.333333333333332,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3873,16 +3744,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="circle feature"
               d="M26.666666666666664,0A1.7841241161527712,1.7841241161527712 0 1,1 26.666666666666664,10A1.7841241161527712,1.7841241161527712 0 1,1 26.666666666666664,0M0,5L53.33333333333333,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -3902,16 +3772,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="arrow feature"
               d="M13.333333333333332,0L12.333333333333332,0L8.333333333333332,4L12.333333333333332,80L13.333333333333332,80L17.333333333333332,4Z"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3931,16 +3800,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="arrow feature"
               d="M26.666666666666664,0L25.666666666666664,0L21.666666666666664,4L25.666666666666664,80L26.666666666666664,80L30.666666666666664,4L26.666666666666664,0M0,5L53.33333333333333,5ZZ"
-              fill="#d3d"
               stroke="#d3d"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #d3d; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="53.33333333333333"
             />
@@ -3960,16 +3828,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="doubleBar feature"
               d="M13.333333333333332,0L8.333333333333332,10L13.333333333333332,10L18.333333333333332,0Z"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />
@@ -3989,16 +3856,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="doubleBar feature"
               d="M26.666666666666664,0L21.666666666666664,10L26.666666666666664,10L31.666666666666664,0L26.666666666666664,0M0,5L53.33333333333333,5ZZ"
-              fill="#3a3"
               stroke="#3a3"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #3a3; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -4018,16 +3884,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="helix feature"
               d="M0,80 C5,7.5 5,2.5 2.5, 0 C0,2.5 2.5,7.5 5,80M5,80 C10,7.5 10,2.5 7.5, 0 C5,2.5 7.5,7.5 10,80M10,80 C15,7.5 15,2.5 12.5, 0 C10,2.5 12.5,7.5 15,80M15,80 C20,7.5 20,2.5 17.5, 0 C15,2.5 17.5,7.5 20,80M20,80 C25,7.5 25,2.5 22.5, 0 C20,2.5 22.5,7.5 25,80M25,80 C30,7.5 30,2.5 27.5, 0 C25,2.5 27.5,7.5 30,80M30,80 C35,7.5 35,2.5 32.5, 0 C30,2.5 32.5,7.5 35,80M35,80 C40,7.5 40,2.5 37.5, 0 C35,2.5 37.5,7.5 40,80M40,80 C45,7.5 45,2.5 42.5, 0 C40,2.5 42.5,7.5 45,80M45,80 C50,7.5 50,2.5 47.5, 0 C45,2.5 47.5,7.5 50,80M50,80 C55,7.5 55,2.5 52.5, 0 C50,2.5 52.5,7.5 55,80"
-              fill="transparent"
               stroke="#f06"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: transparent; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(-16.666666666666664,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(-16.666666666666664,0)"
               width="53.33333333333333"
             />
@@ -4047,16 +3912,15 @@ exports[`nightingale-track tests it should zoom in 1`] = `
             <path
               class="strand feature"
               d="M0,20L21.666666666666664,20L21.666666666666664,60L0,60L0,20M21.666666666666664,0L26.666666666666664,40L21.666666666666664,80Z"
-              fill="#fc0"
               stroke="#fc0"
-              style="fill-opacity: 0.9; stroke-opacity: 0.9;"
+              style="fill: #fc0; fill-opacity: 0.9; stroke-opacity: 0.9;"
               transform="translate(10,0)"
             />
             <rect
               class="outer-rectangle feature"
-              fill="transparent"
               height="80"
               stroke="transparent"
+              style="fill: transparent;"
               transform="translate(10,0)"
               width="26.666666666666664"
             />

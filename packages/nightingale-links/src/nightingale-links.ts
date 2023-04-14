@@ -184,9 +184,11 @@ class NightingaleLinks extends NightingaleTrack {
     this.contactPoints
       .transition()
       .attr("r", (d: number) =>
-          this.getRadius(
-              d === this.#contacts?.selected || (this.#contacts?.contacts[d].has(this.#contacts?.selected || 0) || false)
-          )
+        this.getRadius(
+          d === this.#contacts?.selected ||
+            this.#contacts?.contacts[d].has(this.#contacts?.selected || 0) ||
+            false
+        )
       )
       .attr("stroke", (d: number) =>
         d === this.#contacts?.selected && this.#contacts.isHold
