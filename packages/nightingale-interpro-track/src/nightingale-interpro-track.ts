@@ -375,7 +375,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
             : "rectangle"
         )
       )
-      .attr("fill", (f) =>
+      .style("fill", (f) =>
         expanded ? this.getFeatureColor(f.feature as Feature) : "white"
       )
       .attr(

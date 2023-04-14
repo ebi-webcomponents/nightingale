@@ -299,7 +299,7 @@ class NightingaleTrack extends withManager(
             this.layoutObj?.getFeatureYPos(f.feature) || 0
           })`
       )
-      .attr("fill", (f) => this.getFeatureFillColor(f))
+      .style("fill", (f) => this.getFeatureFillColor(f))
       .attr("stroke", (f) => this.getFeatureColor(f))
       .style("fill-opacity", ({ feature }) =>
         feature.opacity ? feature.opacity : 0.9
@@ -325,7 +325,7 @@ class NightingaleTrack extends withManager(
             this.layoutObj?.getFeatureYPos(f.feature) || 0
           })`
       )
-      .attr("fill", "transparent")
+      .style("fill", "transparent")
       .attr("stroke", "transparent")
       .call(bindEvents, this);
   }
