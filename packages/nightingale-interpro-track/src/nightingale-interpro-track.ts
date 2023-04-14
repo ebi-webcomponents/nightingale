@@ -35,6 +35,21 @@ export type LabelGroup = Selection<
 
 const MAX_OPACITY_WHILE_COLAPSED = 0.8;
 
+const colorCache: Record<string, number[] | null> = {};
+
+function colorKeywordToRGB(colorKeyword: string) {
+  if (colorCache[colorKeyword]) return colorCache[colorKeyword];
+
+  const el = document.createElement("div");
+  el.style.color = colorKeyword;
+  document.body.appendChild(el);
+  const rgbValue = window.getComputedStyle(el).color;
+  document.body.removeChild(el);
+  const res = rgbValue?.match(/[.\d]+/g)?.map(Number) || null;
+  colorCache[colorKeyword] = res;
+  return res;
+}
+
 @customElement("nightingale-interpro-track")
 class NightingaleInterproTrack extends NightingaleTrack {
   @property({ type: Boolean })
@@ -334,12 +349,14 @@ class NightingaleInterproTrack extends NightingaleTrack {
           (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0) +
           (this.layoutObj?.getFeatureHeight(f.feature as Feature) || 0) / 2
       )
-      .attr("fill", (_f, i, nodes) => {
+      .attr("fill", (f, i, nodes) => {
         const element = nodes[i];
         const firstPath = element.parentElement?.querySelector("path.feature");
 
         if (firstPath) {
-          return contrastingColor(getColor(firstPath, "fill"));
+          return contrastingColor(
+            colorKeywordToRGB(this.getFeatureFillColor(f))
+          );
         }
         return null;
       })
