@@ -6,7 +6,6 @@ import { Feature } from "@nightingale-elements/nightingale-track";
 import {
   bindEvents,
   contrastingColor,
-  getColor,
 } from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack from "@nightingale-elements/nightingale-track";
 import InterproEntryLayout, { InterProFeature } from "./InterproEntryLayout";

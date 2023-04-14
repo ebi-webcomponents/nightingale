@@ -59,6 +59,11 @@ class SequenceViewerComponent extends DraggingComponent {
     attribute: "color-scheme",
   })
   colorScheme: string = DEFAULT_COLOR_SCHEME;
+  @property({
+    type: Boolean,
+    attribute: "overlay-conservation",
+  })
+  overlayConservation = false;
 
   @state()
   props: SequenceViewerComponentProps = {
@@ -76,7 +81,6 @@ class SequenceViewerComponent extends DraggingComponent {
     overflowY: "auto",
     scrollBarPositionX: "bottom",
     scrollBarPositionY: "right",
-    overlayConservation: false,
     // TODO: deal with conservation
     conservation: null,
     sequenceDisableDragging: false,
@@ -289,7 +293,7 @@ class SequenceViewerComponent extends DraggingComponent {
           border: this.props.border,
           borderWidth: this.props.borderWidth,
           borderColor: this.props.borderColor,
-          overlayConservation: this.props.overlayConservation,
+          overlayConservation: this.overlayConservation,
           conservation: this.props.conservation,
         });
       },
@@ -550,7 +554,7 @@ class SequenceViewerComponent extends DraggingComponent {
       colorScheme: this.colorSchemeManager,
       textFont: this.props.textFont,
       borderColor: this.props.borderColor,
-      overlayConservation: this.props.overlayConservation,
+      overlayConservation: this.overlayConservation,
       conservation: this.props.conservation,
     };
     this.tileCache.updateTileSpecs({

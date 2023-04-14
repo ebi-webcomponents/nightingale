@@ -46,6 +46,11 @@ class NightingaleMSA extends withManager(
     attribute: "conservation-sample-size",
   })
   sampleSize = 20;
+  @property({
+    type: Boolean,
+    attribute: "overlay-conservation",
+  })
+  overlayConservtion = false;
 
   worker = new Worker(
     new URL("./workers/conservation.worker.ts", import.meta.url)
@@ -137,6 +142,7 @@ class NightingaleMSA extends withManager(
           display-start=${this["display-start"] || 0}
           display-end=${this["display-end"] || 0}
           length=${this.length || 0}
+          ?overlay-conservation=${this.overlayConservtion}
         ></msa-sequence-viewer>
         <div style=${object2style(rightMarginStyle)}></div>
       </div>

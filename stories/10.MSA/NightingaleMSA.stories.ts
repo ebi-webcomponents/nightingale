@@ -47,6 +47,7 @@ const Template: Story<{
   colorScheme: string;
   displayStart: number;
   displayEnd: number;
+  overlayConsevation: boolean;
 }> = (args) => {
   return html`
     <nightingale-msa
@@ -58,6 +59,7 @@ const Template: Story<{
       display-end=${args.displayEnd}
       label-width="200"
       highlight="10:19,40:49"
+      ?overlay-conservation=${args.overlayConsevation}
     ></nightingale-msa>
   `;
 };
@@ -69,6 +71,7 @@ MSA.args = {
   colorScheme: "aliphatic",
   displayStart: 1,
   displayEnd: 50,
+  overlayConsevation: false,
 };
 MSA.play = async () => {
   await customElements.whenDefined("nightingale-msa");

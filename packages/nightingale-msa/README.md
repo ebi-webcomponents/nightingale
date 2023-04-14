@@ -25,21 +25,25 @@ Multiple Sequence Alignment viewer. This component is a stripped-out version of 
 Color Scheme to paint the bases in the alignment. Available options:
 `aliphatic, aromatic, buried, buried_index, charged, cinema, clustal2, clustal, helix, helix_propensity, hydro, lesk, mae, negative, nucleotide, polar, positive, purine, purine_pyrimidine, serine_threonine, strand, strand_propensity, taylor, turn, turn_propensity, zappo,, conservation`
 
-#### `label-width: (default: 0)`
+#### `label-width: number(default: 0)`
 
 Width reserved to render the labels of the sequences. If the value is `0` the labels won't be rendered.
 
-#### `tile-height: (default: 20)`
+#### `tile-height: number (default: 20)`
 
 Height of each base (AKA tile).
 
-#### `active-label: (default: "")`
+#### `active-label: string (default: "")`
 
 Label to highlight as if selected
 
-#### `conservation-sample-size: (default: 20)`
+#### `conservation-sample-size: number (default: 20)`
 
 One of the color-schemes is `conservation` this requires a precalculation that runs on a web worker. The conservation calculation can be sampled to just the first `n` sequences. Which is defined by this parameter.
+
+#### `overlay-conservation: boolean(default: false)`
+
+When this flag is enable the conservation data is used to modify the color of each base.
 
 ### Methods
 
