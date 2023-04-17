@@ -1,7 +1,7 @@
 [
   {
     "name": "Chart name",
-    "colour": "red",
+    "color": "red",
     "range": [0, 100],
     "lineCurve": "default linear??",
     "values": [

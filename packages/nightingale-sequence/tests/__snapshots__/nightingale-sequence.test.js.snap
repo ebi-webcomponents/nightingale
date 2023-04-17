@@ -4,6 +4,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
 <nightingale-sequence
   length="15"
   sequence="MADYDDEFDTKASDL"
+  style="height: 100%; display: inline-block; line-height: 0;"
+  width="800"
 >
   <!---->
   <svg
@@ -167,7 +169,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="10"
+          font-size="25"
           y="2"
         >
           5
@@ -181,7 +183,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="10"
+          font-size="25"
           y="2"
         >
           10
@@ -195,7 +197,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="10"
+          font-size="25"
           y="2"
         >
           15
@@ -209,7 +211,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
     >
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="36"
@@ -218,7 +220,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="88"
@@ -227,7 +229,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="140"
@@ -236,7 +238,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="192"
@@ -245,7 +247,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="244"
@@ -254,7 +256,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="296"
@@ -263,7 +265,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="348"
@@ -272,7 +274,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="400"
@@ -281,7 +283,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="452"
@@ -290,7 +292,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="504"
@@ -299,7 +301,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="556"
@@ -308,7 +310,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="608"
@@ -317,7 +319,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="660"
@@ -326,7 +328,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="712"
@@ -335,7 +337,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="764"
@@ -393,6 +395,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
   highlight="2:5"
   length="15"
   sequence="MADYDDEFDTKASDL"
+  style="height: 100%; display: inline-block; line-height: 0;"
+  width="800"
 >
   <!---->
   <svg
@@ -556,7 +560,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="10"
+          font-size="25"
           y="2"
         >
           5
@@ -570,7 +574,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="10"
+          font-size="25"
           y="2"
         >
           10
@@ -584,7 +588,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="10"
+          font-size="25"
           y="2"
         >
           15
@@ -598,7 +602,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
     >
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="36"
@@ -607,7 +611,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="88"
@@ -616,7 +620,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="140"
@@ -625,7 +629,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="192"
@@ -634,7 +638,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="244"
@@ -643,7 +647,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="296"
@@ -652,7 +656,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="348"
@@ -661,7 +665,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="400"
@@ -670,7 +674,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="452"
@@ -679,7 +683,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="504"
@@ -688,7 +692,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="556"
@@ -697,7 +701,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="608"
@@ -706,7 +710,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="660"
@@ -715,7 +719,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="712"
@@ -724,7 +728,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="10"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="764"
@@ -791,6 +795,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
   display-start="2"
   length="15"
   sequence="MADYDDEFDTKASDL"
+  style="height: 100%; display: inline-block; line-height: 0;"
+  width="800"
 >
   <!---->
   <svg
@@ -846,7 +852,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="23.400000000000002"
+          font-size="25"
           y="2"
         >
           2
@@ -860,7 +866,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="23.400000000000002"
+          font-size="25"
           y="2"
         >
           3
@@ -874,7 +880,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="23.400000000000002"
+          font-size="25"
           y="2"
         >
           4
@@ -888,7 +894,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         <text
           dy="0.71em"
           fill="currentColor"
-          font-size="23.400000000000002"
+          font-size="25"
           y="2"
         >
           5
@@ -902,7 +908,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
     >
       <text
         class="base"
-        font-size="23.400000000000002"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="140"
@@ -911,7 +917,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="23.400000000000002"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="400"
@@ -920,7 +926,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       </text>
       <text
         class="base"
-        font-size="23.400000000000002"
+        font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
         x="660"

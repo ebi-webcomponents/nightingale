@@ -10,6 +10,7 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-a11y",
     "@storybook/addon-storysource",
+    "@storybook/addon-actions",
   ],
   typescript: {
     check: false,
@@ -29,6 +30,10 @@ module.exports = {
       test: /\.(ts|tsx)$/,
       include: path.resolve(__dirname, "../packages"),
       loader: "ts-loader",
+    });
+    config.module.rules.push({
+      test: /\.(tsv)$/,
+      type: "asset/source",
     });
     return config;
   },

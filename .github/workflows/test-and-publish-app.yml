@@ -27,7 +27,7 @@ jobs:
         run: |
           yarn build-storybook
       - name: 🚀 Deploy Storybook
-        if: github.ref == 'refs/heads/2022' || github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -35,6 +35,8 @@ jobs:
           folder: storybook-static # The folder the action should deploy.
           clean: true
       - name: 📟 Building V3
-        if: github.ref == 'refs/heads/2022' || github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
-          gh workflow run workflow --ref v3
+          gh workflow run test-and-publish-app.yml --ref v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

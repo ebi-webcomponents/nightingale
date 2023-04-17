@@ -1,6 +1,6 @@
 # nightingale-interpro-track
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-interpro-track.svg)](https://www.npmjs.com/package/nightingale-interpro--track)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-interpro-track.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-interpro-track)
 
 InterPro extension of the track component
 

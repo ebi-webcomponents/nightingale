@@ -1,9 +1,14 @@
 {
   "name": "@nightingale-elements/nightingale-new-core",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0",
   "description": "Base Elements for Nightingale Components",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "files": [
     "dist",
     "src"
@@ -32,7 +37,7 @@
     "access": "public"
   },
   "dependencies": {
-    "d3": "7.6.1",
-    "lit": "2.4.0"
+    "d3": "7.8.2",
+    "lit": "2.6.1"
   }
 }

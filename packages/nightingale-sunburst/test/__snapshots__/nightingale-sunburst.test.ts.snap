@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nightingale-sunburst tests calculate the hierarchy correctly 1`] = `
+{
+  "children": [
+    {
+      "id": 94801,
+      "node": "Eukaryota",
+      "numDomains": 12299,
+      "numSequences": 11656,
+      "numSpecies": 5,
+      "parent": "root",
+    },
+    {
+      "id": 94057,
+      "node": "Archaea",
+      "numDomains": 26,
+      "numSequences": 26,
+      "numSpecies": 2,
+      "parent": "root",
+    },
+    {
+      "id": 94713,
+      "node": "Bacteria",
+      "numDomains": 169,
+      "numSequences": 169,
+      "numSpecies": 3,
+      "parent": "root",
+    },
+  ],
+  "id": 0,
+  "node": "root",
+  "numDomains": 12494,
+  "numSpecies": 10,
+}
+`;
+
+exports[`nightingale-sunburst tests calculate the hierarchy correctly 2`] = `
+Node {
+  "children": [
+    Node {
+      "data": {
+        "id": 94801,
+        "node": "Eukaryota",
+        "numDomains": 12299,
+        "numSequences": 11656,
+        "numSpecies": 5,
+        "parent": "root",
+      },
+      "depth": 1,
+      "height": 0,
+      "parent": [Circular],
+      "value": 5,
+      "x0": 0,
+      "x1": 3.141592653589793,
+      "y0": 125,
+      "y1": 250,
+    },
+    Node {
+      "data": {
+        "id": 94713,
+        "node": "Bacteria",
+        "numDomains": 169,
+        "numSequences": 169,
+        "numSpecies": 3,
+        "parent": "root",
+      },
+      "depth": 1,
+      "height": 0,
+      "parent": [Circular],
+      "value": 3,
+      "x0": 3.141592653589793,
+      "x1": 5.026548245743669,
+      "y0": 125,
+      "y1": 250,
+    },
+    Node {
+      "data": {
+        "id": 94057,
+        "node": "Archaea",
+        "numDomains": 26,
+        "numSequences": 26,
+        "numSpecies": 2,
+        "parent": "root",
+      },
+      "depth": 1,
+      "height": 0,
+      "parent": [Circular],
+      "value": 2,
+      "x0": 5.026548245743669,
+      "x1": 6.283185307179586,
+      "y0": 125,
+      "y1": 250,
+    },
+  ],
+  "data": {
+    "children": [
+      {
+        "id": 94801,
+        "node": "Eukaryota",
+        "numDomains": 12299,
+        "numSequences": 11656,
+        "numSpecies": 5,
+        "parent": "root",
+      },
+      {
+        "id": 94057,
+        "node": "Archaea",
+        "numDomains": 26,
+        "numSequences": 26,
+        "numSpecies": 2,
+        "parent": "root",
+      },
+      {
+        "id": 94713,
+        "node": "Bacteria",
+        "numDomains": 169,
+        "numSequences": 169,
+        "numSpecies": 3,
+        "parent": "root",
+      },
+    ],
+    "id": 0,
+    "node": "root",
+    "numDomains": 12494,
+    "numSpecies": 10,
+  },
+  "depth": 0,
+  "height": 1,
+  "parent": null,
+  "value": 10,
+  "x0": 0,
+  "x1": 6.283185307179586,
+  "y0": 0,
+  "y1": 125,
+}
+`;
+
+exports[`nightingale-sunburst tests it should display the navigation correctly 1`] = `
+<nightingale-sunburst
+  size="200"
+  weight-attribute="numSpecies"
+>
+  <!---->
+   
+  <canvas
+    height="500px"
+    width="500px"
+  >
+    
+      Nightingale Sunburst
+    
+  </canvas>
+</nightingale-sunburst>
+`;

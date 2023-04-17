@@ -29,7 +29,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.0.0-alpha.5",
-    "molstar": "3.23.0"
+    "@nightingale-elements/nightingale-new-core": "^4.0.0",
+    "molstar": "3.34.0"
   }
 }

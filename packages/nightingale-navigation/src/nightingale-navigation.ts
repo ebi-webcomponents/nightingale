@@ -22,6 +22,8 @@ import NightingaleElement, {
   withHighlight,
 } from "@nightingale-elements/nightingale-new-core";
 
+const HANDLE_SIZE = 6;
+
 @customElement("nightingale-navigation")
 class NightingaleNavigation extends withManager(
   withResizable(
@@ -60,9 +62,14 @@ class NightingaleNavigation extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
+  #currentSelection: number[] | null = null;
 
   @property({ type: Number })
   "ruler-start" = 1;
+  @property({ type: Number })
+  "ruler-padding" = 10;
+  @property({ type: Number })
+  "scale-factor" = (this.length || 0) / 5 || 10;
   @property({ type: Boolean })
   "show-highlight" = false;
 
@@ -73,8 +80,9 @@ class NightingaleNavigation extends withManager(
   }
 
   private createNavRuler() {
+    const limit = this.width - this["margin-right"] - this["ruler-padding"];
     this.#x = scaleLinear()
-      .range([this["margin-left"], this.width - this["margin-right"]])
+      .range([this["margin-left"] + this["ruler-padding"], limit])
       .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)]);
     this.#svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
@@ -108,11 +116,24 @@ class NightingaleNavigation extends withManager(
 
     this.#viewport = brushX()
       .extent([
-        [this["margin-left"], 0],
-        [this.width - this["margin-right"], this.height * 0.51],
+        [this["margin-left"] + this["ruler-padding"], 0],
+        [limit, this.height * 0.5 + HANDLE_SIZE / 2],
       ])
+      .handleSize(HANDLE_SIZE)
+      .on("end", ({ selection }) => {
+        // In case is a click outside the brush, reset brush to previous position
+        if (
+          selection === null &&
+          this.#currentSelection &&
+          this.#brushG &&
+          this.#viewport
+        ) {
+          this.#brushG.call(this.#viewport.move, this.#currentSelection);
+        }
+      })
       .on("brush", ({ selection, transform }) => {
         if (selection && this.#x) {
+          this.#currentSelection = selection;
           this["display-start"] =
             Math.round(this.#x.invert(selection[0]) * 100) / 100;
           this["display-end"] =
@@ -134,15 +155,16 @@ class NightingaleNavigation extends withManager(
         }
       });
 
-    this.#brushG = this.#svg
-      .append("g")
-      .attr("class", "brush")
-      .call(this.#viewport);
+    this.#brushG = this.#svg.append("g").attr("class", "brush");
 
-    this.#brushG.call(this.#viewport.move, [
-      this.#x(this.getStart()),
-      this.#x(this.getEnd()),
-    ]);
+    if (limit > 0) {
+      this.#brushG.call(this.#viewport);
+
+      this.#brushG.call(this.#viewport.move, [
+        this.#x(this.getStart()),
+        this.#x(this.getEnd()),
+      ]);
+    }
 
     this.#polygon = this.#svg
       .append("polygon")
@@ -160,13 +182,20 @@ class NightingaleNavigation extends withManager(
     this.updateHighlight();
   }
 
-  onWidthChange() {
+  onDimensionsChange() {
     if (!this.#x) return;
-    this.#x.range([this["margin-left"], this.width - this["margin-right"]]);
+    this.#x.range([
+      this["margin-left"] + this["ruler-padding"],
+      this.width - this["margin-right"] - this["ruler-padding"],
+    ]);
     this.#svg?.attr("width", this.width);
+    this.#svg?.attr("height", this.height);
     this.#viewport?.extent([
-      [this["margin-left"], 0],
-      [this.width - this["margin-right"], this.height * 0.51],
+      [this["margin-left"] + this["ruler-padding"], 0],
+      [
+        this.width - this["margin-right"] - this["ruler-padding"],
+        this.height * 0.5 + HANDLE_SIZE / 2,
+      ],
     ]);
     if (this.#viewport) this.#brushG?.call(this.#viewport);
   }
@@ -175,9 +204,6 @@ class NightingaleNavigation extends withManager(
     return html`<svg class="container"></svg>`;
   }
   updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has("width")) {
-      this.onWidthChange();
-    }
     this.renderD3();
     super.updated(changedProperties);
   }
@@ -194,17 +220,42 @@ class NightingaleNavigation extends withManager(
       this.#axis.call(this.#xAxis);
       this.updatePolygon();
       this.updateLabels();
-      if (this.#brushG) {
+      const position = [this.#x(this.getStart()), this.#x(this.getEnd())];
+      if (this.#brushG && position[0] >= 0 && position[1] >= 0) {
         this.#dontDispatch = true;
-        this.#brushG.call(this.#viewport.move, [
-          this.#x(this.getStart()),
-          this.#x(this.getEnd()),
-        ]);
+        this.#brushG.call(this.#viewport.move, position);
         this.#dontDispatch = false;
       }
       this.updateHighlight();
       this.renderMarginOnGroup(this.#margins);
     }
+  }
+
+  locate(start: number, end: number) {
+    if (this.#brushG && this.#viewport && this.#x)
+      this.#brushG.call(this.#viewport.move, [this.#x(start), this.#x(end)]);
+  }
+  zoomOut() {
+    this.locate(
+      Math.max(
+        this["ruler-start"] || 1,
+        this.getStart() - this["scale-factor"]
+      ),
+      Math.min(
+        (this.length || 1) + this["ruler-start"] - 1,
+        this.getEnd() + this["scale-factor"]
+      )
+    );
+  }
+  zoomIn() {
+    const newStart = Math.min(
+      this.getStart() + this["scale-factor"],
+      this.getEnd() - 1
+    );
+    this.locate(
+      newStart,
+      Math.max(this.getEnd() - this["scale-factor"], newStart + 1)
+    );
   }
   protected updateHighlight() {
     if (!this.#highlighted) return;
@@ -219,7 +270,10 @@ class NightingaleNavigation extends withManager(
     // Scale to match the range of the navigation brush [1,length]
     const s2 = scaleLinear()
       .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)])
-      .range([this["margin-left"], this.width - this["margin-right"]]);
+      .range([
+        this["margin-left"] + this["ruler-padding"],
+        this.width - this["margin-right"] - this["ruler-padding"],
+      ]);
 
     // Highlight Polygon
     const highlighs = this.#highlighted

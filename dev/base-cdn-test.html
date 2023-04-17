@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>&lt;my-element> Demo</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "@nightingale-elements/nightingale-new-core": "https://cdn.jsdelivr.net/npm/@nightingale-elements/nightingale-new-core@4.0.3-alpha.0/dist/index.js",
+          "@nightingale-elements/nightingale-navigation": "https://cdn.jsdelivr.net/npm/@nightingale-elements/nightingale-navigation@4.0.3-alpha.0/dist/index.js"
+        }
+      }
+    </script>
+    <script
+      defer
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@nightingale-elements/nightingale-new-core@4.0.3-alpha.0/dist/index.js"
+    ></script>
+    <script
+      defer
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@nightingale-elements/nightingale-navigation@4.0.3-alpha.0/dist/index.js"
+    ></script>
+    <style>
+      section {
+        border: solid 1px lightgray;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Basic test</h1>
+    <h2><code>nigthingale-new-core</code></h2>
+    <section>
+      <h3>contrastingColor</h3>
+      <p>
+        Basic operation using contrastingColor a simple function part of the
+        core:
+      </p>
+      <div id="core-content"></div>
+    </section>
+    <h2><code>nigthingale-navigation</code></h2>
+    <section>
+      <nightingale-navigation
+        id="navigation"
+        width="800"
+        height="80"
+        length="50"
+        display-start="5"
+        display-end="25"
+        highlight-color="#EB3BFF22"
+        margin-color="transparent"
+        show-highlight
+      ></nightingale-navigation>
+    </section>
+    <script type="module">
+      import { contrastingColor } from "@nightingale-elements/nightingale-new-core";
+      const coreContent = document.getElementById("core-content");
+      const color = [10, 50, 222];
+      coreContent.innerHTML = `The best contracting color for <code>rgb(${color.join(
+        ","
+      )})</code> is <code>${contrastingColor(color)}</code>`;
+    </script>
+  </body>
+</html>

@@ -1,9 +1,14 @@
 {
   "name": "@nightingale-elements/nightingale-manager",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0",
   "description": "Event bus component for Nightnale",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "files": [
     "dist",
     "src"
@@ -27,6 +32,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5"
+    "@nightingale-elements/nightingale-new-core": "^4.0.0"
   }
 }

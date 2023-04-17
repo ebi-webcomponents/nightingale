@@ -1,6 +1,6 @@
 # nightingale-linegraph-track
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-linegraph-track.svg)](https://www.npmjs.com/package/nightingale-linegraph-track)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-linegraph-track.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-linegraph-track)
 
 Nightingale line graph track component is used to display multiple line graphs (either linear or d3 curves).
 
@@ -38,9 +38,9 @@ The data expects the following structure.
 {
     name: String,
     range:[min, max],
-    colour?: Line colour,
-        (Colour will be assigned if not provided. Use "none" for no line colour)
-    fill?: Create area plot using given fill colour (default "none"),
+    color?: Line color,
+        (color will be assigned if not provided. Use "none" for no line color)
+    fill?: Create area plot using given fill color (default "none"),
     lineCurve?: 'curveLinear'(default)|'curveBasis'|'curveCardinal'|'curveStep'|'curveNatural',
         (More curves - https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curves)
     values: [

@@ -56,8 +56,8 @@ type LineValue = {
 type LineData = {
   name: string;
   range: number[];
-  colour?: string; // (Colour will be assigned if not provided. Use "none" for no line colour)
-  fill?: string; //Create area plot using given fill colour (default "none"),
+  color?: string; // (color will be assigned if not provided. Use "none" for no line color)
+  fill?: string; //Create area plot using given fill color (default "none"),
   lineCurve?: keyof typeof curves; // See https://github.com/d3/d3-shape/#curves
   values: Array<LineValue>;
 };
@@ -97,6 +97,12 @@ class NightingaleLinegraphTrack extends withManager(
   #data?: Array<LineData>;
   #minRange?: number;
   #maxRange?: number;
+  #overlay?: Selection<
+    SVGRectElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
 
   constructor() {
     super();
@@ -164,13 +170,13 @@ class NightingaleLinegraphTrack extends withManager(
       .attr("class", "graph")
       .attr("id", (d) => d.name)
       .attr("d", (d) => {
-        d.colour = d.colour || interpolateRainbow(Math.random());
+        d.color = d.color || interpolateRainbow(Math.random());
         // eslint-disable-next-line no-param-reassign
         d.fill = d.fill || "none";
         return this.drawLine(d)(d.values);
       })
       .attr("fill", (d) => d.fill || null)
-      .attr("stroke", (d) => d.colour || null)
+      .attr("stroke", (d) => d.color || null)
       .attr("transform", "translate(0,0)");
 
     const mouseG = chartGroup.append("g").attr("class", "mouse-over-effects");
@@ -187,14 +193,17 @@ class NightingaleLinegraphTrack extends withManager(
     mousePerLine
       .append("circle")
       .attr("r", 7)
-      .style("stroke", (d) => d.colour || null)
+      .style("stroke", (d) => d.color || null)
       .style("fill", "none")
       .style("stroke-width", "1px")
       .style("opacity", "0");
 
-    mousePerLine.append("text").attr("transform", "translate(10,3)");
+    mousePerLine
+      .append("text")
+      .attr("transform", "translate(10,3)")
+      .attr("pointer-events", "none");
 
-    mouseG
+    this.#overlay = mouseG
       .append("rect") // append a rect to catch mouse movements on canvas
       .attr("width", this.width) // can't catch mouse events on a g element
       .attr("height", this.height)
@@ -211,14 +220,19 @@ class NightingaleLinegraphTrack extends withManager(
 
         // Showing the circle and text only when the mouse is moving over the paths
         if (
-          mouse[0] < (this.xScale?.(beginning) || 0) ||
-          mouse[0] > (this.xScale?.(end) || 0) + this.getSingleBaseWidth()
+          mouse[0] < (this.xScale?.(beginning) || 0) + this["margin-left"] ||
+          mouse[0] >
+            (this.xScale?.(end) || 0) +
+              this.getSingleBaseWidth() +
+              this["margin-left"]
         ) {
           chartGroup.selectAll(".mouse-per-line circle").style("opacity", "0");
           chartGroup.selectAll(".mouse-per-line text").style("opacity", "0");
         } else {
           const features: Record<string, LineValue | undefined> = {};
-          const seqPosition = Math.floor(this.xScale?.invert(mouse[0]) || 0);
+          const seqPosition = Math.floor(
+            this.xScale?.invert(mouse[0] - this["margin-left"]) || 0
+          );
 
           chartGroup
             .selectAll<SVGCircleElement, LineData>(".mouse-per-line circle")
@@ -291,15 +305,16 @@ class NightingaleLinegraphTrack extends withManager(
         .selectAll<SVGPathElement, LineData>("path.graph")
         .attr("d", (d) => this.drawLine(d)(d.values));
 
-      this.svg = select(this as unknown as NightingaleElement)
-        .selectAll<SVGSVGElement, unknown>("svg")
-        .attr("width", this.width)
-        .attr("height", this.height);
+      this.svg?.attr("width", this.width);
 
       this.updateHighlight();
 
       this.renderMarginOnGroup(this.#margins);
     }
+  }
+  onDimensionsChange(): void {
+    super.onDimensionsChange();
+    this.#overlay?.attr("width", this.width).attr("height", this.height);
   }
 
   _initYScale() {
@@ -322,11 +337,15 @@ class NightingaleLinegraphTrack extends withManager(
 
     return graph
       .defined((d) => d.value !== null) // To have gaps in the line graph
-      .x(
-        (d) =>
-          this.getXFromSeqPosition(d.position + 1) -
-          this.getSingleBaseWidth() / 2
-      )
+      .x((d, i, data) => {
+        let offset = this.getSingleBaseWidth() / 2;
+        if (i === 0 || data[i - 1]?.value === null) {
+          offset = this.getSingleBaseWidth();
+        } else if (i + 1 === data.length || data[i + 1]?.value === null) {
+          offset = 0;
+        }
+        return this.getXFromSeqPosition(d.position + 1) - offset;
+      })
       .curve(curves[curve] || curveLinear);
   }
 

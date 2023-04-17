@@ -1,6 +1,6 @@
 # nightingale-manager
 
-[![Published on NPM](https://img.shields.io/npm/v/nightingale-manager.svg)](https://www.npmjs.com/package/nightingale-manager)
+[![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-manager.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-manager)
 
 It is a container for all the tracks and other inner components (e.g. `nightingale-navigation`).
 

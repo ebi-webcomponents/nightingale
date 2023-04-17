@@ -1,8 +1,9 @@
 import typescript from "@rollup/plugin-typescript";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import { rollupImportMapPlugin } from "rollup-plugin-import-map";
+import { terser } from "rollup-plugin-terser";
 import json from "@rollup/plugin-json";
+import webWorkerLoader from "rollup-plugin-web-worker-loader";
 
 export default {
   input: "src/index.ts",
@@ -12,10 +13,19 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    typescript({ target: "es2015", experimentalDecorators: true }),
+    typescript(),
     nodeResolve(),
     commonjs(),
-    rollupImportMapPlugin("../../dev/import-map.json"),
+    // rollupImportMapPlugin("../../dev/import-map.json"),
+    webWorkerLoader({
+      pattern: /(.+\.worker\..+)/,
+    }),
     json(),
+    terser({
+      ecma: 2020,
+      module: true,
+      warnings: true,
+    }),
   ],
+  external: (id) => /@nightingale-elements/.test(id),
 };

@@ -1,7 +1,7 @@
 [
   {
     "name": "chart1",
-    "colour": "#0000ee",
+    "color": "#0000ee",
     "fill": "#5555ee",
     "range": [0, 50],
     "values": [

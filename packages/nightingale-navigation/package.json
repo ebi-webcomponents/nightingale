@@ -1,9 +1,14 @@
 {
   "name": "@nightingale-elements/nightingale-navigation",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0",
   "description": "Navigation component for the Nightingale tool",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "files": [
     "dist",
     "src"
@@ -27,7 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5",
-    "d3": "7.6.1"
+    "@nightingale-elements/nightingale-new-core": "^4.0.0",
+    "d3": "7.8.2"
   }
 }

@@ -4,8 +4,11 @@ import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
 import "../../packages/nightingale-track/src/index.ts";
 import "../../packages/nightingale-sequence/src/index.ts";
-import "../../packages/nightingale-coloured-sequence/src/index.ts";
+import "../../packages/nightingale-colored-sequence/src/index.ts";
 import "../../packages/nightingale-interpro-track/src/index.ts";
+import "../../packages/nightingale-saver/src/index.ts";
+import "../../packages/nightingale-overlay/src/index.ts";
+import "../../packages/nightingale-structure/src/index.ts";
 
 import iproData from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
 import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
@@ -66,7 +69,7 @@ const defaultData = [
 ];
 
 const Template: Story<{
-  width: number;
+  "min-width": number;
   height: number;
   length: number;
   "display-start": number;
@@ -75,122 +78,143 @@ const Template: Story<{
   sequence: string;
   "highlight-color": string;
   "margin-color": string;
+  useOverlay: boolean;
 }> = (args) => {
-  const { width, height, length, sequence } = args;
+  const { height, length, sequence, useOverlay } = args;
   return html`
-    <nightingale-manager>
-      <div style="line-height: 0">
-        <nightingale-navigation
-          id="navigation"
-          width="${width}"
-          height=${height}
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-          show-highlight
-        >
-        </nightingale-navigation>
-      </div>
-      <div style="line-height: 0">
-        <nightingale-sequence
-          id="sequence"
-          sequence=${sequence}
-          width="${width}"
-          height=${height}
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-event="onmouseover"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-        >
-        </nightingale-sequence>
-      </div>
-      <div style="line-height: 0">
-        <nightingale-coloured-sequence
-          id="sequence"
-          sequence=${sequence}
-          width="${width}"
-          height="10"
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-event="onmouseover"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-          scale="hydrophobicity-scale"
-        >
-        </nightingale-coloured-sequence>
-      </div>
-      <div style="line-height: 0">
-        <nightingale-track
-          id="track"
-          width="${width}"
-          height=${height}
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-event="onmouseover"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-        >
-        </nightingale-track>
-      </div>
-      <div style="line-height: 0">
-        <nightingale-track
-          id="track2"
-          width="${width}"
-          height=${height}
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-event="onmouseover"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-          layout="non-overlapping"
-        >
-        </nightingale-track>
-      </div>
-      <div style="line-height: 0">
-        <nightingale-interpro-track
-          id="trackIpro"
-          width="${width}"
-          height=${height}
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-event="onmouseover"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-          shape="roundRectangle"
-          label=".feature.name"
-          show-label
-          expanded
-        >
-        </nightingale-interpro-track>
-      </div>
-      <div style="line-height: 0">
-        <nightingale-linegraph-track
-          id="linegraph"
-          width="${width}"
-          height=${height}
-          length="${length}"
-          display-start="${args["display-start"]}"
-          display-end="${args["display-end"]}"
-          highlight-event="onmouseover"
-          highlight-color=${args["highlight-color"]}
-          margin-color=${args["margin-color"]}
-        ></nightingale-linegraph-track>
-      </div>
-    </nightingale-manager>
+    ${useOverlay &&
+    html`<nightingale-overlay for="root"></nightingale-overlay>`}
+    <nightingale-saver
+      element-id="root"
+      background-color="white"
+    ></nightingale-saver>
+    <div id="root">
+      <nightingale-manager>
+        <div style="display:flex; flex-direction: column;    width: 100%;">
+          <div style="line-height: 0">
+            <nightingale-navigation
+              id="navigation"
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              show-highlight
+            >
+            </nightingale-navigation>
+          </div>
+          <div style="line-height: 0">
+            <nightingale-sequence
+              id="sequence"
+              sequence=${sequence}
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              use-ctrl-to-zoom
+            >
+            </nightingale-sequence>
+          </div>
+          <div style="line-height: 0">
+            <nightingale-colored-sequence
+              id="sequence"
+              sequence=${sequence}
+              min-width="${args["min-width"]}"
+              height="10"
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              scale="hydrophobicity-scale"
+              use-ctrl-to-zoom
+            >
+            </nightingale-colored-sequence>
+          </div>
+          <div style="line-height: 0">
+            <nightingale-track
+              id="track"
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              use-ctrl-to-zoom
+            >
+            </nightingale-track>
+          </div>
+          <div style="line-height: 0">
+            <nightingale-track
+              id="track2"
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              layout="non-overlapping"
+              use-ctrl-to-zoom
+            >
+            </nightingale-track>
+          </div>
+          <div style="line-height: 0">
+            <nightingale-interpro-track
+              id="trackIpro"
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              shape="roundRectangle"
+              label=".feature.name"
+              use-ctrl-to-zoom
+              show-label
+              expanded
+            >
+            </nightingale-interpro-track>
+          </div>
+          <div style="line-height: 0">
+            <nightingale-linegraph-track
+              id="linegraph"
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              use-ctrl-to-zoom
+            ></nightingale-linegraph-track>
+          </div>
+          <nightingale-structure
+            protein-accession="P05067"
+            structure-id="1AAP"
+          ></nightingale-structure>
+        </div>
+      </nightingale-manager>
+    </div>
   `;
 };
 
-export const Manager = Template.bind({});
-Manager.args = {
-  width: 800,
+export const AllTracks = Template.bind({});
+AllTracks.args = {
+  "min-width": 500,
   height: 50,
   length: defaultSequence.length,
   sequence: defaultSequence,
@@ -198,8 +222,9 @@ Manager.args = {
   "display-end": 80,
   "highlight-color": "#EB3BFF22",
   "margin-color": "transparent",
+  useOverlay: true,
 };
-Manager.play = async () => {
+AllTracks.play = async () => {
   await customElements.whenDefined("nightingale-sequence");
   const sequence = document.getElementById("sequence");
   if (sequence) (sequence as any).fixedHighlight = "10:20";
@@ -207,6 +232,7 @@ Manager.play = async () => {
   await customElements.whenDefined("nightingale-navigation");
   const nav = document.getElementById("navigation");
   if (nav) (nav as any).fixedHighlight = "10:20";
+
   await customElements.whenDefined("nightingale-track");
   const track = document.getElementById("track");
   if (track) {
@@ -228,5 +254,108 @@ Manager.play = async () => {
   const linegraphTrack = document.getElementById("linegraph");
   if (linegraphTrack) {
     (linegraphTrack as any).data = linegraph;
+  }
+};
+
+export const SequenceNoControls = () =>
+  html`<h3>Manger with only navigation and sequence</h3>
+    <nightingale-manager>
+      <div style="line-height: 0">
+        <nightingale-navigation
+          id="navigation"
+          height="100"
+          width="800"
+          length=${defaultSequence.length}
+          highlight-color="#EB3BFF22"
+          show-highlight
+        >
+        </nightingale-navigation>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-sequence
+          sequence=${defaultSequence}
+          height="40"
+          width="800"
+          length=${defaultSequence.length}
+        ></nightingale-sequence>
+      </div>
+    </nightingale-manager> `;
+
+export const TrackNoControls = () =>
+  html`<h3>Manger with only navigation and track</h3>
+    <nightingale-manager>
+      <div style="line-height: 0">
+        <nightingale-navigation
+          id="navigation"
+          height="100"
+          width="800"
+          length="60"
+          highlight-color="#EB3BFF22"
+          show-highlight
+        >
+        </nightingale-navigation>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-track
+          id="track-simple"
+          width="800"
+          length="60"
+          use-ctrl-to-zoom
+        >
+        </nightingale-track>
+      </div>
+    </nightingale-manager> `;
+TrackNoControls.play = async () => {
+  await customElements.whenDefined("nightingale-track");
+  const track = document.getElementById("track-simple");
+  if (track) {
+    (track as any).fixedHighlight = "10:20";
+    (track as any).data = defaultData;
+  }
+};
+
+export const InterproTrackNoControls = () =>
+  html`<h3>Manger with only navigation and InterPro track</h3>
+    <nightingale-manager>
+      <div style="line-height: 0">
+        <nightingale-navigation
+          id="navigation"
+          height="100"
+          width="800"
+          length="60"
+          highlight-color="#EB3BFF22"
+          show-highlight
+        >
+        </nightingale-navigation>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-sequence
+          sequence=${defaultSequence}
+          height="40"
+          width="800"
+          length=${defaultSequence.length}
+        ></nightingale-sequence>
+      </div>
+      <div style="line-height: 0">
+        <nightingale-interpro-track
+          id="interpro"
+          width="800"
+          length="60"
+          shape="roundRectangle"
+          label=".feature.name"
+          use-ctrl-to-zoom
+          show-label
+          expanded
+        >
+        </nightingale-interpro-track>
+      </div>
+    </nightingale-manager> `;
+InterproTrackNoControls.play = async () => {
+  const trackIpro = document.getElementById("interpro");
+  if (trackIpro) {
+    (trackIpro as any).fixedHighlight = "10:20";
+    (trackIpro as any).data = iproData;
+    (contributors[0] as any).residues = residues;
+    (trackIpro as any).contributors = contributors;
   }
 };

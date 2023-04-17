@@ -1,0 +1,225 @@
+<Meta title="Creating a component" />
+
+---
+
+# HOW TO CREATE A BASIC COMPONENT (Hello World)
+
+This document describes the creation of a basic Nightingale component.
+
+## Steps to get a `Hello World` component.
+
+1. Create the folder for your component under the `packages/` folder. This will ensure that the scripts defined in the main `package.json` can operate in the new component.
+   ```bash
+   mkdir packages/nightingale-hello
+   ```
+2. Create a folder for your source code `src/` and one for your tests `test/`:
+   ```bash
+   mkdir packages/nightingale-hello/src
+   mkdir packages/nightingale-hello/tests
+   ```
+3. Create the `package.json` for the new component. Here is an example of its content:
+
+   ```json
+   {
+     "name": "nightingale-hello",
+     "version": "4.0.0",
+     "description": "Basic usage",
+     "files": ["dist", "src"],
+     "main": "dist/index.js",
+     "module": "dist/index.js",
+     "type": "module",
+     "types": "dist/index.d.ts",
+     "scripts": {
+       "build": "rollup --config ../../rollup.config.mjs"
+     },
+     "publishConfig": {
+       "access": "public"
+     },
+     "keywords": ["nightingale", "webcomponents", "customelements"],
+     "repository": {
+       "type": "git",
+       "url": "https://github.com/ebi-webcomponents/nightingale.git"
+     },
+     "bugs": {
+       "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+     },
+     "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+     "dependencies": {
+       "@nightingale-elements/nightingale-new-core": "^4.0.0",
+       "d3": "7.8.2"
+     }
+   }
+   ```
+
+4. All nightingale components are written in TypeScript. We need a file `tsconfig.json` with the following content for TypeScript compilation.
+
+   ```json
+   {
+     "extends": "../../tsconfig.json",
+     "compilerOptions": {
+       "outDir": "./dist"
+     },
+     "include": ["./src"]
+   }
+   ```
+
+5. Create the entrypoint for webpack. The current setup of the nightingale project looks for `src/index.ts`:
+
+  ```typescript
+  import NightingaleHello from "./nightingale-hello";
+
+  export default NightingaleHello;
+  ```
+
+6. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
+
+   1. To start we can create a Hello world document with this code:
+
+      ```typescript
+      import { html } from "lit";
+      import NightingaleElement from "@nightingale-elements/nightingale-new-core";
+      import { customElement, property } from "lit/decorators.js";
+
+      @customElement("nightingale-hello")
+      class NightingaleHello extends NightingaleElement {
+        @property({ type: String, attribute: "name" })
+        name = "";
+
+        render() {
+          return html`<p>Hello ${this.name}!</p>`;
+        }
+      }
+
+      export default NightingaleHello;
+      ```
+
+      Here are some notes of this code:
+
+      - The library used to build the web components in Nightingale is [Lit](https://lit.dev/docs/).
+      - The `@customElement` decorator is used for defining the custom element following the web component standard of defining and registering custom elements.
+      - The component rendering is defined by the method `render()`.
+
+   2. The above example inherits from `NightingaleElement` which extends the [LitElement](https://lit.dev/docs/api/LitElement/) itself.
+      It is recommended for any Nightinagle component to extend the same.
+
+   3. Any logic that should be shared among all the components are included in it as a `mixin`.
+
+      For instance, `NightingaleHello` needs to use margin mixin, it is inherited as follows:
+
+      ```typescript
+      class NightingaleHello extends withMargin(NightingaleElement) {
+       ...
+      }
+      ```
+
+      If it needs to add more, say highlight behaviour, it is included as:
+
+      ```typescript
+      class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
+       ...
+      }
+      ```
+
+   4. In order to define attributes for the element, use Lit's `@property` decorator. The `@property` decorator declares a reactive property and there is no need to capture using `attributeChangedCallback`.
+
+      ```typescript
+      @property({ type: String })
+      ```
+
+   5. Event Handling
+
+      If the new component needs to fire events that other Nightingale components could use via `<nightingale-manager>`, it has to be of type change and the detail object should contain the attributes `type` and `value`.
+
+      ```html
+      <nightingale-manager reflected-attributes="attr1 attr2">
+        <nightingale-hello attr1="X" attr2="Y" />
+      </nightingale-manager>
+      ```
+
+      Here is an example of how the child component should fire the event:
+
+      ```typescript
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: {
+            value: "New value",
+            type: "attr1",
+          },
+        })
+      );
+      ```
+
+   6. Here is a snippet of `nightingale-hello.ts` using mixins and firing events.
+    
+      ```typescript
+      import { html } from "lit";
+      import { customElement, property } from "lit/decorators.js";
+
+      import NightingaleElement, {
+        withMargin,
+        withHighlight,
+      } from "@nightingale-elements/nightingale-new-core";
+      
+      @customElement("nightingale-hello")
+      class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
+        @property({ type: String, attribute: "name" })
+        name = "";
+
+        render() {
+          return html`
+          <p>Hello ${this.name}!</p>
+          <button @click=${() => {
+                this.dispatchEvent(
+                  new CustomEvent("change", {
+                    detail: { 
+                      "name": this.name,
+                    },
+                    bubbles: true,
+                  })
+                );
+              }}> I am here </button>
+          `;
+        }
+      }
+
+      export default NightingaleHello;
+      ```
+
+7. Let `yarn` and `lerna` know about your new component by making them.
+
+   ```bash
+   yarn build
+   ```
+
+8. To view it in the showcase application, create a story `NightingaleHello.stories.ts` in `stories/` folder.
+
+  ```typescript
+  import { Meta, Story } from "@storybook/web-components";
+  import { html } from "lit-html";
+  import "../../packages/nightingale-hello/src/index.ts";
+
+  export default {
+    title: "Components/Hello",
+  } as Meta;
+
+  const Template: Story<{
+    "name": string;
+  }> = (args) => {
+    return html`<nightingale-hello name=${args["name"] />`;
+  };
+
+  export const Hello = Template.bind({});
+  Hello.args = {
+    "name": "World",
+  };
+  ```
+
+  The following command runs the storybook locally to test.
+
+  ```bash
+  yarn storybook
+  ```
+
+  ```
+
+```

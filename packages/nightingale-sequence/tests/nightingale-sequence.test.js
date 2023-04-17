@@ -1,15 +1,11 @@
-import "string-pixel-width";
 import "../src/index";
-jest.mock("string-pixel-width", () => ({
-  __esModule: true,
-  default: jest.fn(() => 10),
-}));
+
 let rendered;
 const sequence = "MADYDDEFDTKASDL";
 
 describe("nightingale-sequence tests", () => {
   beforeEach(async () => {
-    document.documentElement.innerHTML = `<nightingale-sequence sequence="${sequence}" length="15"></nightingale-sequence>`;
+    document.documentElement.innerHTML = `<nightingale-sequence sequence="${sequence}" length="15" width="800"></nightingale-sequence>`;
     rendered = document.querySelector("nightingale-sequence");
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
     await rendered.updateComplete;

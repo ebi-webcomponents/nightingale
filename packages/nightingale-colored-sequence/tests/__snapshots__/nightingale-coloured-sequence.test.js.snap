@@ -1,0 +1,283 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nightingale-colored-sequence tests it should display the colored sequence correctly 1`] = `
+<nightingale-colored-sequence
+  height="40"
+  length="15"
+  scale="hydrophobicity-scale"
+  sequence="MADYDDEFDTKASDL"
+  style="display: inline-block; line-height: 0;"
+  width="800"
+>
+  <!---->
+  <svg
+    class="container"
+    height="40"
+    id=""
+    width="800"
+  >
+    <g
+      class="background"
+    />
+    <g
+      class="x axis"
+    />
+    <g
+      class="sequence"
+      width="800"
+    >
+      <rect
+        class="base_bg feature"
+        data-base="M"
+        data-pos="1"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="10"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="A"
+        data-pos="2"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="62"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="D"
+        data-pos="3"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="114"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="Y"
+        data-pos="4"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="166"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="D"
+        data-pos="5"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="218"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="D"
+        data-pos="6"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="270"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="E"
+        data-pos="7"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="322"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="F"
+        data-pos="8"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="374"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="D"
+        data-pos="9"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="426"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="T"
+        data-pos="10"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="478"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="K"
+        data-pos="11"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="530"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="A"
+        data-pos="12"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="582"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="S"
+        data-pos="13"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="634"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="D"
+        data-pos="14"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="686"
+      />
+      <rect
+        class="base_bg feature"
+        data-base="L"
+        data-pos="15"
+        fill="rgb(128, 111, 128)"
+        height="40"
+        width="52"
+        x="738"
+      />
+    </g>
+    <g
+      class="highlighted"
+    />
+    <defs>
+      <lineargradient
+        id="scale-gradient-xjylrx"
+      >
+        <stop
+          offset="0.03333333333333333"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.1"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.16666666666666666"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.23333333333333334"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.3"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.36666666666666664"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.43333333333333335"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.5"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.5666666666666667"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.6333333333333333"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.7"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.7666666666666667"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.8333333333333334"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.9"
+          stop-color="rgb(128, 111, 128)"
+        />
+        <stop
+          offset="0.9666666666666667"
+          stop-color="rgb(128, 111, 128)"
+        />
+      </lineargradient>
+    </defs>
+    <rect
+      class="seq-gradient"
+      fill="url(#scale-gradient-xjylrx)"
+      height="40"
+      style="pointer-events: none; opacity: 0.15384615384615385;"
+      width="780"
+      x="10"
+      y="0"
+    />
+    <g
+      class="margin"
+    >
+      <rect
+        class="margin-left"
+        fill="#FFFFFFDD"
+        height="40"
+        style="pointer-events: none;"
+        width="10"
+        x="0"
+      />
+      <rect
+        class="margin-right"
+        fill="#FFFFFFDD"
+        height="40"
+        style="pointer-events: none;"
+        width="10"
+        x="790"
+      />
+      <rect
+        class="margin-top"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="0"
+      />
+      <rect
+        class="margin-bottom"
+        fill="#FFFFFFDD"
+        height="0"
+        style="pointer-events: none;"
+        width="800"
+        x="0"
+        y="40"
+      />
+    </g>
+  </svg>
+</nightingale-colored-sequence>
+`;

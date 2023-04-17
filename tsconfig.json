@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "esnext",
+    "target": "es2019",
+    "module": "ES2020",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "declaration": true,
     "declarationMap": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2019", "dom"],
     "strict": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,

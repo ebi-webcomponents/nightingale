@@ -1,0 +1,970 @@
+import { Meta } from "@storybook/addon-docs";
+import { Sandpack } from "@codesandbox/sandpack-react";
+
+<Meta title="Loading UniProt Data" />
+
+---
+
+# Loading UniProt Data
+
+This tutorial demonstrates how to load data from the UniProt Proteins API and present this using
+several Nightingale tracks inside a `nightingale-manager`. We'll proceed step by step.
+
+## Step 1: fetch Proteins data and populate `nightingale-sequence`
+
+We will use the example provided in [getting started](?path=/story/getting-started--page#setting-the-sequence-property) as a starting point.
+We will first fetch the sequence and features data for [P05067](https://www.uniprot.org/uniprotkb/P05067), the amyloid-beta precursor protein.
+Firstly we will simply show the sequence with `nightingale-sequence`. We'll start with the first 50 amino acids from the sequence so that they
+are visible by their letter. In the next step we'll show the full sequence.
+
+<Sandpack
+  template="static"
+  files={{
+    "index.html": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  
+  const accession = "P05067";
+  
+  // Load sequence and feature data from Proteins API
+  const featuresData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/features/" + accession)
+  ).json();
+  
+  // Wait for the custom element to be defined before setting
+  // the sequence data 
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    console.log(featuresData.sequence)
+    seq.data = featuresData.sequence;
+  });
+</script>
+  <nightingale-sequence
+    id="sequence"
+    min-width="800"
+    height="40"
+    length="770"
+    display-start="1"
+    display-end="50"
+    margin-color="white"
+    highlight-event="onmouseover"
+  ></nightingale-sequence>`,
+  }}
+/>
+
+## Step 2: use `nightingale-navigation` and `nightingale-manager`
+
+In the previous step we essentilly zoomed in on only the first 50 amino acids. Let's use `nightingale-navigation`
+and `nightingale-manager` to handle user navigation. With these you can click and zoom back to the amino acid level:
+
+<Sandpack
+  template="static"
+  options={{
+    editorHeight: 500,
+  }}
+  files={{
+    "index.html": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-manager@latest";
+  import "@nightingale-elements/nightingale-navigation@latest";
+  
+  const accession = "P05067";
+  
+  // Load feature and variation data from Proteins API
+  const featuresData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/features/" + accession)
+  ).json();
+  
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    seq.data = featuresData.sequence;
+  });
+</script>
+<nightingale-manager>
+   <nightingale-navigation
+     id="navigation"
+     min-width="800"
+     height="40"
+     length="770"
+     display-start="1"
+     display-end="770"
+     margin-color="white"
+   ></nightingale-navigation>
+     <nightingale-sequence
+       id="sequence"
+       min-width="800"
+       height="40"
+       length="770"
+       display-start="1"
+       display-end="770"
+       margin-color="white"
+       highlight-event="onmouseover"
+     ></nightingale-sequence>
+</nightingale-manager>`,
+  }}
+/>
+
+## Step 3: add feature data using `nightingale-track`
+
+Currently we're only showing the sequence from `featuresData`, let's display some of the feature data `nightingale-track`. The basic steps to do this are:
+
+1. Ensure that all `featuresData.features` objects have a `start` property.
+2. Filter the `featuresData.features` by the feature `type`.
+3. Get the specific `nightingale-track` using a `querySelector`.
+4. Assign the feature data to the `data` property.
+
+In this step we'll also place everything within a `<table>`, apply some styling and add `nightingale-colored-sequence` under the current sequence.
+
+<Sandpack
+  template="static"
+  options={{
+    editorHeight: 500,
+  }}
+  files={{
+    "index.html": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<style>
+  td {
+    padding: 5px;
+  }
+  td:first-child {
+    background-color: lightcyan;
+    font: 0.8em sans-serif;
+    white-space: nowrap;
+  }
+  td:nth-child(2) {
+    background-color: aliceblue;
+  }
+  tr:nth-child(-n + 3) > td {
+    background-color: transparent;
+  }
+</style>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-track@latest";
+  import "@nightingale-elements/nightingale-manager@latest";
+  import "@nightingale-elements/nightingale-navigation@latest";
+  import "@nightingale-elements/nightingale-colored-sequence@latest";
+  
+  const accession = "P05067";
+  
+  // Load feature and variation data from Proteins API
+  const featuresData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/features/" + accession)
+  ).json();
+  
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    seq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-colored-sequence").then(() => {
+    const coloredSeq = document.querySelector("#colored-sequence");
+    coloredSeq.data = featuresData.sequence;
+  }); 
+  
+  customElements.whenDefined("nightingale-track").then(() => {
+    // Nightingale expects start rather than the API's begin
+    const features = featuresData.features.map((ft) => ({
+      ...ft,
+      start: ft.start || ft.begin,
+    }));
+  
+    // Filter the data for each feature type and assign to the relevant track data
+    const domain = document.querySelector("#domain");
+    domain.data = features.filter(({ type }) => type === "DOMAIN");
+  
+    const region = document.querySelector("#region");
+    region.data = features.filter(({ type }) => type === "REGION");
+  
+    const site = document.querySelector("#site");
+    site.data = features.filter(({ type }) => type === "SITE");
+  
+    const binding = document.querySelector("#binding");
+    binding.data = features.filter(({ type }) => type === "BINDING");
+ 
+    const chain = document.querySelector("#chain");
+    chain.data = features.filter(({ type }) => type === "CHAIN");
+ 
+    const disulfide = document.querySelector("#disulfide-bond");
+    disulfide.data = features.filter(({ type }) => type === "DISULFID");
+ 
+    const betaStrand = document.querySelector("#beta-strand");
+    betaStrand.data = features.filter(({ type }) => type === "STRAND");
+  });
+</script>
+<nightingale-manager>
+  <table>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-navigation
+            id="navigation"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+          ></nightingale-navigation>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-sequence
+            id="sequence"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+            highlight-event="onmouseover"
+          ></nightingale-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-colored-sequence
+            id="colored-sequence"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            scale="hydrophobicity-scale"
+            margin-color="white"
+            highlight-event="onmouseover"
+          >
+          </nightingale-colored-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td>
+          <nightingale-track
+            id="domain"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>
+          <nightingale-track
+            id="region"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Site</td>
+        <td>
+          <nightingale-track
+            id="site"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Chain</td>
+        <td>
+          <nightingale-track
+            id="chain"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Binding site</td>
+        <td>
+          <nightingale-track
+            id="binding"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Disulfide bond</td>
+        <td>
+          <nightingale-track
+            id="disulfide-bond"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Beta strand</td>
+        <td>
+          <nightingale-track
+            id="beta-strand"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</nightingale-manager>`,
+  }}
+/>
+
+## Step 4: add variation data
+
+The proteins API has a dedicated variation endpoint which we will fetch from, process the response data, and populate a `nightingale-linegraph-track`
+to reflect the number of variants at each amino acid location.
+
+<Sandpack
+  template="static"
+  options={{
+    editorHeight: 500,
+  }}
+  files={{
+    "index.html": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<style>
+  td {
+    padding: 5px;
+  }
+  td:first-child {
+    background-color: lightcyan;
+    font: 0.8em sans-serif;
+    white-space: nowrap;
+  }
+  td:nth-child(2) {
+    background-color: aliceblue;
+  }
+  tr:nth-child(-n + 3) > td {
+    background-color: transparent;
+  }
+</style>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-track@latest";
+  import "@nightingale-elements/nightingale-manager@latest";
+  import "@nightingale-elements/nightingale-navigation@latest";
+  import "@nightingale-elements/nightingale-colored-sequence@latest";
+  import "@nightingale-elements/nightingale-linegraph-track@latest";
+  
+  const accession = "P05067";
+  
+  // Load feature and variation data from Proteins API
+  const featuresData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/features/" + accession)
+  ).json();
+  const variationData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/variation/" + accession)
+  ).json();
+  
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    seq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-colored-sequence").then(() => {
+    const coloredSeq = document.querySelector("#colored-sequence");
+    coloredSeq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-track").then(() => {
+    // Nightingale expects start rather than the API's begin
+    const features = featuresData.features.map((ft) => ({
+      ...ft,
+      start: ft.start || ft.begin,
+    }));
+  
+    // Filter the data for each feature type and assign to the relevant track data
+    const domain = document.querySelector("#domain");
+    domain.data = features.filter(({ type }) => type === "DOMAIN");
+  
+    const region = document.querySelector("#region");
+    region.data = features.filter(({ type }) => type === "REGION");
+  
+    const site = document.querySelector("#site");
+    site.data = features.filter(({ type }) => type === "SITE");
+  
+    const binding = document.querySelector("#binding");
+    binding.data = features.filter(({ type }) => type === "BINDING");
+ 
+    const chain = document.querySelector("#chain");
+    chain.data = features.filter(({ type }) => type === "CHAIN");
+ 
+    const disulfide = document.querySelector("#disulfide-bond");
+    disulfide.data = features.filter(({ type }) => type === "DISULFID");
+ 
+    const betaStrand = document.querySelector("#beta-strand");
+    betaStrand.data = features.filter(({ type }) => type === "STRAND");
+  });
+  
+  customElements.whenDefined("nightingale-linegraph-track").then(() => {
+    // Count the variants by position
+    const count = {};
+    for (const feature of variationData.features) {
+      const position = feature.begin;
+      count[position] = (count[position] || 0) + 1;
+    }
+    const max = Math.max(...Object.values(count));
+    const values = Object.entries(count).map(([position, value]) => ({
+      position: +position,
+      value: +value,
+    }));
+    // Set the variants line graph track data
+    const variants = document.querySelector("#variants");
+    variants.data = [
+      {
+        color: "grey",
+        values,
+        range: [0, max],
+      },
+    ];
+  });
+</script>
+<nightingale-manager>
+  <table>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-navigation
+            id="navigation"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+          ></nightingale-navigation>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-sequence
+            id="sequence"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+            highlight-event="onmouseover"
+          ></nightingale-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-colored-sequence
+            id="colored-sequence"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            scale="hydrophobicity-scale"
+            margin-color="white"
+            highlight-event="onmouseover"
+          >
+          </nightingale-colored-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td>
+          <nightingale-track
+            id="domain"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>
+          <nightingale-track
+            id="region"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Site</td>
+        <td>
+          <nightingale-track
+            id="site"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Chain</td>
+        <td>
+          <nightingale-track
+            id="chain"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Binding site</td>
+        <td>
+          <nightingale-track
+            id="binding"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Disulfide bond</td>
+        <td>
+          <nightingale-track
+            id="disulfide-bond"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Beta strand</td>
+        <td>
+          <nightingale-track
+            id="beta-strand"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Variants</td>
+        <td>
+          <nightingale-linegraph-track
+            id="variants"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-linegraph-track>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</nightingale-manager>`,
+  }}
+/>
+
+## Step 5: add structural data
+
+Non-track components can also be added within the manager if we want to have
+them interact with each other through their common API. For example, the
+`nightingale-structure` component can be used to view 3D structures related to
+the protein currently viewed, mapping the highlight of the tracks onto the
+structure viewer thanks to the manager connecting the elements together.
+
+<Sandpack
+  template="static"
+  options={{
+    editorHeight: 500,
+  }}
+  files={{
+    "index.html": `<script type="importmap">
+  {
+    "imports": {
+      "@nightingale-elements/": "https://cdn.jsdelivr.net/npm/@nightingale-elements/"
+    }
+  }
+</script>
+<style>
+  td {
+    padding: 5px;
+  }
+  td:first-child {
+    background-color: lightcyan;
+    font: 0.8em sans-serif;
+    white-space: nowrap;
+  }
+  td:nth-child(2) {
+    background-color: aliceblue;
+  }
+  tr:nth-child(-n + 3) > td {
+    background-color: transparent;
+  }
+</style>
+<script type="module">
+  import "@nightingale-elements/nightingale-sequence@latest";
+  import "@nightingale-elements/nightingale-track@latest";
+  import "@nightingale-elements/nightingale-manager@latest";
+  import "@nightingale-elements/nightingale-navigation@latest";
+  import "@nightingale-elements/nightingale-colored-sequence@latest";
+  import "@nightingale-elements/nightingale-linegraph-track@latest";
+  // import "@nightingale-elements/nightingale-structure@latest";
+  
+  const accession = "P05067";
+  const pdbId = "1AAP";
+  
+  // Load feature and variation data from Proteins API
+  const featuresData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/features/" + accession)
+  ).json();
+  const variationData = await (
+    await fetch("https://www.ebi.ac.uk/proteins/api/variation/" + accession)
+  ).json();
+  
+  customElements.whenDefined("nightingale-sequence").then(() => {
+    const seq = document.querySelector("#sequence");
+    seq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-colored-sequence").then(() => {
+    const coloredSeq = document.querySelector("#colored-sequence");
+    coloredSeq.data = featuresData.sequence;
+  });
+  
+  customElements.whenDefined("nightingale-track").then(() => {
+    // Nightingale expects start rather than the API's begin
+    const features = featuresData.features.map((ft) => ({
+      ...ft,
+      start: ft.start || ft.begin,
+    }));
+  
+    // Filter the data for each feature type and assign to the relevant track data
+    const domain = document.querySelector("#domain");
+    domain.data = features.filter(({ type }) => type === "DOMAIN");
+  
+    const region = document.querySelector("#region");
+    region.data = features.filter(({ type }) => type === "REGION");
+  
+    const site = document.querySelector("#site");
+    site.data = features.filter(({ type }) => type === "SITE");
+  
+    const binding = document.querySelector("#binding");
+    binding.data = features.filter(({ type }) => type === "BINDING");
+ 
+    const chain = document.querySelector("#chain");
+    chain.data = features.filter(({ type }) => type === "CHAIN");
+ 
+    const disulfide = document.querySelector("#disulfide-bond");
+    disulfide.data = features.filter(({ type }) => type === "DISULFID");
+ 
+    const betaStrand = document.querySelector("#beta-strand");
+    betaStrand.data = features.filter(({ type }) => type === "STRAND");
+ 
+    const structure = document.querySelector("#structure");
+    structure.setAttribute('protein-accession', accession);
+    structure.setAttribute('structure-id', pdbId);
+  });
+  
+  customElements.whenDefined("nightingale-linegraph-track").then(() => {
+    // Count the variants by position
+    const count = {};
+    for (const feature of variationData.features) {
+      const position = feature.begin;
+      count[position] = (count[position] || 0) + 1;
+    }
+    const max = Math.max(...Object.values(count));
+    const values = Object.entries(count).map(([position, value]) => ({
+      position: +position,
+      value: +value,
+    }));
+    // Set the variants line graph track data
+    const variants = document.querySelector("#variants");
+    variants.data = [
+      {
+        color: "grey",
+        values,
+        range: [0, max],
+      },
+    ];
+  });
+</script>
+<nightingale-manager>
+  <table>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-navigation
+            id="navigation"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+          ></nightingale-navigation>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-sequence
+            id="sequence"
+            min-width="800"
+            height="40"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="white"
+            highlight-event="onmouseover"
+          ></nightingale-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <nightingale-colored-sequence
+            id="colored-sequence"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            scale="hydrophobicity-scale"
+            margin-color="white"
+            highlight-event="onmouseover"
+          >
+          </nightingale-colored-sequence>
+        </td>
+      </tr>
+      <tr>
+        <td>Domain</td>
+        <td>
+          <nightingale-track
+            id="domain"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>
+          <nightingale-track
+            id="region"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Site</td>
+        <td>
+          <nightingale-track
+            id="site"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Chain</td>
+        <td>
+          <nightingale-track
+            id="chain"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Binding site</td>
+        <td>
+          <nightingale-track
+            id="binding"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Disulfide bond</td>
+        <td>
+          <nightingale-track
+            id="disulfide-bond"
+            layout="non-overlapping"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Beta strand</td>
+        <td>
+          <nightingale-track
+            id="beta-strand"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-track>
+        </td>
+      </tr>
+      <tr>
+        <td>Variants</td>
+        <td>
+          <nightingale-linegraph-track
+            id="variants"
+            min-width="800"
+            height="15"
+            length="770"
+            display-start="1"
+            display-end="770"
+            margin-color="aliceblue"
+            highlight-event="onmouseover"
+          ></nightingale-linegraph-track>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <nightingale-structure id="structure"></nightingale-structure>
+  </div>
+</nightingale-manager>`,
+  }}
+/>

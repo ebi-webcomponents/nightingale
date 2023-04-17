@@ -117,6 +117,10 @@ class NightingaleStructure extends withManager(
           initial-value: 480px;
         }
 
+        nightingale-structure {
+          width: 100%;
+        }
+
         .structure-viewer-container {
           position: relative;
           height: var(--custom-structure-height, 480px);

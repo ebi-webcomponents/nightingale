@@ -1,13 +1,18 @@
 {
   "name": "@nightingale-elements/nightingale-sequence",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0",
   "description": "Sequence component for the Nightingale tool",
   "files": [
     "dist",
     "src"
   ],
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "keywords": [
@@ -27,8 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0-alpha.5",
-    "d3": "7.6.1",
-    "string-pixel-width": "^1.10.0"
+    "@nightingale-elements/nightingale-new-core": "^4.0.0",
+    "d3": "7.8.2"
   }
 }
