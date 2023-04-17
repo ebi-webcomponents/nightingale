@@ -111,11 +111,11 @@ class NightingaleStructure extends withManager(
           margin-right: 1em;
         } */
 
-        @property --custom-structure-height {
+        /* @property --custom-structure-height {
           syntax: "<length-percentage>";
           inherits: false;
           initial-value: 480px;
-        }
+        } */
 
         nightingale-structure {
           width: 100%;
