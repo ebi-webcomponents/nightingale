@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-saver",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Saver component for Nightingale components",
   "files": [
     "dist",
@@ -34,7 +34,7 @@
   "author": "Swaathi Kandasaamy",
   "license": "MIT",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.2",
+    "@nightingale-elements/nightingale-new-core": "^4.0.3",
     "rasterizehtml": "1.3.1"
   }
 }
