@@ -28,18 +28,23 @@ A UniProt protein accession.
 
 #### `structure-id`
 
-The id of the structure to display for the provided accession.
+The id of the structure to display for the provided accession. Can be a PDB ID
+(e.g. 1AAP) or an AlphaFoldDB ID (AF-P05067-F1).
 
 #### `highlight`
 
-This is a comma separated list of numerical ranges represented as a string e.g. "1-5,10-20". When available, it will highlight all the residues corresponding to the given sequence positions.
+This is a comma separated list of numerical ranges represented as a string e.g.
+"1-5,10-20". When available, it will highlight all the residues corresponding to
+the given sequence positions.
 
 #### `custom-download-url`
 
-Optional custom URL for downloading cif structure files. The lowercase PDB ID is appended to it, including `.cif` suffix.
+Optional custom URL for downloading cif structure files. The lowercase PDB ID is
+appended to it, including `.cif` suffix.
 
 ### CSS custom properties
 
 #### `--custom-structure-height`
 
-The optional height of the 3D structure. By default the value is set to `480px`. This should be a valid CSS value for an element's height property.
+The optional height of the 3D structure. By default the value is set to `480px`.
+This should be a valid CSS value for an element's height property.

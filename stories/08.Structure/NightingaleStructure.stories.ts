@@ -34,10 +34,13 @@ Structure.args = {
   "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
   "--custom-structure-height": "480px",
 };
-Structure.play = async () => {
-  await customElements.whenDefined("nightingale-structure");
-  const track = document.getElementById("viewer");
-  // if (track) {
-  //   (track as any).data = tinyData;
-  // }
+
+export const AlphaFoldStructure = Template.bind({});
+AlphaFoldStructure.args = {
+  "protein-accession": "P05067",
+  "structure-id": "AF-P05067-F1",
+  highlight: "290:315",
+  "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
+  "--custom-structure-height": "480px",
 };
+AlphaFoldStructure.storyName = "AlphaFold Structure";
