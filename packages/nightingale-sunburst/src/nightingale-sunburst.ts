@@ -328,7 +328,7 @@ class NightingaleSunburst extends LitElement {
       context.textAlign = "left";
       context.font = "bold 12px Arial";
       context.fillText("Name:", 10, 10);
-      context.fillText(this["weight-attribute-label"], 10, 40);
+      context.fillText(`${this["weight-attribute-label"]}:`, 10, 40);
       context.font = "12px Arial";
       context.fillText(this.activeSegment.data[this["name-attribute"]], 15, 25);
       context.fillText(

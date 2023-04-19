@@ -22,7 +22,7 @@ const testSequences = [
   {
     name: "seq1",
     sequence:
-      "R1XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII----XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII",
+      "r1XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII----XAVOURSSSAASUICABDUFBSODUNVISDONOINDOINOIADFNOIOFDIOFNOIANFBSIUNFDIOSFJIPDSNFJPOSJFIJII",
   },
   {
     name: "seq2",
@@ -47,16 +47,19 @@ const Template: Story<{
   colorScheme: string;
   displayStart: number;
   displayEnd: number;
+  overlayConsevation: boolean;
 }> = (args) => {
   return html`
     <nightingale-msa
       id="msa"
       height=${args.height}
+      width=${args.width}
       color-scheme=${args.colorScheme}
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
       label-width="200"
       highlight="10:19,40:49"
+      ?overlay-conservation=${args.overlayConsevation}
     ></nightingale-msa>
   `;
 };
@@ -68,6 +71,7 @@ MSA.args = {
   colorScheme: "aliphatic",
   displayStart: 1,
   displayEnd: 50,
+  overlayConsevation: false,
 };
 MSA.play = async () => {
   await customElements.whenDefined("nightingale-msa");

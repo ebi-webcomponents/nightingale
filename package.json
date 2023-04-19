@@ -28,6 +28,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@custom-elements-manifest/analyzer": "0.8.0",
+    "@codesandbox/sandpack-react": "2.2.9",
     "@rollup/plugin-commonjs": "24.0.1",
     "@rollup/plugin-json": "6.0.0",
     "@rollup/plugin-node-resolve": "15.0.1",

@@ -37,15 +37,14 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
           <path
             class="rectangle feature"
             d="M0,0L68.44444444444444,0L68.44444444444444,16L0,16Z"
-            fill="#84862d"
             opacity="1"
-            style="stroke: #84862d; pointer-events: auto;"
+            style="fill: #84862d; stroke: #84862d; pointer-events: auto;"
             transform="translate(10.71111111111111,4)"
           />
           <text
             class="feature-label"
             dominant-baseline="middle"
-            fill="black"
+            fill="white"
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
@@ -69,15 +68,14 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
           <path
             class="rectangle feature"
             d="M0,0L12.622222222222224,0L12.622222222222224,16L0,16Z"
-            fill="#84862d"
             opacity="1"
-            style="stroke: #84862d; pointer-events: auto;"
+            style="fill: #84862d; stroke: #84862d; pointer-events: auto;"
             transform="translate(80.93333333333334,4)"
           />
           <text
             class="feature-label"
             dominant-baseline="middle"
-            fill="black"
+            fill="white"
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
@@ -112,9 +110,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             <path
               class="rectangle child-fragment feature"
               d="M0,0L45.86666666666667,0L45.86666666666667,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(10.71111111111111,7)"
             />
             <text
@@ -143,9 +140,8 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             <path
               class="rectangle child-fragment feature"
               d="M0,0L22.044444444444444,0L22.044444444444444,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(57.111111111111114,7)"
             />
             <text
@@ -320,17 +316,15 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             <path
               class="rectangle child-fragment feature"
               d="M0,0L21.68888888888889,0L21.68888888888889,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(11.422222222222222,7)"
             />
             <path
               class="rectangle child-fragment feature"
               d="M0,0L12.977777777777778,0L12.977777777777778,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(43.24444444444445,7)"
             />
             <text
@@ -369,17 +363,15 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
             <path
               class="rectangle child-fragment feature"
               d="M0,0L7.644444444444445,0L7.644444444444445,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(34.355555555555554,7)"
             />
             <path
               class="rectangle child-fragment feature"
               d="M0,0L20.08888888888889,0L20.08888888888889,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(58.17777777777778,7)"
             />
             <text
@@ -952,15 +944,14 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
           <path
             class="rectangle feature"
             d="M0,0L6160,0L6160,16L0,16Z"
-            fill="#84862d"
             opacity="1"
-            style="stroke: #84862d; pointer-events: auto;"
+            style="fill: #84862d; stroke: #84862d; pointer-events: auto;"
             transform="translate(-4069.9999999999536,4)"
           />
           <text
             class="feature-label"
             dominant-baseline="middle"
-            fill="black"
+            fill="white"
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
@@ -984,15 +975,14 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
           <path
             class="rectangle feature"
             d="M0,0L1136,0L1136,16L0,16Z"
-            fill="#84862d"
             opacity="1"
-            style="stroke: #84862d; pointer-events: auto;"
+            style="fill: #84862d; stroke: #84862d; pointer-events: auto;"
             transform="translate(2249.9999999999745,4)"
           />
           <text
             class="feature-label"
             dominant-baseline="middle"
-            fill="black"
+            fill="white"
             font-size="14"
             style="cursor: inherit; pointer-events: none;"
             text-anchor="middle"
@@ -1027,9 +1017,8 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             <path
               class="rectangle child-fragment feature"
               d="M0,0L4128,0L4128,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(-4069.9999999999536,7)"
             />
             <text
@@ -1058,9 +1047,8 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             <path
               class="rectangle child-fragment feature"
               d="M0,0L1984,0L1984,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(105.99999999999892,7)"
             />
             <text
@@ -1235,17 +1223,15 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             <path
               class="rectangle child-fragment feature"
               d="M0,0L1952,0L1952,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(-4005.999999999954,7)"
             />
             <path
               class="rectangle child-fragment feature"
               d="M0,0L1168,0L1168,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(-1141.999999999987,7)"
             />
             <text
@@ -1284,17 +1270,15 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
             <path
               class="rectangle child-fragment feature"
               d="M0,0L688,0L688,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(-1941.9999999999777,7)"
             />
             <path
               class="rectangle child-fragment feature"
               d="M0,0L1808,0L1808,10L0,10Z"
-              fill="white"
               opacity="0.4"
-              style="stroke: none; pointer-events: none;"
+              style="fill: white; stroke: none; pointer-events: none;"
               transform="translate(201.99999999999784,7)"
             />
             <text

@@ -4,7 +4,7 @@ It adds `width` and `height` as parameters.
 
 ##### Options
 
-When instancing this mixin, the function can received and object with options for default values:
+When instancing this mixin, the function can receive an object with options for default values:
 
 ```javascript
 {
