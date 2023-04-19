@@ -8,6 +8,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "version": "4.0.0-alpha.5",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+
   "keywords": [
     "nightingale",
     "webcomponents",
