@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-new-core",
-  "version": "4.0.0",
+  "version": "4.0.2",
   "description": "Base Elements for Nightingale Components",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -37,7 +37,7 @@
     "access": "public"
   },
   "dependencies": {
-    "d3": "7.8.2",
-    "lit": "2.6.1"
+    "d3": "7.8.3",
+    "lit": "2.7.0"
   }
 }

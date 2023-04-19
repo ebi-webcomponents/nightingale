@@ -9,6 +9,7 @@ import {
   Axis,
   brushX,
   BrushBehavior,
+  BrushSelection,
   select,
   NumberValue,
 } from "d3";
@@ -62,7 +63,7 @@ class NightingaleNavigation extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #currentSelection: number[] | null = null;
+  #currentSelection: BrushSelection | null = null;
 
   @property({ type: Number })
   "ruler-start" = 1;
@@ -220,7 +221,10 @@ class NightingaleNavigation extends withManager(
       this.#axis.call(this.#xAxis);
       this.updatePolygon();
       this.updateLabels();
-      const position = [this.#x(this.getStart()), this.#x(this.getEnd())];
+      const position: BrushSelection = [
+        this.#x(this.getStart()),
+        this.#x(this.getEnd()),
+      ];
       if (this.#brushG && position[0] >= 0 && position[1] >= 0) {
         this.#dontDispatch = true;
         this.#brushG.call(this.#viewport.move, position);
