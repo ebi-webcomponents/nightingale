@@ -20,6 +20,12 @@ class NightingaleSaver extends NightingaleElement {
     converter: (value) => (formats.includes(value || "") ? value : "png"),
   })
   fileFormat = "png";
+  @property({ type: Number, attribute: "extra-width" })
+  extraWidth = 0;
+  @property({ type: Number, attribute: "extra-height" })
+  extraHeight = 0;
+  @property({ type: Boolean })
+  debug = false;
 
   preSave?: () => void = undefined;
   postSave?: () => void = undefined;
@@ -43,21 +49,25 @@ class NightingaleSaver extends NightingaleElement {
     }
     const { width, height } = element.getBoundingClientRect();
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("width", `${width}px`);
-    canvas.setAttribute("height", `${height}px`);
+    canvas.setAttribute("width", `${width + this.extraWidth}px`);
+    canvas.setAttribute("height", `${height + this.extraHeight}px`);
     if (this.fillColor) {
       const context = canvas.getContext("2d");
       if (context) {
         context.fillStyle = this.fillColor;
-        context.fillRect(0, 0, width, height);
+        context.fillRect(
+          0,
+          0,
+          width + this.extraWidth,
+          height + this.extraHeight
+        );
       }
     }
-    // uncomment for development and see the canvas on screen
-    // element.appendChild(canvas);
+    if (this.debug) element.appendChild(canvas);
 
     // Rendering the Protvista svg
     rasterizeHTML
-      .drawHTML(wrapHTML(element.innerHTML), canvas)
+      .drawHTML(wrapHTML(element.outerHTML), canvas)
       .then(() => {
         const image = canvas
           .toDataURL(`image/${this.fileFormat}`, 1.0)

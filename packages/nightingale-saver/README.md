@@ -73,6 +73,18 @@ The file name to be used to save locally.
 
 The format of the image. Accepted formats are png, jpeg, bmp, tiff and gif.
 
+#### `extra-width: number (default: 0)`
+
+Number of pixels added to the right of the image in case of any desired horizontal offset
+
+#### `extra-height: number (default: 0)`
+
+Number of pixels added to the bottom of the image in case of any desired vertical offset
+
+#### `debug: boolean (default: false)`
+
+If `true` the generated canvas will be added to the component in order to visually inspect the outcome image.
+
 ### Properties
 
 #### `preSave: () => void `
