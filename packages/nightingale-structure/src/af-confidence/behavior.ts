@@ -47,7 +47,7 @@ export default PluginBehavior.create<{
           );
           const confidenceScore = getConfidenceScore(se);
           // eslint-disable-next-line consistent-return
-          return confidenceScore && confidenceScore[0] > 0
+          return confidenceScore && (+confidenceScore[0] > 0)
             ? `Confidence score: ${confidenceScore[0]} <small>( ${confidenceScore[1]} )</small>`
             : ``;
         }
