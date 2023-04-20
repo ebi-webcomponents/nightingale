@@ -15,11 +15,11 @@ export declare class WithHighlightInterface {
   "highlight-color": string;
   highlightedRegion: Region;
 }
-const DEFAULT_HIGLIGHT_COLOR = "#FFEB3B66";
+export const DEFAULT_HIGHLIGHT_COLOR = "#FFEB3B66";
 
 const defaultOptions = {
   highlight: null,
-  "highlight-color": DEFAULT_HIGLIGHT_COLOR,
+  "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
 };
 const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,

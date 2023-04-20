@@ -304,6 +304,7 @@ class NightingaleSequence extends withManager(
 
     highlighs.exit().remove();
   }
+
   render() {
     return html`<svg class="container"></svg>`;
   }

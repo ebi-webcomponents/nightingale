@@ -1,0 +1,42 @@
+{
+  "name": "@nightingale-elements/nightingale-structure",
+  "description": "Nightingale Structure",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "version": "4.0.0-alpha.5",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "structure",
+    "molstar",
+    "litemol",
+    "ngl",
+    "pdb",
+    "pdbe",
+    "pdbe-molstar"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^4.0.0",
+    "molstar": "3.34.0"
+  }
+}

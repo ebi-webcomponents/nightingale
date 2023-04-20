@@ -8,6 +8,7 @@ import "../../packages/nightingale-colored-sequence/src/index.ts";
 import "../../packages/nightingale-interpro-track/src/index.ts";
 import "../../packages/nightingale-saver/src/index.ts";
 import "../../packages/nightingale-overlay/src/index.ts";
+import "../../packages/nightingale-structure/src/index.ts";
 
 import iproData from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
 import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
@@ -201,6 +202,10 @@ const Template: Story<{
               use-ctrl-to-zoom
             ></nightingale-linegraph-track>
           </div>
+          <nightingale-structure
+            protein-accession="P05067"
+            structure-id="1AAP"
+          ></nightingale-structure>
         </div>
       </nightingale-manager>
     </div>
