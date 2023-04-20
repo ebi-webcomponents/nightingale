@@ -7,14 +7,13 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "4.0.0-alpha.5",
+  "version": "4.2.0",
   "scripts": {
     "build": "rollup --config ../../rollup.config.mjs"
   },
   "publishConfig": {
     "access": "public"
   },
-
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -36,7 +35,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0",
+    "@nightingale-elements/nightingale-new-core": "^4.2.0",
     "molstar": "3.34.0"
   }
 }
