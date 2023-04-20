@@ -11,6 +11,9 @@ const Template: Story<{
   "file-name": string;
   "file-format": string;
   "background-color": string;
+  "extra-width": number;
+  "extra-height": number;
+  debug: boolean;
 }> = (args) => {
   return html`<nightingale-navigation
       height="50"
@@ -25,6 +28,9 @@ const Template: Story<{
       file-name=${args["file-name"]}
       file-format=${args["file-format"]}
       background-color=${args["background-color"]}
+      extra-width=${args["extra-width"]}
+      extra-height=${args["extra-height"]}
+      ?debug=${args.debug}
     >
       <button>Save a Pic! 📸</button>
     </nightingale-saver> `;
@@ -35,4 +41,7 @@ Saver.args = {
   "file-name": "snapshot",
   "file-format": "jpeg",
   "background-color": "#ddddee",
+  "extra-width": 0,
+  "extra-height": 0,
+  debug: true,
 };

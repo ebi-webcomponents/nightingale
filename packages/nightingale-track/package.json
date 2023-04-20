@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-track",
-  "version": "4.0.1",
+  "version": "4.0.3",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
@@ -32,8 +32,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.0.0",
-    "d3": "7.8.2",
+    "@nightingale-elements/nightingale-new-core": "^4.0.3",
+    "d3": "7.8.3",
     "lodash-es": "^4.17.15"
   }
 }
