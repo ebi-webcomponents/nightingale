@@ -124,13 +124,25 @@ export const formatTooltip = (feature) => {
       dbReferences.map((ref) => ref.id)
     );
 
+  let description = feature.description;
+
+  if (feature.type === "BINDING" || feature.type === "Binding site") {
+    let bindingDescription = "";
+    if (feature.ligandPart) {
+      bindingDescription += `${feature.ligandPart.name} of `;
+    }
+    if (feature.ligand) {
+      bindingDescription += feature.ligand.name;
+    }
+    if (feature.description) {
+      bindingDescription += `; ${feature.description}`;
+    }
+    description = bindingDescription;
+  }
+
   try {
     return `
-      ${
-        feature.description
-          ? `<h5>Description</h5><p>${feature.description}</p>`
-          : ``
-      }
+      ${description ? `<h5>Description</h5><p>${description}</p>` : ``}
       ${
         feature.matchScore
           ? `<h5>Match score</h5><p>${feature.matchScore}%</p>`
