@@ -63,13 +63,10 @@ export const transformData = (data) => {
             name: ptm.name,
             position: ptm.position,
             sources: ptm.sources,
+            dbReferences: mergedDbReferences,
           })),
         };
 
-        // if more than one PTM is present, mergedDbReferences will be the same as the value and it has be assigned to each PTM to avoid errors
-        mergedFeatures.ptms.forEach(
-          (ptm) => (ptm.dbReferences = mergedDbReferences)
-        );
         return Object.assign(
           mergedFeatures,
           proteomicsTrackProperties(mergedFeatures)
