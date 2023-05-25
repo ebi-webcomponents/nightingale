@@ -124,7 +124,7 @@ export const formatTooltip = (feature) => {
       dbReferences.map((ref) => ref.id)
     );
 
-  let description = feature.description;
+  let { description } = feature;
 
   if (feature.type === "BINDING" || feature.type === "Binding site") {
     let bindingDescription = "";
