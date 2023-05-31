@@ -36,11 +36,11 @@ export const transformData = (data) => {
     if (Object.keys(ptmMap).length) {
       adaptedData = Object.values(ptmMap).map((features) => {
         // Only the dbReferences have to be merged as the rest is all the same
-        const mergedDbReferences = {};
+        const mergedDbReferences = [];
         features.forEach((feature) => {
           feature.ptms.forEach((ptm) => {
             ptm.dbReferences.forEach((dbReference) => {
-              mergedDbReferences[dbReference.id] = dbReference;
+              mergedDbReferences.push(dbReference);
             });
           });
         });
@@ -57,7 +57,7 @@ export const transformData = (data) => {
             name: ptm.name,
             position: ptm.position,
             sources: ptm.sources,
-            dbReferences: Object.values(mergedDbReferences),
+            dbReferences: mergedDbReferences,
           })),
         };
 
