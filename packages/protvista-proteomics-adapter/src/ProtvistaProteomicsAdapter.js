@@ -17,6 +17,9 @@ export const transformData = (data) => {
   let adaptedData = [];
 
   if (data && data.length !== 0) {
+    /* Important: The PTM map is a temporary patch until multiple modifications are shown in the peptide. At this point, only 'phospho' sites are of interest. 
+    Once they are available in the data, there is no need for the below merging */
+
     // To merge PTM data present in same residue in a same length peptide, have a map [key: start-end-phospho site 1-... phosphosite n, value: corresponding feature elements]
     const ptmMap = {};
     data.features.forEach((feature) => {
@@ -25,45 +28,36 @@ export const transformData = (data) => {
         feature.ptms.forEach((ptm) => {
           ft += `-${ptm.position}`;
         });
-        if (ptmMap[ft]) {
-          ptmMap[ft] = [...ptmMap[ft], feature];
-          ptmMap[ft].push(feature);
-        } else {
-          ptmMap[ft] = [feature];
-        }
+        ptmMap[ft] = ft in ptmMap ? [...ptmMap[ft], feature] : [feature];
       }
     });
 
+    // The else part alone is enough if the PTM information need not be merged.
     if (Object.keys(ptmMap).length) {
-      adaptedData = Object.values(ptmMap).map((value) => {
-        // ONly the dbReferences have to be merged as the rest is all the same
-        const mergedDbReferences = [];
-        value.forEach((feature) => {
+      adaptedData = Object.values(ptmMap).map((features) => {
+        // Only the dbReferences have to be merged as the rest is all the same
+        const mergedDbReferences = {};
+        features.forEach((feature) => {
           feature.ptms.forEach((ptm) => {
             ptm.dbReferences.forEach((dbReference) => {
-              const refExists = mergedDbReferences.find(
-                (ref) => ref.id === dbReference.id
-              );
-              if (!refExists) {
-                mergedDbReferences.push(dbReference);
-              }
+              mergedDbReferences[dbReference.id] = dbReference;
             });
           });
         });
 
         const mergedFeatures = {
-          type: value[0].type,
-          begin: value[0].begin,
-          end: value[0].end,
-          xrefs: value[0].xrefs,
-          evidences: value[0].evidences,
-          peptide: value[0].peptide,
-          unique: value[0].unique,
-          ptms: value[0].ptms.map((ptm) => ({
+          type: features[0].type,
+          begin: features[0].begin,
+          end: features[0].end,
+          xrefs: features[0].xrefs,
+          evidences: features[0].evidences,
+          peptide: features[0].peptide,
+          unique: features[0].unique,
+          ptms: features[0].ptms.map((ptm) => ({
             name: ptm.name,
             position: ptm.position,
             sources: ptm.sources,
-            dbReferences: mergedDbReferences,
+            dbReferences: Object.values(mergedDbReferences),
           })),
         };
 
