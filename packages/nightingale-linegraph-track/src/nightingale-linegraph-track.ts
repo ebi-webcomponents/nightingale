@@ -49,11 +49,11 @@ const curves: { [x: string]: CurveFactory } = {
   curveNatural,
 };
 
-type LineValue = {
+export type LineValue = {
   position: number;
   value: number;
 };
-type LineData = {
+export type LineData = {
   name: string;
   range: number[];
   color?: string; // (color will be assigned if not provided. Use "none" for no line color)
@@ -388,3 +388,8 @@ class NightingaleLinegraphTrack extends withManager(
 }
 
 export default NightingaleLinegraphTrack;
+declare global {
+  interface HTMLElementTagNameMap {
+    "nightingale-linegraph-track": NightingaleLinegraphTrack;
+  }
+}

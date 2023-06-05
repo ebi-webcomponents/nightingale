@@ -289,3 +289,9 @@ export default TextareaSequence;
 
 const anyErrors = (list: boolean[]): boolean =>
   list.reduce((agg, v) => agg || v, false);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "nightingale-textarea-sequence": TextareaSequence;
+  }
+}

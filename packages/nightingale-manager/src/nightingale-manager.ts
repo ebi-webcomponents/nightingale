@@ -155,3 +155,8 @@ class NightingaleManager extends NightingaleElement {
 }
 
 export default NightingaleManager;
+declare global {
+  interface HTMLElementTagNameMap {
+    "nightingale-manager": NightingaleManager;
+  }
+}

@@ -4,28 +4,28 @@ import * as rasterizeHTML from "rasterizehtml";
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 
 // Accepted file formats
-const formats = ["png", "jpeg", "bmp", "tiff", "gif"];
+export const formats = ["png", "jpeg", "bmp", "tiff", "gif"];
 
 @customElement("nightingale-saver")
 class NightingaleSaver extends NightingaleElement {
   @property({ type: String, attribute: "element-id" })
-  elementId = "";
+  elementId?: string = "";
   @property({ type: String, attribute: "background-color" })
-  fillColor = "transparent";
+  fillColor?: string = "transparent";
   @property({ type: String, attribute: "file-name" })
-  fileName = "nightingale.snapshot";
+  fileName?: string = "nightingale.snapshot";
   @property({
     type: String,
     attribute: "file-format",
     converter: (value) => (formats.includes(value || "") ? value : "png"),
   })
-  fileFormat = "png";
+  fileFormat?: string = "png";
   @property({ type: Number, attribute: "extra-width" })
-  extraWidth = 0;
+  extraWidth?: number = 0;
   @property({ type: Number, attribute: "extra-height" })
-  extraHeight = 0;
+  extraHeight?: number = 0;
   @property({ type: Boolean })
-  debug = false;
+  debug?: boolean = false;
 
   preSave?: () => void = undefined;
   postSave?: () => void = undefined;
@@ -49,8 +49,8 @@ class NightingaleSaver extends NightingaleElement {
     }
     const { width, height } = element.getBoundingClientRect();
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("width", `${width + this.extraWidth}px`);
-    canvas.setAttribute("height", `${height + this.extraHeight}px`);
+    canvas.setAttribute("width", `${width + (this.extraWidth as number)}px`);
+    canvas.setAttribute("height", `${height + (this.extraHeight as number)}px`);
     if (this.fillColor) {
       const context = canvas.getContext("2d");
       if (context) {
@@ -58,8 +58,8 @@ class NightingaleSaver extends NightingaleElement {
         context.fillRect(
           0,
           0,
-          width + this.extraWidth,
-          height + this.extraHeight
+          width + (this.extraWidth as number),
+          height + (this.extraHeight as number)
         );
       }
     }
@@ -136,3 +136,9 @@ const wrapHTML = (html: string) =>
   <body>${html}</body>
 </html>
 `;
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "nightingale-saver": NightingaleSaver;
+  }
+}

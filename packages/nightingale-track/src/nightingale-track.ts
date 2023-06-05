@@ -455,3 +455,9 @@ export default NightingaleTrack;
 
 export { DefaultLayout };
 export { getColorByType };
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "nightingale-track": NightingaleTrack;
+  }
+}
