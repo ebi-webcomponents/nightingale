@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-navigation",
-  "version": "4.2.0",
+  "version": "4.2.1-alpha.0",
   "description": "Navigation component for the Nightingale tool",
   "main": "dist/index.js",
   "module": "dist/index.js",
