@@ -32,6 +32,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.2.0"
+    "@nightingale-elements/nightingale-new-core": "^4.2.1"
   }
 }

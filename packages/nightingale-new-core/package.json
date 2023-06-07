@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-new-core",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Base Elements for Nightingale Components",
   "main": "dist/index.js",
   "module": "dist/index.js",
