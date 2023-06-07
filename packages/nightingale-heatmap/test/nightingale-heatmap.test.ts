@@ -1,4 +1,4 @@
-import NightingaleHeatmap from "../src/index";
+import NightingaleHeatmap from "../dist/index";
 import * as data from "./contact-map.json";
 let rendered: NightingaleHeatmap;
 

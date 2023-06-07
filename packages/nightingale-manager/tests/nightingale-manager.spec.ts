@@ -1,5 +1,5 @@
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
-import NightingaleManager from "../src/index";
+import NightingaleManager from "../dist/index";
 
 let rendered: NightingaleManager;
 

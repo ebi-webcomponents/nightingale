@@ -1,4 +1,4 @@
-import "../src/index";
+import "../dist/index";
 import * as data from "./mockData/data.json";
 
 let rendered;

@@ -1,4 +1,4 @@
-import "../src/index";
+import "../dist/index";
 
 let rendered;
 const sequence = "MADYDDEFDTKASDL";

@@ -1,4 +1,4 @@
-import NightingaleSunburst from "../src/index";
+import NightingaleSunburst from "../dist/index";
 import * as data from "./taxonomy.min.json";
 
 let rendered: NightingaleSunburst;
