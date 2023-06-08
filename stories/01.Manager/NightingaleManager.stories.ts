@@ -346,6 +346,7 @@ export const InterproTrackNoControls = () =>
           use-ctrl-to-zoom
           show-label
           expanded
+          highlight-event="onmouseover"
         >
         </nightingale-interpro-track>
       </div>
