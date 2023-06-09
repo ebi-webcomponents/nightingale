@@ -257,8 +257,8 @@ class NightingaleLinks extends NightingaleTrack {
 
 export default NightingaleLinks;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-links": NightingaleLinks;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-links": NightingaleLinks;
+//   }
+// }

@@ -312,8 +312,8 @@ class NightingaleSequence extends withManager(
 
 export default NightingaleSequence;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-sequence": NightingaleSequence;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-sequence": NightingaleSequence;
+//   }
+// }

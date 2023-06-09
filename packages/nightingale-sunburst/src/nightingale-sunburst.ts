@@ -423,8 +423,8 @@ class NightingaleSunburst extends LitElement {
 
 export default NightingaleSunburst;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-sunburst": NightingaleSunburst;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-sunburst": NightingaleSunburst;
+//   }
+// }

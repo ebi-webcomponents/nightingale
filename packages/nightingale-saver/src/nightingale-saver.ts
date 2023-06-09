@@ -137,8 +137,8 @@ const wrapHTML = (html: string) =>
 </html>
 `;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-saver": NightingaleSaver;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-saver": NightingaleSaver;
+//   }
+// }

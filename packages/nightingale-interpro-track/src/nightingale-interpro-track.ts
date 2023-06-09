@@ -558,8 +558,8 @@ function getVisibleEnd(
 }
 export default NightingaleInterproTrack;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-interpro-track": NightingaleInterproTrack;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-interpro-track": NightingaleInterproTrack;
+//   }
+// }

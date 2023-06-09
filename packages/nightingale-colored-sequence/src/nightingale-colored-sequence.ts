@@ -213,8 +213,8 @@ class NightingaleColoredSequence extends NightingaleSequence {
 
 export default NightingaleColoredSequence;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-colored-sequence": NightingaleColoredSequence;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-colored-sequence": NightingaleColoredSequence;
+//   }
+// }

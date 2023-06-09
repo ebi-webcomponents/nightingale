@@ -354,8 +354,8 @@ class NightingaleHeatmap extends withResizable(
 
 export default NightingaleHeatmap;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-heatmap": NightingaleHeatmap;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-heatmap": NightingaleHeatmap;
+//   }
+// }

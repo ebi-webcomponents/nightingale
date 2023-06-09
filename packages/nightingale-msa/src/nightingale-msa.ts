@@ -195,8 +195,8 @@ class NightingaleMSA extends withManager(
 
 export default NightingaleMSA;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    "nightingale-msa": NightingaleMSA;
-  }
-}
+// declare global {
+//   interface HTMLElementTagNameMap {
+//     "nightingale-msa": NightingaleMSA;
+//   }
+// }
