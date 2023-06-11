@@ -1,3 +1,7 @@
+// FIXME REMOVE
+// FIXME REMOVE
+// FIXME REMOVE
+// @ts-nocheck
 /* eslint-disable class-methods-use-this */
 import { html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";

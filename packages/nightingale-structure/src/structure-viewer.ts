@@ -1,3 +1,7 @@
+// FIXME REMOVE
+// FIXME REMOVE
+// FIXME REMOVE
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import "molstar/lib/mol-util/polyfill";
 import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
@@ -12,8 +16,17 @@ import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
+import { PresetStructureRepresentations, StructureRepresentationPresetProvider } from 'molstar/lib/mol-plugin-state/builder/structure/representation-preset';
+import { MAQualityAssessment } from 'molstar/lib/extensions/model-archive/quality-assessment/behavior';
+import { QualityAssessment } from 'molstar/lib/extensions/model-archive/quality-assessment/prop';
+import { QualityAssessmentPLDDTPreset, QualityAssessmentQmeanPreset } from 'molstar/lib/extensions/model-archive/quality-assessment/behavior';
+import { StateObjectRef } from 'molstar/lib/mol-state';
+import { ObjectKeys } from 'molstar/lib/mol-util/type-helpers';
 
-import AfConfidenceScore from "./af-confidence/behavior";
+const Extensions = {
+    'ma-quality-assessment': PluginSpec.Behavior(MAQualityAssessment),
+};
+
 
 const viewerOptions = {
   layoutIsExpanded: false,
@@ -32,17 +45,47 @@ const viewerOptions = {
   pdbProvider: "pdbe",
   viewportShowControls: PluginConfig.Viewport.ShowControls.defaultValue,
   viewportShowSettings: PluginConfig.Viewport.ShowSettings.defaultValue,
+  extensions: ObjectKeys(Extensions),
 };
+
+const ViewerAutoPreset = StructureRepresentationPresetProvider({
+    id: 'preset-structure-representation-viewer-auto',
+    display: {
+        name: 'Automatic (w/ Annotation)', group: 'Annotation',
+        description: 'Show standard automatic representation but colored by quality assessment (if available in the model).'
+    },
+    isApplicable(a) {
+        // FIXME remove
+        console.log('isApplicable', a)
+        return (
+            !!a.data.models.some(m => QualityAssessment.isApplicable(m, 'pLDDT')) ||
+            !!a.data.models.some(m => QualityAssessment.isApplicable(m, 'qmean'))
+        );
+    },
+    params: () => StructureRepresentationPresetProvider.CommonParams,
+    async apply(ref, params, plugin) {
+        const structureCell = StateObjectRef.resolveAndCheck(plugin.state.data, ref);
+        const structure = structureCell?.obj?.data;
+        console.log('apply', structure)
+        if (!structureCell || !structure) return {};
+
+        if (!!structure.models.some(m => QualityAssessment.isApplicable(m, 'pLDDT'))) {
+            console.log('yes', await QualityAssessmentPLDDTPreset.apply(ref, params, plugin))
+            return await QualityAssessmentPLDDTPreset.apply(ref, params, plugin);
+        } else if (!!structure.models.some(m => QualityAssessment.isApplicable(m, 'qmean'))) {
+            return await QualityAssessmentQmeanPreset.apply(ref, params, plugin);
+        } else {
+            return await PresetStructureRepresentations.auto.apply(ref, params, plugin);
+        }
+    }
+});
 
 const defaultSpec = DefaultPluginSpec(); // TODO: Make our own to select only essential plugins
 const spec: PluginSpec = {
   actions: defaultSpec.actions,
   behaviors: [
-    ...defaultSpec.behaviors,
-    PluginSpec.Behavior(AfConfidenceScore, {
-      autoAttach: true,
-      showTooltip: true,
-    }),
+      ...defaultSpec.behaviors,
+      ...viewerOptions.extensions.map(e => Extensions[e]),
   ],
   layout: {
     initial: {
@@ -64,19 +107,7 @@ const spec: PluginSpec = {
       viewerOptions.viewportShowSelectionMode,
     ],
     [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
-    [
-      PluginConfig.Structure.DefaultRepresentationPresetParams,
-      {
-        theme: {
-          globalName: "af-confidence",
-          carbonByChainId: false,
-          focus: {
-            name: "element-symbol",
-            params: { carbonByChainId: false },
-          },
-        },
-      },
-    ],
+    [PluginConfig.Structure.DefaultRepresentationPreset, ViewerAutoPreset.id],
   ],
 };
 
@@ -99,6 +130,10 @@ export const getStructureViewer = async (
 ): Promise<StructureViewer> => {
   const plugin = new PluginContext(spec);
   await plugin.init();
+
+  // FIXME can we register this here?
+  // Here is how it's registered in molstar app: https://github.com/molstar/molstar/blob/v3.34.0/src/apps/viewer/app.ts#L193-L199
+  plugin.builders.structure.representation.registerPreset(ViewerAutoPreset);
 
   const canvas = container.querySelector<HTMLCanvasElement>("canvas");
 
