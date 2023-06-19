@@ -5,6 +5,7 @@ import { terser } from "rollup-plugin-terser";
 import json from "@rollup/plugin-json";
 import webWorkerLoader from "rollup-plugin-web-worker-loader";
 import css from "rollup-plugin-css-only";
+import workerSyntax from "./rollup-plugins/rollup-plugin-webworker-syntax.js";
 
 export default {
   input: "src/index.ts",
@@ -15,13 +16,14 @@ export default {
   },
   plugins: [
     css(),
-    typescript(),
     nodeResolve(),
     commonjs(),
-    // rollupImportMapPlugin("../../dev/import-map.json"),
+    workerSyntax(),
     webWorkerLoader({
-      pattern: /(.+\.worker\..+)/,
+      inline: false,
+      outputFolder: "./workers",
     }),
+    typescript(),
     json(),
     terser({
       ecma: 2020,
