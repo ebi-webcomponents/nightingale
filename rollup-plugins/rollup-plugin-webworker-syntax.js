@@ -17,11 +17,9 @@ function rollupWorkerPlugin() {
       if (!match) return;
       var matchURL = match[0].match(/new URL\("(.+)",.+\)/);
       if (!matchURL) return;
-      console.log(matchURL);
       const transformedCode = `
       import RollupWorker from "web-worker:${matchURL[1]}";
       ${code.replace(workerRegex, "new RollupWorker(")};`;
-      console.log(transformedCode);
       return {
         code: transformedCode,
         map: null, // You can generate source maps if needed
