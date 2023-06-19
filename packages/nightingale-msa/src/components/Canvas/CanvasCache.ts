@@ -1,5 +1,4 @@
-import * as shallowEqual from "shallowequal";
-import { minBy } from "lodash-es";
+import { minBy, isEqual } from "lodash-es";
 import { ResidueTileOptions, TileOptions } from "../../types/types";
 
 // type TileOptions = Record<string, string | number | object>;
@@ -83,7 +82,7 @@ class CanvasCache {
    * Returns: `true` when the cache has been invalidated
    */
   updateTileSpecs(spec: ResidueTileOptions) {
-    if (!shallowEqual(spec, this.spec)) {
+    if (!isEqual(this.spec, spec)) {
       this.invalidate();
       this.spec = spec;
       return true;
