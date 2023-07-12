@@ -30,9 +30,9 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
 ) => {
   class WithHighlight extends superClass {
     #initialOptions = { ...defaultOptions, ...options };
-    @property({ type: String })
+    @property({ type: String, reflect: true })
     highlight = this.#initialOptions.highlight;
-    @property({ type: String })
+    @property({ type: String, reflect: true })
     "highlight-color" = this.#initialOptions["highlight-color"];
 
     highlightedRegion: Region;

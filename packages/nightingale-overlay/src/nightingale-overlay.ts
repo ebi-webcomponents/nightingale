@@ -86,7 +86,6 @@ class NightingaleOverlay extends NightingaleElement {
   }
 
   render() {
-    console.log("render???");
     const rect = this.currentTarget?.getBoundingClientRect();
     return html` <div
       style="

@@ -26,9 +26,9 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   class WithResizable extends withDimensions(superClass) {
     #intitialOptions = { ...defaultOptions, ...options };
     #observer?: ResizeObserver;
-    @property({ type: Number })
+    @property({ type: Number, reflect: true })
     "min-width": number = this.#intitialOptions["min-width"];
-    @property({ type: Number })
+    @property({ type: Number, reflect: true })
     "min-height": number = this.#intitialOptions["min-height"];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
