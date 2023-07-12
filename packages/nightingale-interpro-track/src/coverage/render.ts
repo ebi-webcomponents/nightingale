@@ -42,7 +42,7 @@ export const refreshCoverage = ({
 }) => {
   featuresG?.attr(
     "mask",
-    element.expanded ? null : `url(#mask-${element.accession})`
+    element.expanded ? null : `url(#mask-${element.accession})`,
   );
   element.svg
     ?.selectAll<SVGRectElement, Segment>("defs mask rect")

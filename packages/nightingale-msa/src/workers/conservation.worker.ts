@@ -8,7 +8,7 @@ const lettersInAlphabet = 26;
 export const calculateConservation = (
   sequences: SequencesMSA,
   sampleSize: number | null = null,
-  isWorker = false
+  isWorker = false,
 ) => {
   const length =
     (sequences && sequences.length && sequences[0].sequence.length) || 0;

@@ -2,8 +2,13 @@
 
 exports[`nightingale-colored-sequence tests it should display the colored sequence correctly 1`] = `
 <nightingale-colored-sequence
+  display-end="-1"
+  display-start="1"
   height="40"
+  highlight-color="#FFEB3B66"
   length="15"
+  min-height="10"
+  min-width="10"
   scale="hydrophobicity-scale"
   sequence="MADYDDEFDTKASDL"
   style="display: inline-block; line-height: 0;"

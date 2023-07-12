@@ -22,7 +22,7 @@ type ErrorsObject = {
 };
 type FormatSequenceFunction = (
   sequence: string,
-  options?: Record<string, unknown>
+  options?: Record<string, unknown>,
 ) => string;
 
 const Quill = Q as unknown as typeof Q.Quill;
@@ -91,7 +91,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
   attributeChangedCallback(
     name: string,
     _old: string | null,
-    value: string | null
+    value: string | null,
   ): void {
     super.attributeChangedCallback(name, _old, value);
     debounce(() => this.format(), SHORT_DEBOUNCE_TIME);
@@ -124,7 +124,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
       !this.allowComments,
       this.single,
       this.disableHeaderCheck,
-      this.#formatSequence
+      this.#formatSequence,
     );
     this.quill.setText(newText);
     debounce(() => this.format(), SHORT_DEBOUNCE_TIME);
@@ -159,7 +159,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
     Quill.register("modules/formatter", (quill: Q.Quill) => {
       quill.on(
         "text-change",
-        debounce(() => this.format(), DEBOUNCE_TIME)
+        debounce(() => this.format(), DEBOUNCE_TIME),
       );
     });
     if (this.#container.value) {
@@ -174,7 +174,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
 
       this.quill.on("text-change", () => {
         const input = this.querySelector<HTMLInputElement>(
-          `input[name=${this.name}]`
+          `input[name=${this.name}]`,
         );
         if (input) input.value = this.sequence || "";
       });
@@ -216,7 +216,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
         seqLength += line.replace(/\s/g, "").length;
         let linePos = 0;
         const parts = line.split(
-          new RegExp(`([^${this.alphabet}])`, this.caseSensitive ? "" : "i")
+          new RegExp(`([^${this.alphabet}])`, this.caseSensitive ? "" : "i"),
         );
         parts.forEach((part, i) => {
           if (!this.quill) return;
@@ -248,7 +248,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
         text.length - secondHeaderPosition,
         {
           background: this.secondHeaderErrorBackgroundColor,
-        }
+        },
       );
     }
     if (JSON.stringify(this.#errors) !== JSON.stringify(errors)) {
@@ -256,7 +256,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
       this.#valid = !anyErrors(Object.values(errors));
       this.paintTextareaBorder();
       this.#container?.value?.dispatchEvent(
-        new CustomEvent("error-change", { bubbles: true, detail: { errors } })
+        new CustomEvent("error-change", { bubbles: true, detail: { errors } }),
       );
     }
   }

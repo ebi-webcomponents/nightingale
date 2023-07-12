@@ -90,7 +90,7 @@ class NightingaleColoredSequence extends NightingaleSequence {
     }
     if (
       /([ILFVMPWHTEQCYASNDRGK]:-?\d+\.?\d*)(,[ILFVMPWHTEQCYASNDRGK]:-?\d+\.?\d*)*/.test(
-        attributeScale
+        attributeScale,
       )
     ) {
       try {
@@ -101,7 +101,7 @@ class NightingaleColoredSequence extends NightingaleSequence {
       } catch (error) {
         console.error(
           `Couldn't parse the given scale "${attributeScale}"`,
-          error
+          error,
         );
       }
     }
@@ -128,7 +128,7 @@ class NightingaleColoredSequence extends NightingaleSequence {
       const ftWidth = this.getSingleBaseWidth();
       const first = Math.round(Math.max(0, this.getStart() - 2));
       const last = Math.round(
-        Math.min(this.sequence?.length || 0, this.getEnd() + 1)
+        Math.min(this.sequence?.length || 0, this.getEnd() + 1),
       );
       const bases =
         this.sequence
@@ -177,14 +177,14 @@ class NightingaleColoredSequence extends NightingaleSequence {
           .merge(stops)
           .attr(
             "offset",
-            (_, pos) => (pos + 0.5) / (this.sequence?.length || 1)
+            (_, pos) => (pos + 0.5) / (this.sequence?.length || 1),
           )
           .attr("stop-color", (base) =>
             colorScale(
               scale && base.toUpperCase() in scale
                 ? (scale[base.toUpperCase()] as number)
-                : 0 // if the base is not in the given scale
-            )
+                : 0, // if the base is not in the given scale
+            ),
           );
       }
       this.#gradient?.exit().remove();
@@ -199,8 +199,8 @@ class NightingaleColoredSequence extends NightingaleSequence {
           Math.max(
             0,
             this.getXFromSeqPosition(this.sequence?.length || 0) -
-              this.getXFromSeqPosition(0)
-          )
+              this.getXFromSeqPosition(0),
+          ),
         )
         .style("opacity", ftWidth < MIN_BASE_SIZE ? 1 : MIN_BASE_SIZE / ftWidth)
         .attr("fill", `url(#scale-gradient-${this.#uniqueID})`);

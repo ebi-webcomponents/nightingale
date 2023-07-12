@@ -53,7 +53,7 @@ export default class DefaultLayout {
   getFeatureHeight(..._args: unknown[]) {
     return Math.max(
       this.minHeight,
-      this.layoutHeight - this.margin.top - this.margin.bottom
+      this.layoutHeight - this.margin.top - this.margin.bottom,
     );
   }
 }

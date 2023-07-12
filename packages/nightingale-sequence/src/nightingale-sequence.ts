@@ -23,10 +23,10 @@ class NightingaleSequence extends withManager(
   withZoom(
     withResizable(
       withMargin(
-        withPosition(withDimensions(withHighlight(NightingaleElement)))
-      )
-    )
-  )
+        withPosition(withDimensions(withHighlight(NightingaleElement))),
+      ),
+    ),
+  ),
 ) {
   @property({ type: String })
   sequence?: string | null;
@@ -134,7 +134,7 @@ class NightingaleSequence extends withManager(
         "transform",
         `translate(0,${
           this["margin-top"] + 0.75 * this.getHeightWithMargins()
-        })`
+        })`,
       );
 
     this.highlighted = this.svg.append("g").attr("class", "highlighted");
@@ -164,7 +164,7 @@ class NightingaleSequence extends withManager(
       const half = ftWidth / 2;
       const first = Math.floor(Math.max(0, this.getStart() - 1));
       const last = Math.ceil(
-        Math.min(this.sequence?.length || 0, this.getEnd())
+        Math.min(this.sequence?.length || 0, this.getEnd()),
       );
       const bases: Array<SequenceBaseType> =
         space < 0
@@ -187,7 +187,7 @@ class NightingaleSequence extends withManager(
 
       this.#axis.attr(
         "transform",
-        `translate(${this["margin-left"] + half},${this["margin-top"]})`
+        `translate(${this["margin-left"] + half},${this["margin-top"]})`,
       );
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
@@ -198,8 +198,8 @@ class NightingaleSequence extends withManager(
         this.chWidth || 10,
         Math.min(
           this["margin-top"] + 0.25 * this.getHeightWithMargins(),
-          ftWidth - 2
-        )
+          ftWidth - 2,
+        ),
       );
       this.#axis.selectAll(".tick text").attr("font-size", size);
 
@@ -208,13 +208,13 @@ class NightingaleSequence extends withManager(
           "transform",
           `translate(0,${
             this["margin-top"] + 0.75 * this.getHeightWithMargins()
-          })`
+          })`,
         );
         this.#bases = this.seq_g.selectAll("text.base");
 
         const textElements = this.#bases.data(
           bases,
-          (d) => (d as SequenceBaseType).position
+          (d) => (d as SequenceBaseType).position,
         );
 
         textElements
@@ -299,7 +299,7 @@ class NightingaleSequence extends withManager(
       .attr("height", this.height)
       .attr("x", (d) => this.getXFromSeqPosition(d.start))
       .attr("width", (d) =>
-        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
+        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1)),
       );
 
     highlighs.exit().remove();

@@ -62,7 +62,7 @@ type HeatmapData = Array<
   [
     number, //   X coordinate starting on 1
     number, //   Y coordinate starting on 1
-    number //    Value in that position. Between 0 and 1
+    number, //    Value in that position. Between 0 and 1
   ]
 >;
 ```

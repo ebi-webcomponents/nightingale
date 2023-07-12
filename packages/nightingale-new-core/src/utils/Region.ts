@@ -33,7 +33,7 @@ export default class Region {
       const [_start, _end, _] = region.split(":");
       if (typeof _ !== "undefined")
         throw new Error(
-          `there should be at most 1 ':' per region. Region: ${region}`
+          `there should be at most 1 ':' per region. Region: ${region}`,
         );
       let start = _start ? Number(_start) : this.min;
       let end = _end ? Number(_end) : this.max;
@@ -42,11 +42,11 @@ export default class Region {
       if (end > this.max) end = this.max;
       if (Number.isNaN(start))
         throw new Error(
-          `The parsed value of ${_start} is NaN. Region: ${region}`
+          `The parsed value of ${_start} is NaN. Region: ${region}`,
         );
       if (Number.isNaN(end))
         throw new Error(
-          `The parsed value of ${_end} is NaN. Region: ${region}`
+          `The parsed value of ${_end} is NaN. Region: ${region}`,
         );
       return {
         start,

@@ -57,12 +57,12 @@ class Labels extends LitElement {
                 new CustomEvent("msa-active-label", {
                   bubbles: true,
                   detail: { label },
-                })
+                }),
               );
             }}
           >
             ${label}
-          </li>`
+          </li>`,
       )}
     </ul>`;
   }

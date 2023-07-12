@@ -97,13 +97,13 @@ const Template: Story<{
       comments-color=${ifDefined(args["comments-color"])}
       base-error-color=${ifDefined(args["base-error-color"])}
       base-error-background-color=${ifDefined(
-        args["base-error-background-color"]
+        args["base-error-background-color"],
       )}
       second-header-error-background-color=${ifDefined(
-        args["second-header-error-background-color"]
+        args["second-header-error-background-color"],
       )}
       too-short-error-background-color=${ifDefined(
-        args["too-short-error-background-color"]
+        args["too-short-error-background-color"],
       )}
     ></nightingale-textarea-sequence>
     <br />

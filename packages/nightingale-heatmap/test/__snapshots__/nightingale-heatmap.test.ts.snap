@@ -32,8 +32,14 @@ exports[`nightingale-navigation tests data for the heatmap correctly after symme
 
 exports[`nightingale-navigation tests it should display the heatmap correctly 1`] = `
 <nightingale-heatmap
+  display-end="-1"
+  display-start="1"
   height="200"
+  highlight-color="#fc1e1e"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: block; line-height: 0;"
+  width="100"
 >
   <!---->
   

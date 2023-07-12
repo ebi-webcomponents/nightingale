@@ -3,7 +3,7 @@ import NightingaleBaseElement, {
 } from "../../nightingale-base-element";
 
 const withManager = <T extends Constructor<NightingaleBaseElement>>(
-  superClass: T
+  superClass: T,
 ) => {
   class WithManager extends superClass {
     manager?: HTMLElement | null;

@@ -2,7 +2,7 @@ import { RawPosition } from "../types/types";
 
 class Mouse {
   static relative = function (
-    event: MouseEvent | TouchEvent | Touch
+    event: MouseEvent | TouchEvent | Touch,
   ): RawPosition {
     if ((event as TouchEvent).changedTouches !== undefined)
       return Mouse.relative((event as TouchEvent).changedTouches[0]);
@@ -28,7 +28,7 @@ class Mouse {
   };
 
   static absolute = function (
-    event: MouseEvent | TouchEvent | Touch
+    event: MouseEvent | TouchEvent | Touch,
   ): RawPosition {
     if ((event as TouchEvent).changedTouches !== undefined)
       //return Mouse.abs(e.changedTouches[e.targetTouches.length - 1]);

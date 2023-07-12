@@ -19,8 +19,8 @@ import { Region, SequencesMSA } from "./types/types";
 @customElement("nightingale-msa")
 class NightingaleMSA extends withManager(
   withResizable(
-    withHighlight(withMargin(withDimensions(withPosition(NightingaleElement))))
-  )
+    withHighlight(withMargin(withDimensions(withPosition(NightingaleElement)))),
+  ),
 ) {
   @property({
     attribute: "color-scheme",
@@ -53,7 +53,7 @@ class NightingaleMSA extends withManager(
   overlayConservtion = false;
 
   worker = new Worker(
-    new URL("./workers/conservation.worker.ts", import.meta.url)
+    new URL("./workers/conservation.worker.ts", import.meta.url),
   ); //new ConservationWorker();
 
   private sequenceViewer?: SequenceViewerComponent | null;
@@ -66,7 +66,7 @@ class NightingaleMSA extends withManager(
         new CustomEvent("conservationProgress", {
           bubbles: true,
           detail: e.data,
-        })
+        }),
       );
       if (e.data.progress === 1) {
         const conservation = {
@@ -166,7 +166,7 @@ class NightingaleMSA extends withManager(
           },
           fillColor: this["highlight-color"],
           borderColor: this["highlight-color"],
-        } as Region)
+        }) as Region,
     );
   }
   protected firstUpdated() {

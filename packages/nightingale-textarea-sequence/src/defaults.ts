@@ -12,7 +12,7 @@ export const alphabets = {
 
 export const formatSequence = (
   sequence: string,
-  options: Record<string, unknown> = {}
+  options: Record<string, unknown> = {},
 ): string => {
   const block = (options.block as number) || 10;
   const line = (options.line as number) || 50;
@@ -28,7 +28,7 @@ export const formatSequence = (
 
 const injectComments = (
   formattedSequence: string,
-  comments: SequenceComments
+  comments: SequenceComments,
 ): string => {
   const commentPositions = Object.keys(comments).map(Number);
   if (!commentPositions.length) return formattedSequence;
@@ -55,7 +55,7 @@ export const cleanUpText = (
   removeComments = true,
   single = true,
   disableHeaderCheck = false,
-  format = formatSequence
+  format = formatSequence,
 ) => {
   const sequences: SequenceObject[] = [];
   let current = -1;
@@ -96,7 +96,7 @@ export const cleanUpText = (
           .replace(/\s/g, "")
           .replace(
             new RegExp(`([^${alphabet}])`, caseSensitive ? "g" : "ig"),
-            ""
+            "",
           );
       }
     });
@@ -105,8 +105,8 @@ export const cleanUpText = (
       ({ header, sequence, comments }) =>
         `${header ? `> ${header}\n` : ""}${injectComments(
           format(sequence),
-          comments
-        )}`
+          comments,
+        )}`,
     )
     .join("\n\n");
 };

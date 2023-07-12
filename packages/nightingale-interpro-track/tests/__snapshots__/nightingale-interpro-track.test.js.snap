@@ -2,10 +2,16 @@
 
 exports[`nightingale-interpro-track tests it should display the sequence correctly after highlight 1`] = `
 <nightingale-interpro-track
-  height="20"
+  display-end="-1"
+  display-start="1"
+  height="2"
   highlight="10:30"
+  highlight-color="#FFEB3B66"
   length="450"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
+  width="100"
 >
   <!---->
   <svg
@@ -563,9 +569,15 @@ exports[`nightingale-interpro-track tests it should display the sequence correct
 
 exports[`nightingale-interpro-track tests it should display the track correctly 1`] = `
 <nightingale-interpro-track
-  height="20"
+  display-end="-1"
+  display-start="1"
+  height="2"
+  highlight-color="#FFEB3B66"
   length="450"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
+  width="100"
 >
   <!---->
   <svg
@@ -910,9 +922,13 @@ exports[`nightingale-interpro-track tests it should zoom in 1`] = `
 <nightingale-interpro-track
   display-end="264"
   display-start="260"
-  height="20"
+  height="2"
+  highlight-color="#FFEB3B66"
   length="450"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
+  width="100"
 >
   <!---->
   <svg

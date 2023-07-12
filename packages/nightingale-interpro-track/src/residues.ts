@@ -45,7 +45,7 @@ export const createResidueGroup = (baseG: BaseGroup) => {
           ...r,
           feature: d,
           i,
-        })) || []
+        })) || [],
     )
     .enter()
     .append("g")
@@ -59,7 +59,7 @@ export const createResidueGroup = (baseG: BaseGroup) => {
         location: loc,
         i: d.i,
         j,
-      }))
+      })),
     )
     .enter()
     .append("g")
@@ -95,8 +95,8 @@ export const createResiduePaths = ({
             k: d.feature.k,
             i: d.i,
             j: d.j,
-          } as ResidueDatum)
-      )
+          }) as ResidueDatum,
+      ),
     )
     .enter()
     .append("path")
@@ -125,17 +125,17 @@ export const refreshResiduePaths = ({
   const numberOfSibillings = new Set(
     paths
       .data()
-      .map((f) => `${f.feature?.accession}-${f.location?.description}`)
+      .map((f) => `${f.feature?.accession}-${f.location?.description}`),
   ).size;
   paths
     .attr("d", getResidueShape)
     .attr("transform", getResidueTransform)
     .style("pointer-events", (f) =>
-      expanded || (f.feature && f.feature.expanded) ? "auto" : "none"
+      expanded || (f.feature && f.feature.expanded) ? "auto" : "none",
     )
     .style("stroke", () => (expanded ? null : "none"))
     .style("opacity", () =>
-      expanded ? null : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings
+      expanded ? null : MAX_OPACITY_WHILE_COLAPSED / numberOfSibillings,
     )
     .attr("fill", getResidueFill);
 };

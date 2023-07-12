@@ -2,7 +2,13 @@
 
 exports[`nightingale-sequence tests it should display the sequence correctly 1`] = `
 <nightingale-sequence
+  display-end="-1"
+  display-start="1"
+  height="100"
+  highlight-color="#FFEB3B66"
   length="15"
+  min-height="10"
+  min-width="10"
   sequence="MADYDDEFDTKASDL"
   style="height: 100%; display: inline-block; line-height: 0;"
   width="800"
@@ -392,8 +398,14 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
 
 exports[`nightingale-sequence tests it should display the sequence correctly after highlight 1`] = `
 <nightingale-sequence
+  display-end="-1"
+  display-start="1"
+  height="100"
   highlight="2:5"
+  highlight-color="#FFEB3B66"
   length="15"
+  min-height="10"
+  min-width="10"
   sequence="MADYDDEFDTKASDL"
   style="height: 100%; display: inline-block; line-height: 0;"
   width="800"
@@ -793,7 +805,11 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
 <nightingale-sequence
   display-end="4"
   display-start="2"
+  height="100"
+  highlight-color="#FFEB3B66"
   length="15"
+  min-height="10"
+  min-width="10"
   sequence="MADYDDEFDTKASDL"
   style="height: 100%; display: inline-block; line-height: 0;"
   width="800"

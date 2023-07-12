@@ -20,7 +20,7 @@ const withPosition = <T extends Constructor<NightingaleBaseElement>>(
     "display-start"?: number;
     "display-end"?: number;
     length?: number;
-  } = {}
+  } = {},
 ) => {
   class WithPosition extends superClass {
     #intitialOptions = { ...defaultOptions, ...options };

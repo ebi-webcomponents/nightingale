@@ -95,7 +95,7 @@ export type StructureViewer = {
 
 export const getStructureViewer = async (
   container: HTMLDivElement,
-  onHighlightClick: (sequencePositions: SequencePosition[]) => void
+  onHighlightClick: (sequencePositions: SequencePosition[]) => void,
 ): Promise<StructureViewer> => {
   const plugin = new PluginContext(spec);
   await plugin.init();
@@ -138,24 +138,24 @@ export const getStructureViewer = async (
     async loadPdb(pdb) {
       await this.loadCifUrl(
         `https://www.ebi.ac.uk/pdbe/model-server/v1/${pdb.toLowerCase()}/full?encoding=bcif`,
-        true
+        true,
       );
     },
     async loadCifUrl(url, isBinary = false): Promise<void> {
       const data = await plugin.builders.data.download(
         { url, isBinary },
-        { state: { isGhost: true } }
+        { state: { isGhost: true } },
       );
 
       const trajectory = await plugin.builders.structure.parseTrajectory(
         data,
-        "mmcif"
+        "mmcif",
       );
 
       await plugin.builders.structure.hierarchy.applyPreset(
         trajectory,
         "all-models",
-        { useDefaultIfSingleModel: true }
+        { useDefaultIfSingleModel: true },
       );
     },
     highlight(ranges) {
@@ -183,11 +183,11 @@ export const getStructureViewer = async (
                     Q.struct.atomProperty.macromolecular.auth_asym_id(),
                     chain,
                   ]),
-                ])
-              )
+                ]),
+              ),
             ),
           }),
-        data
+        data,
       );
       const loci = StructureSelection.toLociWithSourceUnits(sel);
       plugin.managers.camera.focusLoci(loci);

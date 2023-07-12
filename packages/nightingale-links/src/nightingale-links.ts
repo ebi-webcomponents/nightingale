@@ -19,7 +19,7 @@ const d3Color = scaleLinear([0, 1], ["orange", "blue"]);
 const getHighlightEvent = (
   type: string,
   target: NightingaleLinks,
-  residues?: Array<number>
+  residues?: Array<number>,
 ): CustomEvent => {
   return new CustomEvent("change", {
     detail: {
@@ -54,7 +54,7 @@ class NightingaleLinks extends NightingaleTrack {
     ) {
       if (this._rawData) {
         this.#contacts = getContactsObject(
-          filterContacts(this._rawData, this.minDistance, this.minProbability)
+          filterContacts(this._rawData, this.minDistance, this.minProbability),
         );
         this.createTrack();
       }
@@ -70,7 +70,7 @@ class NightingaleLinks extends NightingaleTrack {
       throw new Error("data is not in a valid format");
     }
     this.#contacts = getContactsObject(
-      filterContacts(this._rawData, this.minDistance, this.minProbability)
+      filterContacts(this._rawData, this.minDistance, this.minProbability),
     );
     this.createTrack();
   }
@@ -110,7 +110,7 @@ class NightingaleLinks extends NightingaleTrack {
   _getColor(d: number): string {
     if (!this.#contacts?.contacts[d]) return "";
     return d3Color(
-      this.#contacts.contacts[d].size / this.#contacts.maxNumberOfContacts
+      this.#contacts.contacts[d].size / this.#contacts.maxNumberOfContacts,
     );
   }
 
@@ -121,8 +121,8 @@ class NightingaleLinks extends NightingaleTrack {
       getHighlightEvent(
         "mouseover",
         this,
-        Array.from(this.#contacts.contacts[d]).concat(+d).sort()
-      )
+        Array.from(this.#contacts.contacts[d]).concat(+d).sort(),
+      ),
     );
   }
 
@@ -187,20 +187,20 @@ class NightingaleLinks extends NightingaleTrack {
         this.getRadius(
           d === this.#contacts?.selected ||
             this.#contacts?.contacts[d].has(this.#contacts?.selected || 0) ||
-            false
-        )
+            false,
+        ),
       )
       .attr("stroke", (d: number) =>
         d === this.#contacts?.selected && this.#contacts.isHold
           ? "rgb(127 255 127)"
-          : null
+          : null,
       )
       .style("opacity", (d: number) =>
-        d === this.#contacts?.selected ? 1 : OPACITY_MOUSEOUT
+        d === this.#contacts?.selected ? 1 : OPACITY_MOUSEOUT,
       );
     const selectedLinks = this.#contacts.selected
       ? this._linksData?.filter((link) =>
-          link.includes(+(this.#contacts?.selected || 0))
+          link.includes(+(this.#contacts?.selected || 0)),
         ) || []
       : [];
 
@@ -236,7 +236,7 @@ class NightingaleLinks extends NightingaleTrack {
       .attr(
         "cx",
         (d: number) =>
-          this.getXFromSeqPosition(d) + this.getSingleBaseWidth() / 2
+          this.getXFromSeqPosition(d) + this.getSingleBaseWidth() / 2,
       )
       .attr("cy", this.height * 0.5);
 
