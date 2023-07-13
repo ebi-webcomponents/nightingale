@@ -26,7 +26,7 @@
     "@storybook/{app}/webpack": "5.88.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.8",
+    "@babel/core": "^7.22.9",
     "@codesandbox/sandpack-react": "2.6.9",
     "@custom-elements-manifest/analyzer": "0.8.3",
     "@rollup/plugin-commonjs": "25.0.2",
