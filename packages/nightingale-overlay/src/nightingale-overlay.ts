@@ -166,9 +166,3 @@ class NightingaleOverlay extends NightingaleElement {
 }
 
 export default NightingaleOverlay;
-
-// declare global {
-//   interface HTMLElementTagNameMap {
-//     "nightingale-overlay": NightingaleOverlay;
-//   }
-// }

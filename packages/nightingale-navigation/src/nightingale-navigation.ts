@@ -376,9 +376,3 @@ class NightingaleNavigation extends withManager(
 }
 
 export default NightingaleNavigation;
-
-// declare global {
-//   interface HTMLElementTagNameMap {
-//     "nightingale-navigation": NightingaleNavigation;
-//   }
-// }

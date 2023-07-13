@@ -388,8 +388,3 @@ class NightingaleLinegraphTrack extends withManager(
 }
 
 export default NightingaleLinegraphTrack;
-// declare global {
-//   interface HTMLElementTagNameMap {
-//     "nightingale-linegraph-track": NightingaleLinegraphTrack;
-//   }
-// }

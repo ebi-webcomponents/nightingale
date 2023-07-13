@@ -557,9 +557,3 @@ function getVisibleEnd(
   return Math.min(featureEnd || 0, dEnd);
 }
 export default NightingaleInterproTrack;
-
-// declare global {
-//   interface HTMLElementTagNameMap {
-//     "nightingale-interpro-track": NightingaleInterproTrack;
-//   }
-// }
