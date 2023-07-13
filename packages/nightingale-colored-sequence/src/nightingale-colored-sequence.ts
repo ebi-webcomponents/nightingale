@@ -38,9 +38,9 @@ const MIN_BASE_SIZE = 8;
 
 @customElement("nightingale-colored-sequence")
 class NightingaleColoredSequence extends NightingaleSequence {
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   scale?: string = undefined;
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   "color-range"?: string = undefined;
 
   #uniqueID = "";
