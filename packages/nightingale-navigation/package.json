@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-navigation",
-  "version": "4.2.1",
+  "version": "4.3.0-alpha.0",
   "description": "Navigation component for the Nightingale tool",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -32,7 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.2.1",
+    "@nightingale-elements/nightingale-new-core": "^4.3.0-alpha.0",
     "d3": "7.8.5"
   }
 }
