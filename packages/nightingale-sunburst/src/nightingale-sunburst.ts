@@ -105,21 +105,21 @@ const getDistanceOfPointsInRadians = (
 @customElement("nightingale-sunburst")
 class NightingaleSunburst extends LitElement {
   @property({ type: Number })
-  side = 500;
+  side?: number = 500;
   @property({ type: String })
   "weight-attribute": WeightAttributes = "value";
   @property({ type: String })
-  "weight-attribute-label" = "Value";
+  "weight-attribute-label"?: string = "Value";
   @property({ type: String })
   "name-attribute": NameAttributes = "name";
   @property({ type: String })
   "id-attribute": NameAttributes = "id";
   @property({ type: Number })
-  "max-depth" = Infinity;
+  "max-depth"?: number = Infinity;
   @property({ type: Number })
-  "font-size" = 10;
+  "font-size"?: number = 10;
   @property({ type: Boolean })
-  "show-tooltip" = false;
+  "show-tooltip"?: boolean = false;
 
   #data: Node | null = null;
 
@@ -131,8 +131,8 @@ class NightingaleSunburst extends LitElement {
   handleMousemove = (event: MouseEvent) => {
     if (!this.root || (this.activeSegment && this.holdSegment)) return;
     this.selectNodeByPosition(
-      event.offsetX - this.side / 2,
-      event.offsetY - this.side / 2,
+      event.offsetX - (this.side as number) / 2,
+      event.offsetY - (this.side as number) / 2
     );
   };
 
@@ -141,19 +141,23 @@ class NightingaleSunburst extends LitElement {
     this.holdSegment = !this.holdSegment;
     if (!this.holdSegment) {
       this.selectNodeByPosition(
-        event.offsetX - this.side / 2,
-        event.offsetY - this.side / 2,
+        event.offsetX - (this.side as number) / 2,
+        event.offsetY - (this.side as number) / 2
       );
     }
   };
 
   prepareTree() {
     if (!this.#data) return;
-    const dataWithValues = prepareTreeData(this.#data, 0, this["max-depth"]);
+    const dataWithValues = prepareTreeData(
+      this.#data,
+      0,
+      this["max-depth"] as number
+    );
     this.root = partition(
       dataWithValues,
-      this.side / 2,
-      this["weight-attribute"],
+      (this.side as number) / 2,
+      this["weight-attribute"]
     );
   }
 
@@ -204,8 +208,8 @@ class NightingaleSunburst extends LitElement {
     const canvasNode = canvas.node();
     if (!canvasNode || !this.#data) return;
     const context = canvasNode.getContext("2d");
-    const width = this.side;
-    const height = this.side;
+    const width = this.side as number;
+    const height = this.side as number;
 
     if (!context) return;
     context.clearRect(0, 0, width, height);
@@ -221,7 +225,8 @@ class NightingaleSunburst extends LitElement {
   renderArcs(context: CanvasRenderingContext2D, width: number, height: number) {
     for (const segment of this.root
       ?.descendants()
-      .filter((d) => d.depth && d.depth <= this["max-depth"]) || []) {
+      .filter((d) => d.depth && d.depth <= (this["max-depth"] as number)) ||
+      []) {
       // Initialize path
       context.beginPath();
 
@@ -272,8 +277,8 @@ class NightingaleSunburst extends LitElement {
       .filter(
         (d) =>
           d.depth &&
-          d.depth <= this["max-depth"] &&
-          ((d.y0 + d.y1) / 2) * (d.x1 - d.x0) > 10,
+          d.depth <= (this["max-depth"] as number) &&
+          ((d.y0 + d.y1) / 2) * (d.x1 - d.x0) > 10
       );
     for (const segment of labelsToDisplay || []) {
       const angle = (segment.x0 + segment.x1) / 2;
@@ -407,7 +412,10 @@ class NightingaleSunburst extends LitElement {
   }
 
   render() {
-    return html` <canvas width="${this.side}px" height="${this.side}px">
+    return html` <canvas
+      width="${this.side as number}px"
+      height="${this.side as number}px"
+    >
       Nightingale Sunburst
     </canvas>`;
   }

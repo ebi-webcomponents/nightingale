@@ -8,11 +8,14 @@ import {
   contactObjectToLinkList,
   getContactsObject,
   filterContacts,
+  ArrayOfNumberArray,
+  ContactObject,
+  LinksData,
 } from "./links-parser";
-import { ArrayOfNumberArray, ContactObject, LinksData } from "./declarations";
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 
 const OPACITY_MOUSEOUT = 0.4;
+const DEFAULT_PROBABILITY = 0.7;
 
 const d3Color = scaleLinear([0, 1], ["orange", "blue"]);
 
@@ -37,10 +40,10 @@ const getHighlightEvent = (
 @customElement("nightingale-links")
 class NightingaleLinks extends NightingaleTrack {
   @property({ type: Number, attribute: "min-distance" })
-  minDistance = 0;
+  minDistance?: number = 0;
 
   @property({ type: Number, attribute: "min-probability" })
-  minProbability = 0.7;
+  minProbability?: number = DEFAULT_PROBABILITY;
 
   _rawData?: ArrayOfNumberArray | null = null;
   _linksData?: ArrayOfNumberArray | null = null;
@@ -54,7 +57,11 @@ class NightingaleLinks extends NightingaleTrack {
     ) {
       if (this._rawData) {
         this.#contacts = getContactsObject(
-          filterContacts(this._rawData, this.minDistance, this.minProbability),
+          filterContacts(
+            this._rawData,
+            this.minDistance || 0,
+            this.minProbability || DEFAULT_PROBABILITY
+          )
         );
         this.createTrack();
       }
@@ -70,7 +77,11 @@ class NightingaleLinks extends NightingaleTrack {
       throw new Error("data is not in a valid format");
     }
     this.#contacts = getContactsObject(
-      filterContacts(this._rawData, this.minDistance, this.minProbability),
+      filterContacts(
+        this._rawData,
+        this.minDistance || 0,
+        this.minProbability || DEFAULT_PROBABILITY
+      )
     );
     this.createTrack();
   }

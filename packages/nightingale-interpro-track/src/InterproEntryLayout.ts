@@ -27,7 +27,7 @@ export type Residue = {
 
 export type InterProFeature = Feature & {
   residues: Residue[];
-  expanded: boolean;
+  expanded?: boolean;
   i?: number;
   j?: number;
   k?: number;

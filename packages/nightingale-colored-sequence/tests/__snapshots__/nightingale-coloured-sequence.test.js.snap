@@ -35,7 +35,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="M"
         data-pos="1"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(156, 135, 99)"
         height="40"
         width="52"
         x="10"
@@ -44,7 +44,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="A"
         data-pos="2"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(106, 92, 149)"
         height="40"
         width="52"
         x="62"
@@ -53,7 +53,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="D"
         data-pos="3"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(96, 83, 159)"
         height="40"
         width="52"
         x="114"
@@ -62,7 +62,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="Y"
         data-pos="4"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(113, 98, 142)"
         height="40"
         width="52"
         x="166"
@@ -71,7 +71,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="D"
         data-pos="5"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(96, 83, 159)"
         height="40"
         width="52"
         x="218"
@@ -80,7 +80,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="D"
         data-pos="6"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(96, 83, 159)"
         height="40"
         width="52"
         x="270"
@@ -89,7 +89,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="E"
         data-pos="7"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(120, 104, 135)"
         height="40"
         width="52"
         x="322"
@@ -98,7 +98,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="F"
         data-pos="8"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(164, 143, 91)"
         height="40"
         width="52"
         x="374"
@@ -107,7 +107,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="D"
         data-pos="9"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(96, 83, 159)"
         height="40"
         width="52"
         x="426"
@@ -116,7 +116,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="T"
         data-pos="10"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(120, 104, 135)"
         height="40"
         width="52"
         x="478"
@@ -125,7 +125,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="K"
         data-pos="11"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(0, 0, 255)"
         height="40"
         width="52"
         x="530"
@@ -134,7 +134,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="A"
         data-pos="12"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(106, 92, 149)"
         height="40"
         width="52"
         x="582"
@@ -143,7 +143,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="S"
         data-pos="13"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(106, 92, 149)"
         height="40"
         width="52"
         x="634"
@@ -152,7 +152,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="D"
         data-pos="14"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(96, 83, 159)"
         height="40"
         width="52"
         x="686"
@@ -161,7 +161,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         class="base_bg feature"
         data-base="L"
         data-pos="15"
-        fill="rgb(128, 111, 128)"
+        fill="rgb(171, 149, 84)"
         height="40"
         width="52"
         x="738"
@@ -176,63 +176,63 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
       >
         <stop
           offset="0.03333333333333333"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(156, 135, 99)"
         />
         <stop
           offset="0.1"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(106, 92, 149)"
         />
         <stop
           offset="0.16666666666666666"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(96, 83, 159)"
         />
         <stop
           offset="0.23333333333333334"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(113, 98, 142)"
         />
         <stop
           offset="0.3"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(96, 83, 159)"
         />
         <stop
           offset="0.36666666666666664"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(96, 83, 159)"
         />
         <stop
           offset="0.43333333333333335"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(120, 104, 135)"
         />
         <stop
           offset="0.5"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(164, 143, 91)"
         />
         <stop
           offset="0.5666666666666667"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(96, 83, 159)"
         />
         <stop
           offset="0.6333333333333333"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(120, 104, 135)"
         />
         <stop
           offset="0.7"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(0, 0, 255)"
         />
         <stop
           offset="0.7666666666666667"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(106, 92, 149)"
         />
         <stop
           offset="0.8333333333333334"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(106, 92, 149)"
         />
         <stop
           offset="0.9"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(96, 83, 159)"
         />
         <stop
           offset="0.9666666666666667"
-          stop-color="rgb(128, 111, 128)"
+          stop-color="rgb(171, 149, 84)"
         />
       </lineargradient>
     </defs>

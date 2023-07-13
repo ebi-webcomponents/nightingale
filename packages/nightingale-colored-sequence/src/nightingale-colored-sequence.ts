@@ -26,7 +26,7 @@ const defaultScale = {
   range: ["#ffdd00", "#0000FF"],
 };
 
-type DataBlock = {
+export type DataBlock = {
   start: number;
   end: number;
   aa: string;
@@ -39,9 +39,9 @@ const MIN_BASE_SIZE = 8;
 @customElement("nightingale-colored-sequence")
 class NightingaleColoredSequence extends NightingaleSequence {
   @property({ type: String })
-  scale = undefined;
+  scale?: string = undefined;
   @property({ type: String })
-  "color-range" = undefined;
+  "color-range"?: string = undefined;
 
   #uniqueID = "";
   #gradient?: Selection<

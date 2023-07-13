@@ -52,11 +52,11 @@ function colorKeywordToRGB(colorKeyword: string) {
 @customElement("nightingale-interpro-track")
 class NightingaleInterproTrack extends NightingaleTrack {
   @property({ type: Boolean })
-  expanded = false;
+  expanded?: boolean = false;
   @property({ type: Boolean })
-  "show-label" = false;
+  "show-label"?: boolean = false;
   @property({ type: String })
-  label: string | null = null;
+  label?: string | null = null;
 
   layout = undefined;
   protected layoutObj?: InterproEntryLayout;
@@ -83,7 +83,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
 
   protected createTrack() {
     if (!this.layoutObj) return;
-    this.layoutObj.expanded = this.expanded;
+    this.layoutObj.expanded = !!this.expanded;
     this.#childrenG = undefined;
     super.createTrack();
   }
@@ -117,7 +117,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
   getLayout() {
     return new InterproEntryLayout({
       layoutHeight: this.height,
-      expanded: this.expanded,
+      expanded: !!this.expanded,
       padding: (this["margin-top"] + this["margin-bottom"]) / 2,
     });
   }
@@ -199,7 +199,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
       baseG: this.#residuesG,
       getResidueShape: (d) => this.getResidueShape(d),
       getResidueTransform: (d) => this.getResidueTransform(d),
-      getResidueFill: (d) => this.getResidueFill(d, this.expanded),
+      getResidueFill: (d) => this.getResidueFill(d, !!this.expanded),
       element: this,
     });
 
@@ -289,7 +289,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
         baseG: this.#childResiduesG,
         getResidueShape: (d) => this.getResidueShape(d),
         getResidueTransform: (d) => this.getResidueTransform(d),
-        getResidueFill: (d) => this.getResidueFill(d, d.feature?.expanded),
+        getResidueFill: (d) => this.getResidueFill(d, !!d.feature?.expanded),
         element: this,
       });
       if (this.#coverage?.length)
@@ -436,7 +436,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
 
   refresh() {
     if (this.#haveCreatedFeatures && this.layoutObj) {
-      this.layoutObj.expanded = this.expanded;
+      this.layoutObj.expanded = !!this.expanded;
       this.layoutObj.init(this.data as InterProFeature[], this.#contributors);
       this.height = this.layoutObj.maxYPos;
 
@@ -458,10 +458,10 @@ class NightingaleInterproTrack extends NightingaleTrack {
       if (this.#residuesG)
         refreshResiduePaths({
           baseG: this.#residuesG,
-          expanded: this.expanded,
+          expanded: !!this.expanded,
           getResidueShape: (d) => this.getResidueShape(d),
           getResidueTransform: (d) => this.getResidueTransform(d),
-          getResidueFill: (d) => this.getResidueFill(d, this.expanded),
+          getResidueFill: (d) => this.getResidueFill(d, !!this.expanded),
         });
 
       if (this.#contributors) {
@@ -497,10 +497,11 @@ class NightingaleInterproTrack extends NightingaleTrack {
         if (this.#childResiduesG)
           refreshResiduePaths({
             baseG: this.#childResiduesG,
-            expanded: this.expanded,
+            expanded: !!this.expanded,
             getResidueShape: (d) => this.getResidueShape(d),
             getResidueTransform: (d) => this.getResidueTransform(d),
-            getResidueFill: (d) => this.getResidueFill(d, d.feature?.expanded),
+            getResidueFill: (d) =>
+              this.getResidueFill(d, !!d.feature?.expanded),
           });
 
         if (this.#coverage?.length)

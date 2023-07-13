@@ -1,4 +1,4 @@
-import NightingaleNavigation from "../src/index";
+import NightingaleNavigation from "../dist/index";
 
 let rendered: NightingaleNavigation;
 
