@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-overlay",
-  "version": "4.2.1",
+  "version": "4.2.2-alpha.0",
   "files": [
     "dist",
     "src"
@@ -29,6 +29,6 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.2.1"
+    "@nightingale-elements/nightingale-new-core": "^4.2.2-alpha.0"
   }
 }

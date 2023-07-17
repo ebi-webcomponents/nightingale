@@ -66,13 +66,13 @@ class NightingaleNavigation extends withManager(
   #currentSelection: BrushSelection | null = null;
 
   @property({ type: Number })
-  "ruler-start" = 1;
+  "ruler-start"?: number = 1;
   @property({ type: Number })
-  "ruler-padding" = 10;
+  "ruler-padding"?: number = 10;
   @property({ type: Number })
-  "scale-factor" = (this.length || 0) / 5 || 10;
+  "scale-factor"?: number = (this.length || 0) / 5 || 10;
   @property({ type: Boolean })
-  "show-highlight" = false;
+  "show-highlight"?: boolean = false;
 
   constructor() {
     super();
@@ -81,10 +81,14 @@ class NightingaleNavigation extends withManager(
   }
 
   private createNavRuler() {
-    const limit = this.width - this["margin-right"] - this["ruler-padding"];
+    const limit =
+      this.width - this["margin-right"] - (this["ruler-padding"] as number);
     this.#x = scaleLinear()
-      .range([this["margin-left"] + this["ruler-padding"], limit])
-      .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)]);
+      .range([this["margin-left"] + (this["ruler-padding"] as number), limit])
+      .domain([
+        this["ruler-start"] as number,
+        (this["ruler-start"] as number) + (this.length || 1),
+      ]);
     this.#svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
       .attr("id", "")
@@ -117,7 +121,7 @@ class NightingaleNavigation extends withManager(
 
     this.#viewport = brushX()
       .extent([
-        [this["margin-left"] + this["ruler-padding"], 0],
+        [this["margin-left"] + (this["ruler-padding"] as number), 0],
         [limit, this.height * 0.5 + HANDLE_SIZE / 2],
       ])
       .handleSize(HANDLE_SIZE)
@@ -186,15 +190,15 @@ class NightingaleNavigation extends withManager(
   onDimensionsChange() {
     if (!this.#x) return;
     this.#x.range([
-      this["margin-left"] + this["ruler-padding"],
-      this.width - this["margin-right"] - this["ruler-padding"],
+      this["margin-left"] + (this["ruler-padding"] as number),
+      this.width - this["margin-right"] - (this["ruler-padding"] as number),
     ]);
     this.#svg?.attr("width", this.width);
     this.#svg?.attr("height", this.height);
     this.#viewport?.extent([
-      [this["margin-left"] + this["ruler-padding"], 0],
+      [this["margin-left"] + (this["ruler-padding"] as number), 0],
       [
-        this.width - this["margin-right"] - this["ruler-padding"],
+        this.width - this["margin-right"] - (this["ruler-padding"] as number),
         this.height * 0.5 + HANDLE_SIZE / 2,
       ],
     ]);
@@ -215,8 +219,8 @@ class NightingaleNavigation extends withManager(
   renderD3() {
     if (this.#x && this.#axis && this.#xAxis && this.#viewport) {
       this.#x.domain([
-        this["ruler-start"],
-        this["ruler-start"] + (this.length || 1) - 1,
+        this["ruler-start"] as number,
+        (this["ruler-start"] as number) + (this.length || 1) - 1,
       ]);
       this.#axis.call(this.#xAxis);
       this.updatePolygon();
@@ -242,23 +246,23 @@ class NightingaleNavigation extends withManager(
   zoomOut() {
     this.locate(
       Math.max(
-        this["ruler-start"] || 1,
-        this.getStart() - this["scale-factor"]
+        (this["ruler-start"] as number) || 1,
+        this.getStart() - (this["scale-factor"] as number)
       ),
       Math.min(
-        (this.length || 1) + this["ruler-start"] - 1,
-        this.getEnd() + this["scale-factor"]
+        (this.length || 1) + (this["ruler-start"] as number) - 1,
+        this.getEnd() + (this["scale-factor"] as number)
       )
     );
   }
   zoomIn() {
     const newStart = Math.min(
-      this.getStart() + this["scale-factor"],
+      this.getStart() + (this["scale-factor"] as number),
       this.getEnd() - 1
     );
     this.locate(
       newStart,
-      Math.max(this.getEnd() - this["scale-factor"], newStart + 1)
+      Math.max(this.getEnd() - (this["scale-factor"] as number), newStart + 1)
     );
   }
   protected updateHighlight() {
@@ -273,10 +277,13 @@ class NightingaleNavigation extends withManager(
 
     // Scale to match the range of the navigation brush [1,length]
     const s2 = scaleLinear()
-      .domain([this["ruler-start"], this["ruler-start"] + (this.length || 1)])
+      .domain([
+        this["ruler-start"] as number,
+        (this["ruler-start"] as number) + (this.length || 1),
+      ])
       .range([
-        this["margin-left"] + this["ruler-padding"],
-        this.width - this["margin-right"] - this["ruler-padding"],
+        this["margin-left"] + (this["ruler-padding"] as number),
+        this.width - this["margin-right"] - (this["ruler-padding"] as number),
       ]);
 
     // Highlight Polygon

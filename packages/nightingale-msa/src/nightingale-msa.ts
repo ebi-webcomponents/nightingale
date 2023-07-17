@@ -14,8 +14,9 @@ import NightingaleElement, {
 } from "@nightingale-elements/nightingale-new-core";
 import object2style from "./utils/object2style";
 import { Region, SequencesMSA } from "./types/types";
-// import ConservationWorker from "web-worker:./workers/conservation.worker";
 
+const DEAFULT_TILE_HEIGHT = 20;
+const DEAFULT_COLOR_SCHEME = "clustal2";
 @customElement("nightingale-msa")
 class NightingaleMSA extends withManager(
   withResizable(
@@ -25,36 +26,36 @@ class NightingaleMSA extends withManager(
   @property({
     attribute: "color-scheme",
   })
-  colorScheme = "clustal2";
+  colorScheme?: string = DEAFULT_COLOR_SCHEME;
   @property({
     type: Number,
     attribute: "label-width",
   })
-  labelWidth = 0;
+  labelWidth?: number = 0;
   @property({
     type: Number,
     attribute: "tile-height",
   })
-  tileHeight = 20;
+  tileHeight?: number = DEAFULT_TILE_HEIGHT;
   @property({
     attribute: "active-label",
     reflect: true,
   })
-  activeLabel = "";
+  activeLabel?: string = "";
   @property({
     type: Number,
     attribute: "conservation-sample-size",
   })
-  sampleSize = 20;
+  sampleSize?: number = 20;
   @property({
     type: Boolean,
     attribute: "overlay-conservation",
   })
-  overlayConservtion = false;
+  overlayConservtion?: boolean = false;
 
   worker = new Worker(
     new URL("./workers/conservation.worker.ts", import.meta.url)
-  ); //new ConservationWorker();
+  );
 
   private sequenceViewer?: SequenceViewerComponent | null;
   private labelPanel?: LabelsComponent | null;
@@ -119,26 +120,28 @@ class NightingaleMSA extends withManager(
       width: "100%",
       background: this["margin-color"],
     };
+    const labelWidth = this.labelWidth || 0;
+    const tileHeight = this.tileHeight || DEAFULT_TILE_HEIGHT;
     return html`
       ${this["margin-top"] > 0
         ? html`<div style=${object2style(topMarginStyle)}></div>`
         : ""}
       <div style=${object2style(containerStyle)}>
-        ${this.labelWidth > 0
+        ${labelWidth > 0
           ? html`<msa-labels
-              width=${this.labelWidth}
+              width=${labelWidth}
               height=${this.height}
-              tile-height=${this.tileHeight}
-              active-label=${this.activeLabel}
+              tile-height=${tileHeight}
+              active-label=${this.activeLabel || ""}
             ></msa-labels>`
           : ""}
 
         <div style=${object2style(leftMarginStyle)}></div>
         <msa-sequence-viewer
           height=${this.height}
-          width=${this.getWidthWithMargins() - this.labelWidth}
-          color-scheme=${this.colorScheme}
-          tile-height=${this.tileHeight}
+          width=${this.getWidthWithMargins() - labelWidth}
+          color-scheme=${this.colorScheme || DEAFULT_COLOR_SCHEME}
+          tile-height=${tileHeight}
           display-start=${this["display-start"] || 0}
           display-end=${this["display-end"] || 0}
           length=${this.length || 0}
