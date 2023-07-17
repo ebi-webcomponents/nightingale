@@ -10,7 +10,6 @@ exports[`nightingale-navigation tests it should display the navigation correctly
   min-height="10"
   min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
-  width="100"
 >
   <!---->
   <svg
@@ -329,7 +328,6 @@ exports[`nightingale-navigation tests it should display the navigation correctly
   min-height="10"
   min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
-  width="100"
 >
   <!---->
   <svg

@@ -10,7 +10,8 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup --config ../../rollup.config.mjs"
+    "build": "rollup --config ../../rollup.config.mjs",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js ./tests/*"
   },
   "publishConfig": {
     "access": "public"

@@ -11,7 +11,6 @@ exports[`nightingale-track tests it should change the layout 1`] = `
   min-height="10"
   min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
-  width="100"
 >
   <!---->
   <svg
@@ -1017,7 +1016,6 @@ exports[`nightingale-track tests it should display the sequence correctly after 
   min-height="10"
   min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
-  width="100"
 >
   <!---->
   <svg
@@ -2030,7 +2028,6 @@ exports[`nightingale-track tests it should display the track correctly 1`] = `
   min-height="10"
   min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
-  width="100"
 >
   <!---->
   <svg
@@ -3000,7 +2997,6 @@ exports[`nightingale-track tests it should zoom in 1`] = `
   min-height="10"
   min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
-  width="100"
 >
   <!---->
   <svg
