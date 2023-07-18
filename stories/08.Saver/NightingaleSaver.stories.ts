@@ -31,6 +31,7 @@ const Template: Story<{
       extra-width=${args["extra-width"]}
       extra-height=${args["extra-height"]}
       ?debug=${args.debug}
+      scale-factor="2"
     >
       <button>Save a Pic! 📸</button>
     </nightingale-saver> `;

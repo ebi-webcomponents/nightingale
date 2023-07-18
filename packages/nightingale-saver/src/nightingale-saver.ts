@@ -24,6 +24,8 @@ class NightingaleSaver extends NightingaleElement {
   extraWidth?: number = 0;
   @property({ type: Number, attribute: "extra-height" })
   extraHeight?: number = 0;
+  @property({ type: Number, attribute: "scale-factor" })
+  scaleFactor?: number = 1;
   @property({ type: Boolean })
   debug?: boolean = false;
 
@@ -38,7 +40,7 @@ class NightingaleSaver extends NightingaleElement {
     const element = document.querySelector<HTMLElement>(`#${this.elementId}`);
     if (!element) {
       throw new Error(
-        "The 'element-id' attribute is not related with a current DOM element",
+        "The 'element-id' attribute is not related with a current DOM element"
       );
     }
     element.style.display = "block"; // In order to get the width and height of protvista manager, its display has to be set to block
@@ -48,26 +50,26 @@ class NightingaleSaver extends NightingaleElement {
       this.preSave();
     }
     const { width, height } = element.getBoundingClientRect();
+    const scaleFactor = this.scaleFactor || 1;
+    const scaledWidth = scaleFactor * (width + (this.extraWidth as number));
+    const scaledHeight = scaleFactor * (height + (this.extraHeight as number));
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("width", `${width + (this.extraWidth as number)}px`);
-    canvas.setAttribute("height", `${height + (this.extraHeight as number)}px`);
+    canvas.setAttribute("width", `${scaledWidth}px`);
+    canvas.setAttribute("height", `${scaledHeight}px`);
     if (this.fillColor) {
       const context = canvas.getContext("2d");
       if (context) {
         context.fillStyle = this.fillColor;
-        context.fillRect(
-          0,
-          0,
-          width + (this.extraWidth as number),
-          height + (this.extraHeight as number)
-        );
+        context.fillRect(0, 0, scaledWidth, scaledHeight);
       }
     }
     if (this.debug) element.appendChild(canvas);
 
     // Rendering the Protvista svg
     rasterizeHTML
-      .drawHTML(wrapHTML(element.outerHTML), canvas)
+      .drawHTML(wrapHTML(element.outerHTML), canvas, {
+        zoom: scaleFactor,
+      })
       .then(() => {
         const image = canvas
           .toDataURL(`image/${this.fileFormat}`, 1.0)
@@ -81,7 +83,7 @@ class NightingaleSaver extends NightingaleElement {
       .catch((err) => {
         console.error(err);
         throw new Error(
-          `Couldn't generate the snapshot for the element '${this.elementId}'`,
+          `Couldn't generate the snapshot for the element '${this.elementId}'`
         );
       })
       .finally(() => {
