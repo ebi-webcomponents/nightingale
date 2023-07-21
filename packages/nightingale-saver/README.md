@@ -81,9 +81,10 @@ Number of pixels added to the right of the image in case of any desired horizont
 
 Number of pixels added to the bottom of the image in case of any desired vertical offset
 
-#### `debug: boolean (default: false)`
+#### `preview: boolean (default: false)`
 
 If `true` the generated canvas will be added to the component in order to visually inspect the outcome image.
+The image is not downloaded. 
 
 ### Properties
 
