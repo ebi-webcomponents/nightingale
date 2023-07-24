@@ -29,9 +29,6 @@ class NightingaleSaver extends NightingaleElement {
   @property({ type: Boolean })
   preview?: boolean = false;
 
-  #height: number = -1;
-  #width: number = -1;
-
   preSave?: () => void = undefined;
   postSave?: () => void = undefined;
 
