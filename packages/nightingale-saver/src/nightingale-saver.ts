@@ -52,15 +52,12 @@ class NightingaleSaver extends NightingaleElement {
     if (typeof this.preSave === "function") {
       this.preSave();
     }
-    if (this.#height < 0 && this.#width < 0) {
-      const { width, height } = element.getBoundingClientRect();
-      this.#width = width;
-      this.#height = height;
-    }
+    element.querySelector('canvas.preview')?.remove();
+    const { width, height } = element.getBoundingClientRect();
 
     const scaleFactor = this.scaleFactor || 1;
-    const scaledWidth = scaleFactor * (this.#width + (this.extraWidth as number));
-    const scaledHeight = scaleFactor * (this.#height + (this.extraHeight as number));
+    const scaledWidth = scaleFactor * (width + (this.extraWidth as number));
+    const scaledHeight = scaleFactor * (height + (this.extraHeight as number));
     const canvas = document.createElement("canvas");
     canvas.className = "preview";
     canvas.setAttribute("width", `${scaledWidth}px`);
@@ -73,7 +70,6 @@ class NightingaleSaver extends NightingaleElement {
       }
     }
     if (this.preview) {
-      element.querySelector('canvas.preview')?.remove();
       element.appendChild(canvas);
     }
 
