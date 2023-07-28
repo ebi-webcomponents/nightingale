@@ -13,7 +13,8 @@ const Template: Story<{
   "background-color": string;
   "extra-width": number;
   "extra-height": number;
-  debug: boolean;
+  "scale-factor": number;
+  preview: boolean;
 }> = (args) => {
   return html`<nightingale-navigation
       height="50"
@@ -30,8 +31,8 @@ const Template: Story<{
       background-color=${args["background-color"]}
       extra-width=${args["extra-width"]}
       extra-height=${args["extra-height"]}
-      ?debug=${args.debug}
-      scale-factor="2"
+      scale-factor=${args["scale-factor"]}
+      ?preview=${args.preview}
     >
       <button>Save a Pic! 📸</button>
     </nightingale-saver> `;
@@ -44,5 +45,6 @@ Saver.args = {
   "background-color": "#ddddee",
   "extra-width": 0,
   "extra-height": 0,
-  debug: true,
+  "scale-factor": 2,
+  preview: true,
 };

@@ -27,7 +27,7 @@ class NightingaleSaver extends NightingaleElement {
   @property({ type: Number, attribute: "scale-factor" })
   scaleFactor?: number = 1;
   @property({ type: Boolean })
-  debug?: boolean = false;
+  preview?: boolean = false;
 
   preSave?: () => void = undefined;
   postSave?: () => void = undefined;
@@ -49,11 +49,14 @@ class NightingaleSaver extends NightingaleElement {
     if (typeof this.preSave === "function") {
       this.preSave();
     }
+    element.querySelector('canvas.preview')?.remove();
     const { width, height } = element.getBoundingClientRect();
+
     const scaleFactor = this.scaleFactor || 1;
     const scaledWidth = scaleFactor * (width + (this.extraWidth as number));
     const scaledHeight = scaleFactor * (height + (this.extraHeight as number));
     const canvas = document.createElement("canvas");
+    canvas.className = "preview";
     canvas.setAttribute("width", `${scaledWidth}px`);
     canvas.setAttribute("height", `${scaledHeight}px`);
     if (this.fillColor) {
@@ -63,7 +66,9 @@ class NightingaleSaver extends NightingaleElement {
         context.fillRect(0, 0, scaledWidth, scaledHeight);
       }
     }
-    if (this.debug) element.appendChild(canvas);
+    if (this.preview) {
+      element.appendChild(canvas);
+    }
 
     // Rendering the Protvista svg
     rasterizeHTML
@@ -74,11 +79,13 @@ class NightingaleSaver extends NightingaleElement {
         const image = canvas
           .toDataURL(`image/${this.fileFormat}`, 1.0)
           .replace(`image/${this.fileFormat}`, "image/octet-stream");
-        const link = document.createElement("a");
-        link.download = `${this.fileName}.${this.fileFormat}`;
-        link.href = image;
-        document.body.appendChild(link);
-        link.click();
+        if (!this.preview) {
+          const link = document.createElement("a");
+          link.download = `${this.fileName}.${this.fileFormat}`;
+          link.href = image;
+          document.body.appendChild(link);
+          link.click();
+        }
       })
       .catch((err) => {
         console.error(err);
