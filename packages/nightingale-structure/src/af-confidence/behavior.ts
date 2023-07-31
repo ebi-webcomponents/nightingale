@@ -35,7 +35,7 @@ export default PluginBehavior.create<{
           const u = e.unit;
           if (
             !u.model.customProperties.hasReference(
-              AfConfidenceProvider.descriptor
+              AfConfidenceProvider.descriptor,
             )
           )
             return;
@@ -43,11 +43,11 @@ export default PluginBehavior.create<{
           const se = StructureElement.Location.create(
             loci.structure,
             u,
-            u.elements[OrderedSet.getAt(e.indices, 0)]
+            u.elements[OrderedSet.getAt(e.indices, 0)],
           );
           const confidenceScore = getConfidenceScore(se);
           // eslint-disable-next-line consistent-return
-          return confidenceScore && (+confidenceScore[0] > 0)
+          return confidenceScore && +confidenceScore[0] > 0
             ? `Confidence score: ${confidenceScore[0]} <small>( ${confidenceScore[1]} )</small>`
             : ``;
         }
@@ -57,12 +57,12 @@ export default PluginBehavior.create<{
     register(): void {
       this.ctx.customModelProperties.register(
         this.provider,
-        this.params.autoAttach
+        this.params.autoAttach,
       );
       this.ctx.managers.lociLabels.addProvider(this.labelAfConfScore);
 
       this.ctx.representation.structure.themes.colorThemeRegistry.add(
-        AfConfidenceColorThemeProvider
+        AfConfidenceColorThemeProvider,
       );
     }
 
@@ -72,18 +72,18 @@ export default PluginBehavior.create<{
       this.params.showTooltip = p.showTooltip;
       this.ctx.customModelProperties.setDefaultAutoAttach(
         this.provider.descriptor.name,
-        this.params.autoAttach
+        this.params.autoAttach,
       );
       return updated;
     }
 
     unregister() {
       this.ctx.customModelProperties.unregister(
-        AfConfidenceProvider.descriptor.name
+        AfConfidenceProvider.descriptor.name,
       );
       this.ctx.managers.lociLabels.removeProvider(this.labelAfConfScore);
       this.ctx.representation.structure.themes.colorThemeRegistry.remove(
-        AfConfidenceColorThemeProvider
+        AfConfidenceColorThemeProvider,
       );
     }
   },

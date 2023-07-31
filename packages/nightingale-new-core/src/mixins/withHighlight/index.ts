@@ -26,13 +26,13 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
   options: {
     highlight?: string | null;
     "highlight-color"?: string | null;
-  } = {}
+  } = {},
 ) => {
   class WithHighlight extends superClass {
     #initialOptions = { ...defaultOptions, ...options };
-    @property({ type: String })
+    @property({ type: String, reflect: true })
     highlight = this.#initialOptions.highlight;
-    @property({ type: String })
+    @property({ type: String, reflect: true })
     "highlight-color" = this.#initialOptions["highlight-color"];
 
     highlightedRegion: Region;
@@ -47,14 +47,14 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
     set fixedHighlight(value: string | null) {
       this.#fixedHighlight = value;
       this.highlightedRegion.decode(
-        combineRegions(this.highlight || "", this.#fixedHighlight || "")
+        combineRegions(this.highlight || "", this.#fixedHighlight || ""),
       );
       this.updateHighlight();
     }
     attributeChangedCallback(
       name: string,
       oldValue: string | null,
-      newValue: string | null
+      newValue: string | null,
     ): void {
       super.attributeChangedCallback(name, oldValue, newValue);
       if (newValue === "null") newValue = null;
@@ -64,7 +64,7 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
         }
         if (name === "highlight") {
           this.highlightedRegion.decode(
-            combineRegions(newValue || "", this.#fixedHighlight || "")
+            combineRegions(newValue || "", this.#fixedHighlight || ""),
           );
         }
       }

@@ -67,13 +67,13 @@ class FakeScroll extends LitElement {
             movement,
             sourceEvent: e,
           },
-        })
+        }),
       );
   };
 
   checkOverflow(
     overflow: "hidden" | "auto" | "scroll",
-    { withX = false, withY = false }
+    { withX = false, withY = false },
   ) {
     let show = false;
     switch (overflow) {

@@ -6,6 +6,7 @@ Nightingale is a monorepo containing visualisation web components to use with
 biological data.
 
 ## Cite us
+
 **Nightingale: web components for protein feature visualization**, Bioinformatics Advances, Volume 3, Issue 1, 2023, vbad064, [https://doi.org/10.1093/bioadv/vbad064](https://doi.org/10.1093/bioadv/vbad064)
 
 ## Documentation/Getting started

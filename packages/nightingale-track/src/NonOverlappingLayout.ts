@@ -25,7 +25,7 @@ export default class NonOverlappingLayout extends DefaultLayout {
   init(features: Feature[]) {
     features.forEach((feature) => {
       const rowIndex = this.#rows.findIndex(
-        (row) => !featureOvelapsInRow(feature, row)
+        (row) => !featureOvelapsInRow(feature, row),
       );
       if (rowIndex >= 0) {
         this.#rows[rowIndex].push(feature);
@@ -37,7 +37,7 @@ export default class NonOverlappingLayout extends DefaultLayout {
     });
     this.rowHeight = Math.min(
       this.layoutHeight / this.#rows.length,
-      this.minHeight
+      this.minHeight,
     );
   }
 

@@ -59,5 +59,5 @@ export const SequenceNoControls = () =>
           display-end=${end}
           highlight="3:15"
         ></nightingale-sequence>
-      `
+      `,
     )} `;

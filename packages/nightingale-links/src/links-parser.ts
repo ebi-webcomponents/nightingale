@@ -45,7 +45,7 @@ export const parseToRowData = (text: string): ArrayOfNumberArray =>
 export const filterContacts = (
   data: ArrayOfNumberArray,
   minDistance: number,
-  minProbability: number
+  minProbability: number,
 ): ArrayOfNumberArray =>
   data.filter(([n1, n2, p]) => {
     return Math.abs(n1 - n2) >= minDistance && p > minProbability;
@@ -54,12 +54,12 @@ export const filterContacts = (
 export const parseLinksAssociative = (
   text: string,
   minDistance: number,
-  minProbability: number
+  minProbability: number,
 ): LinksObject => {
   const rawData = filterContacts(
     parseToRowData(text),
     minDistance,
-    minProbability
+    minProbability,
   );
   const n2set: NumberArray = {};
   const sets: ArrayOfNumberArray = [];
@@ -90,16 +90,16 @@ export const parseLinksAssociative = (
 export const parseLinks = (
   text: string,
   minDistance: number,
-  minProbability: number
+  minProbability: number,
 ): ContactObject => {
   const rawData = parseToRowData(text);
   return getContactsObject(
-    filterContacts(rawData, minDistance, minProbability)
+    filterContacts(rawData, minDistance, minProbability),
   );
 };
 
 export const getContactsObject = (
-  contacts: ArrayOfNumberArray
+  contacts: ArrayOfNumberArray,
 ): ContactObject => {
   const contactsObj: Contacts = {};
   contacts.forEach(([n1, n2]) => {
@@ -111,13 +111,13 @@ export const getContactsObject = (
   return {
     contacts: contactsObj,
     maxNumberOfContacts: Math.max(
-      ...Object.values(contactsObj).map((s) => s.size)
+      ...Object.values(contactsObj).map((s) => s.size),
     ),
   };
 };
 
 export const contactObjectToLinkList = (
-  contacts: Contacts
+  contacts: Contacts,
 ): Array<ContactLink> => {
   const linkList: Array<ContactLink> = [];
   const keys: Set<string> = new Set();

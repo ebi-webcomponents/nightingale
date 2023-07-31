@@ -75,7 +75,7 @@ export default class FeatureShape {
     aaWidth: number,
     ftHeight: number,
     ftLength: number,
-    shape: Shapes
+    shape: Shapes,
   ) {
     shape = shape || "rectangle";
     this.#ftLength = ftLength;

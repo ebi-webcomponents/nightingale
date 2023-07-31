@@ -6,6 +6,9 @@ describe("nightingale-navigation tests", () => {
   beforeEach(() => {
     rendered = new NightingaleNavigation();
     rendered.setAttribute("height", "15");
+    rendered.setAttribute("length", "10");
+    rendered.setAttribute("display-start", "1");
+    rendered.setAttribute("display-end", "1");
     document.documentElement.appendChild(rendered);
   });
 

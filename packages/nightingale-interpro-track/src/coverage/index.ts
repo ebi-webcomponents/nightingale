@@ -123,18 +123,19 @@ export const addContributor = (contributor: Segment, coverage: Segment[]) => {
 export const getCoverage = (
   contributors: Feature[],
   length = 100,
-  createEmptyFragments = true
+  createEmptyFragments = true,
 ) => {
   let coverage: Segment[] = [];
   if (createEmptyFragments) {
     coverage = addContributor({ start: 1, end: length, value: 0 }, coverage);
   }
-  contributors.forEach((f) =>
-    f.locations?.forEach((loc) =>
-      loc.fragments.forEach((fr) => {
-        coverage = addContributor(fr, coverage);
-      })
-    )
+  contributors.forEach(
+    (f) =>
+      f.locations?.forEach((loc) =>
+        loc.fragments.forEach((fr) => {
+          coverage = addContributor(fr, coverage);
+        }),
+      ),
   );
   return coverage;
 };

@@ -2,9 +2,14 @@
 
 exports[`nightingale-track tests it should change the layout 1`] = `
 <nightingale-track
+  display-end="-1"
+  display-start="1"
   height="80"
+  highlight-color="#FFEB3B66"
   layout="non-overlapping"
   length="223"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
@@ -1002,9 +1007,14 @@ exports[`nightingale-track tests it should change the layout 1`] = `
 
 exports[`nightingale-track tests it should display the sequence correctly after highlight 1`] = `
 <nightingale-track
+  display-end="-1"
+  display-start="1"
   height="80"
   highlight="10:30"
+  highlight-color="#FFEB3B66"
   length="223"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
@@ -2010,8 +2020,13 @@ exports[`nightingale-track tests it should display the sequence correctly after 
 
 exports[`nightingale-track tests it should display the track correctly 1`] = `
 <nightingale-track
+  display-end="-1"
+  display-start="1"
   height="80"
+  highlight-color="#FFEB3B66"
   length="223"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->
@@ -2977,7 +2992,10 @@ exports[`nightingale-track tests it should zoom in 1`] = `
   display-end="4"
   display-start="2"
   height="80"
+  highlight-color="#FFEB3B66"
   length="223"
+  min-height="10"
+  min-width="10"
   style="width: 100%; display: inline-block; line-height: 0;"
 >
   <!---->

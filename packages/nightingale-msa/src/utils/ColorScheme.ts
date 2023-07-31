@@ -24,7 +24,7 @@ class ColorScheme {
       return (this.scheme as DynSchemeClass).getColor(
         element,
         position,
-        this.conservation
+        this.conservation,
       );
     }
     return this.scheme.getColor(element); // , position, schemesMgr.conservation);

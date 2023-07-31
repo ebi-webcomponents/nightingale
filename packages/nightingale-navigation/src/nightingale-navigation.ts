@@ -28,8 +28,8 @@ const HANDLE_SIZE = 6;
 @customElement("nightingale-navigation")
 class NightingaleNavigation extends withManager(
   withResizable(
-    withMargin(withPosition(withDimensions(withHighlight(NightingaleElement))))
-  )
+    withMargin(withPosition(withDimensions(withHighlight(NightingaleElement)))),
+  ),
 ) {
   #x: ScaleLinear<number, number> | null;
   #dontDispatch: boolean;
@@ -153,7 +153,7 @@ class NightingaleNavigation extends withManager(
                 },
                 bubbles: true,
                 cancelable: true,
-              })
+              }),
             );
           this.updateLabels();
           this.updatePolygon();
@@ -337,7 +337,7 @@ class NightingaleNavigation extends withManager(
         "width",
         (segment) =>
           s2(Math.min(this.length || 1, segment.end) + 1) -
-          s2(Math.max(1, segment.start))
+          s2(Math.max(1, segment.start)),
       )
       .attr("y", this["margin-top"])
       .attr("height", this.height / 2);
@@ -362,7 +362,7 @@ class NightingaleNavigation extends withManager(
         `${this.#x(this.getStart())},${this.height / 2}
         ${this.#x(this.getEnd())},${this.height / 2}
         ${this.width - this["margin-right"]},${this.height}
-        ${this["margin-left"]},${this.height}`
+        ${this["margin-left"]},${this.height}`,
       );
   }
   private getStart(): number {

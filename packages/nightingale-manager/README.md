@@ -27,7 +27,7 @@ this.dispatchEvent(
       value: "New value",
       type: "attr1",
     },
-  })
+  }),
 );
 ```
 

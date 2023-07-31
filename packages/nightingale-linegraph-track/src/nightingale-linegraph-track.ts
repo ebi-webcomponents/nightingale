@@ -67,10 +67,10 @@ class NightingaleLinegraphTrack extends withManager(
   withZoom(
     withResizable(
       withMargin(
-        withPosition(withDimensions(withHighlight(NightingaleElement)))
-      )
-    )
-  )
+        withPosition(withDimensions(withHighlight(NightingaleElement))),
+      ),
+    ),
+  ),
 ) {
   @property({ type: String })
   type?: string | null;
@@ -231,7 +231,7 @@ class NightingaleLinegraphTrack extends withManager(
         } else {
           const features: Record<string, LineValue | undefined> = {};
           const seqPosition = Math.floor(
-            this.xScale?.invert(mouse[0] - this["margin-left"]) || 0
+            this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
           );
 
           chartGroup
@@ -293,7 +293,7 @@ class NightingaleLinegraphTrack extends withManager(
               detail,
               bubbles: true,
               cancelable: true,
-            })
+            }),
           );
         }
       });

@@ -33,10 +33,10 @@ class NightingaleHeatmap extends withResizable(
       withDimensions(
         withHighlight(NightingaleElement, {
           "highlight-color": "#fc1e1e",
-        })
-      )
-    )
-  )
+        }),
+      ),
+    ),
+  ),
 ) {
   @property({ type: Boolean })
   symmetric?: boolean = false;
@@ -137,10 +137,10 @@ class NightingaleHeatmap extends withResizable(
     const mousemove = (event: MouseEvent) => {
       if (!this.#x || !this.#y) return;
       const xDomainValue = Math.floor(
-        (this.#x.domain().length * event.offsetX) / this.#x.range()[1]
+        (this.#x.domain().length * event.offsetX) / this.#x.range()[1],
       );
       const yDomainValue = Math.floor(
-        (this.#y.domain().length * event.offsetY) / this.#y.range()[1]
+        (this.#y.domain().length * event.offsetY) / this.#y.range()[1],
       );
 
       if (xDomainValue >= 0 && yDomainValue >= 0) {
@@ -178,7 +178,7 @@ class NightingaleHeatmap extends withResizable(
         },
         bubbles: true,
         cancelable: true,
-      })
+      }),
     );
   }
 
@@ -259,7 +259,7 @@ class NightingaleHeatmap extends withResizable(
         "transform",
         `translate(${this.#canvasWidth / 2 || 0},${
           this.#canvasHeight + margin.top + margin.bottom || 0
-        })`
+        })`,
       );
     svg
       .select<SVGTextElement>("text.y-label")
@@ -306,13 +306,13 @@ class NightingaleHeatmap extends withResizable(
     area.selectAll("circle").remove();
     if (!this.#x || !this.#y || highlightPoint.length < 2) return null;
     let dataPoint = this.#data.filter(
-      ([x, y]) => x === highlightPoint[0] && y === highlightPoint[1]
+      ([x, y]) => x === highlightPoint[0] && y === highlightPoint[1],
     );
 
     if (!dataPoint.length) {
       if (this.symmetric) {
         dataPoint = this.#data.filter(
-          ([x, y]) => x === highlightPoint[1] && y === highlightPoint[0]
+          ([x, y]) => x === highlightPoint[1] && y === highlightPoint[0],
         );
       }
     }
@@ -338,7 +338,7 @@ class NightingaleHeatmap extends withResizable(
       this.#x(value[0]) || 0,
       this.#y(value[1]) || 0,
       Math.ceil(this.#x.bandwidth()),
-      Math.ceil(this.#y.bandwidth())
+      Math.ceil(this.#y.bandwidth()),
     );
     // Symmetric half
     if (this.symmetric && !highlight)
@@ -347,7 +347,7 @@ class NightingaleHeatmap extends withResizable(
         this.#x(value[1]) || 0,
         this.#y(value[0]) || 0,
         Math.ceil(this.#x.bandwidth()),
-        Math.ceil(this.#y.bandwidth())
+        Math.ceil(this.#y.bandwidth()),
       );
   }
 }

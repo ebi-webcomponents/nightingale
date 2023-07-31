@@ -7,7 +7,7 @@ export function isColorValid(color: string): boolean {
 }
 
 export default (
-  text: string | null = null
+  text: string | null = null,
 ): {
   range: string[];
   domain: number[];
@@ -32,7 +32,7 @@ export default (
       const number = parseFloat(bl[1]);
       if (Number.isNaN(number))
         throw new Error(
-          `The second part of every point should be a number. Error in point ${i}: ${bl}`
+          `The second part of every point should be a number. Error in point ${i}: ${bl}`,
         );
       return number;
     });
