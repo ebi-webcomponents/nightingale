@@ -63,7 +63,7 @@ export type Schema = typeof Schema;
 
 const tryGetInfoFromCif = (
   categoryName: string,
-  model: Model
+  model: Model,
 ): undefined | Info => {
   if (
     !MmcifFormat.is(model.sourceData) ||
@@ -73,7 +73,7 @@ const tryGetInfoFromCif = (
   }
   const timestampField =
     model.sourceData.data.frame.categories[categoryName].getField(
-      "metric_value"
+      "metric_value",
     );
   if (!timestampField || timestampField.rowCount === 0) return;
 
@@ -85,7 +85,7 @@ const tryGetInfoFromCif = (
 
 const fromCif = (
   ctx: CustomProperty.Context,
-  model: Model
+  model: Model,
 ): AfConfidence | undefined => {
   const info = tryGetInfoFromCif("ma_qa_metric_local", model);
   if (!info) return;
@@ -99,7 +99,7 @@ export async function fromCifOrServer(
   ctx: CustomProperty.Context,
   model: Model,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  props: AfConfidenceProps
+  props: AfConfidenceProps,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   const cif = fromCif(ctx, model);
@@ -131,7 +131,7 @@ function getCifData(model: Model) {
   return {
     residues: toTable(
       Schema.local_metric_values,
-      model.sourceData.data.frame.categories.ma_qa_metric_local
+      model.sourceData.data.frame.categories.ma_qa_metric_local,
     ),
   };
 }
@@ -160,7 +160,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
   obtain: async (
     ctx: CustomProperty.Context,
     data: Model,
-    props: Partial<AfConfidenceProps>
+    props: Partial<AfConfidenceProps>,
   ) => {
     const p = { ...PD.getDefaultValues(AfConfidenceParams), ...props };
     const conf = await fromCifOrServer(ctx, data, p);
@@ -170,7 +170,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
 
 function createScoreMapFromCif(
   modelData: Model,
-  residueData: Table<typeof Schema.local_metric_values>
+  residueData: Table<typeof Schema.local_metric_values>,
 ): AfConfidence["data"] | undefined {
   const ret = new Map<ResidueIndex, [number, string]>();
   const { label_asym_id, label_seq_id, metric_value, _rowCount } = residueData;
@@ -183,7 +183,7 @@ function createScoreMapFromCif(
       "1",
       label_asym_id.value(i),
       label_seq_id.value(i),
-      ""
+      "",
     );
 
     let confidencyCategory = "Very low";

@@ -17,10 +17,13 @@ export const createCoverage = ({
 }) => {
   element.accession = element?.data?.[0]?.accession || "_";
 
-  const mask = element.svg
-    ?.append("defs")
-    .append("mask")
-    .attr("id", `mask-${element.accession}`);
+  let mask = element.svg?.select<SVGMaskElement>("defs mask");
+
+  if (!mask?.size())
+    mask = element.svg
+      ?.append("defs")
+      .append("mask")
+      .attr("id", `mask-${element.accession}`);
 
   mask
     ?.selectAll("rect")
@@ -42,7 +45,7 @@ export const refreshCoverage = ({
 }) => {
   featuresG?.attr(
     "mask",
-    element.expanded ? null : `url(#mask-${element.accession})`
+    element.expanded ? null : `url(#mask-${element.accession})`,
   );
   element.svg
     ?.selectAll<SVGRectElement, Segment>("defs mask rect")

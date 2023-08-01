@@ -44,7 +44,7 @@ const translatePositions = (
   start: number,
   end: number,
   mappingDirection: Direction,
-  mappings?: Mapping[]
+  mappings?: Mapping[],
 ): TranslatedPosition[] => {
   // Return if mappings not ready
   if (!mappings) {
@@ -56,7 +56,7 @@ const translatePositions = (
   }
   // return a translation separately for each chain (if it exists)
   const translations: TranslatedPosition[] = Object.values(
-    groupBy(mappings, (mapping) => mapping.chain_id)
+    groupBy(mappings, (mapping) => mapping.chain_id),
   )
     .map((chainMappings) => {
       let startMapping = null;
@@ -67,7 +67,7 @@ const translatePositions = (
           mapping.end.residue_number - mapping.start.residue_number
         ) {
           throw new PositionMappingError(
-            "Mismatch between protein sequence and structure residues"
+            "Mismatch between protein sequence and structure residues",
           );
         }
         const regionStart =
@@ -107,12 +107,12 @@ const translatePositions = (
       };
     })
     .filter((tp: TranslatedPosition | null): tp is TranslatedPosition =>
-      Boolean(tp)
+      Boolean(tp),
     );
 
   if (!translations.length) {
     throw new PositionMappingError(
-      "Start or end coordinate outside of mapping range"
+      "Start or end coordinate outside of mapping range",
     );
   }
 

@@ -4,28 +4,30 @@ import * as rasterizeHTML from "rasterizehtml";
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 
 // Accepted file formats
-const formats = ["png", "jpeg", "bmp", "tiff", "gif"];
+export const formats = ["png", "jpeg", "bmp", "tiff", "gif"];
 
 @customElement("nightingale-saver")
 class NightingaleSaver extends NightingaleElement {
   @property({ type: String, attribute: "element-id" })
-  elementId = "";
+  elementId?: string = "";
   @property({ type: String, attribute: "background-color" })
-  fillColor = "transparent";
+  fillColor?: string = "transparent";
   @property({ type: String, attribute: "file-name" })
-  fileName = "nightingale.snapshot";
+  fileName?: string = "nightingale.snapshot";
   @property({
     type: String,
     attribute: "file-format",
     converter: (value) => (formats.includes(value || "") ? value : "png"),
   })
-  fileFormat = "png";
+  fileFormat?: string = "png";
   @property({ type: Number, attribute: "extra-width" })
-  extraWidth = 0;
+  extraWidth?: number = 0;
   @property({ type: Number, attribute: "extra-height" })
-  extraHeight = 0;
+  extraHeight?: number = 0;
+  @property({ type: Number, attribute: "scale-factor" })
+  scaleFactor?: number = 1;
   @property({ type: Boolean })
-  debug = false;
+  preview?: boolean = false;
 
   preSave?: () => void = undefined;
   postSave?: () => void = undefined;
@@ -47,36 +49,43 @@ class NightingaleSaver extends NightingaleElement {
     if (typeof this.preSave === "function") {
       this.preSave();
     }
+    element.querySelector('canvas.preview')?.remove();
     const { width, height } = element.getBoundingClientRect();
+
+    const scaleFactor = this.scaleFactor || 1;
+    const scaledWidth = scaleFactor * (width + (this.extraWidth as number));
+    const scaledHeight = scaleFactor * (height + (this.extraHeight as number));
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("width", `${width + this.extraWidth}px`);
-    canvas.setAttribute("height", `${height + this.extraHeight}px`);
+    canvas.className = "preview";
+    canvas.setAttribute("width", `${scaledWidth}px`);
+    canvas.setAttribute("height", `${scaledHeight}px`);
     if (this.fillColor) {
       const context = canvas.getContext("2d");
       if (context) {
         context.fillStyle = this.fillColor;
-        context.fillRect(
-          0,
-          0,
-          width + this.extraWidth,
-          height + this.extraHeight
-        );
+        context.fillRect(0, 0, scaledWidth, scaledHeight);
       }
     }
-    if (this.debug) element.appendChild(canvas);
+    if (this.preview) {
+      element.appendChild(canvas);
+    }
 
     // Rendering the Protvista svg
     rasterizeHTML
-      .drawHTML(wrapHTML(element.outerHTML), canvas)
+      .drawHTML(wrapHTML(element.outerHTML), canvas, {
+        zoom: scaleFactor,
+      })
       .then(() => {
         const image = canvas
           .toDataURL(`image/${this.fileFormat}`, 1.0)
           .replace(`image/${this.fileFormat}`, "image/octet-stream");
-        const link = document.createElement("a");
-        link.download = `${this.fileName}.${this.fileFormat}`;
-        link.href = image;
-        document.body.appendChild(link);
-        link.click();
+        if (!this.preview) {
+          const link = document.createElement("a");
+          link.download = `${this.fileName}.${this.fileFormat}`;
+          link.href = image;
+          document.body.appendChild(link);
+          link.click();
+        }
       })
       .catch((err) => {
         console.error(err);

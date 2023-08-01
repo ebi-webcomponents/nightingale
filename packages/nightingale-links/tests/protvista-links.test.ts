@@ -23,8 +23,8 @@ describe("links parser", () => {
     for (const [a0, a1] of links) {
       expect(
         links.filter(
-          ([b0, b1]) => (a0 === b0 && a1 === b1) || (a0 === b1 && a1 === b0)
-        ).length
+          ([b0, b1]) => (a0 === b0 && a1 === b1) || (a0 === b1 && a1 === b0),
+        ).length,
       ).toBe(1);
     }
   });

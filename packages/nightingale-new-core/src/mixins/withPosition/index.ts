@@ -20,15 +20,24 @@ const withPosition = <T extends Constructor<NightingaleBaseElement>>(
     "display-start"?: number;
     "display-end"?: number;
     length?: number;
-  } = {}
+  } = {},
 ) => {
   class WithPosition extends superClass {
     #intitialOptions = { ...defaultOptions, ...options };
-    @property({ type: Number })
-    length?: number = this.#intitialOptions.length;
-    @property({ type: Number })
+    #length: number = this.#intitialOptions.length;
+    @property({ type: Number, reflect: true })
+    get length() {
+      return this.#length;
+    }
+    set length(value: number) {
+      this.#length = value;
+      if ((this["display-end"] || 0) > this.#length)
+        this["display-end"] = this.length;
+    }
+
+    @property({ type: Number, reflect: true })
     "display-start"?: number = this.#intitialOptions["display-start"];
-    @property({ type: Number })
+    @property({ type: Number, reflect: true })
     "display-end"?: number = this.#intitialOptions["display-end"];
   }
   return WithPosition as Constructor<withPositionInterface> & T;

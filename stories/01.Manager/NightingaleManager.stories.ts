@@ -87,6 +87,7 @@ const Template: Story<{
     <nightingale-saver
       element-id="root"
       background-color="white"
+      scale-factor="2"
     ></nightingale-saver>
     <div id="root">
       <nightingale-manager>
@@ -346,6 +347,7 @@ export const InterproTrackNoControls = () =>
           use-ctrl-to-zoom
           show-label
           expanded
+          highlight-event="onmouseover"
         >
         </nightingale-interpro-track>
       </div>

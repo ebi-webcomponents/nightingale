@@ -5,9 +5,9 @@ import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 @customElement("nightingale-overlay")
 class NightingaleOverlay extends NightingaleElement {
   @property({ type: String })
-  for = "";
+  for?: string = "";
   @property({ type: String })
-  label = "Use [CTRL] + scroll to zoom";
+  label?: string = "Use [CTRL] + scroll to zoom";
 
   private overlay?: HTMLDivElement;
 
@@ -34,8 +34,8 @@ class NightingaleOverlay extends NightingaleElement {
 
   connectedCallback() {
     super.connectedCallback();
-    if (this.for) {
-      this.currentTarget = document.getElementById(this.for);
+    if (this.for as string) {
+      this.currentTarget = document.getElementById(this.for as string);
     }
     this.addEventListeners();
   }
@@ -47,7 +47,7 @@ class NightingaleOverlay extends NightingaleElement {
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("for")) {
       this.removeEventListeners();
-      this.currentTarget = document.getElementById(this.for);
+      this.currentTarget = document.getElementById(this.for as string);
       this.addEventListeners();
     }
   }
@@ -86,7 +86,6 @@ class NightingaleOverlay extends NightingaleElement {
   }
 
   render() {
-    console.log("render???");
     const rect = this.currentTarget?.getBoundingClientRect();
     return html` <div
       style="

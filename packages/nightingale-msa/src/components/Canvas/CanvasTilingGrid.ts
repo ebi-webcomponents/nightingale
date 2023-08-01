@@ -84,7 +84,7 @@ class CanvasTilingGridComponent {
         xPos,
         yPos,
         tileWidth,
-        tileHeight
+        tileHeight,
       );
     }
   }
@@ -145,7 +145,7 @@ class CanvasTilingGridComponent {
       text,
       this.props.tileWidth / 2,
       this.props.tileHeight / 2 + 1,
-      this.props.tileWidth
+      this.props.tileWidth,
     );
   }
 

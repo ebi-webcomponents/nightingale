@@ -16,7 +16,7 @@ describe("translatePositions", () => {
           uniprot.start,
           uniprot.end,
           "UP_PDB",
-          mappings
+          mappings,
         );
         expect(translated[0].start).toEqual(pdb.start);
         expect(translated[0].end).toEqual(pdb.end);
@@ -26,7 +26,7 @@ describe("translatePositions", () => {
           pdb.start,
           pdb.end,
           "PDB_UP",
-          mappings
+          mappings,
         );
         expect(translated[0].start).toEqual(uniprot.start);
         expect(translated[0].end).toEqual(uniprot.end);

@@ -52,10 +52,10 @@ class NightingaleTrack extends withManager(
   withZoom(
     withResizable(
       withMargin(
-        withPosition(withDimensions(withHighlight(NightingaleElement)))
-      )
-    )
-  )
+        withPosition(withDimensions(withHighlight(NightingaleElement))),
+      ),
+    ),
+  ),
 ) {
   @property({ type: String })
   color?: string | null;
@@ -161,7 +161,7 @@ class NightingaleTrack extends withManager(
   attributeChangedCallback(
     name: string,
     oldValue: string | null,
-    newValue: string | null
+    newValue: string | null,
   ): void {
     super.attributeChangedCallback(name, oldValue, newValue);
     if (
@@ -221,7 +221,7 @@ class NightingaleTrack extends withManager(
     }
     if ((f as { feature: Feature }).feature?.type) {
       return getShapeByType(
-        (f as { feature: Feature }).feature.type as string
+        (f as { feature: Feature }).feature.type as string,
       ) as Shapes;
     }
     return defaultShape;
@@ -261,8 +261,8 @@ class NightingaleTrack extends withManager(
         (d.locations || []).map((loc) =>
           Object.assign({}, loc, {
             feature: d,
-          })
-        )
+          }),
+        ),
       )
       .enter()
       .append("g")
@@ -274,8 +274,8 @@ class NightingaleTrack extends withManager(
         d.fragments.map((loc) =>
           Object.assign({}, loc, {
             feature: d.feature,
-          })
-        )
+          }),
+        ),
       )
       .enter()
       .append("g")
@@ -289,23 +289,23 @@ class NightingaleTrack extends withManager(
           this.getSingleBaseWidth(),
           this.layoutObj?.getFeatureHeight() || 0,
           f.end ? f.end - f.start + 1 : 1,
-          this.getShape(f)
-        )
+          this.getShape(f),
+        ),
       )
       .attr(
         "transform",
         (f) =>
           `translate(${this.getXFromSeqPosition(f.start)},${
             this.layoutObj?.getFeatureYPos(f.feature) || 0
-          })`
+          })`,
       )
       .style("fill", (f) => this.getFeatureFillColor(f))
       .attr("stroke", (f) => this.getFeatureColor(f))
       .style("fill-opacity", ({ feature }) =>
-        feature.opacity ? feature.opacity : 0.9
+        feature.opacity ? feature.opacity : 0.9,
       )
       .style("stroke-opacity", ({ feature }) =>
-        feature.opacity ? feature.opacity : 0.9
+        feature.opacity ? feature.opacity : 0.9,
       );
 
     fragmentGroup
@@ -314,8 +314,8 @@ class NightingaleTrack extends withManager(
       .attr("width", (f) =>
         Math.max(
           0,
-          this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
-        )
+          this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1),
+        ),
       )
       .attr("height", this.layoutObj?.getFeatureHeight() || 0)
       .attr(
@@ -323,7 +323,7 @@ class NightingaleTrack extends withManager(
         (f) =>
           `translate(${this.getXFromSeqPosition(f.start)},${
             this.layoutObj?.getFeatureYPos(f.feature) || 0
-          })`
+          })`,
       )
       .style("fill", "transparent")
       .attr("stroke", "transparent")
@@ -360,14 +360,14 @@ class NightingaleTrack extends withManager(
                     e.fragments.map((loc) =>
                       Object.assign({}, loc, {
                         feature: f,
-                      })
-                    )
+                      }),
+                    ),
                   ),
-                []
-              )
+                [],
+              ),
             ),
-          []
-        )
+          [],
+        ),
       );
 
       fragmentG
@@ -377,15 +377,15 @@ class NightingaleTrack extends withManager(
             this.getSingleBaseWidth(),
             this.layoutObj?.getFeatureHeight() || 0,
             f?.end && f?.start ? f.end - f.start + 1 : 1,
-            this.getShape(f)
-          )
+            this.getShape(f),
+          ),
         )
         .attr(
           "transform",
           (f) =>
             `translate(${this.getXFromSeqPosition(
-              f.start || 0
-            )},${this.layoutObj?.getFeatureYPos(f.feature as Feature)})`
+              f.start || 0,
+            )},${this.layoutObj?.getFeatureYPos(f.feature as Feature)})`,
         );
 
       fragmentG
@@ -394,8 +394,8 @@ class NightingaleTrack extends withManager(
           Math.max(
             0,
             this.getSingleBaseWidth() *
-              (f?.end && f?.start ? f.end - f.start + 1 : 1)
-          )
+              (f?.end && f?.start ? f.end - f.start + 1 : 1),
+          ),
         )
         .attr("height", this.layoutObj?.getFeatureHeight() || 0)
         .attr(
@@ -403,7 +403,7 @@ class NightingaleTrack extends withManager(
           (f) =>
             `translate(${this.getXFromSeqPosition(f.start || 0)},${
               this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0
-            })`
+            })`,
         );
     }
     this.updateHighlight();
@@ -432,7 +432,7 @@ class NightingaleTrack extends withManager(
       .attr("height", this.height)
       .attr("x", (d) => this.getXFromSeqPosition(d.start))
       .attr("width", (d) =>
-        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
+        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1)),
       );
 
     highlighs.exit().remove();

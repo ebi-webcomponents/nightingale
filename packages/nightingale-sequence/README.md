@@ -25,7 +25,7 @@ Alternatively the sequence can be set as a parameter once the component is loade
 
 ```javascript
 const nightingaleSequence = document.querySelectAll(
-  "#my-nightingale-sequence-id"
+  "#my-nightingale-sequence-id",
 );
 nightingaleSequence.sequence = proteinSequence;
 ```

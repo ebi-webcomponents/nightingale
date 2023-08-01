@@ -105,7 +105,7 @@ TrackWithResiduesNoControls.play = async () => {
   const track3 = document.getElementById("track3");
   if (track3) {
     const dataCopy: Array<Record<string, unknown>> = data.map(
-      ({ ...rest }) => ({ ...rest })
+      ({ ...rest }) => ({ ...rest }),
     );
     dataCopy[0].residues = residues;
 
@@ -130,7 +130,7 @@ TrackWithContributorsAndResiduesNoControls.play = async () => {
   const track4 = document.getElementById("track4");
   if (track4) {
     const contributorsCopy: Array<Record<string, unknown>> = contributors.map(
-      ({ ...rest }) => ({ ...rest })
+      ({ ...rest }) => ({ ...rest }),
     );
     contributorsCopy[0].residues = residues;
 

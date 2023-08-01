@@ -73,7 +73,7 @@ export const ColoredSequenceNoControls = () =>
           highlight="3:15"
           scale="hydrophobicity-scale"
         ></nightingale-colored-sequence>
-      `
+      `,
     )} `;
 
 const twoCoordinates = [
@@ -97,9 +97,9 @@ export const ChangingScales = () =>
               highlight="3:15"
               scale=${scale}
             ></nightingale-colored-sequence>
-          `
+          `,
         )}
-      `
+      `,
     )} `;
 
 export const ChangingColorRange = () => {
@@ -126,8 +126,8 @@ export const ChangingColorRange = () => {
               scale="hydrophobicity-scale"
               color-range=${range}
             ></nightingale-colored-sequence>
-          `
+          `,
         )}
-      `
+      `,
     )} `;
 };

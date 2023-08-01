@@ -4,11 +4,11 @@ import object2style from "../utils/object2style";
 
 @customElement("msa-labels")
 class Labels extends LitElement {
-  @property()
+  @property({ type: Number })
   width = 0;
-  @property()
+  @property({ type: Number })
   height = 0;
-  @property()
+  @property({ type: Number })
   y = 0;
   @state()
   labels: string[] = [];
@@ -57,12 +57,12 @@ class Labels extends LitElement {
                 new CustomEvent("msa-active-label", {
                   bubbles: true,
                   detail: { label },
-                })
+                }),
               );
             }}
           >
             ${label}
-          </li>`
+          </li>`,
       )}
     </ul>`;
   }

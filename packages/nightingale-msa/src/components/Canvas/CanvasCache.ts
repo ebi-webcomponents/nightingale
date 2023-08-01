@@ -53,7 +53,7 @@ class CanvasCache {
       // purge oldest key from cache if maxSize is reached
       const oldestKey = minBy(
         Object.keys(this.cache),
-        (k) => this.cache[k].insertionTime
+        (k) => this.cache[k].insertionTime,
       );
       if (oldestKey) delete this.cache[oldestKey];
     }

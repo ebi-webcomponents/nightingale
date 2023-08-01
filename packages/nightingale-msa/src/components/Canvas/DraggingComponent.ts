@@ -17,7 +17,7 @@ Sub-classes are expected to implement:
 
 */
 abstract class DraggingComponent extends withZoom(
-  withPosition(withDimensions(NightingaleElement))
+  withPosition(withDimensions(NightingaleElement)),
 ) {
   "use-ctrl-to-zoom" = true;
   "margin-right" = 0;
@@ -58,7 +58,7 @@ abstract class DraggingComponent extends withZoom(
    */
   abstract onPositionUpdate(
     newPosition?: RawPosition,
-    oldPosition?: RawPosition
+    oldPosition?: RawPosition,
   ): void;
 
   firstUpdated() {
@@ -73,7 +73,7 @@ abstract class DraggingComponent extends withZoom(
     ];
     this.ctxBuffers = this.canvasBuffers.map(
       (buffer) =>
-        buffer.getContext("2d", { alpha: "false" }) as CanvasRenderingContext2D
+        buffer.getContext("2d", { alpha: "false" }) as CanvasRenderingContext2D,
     );
     // init
     this.swapContexts();

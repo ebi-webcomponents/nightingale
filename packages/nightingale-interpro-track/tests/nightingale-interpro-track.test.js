@@ -1,4 +1,4 @@
-import "../src/index";
+import "../dist/index";
 import * as iproData from "./mockData/interpro-IPR016039.json";
 import * as contributors from "./mockData/interpro-contributors.json";
 import * as residues from "./mockData/interpro-residues.json";

@@ -1,5 +1,5 @@
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
-import NightingaleManager from "../src/index";
+import NightingaleManager from "../dist/index";
 
 let rendered: NightingaleManager;
 
@@ -16,10 +16,10 @@ describe("nightingale-navigation tests", () => {
   test("It should propagate reflected attributes", () => {
     rendered.setAttribute("reflected-attributes", "item1,item2");
     const innerElement1 = document.createElement(
-      "div"
+      "div",
     ) as unknown as NightingaleElement;
     const innerElement2 = document.createElement(
-      "div"
+      "div",
     ) as unknown as NightingaleElement;
     rendered.appendChild(innerElement1);
     rendered.register(innerElement1);
@@ -33,7 +33,7 @@ describe("nightingale-navigation tests", () => {
         },
         bubbles: true,
         cancelable: true,
-      })
+      }),
     );
     innerElement1.dispatchEvent(
       new CustomEvent("change", {
@@ -43,7 +43,7 @@ describe("nightingale-navigation tests", () => {
         },
         bubbles: true,
         cancelable: true,
-      })
+      }),
     );
     expect(innerElement1.getAttribute("item1")).toBe("1234");
     expect(innerElement1.getAttribute("item2")).toBe("some text");
@@ -53,7 +53,7 @@ describe("nightingale-navigation tests", () => {
 
   test("It should propagate default attributes", () => {
     const innerElement = document.createElement(
-      "div"
+      "div",
     ) as unknown as NightingaleElement;
     rendered.appendChild(innerElement);
     rendered.register(innerElement);

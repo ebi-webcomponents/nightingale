@@ -21,7 +21,7 @@ export interface withMarginInterface extends NightingaleBaseElement {
       unknown,
       HTMLElement | SVGElement | null,
       unknown
-    >
+    >,
   ) => void;
 }
 
@@ -40,7 +40,7 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
     "margin-left"?: number;
     "margin-right"?: number;
     "margin-color"?: string | null;
-  } = {}
+  } = {},
 ) => {
   class WithMargin extends withDimensions(superClass) {
     #intitialOptions = { ...defaultOptions, ...options };
@@ -73,7 +73,7 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
         unknown,
         HTMLElement | SVGElement | null,
         unknown
-      >
+      >,
     ) {
       if (!g) return;
 

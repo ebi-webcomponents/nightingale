@@ -27,7 +27,7 @@ export type Residue = {
 
 export type InterProFeature = Feature & {
   residues: Residue[];
-  expanded: boolean;
+  expanded?: boolean;
   i?: number;
   j?: number;
   k?: number;
@@ -66,7 +66,7 @@ export default class InterproEntryLayout extends DefaultLayout {
       const isCollapsible = feature?.residues?.length || children?.length;
       this.#heightMap.set(
         feature.accession,
-        isCollapsible && !this.expanded ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT
+        isCollapsible && !this.expanded ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT,
       );
       this.#yPositionMap.set(feature.accession, this.padding);
       yPos = (this.#heightMap.get(feature.accession) || 0) + 2 * this.padding;
@@ -82,7 +82,7 @@ export default class InterproEntryLayout extends DefaultLayout {
           innerPadding,
           feature.locations,
           residuesPos,
-          this.expanded
+          this.expanded,
         );
     }
     if (children)
@@ -92,7 +92,7 @@ export default class InterproEntryLayout extends DefaultLayout {
           this.#heightMap.set(child.accession, CHILD_HEIGHT);
           this.#yPositionMap.set(
             child.accession,
-            (this.expanded ? this.maxYPos : innerPadding) + this.padding
+            (this.expanded ? this.maxYPos : innerPadding) + this.padding,
           );
           yPos += this.expanded
             ? 2 * this.padding +
@@ -113,7 +113,7 @@ export default class InterproEntryLayout extends DefaultLayout {
             innerPadding,
             child.locations,
             residuesPos,
-            this.expanded && child.expanded
+            this.expanded && child.expanded,
           );
         }
       }
@@ -131,13 +131,13 @@ export default class InterproEntryLayout extends DefaultLayout {
       string,
       Record<string, Record<string, { height: number; yPos: number }>>
     > = {},
-    expanded = true
+    expanded = true,
   ) {
     for (let i = 0; i < residues.length; i++) {
       const resGroup = residues[i];
       InterproEntryLayout.filterOutResidueFragmentsOutOfLocation(
         resGroup,
-        locs || []
+        locs || [],
       );
       if (!(resGroup.accession in residuesPos[featureAcc]))
         residuesPos[featureAcc][resGroup.accession] = {};
@@ -157,11 +157,11 @@ export default class InterproEntryLayout extends DefaultLayout {
         }
         this.#heightMap.set(
           `${resGroup.accession}_${k}_${i}_${j}`,
-          residuesPos[featureAcc][resGroup.accession][desc].height
+          residuesPos[featureAcc][resGroup.accession][desc].height,
         );
         this.#yPositionMap.set(
           `${resGroup.accession}_${k}_${i}_${j}`,
-          residuesPos[featureAcc][resGroup.accession][desc].yPos
+          residuesPos[featureAcc][resGroup.accession][desc].yPos,
         );
         this.maxYPos = Math.max(this.maxYPos, yPos);
       }
@@ -171,20 +171,20 @@ export default class InterproEntryLayout extends DefaultLayout {
 
   static filterOutResidueFragmentsOutOfLocation(
     residue: Residue,
-    featureLocations: FeatureLocation[]
+    featureLocations: FeatureLocation[],
   ) {
     residue.locations.forEach(
       (locRes) =>
         (locRes.fragments = locRes.fragments.filter((fragRes) =>
           featureLocations.some((loc) =>
             loc.fragments.some(
-              (frag) => fragRes.start >= frag.start && fragRes.end <= frag.end
-            )
-          )
-        ))
+              (frag) => fragRes.start >= frag.start && fragRes.end <= frag.end,
+            ),
+          ),
+        )),
     );
     residue.locations = residue.locations.filter(
-      (locRes) => locRes.fragments.length
+      (locRes) => locRes.fragments.length,
     );
   }
 

@@ -12,7 +12,7 @@ export function luma(rgb: number[]) {
 
 export function getColor(
   element: Element,
-  property: ColorProperty
+  property: ColorProperty,
 ): number[] | null {
   const style = getComputedStyle(element);
   const prop = style?.[property];

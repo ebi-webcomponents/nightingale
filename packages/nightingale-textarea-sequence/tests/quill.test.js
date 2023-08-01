@@ -8,13 +8,13 @@ describe("textarea-sequence: formatSequence", () => {
   test("same line blocks of 5", () => {
     const seq = "   XXXXXXXXXXXXXXX  ";
     expect(formatSequence(seq, { block: 5, line: 80 })).toEqual(
-      "XXXXX XXXXX XXXXX"
+      "XXXXX XXXXX XXXXX",
     );
   });
   test("lines of 10 blocks of 5", () => {
     const seq = "   XXXXXXXXXXXXXXX  ";
     expect(formatSequence(seq, { block: 5, line: 10 })).toEqual(
-      "XXXXX XXXXX\nXXXXX"
+      "XXXXX XXXXX\nXXXXX",
     );
   });
 });
@@ -48,28 +48,28 @@ describe("textarea-sequence: cleanUpText", () => {
   test("lines of 10 blocks of 5: comments", () => {
     const comment = "; this is a comment";
     expect(
-      cleanUpText(`${seq}\n${comment}`, alphabets.dna, true, true)
+      cleanUpText(`${seq}\n${comment}`, alphabets.dna, true, true),
     ).toEqual(cleaned);
     expect(
-      cleanUpText(`${seq}\n${comment}`, alphabets.dna, true, false)
+      cleanUpText(`${seq}\n${comment}`, alphabets.dna, true, false),
     ).toEqual(`${cleaned}\n${comment}`);
   });
   test("lines of 10 blocks of 5: single", () => {
     expect(cleanUpText(`${seq}\n${seq}`)).toEqual(cleaned);
     expect(
-      cleanUpText(`${seq}\n${seq}`, alphabets.protein, false, true, false)
+      cleanUpText(`${seq}\n${seq}`, alphabets.protein, false, true, false),
     ).toEqual(`${cleaned}\n\n${cleaned}`);
   });
   test("lines of 10 blocks of 5: formatting function", () => {
     const cleaned2 = "> header\nAAAAAAAAAAAAAAAAAAAAA";
     expect(
-      cleanUpText(seq, alphabets.protein, false, true, false, false, (x) => x)
+      cleanUpText(seq, alphabets.protein, false, true, false, false, (x) => x),
     ).toEqual(cleaned2);
   });
   test("diable check header", () => {
     const seq = "AAAAAAAAAAAAAAAAAAAAA";
     expect(
-      cleanUpText(seq, alphabets.protein, false, true, false, true)
+      cleanUpText(seq, alphabets.protein, false, true, false, true),
     ).toEqual("AAAAAAAAAA AAAAAAAAAA A");
   });
 });

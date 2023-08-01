@@ -1,4 +1,4 @@
-import "../src/index";
+import "../dist/index";
 
 let rendered;
 const sequence = "MADYDDEFDTKASDL";
@@ -25,14 +25,14 @@ describe("nightingale-colored-sequence tests", () => {
 
   test("it should display the colored sequence correctly", async () => {
     const firstValue = rendered.querySelector(
-      ".sequence rect.feature:first-child"
+      ".sequence rect.feature:first-child",
     );
     expect(firstValue.getAttribute("data-base")).toBe(sequence[0]);
     const lastValue = rendered.querySelector(
-      ".sequence rect.feature:last-child"
+      ".sequence rect.feature:last-child",
     );
     expect(lastValue.getAttribute("data-base")).toBe(
-      sequence[sequence.length - 1]
+      sequence[sequence.length - 1],
     );
     expect(rendered).toMatchSnapshot();
   });

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html>
   <head>
@@ -84,11 +84,11 @@
       customElements.whenDefined("nightingale-track").then(() => {
         if (document.getElementById("firstTrack")) {
           fetch(
-            "http://localhost:8000/packages/nightingale-track/tests/mockData/data.json"
+            "http://localhost:8000/packages/nightingale-track/tests/mockData/data.json",
           )
             .then((response) => response.json())
             .then(
-              (data) => (document.getElementById("firstTrack").data = data)
+              (data) => (document.getElementById("firstTrack").data = data),
             );
         }
         if (document.getElementById("track")) {

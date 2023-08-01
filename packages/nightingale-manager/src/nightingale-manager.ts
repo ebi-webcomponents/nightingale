@@ -18,9 +18,9 @@ class NightingaleManager extends NightingaleElement {
           attributes
             .filter(
               (attr: string) =>
-                !NightingaleManager.observedAttributes.includes(attr)
+                !NightingaleManager.observedAttributes.includes(attr),
             )
-            .map((attr: string) => [attr, null])
+            .map((attr: string) => [attr, null]),
         );
         return mapToReturn;
       },
@@ -58,7 +58,7 @@ class NightingaleManager extends NightingaleElement {
   override attributeChangedCallback(
     attr: string,
     previousValue: string | null,
-    newValue: string | null
+    newValue: string | null,
   ) {
     super.attributeChangedCallback(attr, previousValue, newValue);
     this.applyAttributes();

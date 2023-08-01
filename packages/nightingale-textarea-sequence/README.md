@@ -75,14 +75,14 @@ See the [Quill API documentation](https://quilljs.com/docs/api/) for more detail
 
 #### `formatSequence`
 
-A formatting function to use in the [cleanUp()](####`cleanUp()`) method. It should add desired spaces a line splits.
+A formatting function to use in the [cleanUp()](<####`cleanUp()`>) method. It should add desired spaces a line splits.
 
 The signature of the function should be:
 
 ```typescript
 type FormatSequenceFunction = (
   sequence: string,
-  options?: Record<string, unknown>
+  options?: Record<string, unknown>,
 ) => string;
 ```
 
