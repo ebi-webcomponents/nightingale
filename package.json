@@ -74,5 +74,8 @@
   "workspaces": [
     "packages/*"
   ],
-  "customElements": "custom-elements.json"
+  "customElements": "custom-elements.json",
+  "dependencies": {
+    "rimraff": "^0.0.1-security"
+  }
 }

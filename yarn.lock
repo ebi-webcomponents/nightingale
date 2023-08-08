@@ -14371,6 +14371,11 @@ rimraf@^4.4.1:
   dependencies:
     glob "^9.2.0"
 
+rimraff@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.yarnpkg.com/rimraff/-/rimraff-0.0.1-security.tgz#5454c7f9c8df1fedabf107af7ef0ef5bb0a05d09"
+  integrity sha512-fW4+yD5XH1dFCJmbp3OK624b8yQ6c7SvyLDzyAT+UIOSuUZ+toClQCTw8ZV/ik8UqPln8dwwGGbCSE8UkicqVQ==
+
 ripemd160@^2.0.0, ripemd160@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/ripemd160/-/ripemd160-2.0.2.tgz#a1c1a6f624751577ba5d07914cbc92850585890c"
