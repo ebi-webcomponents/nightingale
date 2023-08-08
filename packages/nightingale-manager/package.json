@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-manager",
-  "version": "4.5.0-alpha.0",
+  "version": "4.5.0",
   "description": "Event bus component for Nightnale",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -33,6 +33,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.5.0-alpha.0"
+    "@nightingale-elements/nightingale-new-core": "^4.5.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-colored-sequence",
-  "version": "4.5.0-alpha.0",
+  "version": "4.5.0",
   "description": "Track that colors each base by a given function. The default function is hydrophobicity",
   "files": [
     "dist",
@@ -17,8 +17,8 @@
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.5.0-alpha.0",
-    "@nightingale-elements/nightingale-sequence": "^4.5.0-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "^4.5.0",
+    "@nightingale-elements/nightingale-sequence": "^4.5.0",
     "d3": "7.8.5"
   },
   "repository": {
