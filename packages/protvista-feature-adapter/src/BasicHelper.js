@@ -206,11 +206,11 @@ export const formatTooltip = (feature) => {
                         ref.properties["Universal Spectrum Id"]
                       }" style="color:#FFF" target="_blank">View on ProteomeXchange</a>
                       </li>
-                      <li style="text-indent: 2em">PSM Count: ${
-                        ref.properties["PSM Count"]
+                      <li style="text-indent: 2em">PSM Count (0.05 gFLR): ${
+                        ref.properties["PSM Count (0.05 gFLR)"]
                       }</li>
-                      <li style="text-indent: 2em">Site probability: ${
-                        ref.properties["Site probability"]
+                      <li style="text-indent: 2em">Final site probability: ${
+                        ref.properties["Final site probability"]
                       }</li>
                       `
                   )
