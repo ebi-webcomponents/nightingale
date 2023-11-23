@@ -31,7 +31,7 @@ export const transformData = (
   const { sequence, features } = data;
   const variants = features.map((variant) => ({
     ...variant,
-    accession: variant.genomicLocation,
+    accession: variant.genomicLocation?.join(", "),
     variant: variant.alternativeSequence
       ? variant.alternativeSequence
       : AminoAcid.Empty,
