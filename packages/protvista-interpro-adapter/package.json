@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "dependencies": {
+    "color-hash": "2.0.2"
+  }
 }

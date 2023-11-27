@@ -1,3 +1,14 @@
+import ColorHash from "color-hash";
+
+// Copied from InterPro to replicate the same colours for the representative domains
+/* eslint-disable no-magic-numbers */
+const colorHash = new ColorHash({
+  hash: "bkdr",
+  saturation: [0.65, 0.35, 0.5],
+  lightness: [0.65, 0.35, 0.5],
+});
+/* eslint-enable no-magic-numbers */
+
 export const transformData = (data) => {
   try {
     return data?.results?.map(({ metadata, proteins }) => ({
@@ -12,6 +23,9 @@ export const transformData = (data) => {
         ...proteins[0].entry_protein_locations.map((location) =>
           Math.max(...location.fragments.map((fragment) => fragment.end))
         )
+      ),
+      color: colorHash.hex(
+        metadata.accession.toLowerCase().split("").reverse().join("")
       ),
       tooltipContent: `
         <h5>Accession</h5>
