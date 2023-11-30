@@ -4,6 +4,7 @@ exports[`ProtvistaFeatureAdapter tests should transform the data correctly 1`] =
 Array [
   Object {
     "accession": "IPR002223",
+    "color": "#cbd279",
     "end": 342,
     "go_terms": Array [
       Object {
@@ -51,15 +52,18 @@ Array [
     "start": 288,
     "tooltipContent": "
         <h5>Accession</h5>
+        <p>
         <a
           target=\\"_blank\\"
           rel=\\"noopener\\"
-          href=\\"https://www.ebi.ac.uk/interpro/entry/InterPro/IPR002223/\\"
+          href=\\"https://www.ebi.ac.uk/interpro/entry/interpro/IPR002223/\\"
         >
         IPR002223
         </a>
+        </p>
         <h5>Name</h5>
         <p>Pancreatic trypsin inhibitor Kunitz domain</p>
+        
       ",
     "type": "domain",
   },
