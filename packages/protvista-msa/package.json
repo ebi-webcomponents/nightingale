@@ -1,6 +1,6 @@
 {
   "name": "protvista-msa",
-  "version": "3.8.10",
+  "version": "3.8.13",
   "files": [
     "dist",
     "src"
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "protvista-utils": "^3.8.10",
-    "protvista-zoomable": "^3.8.10",
+    "protvista-zoomable": "^3.8.13",
     "react-msa-viewer": "https://github.com/ebi-webcomponents/react-msa-viewer#semver:1.6.3"
   },
   "devDependencies": {
