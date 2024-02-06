@@ -14,16 +14,20 @@ export const transformData = (data) => {
     return data?.results?.map(({ metadata, proteins }) => ({
       ...metadata,
       locations: proteins[0].entry_protein_locations,
-      start: Math.min(
-        ...proteins[0].entry_protein_locations.map((location) =>
-          Math.min(...location.fragments.map((fragment) => fragment.start))
-        )
-      ),
-      end: Math.max(
-        ...proteins[0].entry_protein_locations.map((location) =>
-          Math.max(...location.fragments.map((fragment) => fragment.end))
-        )
-      ),
+      start: proteins[0].entry_protein_locations
+        ? Math.min(
+            ...proteins[0].entry_protein_locations.map((location) =>
+              Math.min(...location.fragments.map((fragment) => fragment.start))
+            )
+          )
+        : "",
+      end: proteins[0].entry_protein_locations
+        ? Math.max(
+            ...proteins[0].entry_protein_locations?.map((location) =>
+              Math.max(...location.fragments.map((fragment) => fragment.end))
+            )
+          )
+        : "",
       color: colorHash.hex(
         metadata.accession.toLowerCase().split("").reverse().join("")
       ),
