@@ -93,6 +93,10 @@ class NightingaleMSA extends withManager(
     this.worker.postMessage({ sequences, sampleSize: this.sampleSize });
   }
 
+  set features(features: Array<Region>) {
+    if (this.sequenceViewer) this.sequenceViewer.features= features;
+  }
+
   getColorMap() {
     return this.sequenceViewer?.getColorMap();
   }
