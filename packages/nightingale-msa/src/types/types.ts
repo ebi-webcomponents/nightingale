@@ -47,21 +47,18 @@ export type ResidueTileOptions = {
   textFont: string;
   borderColor: string;
   overlayConservation: boolean;
-  // conservation:any;
 };
-export type TileOptions =
-  // | ResidueTileOptions
-  {
-    tileWidth: number;
-    tileHeight: number;
-    colorScheme: ColorScheme;
-    textFont: string;
-    borderColor: string;
-    overlayConservation: boolean;
-    xGridSize: number;
-    yGridSize: number;
-    sequences: SequencesType;
-  };
+export type TileOptions = {
+  tileWidth: number;
+  tileHeight: number;
+  colorScheme: ColorScheme;
+  textFont: string;
+  borderColor: string;
+  overlayConservation: boolean;
+  xGridSize: number;
+  yGridSize: number;
+  sequences: SequencesType;
+};
 export type Region = {
   id?: string;
   residues: {
@@ -84,8 +81,6 @@ export type Stats = {
   fullWidth: number;
   fullHeight: number;
 };
-
-// export type RawPosition = [number, number];
 
 export type SequencePosition = {
   position: number;
