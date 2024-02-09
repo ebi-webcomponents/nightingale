@@ -48,31 +48,39 @@ const testSequences = [
 
 const Template: Story<{
   height: number;
-  width: number;
   colorScheme: string;
   displayStart: number;
   displayEnd: number;
   overlayConsevation: boolean;
 }> = (args) => {
   return html`
-    <nightingale-msa
-      id="msa"
-      height=${args.height}
-      width=${args.width}
-      color-scheme=${args.colorScheme}
-      display-start=${args.displayStart}
-      display-end=${args.displayEnd}
-      label-width="200"
-      highlight="10:19,40:49"
-      ?overlay-conservation=${args.overlayConsevation}
-    ></nightingale-msa>
+    <nightingale-manager style="width: 100%">
+      <div style="padding-left: 100px">
+        <nightingale-navigation
+          height="50"
+          length="184"
+          id="navigation"
+          display-start="50"
+          display-end="130"
+        ></nightingale-navigation>
+      </div>
+      <nightingale-msa
+        id="msa"
+        height=${args.height}
+        color-scheme=${args.colorScheme}
+        display-start=${args.displayStart}
+        display-end=${args.displayEnd}
+        label-width="100"
+        highlight="10:19,40:49"
+        ?overlay-conservation=${args.overlayConsevation}
+      ></nightingale-msa>
+    </nightingale-manager>
   `;
 };
 
 export const MSA = Template.bind({});
 MSA.args = {
   height: 200,
-  width: 800,
   colorScheme: "aliphatic",
   displayStart: 1,
   displayEnd: 50,
