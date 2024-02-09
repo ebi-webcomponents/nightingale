@@ -17,6 +17,11 @@ export default {
       control: { type: "select" },
     },
   },
+  parameters: {
+    actions: {
+      handles: ["onFeatureClick"],
+    },
+  },
 } as Meta;
 const testSequences = [
   {
@@ -43,31 +48,39 @@ const testSequences = [
 
 const Template: Story<{
   height: number;
-  width: number;
   colorScheme: string;
   displayStart: number;
   displayEnd: number;
   overlayConsevation: boolean;
 }> = (args) => {
   return html`
-    <nightingale-msa
-      id="msa"
-      height=${args.height}
-      width=${args.width}
-      color-scheme=${args.colorScheme}
-      display-start=${args.displayStart}
-      display-end=${args.displayEnd}
-      label-width="200"
-      highlight="10:19,40:49"
-      ?overlay-conservation=${args.overlayConsevation}
-    ></nightingale-msa>
+    <nightingale-manager style="width: 100%">
+      <div style="padding-left: 100px">
+        <nightingale-navigation
+          height="50"
+          length="184"
+          id="navigation"
+          display-start="50"
+          display-end="130"
+        ></nightingale-navigation>
+      </div>
+      <nightingale-msa
+        id="msa"
+        height=${args.height}
+        color-scheme=${args.colorScheme}
+        display-start=${args.displayStart}
+        display-end=${args.displayEnd}
+        label-width="100"
+        highlight="10:19,40:49"
+        ?overlay-conservation=${args.overlayConsevation}
+      ></nightingale-msa>
+    </nightingale-manager>
   `;
 };
 
 export const MSA = Template.bind({});
 MSA.args = {
   height: 200,
-  width: 800,
   colorScheme: "aliphatic",
   displayStart: 1,
   displayEnd: 50,
@@ -160,4 +173,78 @@ LinksAndMSA.play = async () => {
   await customElements.whenDefined("nightingale-links");
   const links = document.getElementById("links");
   if (links) (links as any).contacts = rawContactsHC;
+};
+
+export const MSAWithFeatures = () => html`
+  <nightingale-manager style="width: 100%">
+    <div style="padding-left: 100px">
+      <nightingale-navigation
+        height="50"
+        length="184"
+        id="navigation"
+        display-start="50"
+        display-end="130"
+      ></nightingale-navigation>
+    </div>
+    <nightingale-msa
+      id="msa-2"
+      height="200"
+      display-start="50"
+      display-end="130"
+      color-scheme="clustal2"
+      label-width="100"
+      highlight="3:20"
+      highlight-color="red"
+    ></nightingale-msa>
+  </nightingale-manager>
+`;
+MSAWithFeatures.play = async () => {
+  await customElements.whenDefined("nightingale-msa");
+  const msa = document.getElementById("msa-2") as any;
+  if (msa)
+    msa.data = [
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+      ...testSequences,
+    ];
+  msa.features = [
+    {
+      residues: {
+        from: 50,
+        to: 100,
+      },
+      sequences: {
+        from: 2,
+        to: 5,
+      },
+      id: "feature1",
+      borderColor: "#CC9933",
+      fillColor: "transparent",
+      mouseOverFillColor: "transparent",
+      mouseOverBorderColor: "#CC9933",
+    },
+    {
+      residues: {
+        from: 100,
+        to: 180,
+      },
+      sequences: {
+        from: 7,
+        to: 8,
+      },
+      id: "feature2",
+      borderColor: "blue",
+      fillColor: "blue",
+      mouseOverFillColor: "purple",
+      mouseOverBorderColor: "purple",
+    },
+  ];
 };
