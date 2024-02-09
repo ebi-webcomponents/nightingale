@@ -239,5 +239,4 @@ MSAWithFeatures.play = async () => {
       mouseOverBorderColor: "purple",
     },
   ];
-  msa.sequenceViewer.addEventListener("click", msa.sequenceViewer.onClick);
 };
