@@ -100,6 +100,32 @@
           document.getElementById("track").fixedHighlight = "10:20";
         }
       });
+      customElements.whenDefined("nightingale-heatmap-hotmap").then(() => {
+        const xDomain = [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+          31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+          41, 42, 43, 44, 45, 46, 47, 48, 49, 50
+        ];
+        const yDomain = ['A', 'B', 'C'];
+        // xValue
+        // yValue
+        // score
+        let data = [];
+        for (const xVal of xDomain) {
+          for (const yVal of yDomain) {
+            let scoreVal = Math.random();
+            data.push({
+              xValue: xVal,
+              yValue: yVal,
+              score: scoreVal
+            });
+          }
+        }
+        if (document.getElementById("heatmapHotmap"))
+          document.getElementById("heatmapHotmap").setHeatmapData(xDomain, yDomain, data);
+      });
     </script>
     <style>
       p {
@@ -147,8 +173,10 @@
           highlight-color="#EB3BFF66"
         ></nightingale-track>
         <nightingale-heatmap-hotmap
+          id="heatmapHotmap"
+          heatmapId="heatmapHotmapInstance"
           width="800"
-          height="50"
+          height="500"
           length="50"
           display-start="5"
           display-end="25"
