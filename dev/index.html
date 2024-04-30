@@ -26,6 +26,10 @@
       type="module"
       src="../packages/nightingale-track/dist/index.js"
     ></script>
+    <script
+      type="module"
+      src="../packages/nightingale-heatmap-hotmap/dist/index.js"
+    ></script>
     <script defer>
       const featuresData = [
         {
@@ -142,6 +146,15 @@
           highlight-event="onmouseover"
           highlight-color="#EB3BFF66"
         ></nightingale-track>
+        <nightingale-heatmap-hotmap
+          width="800"
+          height="50"
+          length="50"
+          display-start="5"
+          display-end="25"
+          highlight-event="onmouseover"
+          highlight-color="#EB3BFF66"
+        ></nightingale-heatmap-hotmap>
       </nightingale-manager>
     </div>
     <hr />
