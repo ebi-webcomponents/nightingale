@@ -1,4 +1,4 @@
-import { html } from "lit";
+import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from 'lit-html/directives/style-map.js';
 import heatmapStyleSheet from './heatmap-component.css';
@@ -17,8 +17,8 @@ interface HotmapData {
   [key: string]: any;
 }
 
-@customElementOnce("nightingale-heatmap-hotmap")
-class NightingaleHeatmapHotmap extends withManager(
+@customElementOnce("nightingale-sequence-heatmap")
+class NightingaleSequenceHeatmap extends withManager(
   withZoom(
     withResizable(
       withMargin(
@@ -27,6 +27,9 @@ class NightingaleHeatmapHotmap extends withManager(
     ),
   ),
 ) {
+  /**
+   * Mandatory field in order for heatmap component to work properly
+   */
   @property({ type: String })
   heatmapId!: string;
   
@@ -35,6 +38,12 @@ class NightingaleHeatmapHotmap extends withManager(
   heatmapData?: HotmapData[];
   heatmapInstance?: Heatmap<number, string, HotmapData>;
 
+  /**
+   * Callback for attribute change. Responsible for binding Nightingale events to Heatmap component
+   * @param name name of attribute changed
+   * @param oldValue oldValue of attribute changed
+   * @param newValue newValue of attribute changed (could be same as oldValue)
+   */
   attributeChangedCallback(
     name: string,
     oldValue: string | null,
@@ -56,8 +65,12 @@ class NightingaleHeatmapHotmap extends withManager(
     super.connectedCallback();
   }
 
+  /**
+   * This stops rendering from happening at each highlight or zoom event
+   * @param changedProperties 
+   * @returns true or false for rendering condition
+   */
   shouldUpdate(changedProperties: Map<string, any>) {
-
     const hasHighlightDefined = changedProperties.has('highlight') && changedProperties.get('highlight') !== undefined;
     const hasDisplayStDefined = changedProperties.has('display-start') && changedProperties.get('display-start') !== undefined;
     const hasDisplayEndDefined = changedProperties.has('display-end') && changedProperties.get('display-end') !== undefined;
@@ -65,6 +78,15 @@ class NightingaleHeatmapHotmap extends withManager(
     return !hasHighlightDefined && !hasDisplayStDefined && !hasDisplayEndDefined;
   }
 
+  /**
+   * Render function. Should only be called once in order for heatmap to work properly
+   * (although some workarounds exist to allow it to be reused if necessary)
+   * 
+   * Heatmap-components styles are injected here as a typescript variable
+   * (necessary to avoid changing rollup build configs)
+   * 
+   * @returns lit-html to render for this component
+   */
   render() {
     const mainStyles = {
       width: this.width + "px",
@@ -75,11 +97,12 @@ class NightingaleHeatmapHotmap extends withManager(
       width: (this.width-20) + "px",
       height: this.height + "px",
       zIndex: 1,
-      display: "none"
+      display: this.heatmapData ? "" : "none"
     }
     const loadingStyles = {
       width: (this.width-20) + "px",
-      textAlign: 'center'
+      textAlign: 'center',
+      display: this.heatmapData ? "none" : ""
     }
     // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
     return html`
@@ -127,6 +150,23 @@ class NightingaleHeatmapHotmap extends withManager(
     `;
   }
 
+  /**
+   * Function runs after whole lit element update cycle is done
+   * Here we rebind heatmap events in case a heatmap instance already exists
+   * (should not be the default case, see render and shouldUpdate above)
+   */
+  updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    if (this.heatmapInstance) {
+      this.bindHeatmapEvents();
+    }
+  }
+
+  /**
+   * Main function accessed by the user in order to render heatmap visualization
+   * @param xDomain int[]: list of 1-indexed resid ids for each residue number
+   * @param yDomain string[]: list of heatmap row categories
+   * @param data array of objects containing some mandatory fields: xValue (resid id), yValue (row categ) and score (float value mapped to color)
+   */
   setHeatmapData(
     xDomain: number[],
     yDomain: string[],
@@ -134,17 +174,20 @@ class NightingaleHeatmapHotmap extends withManager(
   ) {
     this.heatmapDomainX = xDomain;
     this.heatmapDomainY = yDomain;
+    // render heatmap if not initialized
     if (!this.heatmapData) {
       this.heatmapData = data;
       this.renderHeatmap();
-    } else {
+    }
+    // just set new data if initialized
+    else {
       this.heatmapData = data;
       this.heatmapInstance!.setData({
         xDomain: xDomain,
         yDomain: yDomain,
         items: data,
         x: (d) => {
-          const x = d.start;
+          const x = d.xValue;
           return x;
         },
         y: (d) => {
@@ -157,6 +200,10 @@ class NightingaleHeatmapHotmap extends withManager(
     }
   }
 
+  /**
+   * Main heatmap rendering function. Should only be triggered once
+   * Necessary to bind zoom and hover events between Heatmap component and Nightingale
+   */
   renderHeatmap() {
     document.getElementById(this.heatmapId)!.style.display = "";
     document.getElementById(`${this.heatmapId}_loading`)!.style.display = "none";
@@ -199,7 +246,20 @@ class NightingaleHeatmapHotmap extends withManager(
     hm.setZooming({ axis: 'x' });
     hm.setVisualParams({ xGapPixels: 0, yGapPixels: 0 });
     this.heatmapInstance = hm;
+    
+    this.bindHeatmapEvents();
 
+    this.heatmapInstance.render(this.heatmapId!);
+    this.heatmapInstance.events.render.subscribe((d) => {
+      this.triggerHeatmapZoom();
+    });
+  }
+
+  /**
+   * Function to bind zoom and hover events between Heatmap component and Nightingale
+   */
+  bindHeatmapEvents() {
+    if (!this.heatmapInstance) return;
     this.heatmapInstance.events.zoom.subscribe((d) => {
       if (!d) return;
       // On heatmap zoom dispatch event to Protvista
@@ -227,7 +287,6 @@ class NightingaleHeatmapHotmap extends withManager(
       }
     });
 
-
     this.heatmapInstance.events.hover.subscribe((d) => {
       if (!d) return;
       // On heatmap zoom dispatch event to Protvista
@@ -242,13 +301,11 @@ class NightingaleHeatmapHotmap extends withManager(
       );
 
     });
-
-    this.heatmapInstance.render(this.heatmapId!);
-    this.heatmapInstance.events.render.subscribe((d) => {
-      this.triggerHeatmapZoom();
-    });
   }
 
+  /**
+   * Function to trigger Heatmap zooming from Nightingale
+   */
   triggerHeatmapZoom() {
     const toStart = this["display-start"]!;
     const toEnd = this["display-end"]!;
@@ -261,6 +318,9 @@ class NightingaleHeatmapHotmap extends withManager(
     }
   }
 
+  /**
+   * Function to trigger Heatmap highlighting from Nightingale
+   */
   triggerHeatmapHighlight() {
     const highlight = this["highlight"]!;
 
@@ -304,4 +364,4 @@ class NightingaleHeatmapHotmap extends withManager(
   }
  
 }
-export default NightingaleHeatmapHotmap;
+export default NightingaleSequenceHeatmap;

@@ -28,7 +28,7 @@
     ></script>
     <script
       type="module"
-      src="../packages/nightingale-heatmap-hotmap/dist/index.js"
+      src="../packages/nightingale-sequence-heatmap/dist/index.js"
     ></script>
     <script defer>
       const featuresData = [
@@ -100,7 +100,7 @@
           document.getElementById("track").fixedHighlight = "10:20";
         }
       });
-      customElements.whenDefined("nightingale-heatmap-hotmap").then(() => {
+      customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
         setTimeout(() => {
           const xDomain = [
           1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -178,7 +178,7 @@
           highlight-event="onmouseover"
           highlight-color="#EB3BFF66"
         ></nightingale-track>
-        <nightingale-heatmap-hotmap
+        <nightingale-sequence-heatmap
           id="heatmapHotmap"
           heatmapId="heatmapHotmapInstance"
           width="800"
@@ -188,7 +188,7 @@
           display-end="25"
           highlight-event="onmouseover"
           highlight-color="#EB3BFF66"
-        ></nightingale-heatmap-hotmap>
+        ></nightingale-sequence-heatmap>
       </nightingale-manager>
     </div>
     <hr />
