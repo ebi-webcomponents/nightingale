@@ -10,17 +10,12 @@ import { scaleLinear } from "d3";
 import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
 import { Box, scaleDistance } from "heatmap-component/lib/heatmap-component/scales";
 
-
-
 interface HotmapData {
   xValue: number;
   yValue: string;
   score: number;
   [key: string]: any;
 }
-
-// const externalCSS = unsafeCSS(`@import url('https://cdn.jsdelivr.net/npm/heatmap-component@0.9.0/build/heatmap-component.css');`);
-// const externalCSS = unsafeCSS(styles);
 
 @customElementOnce("nightingale-heatmap-hotmap")
 class NightingaleHeatmapHotmap extends withManager(
@@ -40,17 +35,6 @@ class NightingaleHeatmapHotmap extends withManager(
   heatmapData?: HotmapData[];
   heatmapInstance?: Heatmap<number, string, HotmapData>;
 
-  // static styles = css`${externalCSS}`;
-
-  /**
-   * 1st ON CREATED: Called once for each attribute on order they appear
-   * 4th ON CREATED: Additional or duplicate call based on Mixins (see below:)
-   *     - withResizable adds min-width, min-height
-   *     - withHighlight duplicate set highlight-color
-   *     - withPosition duplicate set display-start and display-end
-   * 
-   * 1st ON UPDATED: Called once by each attribute updated by manager
-   */
   attributeChangedCallback(
     name: string,
     oldValue: string | null,
@@ -68,19 +52,11 @@ class NightingaleHeatmapHotmap extends withManager(
     }
   }
 
-  /**
-   * 2nd ON CREATED
-   */
   connectedCallback() {
     super.connectedCallback();
-    // console.log(NightingaleHeatmapHotmap.styles.cssText); // Log the component's styles
   }
 
-  // Runs after attributeChangedCallback and before render
   shouldUpdate(changedProperties: Map<string, any>) {
-    // TODO: Add check for data defined before false
-    // TODO: Add check for binding functions existance before false
-    // Stop render on highlight, display changes
 
     const hasHighlightDefined = changedProperties.has('highlight') && changedProperties.get('highlight') !== undefined;
     const hasDisplayStDefined = changedProperties.has('display-start') && changedProperties.get('display-start') !== undefined;
@@ -89,11 +65,6 @@ class NightingaleHeatmapHotmap extends withManager(
     return !hasHighlightDefined && !hasDisplayStDefined && !hasDisplayEndDefined;
   }
 
-  /**
-   * 3rd ON CREATED
-   * 
-   * 2nd ON UPDATED
-   */
   render() {
     const mainStyles = {
       width: this.width + "px",
@@ -156,18 +127,6 @@ class NightingaleHeatmapHotmap extends withManager(
     `;
   }
 
-  /**
-   * 5TH (last) ON CREATED (1st is also 4th)
-   */
-  firstUpdated() {
-    // console.log("firstUpdated")
-    // console.log("")
-  }
-
-  /**
-   * Heatmap render and reload
-   */
-
   setHeatmapData(
     xDomain: number[],
     yDomain: string[],
@@ -198,7 +157,6 @@ class NightingaleHeatmapHotmap extends withManager(
     }
   }
 
-  // Renders residue heatmap given data and heatmapId set in constructor
   renderHeatmap() {
     document.getElementById(this.heatmapId)!.style.display = "";
     document.getElementById(`${this.heatmapId}_loading`)!.style.display = "none";
@@ -344,12 +302,6 @@ class NightingaleHeatmapHotmap extends withManager(
     }
 
   }
-
-  // runs after update is finished
-  // updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-  //   console.log("finished update");
-  //   console.log(_changedProperties);
-  // }
  
 }
 export default NightingaleHeatmapHotmap;
