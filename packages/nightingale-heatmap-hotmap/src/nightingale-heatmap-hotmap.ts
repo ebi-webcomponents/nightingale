@@ -1,12 +1,9 @@
-import { html, PropertyValueMap } from "lit";
+import { html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from 'lit-html/directives/style-map.js';
 
 import NightingaleElement, { customElementOnce, withDimensions, withHighlight, withManager, withMargin, withPosition, withResizable, withZoom } from "@nightingale-elements/nightingale-new-core";
 import { Heatmap } from "heatmap-component";
-
-// TODO: height is not triggering a full redrawn when is changed after first render
-const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
 interface HotmapData {
   xValue: number;
@@ -47,24 +44,22 @@ class NightingaleHeatmapHotmap extends withManager(
     oldValue: string | null,
     newValue: string | null,
   ): void {
-    // console.log("attributeChangedCallback")
     super.attributeChangedCallback(name, oldValue, newValue);
     if (
-      ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) ||
-      name.startsWith("margin-")
+      name.startsWith("display-")
     ) {
-      // console.log("FOR: " + ATTRIBUTES_THAT_TRIGGER_REFRESH.toString())
+      if (oldValue !== newValue) this.triggerHeatmapZoom();
+    } else if (
+      name === "highlight"
+    ) {
+
     }
-    // console.log(name, oldValue, newValue)
-    // console.log("")
   }
 
   /**
    * 2nd ON CREATED
    */
   connectedCallback() {
-    // console.log("connectedCallback")
-    // console.log("")
     super.connectedCallback();
   }
 
@@ -87,26 +82,29 @@ class NightingaleHeatmapHotmap extends withManager(
    * 2nd ON UPDATED
    */
   render() {
-    // console.log("render")
-    // console.log("")
-    // return html`<h1 class="hello-world-hotmap">Hi I am the hotmap container</h1>`;
     const mainStyles = {
       width: this.width + "px",
-      // visibility: this.heatmapData? 'visible': 'hidden',
       paddingLeft: "10px",
       paddingRight: "10px"
     };
     const heatmapStyles = {
       width: (this.width-20) + "px",
       height: this.height + "px",
-      display: "none" 
+      zIndex: 1,
+      display: "none"
     }
     const loadingStyles = {
       width: (this.width-20) + "px",
-      // visibility: this.heatmapData? 'hidden': 'visible',
       textAlign: 'center'
     }
+    // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
     return html`
+      <style>
+        .heatmap-canvas-div > svg {
+          z-index: 2;
+        }
+      </style>
+
       <div style=${styleMap(mainStyles)}">
         <div id="${this.heatmapId}" style=${styleMap(heatmapStyles)}"></div>
       </div>
@@ -203,18 +201,58 @@ class NightingaleHeatmapHotmap extends withManager(
         return "none";
       },
     });
+    hm.setTooltip(
+      (d, x, y, xIndex, yIndex) => {
+        let returnHTML = `
+        <b>Your are at</b> <br />
+
+        x,y: <b>${d.xValue},${d.yValue}</b><br />
+        score: <b>${d.score}</b>`;
+        return returnHTML;
+      }
+    );
+    hm.setZooming({ axis: 'x' });
+    hm.setVisualParams({ xGapPixels: 0, yGapPixels: 0 });
     this.heatmapInstance = hm;
 
     this.heatmapInstance.events.zoom.subscribe((d) => {
       if (!d) return;
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: {
+            value: d.xMin + 0.5,
+            type: "display-start",
+          },
+          bubbles: true,
+        }),
+      );
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: {
+            value: d.xMax - 0.5,
+            type: "display-end",
+          },
+          bubbles: true,
+        }),
+      );
     });
 
     this.heatmapInstance.render(this.heatmapId!);
-    
-    const that = this;
     this.heatmapInstance.events.render.subscribe((d) => {
-      that.render();
+      this.triggerHeatmapZoom();
     });
+  }
+
+  triggerHeatmapZoom() {
+    const toStart = this["display-start"]!;
+    const toEnd = this["display-end"]!;
+
+    if (this.heatmapInstance) {
+      this.heatmapInstance.zoom({
+        xMin: toStart - 0.5,
+        xMax: toEnd + 0.5,
+      });
+    }
   }
 
   // runs after update is finished
