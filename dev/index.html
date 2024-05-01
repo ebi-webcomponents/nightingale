@@ -110,9 +110,6 @@
           41, 42, 43, 44, 45, 46, 47, 48, 49, 50
         ];
         const yDomain = ['A', 'B', 'C'];
-        // xValue
-        // yValue
-        // score
         let data = [];
         for (const xVal of xDomain) {
           for (const yVal of yDomain) {
@@ -126,6 +123,13 @@
         }
         if (document.getElementById("heatmapHotmap"))
           document.getElementById("heatmapHotmap").setHeatmapData(xDomain, yDomain, data);
+          setTimeout(() => {
+            const colorScale = d3.scaleLinear(
+              [0, 1],
+              ["lightblue", "blue"]
+            );
+            document.getElementById("heatmapHotmap").heatmapInstance.setColor((d) => colorScale(d.score));
+          }, 5000)
         }, 3000)
       });
     </script>
@@ -237,4 +241,5 @@
       layout="non-overlapping"
     ></nightingale-track>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 </html>

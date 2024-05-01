@@ -5,7 +5,12 @@ import heatmapStyleSheet from './heatmap-component.css';
 
 import NightingaleElement, { customElementOnce, withDimensions, withHighlight, withManager, withMargin, withPosition, withResizable, withZoom } from "@nightingale-elements/nightingale-new-core";
 import { Heatmap } from "heatmap-component";
-import { formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
+import { attrd, formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
+import { scaleLinear } from "d3";
+import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
+import { Box, scaleDistance } from "heatmap-component/lib/heatmap-component/scales";
+
+
 
 interface HotmapData {
   xValue: number;
@@ -59,7 +64,7 @@ class NightingaleHeatmapHotmap extends withManager(
     } else if (
       name === "highlight"
     ) {
-
+      if (oldValue !== newValue) this.triggerHeatmapHighlight();
     }
   }
 
@@ -108,9 +113,6 @@ class NightingaleHeatmapHotmap extends withManager(
     // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
     return html`
       <style>
-        .heatmap-canvas-div > svg {
-          z-index: 2;
-        }
         #${this.heatmapId} {
           /** Position of bottom-left corner of tooltip box relative to the mouse position */
           --tooltip-offset-x: 5px;
@@ -216,6 +218,16 @@ class NightingaleHeatmapHotmap extends withManager(
         return "none";
       },
     });
+
+    const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
+    const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
+
+    const colorScale = scaleLinear(
+      [dataMin, dataMax],
+      ["#ff898b", "#b20003"]
+    );
+    hm.setColor((d) => colorScale(d.score));
+
     hm.setTooltip(
       (d, x, y, xIndex, yIndex) => {
         let returnHTML = `
@@ -257,6 +269,22 @@ class NightingaleHeatmapHotmap extends withManager(
       }
     });
 
+
+    this.heatmapInstance.events.hover.subscribe((d) => {
+      if (!d) return;
+      // On heatmap zoom dispatch event to Protvista
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: {
+            value: `${d.xIndex+1}:${d.xIndex+1}`,
+            type: "highlight",
+          },
+          bubbles: true,
+        })
+      );
+
+    });
+
     this.heatmapInstance.render(this.heatmapId!);
     this.heatmapInstance.events.render.subscribe((d) => {
       this.triggerHeatmapZoom();
@@ -273,6 +301,48 @@ class NightingaleHeatmapHotmap extends withManager(
         xMax: toEnd + 0.5,
       });
     }
+  }
+
+  triggerHeatmapHighlight() {
+    const highlight = this["highlight"]!;
+
+    if (this.heatmapInstance) {
+      // any so we can use private marker attributes
+      const heatmapInstanceMarker = (<any>this.heatmapInstance.extensions.marker!);
+
+      if (!highlight) { // highlight null means no highlight to be shown
+        heatmapInstanceMarker.state.dom.svg.selectAll('.' + HeatmapClassNames.Marker).remove();
+        heatmapInstanceMarker.state.dom.svg.selectAll('.' + HeatmapClassNames.MarkerX).remove();
+        heatmapInstanceMarker.state.dom.svg.selectAll('.' + HeatmapClassNames.MarkerY).remove();
+        return;
+      };
+
+      // parse highlight start and end residues as indexes
+      const highlightStart = parseInt(highlight.split(":")[0])-1;
+      const highlightEnd = parseInt(highlight.split(":")[1])-1;
+
+      // calculate x and width inside the canvas
+      const x = heatmapInstanceMarker.state.scales.worldToCanvas.x(highlightStart);
+      const width = scaleDistance(heatmapInstanceMarker.state.scales.worldToCanvas.x, Math.max((highlightEnd-highlightStart)+1, 1));
+
+      // use class name, static and dynamic attributes
+      const className = HeatmapClassNames.MarkerY;
+      const staticAttrs = { rx: heatmapInstanceMarker.params.markerCornerRadius, ry: heatmapInstanceMarker.params.markerCornerRadius };
+      const dynamicAttrs = {
+        x,
+        y: heatmapInstanceMarker.state.boxes.canvas.ymin,
+        width,
+        height: Box.height(heatmapInstanceMarker.state.boxes.canvas),
+        fill: `#${this["highlight-color"]}`,
+        fillOpacity: 0.9,
+      };
+
+      // create marker inside canvas svg element
+      const marker = heatmapInstanceMarker.state.dom.svg.selectAll('.' + className).data([1]);
+      attrd(marker.enter().append('rect'), { class: className, ...staticAttrs, ...dynamicAttrs });
+      attrd(marker, dynamicAttrs);
+    }
+
   }
 
   // runs after update is finished
