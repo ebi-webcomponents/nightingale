@@ -26,7 +26,7 @@ class NightingaleHeatmapHotmap extends withManager(
   ),
 ) {
   @property({ type: String })
-  heatmapId: string | undefined;
+  heatmapId!: string;
   
   heatmapDomainX?: number[];
   heatmapDomainY?: string[];
@@ -92,24 +92,25 @@ class NightingaleHeatmapHotmap extends withManager(
     // return html`<h1 class="hello-world-hotmap">Hi I am the hotmap container</h1>`;
     const mainStyles = {
       width: this.width + "px",
-      visibility: this.heatmapData? 'visible': 'hidden',
+      // visibility: this.heatmapData? 'visible': 'hidden',
       paddingLeft: "10px",
       paddingRight: "10px"
     };
     const heatmapStyles = {
       width: (this.width-20) + "px",
-      height: this.heatmapData? this.height + "px": "0px",
+      height: this.height + "px",
+      display: "none" 
     }
     const loadingStyles = {
       width: (this.width-20) + "px",
-      visibility: this.heatmapData? 'hidden': 'visible',
+      // visibility: this.heatmapData? 'hidden': 'visible',
       textAlign: 'center'
     }
     return html`
       <div style=${styleMap(mainStyles)}">
         <div id="${this.heatmapId}" style=${styleMap(heatmapStyles)}"></div>
       </div>
-      <div style=${styleMap(loadingStyles)}">
+      <div id="${this.heatmapId}_loading" style=${styleMap(loadingStyles)}">
         <svg width="200px" height="200px"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;">
           <circle cx="75" cy="50" fill="#363a3c" r="6.39718">
               <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.875s"></animate>
@@ -159,11 +160,34 @@ class NightingaleHeatmapHotmap extends withManager(
   ) {
     this.heatmapDomainX = xDomain;
     this.heatmapDomainY = yDomain;
-    this.heatmapData = data;
+    if (!this.heatmapData) {
+      this.heatmapData = data;
+      this.renderHeatmap();
+    } else {
+      this.heatmapData = data;
+      this.heatmapInstance!.setData({
+        xDomain: xDomain,
+        yDomain: yDomain,
+        items: data,
+        x: (d) => {
+          const x = d.start;
+          return x;
+        },
+        y: (d) => {
+          if (d.yValue) {
+            return d.yValue
+          }
+          return "none";
+        },
+      });
+    }
   }
 
   // Renders residue heatmap given data and heatmapId set in constructor
   renderHeatmap() {
+    document.getElementById(this.heatmapId)!.style.display = "";
+    document.getElementById(`${this.heatmapId}_loading`)!.style.display = "none";
+
     const hm = Heatmap.create({
       xDomain: this.heatmapDomainX!,
       yDomain: this.heatmapDomainY!,
@@ -193,12 +217,11 @@ class NightingaleHeatmapHotmap extends withManager(
     });
   }
 
-  updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-    console.log("finished update");
-    if (this.heatmapData) {
-      this.renderHeatmap();
-    }
-  }
+  // runs after update is finished
+  // updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+  //   console.log("finished update");
+  //   console.log(_changedProperties);
+  // }
  
 }
 export default NightingaleHeatmapHotmap;
