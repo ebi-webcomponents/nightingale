@@ -1,9 +1,11 @@
 import { html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from 'lit-html/directives/style-map.js';
+import heatmapStyleSheet from './heatmap-component.css';
 
 import NightingaleElement, { customElementOnce, withDimensions, withHighlight, withManager, withMargin, withPosition, withResizable, withZoom } from "@nightingale-elements/nightingale-new-core";
 import { Heatmap } from "heatmap-component";
+import { formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
 
 interface HotmapData {
   xValue: number;
@@ -11,6 +13,9 @@ interface HotmapData {
   score: number;
   [key: string]: any;
 }
+
+// const externalCSS = unsafeCSS(`@import url('https://cdn.jsdelivr.net/npm/heatmap-component@0.9.0/build/heatmap-component.css');`);
+// const externalCSS = unsafeCSS(styles);
 
 @customElementOnce("nightingale-heatmap-hotmap")
 class NightingaleHeatmapHotmap extends withManager(
@@ -29,6 +34,8 @@ class NightingaleHeatmapHotmap extends withManager(
   heatmapDomainY?: string[];
   heatmapData?: HotmapData[];
   heatmapInstance?: Heatmap<number, string, HotmapData>;
+
+  // static styles = css`${externalCSS}`;
 
   /**
    * 1st ON CREATED: Called once for each attribute on order they appear
@@ -61,6 +68,7 @@ class NightingaleHeatmapHotmap extends withManager(
    */
   connectedCallback() {
     super.connectedCallback();
+    // console.log(NightingaleHeatmapHotmap.styles.cssText); // Log the component's styles
   }
 
   // Runs after attributeChangedCallback and before render
@@ -103,6 +111,13 @@ class NightingaleHeatmapHotmap extends withManager(
         .heatmap-canvas-div > svg {
           z-index: 2;
         }
+        #${this.heatmapId} {
+          /** Position of bottom-left corner of tooltip box relative to the mouse position */
+          --tooltip-offset-x: 5px;
+          /** Position of bottom-left corner of tooltip box relative to the mouse position */
+          --tooltip-offset-y: 8px;
+        }
+        ${heatmapStyleSheet}
       </style>
 
       <div style=${styleMap(mainStyles)}">
@@ -207,7 +222,7 @@ class NightingaleHeatmapHotmap extends withManager(
         <b>Your are at</b> <br />
 
         x,y: <b>${d.xValue},${d.yValue}</b><br />
-        score: <b>${d.score}</b>`;
+        score: <b>${formatDataItem(d.score)}</b>`;
         return returnHTML;
       }
     );
@@ -217,24 +232,29 @@ class NightingaleHeatmapHotmap extends withManager(
 
     this.heatmapInstance.events.zoom.subscribe((d) => {
       if (!d) return;
-      this.dispatchEvent(
-        new CustomEvent("change", {
-          detail: {
-            value: d.xMin + 0.5,
-            type: "display-start",
-          },
-          bubbles: true,
-        }),
-      );
-      this.dispatchEvent(
-        new CustomEvent("change", {
-          detail: {
-            value: d.xMax - 0.5,
-            type: "display-end",
-          },
-          bubbles: true,
-        }),
-      );
+      // On heatmap zoom dispatch event to Protvista
+      if (d.xMin + 0.5 !== this["display-start"]) {
+        this.dispatchEvent(
+          new CustomEvent("change", {
+            detail: {
+              value: d.xMin + 0.5,
+              type: "display-start",
+            },
+            bubbles: true,
+          }),
+        );
+      }
+      if (d.xMax - 0.5 !== this["display-end"]) {
+        this.dispatchEvent(
+          new CustomEvent("change", {
+            detail: {
+              value: d.xMax - 0.5,
+              type: "display-end",
+            },
+            bubbles: true,
+          }),
+        );
+      }
     });
 
     this.heatmapInstance.render(this.heatmapId!);
