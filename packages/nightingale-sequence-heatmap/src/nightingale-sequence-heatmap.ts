@@ -290,7 +290,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
     this.heatmapInstance.render(this.heatmapId!);
     this.heatmapInstance.events.render.subscribe((d) => {
-      this.triggerHeatmapZoom();
+      if (this["display-start"] !== 0 && this["display-end"] !== 0) this.triggerHeatmapZoom();
     });
   }
 
@@ -348,7 +348,6 @@ class NightingaleSequenceHeatmap extends withManager(
   triggerHeatmapZoom() {
     const toStart = this["display-start"]!;
     const toEnd = this["display-end"]!;
-
     if (this.heatmapInstance) {
       this.heatmapInstance.zoom({
         xMin: toStart - 0.5,
@@ -361,7 +360,7 @@ class NightingaleSequenceHeatmap extends withManager(
    * Function to trigger Heatmap highlighting from Nightingale
    */
   triggerHeatmapHighlight() {
-    const highlight = this["highlight"]!;
+    const highlight = this["highlight"];
 
     if (this.heatmapInstance) {
       // any so we can use private marker attributes

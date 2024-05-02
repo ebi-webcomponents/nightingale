@@ -1,11 +1,101 @@
-# `@nightingale-elements/nightingale-sequence-heatmap`
+# nightingale-sequence-heatmap
 
-> TODO: description
+Nightingale Sequence Heatmap component is used to generate a heatmap visualisation with residue bound data.
+
+It uses [heatmap-component](https://www.npmjs.com/package/heatmap-component) to render the canvas heatmap.
 
 ## Usage
 
-```
-const nightingaleHeatmapHotmap = require('@nightingale-elements/nightingale-sequence-heatmap');
+The below example shows how to instantiate the component
 
-// TODO: DEMONSTRATE API
+```html
+<nightingale-sequence-heatmap
+  id="id-for-sequence-heatmap"
+  width="400"
+  height="400"
+  highlight-event="onmouseover"
+  highlight-color="#EB3BFF66"
+></nightingale-sequence-heatmap>
+```
+
+Please note that after instantiation the component needs to be initialized using the setHeatmapData function as seem below:
+
+```javascript
+const xDomain = [1, 2, 3]; // 1-indexed residue ids
+const yDomain = ['A', 'B', 'C']; // categories (rows) to show on heatmap
+const data = [ // array of objects to be displayed, see more info on API Reference
+  {xValue:1, yValue:'A' ,score: 0.4 },
+  {xValue:1, yValue:'B' ,score: 32 },
+  {xValue:1, yValue:'C' ,score: 1.6 },
+  {xValue:2, yValue:'A' ,score: 2.5 },
+  {xValue:2, yValue:'B' ,score: 1 },
+  {xValue:2, yValue:'C' ,score: 7.6 },
+  {xValue:3, yValue:'A' ,score: 25.0 },
+  {xValue:3, yValue:'B' ,score: 10 },
+  {xValue:3, yValue:'C' ,score: 6 },
+]
+customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
+  document.getElementById("id-for-sequence-heatmap").setHeatmapData(xDomain, yDomain, data); // initialization function
+});
+```
+
+## API Reference
+
+### Properties
+
+#### `setHeatmapData(xDomain: number[], yDomain: string[], data: Array)`
+
+The data array is of the HotmapData structure.
+
+Please note that this format is flexible to additional properties for specific use cases ([key: string]: any;)
+
+```typescript
+interface HotmapData {
+  xValue: number; // residue index (columns)
+  yValue: string; // category type (rows)
+  score: number; // heatmap value converted to colors
+  [key: string]: any; // additional properties for specific use cases
+}
+```
+
+## Heatmap-component Reference
+
+### Useful functions
+
+#### `setColor((d: HotmapData) => {})`
+
+Allows dynamic setting of heatmap color palette
+
+```javascript
+customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
+  const heatmapElement = document.getElementById("id-for-sequence-heatmap");
+
+  const colorScale = d3.scaleLinear(
+    [0, 1], /** min and max domain values of scale.
+    can also contain extra value steps as long as length is same as below */
+    ["#ffffff", "#00441b"] // colors to map domain to
+  );
+  heatmapElement.heatmapInstance.setColor((d) => colorScale(d.score));
+});
+```
+
+#### `setTooltip((d: HotmapData, x: number, y: number, xIndex: number, yIndex: number) => {})`
+
+Allows dynamic setting of tooltip HTML content
+
+```javascript
+customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
+  const heatmapElement = document.getElementById("id-for-sequence-heatmap");
+
+  heatmapElement.heatmapInstance.setTooltip(
+    (d, x, y, xIndex, yIndex) => {
+      let returnHTML = `
+      <b>Your are at</b> <br />
+
+      x,y: <b>${d.xValue},${d.yValue}</b><br />
+      score: <b>${d.score}</b>`;
+      return returnHTML;
+    }
+  );
+});
 ```
