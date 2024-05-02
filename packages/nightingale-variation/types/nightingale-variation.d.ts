@@ -1,18 +1,26 @@
-export type ProtvistaVariationDatum = {
+export type VariationDatum = {
   accession: string;
   variant: string;
-  start: string;
+  start: number;
+  size?: number;
   xrefNames: string[];
   hasPredictions: boolean;
   tooltipContent?: string;
   protvistaFeatureId: string;
+  alternativeSequence?: string;
+  internalId?: string;
+  wildType?: string;
+  color?: string;
 };
 
-export type ProtvistaVariationData = {
+export type VariationData = {
   sequence: string;
-  variants: ProtvistaVariationDatum[];
+  variants: VariationDatum[];
 };
 
-declare class ProtvistaVariation extends HTMLElement {}
-
-export default ProtvistaVariation;
+export type ProcessedVariationData = {
+  type: string;
+  normal: string;
+  pos: number;
+  variants: VariationDatum[];
+};

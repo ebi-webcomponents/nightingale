@@ -9,7 +9,10 @@ import withZoom, { WithZoomInterface } from "../../withZoom";
 
 export interface WithSVGHighlightInterface
   extends WithZoomInterface,
-    WithHighlightInterface {}
+    WithHighlightInterface {
+  createHighlightGroup: () => void;
+  updateHighlight: () => void;
+}
 const withSVGHighlight = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T
 ) => {
@@ -21,7 +24,7 @@ const withSVGHighlight = <T extends Constructor<NightingaleBaseElement>>(
       unknown
     >;
 
-    public createHighlightGroup() {
+    createHighlightGroup() {
       const svg = select(this as unknown as NightingaleBaseElement).selectAll<
         SVGSVGElement,
         unknown
@@ -29,7 +32,7 @@ const withSVGHighlight = <T extends Constructor<NightingaleBaseElement>>(
 
       this.highlighted = svg.append("g").attr("class", "highlighted");
     }
-    public updateHighlight() {
+    updateHighlight() {
       if (!this.highlighted) return;
       const highlighs = this.highlighted
         .selectAll<

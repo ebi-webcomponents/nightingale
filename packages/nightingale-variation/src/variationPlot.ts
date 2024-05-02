@@ -1,6 +1,11 @@
-import { select, scalePow } from "d3";
+import { select, scalePow, ScalePower, Selection } from "d3";
+import NightingaleVariation from "./nightingale-variation";
+import { ProcessedVariationData } from "../types/nightingale-variation";
+import { bindEvents } from "@nightingale-elements/nightingale-new-core";
 
 class VariationPlot {
+  _frequency: ScalePower<number, number>;
+
   constructor() {
     this._frequency = scalePow().exponent(0.001).domain([0, 1]).range([5, 10]);
     // Data bind otherwise babel removes it
@@ -8,7 +13,15 @@ class VariationPlot {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  drawVariationPlot(selection, element) {
+  drawVariationPlot(
+    selection: Selection<
+      SVGGElement,
+      ProcessedVariationData[],
+      HTMLElement | SVGElement | null,
+      unknown
+    >,
+    element: NightingaleVariation
+  ) {
     const ftWidth = element.getSingleBaseWidth();
     const half = ftWidth / 2;
     // Iterate over data
@@ -20,7 +33,9 @@ class VariationPlot {
       const withVariants = data.filter((elem) => elem.variants.length !== 0);
 
       // bind data
-      const bars = series.selectAll("g").data(withVariants, (d) => d.pos);
+      const bars = series
+        .selectAll<SVGGElement, ProcessedVariationData>("g")
+        .data(withVariants, (d) => d.pos);
 
       bars.exit().remove();
 
@@ -29,7 +44,7 @@ class VariationPlot {
         .enter()
         .append("g")
         .merge(bars)
-        .selectAll("circle")
+        .selectAll<SVGCircleElement, ProcessedVariationData>("circle")
         .data((d) => d.variants);
 
       circle.exit().remove();
@@ -45,7 +60,7 @@ class VariationPlot {
           return element.getXFromSeqPosition(d.start) + half;
         })
         .attr("cy", (d) => {
-          return element._yScale(d.variant.charAt(0));
+          return element.yScale?.(d.variant.charAt(0)) || 0;
         })
         .attr("name", (d) => {
           const mutation =
@@ -55,9 +70,9 @@ class VariationPlot {
           return d.internalId;
         })
         .attr("fill", (d) => {
-          return d.color ? d.color : element._colorConfig(d);
+          return d.color ? d.color : element.colorConfig(d);
         })
-        .call(element.bindEvents, element);
+        .call(bindEvents, element);
     });
   }
 }

@@ -1,9 +1,14 @@
-function processVariants(data) {
-  const { variants, sequence } = data;
+import {
+  VariationData,
+  VariationDatum,
+  ProcessedVariationData,
+} from "../types/nightingale-variation";
 
+function processVariants(
+  data?: VariationData
+): ProcessedVariationData[] | null {
+  const { variants, sequence } = data || {};
   if (!sequence || !variants) return null;
-
-  // const mutationArray = [];
 
   const seq = sequence.split("");
 
@@ -12,7 +17,7 @@ function processVariants(data) {
       type: "VARIANT",
       normal: aa,
       pos: i + 1,
-      variants: [],
+      variants: [] as VariationDatum[],
     };
   });
 
