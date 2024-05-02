@@ -107,11 +107,13 @@ class NightingaleSequenceHeatmap extends withManager(
   render() {
     const mainStyles = {
       width: this.width + "px",
-      paddingLeft: "10px",
-      paddingRight: "10px"
+      paddingLeft: this["margin-left"]+"px",
+      paddingRight: this["margin-right"]+"px",
+      paddingTop: this["margin-top"]+"px",
+      paddingBottom: this["margin-bottom"]+"px"
     };
     const heatmapStyles = {
-      width: (this.width-20) + "px",
+      width: (this.width-this["margin-left"]-this["margin-right"]) + "px",
       height: this.height + "px",
       zIndex: 1,
       display: this.heatmapData ? "" : "none"
