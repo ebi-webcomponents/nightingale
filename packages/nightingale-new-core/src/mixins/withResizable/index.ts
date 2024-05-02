@@ -2,12 +2,12 @@ import { property } from "lit/decorators.js";
 import NightingaleBaseElement, {
   Constructor,
 } from "../../nightingale-base-element";
-import withDimensions from "../withDimensions";
+import withDimensions, { WithDimensionsInterface } from "../withDimensions";
 
 const DEFAULT_MIN_HEIGHT = 10;
 const DEFAULT_MIN_WIDTH = 10;
 
-export declare class WithResizableInterface {
+export interface WithResizableInterface extends WithDimensionsInterface {
   "min-width": number;
   "min-height": number;
   onDimensionsChange(): void;
@@ -21,7 +21,7 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   options: {
     "min-width"?: number;
     "min-height"?: number;
-  } = {},
+  } = {}
 ) => {
   class WithResizable extends withDimensions(superClass) {
     #intitialOptions = { ...defaultOptions, ...options };

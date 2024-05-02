@@ -1,0 +1,41 @@
+{
+  "name": "protvista-variation",
+  "version": "3.8.10",
+  "description": "Variation viewer for the ProtVista tool",
+  "files": [
+    "dist",
+    "style",
+    "src",
+    "types"
+  ],
+  "main": "dist/protvista-variation.js",
+  "module": "src/protvista-variation.js",
+  "types": "types/protvista-variation.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "variation"
+  ],
+  "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
+  "license": "MIT",
+  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80",
+  "dependencies": {
+    "lodash-es": "^4.17.11",
+    "protvista-track": "^3.8.10"
+  },
+  "devDependencies": {
+    "d3": "^5.7.0"
+  },
+  "peerDependencies": {
+    "d3": "5.X"
+  }
+}
