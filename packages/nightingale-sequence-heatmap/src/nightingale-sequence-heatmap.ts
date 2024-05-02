@@ -6,7 +6,7 @@ import heatmapStyleSheet from './heatmap-component.css';
 import NightingaleElement, { customElementOnce, withDimensions, withHighlight, withManager, withMargin, withPosition, withResizable, withZoom } from "@nightingale-elements/nightingale-new-core";
 import { Heatmap } from "heatmap-component";
 import { attrd, formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
-import { scaleLinear } from "d3";
+import { interpolateYlOrRd, scaleLinear, scaleSequential } from "d3";
 import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
 import { Box, scaleDistance } from "heatmap-component/lib/heatmap-component/scales";
 
@@ -16,6 +16,23 @@ interface HotmapData {
   score: number;
   [key: string]: any;
 }
+
+const hexComponentToNumber = (hexComp: string): number => {
+  return parseInt(hexComp, 16);
+};
+
+const hexToRgb = (hex: string): {r: number, g: number, b: number, a?: number} | null => {
+  var result = null;
+  if (hex.length === 7) result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (hex.length === 9) result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: hexComponentToNumber(result[1]),
+    g: hexComponentToNumber(result[2]),
+    b: hexComponentToNumber(result[3]),
+    a: hex.length === 9 ? hexComponentToNumber(result[4]) : undefined
+  } : null;
+};
+
 
 @customElementOnce("nightingale-sequence-heatmap")
 class NightingaleSequenceHeatmap extends withManager(
@@ -104,6 +121,17 @@ class NightingaleSequenceHeatmap extends withManager(
       textAlign: 'center',
       display: this.heatmapData ? "none" : ""
     }
+    
+    // required to allow hex with alpha channel to work with fill property
+    let colorString = this["highlight-color"];
+    let fillValue = 0.9;
+
+    const rgb = hexToRgb(this["highlight-color"]);
+    if (rgb) {
+      colorString = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+      fillValue = rgb.a? parseFloat(formatDataItem(0.9 * (rgb.a/256.0))) : 0.9; 
+    }
+
     // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
     return html`
       <style>
@@ -112,6 +140,18 @@ class NightingaleSequenceHeatmap extends withManager(
           --tooltip-offset-x: 5px;
           /** Position of bottom-left corner of tooltip box relative to the mouse position */
           --tooltip-offset-y: 8px;
+        }
+        .heatmap-marker-x {
+          /** background: ${this["highlight-color"]} !important; */
+          fill: ${colorString} !important;
+          fill-opacity: ${fillValue} !important;
+          stroke-width: 0 !important;
+        }
+        .heatmap-marker-y {
+          /** background: ${this["highlight-color"]} !important; */
+          fill: ${colorString} !important;
+          fill-opacity: ${fillValue} !important;
+          stroke-width: 0 !important;
         }
         ${heatmapStyleSheet}
       </style>
@@ -227,10 +267,7 @@ class NightingaleSequenceHeatmap extends withManager(
     const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
     const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
 
-    const colorScale = scaleLinear(
-      [dataMin, dataMax],
-      ["#ff898b", "#b20003"]
-    );
+    const colorScale = scaleSequential([dataMin, dataMax], interpolateYlOrRd);
     hm.setColor((d) => colorScale(d.score));
 
     hm.setTooltip(
@@ -345,14 +382,15 @@ class NightingaleSequenceHeatmap extends withManager(
 
       // use class name, static and dynamic attributes
       const className = HeatmapClassNames.MarkerY;
-      const staticAttrs = { rx: heatmapInstanceMarker.params.markerCornerRadius, ry: heatmapInstanceMarker.params.markerCornerRadius };
+      const staticAttrs = {
+        rx: heatmapInstanceMarker.params.markerCornerRadius,
+        ry: heatmapInstanceMarker.params.markerCornerRadius,
+      };
       const dynamicAttrs = {
         x,
         y: heatmapInstanceMarker.state.boxes.canvas.ymin,
         width,
         height: Box.height(heatmapInstanceMarker.state.boxes.canvas),
-        fill: `#${this["highlight-color"]}`,
-        fillOpacity: 0.9,
       };
 
       // create marker inside canvas svg element
