@@ -1,19 +1,36 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
-import { styleMap } from 'lit-html/directives/style-map.js';
-import heatmapStyleSheet from './heatmap-component.css';
+import { styleMap } from "lit-html/directives/style-map.js";
+import heatmapStyleSheet from "./heatmap-component.css";
 
-import NightingaleElement, { customElementOnce, withDimensions, withHighlight, withManager, withMargin, withPosition, withResizable, withZoom } from "@nightingale-elements/nightingale-new-core";
+import NightingaleElement, {
+  customElementOnce,
+  withDimensions,
+  withHighlight,
+  withManager,
+  withMargin,
+  withPosition,
+  withResizable,
+  withZoom,
+} from "@nightingale-elements/nightingale-new-core";
 import { Heatmap } from "heatmap-component";
-import { attrd, formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
-import { interpolateYlOrRd, scaleLinear, scaleSequential } from "d3";
+import {
+  attrd,
+  formatDataItem,
+} from "heatmap-component/lib/heatmap-component/utils";
+import { interpolateYlOrRd, scaleSequential } from "d3";
 import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
-import { Box, scaleDistance } from "heatmap-component/lib/heatmap-component/scales";
+import {
+  Box,
+  scaleDistance,
+} from "heatmap-component/lib/heatmap-component/scales";
 
 interface HotmapData {
   xValue: number;
   yValue: string;
   score: number;
+  // any so we are flexible to user data formats
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -21,18 +38,23 @@ const hexComponentToNumber = (hexComp: string): number => {
   return parseInt(hexComp, 16);
 };
 
-const hexToRgb = (hex: string): {r: number, g: number, b: number, a?: number} | null => {
-  var result = null;
-  if (hex.length === 7) result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (hex.length === 9) result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: hexComponentToNumber(result[1]),
-    g: hexComponentToNumber(result[2]),
-    b: hexComponentToNumber(result[3]),
-    a: hex.length === 9 ? hexComponentToNumber(result[4]) : undefined
-  } : null;
+const hexToRgb = (
+  hex: string,
+): { r: number; g: number; b: number; a?: number } | null => {
+  let result = null;
+  if (hex.length === 7)
+    result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (hex.length === 9)
+    result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: hexComponentToNumber(result[1]),
+        g: hexComponentToNumber(result[2]),
+        b: hexComponentToNumber(result[3]),
+        a: hex.length === 9 ? hexComponentToNumber(result[4]) : undefined,
+      }
+    : null;
 };
-
 
 @customElementOnce("nightingale-sequence-heatmap")
 class NightingaleSequenceHeatmap extends withManager(
@@ -49,7 +71,7 @@ class NightingaleSequenceHeatmap extends withManager(
    */
   @property({ type: String })
   heatmapId!: string;
-  
+
   heatmapDomainX?: number[];
   heatmapDomainY?: string[];
   heatmapData?: HotmapData[];
@@ -67,13 +89,9 @@ class NightingaleSequenceHeatmap extends withManager(
     newValue: string | null,
   ): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (
-      name.startsWith("display-")
-    ) {
+    if (name.startsWith("display-")) {
       if (oldValue !== newValue) this.triggerHeatmapZoom();
-    } else if (
-      name === "highlight"
-    ) {
+    } else if (name === "highlight") {
       if (oldValue !== newValue) this.triggerHeatmapHighlight();
     }
   }
@@ -84,46 +102,55 @@ class NightingaleSequenceHeatmap extends withManager(
 
   /**
    * This stops rendering from happening at each highlight or zoom event
-   * @param changedProperties 
+   * @param changedProperties
    * @returns true or false for rendering condition
    */
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   shouldUpdate(changedProperties: Map<string, any>) {
-    const hasHighlightDefined = changedProperties.has('highlight') && changedProperties.get('highlight') !== undefined;
-    const hasDisplayStDefined = changedProperties.has('display-start') && changedProperties.get('display-start') !== undefined;
-    const hasDisplayEndDefined = changedProperties.has('display-end') && changedProperties.get('display-end') !== undefined;
+    const hasHighlightDefined =
+      changedProperties.has("highlight") &&
+      changedProperties.get("highlight") !== undefined;
+    const hasDisplayStDefined =
+      changedProperties.has("display-start") &&
+      changedProperties.get("display-start") !== undefined;
+    const hasDisplayEndDefined =
+      changedProperties.has("display-end") &&
+      changedProperties.get("display-end") !== undefined;
 
-    return !hasHighlightDefined && !hasDisplayStDefined && !hasDisplayEndDefined;
+    return (
+      !hasHighlightDefined && !hasDisplayStDefined && !hasDisplayEndDefined
+    );
   }
 
   /**
    * Render function. Should only be called once in order for heatmap to work properly
    * (although some workarounds exist to allow it to be reused if necessary)
-   * 
+   *
    * Heatmap-components styles are injected here as a typescript variable
    * (necessary to avoid changing rollup build configs)
-   * 
+   *
    * @returns lit-html to render for this component
    */
   render() {
     const mainStyles = {
       width: this.width + "px",
-      paddingLeft: this["margin-left"]+"px",
-      paddingRight: this["margin-right"]+"px",
-      paddingTop: this["margin-top"]+"px",
-      paddingBottom: this["margin-bottom"]+"px"
+      paddingLeft: this["margin-left"] + "px",
+      paddingRight: this["margin-right"] + "px",
+      paddingTop: this["margin-top"] + "px",
+      paddingBottom: this["margin-bottom"] + "px",
     };
     const heatmapStyles = {
-      width: (this.width-this["margin-left"]-this["margin-right"]) + "px",
+      width: this.width - this["margin-left"] - this["margin-right"] + "px",
       height: this.height + "px",
       zIndex: 1,
-      display: this.heatmapData ? "" : "none"
-    }
+      display: this.heatmapData ? "" : "none",
+    };
     const loadingStyles = {
-      width: (this.width-20) + "px",
-      textAlign: 'center',
-      display: this.heatmapData ? "none" : ""
-    }
-    
+      width: this.width - 20 + "px",
+      textAlign: "center",
+      display: this.heatmapData ? "none" : "",
+    };
+
     // required to allow hex with alpha channel to work with fill property
     let colorString = this["highlight-color"];
     let fillValue = 0.9;
@@ -131,7 +158,9 @@ class NightingaleSequenceHeatmap extends withManager(
     const rgb = hexToRgb(this["highlight-color"]);
     if (rgb) {
       colorString = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-      fillValue = rgb.a? parseFloat(formatDataItem(0.9 * (rgb.a/256.0))) : 0.9; 
+      fillValue = rgb.a
+        ? parseFloat(formatDataItem(0.9 * (rgb.a / 256.0)))
+        : 0.9;
     }
 
     // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
@@ -197,7 +226,10 @@ class NightingaleSequenceHeatmap extends withManager(
    * Here we rebind heatmap events in case a heatmap instance already exists
    * (should not be the default case, see render and shouldUpdate above)
    */
-  updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+  updated(
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
+  ): void {
     if (this.heatmapInstance) {
       this.bindHeatmapEvents();
     }
@@ -209,11 +241,7 @@ class NightingaleSequenceHeatmap extends withManager(
    * @param yDomain string[]: list of heatmap row categories
    * @param data array of objects containing some mandatory fields: xValue (resid id), yValue (row categ) and score (float value mapped to color)
    */
-  setHeatmapData(
-    xDomain: number[],
-    yDomain: string[],
-    data: HotmapData[]
-  ) {
+  setHeatmapData(xDomain: number[], yDomain: string[], data: HotmapData[]) {
     this.heatmapDomainX = xDomain;
     this.heatmapDomainY = yDomain;
     // render heatmap if not initialized
@@ -234,7 +262,7 @@ class NightingaleSequenceHeatmap extends withManager(
         },
         y: (d) => {
           if (d.yValue) {
-            return d.yValue
+            return d.yValue;
           }
           return "none";
         },
@@ -248,7 +276,8 @@ class NightingaleSequenceHeatmap extends withManager(
    */
   renderHeatmap() {
     document.getElementById(this.heatmapId)!.style.display = "";
-    document.getElementById(`${this.heatmapId}_loading`)!.style.display = "none";
+    document.getElementById(`${this.heatmapId}_loading`)!.style.display =
+      "none";
 
     const hm = Heatmap.create({
       xDomain: this.heatmapDomainX!,
@@ -272,25 +301,24 @@ class NightingaleSequenceHeatmap extends withManager(
     const colorScale = scaleSequential([dataMin, dataMax], interpolateYlOrRd);
     hm.setColor((d) => colorScale(d.score));
 
-    hm.setTooltip(
-      (d, x, y, xIndex, yIndex) => {
-        let returnHTML = `
+    hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
+      const returnHTML = `
         <b>Your are at</b> <br />
 
         x,y: <b>${d.xValue},${d.yValue}</b><br />
         score: <b>${formatDataItem(d.score)}</b>`;
-        return returnHTML;
-      }
-    );
-    hm.setZooming({ axis: 'x' });
+      return returnHTML;
+    });
+    hm.setZooming({ axis: "x" });
     hm.setVisualParams({ xGapPixels: 0, yGapPixels: 0 });
     this.heatmapInstance = hm;
-    
+
     this.bindHeatmapEvents();
 
     this.heatmapInstance.render(this.heatmapId!);
-    this.heatmapInstance.events.render.subscribe((d) => {
-      if (this["display-start"] !== 0 && this["display-end"] !== 0) this.triggerHeatmapZoom();
+    this.heatmapInstance.events.render.subscribe((_) => {
+      if (this["display-start"] !== 0 && this["display-end"] !== 0)
+        this.triggerHeatmapZoom();
     });
   }
 
@@ -332,13 +360,12 @@ class NightingaleSequenceHeatmap extends withManager(
       this.dispatchEvent(
         new CustomEvent("change", {
           detail: {
-            value: `${d.xIndex+1}:${d.xIndex+1}`,
+            value: `${d.xIndex + 1}:${d.xIndex + 1}`,
             type: "highlight",
           },
           bubbles: true,
-        })
+        }),
       );
-
     });
   }
 
@@ -364,22 +391,36 @@ class NightingaleSequenceHeatmap extends withManager(
 
     if (this.heatmapInstance) {
       // any so we can use private marker attributes
-      const heatmapInstanceMarker = (<any>this.heatmapInstance.extensions.marker!);
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+      const heatmapInstanceMarker = <any>(
+        this.heatmapInstance.extensions.marker!
+      );
 
-      if (!highlight) { // highlight null means no highlight to be shown
-        heatmapInstanceMarker.state.dom.svg.selectAll('.' + HeatmapClassNames.Marker).remove();
-        heatmapInstanceMarker.state.dom.svg.selectAll('.' + HeatmapClassNames.MarkerX).remove();
-        heatmapInstanceMarker.state.dom.svg.selectAll('.' + HeatmapClassNames.MarkerY).remove();
+      if (!highlight) {
+        // highlight null means no highlight to be shown
+        heatmapInstanceMarker.state.dom.svg
+          .selectAll("." + HeatmapClassNames.Marker)
+          .remove();
+        heatmapInstanceMarker.state.dom.svg
+          .selectAll("." + HeatmapClassNames.MarkerX)
+          .remove();
+        heatmapInstanceMarker.state.dom.svg
+          .selectAll("." + HeatmapClassNames.MarkerY)
+          .remove();
         return;
-      };
+      }
 
       // parse highlight start and end residues as indexes
-      const highlightStart = parseInt(highlight.split(":")[0])-1;
-      const highlightEnd = parseInt(highlight.split(":")[1])-1;
+      const highlightStart = parseInt(highlight.split(":")[0]) - 1;
+      const highlightEnd = parseInt(highlight.split(":")[1]) - 1;
 
       // calculate x and width inside the canvas
-      const x = heatmapInstanceMarker.state.scales.worldToCanvas.x(highlightStart);
-      const width = scaleDistance(heatmapInstanceMarker.state.scales.worldToCanvas.x, Math.max((highlightEnd-highlightStart)+1, 1));
+      const x =
+        heatmapInstanceMarker.state.scales.worldToCanvas.x(highlightStart);
+      const width = scaleDistance(
+        heatmapInstanceMarker.state.scales.worldToCanvas.x,
+        Math.max(highlightEnd - highlightStart + 1, 1),
+      );
 
       // use class name, static and dynamic attributes
       const className = HeatmapClassNames.MarkerY;
@@ -395,12 +436,16 @@ class NightingaleSequenceHeatmap extends withManager(
       };
 
       // create marker inside canvas svg element
-      const marker = heatmapInstanceMarker.state.dom.svg.selectAll('.' + className).data([1]);
-      attrd(marker.enter().append('rect'), { class: className, ...staticAttrs, ...dynamicAttrs });
+      const marker = heatmapInstanceMarker.state.dom.svg
+        .selectAll("." + className)
+        .data([1]);
+      attrd(marker.enter().append("rect"), {
+        class: className,
+        ...staticAttrs,
+        ...dynamicAttrs,
+      });
       attrd(marker, dynamicAttrs);
     }
-
   }
- 
 }
 export default NightingaleSequenceHeatmap;

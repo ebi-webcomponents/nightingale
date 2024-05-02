@@ -22,20 +22,23 @@ Please note that after instantiation the component needs to be initialized using
 
 ```javascript
 const xDomain = [1, 2, 3]; // 1-indexed residue ids
-const yDomain = ['A', 'B', 'C']; // categories (rows) to show on heatmap
-const data = [ // array of objects to be displayed, see more info on API Reference
-  {xValue:1, yValue:'A' ,score: 0.4 },
-  {xValue:1, yValue:'B' ,score: 32 },
-  {xValue:1, yValue:'C' ,score: 1.6 },
-  {xValue:2, yValue:'A' ,score: 2.5 },
-  {xValue:2, yValue:'B' ,score: 1 },
-  {xValue:2, yValue:'C' ,score: 7.6 },
-  {xValue:3, yValue:'A' ,score: 25.0 },
-  {xValue:3, yValue:'B' ,score: 10 },
-  {xValue:3, yValue:'C' ,score: 6 },
-]
+const yDomain = ["A", "B", "C"]; // categories (rows) to show on heatmap
+const data = [
+  // array of objects to be displayed, see more info on API Reference
+  { xValue: 1, yValue: "A", score: 0.4 },
+  { xValue: 1, yValue: "B", score: 32 },
+  { xValue: 1, yValue: "C", score: 1.6 },
+  { xValue: 2, yValue: "A", score: 2.5 },
+  { xValue: 2, yValue: "B", score: 1 },
+  { xValue: 2, yValue: "C", score: 7.6 },
+  { xValue: 3, yValue: "A", score: 25.0 },
+  { xValue: 3, yValue: "B", score: 10 },
+  { xValue: 3, yValue: "C", score: 6 },
+];
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
-  document.getElementById("id-for-sequence-heatmap").setHeatmapData(xDomain, yDomain, data); // initialization function
+  document
+    .getElementById("id-for-sequence-heatmap")
+    .setHeatmapData(xDomain, yDomain, data); // initialization function
 });
 ```
 
@@ -71,9 +74,9 @@ customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
   const heatmapElement = document.getElementById("id-for-sequence-heatmap");
 
   const colorScale = d3.scaleLinear(
-    [0, 1], /** min and max domain values of scale.
-    can also contain extra value steps as long as length is same as below */
-    ["#ffffff", "#00441b"] // colors to map domain to
+    [0, 1] /** min and max domain values of scale.
+    can also contain extra value steps as long as length is same as below */,
+    ["#ffffff", "#00441b"], // colors to map domain to
   );
   heatmapElement.heatmapInstance.setColor((d) => colorScale(d.score));
 });
@@ -87,15 +90,13 @@ Allows dynamic setting of tooltip HTML content
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
   const heatmapElement = document.getElementById("id-for-sequence-heatmap");
 
-  heatmapElement.heatmapInstance.setTooltip(
-    (d, x, y, xIndex, yIndex) => {
-      let returnHTML = `
+  heatmapElement.heatmapInstance.setTooltip((d, x, y, xIndex, yIndex) => {
+    let returnHTML = `
       <b>Your are at</b> <br />
 
       x,y: <b>${d.xValue},${d.yValue}</b><br />
       score: <b>${d.score}</b>`;
-      return returnHTML;
-    }
-  );
+    return returnHTML;
+  });
 });
 ```
