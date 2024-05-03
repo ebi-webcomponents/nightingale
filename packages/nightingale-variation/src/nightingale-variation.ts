@@ -18,13 +18,34 @@ import _intersection from "lodash-es/intersection";
 import _groupBy from "lodash-es/groupBy";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
-import { ProteinsAPIVariation, transformData } from "./proteinAPI";
+import { transformData, ProteinsAPIVariation } from "./proteinAPI";
 
-import {
-  ProcessedVariationData,
-  VariationData,
-  VariationDatum,
-} from "../types/nightingale-variation";
+export type VariationDatum = {
+  accession: string;
+  variant: string;
+  start: number;
+  size?: number;
+  xrefNames: string[];
+  hasPredictions: boolean;
+  tooltipContent?: string;
+  protvistaFeatureId: string;
+  alternativeSequence?: string;
+  internalId?: string;
+  wildType?: string;
+  color?: string;
+};
+
+export type VariationData = {
+  sequence: string;
+  variants: VariationDatum[];
+};
+
+export type ProcessedVariationData = {
+  type: string;
+  normal: string;
+  pos: number;
+  variants: VariationDatum[];
+};
 
 const aaList = [
   "G",

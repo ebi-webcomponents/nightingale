@@ -1,6 +1,6 @@
 import { select, scalePow, ScalePower, Selection } from "d3";
 import NightingaleVariation from "./nightingale-variation";
-import { ProcessedVariationData } from "../types/nightingale-variation";
+import { ProcessedVariationData } from "./nightingale-variation";
 import { bindEvents } from "@nightingale-elements/nightingale-new-core";
 
 class VariationPlot {

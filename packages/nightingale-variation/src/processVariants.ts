@@ -2,7 +2,7 @@ import {
   VariationData,
   VariationDatum,
   ProcessedVariationData,
-} from "../types/nightingale-variation";
+} from "./nightingale-variation";
 
 function processVariants(
   data?: VariationData
