@@ -4,7 +4,6 @@ import "../../packages/nightingale-variation/src/index.ts";
 import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-sequence/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
-
 // @ts-ignore
 import rawVariation from "../../packages/nightingale-variation/tests/P99999.variation.json";
 
@@ -41,7 +40,13 @@ BasicVariation.args = {
 BasicVariation.play = async () => {
   await customElements.whenDefined("nightingale-variation");
   const variationTrack = document.getElementById("variation");
-  if (variationTrack) (variationTrack as any).data = rawVariation;
+  if (variationTrack) {
+    (variationTrack as any).data = rawVariation;
+    (variationTrack as any).colorConfig = (v: any) => {
+      if (v.hasPredictions) return "green";
+      return "#DD2121";
+    };
+  }
 };
 
 export const NightingaleVariation = () => html`

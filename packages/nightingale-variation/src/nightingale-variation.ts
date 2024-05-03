@@ -1,13 +1,8 @@
 import { html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import NightingaleElement, {
-  withDimensions,
-  withPosition,
-  withMargin,
-  withResizable,
   withSVGHighlight,
   withManager,
-  withZoom,
 } from "@nightingale-elements/nightingale-new-core";
 
 import {
@@ -56,38 +51,9 @@ const aaList = [
   "*",
 ];
 
-const deepArrayOperation = (
-  arrays: Array<Array<VariationData>>,
-  operation: (...variants: VariationDatum[][]) => VariationDatum[]
-) => {
-  if (!arrays || arrays.length <= 0) {
-    return null;
-  }
-  const firstArray = arrays[0];
-  // Iterate over positions
-  firstArray.forEach((position, i) => {
-    const filteredVariants = arrays.map((array) => array[i].variants);
-    /* eslint-disable no-param-reassign */
-    position.variants = operation(...filteredVariants);
-  });
-  return firstArray;
-};
-
 @customElement("nightingale-variation")
 class NightingaleVariation extends withManager(
-  withSVGHighlight(
-    // withResizable(
-    //   withMargin(
-    //     withPosition(
-    // withZoom(
-    // withDimensions(
-    NightingaleElement
-    // )
-    // )
-    //     )
-    //   )
-    // )
-  )
+  withSVGHighlight(NightingaleElement)
 ) {
   /**
    * Indicates the data is in the format of the protein API and needs to be transformed acordingly
