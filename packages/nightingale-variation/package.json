@@ -29,8 +29,11 @@
     "customelements",
     "variation"
   ],
-  "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
-  "license": "ISC",
+  "authors": [
+    "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
+    "Gustavo Salazar &lt;gsalazar@ebi.ac.uk&gt;"
+  ],
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
