@@ -4,7 +4,7 @@ import "../../packages/nightingale-variation/src/index.ts";
 import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-sequence/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
-// @ts-ignore
+
 import rawVariation from "../../packages/nightingale-variation/tests/P99999.variation.json";
 
 export default {

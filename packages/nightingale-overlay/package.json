@@ -29,6 +29,6 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.5.0"
+    "@nightingale-elements/nightingale-new-core": "4.5.1-canary.0"
   }
 }
