@@ -253,6 +253,12 @@ class NightingaleVariation extends withManager(
 
   updateScale() {
     if (this.yScale) {
+      this.yScale.range([
+        0,
+        this.height - this["margin-top"] - this["margin-bottom"],
+      ]);
+      this.svg?.attr("width", this.width).attr("height", this.height);
+
       const yAxisLScale = axisLeft(this.yScale).tickSize(
         -this.getWidthWithMargins()
       );
