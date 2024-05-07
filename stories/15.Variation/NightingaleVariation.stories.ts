@@ -5,10 +5,24 @@ import "../../packages/nightingale-navigation/src/index.ts";
 import "../../packages/nightingale-sequence/src/index.ts";
 import "../../packages/nightingale-manager/src/index.ts";
 
-import rawVariation from "../../packages/nightingale-variation/tests/P99999.variation.json";
+import variationP99999 from "../../packages/nightingale-variation/tests/P99999.variation.json";
+import variationP42336 from "../../packages/nightingale-variation/tests/P42336.variation.json";
+import { ProteinsAPIVariation } from "../../packages/nightingale-variation/src/proteinAPI.js";
+
+const data: Record<string, ProteinsAPIVariation> = {
+  P99999: variationP99999 as unknown as ProteinsAPIVariation,
+  "P99999-2": variationP99999 as unknown as ProteinsAPIVariation,
+  P42336: variationP42336 as unknown as ProteinsAPIVariation,
+};
 
 export default {
   title: "Components/Tracks/Variation",
+  argTypes: {
+    protein: {
+      options: ["P99999", "P99999-2", "P42336"],
+      control: { type: "radio" },
+    },
+  },
 } as Meta;
 
 const Template: Story<{
@@ -16,7 +30,15 @@ const Template: Story<{
   width: number;
   displayStart: number;
   displayEnd: number;
+  protein: "P99999" | "P99999-2" | "P42336";
 }> = (args) => {
+  setTimeout(async () => {
+    await customElements.whenDefined("nightingale-variation");
+    const variationTrack = document.getElementById("variation");
+    if (variationTrack) {
+      (variationTrack as any).data = data[args.protein];
+    }
+  }, 500);
   return html`
     <nightingale-variation
       id="variation"
@@ -24,7 +46,7 @@ const Template: Story<{
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
       highlight="10:19,40:49"
-      length=${rawVariation.sequence.length}
+      length=${data[args.protein].sequence.length}
       protein-api
     ></nightingale-variation>
   `;
@@ -36,12 +58,12 @@ BasicVariation.args = {
   width: 800,
   displayStart: 1,
   displayEnd: 50,
+  protein: "P99999",
 };
-BasicVariation.play = async () => {
+BasicVariation.play = async (story) => {
   await customElements.whenDefined("nightingale-variation");
   const variationTrack = document.getElementById("variation");
   if (variationTrack) {
-    (variationTrack as any).data = rawVariation;
     (variationTrack as any).colorConfig = (v: any) => {
       if (v.hasPredictions) return "green";
       return "#DD2121";
@@ -54,16 +76,16 @@ export const NightingaleVariation = () => html`
     <div>
       <nightingale-navigation
         height="50"
-        length=${rawVariation.sequence.length}
+        length=${data.P99999.sequence.length}
         id="navigation"
       ></nightingale-navigation>
     </div>
     <div>
       <nightingale-sequence
         height="30"
-        length=${rawVariation.sequence.length}
+        length=${data.P99999.sequence.length}
         id="sequence"
-        sequence=${rawVariation.sequence}
+        sequence=${data.P99999.sequence}
         highlight-event="onmouseover"
       ></nightingale-sequence>
     </div>
@@ -71,7 +93,7 @@ export const NightingaleVariation = () => html`
       protein-api
       id="links-2"
       height="500"
-      length=${rawVariation.sequence.length}
+      length=${data.P99999.sequence.length}
       highlight="3:20"
       highlight-color="rgba(30,200,20,0.2)"
       highlight-event="onmouseover"
@@ -81,5 +103,5 @@ export const NightingaleVariation = () => html`
 NightingaleVariation.play = async () => {
   await customElements.whenDefined("nightingale-variation");
   const variation = document.getElementById("links-2");
-  if (variation) (variation as any).data = rawVariation;
+  if (variation) (variation as any).data = data.P99999;
 };

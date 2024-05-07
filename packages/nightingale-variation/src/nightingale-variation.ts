@@ -135,6 +135,7 @@ class NightingaleVariation extends withManager(
   }
 
   set data(data: VariationData | ProteinsAPIVariation | null | undefined) {
+    if (this.#data === data) return;
     this.processData(data);
     this.createFeatures();
   }
@@ -191,19 +192,19 @@ class NightingaleVariation extends withManager(
 
     this.variationPlot = new VariationPlot();
     // Group for the main chart
-    const mainChart = this.svg.select("g.sequence-features");
+    const mainChart = this.svg
+      .select("g.sequence-features")
+      .attr("transform", `translate(0, ${this["margin-top"]})`);
 
     // clip path prevents drawing outside of it
-    const chartArea = mainChart
-      .attr("transform", `translate(0, ${this["margin-top"]})`)
-      .append("g");
-
+    let chartArea = mainChart.select<SVGGElement>("g.points");
+    if (chartArea.empty()) {
+      chartArea = mainChart.append("g").attr("class", "points");
+      this.axisLeft = mainChart.append("g");
+      this.axisRight = mainChart.append("g");
+    }
     // This is calling the data series render code for each of the items in the data
     this.series = chartArea.datum(this.processedData);
-
-    this.axisLeft = mainChart.append("g");
-
-    this.axisRight = mainChart.append("g");
 
     this.updateScale();
   }
