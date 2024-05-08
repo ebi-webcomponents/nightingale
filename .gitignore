@@ -11,4 +11,4 @@ package-lock.json
 .DS_Store
 .vscode
 rollup.config-*.cjs
-.nx
+.nx/
