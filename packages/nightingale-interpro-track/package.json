@@ -35,7 +35,7 @@
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.5.0",
     "@nightingale-elements/nightingale-track": "^4.5.0",
-    "d3": "7.8.5",
+    "d3": "7.9.0",
     "lodash-es": "^4.17.15"
   }
 }

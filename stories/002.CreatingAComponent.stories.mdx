@@ -46,7 +46,7 @@ This document describes the creation of a basic Nightingale component.
      "homepage": "https://ebi-webcomponents.github.io/nightingale/",
      "dependencies": {
        "@nightingale-elements/nightingale-new-core": "^4.0.0",
-       "d3": "7.8.2"
+       "d3": "7.9.0"
      }
    }
    ```
@@ -65,11 +65,11 @@ This document describes the creation of a basic Nightingale component.
 
 5. Create the entrypoint for webpack. The current setup of the nightingale project looks for `src/index.ts`:
 
-  ```typescript
-  import NightingaleHello from "./nightingale-hello";
+```typescript
+import NightingaleHello from "./nightingale-hello";
 
-  export default NightingaleHello;
-  ```
+export default NightingaleHello;
+```
 
 6. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
 
@@ -150,7 +150,7 @@ This document describes the creation of a basic Nightingale component.
       ```
 
    6. Here is a snippet of `nightingale-hello.ts` using mixins and firing events.
-    
+
       ```typescript
       import { html } from "lit";
       import { customElement, property } from "lit/decorators.js";
@@ -159,25 +159,31 @@ This document describes the creation of a basic Nightingale component.
         withMargin,
         withHighlight,
       } from "@nightingale-elements/nightingale-new-core";
-      
+
       @customElement("nightingale-hello")
-      class NightingaleHello extends withMargin(withHighlight(NightingaleElement)) {
+      class NightingaleHello extends withMargin(
+        withHighlight(NightingaleElement)
+      ) {
         @property({ type: String, attribute: "name" })
         name = "";
 
         render() {
           return html`
-          <p>Hello ${this.name}!</p>
-          <button @click=${() => {
+            <p>Hello ${this.name}!</p>
+            <button
+              @click=${() => {
                 this.dispatchEvent(
                   new CustomEvent("change", {
-                    detail: { 
-                      "name": this.name,
+                    detail: {
+                      name: this.name,
                     },
                     bubbles: true,
                   })
                 );
-              }}> I am here </button>
+              }}
+            >
+              I am here
+            </button>
           `;
         }
       }
@@ -193,33 +199,33 @@ This document describes the creation of a basic Nightingale component.
 
 8. To view it in the showcase application, create a story `NightingaleHello.stories.ts` in `stories/` folder.
 
-  ```typescript
-  import { Meta, Story } from "@storybook/web-components";
-  import { html } from "lit-html";
-  import "../../packages/nightingale-hello/src/index.ts";
+```typescript
+import { Meta, Story } from "@storybook/web-components";
+import { html } from "lit-html";
+import "../../packages/nightingale-hello/src/index.ts";
 
-  export default {
-    title: "Components/Hello",
-  } as Meta;
+export default {
+  title: "Components/Hello",
+} as Meta;
 
-  const Template: Story<{
-    "name": string;
-  }> = (args) => {
-    return html`<nightingale-hello name=${args["name"] />`;
-  };
+const Template: Story<{
+  "name": string;
+}> = (args) => {
+  return html`<nightingale-hello name=${args["name"] />`;
+};
 
-  export const Hello = Template.bind({});
-  Hello.args = {
-    "name": "World",
-  };
-  ```
+export const Hello = Template.bind({});
+Hello.args = {
+  "name": "World",
+};
+```
 
-  The following command runs the storybook locally to test.
+The following command runs the storybook locally to test.
 
-  ```bash
-  yarn storybook
-  ```
+```bash
+yarn storybook
+```
 
-  ```
+```
 
 ```
