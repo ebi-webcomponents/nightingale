@@ -60,8 +60,8 @@ class NightingaleLinks extends NightingaleTrack {
           filterContacts(
             this._rawData,
             this.minDistance || 0,
-            this.minProbability || DEFAULT_PROBABILITY
-          )
+            this.minProbability || DEFAULT_PROBABILITY,
+          ),
         );
         this.createTrack();
       }
@@ -80,8 +80,8 @@ class NightingaleLinks extends NightingaleTrack {
       filterContacts(
         this._rawData,
         this.minDistance || 0,
-        this.minProbability || DEFAULT_PROBABILITY
-      )
+        this.minProbability || DEFAULT_PROBABILITY,
+      ),
     );
     this.createTrack();
   }

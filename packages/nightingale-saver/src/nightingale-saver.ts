@@ -40,7 +40,7 @@ class NightingaleSaver extends NightingaleElement {
     const element = document.querySelector<HTMLElement>(`#${this.elementId}`);
     if (!element) {
       throw new Error(
-        "The 'element-id' attribute is not related with a current DOM element"
+        "The 'element-id' attribute is not related with a current DOM element",
       );
     }
     element.style.display = "block"; // In order to get the width and height of protvista manager, its display has to be set to block
@@ -49,7 +49,7 @@ class NightingaleSaver extends NightingaleElement {
     if (typeof this.preSave === "function") {
       this.preSave();
     }
-    element.querySelector('canvas.preview')?.remove();
+    element.querySelector("canvas.preview")?.remove();
     const { width, height } = element.getBoundingClientRect();
 
     const scaleFactor = this.scaleFactor || 1;
@@ -90,7 +90,7 @@ class NightingaleSaver extends NightingaleElement {
       .catch((err) => {
         console.error(err);
         throw new Error(
-          `Couldn't generate the snapshot for the element '${this.elementId}'`
+          `Couldn't generate the snapshot for the element '${this.elementId}'`,
         );
       })
       .finally(() => {
