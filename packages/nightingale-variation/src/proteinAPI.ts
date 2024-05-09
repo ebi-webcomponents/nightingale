@@ -218,7 +218,9 @@ export const transformData = (
     (variant) =>
       ({
         ...variant,
-        accession: variant.genomicLocation,
+        accession: (variant.genomicLocation || []).length !== 0 
+            ? (variant.genomicLocation || [])[0] 
+            : '',
         variant: variant.alternativeSequence
           ? variant.alternativeSequence
           : AminoAcid.Empty,

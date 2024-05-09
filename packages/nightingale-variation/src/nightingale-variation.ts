@@ -13,9 +13,9 @@ import {
   ScalePoint,
   Selection,
 } from "d3";
-import _union from "lodash-es/union";
-import _intersection from "lodash-es/intersection";
-import _groupBy from "lodash-es/groupBy";
+// import _union from "lodash-es/union";
+// import _intersection from "lodash-es/intersection";
+// import _groupBy from "lodash-es/groupBy";
 import processVariants from "./processVariants";
 import VariationPlot from "./variationPlot";
 import { transformData, ProteinsAPIVariation } from "./proteinAPI";

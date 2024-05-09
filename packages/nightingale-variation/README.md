@@ -2,7 +2,7 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-variation.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-variation)
 
-This custom element displays a matrix of amino-acid changes at a given position on the protein sequence. The advantage of a matrix-based approach is that even with a large number of variants (every single amino-acid change per location) the space taken by the visualisation on the screen doesn't change.
+This custom element displays a matrix of amino acid changes at a given position on the protein sequence. The advantage of a matrix-based approach is that even with a large number of variants (every single amino acid change per location) the space taken by the visualisation on the screen doesn't change.
 
 <!-- [Demo](https://ebi-webcomponents.github.io/nightingale/#/variation) -->
 
