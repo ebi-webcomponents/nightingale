@@ -23,6 +23,7 @@ const Template: Story<{
   width: number;
   displayStart: number;
   displayEnd: number;
+  marginLeft: number;
   protein: "P99999" | "P42336";
 }> = (args) => {
   setTimeout(async () => {
@@ -39,6 +40,7 @@ const Template: Story<{
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
       length=${data[args.protein].sequence.length}
+      margin-left=${args.marginLeft}
       protein-api
     ></nightingale-variation>
   `;
@@ -50,6 +52,7 @@ BasicVariation.args = {
   width: 800,
   displayStart: 1,
   displayEnd: 50,
+  marginLeft: 20,
   protein: "P99999",
 };
 BasicVariation.argTypes = {
@@ -77,6 +80,7 @@ export const NightingaleVariation = () => html`
         height="50"
         length=${data.P99999.sequence.length}
         id="navigation"
+        margin-left="20"
       ></nightingale-navigation>
     </div>
     <div>
@@ -86,6 +90,7 @@ export const NightingaleVariation = () => html`
         id="sequence"
         sequence=${data.P99999.sequence}
         highlight-event="onmouseover"
+        margin-left="20"
       ></nightingale-sequence>
     </div>
     <nightingale-variation
@@ -95,6 +100,7 @@ export const NightingaleVariation = () => html`
       length=${data.P99999.sequence.length}
       highlight-color="rgba(30,200,20,0.2)"
       highlight-event="onmouseover"
+      margin-left="20"
     ></nightingale-variation>
   </nightingale-manager>
 `;
