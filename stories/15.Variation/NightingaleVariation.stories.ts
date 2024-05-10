@@ -11,18 +11,11 @@ import { ProteinsAPIVariation } from "../../packages/nightingale-variation/src/p
 
 const data: Record<string, ProteinsAPIVariation> = {
   P99999: variationP99999 as unknown as ProteinsAPIVariation,
-  "P99999-2": variationP99999 as unknown as ProteinsAPIVariation,
   P42336: variationP42336 as unknown as ProteinsAPIVariation,
 };
 
 export default {
   title: "Components/Tracks/Variation",
-  argTypes: {
-    protein: {
-      options: ["P99999", "P99999-2", "P42336"],
-      control: { type: "radio" },
-    },
-  },
 } as Meta;
 
 const Template: Story<{
@@ -30,7 +23,7 @@ const Template: Story<{
   width: number;
   displayStart: number;
   displayEnd: number;
-  protein: "P99999" | "P99999-2" | "P42336";
+  protein: "P99999" | "P42336";
 }> = (args) => {
   setTimeout(async () => {
     await customElements.whenDefined("nightingale-variation");
@@ -60,6 +53,13 @@ BasicVariation.args = {
   displayEnd: 50,
   protein: "P99999",
 };
+BasicVariation.argTypes = {
+  protein: {
+    options: ["P99999", "P42336"],
+    control: { type: "radio" },
+  },
+};
+
 BasicVariation.play = async (story) => {
   await customElements.whenDefined("nightingale-variation");
   const variationTrack = document.getElementById("variation");
