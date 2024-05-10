@@ -82,12 +82,20 @@ class NightingaleVariation extends withManager(
    */
   @property({ type: Boolean, attribute: "protein-api" })
   proteinAPI?: boolean = false;
+  /**
+   * Indicates if the view should only include rows with at least 1 variant
+   */
+  @property({ type: Boolean, attribute: "condensed-view" })
+  condensedView?: boolean = false;
 
   yScale?: ScalePoint<string>;
 
   #data: VariationData | ProteinsAPIVariation | null | undefined;
 
-  processedData?: ProcessedVariationData[] | null;
+  processedData?: {
+    mutationArray: ProcessedVariationData[];
+    aaPresence: Record<string, boolean>;
+  } | null;
 
   variationPlot?: VariationPlot;
   series?: Selection<
@@ -205,7 +213,7 @@ class NightingaleVariation extends withManager(
       this.axisRight = mainChart.append("g");
     }
     // This is calling the data series render code for each of the items in the data
-    this.series = chartArea.datum(this.processedData);
+    this.series = chartArea.datum(this.processedData.mutationArray);
 
     this.updateScale();
   }
@@ -255,10 +263,13 @@ class NightingaleVariation extends withManager(
 
   updateScale() {
     if (this.yScale) {
-      this.yScale.range([
-        0,
-        this.height - this["margin-top"] - this["margin-bottom"],
-      ]);
+      this.yScale
+        .range([0, this.height - this["margin-top"] - this["margin-bottom"]])
+        .domain(
+          aaList.filter((aa) =>
+            this.condensedView ? this.processedData?.aaPresence[aa] : true
+          )
+        );
       this.svg?.attr("width", this.width).attr("height", this.height);
 
       const yAxisLScale = axisLeft(this.yScale).tickSize(

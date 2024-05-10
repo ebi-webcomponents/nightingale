@@ -25,6 +25,7 @@ const Template: Story<{
   displayEnd: number;
   marginLeft: number;
   protein: "P99999" | "P42336";
+  condensedView: boolean;
 }> = (args) => {
   setTimeout(async () => {
     await customElements.whenDefined("nightingale-variation");
@@ -41,6 +42,7 @@ const Template: Story<{
       display-end=${args.displayEnd}
       length=${data[args.protein].sequence.length}
       margin-left=${args.marginLeft}
+      ?condensed-view=${args.condensedView}
       protein-api
     ></nightingale-variation>
   `;
@@ -54,6 +56,7 @@ BasicVariation.args = {
   displayEnd: 50,
   marginLeft: 20,
   protein: "P99999",
+  condensedView: false,
 };
 BasicVariation.argTypes = {
   protein: {
@@ -101,6 +104,7 @@ export const NightingaleVariation = () => html`
       highlight-color="rgba(30,200,20,0.2)"
       highlight-event="onmouseover"
       margin-left="20"
+      condensed-view
     ></nightingale-variation>
   </nightingale-manager>
 `;
