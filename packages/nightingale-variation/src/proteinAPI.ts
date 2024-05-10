@@ -23,7 +23,7 @@ export type Variant = {
   end: string;
   xrefs: Xref[];
   cytogeneticBand: string;
-  genomicLocation: string;
+  genomicLocation?: string[];
   locations: Location[];
   codon?: string;
   consequenceType: ConsequenceType;
@@ -229,6 +229,7 @@ export const transformData = (
         hasPredictions: variant.predictions && variant.predictions.length > 0,
         //   tooltipContent: formatTooltip(variant),
         protvistaFeatureId: String(Math.random()),
+        consequenceType: variant.consequenceType,
       }) as VariationDatum
   );
   if (!variants) return null;

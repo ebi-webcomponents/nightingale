@@ -33,6 +33,7 @@ export type VariationDatum = {
   internalId?: string;
   wildType?: string;
   color?: string;
+  consequenceType: string;
 };
 
 export type VariationData = {
@@ -159,7 +160,7 @@ class NightingaleVariation extends withManager(
       opacity: 0.6;
     }
     nightingale-variation circle:hover {
-      opacity: 0.9;
+      opacity: 1;
     }
     nightingale-variation .tick line,
     nightingale-variation .axis path {
