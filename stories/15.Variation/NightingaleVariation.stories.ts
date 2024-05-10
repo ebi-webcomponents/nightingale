@@ -38,7 +38,6 @@ const Template: Story<{
       height=${args.height}
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
-      highlight="10:19,40:49"
       length=${data[args.protein].sequence.length}
       protein-api
     ></nightingale-variation>
@@ -94,7 +93,6 @@ export const NightingaleVariation = () => html`
       id="links-2"
       height="500"
       length=${data.P99999.sequence.length}
-      highlight="3:20"
       highlight-color="rgba(30,200,20,0.2)"
       highlight-event="onmouseover"
     ></nightingale-variation>
