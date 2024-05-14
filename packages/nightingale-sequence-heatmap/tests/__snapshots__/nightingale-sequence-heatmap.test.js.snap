@@ -4,7 +4,7 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence corre
 <nightingale-sequence-heatmap
   display-end="-1"
   display-start="1"
-  heatmapid="testId"
+  heatmap-id="testId"
   height="500"
   highlight="1:3"
   highlight-color="#FFEB3B66"
@@ -15,49 +15,41 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence corre
 >
   <!---->
   
-      
+        
   <style>
     
-        #
+          #
     <!---->
     testId
      {
-          /** Position of bottom-left corner of tooltip box relative to the mouse position */
-          --tooltip-offset-x: 5px;
-          /** Position of bottom-left corner of tooltip box relative to the mouse position */
-          --tooltip-offset-y: 8px;
-        }
-        .heatmap-marker-x {
-          /** background: 
-    <!---->
-    #FFEB3B66
-     !important; */
-          fill: 
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-x: 5px;
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-y: 8px;
+          }
+          .heatmap-marker-x {
+            fill: 
     <!---->
     rgb(255, 235, 59)
      !important;
-          fill-opacity: 
+            fill-opacity: 
     <!---->
     0.359
      !important;
-          stroke-width: 0 !important;
-        }
-        .heatmap-marker-y {
-          /** background: 
-    <!---->
-    #FFEB3B66
-     !important; */
-          fill: 
+            stroke-width: 0 !important;
+          }
+          .heatmap-marker-y {
+            fill: 
     <!---->
     rgb(255, 235, 59)
      !important;
-          fill-opacity: 
+            fill-opacity: 
     <!---->
     0.359
      !important;
-          stroke-width: 0 !important;
-        }
-        
+            stroke-width: 0 !important;
+          }
+          
     <!---->
     
 .heatmap-main-div {
@@ -170,20 +162,21 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence corre
     fill: none;
 }
     
-      
+        
     <!---->
   </style>
   
 
-      
+        
   <div
-    style="width:500px;padding-left:10px;padding-right:10px;padding-top:0px;padding-bottom:0px;""
+    class="container"
+    style="width: 500px; padding: 0px 10px 0px 10px;"
   >
     
-        
+          
     <div
       id="testId"
-      style="width:480px;height:500px;z-index:1;display:none;""
+      style="width: 480px; height: 500px; z-index: 1;"
     >
       <div
         class="heatmap-main-div"
@@ -215,201 +208,8 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence corre
       </div>
     </div>
     
-      
+        
   </div>
-  
-      
-  <div
-    id="testId_loading"
-    style="display: none;"
-  >
-    
-        
-    <svg
-      height="200px"
-      preserveAspectRatio="xMidYMid"
-      style="background: none;"
-      viewBox="0 0 100 100"
-      width="200px"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-    >
-      
-          
-      <circle
-        cx="75"
-        cy="50"
-        fill="#363a3c"
-        r="6.39718"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.875s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="67.678"
-        cy="67.678"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.75s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="50"
-        cy="75"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.625s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="32.322"
-        cy="67.678"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.5s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="25"
-        cy="50"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.375s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="32.322"
-        cy="32.322"
-        fill="#363a3c"
-        r="4.80282"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.25s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="50"
-        cy="25"
-        fill="#363a3c"
-        r="6.40282"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.125s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="67.678"
-        cy="32.322"
-        fill="#363a3c"
-        r="7.99718"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="0s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-        
-    </svg>
-    
-      
-  </div>
-  
-    
 </nightingale-sequence-heatmap>
 `;
 
@@ -417,7 +217,7 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence heatm
 <nightingale-sequence-heatmap
   display-end="-1"
   display-start="1"
-  heatmapid="testId"
+  heatmap-id="testId"
   height="500"
   highlight-color="#FFEB3B66"
   min-height="10"
@@ -427,49 +227,41 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence heatm
 >
   <!---->
   
-      
+        
   <style>
     
-        #
+          #
     <!---->
     testId
      {
-          /** Position of bottom-left corner of tooltip box relative to the mouse position */
-          --tooltip-offset-x: 5px;
-          /** Position of bottom-left corner of tooltip box relative to the mouse position */
-          --tooltip-offset-y: 8px;
-        }
-        .heatmap-marker-x {
-          /** background: 
-    <!---->
-    #FFEB3B66
-     !important; */
-          fill: 
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-x: 5px;
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-y: 8px;
+          }
+          .heatmap-marker-x {
+            fill: 
     <!---->
     rgb(255, 235, 59)
      !important;
-          fill-opacity: 
+            fill-opacity: 
     <!---->
     0.359
      !important;
-          stroke-width: 0 !important;
-        }
-        .heatmap-marker-y {
-          /** background: 
-    <!---->
-    #FFEB3B66
-     !important; */
-          fill: 
+            stroke-width: 0 !important;
+          }
+          .heatmap-marker-y {
+            fill: 
     <!---->
     rgb(255, 235, 59)
      !important;
-          fill-opacity: 
+            fill-opacity: 
     <!---->
     0.359
      !important;
-          stroke-width: 0 !important;
-        }
-        
+            stroke-width: 0 !important;
+          }
+          
     <!---->
     
 .heatmap-main-div {
@@ -582,20 +374,21 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence heatm
     fill: none;
 }
     
-      
+        
     <!---->
   </style>
   
 
-      
+        
   <div
-    style="width:500px;padding-left:10px;padding-right:10px;padding-top:0px;padding-bottom:0px;""
+    class="container"
+    style="width: 500px; padding: 0px 10px 0px 10px;"
   >
     
-        
+          
     <div
       id="testId"
-      style="width:480px;height:500px;z-index:1;display:none;""
+      style="width: 480px; height: 500px; z-index: 1;"
     >
       <div
         class="heatmap-main-div"
@@ -617,201 +410,8 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence heatm
       </div>
     </div>
     
-      
+        
   </div>
-  
-      
-  <div
-    id="testId_loading"
-    style="display: none;"
-  >
-    
-        
-    <svg
-      height="200px"
-      preserveAspectRatio="xMidYMid"
-      style="background: none;"
-      viewBox="0 0 100 100"
-      width="200px"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-    >
-      
-          
-      <circle
-        cx="75"
-        cy="50"
-        fill="#363a3c"
-        r="6.39718"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.875s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="67.678"
-        cy="67.678"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.75s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="50"
-        cy="75"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.625s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="32.322"
-        cy="67.678"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.5s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="25"
-        cy="50"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.375s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="32.322"
-        cy="32.322"
-        fill="#363a3c"
-        r="4.80282"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.25s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="50"
-        cy="25"
-        fill="#363a3c"
-        r="6.40282"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.125s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="67.678"
-        cy="32.322"
-        fill="#363a3c"
-        r="7.99718"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="0s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-        
-    </svg>
-    
-      
-  </div>
-  
-    
 </nightingale-sequence-heatmap>
 `;
 
@@ -819,7 +419,7 @@ exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
 <nightingale-sequence-heatmap
   display-end="4"
   display-start="2"
-  heatmapid="testId"
+  heatmap-id="testId"
   height="500"
   highlight-color="#FFEB3B66"
   min-height="10"
@@ -829,49 +429,41 @@ exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
 >
   <!---->
   
-      
+        
   <style>
     
-        #
+          #
     <!---->
     testId
      {
-          /** Position of bottom-left corner of tooltip box relative to the mouse position */
-          --tooltip-offset-x: 5px;
-          /** Position of bottom-left corner of tooltip box relative to the mouse position */
-          --tooltip-offset-y: 8px;
-        }
-        .heatmap-marker-x {
-          /** background: 
-    <!---->
-    #FFEB3B66
-     !important; */
-          fill: 
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-x: 5px;
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-y: 8px;
+          }
+          .heatmap-marker-x {
+            fill: 
     <!---->
     rgb(255, 235, 59)
      !important;
-          fill-opacity: 
+            fill-opacity: 
     <!---->
     0.359
      !important;
-          stroke-width: 0 !important;
-        }
-        .heatmap-marker-y {
-          /** background: 
-    <!---->
-    #FFEB3B66
-     !important; */
-          fill: 
+            stroke-width: 0 !important;
+          }
+          .heatmap-marker-y {
+            fill: 
     <!---->
     rgb(255, 235, 59)
      !important;
-          fill-opacity: 
+            fill-opacity: 
     <!---->
     0.359
      !important;
-          stroke-width: 0 !important;
-        }
-        
+            stroke-width: 0 !important;
+          }
+          
     <!---->
     
 .heatmap-main-div {
@@ -984,20 +576,21 @@ exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
     fill: none;
 }
     
-      
+        
     <!---->
   </style>
   
 
-      
+        
   <div
-    style="width:500px;padding-left:10px;padding-right:10px;padding-top:0px;padding-bottom:0px;""
+    class="container"
+    style="width: 500px; padding: 0px 10px 0px 10px;"
   >
     
-        
+          
     <div
       id="testId"
-      style="width:480px;height:500px;z-index:1;display:none;""
+      style="width: 480px; height: 500px; z-index: 1;"
     >
       <div
         class="heatmap-main-div"
@@ -1019,200 +612,7 @@ exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
       </div>
     </div>
     
-      
+        
   </div>
-  
-      
-  <div
-    id="testId_loading"
-    style="display: none;"
-  >
-    
-        
-    <svg
-      height="200px"
-      preserveAspectRatio="xMidYMid"
-      style="background: none;"
-      viewBox="0 0 100 100"
-      width="200px"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-    >
-      
-          
-      <circle
-        cx="75"
-        cy="50"
-        fill="#363a3c"
-        r="6.39718"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.875s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="67.678"
-        cy="67.678"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.75s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="50"
-        cy="75"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.625s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="32.322"
-        cy="67.678"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.5s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="25"
-        cy="50"
-        fill="#363a3c"
-        r="4.8"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.375s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="32.322"
-        cy="32.322"
-        fill="#363a3c"
-        r="4.80282"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.25s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="50"
-        cy="25"
-        fill="#363a3c"
-        r="6.40282"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="-0.125s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-          
-      <circle
-        cx="67.678"
-        cy="32.322"
-        fill="#363a3c"
-        r="7.99718"
-      >
-        
-              
-        <animate
-          attributeName="r"
-          begin="0s"
-          dur="1s"
-          repeatCount="indefinite"
-          times="0;0.1;0.2;0.3;1"
-          values="4.8;4.8;8;4.8;4.8"
-        />
-        
-          
-      </circle>
-      
-        
-    </svg>
-    
-      
-  </div>
-  
-    
 </nightingale-sequence-heatmap>
 `;

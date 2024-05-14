@@ -120,9 +120,10 @@
             }
           }
           if (document.getElementById("heatmapHotmap"))
-            document
-              .getElementById("heatmapHotmap")
-              .setHeatmapData(xDomain, yDomain, data);
+            document.getElementById("heatmapHotmap").fixedHighlight = "10:20";
+          document
+            .getElementById("heatmapHotmap")
+            .setHeatmapData(xDomain, yDomain, data);
           setTimeout(() => {
             const colorScale = d3.scaleLinear([0, 1], ["lightblue", "blue"]);
             document
@@ -179,7 +180,7 @@
         ></nightingale-track>
         <nightingale-sequence-heatmap
           id="heatmapHotmap"
-          heatmapId="heatmapHotmapInstance"
+          heatmap-id="heatmapHotmapInstance"
           width="800"
           height="500"
           display-start="5"

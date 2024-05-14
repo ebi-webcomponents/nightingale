@@ -10,7 +10,8 @@ The below example shows how to instantiate the component
 
 ```html
 <nightingale-sequence-heatmap
-  id="id-for-sequence-heatmap"
+  id="id-for-nightingale-sequence-heatmap"
+  heatmap-id="seq-heatmap"
   width="400"
   height="400"
   highlight-event="onmouseover"
@@ -37,7 +38,7 @@ const data = [
 ];
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
   document
-    .getElementById("id-for-sequence-heatmap")
+    .getElementById("id-for-nightingale-sequence-heatmap")
     .setHeatmapData(xDomain, yDomain, data); // initialization function
 });
 ```
@@ -57,7 +58,7 @@ interface HotmapData {
   xValue: number; // residue index (columns)
   yValue: string; // category type (rows)
   score: number; // heatmap value converted to colors
-  [key: string]: any; // additional properties for specific use cases
+  [key: string]: unknown; // additional properties for specific use cases such as custom tooltips
 }
 ```
 
@@ -71,12 +72,11 @@ Allows dynamic setting of heatmap color palette
 
 ```javascript
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
-  const heatmapElement = document.getElementById("id-for-sequence-heatmap");
+  const heatmapElement = document.getElementById("id-for-nightingale-sequence-heatmap");
 
   const colorScale = d3.scaleLinear(
-    [0, 1] /** min and max domain values of scale.
-    can also contain extra value steps as long as length is same as below */,
-    ["#ffffff", "#00441b"], // colors to map domain to
+    [0, 1], // score value domain
+    ["#ffffff", "#00441b"], // color range to map values
   );
   heatmapElement.heatmapInstance.setColor((d) => colorScale(d.score));
 });
@@ -88,7 +88,7 @@ Allows dynamic setting of tooltip HTML content
 
 ```javascript
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
-  const heatmapElement = document.getElementById("id-for-sequence-heatmap");
+  const heatmapElement = document.getElementById("id-for-nightingale-sequence-heatmap");
 
   heatmapElement.heatmapInstance.setTooltip((d, x, y, xIndex, yIndex) => {
     let returnHTML = `

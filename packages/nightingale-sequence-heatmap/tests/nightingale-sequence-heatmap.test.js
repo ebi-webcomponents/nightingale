@@ -5,7 +5,7 @@ let rendered;
 
 describe("nightingale-sequence-heatmap tests", () => {
   beforeEach(async () => {
-    document.documentElement.innerHTML = `<nightingale-sequence-heatmap  heatmapId="testId" width="500" height="500"></nightingale-sequence-heatmap>`;
+    document.documentElement.innerHTML = `<nightingale-sequence-heatmap  heatmap-id="testId" width="500" height="500"></nightingale-sequence-heatmap>`;
     rendered = document.querySelector("nightingale-sequence-heatmap");
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
     await rendered.updateComplete;
