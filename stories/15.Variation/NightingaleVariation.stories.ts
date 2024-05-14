@@ -19,7 +19,7 @@ export default {
 } as Meta;
 
 const Template: Story<{
-  height: number;
+  rowHeight: number;
   width: number;
   displayStart: number;
   displayEnd: number;
@@ -37,7 +37,7 @@ const Template: Story<{
   return html`
     <nightingale-variation
       id="variation"
-      height=${args.height}
+      row-height=${args.rowHeight}
       display-start=${args.displayStart}
       display-end=${args.displayEnd}
       length=${data[args.protein].sequence.length}
@@ -50,7 +50,7 @@ const Template: Story<{
 
 export const BasicVariation = Template.bind({});
 BasicVariation.args = {
-  height: 600,
+  rowHeight: 15,
   width: 800,
   displayStart: 1,
   displayEnd: 50,
@@ -99,7 +99,7 @@ export const NightingaleVariation = () => html`
     <nightingale-variation
       protein-api
       id="links-2"
-      height="500"
+      row-height="15"
       length=${data.P99999.sequence.length}
       highlight-color="rgba(30,200,20,0.2)"
       highlight-event="onmouseover"

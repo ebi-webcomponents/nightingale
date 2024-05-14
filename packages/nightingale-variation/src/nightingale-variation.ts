@@ -87,6 +87,11 @@ class NightingaleVariation extends withManager(
    */
   @property({ type: Boolean, attribute: "condensed-view" })
   condensedView?: boolean = false;
+  /**
+   * Indicates if the view should only include rows with at least 1 variant
+   */
+  @property({ type: Number, attribute: "row-height" })
+  rowHeight?: number;
 
   yScale?: ScalePoint<string>;
 
@@ -263,13 +268,18 @@ class NightingaleVariation extends withManager(
 
   updateScale() {
     if (this.yScale) {
+      const aaToDisplay = aaList.filter((aa) =>
+        this.condensedView ? this.processedData?.aaPresence[aa] : true
+      );
+      if (this.rowHeight) {
+        this.height =
+          aaToDisplay.length * this.rowHeight +
+          this["margin-top"] +
+          this["margin-bottom"];
+      }
       this.yScale
         .range([0, this.height - this["margin-top"] - this["margin-bottom"]])
-        .domain(
-          aaList.filter((aa) =>
-            this.condensedView ? this.processedData?.aaPresence[aa] : true
-          )
-        );
+        .domain(aaToDisplay);
       this.svg?.attr("width", this.width).attr("height", this.height);
 
       const yAxisLScale = axisLeft(this.yScale).tickSize(
