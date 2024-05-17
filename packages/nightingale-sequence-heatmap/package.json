@@ -1,0 +1,40 @@
+{
+  "name": "@nightingale-elements/nightingale-sequence-heatmap",
+  "version": "4.5.2",
+  "description": "Nightingale wrapper for PDBe Canvas Heatmap library (hotmap)",
+  "keywords": [
+    "nightingale",
+    "heatmap",
+    "hotmap"
+  ],
+  "author": "Marcelo Afonso <marcelo@ebi.ac.uk>",
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^4.5.0",
+    "d3": "7.8.5",
+    "heatmap-component": "^0.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js ./tests/*"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  }
+}

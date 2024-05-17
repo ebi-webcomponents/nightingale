@@ -79,6 +79,8 @@ const Template: Story<{
   "highlight-color": string;
   "margin-color": string;
   useOverlay: boolean;
+  "heatmap-id": string;
+  "heatmap-height": number;
 }> = (args) => {
   const { height, length, sequence, useOverlay } = args;
   return html`
@@ -190,6 +192,19 @@ const Template: Story<{
             </nightingale-interpro-track>
           </div>
           <div style="line-height: 0">
+            <nightingale-sequence-heatmap
+              id="sequence-heatmap"
+              heatmap-id=${args["heatmap-id"]}
+              min-width="${args["min-width"]}"
+              length="${length}"
+              height=${args["heatmap-height"]}
+              display-start=${args["display-start"]}
+              display-end=${args["display-end"]}
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+            ></nightingale-sequence-heatmap>
+          </div>
+          <div style="line-height: 0">
             <nightingale-linegraph-track
               id="linegraph"
               min-width="${args["min-width"]}"
@@ -224,6 +239,8 @@ AllTracks.args = {
   "highlight-color": "#EB3BFF22",
   "margin-color": "transparent",
   useOverlay: true,
+  "heatmap-id": "id1",
+  "heatmap-height": 180,
 };
 AllTracks.play = async () => {
   await customElements.whenDefined("nightingale-sequence");
@@ -255,6 +272,16 @@ AllTracks.play = async () => {
   const linegraphTrack = document.getElementById("linegraph");
   if (linegraphTrack) {
     (linegraphTrack as any).data = linegraph;
+  }
+
+  await customElements.whenDefined("nightingale-sequence-heatmap");
+  const seqHeatmap = document.getElementById("sequence-heatmap");
+  if (seqHeatmap) {
+    setTimeout(() => {
+      // wait until renders finished
+      (seqHeatmap as any).fixedHighlight = "10:20";
+      (seqHeatmap as any).createRandomFromLength();
+    }, 50);
   }
 };
 
