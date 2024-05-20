@@ -2,14 +2,13 @@ import { SequencesMSA } from "../types/types";
 
 declare const self: Worker & { previous: unknown };
 
-const aLetterOffset = "A".charCodeAt(0);
-const lettersInAlphabet = 26;
-
 export const calculateConservation = (
   sequences: SequencesMSA,
   sampleSize: number | null = null,
-  isWorker = false,
+  isWorker = false
 ) => {
+  const aLetterOffset = "A".charCodeAt(0);
+  const lettersInAlphabet = 26;
   const length =
     (sequences && sequences.length && sequences[0].sequence.length) || 0;
   const finalSampleSize = sampleSize
@@ -44,12 +43,13 @@ export const calculateConservation = (
   return conservation;
 };
 
-const onmessage = function (e: MessageEvent) {
+const conservationInlineWorkerString = `
+self.addEventListener('message', (e) => {
   if (self.previous !== e.data) {
-    calculateConservation(e.data.sequences, e.data.sampleSize, true);
+    const f = ${calculateConservation.toString()};
+    f(e.data.sequences, e.data.sampleSize, true);
   }
   self.previous = e.data;
-};
-self.addEventListener("message", onmessage);
+})`;
 
-export default calculateConservation;
+export default conservationInlineWorkerString;
