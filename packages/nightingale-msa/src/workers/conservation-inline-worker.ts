@@ -39,7 +39,6 @@ export const calculateConservation = (
   if (isWorker) {
     self.postMessage({ progress: 1, conservation }, [conservation.buffer]);
   }
-
   return conservation;
 };
 
