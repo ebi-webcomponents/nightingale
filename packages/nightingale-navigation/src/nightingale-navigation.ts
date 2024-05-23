@@ -247,22 +247,22 @@ class NightingaleNavigation extends withManager(
     this.locate(
       Math.max(
         (this["ruler-start"] as number) || 1,
-        this.getStart() - (this["scale-factor"] as number)
+        this.getStart() - (this["scale-factor"] as number),
       ),
       Math.min(
         (this.length || 1) + (this["ruler-start"] as number) - 1,
-        this.getEnd() + (this["scale-factor"] as number)
-      )
+        this.getEnd() + (this["scale-factor"] as number),
+      ),
     );
   }
   zoomIn() {
     const newStart = Math.min(
       this.getStart() + (this["scale-factor"] as number),
-      this.getEnd() - 1
+      this.getEnd() - 1,
     );
     this.locate(
       newStart,
-      Math.max(this.getEnd() - (this["scale-factor"] as number), newStart + 1)
+      Math.max(this.getEnd() - (this["scale-factor"] as number), newStart + 1),
     );
   }
   protected updateHighlight() {

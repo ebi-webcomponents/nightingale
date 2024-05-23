@@ -1,28 +1,15 @@
 import { customElement } from "lit/decorators.js";
+import { CustomElementDecorator } from "lit/decorators";
 
 type Constructor<T> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): T;
 };
-export interface ClassElement {
-  kind: "field" | "method";
-  key: PropertyKey;
-  placement: "static" | "prototype" | "own";
-  initializer?: Function;
-  extras?: ClassElement[];
-  finisher?: <T>(clazz: Constructor<T>) => void | Constructor<T>;
-  descriptor?: PropertyDescriptor;
-}
 
-interface ClassDescriptor {
-  kind: "class";
-  elements: ClassElement[];
-  finisher?: <T>(clazz: Constructor<T>) => void | Constructor<T>;
-}
 type CustomElementClass = Omit<typeof HTMLElement, "new">;
 
 /**
- * Extending the decorator to define custom elements in porder to make sure only gets defined once.
+ * Extending the decorator to define custom elements in order to make sure only gets defined once.
  *
  * ```js
  * @customElementOnce('my-element')
@@ -35,11 +22,15 @@ type CustomElementClass = Omit<typeof HTMLElement, "new">;
  * @category Decorator
  * @param tagName The tag name of the custom element to define.
  */
-const customElementOnce =
-  (tagName: string) =>
-  (classOrDescriptor: CustomElementClass | ClassDescriptor) => {
+export const customElementOnce =
+  (tagName: string): CustomElementDecorator =>
+  (
+    classOrTarget: CustomElementClass | Constructor<HTMLElement>,
+    context?: ClassDecoratorContext<Constructor<HTMLElement>>
+  ) => {
     if (!window.customElements.get(tagName))
-      customElement(tagName)(classOrDescriptor);
+      if (context) customElement(tagName)(classOrTarget, context);
+      else customElement(tagName)(classOrTarget);
   };
 
 export default customElementOnce;

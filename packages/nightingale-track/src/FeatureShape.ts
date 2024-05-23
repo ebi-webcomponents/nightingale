@@ -90,9 +90,7 @@ export default class FeatureShape {
   }
 
   private rectangle() {
-    return `M0,0L${this.#ftWidth},0L${this.#ftWidth},${this.#ftHeight}L0,${
-      this.#ftHeight
-    }Z`;
+    return `M0,0L${this.#ftWidth},0L${this.#ftWidth},${this.#ftHeight}L0,${this.#ftHeight}Z`;
   }
 
   private roundRectangle() {
@@ -114,9 +112,7 @@ export default class FeatureShape {
 
   bridge() {
     if (this.#ftLength !== 1) {
-      return `M0,${this.#ftHeight}L0,0L${this.#ftWidth},0L${this.#ftWidth},${
-        this.#ftHeight
-      }L${this.#ftWidth},2L0,2Z`;
+      return `M0,${this.#ftHeight}L0,0L${this.#ftWidth},0L${this.#ftWidth},${this.#ftHeight}L${this.#ftWidth},2L0,2Z`;
     }
     return `M0,${this.#ftHeight}L0,${this.#ftHeight / 2}L${this.#ftWidth / 2},${
       this.#ftHeight / 2
