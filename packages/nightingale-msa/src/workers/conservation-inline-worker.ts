@@ -2,14 +2,17 @@ import { SequencesMSA } from "../types/types";
 
 declare const self: Worker & { previous: unknown };
 
-const aLetterOffset = "A".charCodeAt(0);
-const lettersInAlphabet = 26;
+// This file exports the JavaScript source code string of a function which calculates conversvation that is used for an inline worker.
+// The point of doing this is so we can avoid rollup/webpack issues which were arising when using a normal worker.
+// See this article for more information on inline workers: https://web.dev/articles/workers-basics#inline_workers
 
 export const calculateConservation = (
   sequences: SequencesMSA,
   sampleSize: number | null = null,
-  isWorker = false,
+  isWorker = false
 ) => {
+  const aLetterOffset = "A".charCodeAt(0);
+  const lettersInAlphabet = 26;
   const length =
     (sequences && sequences.length && sequences[0].sequence.length) || 0;
   const finalSampleSize = sampleSize
@@ -40,16 +43,18 @@ export const calculateConservation = (
   if (isWorker) {
     self.postMessage({ progress: 1, conservation }, [conservation.buffer]);
   }
-
   return conservation;
 };
 
-const onmessage = function (e: MessageEvent) {
+// Note that the line `const f = ${calculateConservation.toString()};` allows us to keep that
+// function's source code in TypeScript while also being transpiled into JavaScript.
+const conservationInlineWorkerString = `
+self.addEventListener('message', (e) => {
   if (self.previous !== e.data) {
-    calculateConservation(e.data.sequences, e.data.sampleSize, true);
+    const f = ${calculateConservation.toString()};
+    f(e.data.sequences, e.data.sampleSize, true);
   }
   self.previous = e.data;
-};
-self.addEventListener("message", onmessage);
+})`;
 
-export default calculateConservation;
+export default conservationInlineWorkerString;

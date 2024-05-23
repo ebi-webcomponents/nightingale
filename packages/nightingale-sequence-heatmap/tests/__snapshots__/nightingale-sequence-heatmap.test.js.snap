@@ -1,0 +1,621 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nightingale-sequence-heatmap tests it should display the sequence correctly after highlight 1`] = `
+<nightingale-sequence-heatmap
+  display-end="-1"
+  display-start="1"
+  heatmap-id="testId"
+  height="500"
+  highlight="1:3"
+  highlight-color="#FFEB3B66"
+  length="0"
+  min-height="10"
+  min-width="10"
+  style="display: inline-block; line-height: 0;"
+  width="500"
+>
+  <!---->
+  
+        
+  <style>
+    
+          #
+    <!---->
+    testId
+     {
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-x: 5px;
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-y: 8px;
+          }
+          .heatmap-marker-x {
+            fill: 
+    <!---->
+    rgb(255, 235, 59)
+     !important;
+            fill-opacity: 
+    <!---->
+    0.359
+     !important;
+            stroke-width: 0 !important;
+          }
+          .heatmap-marker-y {
+            fill: 
+    <!---->
+    rgb(255, 235, 59)
+     !important;
+            fill-opacity: 
+    <!---->
+    0.359
+     !important;
+            stroke-width: 0 !important;
+          }
+          
+    <!---->
+    
+.heatmap-main-div {
+    font-family: sans-serif;
+}
+
+.heatmap-canvas-div {
+    /* Set background-color here to change the background of the heatmap */
+    background-color: none;
+}
+
+.heatmap-tooltip-box,
+.heatmap-pinned-tooltip-box {
+    z-index: 0;
+    /* Avoid tooltip flickering */
+    pointer-events: none;
+}
+
+.heatmap-tooltip-content,
+.heatmap-pinned-tooltip-content {
+    margin-left: var(--tooltip-offset-x);
+    margin-bottom: var(--tooltip-offset-y);
+    border: solid black 1px;
+    padding-block: 0.35em;
+    padding-inline: 0.7em;
+    background-color: white;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+    pointer-events: initial;
+    width: max-content;
+    line-height: 1;
+}
+
+.heatmap-pinned-tooltip-close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 1000px;
+    background-color: black;
+    border: solid black 1px;
+    pointer-events: initial;
+    cursor: pointer;
+}
+
+.heatmap-pinned-tooltip-close svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
+
+.heatmap-pinned-tooltip-pin {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: calc(var(--tooltip-offset-x) / 0.6);
+    height: calc(var(--tooltip-offset-y) / 0.6);
+    z-index: -1;
+}
+
+.heatmap-pinned-tooltip-pin svg {
+    fill: black;
+}
+
+.heatmap-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+}
+
+.heatmap-overlay-shade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+.heatmap-overlay-message {
+    margin: 5px;
+    padding-block: 1em;
+    padding-inline: 1.6em;
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+    background-color: white;
+    border: solid black 1px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+}
+
+.heatmap-marker {
+    stroke: black;
+    stroke-width: 4;
+    fill: none;
+}
+
+.heatmap-marker-x,
+.heatmap-marker-y {
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+}
+    
+        
+    <!---->
+  </style>
+  
+
+        
+  <div
+    class="container"
+    style="width: 500px; padding: 0px 10px 0px 10px;"
+  >
+    
+          
+    <div
+      id="testId"
+      style="width: 480px; height: 500px; z-index: 1;"
+    >
+      <div
+        class="heatmap-main-div"
+        style="position: relative; width: 100%; height: 100%;"
+      >
+        <div
+          class="heatmap-canvas-div"
+          style="position: absolute; width: 100%; height: 100%;"
+        >
+          <canvas
+            height="0"
+            style="position: absolute; width: 100%; height: 100%;"
+            width="0"
+          />
+          <svg
+            style="position: absolute; width: 100%; height: 100%;"
+          >
+            <rect
+              class="heatmap-marker-y"
+              height="0"
+              rx="1"
+              ry="1"
+              width="NaN"
+              x="NaN"
+              y="0"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+        
+  </div>
+</nightingale-sequence-heatmap>
+`;
+
+exports[`nightingale-sequence-heatmap tests it should display the sequence heatmap correctly 1`] = `
+<nightingale-sequence-heatmap
+  display-end="-1"
+  display-start="1"
+  heatmap-id="testId"
+  height="500"
+  highlight-color="#FFEB3B66"
+  length="0"
+  min-height="10"
+  min-width="10"
+  style="display: inline-block; line-height: 0;"
+  width="500"
+>
+  <!---->
+  
+        
+  <style>
+    
+          #
+    <!---->
+    testId
+     {
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-x: 5px;
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-y: 8px;
+          }
+          .heatmap-marker-x {
+            fill: 
+    <!---->
+    rgb(255, 235, 59)
+     !important;
+            fill-opacity: 
+    <!---->
+    0.359
+     !important;
+            stroke-width: 0 !important;
+          }
+          .heatmap-marker-y {
+            fill: 
+    <!---->
+    rgb(255, 235, 59)
+     !important;
+            fill-opacity: 
+    <!---->
+    0.359
+     !important;
+            stroke-width: 0 !important;
+          }
+          
+    <!---->
+    
+.heatmap-main-div {
+    font-family: sans-serif;
+}
+
+.heatmap-canvas-div {
+    /* Set background-color here to change the background of the heatmap */
+    background-color: none;
+}
+
+.heatmap-tooltip-box,
+.heatmap-pinned-tooltip-box {
+    z-index: 0;
+    /* Avoid tooltip flickering */
+    pointer-events: none;
+}
+
+.heatmap-tooltip-content,
+.heatmap-pinned-tooltip-content {
+    margin-left: var(--tooltip-offset-x);
+    margin-bottom: var(--tooltip-offset-y);
+    border: solid black 1px;
+    padding-block: 0.35em;
+    padding-inline: 0.7em;
+    background-color: white;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+    pointer-events: initial;
+    width: max-content;
+    line-height: 1;
+}
+
+.heatmap-pinned-tooltip-close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 1000px;
+    background-color: black;
+    border: solid black 1px;
+    pointer-events: initial;
+    cursor: pointer;
+}
+
+.heatmap-pinned-tooltip-close svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
+
+.heatmap-pinned-tooltip-pin {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: calc(var(--tooltip-offset-x) / 0.6);
+    height: calc(var(--tooltip-offset-y) / 0.6);
+    z-index: -1;
+}
+
+.heatmap-pinned-tooltip-pin svg {
+    fill: black;
+}
+
+.heatmap-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+}
+
+.heatmap-overlay-shade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+.heatmap-overlay-message {
+    margin: 5px;
+    padding-block: 1em;
+    padding-inline: 1.6em;
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+    background-color: white;
+    border: solid black 1px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+}
+
+.heatmap-marker {
+    stroke: black;
+    stroke-width: 4;
+    fill: none;
+}
+
+.heatmap-marker-x,
+.heatmap-marker-y {
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+}
+    
+        
+    <!---->
+  </style>
+  
+
+        
+  <div
+    class="container"
+    style="width: 500px; padding: 0px 10px 0px 10px;"
+  >
+    
+          
+    <div
+      id="testId"
+      style="width: 480px; height: 500px; z-index: 1;"
+    >
+      <div
+        class="heatmap-main-div"
+        style="position: relative; width: 100%; height: 100%;"
+      >
+        <div
+          class="heatmap-canvas-div"
+          style="position: absolute; width: 100%; height: 100%;"
+        >
+          <canvas
+            height="100"
+            style="position: absolute; width: 100%; height: 100%;"
+            width="100"
+          />
+          <svg
+            style="position: absolute; width: 100%; height: 100%;"
+          />
+        </div>
+      </div>
+    </div>
+    
+        
+  </div>
+</nightingale-sequence-heatmap>
+`;
+
+exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
+<nightingale-sequence-heatmap
+  display-end="4"
+  display-start="2"
+  heatmap-id="testId"
+  height="500"
+  highlight-color="#FFEB3B66"
+  length="0"
+  min-height="10"
+  min-width="10"
+  style="display: inline-block; line-height: 0;"
+  width="500"
+>
+  <!---->
+  
+        
+  <style>
+    
+          #
+    <!---->
+    testId
+     {
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-x: 5px;
+            /** Position of bottom-left corner of tooltip box relative to the mouse position */
+            --tooltip-offset-y: 8px;
+          }
+          .heatmap-marker-x {
+            fill: 
+    <!---->
+    rgb(255, 235, 59)
+     !important;
+            fill-opacity: 
+    <!---->
+    0.359
+     !important;
+            stroke-width: 0 !important;
+          }
+          .heatmap-marker-y {
+            fill: 
+    <!---->
+    rgb(255, 235, 59)
+     !important;
+            fill-opacity: 
+    <!---->
+    0.359
+     !important;
+            stroke-width: 0 !important;
+          }
+          
+    <!---->
+    
+.heatmap-main-div {
+    font-family: sans-serif;
+}
+
+.heatmap-canvas-div {
+    /* Set background-color here to change the background of the heatmap */
+    background-color: none;
+}
+
+.heatmap-tooltip-box,
+.heatmap-pinned-tooltip-box {
+    z-index: 0;
+    /* Avoid tooltip flickering */
+    pointer-events: none;
+}
+
+.heatmap-tooltip-content,
+.heatmap-pinned-tooltip-content {
+    margin-left: var(--tooltip-offset-x);
+    margin-bottom: var(--tooltip-offset-y);
+    border: solid black 1px;
+    padding-block: 0.35em;
+    padding-inline: 0.7em;
+    background-color: white;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+    pointer-events: initial;
+    width: max-content;
+    line-height: 1;
+}
+
+.heatmap-pinned-tooltip-close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 1000px;
+    background-color: black;
+    border: solid black 1px;
+    pointer-events: initial;
+    cursor: pointer;
+}
+
+.heatmap-pinned-tooltip-close svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
+
+.heatmap-pinned-tooltip-pin {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: calc(var(--tooltip-offset-x) / 0.6);
+    height: calc(var(--tooltip-offset-y) / 0.6);
+    z-index: -1;
+}
+
+.heatmap-pinned-tooltip-pin svg {
+    fill: black;
+}
+
+.heatmap-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+}
+
+.heatmap-overlay-shade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+.heatmap-overlay-message {
+    margin: 5px;
+    padding-block: 1em;
+    padding-inline: 1.6em;
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+    background-color: white;
+    border: solid black 1px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+}
+
+.heatmap-marker {
+    stroke: black;
+    stroke-width: 4;
+    fill: none;
+}
+
+.heatmap-marker-x,
+.heatmap-marker-y {
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+}
+    
+        
+    <!---->
+  </style>
+  
+
+        
+  <div
+    class="container"
+    style="width: 500px; padding: 0px 10px 0px 10px;"
+  >
+    
+          
+    <div
+      id="testId"
+      style="width: 480px; height: 500px; z-index: 1;"
+    >
+      <div
+        class="heatmap-main-div"
+        style="position: relative; width: 100%; height: 100%;"
+      >
+        <div
+          class="heatmap-canvas-div"
+          style="position: absolute; width: 100%; height: 100%;"
+        >
+          <canvas
+            height="0"
+            style="position: absolute; width: 100%; height: 100%;"
+            width="0"
+          />
+          <svg
+            style="position: absolute; width: 100%; height: 100%;"
+          />
+        </div>
+      </div>
+    </div>
+    
+        
+  </div>
+</nightingale-sequence-heatmap>
+`;

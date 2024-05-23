@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-msa",
-  "version": "4.5.2",
+  "version": "4.6.0",
   "files": [
     "dist",
     "src"
