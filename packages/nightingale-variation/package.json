@@ -1,0 +1,46 @@
+{
+  "name": "@nightingale-elements/nightingale-variation",
+  "version": "4.0.0",
+  "description": "Variation viewer component",
+  "files": [
+    "dist",
+    "style",
+    "src",
+    "types"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements",
+    "variation"
+  ],
+  "authors": [
+    "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
+    "Gustavo Salazar &lt;gsalazar@ebi.ac.uk&gt;"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "4.5.2-canary.0",
+    "@nightingale-elements/nightingale-track": "^4.5.0",
+    "d3": "7.8.5",
+    "lodash-es": "^4.17.15"
+  }
+}

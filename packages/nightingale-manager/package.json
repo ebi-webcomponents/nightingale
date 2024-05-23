@@ -33,6 +33,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.5.0"
+    "@nightingale-elements/nightingale-new-core": "4.5.2-canary.0"
   }
 }

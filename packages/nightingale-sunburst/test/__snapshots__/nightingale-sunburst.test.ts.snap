@@ -36,9 +36,9 @@ exports[`nightingale-sunburst tests calculate the hierarchy correctly 1`] = `
 `;
 
 exports[`nightingale-sunburst tests calculate the hierarchy correctly 2`] = `
-Jr {
+Zr {
   "children": [
-    Jr {
+    Zr {
       "data": {
         "id": 94801,
         "node": "Eukaryota",
@@ -56,7 +56,7 @@ Jr {
       "y0": 125,
       "y1": 250,
     },
-    Jr {
+    Zr {
       "data": {
         "id": 94713,
         "node": "Bacteria",
@@ -74,7 +74,7 @@ Jr {
       "y0": 125,
       "y1": 250,
     },
-    Jr {
+    Zr {
       "data": {
         "id": 94057,
         "node": "Archaea",

@@ -4,10 +4,12 @@ import NightingaleBaseElement, {
 import { property } from "lit/decorators.js";
 import { Selection } from "d3";
 
-import withDimensions from "../withDimensions";
+import withDimensions, { WithDimensionsInterface } from "../withDimensions";
 
 const DEFAULT_MARGIN_COLOR = "#FFFFFFDD";
-export interface withMarginInterface extends NightingaleBaseElement {
+export interface withMarginInterface
+  extends NightingaleBaseElement,
+    WithDimensionsInterface {
   "margin-top": number;
   "margin-bottom": number;
   "margin-left": number;
@@ -21,7 +23,7 @@ export interface withMarginInterface extends NightingaleBaseElement {
       unknown,
       HTMLElement | SVGElement | null,
       unknown
-    >,
+    >
   ) => void;
 }
 
@@ -40,7 +42,7 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
     "margin-left"?: number;
     "margin-right"?: number;
     "margin-color"?: string | null;
-  } = {},
+  } = {}
 ) => {
   class WithMargin extends withDimensions(superClass) {
     #intitialOptions = { ...defaultOptions, ...options };
@@ -73,7 +75,7 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
         unknown,
         HTMLElement | SVGElement | null,
         unknown
-      >,
+      >
     ) {
       if (!g) return;
 
