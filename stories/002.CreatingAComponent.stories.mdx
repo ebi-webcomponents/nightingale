@@ -68,8 +68,8 @@ This document describes the creation of a basic Nightingale component.
 ```typescript
 import NightingaleHello from "./nightingale-hello";
 
-export default NightingaleHello;
-```
+    export default NightingaleHello;
+    ```
 
 6. Create the file where the code of your custom element will be. In our example `src/nightingale-hello.ts`.
 
@@ -199,33 +199,30 @@ export default NightingaleHello;
 
 8. To view it in the showcase application, create a story `NightingaleHello.stories.ts` in `stories/` folder.
 
-```typescript
-import { Meta, Story } from "@storybook/web-components";
-import { html } from "lit-html";
-import "../../packages/nightingale-hello/src/index.ts";
+    ```typescript
+    import { Meta, Story } from "@storybook/web-components";
+    import { html } from "lit-html";
+    import "../../packages/nightingale-hello/src/index.ts";
+    
+    export default {
+      title: "Components/Hello",
+    } as Meta;
+    
+    const Template: Story<{
+      "name": string;
+    }> = (args) => {
+      return html`<nightingale-hello name=${args["name"] />`;
+    };
+    
+    export const Hello = Template.bind({});
+    Hello.args = {
+      "name": "World",
+    };
+    ```
 
-export default {
-  title: "Components/Hello",
-} as Meta;
+9. The following command runs the storybook locally to test.
 
-const Template: Story<{
-  "name": string;
-}> = (args) => {
-  return html`<nightingale-hello name=${args["name"] />`;
-};
+    ```bash
+    yarn storybook
+    ```
 
-export const Hello = Template.bind({});
-Hello.args = {
-  "name": "World",
-};
-```
-
-The following command runs the storybook locally to test.
-
-```bash
-yarn storybook
-```
-
-```
-
-```
