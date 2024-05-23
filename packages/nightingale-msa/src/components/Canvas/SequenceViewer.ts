@@ -97,12 +97,12 @@ class SequenceViewerComponent extends DraggingComponent {
       currentViewSequence: clamp(
         floor(position.yPos / this.tileHeight),
         0,
-        (this.sequences?.length || 1) - 1
+        (this.sequences?.length || 1) - 1,
       ),
       currentViewSequencePosition: clamp(
         floor(position.xPos / this.tileWidth),
         0,
-        this.sequences?.maxLength || 0
+        this.sequences?.maxLength || 0,
       ),
       ...position,
     };
@@ -217,7 +217,7 @@ class SequenceViewerComponent extends DraggingComponent {
     if (!positions) {
       if (debug)
         console.error(
-          "Failed to draw scene because couldn't get the tile positions"
+          "Failed to draw scene because couldn't get the tile positions",
         );
       return;
     }
@@ -233,14 +233,14 @@ class SequenceViewerComponent extends DraggingComponent {
       this.ctx.canvas.dispatchEvent(
         new CustomEvent("drawCompleted", {
           bubbles: true,
-        })
+        }),
       );
     }
     if (debug) {
       const elapsed = Date.now() - this.redrawStarted;
       if (elapsed > 5) {
         console.log(
-          `Took ${elapsed} msecs to redraw for ${positions.startXTile} ${positions.startYTile} (redrawnTiles: ${this.redrawnTiles})`
+          `Took ${elapsed} msecs to redraw for ${positions.startXTile} ${positions.startYTile} (redrawnTiles: ${this.redrawnTiles})`,
         );
       }
     }
@@ -251,19 +251,19 @@ class SequenceViewerComponent extends DraggingComponent {
     if (!this.position || !this.sequences || !this.stats) return null;
     const startXTile = Math.max(
       0,
-      this.position.currentViewSequencePosition - this.props.cacheElements
+      this.position.currentViewSequencePosition - this.props.cacheElements,
     );
     const startYTile = Math.max(
       0,
-      this.position.currentViewSequence - this.props.cacheElements
+      this.position.currentViewSequence - this.props.cacheElements,
     );
     const endYTile = Math.min(
       this.sequences.length,
-      startYTile + this.stats.nrYTiles + 2 * this.props.cacheElements
+      startYTile + this.stats.nrYTiles + 2 * this.props.cacheElements,
     );
     const endXTile = Math.min(
       this.sequences.maxLength,
-      startXTile + this.stats.nrXTiles + 2 * this.props.cacheElements
+      startXTile + this.stats.nrXTiles + 2 * this.props.cacheElements,
     );
     return { startXTile, startYTile, endXTile, endYTile };
   }
@@ -330,7 +330,7 @@ class SequenceViewerComponent extends DraggingComponent {
           xPos,
           yPos,
           width,
-          height
+          height,
         );
       }
     }
@@ -397,7 +397,7 @@ class SequenceViewerComponent extends DraggingComponent {
       xPosFrom,
       yPosFrom,
       regionWidth,
-      regionHeight
+      regionHeight,
     );
   }
   movePosition = (m: Movement) => {
@@ -424,14 +424,14 @@ class SequenceViewerComponent extends DraggingComponent {
     const seqNr = clamp(
       floor((this.position.yPos + pos.yPos) / this.tileHeight),
       0,
-      sequences.length - 1
+      sequences.length - 1,
     );
     const sequence = sequences[seqNr];
 
     const position = clamp(
       floor((this.position.xPos + pos.xPos) / this.tileWidth),
       0,
-      sequence.sequence.length - 1
+      sequence.sequence.length - 1,
     );
     return {
       i: seqNr,
@@ -452,7 +452,7 @@ class SequenceViewerComponent extends DraggingComponent {
           sequencePosition.position >= feature.residues.from - 1 &&
           sequencePosition.position <= feature.residues.to - 1 &&
           sequencePosition.i >= feature.sequences.from &&
-          sequencePosition.i <= feature.sequences.to
+          sequencePosition.i <= feature.sequences.to,
       )
       .map((feature) => feature.id || "");
   }
@@ -477,7 +477,7 @@ class SequenceViewerComponent extends DraggingComponent {
         new CustomEvent(name, {
           bubbles: true,
           detail: data,
-        })
+        }),
       );
     }
 
@@ -566,7 +566,7 @@ class SequenceViewerComponent extends DraggingComponent {
       sequences: this.sequences,
     } as TileOptions);
     this.residueTileCache.updateTileSpecs(
-      residueTileSpecs as ResidueTileOptions
+      residueTileSpecs as ResidueTileOptions,
     );
   }
 

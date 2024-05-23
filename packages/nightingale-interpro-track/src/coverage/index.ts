@@ -129,13 +129,12 @@ export const getCoverage = (
   if (createEmptyFragments) {
     coverage = addContributor({ start: 1, end: length, value: 0 }, coverage);
   }
-  contributors.forEach(
-    (f) =>
-      f.locations?.forEach((loc) =>
-        loc.fragments.forEach((fr) => {
-          coverage = addContributor(fr, coverage);
-        }),
-      ),
+  contributors.forEach((f) =>
+    f.locations?.forEach((loc) =>
+      loc.fragments.forEach((fr) => {
+        coverage = addContributor(fr, coverage);
+      }),
+    ),
   );
   return coverage;
 };

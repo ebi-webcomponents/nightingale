@@ -132,7 +132,7 @@ class NightingaleSunburst extends LitElement {
     if (!this.root || (this.activeSegment && this.holdSegment)) return;
     this.selectNodeByPosition(
       event.offsetX - (this.side as number) / 2,
-      event.offsetY - (this.side as number) / 2
+      event.offsetY - (this.side as number) / 2,
     );
   };
 
@@ -142,7 +142,7 @@ class NightingaleSunburst extends LitElement {
     if (!this.holdSegment) {
       this.selectNodeByPosition(
         event.offsetX - (this.side as number) / 2,
-        event.offsetY - (this.side as number) / 2
+        event.offsetY - (this.side as number) / 2,
       );
     }
   };
@@ -152,12 +152,12 @@ class NightingaleSunburst extends LitElement {
     const dataWithValues = prepareTreeData(
       this.#data,
       0,
-      this["max-depth"] as number
+      this["max-depth"] as number,
     );
     this.root = partition(
       dataWithValues,
       (this.side as number) / 2,
-      this["weight-attribute"]
+      this["weight-attribute"],
     );
   }
 
@@ -278,7 +278,7 @@ class NightingaleSunburst extends LitElement {
         (d) =>
           d.depth &&
           d.depth <= (this["max-depth"] as number) &&
-          ((d.y0 + d.y1) / 2) * (d.x1 - d.x0) > 10
+          ((d.y0 + d.y1) / 2) * (d.x1 - d.x0) > 10,
       );
     for (const segment of labelsToDisplay || []) {
       const angle = (segment.x0 + segment.x1) / 2;

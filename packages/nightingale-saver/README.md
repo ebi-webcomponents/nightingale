@@ -84,7 +84,7 @@ Number of pixels added to the bottom of the image in case of any desired vertica
 #### `preview: boolean (default: false)`
 
 If `true` the generated canvas will be added to the component in order to visually inspect the outcome image.
-The image is not downloaded. 
+The image is not downloaded.
 
 ### Properties
 

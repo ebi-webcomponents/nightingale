@@ -13,7 +13,7 @@ const withDimensions = <T extends Constructor<NightingaleBaseElement>>(
   options?: {
     width?: number;
     height?: number;
-  }
+  },
 ) => {
   class WithDimensions extends superClass {
     // TODO: Making the width reflective makes the withResizable not responsive
