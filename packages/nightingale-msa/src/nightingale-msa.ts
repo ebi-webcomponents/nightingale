@@ -12,6 +12,7 @@ import NightingaleElement, {
   withHighlight,
   withResizable,
 } from "@nightingale-elements/nightingale-new-core";
+import conservationInlineWorkerString from "./workers/conservation-inline-worker";
 import object2style from "./utils/object2style";
 import { Region, SequencesMSA } from "./types/types";
 
@@ -54,7 +55,7 @@ class NightingaleMSA extends withManager(
   overlayConservtion?: boolean = false;
 
   worker = new Worker(
-    new URL("./workers/conservation.worker.ts", import.meta.url)
+    window.URL.createObjectURL(new Blob([conservationInlineWorkerString]))
   );
 
   private sequenceViewer?: SequenceViewerComponent | null;

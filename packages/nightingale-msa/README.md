@@ -39,7 +39,7 @@ Label to highlight as if selected
 
 #### `conservation-sample-size: number (default: 20)`
 
-One of the color-schemes is `conservation` this requires a precalculation that runs on a web worker. The conservation calculation can be sampled to just the first `n` sequences. Which is defined by this parameter.
+One of the color-schemes is `conservation` this requires a precalculation that runs on an inline web worker. The conservation calculation can be sampled to just the first `n` sequences. Which is defined by this parameter.
 
 #### `overlay-conservation: boolean(default: false)`
 
