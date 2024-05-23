@@ -2,6 +2,10 @@ import { SequencesMSA } from "../types/types";
 
 declare const self: Worker & { previous: unknown };
 
+// This file exports the JavaScript source code string of a function which calculates conversvation that is used for an inline worker.
+// The point of doing this is so we can avoid rollup/webpack issues which were arising when using a normal worker.
+// See this article for more information on inline workers: https://web.dev/articles/workers-basics#inline_workers
+
 export const calculateConservation = (
   sequences: SequencesMSA,
   sampleSize: number | null = null,
@@ -42,6 +46,8 @@ export const calculateConservation = (
   return conservation;
 };
 
+// Note that the line `const f = ${calculateConservation.toString()};` allows us to keep that
+// function's source code in TypeScript while also being transpiled into JavaScript.
 const conservationInlineWorkerString = `
 self.addEventListener('message', (e) => {
   if (self.previous !== e.data) {
