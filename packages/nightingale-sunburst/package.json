@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-sunburst",
-  "version": "4.5.0",
+  "version": "5.0.0",
   "files": [
     "dist",
     "src"
@@ -34,7 +34,7 @@
   "author": "gsalazar@ebi.ac.uk",
   "license": "MIT",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.5.2-canary.0",
+    "@nightingale-elements/nightingale-new-core": "^5.0.0",
     "d3": "7.9.0",
     "lodash-es": "^4.17.15"
   }

@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-msa",
-  "version": "4.6.0",
+  "version": "5.0.0",
   "files": [
     "dist",
     "src"
@@ -29,7 +29,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "4.5.2-canary.0",
+    "@nightingale-elements/nightingale-new-core": "^5.0.0",
     "d3": "7.9.0"
   }
 }
