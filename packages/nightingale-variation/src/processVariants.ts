@@ -27,7 +27,7 @@ function processVariants(data?: VariationData): {
     if (mutationArray[variant.start - 1]) {
       // Currently not dealing with variants outside of sequence
       mutationArray[variant.start - 1].variants.push(variant);
-      aaPresence[variant.alternativeSequence || ""] = true;
+      aaPresence[variant.variant || ""] = true;
     }
   });
   return { mutationArray, aaPresence };
