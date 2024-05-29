@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-variation",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Variation viewer component",
   "files": [
     "dist",
