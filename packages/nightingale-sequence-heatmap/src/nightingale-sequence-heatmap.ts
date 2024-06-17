@@ -116,20 +116,17 @@ class NightingaleSequenceHeatmap extends withManager(
    * @returns lit-html to render for this component
    */
   render() {
-    const mainStyles = {
-      width: this.width + "px",
+    const heatmapStyles = {
+      width: this.getWidthWithMargins() + "px",
+      height: this.height + "px",
+      zIndex: 1,
       paddingLeft: this["margin-left"] + "px",
       paddingRight: this["margin-right"] + "px",
       paddingTop: this["margin-top"] + "px",
       paddingBottom: this["margin-bottom"] + "px",
     };
-    const heatmapStyles = {
-      width: this.width - this["margin-left"] - this["margin-right"] + "px",
-      height: this.height + "px",
-      zIndex: 1,
-    };
     const loadingStyles = {
-      width: this.width - 20 + "px",
+      width: this.getWidthWithMargins() + "px",
       textAlign: "center",
     };
 
@@ -168,16 +165,14 @@ class NightingaleSequenceHeatmap extends withManager(
           ${heatmapStyleSheet}
         </style>
 
-        <div class="container" style=${styleMap(mainStyles)}">
-          <div id="${this["heatmap-id"]}" style=${styleMap(
+        <div id="${this["heatmap-id"]}" style=${styleMap(
             heatmapStyles,
-          )}"></div>
-        </div>`;
+          )}" />`;
     } else {
       return html`
         <div id="${this["heatmap-id"]}_loading" style=${styleMap(
           loadingStyles,
-        )}">
+        )}>
           <svg width="200px" height="200px"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;">
             <circle cx="75" cy="50" fill="#363a3c" r="6.39718">
                 <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.875s"></animate>
@@ -313,7 +308,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
       const returnHTML = `
-        <b>Your are at</b> <br />
+        <b>You're at</b> <br />
 
         x,y: <b>${d.xValue},${d.yValue}</b><br />
         score: <b>${formatDataItem(d.score)}</b>`;
