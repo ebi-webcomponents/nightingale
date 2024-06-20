@@ -303,7 +303,7 @@ class NightingaleSequenceHeatmap extends withManager(
     const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
     const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
 
-    const colorScale = scaleSequential([dataMin, dataMax], interpolateYlOrRd);
+    const colorScale = scaleSequential([dataMin, dataMax], ["#3d5493", "#9a131a"]);
     hm.setColor((d) => colorScale(d.score));
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
