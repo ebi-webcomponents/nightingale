@@ -9354,10 +9354,10 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-heatmap-component@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/heatmap-component/-/heatmap-component-0.10.0.tgz#123da655cd5de15567bd9697b40d418505a7eb38"
-  integrity sha512-vHUlV27iXpIP6RhXLnLkcEvM8Ww5Io+AiSLzM1fXHudokD2FCZAwkajOQLvJDS02vitN1O66i/2VVaDsMrDkMw==
+heatmap-component@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/heatmap-component/-/heatmap-component-1.0.1.tgz#1bec0546b8f85912d59bffb297172372e4c87256"
+  integrity sha512-FftYefBTv6Dbw4f5gMj6OqtpZrzDVWLQvxti9VjbPJhoP2VGkTWYvSO/kiBORrFelR8HA22UjRtm0kLxVx+k7w==
   dependencies:
     d3 "^7.9.0"
     lodash "^4.17.21"
