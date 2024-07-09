@@ -4,6 +4,13 @@ Nightingale Sequence Heatmap component is used to generate a heatmap visualisati
 
 It uses [heatmap-component](https://www.npmjs.com/package/heatmap-component) to render the canvas heatmap.
 
+##### Attributes
+
+###### `hm-highlight-width: number (default 0)`
+
+Number of pixels for the border width of the heatmap. See [live demos](https://github.com/PDBeurope/heatmap-component/#live-demos)
+for examples with border width 1.
+
 ## Usage
 
 The below example shows how to instantiate the component
@@ -14,6 +21,7 @@ The below example shows how to instantiate the component
   heatmap-id="seq-heatmap"
   width="400"
   height="400"
+  hm-highlight-width="0"
   highlight-event="onmouseover"
   highlight-color="#EB3BFF66"
 ></nightingale-sequence-heatmap>
@@ -71,14 +79,18 @@ interface HotmapData {
 Allows dynamic setting of heatmap color palette
 
 ```javascript
-customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
+customElements.whenDefined("nightingale-sequence-heatmap").then( async() => {
   const heatmapElement = document.getElementById("id-for-nightingale-sequence-heatmap");
+  heatmapElement.setHeatmapData(xDomain, yDomain, data);
 
   const colorScale = d3.scaleLinear(
     [0, 1], // score value domain
     ["#ffffff", "#00441b"], // color range to map values
   );
-  heatmapElement.heatmapInstance.setColor((d) => colorScale(d.score));
+
+  await heatmapElement.updateComplete.then(() => {
+    heatmapElement.heatmapInstance.setColor((d) => colorScale(d.score));
+  });
 });
 ```
 
@@ -87,16 +99,19 @@ customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
 Allows dynamic setting of tooltip HTML content
 
 ```javascript
-customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
+customElements.whenDefined("nightingale-sequence-heatmap").then( async() => {
   const heatmapElement = document.getElementById("id-for-nightingale-sequence-heatmap");
+  heatmapElement.setHeatmapData(xDomain, yDomain, data);
+  
+  await heatmapElement.updateComplete.then(() => {
+    heatmapElement.heatmapInstance.setTooltip((d, x, y, xIndex, yIndex) => {
+      let returnHTML = `
+        <b>You are at</b> <br />
 
-  heatmapElement.heatmapInstance.setTooltip((d, x, y, xIndex, yIndex) => {
-    let returnHTML = `
-      <b>Your are at</b> <br />
-
-      x,y: <b>${d.xValue},${d.yValue}</b><br />
-      score: <b>${d.score}</b>`;
-    return returnHTML;
+        x,y: <b>${d.xValue},${d.yValue}</b><br />
+        score: <b>${d.score}</b>`;
+      return returnHTML;
+    });
   });
 });
 ```
