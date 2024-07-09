@@ -39,9 +39,9 @@ const hexComponentToNumber = (hexComp: string): number => {
 };
 
 const formatDataItem = (item: unknown): string => {
-  if (typeof item === 'number') return item.toFixed(3);
+  if (typeof item === "number") return item.toFixed(3);
   else return JSON.stringify(item);
-}
+};
 
 const hexToRgb = (
   hex: string,
@@ -145,7 +145,7 @@ class NightingaleSequenceHeatmap extends withManager(
     let colorString = this["highlight-color"];
     let fillValue = 0.9;
 
-    let highlightWidth = this["hm-highlight-width"];
+    const highlightWidth = this["hm-highlight-width"];
 
     const rgb = hexToRgb(this["highlight-color"]);
     if (rgb) {
@@ -392,7 +392,7 @@ class NightingaleSequenceHeatmap extends withManager(
       // data to send to nightingale can be null if hover outside boundaries
       let toSend = null;
       if (d && d.cell && d.cell.xIndex) {
-        toSend = `${d.cell.xIndex + 1 }:${d.cell.xIndex + 1 }`;
+        toSend = `${d.cell.xIndex + 1}:${d.cell.xIndex + 1}`;
       }
       // On heatmap zoom dispatch event to Nightingale
       this.dispatchEvent(
