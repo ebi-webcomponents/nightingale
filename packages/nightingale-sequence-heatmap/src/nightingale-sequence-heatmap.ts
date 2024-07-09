@@ -14,7 +14,6 @@ import NightingaleElement, {
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
 import { Heatmap } from "heatmap-component";
-import { formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
 import {
   interpolateYlOrRd,
   scaleSequential,
@@ -38,6 +37,11 @@ interface HotmapData {
 const hexComponentToNumber = (hexComp: string): number => {
   return parseInt(hexComp, 16);
 };
+
+const formatDataItem = (item: unknown): string => {
+  if (typeof item === 'number') return item.toFixed(3);
+  else return JSON.stringify(item);
+}
 
 const hexToRgb = (
   hex: string,
@@ -73,10 +77,14 @@ class NightingaleSequenceHeatmap extends withManager(
   @property({ type: String })
   "heatmap-id"!: string;
 
+  @property({ type: Number })
+  "hm-highlight-width": number = 0;
+
   heatmapDomainX?: number[];
   heatmapDomainY?: string[];
   heatmapData?: HotmapData[];
   heatmapInstance?: Heatmap<number, string, HotmapData>;
+  firstZoom = false;
 
   connectedCallback() {
     super.connectedCallback();
@@ -137,6 +145,8 @@ class NightingaleSequenceHeatmap extends withManager(
     let colorString = this["highlight-color"];
     let fillValue = 0.9;
 
+    let highlightWidth = this["hm-highlight-width"];
+
     const rgb = hexToRgb(this["highlight-color"]);
     if (rgb) {
       colorString = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
@@ -158,12 +168,12 @@ class NightingaleSequenceHeatmap extends withManager(
           .heatmap-marker-x {
             fill: ${colorString} !important;
             fill-opacity: ${fillValue} !important;
-            stroke-width: 0 !important;
+            stroke-width: ${highlightWidth} !important;
           }
           .heatmap-marker-y {
             fill: ${colorString} !important;
             fill-opacity: ${fillValue} !important;
-            stroke-width: 0 !important;
+            stroke-width: ${highlightWidth} !important;
           }
           ${heatmapStyleSheet}
         </style>
@@ -242,7 +252,7 @@ class NightingaleSequenceHeatmap extends withManager(
       this.heatmapInstance!.setData({
         xDomain: xDomain,
         yDomain: yDomain,
-        items: data,
+        data: data,
         x: (d) => {
           const x = d.xValue;
           return x;
@@ -292,7 +302,7 @@ class NightingaleSequenceHeatmap extends withManager(
     const hm = Heatmap.create({
       xDomain: this.heatmapDomainX!,
       yDomain: this.heatmapDomainY!,
-      items: this.heatmapData!,
+      data: this.heatmapData!,
       x: (d) => {
         const x = d.xValue;
         return x;
@@ -313,7 +323,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
       const returnHTML = `
-        <b>Your are at</b> <br />
+        <b>You are at</b> <br />
 
         x,y: <b>${d.xValue},${d.yValue}</b><br />
         score: <b>${formatDataItem(d.score)}</b>`;
@@ -339,11 +349,16 @@ class NightingaleSequenceHeatmap extends withManager(
       // no data, stop zoom from occurring
       if (!d) return;
       // On heatmap zoom dispatch event to Nightingale
-      if (d.xMin + 0.5 !== this["display-start"]) {
+      let xDiff = d.xMin;
+      // if not zoomed yet but display attr values exist
+      if (!this.firstZoom && this["display-start"]) {
+        xDiff = this["display-start"];
+      }
+      if (xDiff !== this["display-start"]) {
         this.dispatchEvent(
           new CustomEvent("change", {
             detail: {
-              value: d.xMin + 0.5,
+              value: xDiff,
               type: "display-start",
             },
             bubbles: true,
@@ -351,11 +366,16 @@ class NightingaleSequenceHeatmap extends withManager(
           }),
         );
       }
-      if (d.xMax - 0.5 !== this["display-end"]) {
+      let xMaxDiff = d.xMax - 1;
+      // if not zoomed yet but display attr values exist
+      if (!this.firstZoom && this["display-end"]) {
+        xMaxDiff = this["display-end"];
+      }
+      if (xMaxDiff !== this["display-end"]) {
         this.dispatchEvent(
           new CustomEvent("change", {
             detail: {
-              value: d.xMax - 0.5,
+              value: xMaxDiff,
               type: "display-end",
             },
             bubbles: true,
@@ -363,11 +383,17 @@ class NightingaleSequenceHeatmap extends withManager(
           }),
         );
       }
+      if (!this.firstZoom) {
+        this.firstZoom = true;
+      }
     });
 
     this.heatmapInstance.events.hover.subscribe((d) => {
       // data to send to nightingale can be null if hover outside boundaries
-      const toSend = d === undefined ? null : `${d.xIndex + 1}:${d.xIndex + 1}`;
+      let toSend = null;
+      if (d && d.cell && d.cell.xIndex) {
+        toSend = `${d.cell.xIndex + 1 }:${d.cell.xIndex + 1 }`;
+      }
       // On heatmap zoom dispatch event to Nightingale
       this.dispatchEvent(
         new CustomEvent("change", {
@@ -387,11 +413,11 @@ class NightingaleSequenceHeatmap extends withManager(
    */
   triggerHeatmapZoom() {
     const toStart = this["display-start"]!;
-    const toEnd = this["display-end"]!;
+    const toEnd = this["display-end"]! + 1;
     if (this.heatmapInstance) {
       this.heatmapInstance.zoom({
-        xMin: toStart - 0.5,
-        xMax: toEnd + 0.5,
+        xMin: toStart,
+        xMax: toEnd,
       });
     }
   }

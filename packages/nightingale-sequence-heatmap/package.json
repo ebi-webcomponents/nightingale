@@ -21,7 +21,7 @@
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^4.5.0",
     "d3": "7.8.5",
-    "heatmap-component": "^0.9.0"
+    "heatmap-component": "^0.10.0"
   },
   "publishConfig": {
     "access": "public"

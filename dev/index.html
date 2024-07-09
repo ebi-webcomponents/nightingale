@@ -120,7 +120,7 @@
             }
           }
           if (document.getElementById("heatmapHotmap"))
-            document.getElementById("heatmapHotmap").fixedHighlight = "10:20";
+          document.getElementById("heatmapHotmap").fixedHighlight = "10:20";
           document
             .getElementById("heatmapHotmap")
             .setHeatmapData(xDomain, yDomain, data);
@@ -185,6 +185,7 @@
           height="500"
           display-start="5"
           display-end="25"
+          hm-highlight-width="0"
           highlight-event="onmouseover"
           highlight-color="#EB3BFF66"
         ></nightingale-sequence-heatmap>
