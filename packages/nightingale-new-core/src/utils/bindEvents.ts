@@ -23,7 +23,7 @@ type SequenceBaseData = {
 
 type detailInterface = {
   eventType: EventType;
-  // coords: null | [number, number];
+  coords: null | [number, number];
   feature?: FeatureData | SequenceBaseData | null;
   target?: HTMLElement;
   highlight?: string;
@@ -51,6 +51,7 @@ export function createEvent(
     eventType: type,
     // TODO: add coordinates
     // coords: WithNightingaleEvents._getClickCoords(),
+    coords: event ? [(event as MouseEvent).clientX, (event as MouseEvent).clientY]: null,
     feature,
     target,
     parentEvent: event,
@@ -83,42 +84,36 @@ export default function bindEvents<T extends BaseType>(
   element: NightingaleBaseElement,
 ) {
   feature
-    .on("mouseover", function (event: Event, datum: unknown) {
-      element.dispatchEvent(
-        createEvent(
-          "mouseover",
-          datum as FeatureData | SequenceBaseData,
-          element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
-          false,
-          (datum as FeatureData).start ?? (datum as SequenceBaseData).position,
-          (datum as FeatureData).end ?? (datum as SequenceBaseData).position,
-          this as unknown as HTMLElement,
-          event,
-        ),
-      );
-    })
-    .on("mouseout", () => {
-      element.dispatchEvent(
-        createEvent(
-          "mouseout",
-          null,
-          element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
-        ),
-      );
-    })
-    .on("click", function (event: Event, datum: unknown) {
-      element.dispatchEvent(
-        createEvent(
-          "click",
-          datum as FeatureData | SequenceBaseData,
-          element.getAttribute(HIGHLIGHT_EVENT) === "onclick",
-          true,
-          (datum as FeatureData).start ?? (datum as SequenceBaseData).position,
-          (datum as FeatureData).end ?? (datum as SequenceBaseData).position,
-          this as unknown as HTMLElement,
-          event,
-          element as NightingaleBaseElement & WithHighlightInterface,
-        ),
-      );
-    });
+      .on("mouseover", function (event: MouseEvent, datum: unknown) {
+          element.dispatchEvent(
+              createEvent(
+                  "mouseover",
+                  datum as FeatureData | SequenceBaseData,
+                  element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
+                  false,
+                  (datum as FeatureData).start ?? (datum as SequenceBaseData).position,
+                  (datum as FeatureData).end ?? (datum as SequenceBaseData).position,
+                  this as unknown as HTMLElement,
+                  event
+              )
+          );
+      })
+      .on("mouseout", () => {
+          element.dispatchEvent(createEvent("mouseout", null, element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover"));
+      })
+      .on("click", function (event: MouseEvent, datum: unknown) {
+          element.dispatchEvent(
+              createEvent(
+                  "click",
+                  datum as FeatureData | SequenceBaseData,
+                  element.getAttribute(HIGHLIGHT_EVENT) === "onclick",
+                  true,
+                  (datum as FeatureData).start ?? (datum as SequenceBaseData).position,
+                  (datum as FeatureData).end ?? (datum as SequenceBaseData).position,
+                  this as unknown as HTMLElement,
+                  event,
+                  element as NightingaleBaseElement & WithHighlightInterface
+              )
+          );
+      });
 }

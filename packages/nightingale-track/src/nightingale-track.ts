@@ -35,7 +35,8 @@ export type Feature = {
   color?: string;
   fill?: string;
   shape?: Shapes;
-  tooltipContent?: string;
+  description?: string;
+  evidence?: string;
   type?: string;
   locations?: Array<FeatureLocation>;
   feature?: Feature;
