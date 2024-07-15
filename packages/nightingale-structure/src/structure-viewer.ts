@@ -213,8 +213,5 @@ export const getStructureViewer = async (
     },
   };
 
-  // Debug, remove before publishing
-  Object.assign(globalThis, { structureViewer });
-
   return structureViewer;
 };
