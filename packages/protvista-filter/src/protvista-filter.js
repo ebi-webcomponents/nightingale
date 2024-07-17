@@ -6,7 +6,7 @@ class ProtvistaFilter extends LitElement {
     return {
       filters: { type: Array },
       selectedFilters: { type: Set },
-      for: { type: String }
+      for: { type: String },
     };
   }
 
@@ -19,8 +19,8 @@ class ProtvistaFilter extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("filterChange", this._onFilterChange);
-    if (this.closest("protvista-manager")) {
-      this.manager = this.closest("protvista-manager");
+    if (this.closest("nightingale-manager")) {
+      this.manager = this.closest("nightingale-manager");
       this.manager.register(this);
     }
   }
@@ -84,20 +84,17 @@ class ProtvistaFilter extends LitElement {
   }
 
   render() {
-    const groupByType = groupBy(this.filters, f => {
+    const groupByType = groupBy(this.filters, (f) => {
       return f.type.text;
     });
     return html`
       ${Object.keys(groupByType).map(
-        type =>
+        (type) =>
           html`
             <h4>${type}</h4>
             <div>
               ${groupByType[type].map(
-                filterItem =>
-                  html`
-                    ${this.getCheckBox(filterItem)}
-                  `
+                (filterItem) => html` ${this.getCheckBox(filterItem)} `
               )}
             </div>
           `
@@ -120,14 +117,7 @@ class ProtvistaFilter extends LitElement {
       >
         <input
           type="checkbox"
-          class="protvista_checkbox_input"
-          ?checked="true"
-          .value="${name}"
-          @change="${() => this.toggleFilter(name)}"
-        />
-        <span
-          class="checkmark"
-          style=${`background: ${
+          style=${`accent-color: ${
             isCompound
               ? `
             linear-gradient(${options.colors[0]},
@@ -135,10 +125,11 @@ class ProtvistaFilter extends LitElement {
           `
               : options.colors[0]
           };`}
-        ></span>
-        <span class="protvista_checkbox_label">
-          ${labels.join("/")}
-        </span>
+          ?checked="true"
+          .value="${name}"
+          @change="${() => this.toggleFilter(name)}"
+        />
+        <span class="protvista_checkbox_label"> ${labels.join("/")} </span>
       </label>
     `;
   }
@@ -158,12 +149,12 @@ class ProtvistaFilter extends LitElement {
           handler: "property",
           for: this.for,
           value: this.filters
-            .filter(filter => this.selectedFilters.has(filter.name))
-            .map(filter => ({
+            .filter((filter) => this.selectedFilters.has(filter.name))
+            .map((filter) => ({
               category: filter.type.name,
-              filterFn: filter.filterData
-            }))
-        }
+              filterFn: filter.filterData,
+            })),
+        },
       })
     );
   }
