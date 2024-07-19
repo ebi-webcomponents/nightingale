@@ -14,11 +14,18 @@ export const renameProperties = (features) => {
 };
 
 const formatSource = (source) => {
-  return source.name?.toLowerCase() === "PubMed".toLowerCase()
-    ? `${source.id}&nbsp;(<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>)`
-    : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${
-        source.id
-      }</a>&nbsp;${source.name ? `(${source.name})` : ""}`;
+  if (source.name?.toLowerCase() === "PubMed".toLowerCase()) {
+    return `${source.id}&nbsp;(<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>)`;
+  }
+  const sourceLink = `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.id}</a>`;
+  if (source.name) {
+    // Temporary until we get the expected value as 'PeptideAtlas' instead of 'HppPeptideAtlas'
+    if (source.name.startsWith("Hpp")) {
+      return `${sourceLink}&nbsp;(${source.name.slice(3)})`;
+    }
+    return `${sourceLink}&nbsp;(${source.name})`;
+  }
+  return sourceLink;
 };
 
 export const getEvidenceFromCodes = (evidenceList) => {
