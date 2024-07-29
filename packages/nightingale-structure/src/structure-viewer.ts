@@ -12,8 +12,11 @@ import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
+import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
 
 import AfConfidenceScore from "./af-confidence/behavior";
+import { AlphaMissenseColorTheme } from "./AlphaMissenseColorTheme";
+import { AfConfidenceColorThemeProvider } from "./af-confidence/color";
 
 const viewerOptions = {
   layoutIsExpanded: false,
@@ -91,11 +94,13 @@ export type StructureViewer = {
   clearHighlight(): void;
   changeHighlightColor(color: number): void;
   handleResize(): void;
+  applyTheme(): void;
 };
 
 export const getStructureViewer = async (
   container: HTMLDivElement,
   onHighlightClick: (sequencePositions: SequencePosition[]) => void,
+  theme?: string,
 ): Promise<StructureViewer> => {
   const plugin = new PluginContext(spec);
   await plugin.init();
@@ -105,6 +110,19 @@ export const getStructureViewer = async (
   if (!canvas || !plugin.initViewer(canvas, container)) {
     throw new Error("Failed to init Mol*");
   }
+
+  if (AlphaMissenseColorTheme.colorThemeProvider)
+    plugin.representation.structure.themes.colorThemeRegistry.add(
+      AlphaMissenseColorTheme.colorThemeProvider,
+    );
+  if (AlphaMissenseColorTheme.labelProvider)
+    plugin.managers.lociLabels.addProvider(
+      AlphaMissenseColorTheme.labelProvider,
+    );
+    plugin.customModelProperties.register(
+    AlphaMissenseColorTheme.propertyProvider,
+    true,
+  );
 
   // const data = await plugin.builders.data.download({ url: '...' }, { state: { isGhost: true } });
   // const trajectory = await plugin.builders.structure.parseTrajectory(data, format);
@@ -157,7 +175,32 @@ export const getStructureViewer = async (
         "all-models",
         { useDefaultIfSingleModel: true },
       );
+      this.applyTheme();
     },
+
+    applyTheme() {
+      let colouringTheme: string;
+      if (theme === 'alphamissense') {
+        colouringTheme =
+            AlphaMissenseColorTheme.propertyProvider.descriptor.name;
+      } else {
+        colouringTheme = AfConfidenceColorThemeProvider.name;
+      }
+  
+      // apply colouring
+      plugin?.dataTransaction(async () => {
+        for (const s of plugin?.managers.structure.hierarchy.current
+          .structures || []) {
+          await plugin?.managers.structure.component.updateRepresentationsTheme(
+            s.components,
+            {
+              color: colouringTheme as typeof ChainIdColorThemeProvider.name,
+            },
+          );
+        }
+      });
+    },
+
     highlight(ranges) {
       // What nightingale calls "highlight", mol* calls "select"
       // The query in this method is over label_seq_id so the provided start & end

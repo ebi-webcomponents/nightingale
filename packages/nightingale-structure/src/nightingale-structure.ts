@@ -14,7 +14,6 @@ import translatePositions, {
   Mapping,
   TranslatedPosition,
 } from "./position-mapping";
-import { extractColors } from "./am-pathogenicity";
 
 /*
   TODO:
@@ -86,6 +85,9 @@ class NightingaleStructure extends withManager(
 
   @property({ type: String })
   "custom-download-url"?: string;
+
+  @property({ type: String })
+  "theme"?: string;
 
   @state()
   selectedMolecule?: {
@@ -171,7 +173,7 @@ class NightingaleStructure extends withManager(
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
-      getStructureViewer(structureViewerDiv, this.updateHighlight).then(
+      getStructureViewer(structureViewerDiv, this.updateHighlight, this.theme).then(
         (structureViewer) => {
           this.#structureViewer = structureViewer;
           // Remove initial "#" and possible trailing opacity value
@@ -247,12 +249,6 @@ class NightingaleStructure extends withManager(
       if (afInfo?.cifUrl) {
         await this.#structureViewer?.loadCifUrl(afInfo.cifUrl, false);
         this.clearMessage();
-      }
-      if (afInfo?.amAnnotationsUrl) {
-        const payload = await fetch(afInfo.amAnnotationsUrl);
-        const rawCSV = await payload.text();
-        const amParsedData = extractColors(rawCSV);
-        console.log(amParsedData)
       }
       // mappings = await this.#structureViewer.loadAF(afPredictions.b);
     } else {
