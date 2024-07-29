@@ -15,7 +15,6 @@ const AM_COLOR_SCALE = {
     "#d15e4b",
     "#b2182b",
   ],
-  invalidColor: "#000000",
 };
 
 const amColorScale = scaleLinear(
@@ -24,7 +23,7 @@ const amColorScale = scaleLinear(
 );
 
 // eslint-disable-next-line no-magic-numbers
-const defaultColor = Color(0x777777);
+const defaultColor = Color(0x000000);
 
 const rowSplitter = /\s*\n\s*/;
 const cellSplitter = /^(.)(\d+)(.),(.+),(\w+)$/;
@@ -39,12 +38,10 @@ export const AlphaMissenseColorTheme = CustomElementProperty.create({
   name: "basic-wrapper-am-coloring",
   getData: async (model) => {
     const map = new Map();
-    // const entryURL = model.entry.split('structure')[0];
-    // const lddtURL = `${entryURL}lddt`;
     const residueIndex = model.atomicHierarchy.residueAtomSegments.index;
     const residueRowCount = model.atomicHierarchy.atoms._rowCount;
     const response = await fetch(
-      "https://alphafold.ebi.ac.uk/files/AF-P05067-F1-aa-substitutions.csv"
+      `https://alphafold.ebi.ac.uk/files/${model.entry}-aa-substitutions.csv`
     );
     const rawText = await response.text();
 
@@ -54,9 +51,7 @@ export const AlphaMissenseColorTheme = CustomElementProperty.create({
       if (i === 0 || !row) {
         continue;
       }
-
       const cellContents = row.match(cellSplitter);
-
       if (cellContents) {
         positions.push(+cellContents[4]);
       }
@@ -75,7 +70,7 @@ export const AlphaMissenseColorTheme = CustomElementProperty.create({
     },
     defaultColor: defaultColor,
   },
-  getLabel: function (e) {
+  getLabel: (e) => {
     return `Pathogenecity Score: ${e}`;
   },
 });
