@@ -94,13 +94,13 @@ export type StructureViewer = {
   clearHighlight(): void;
   changeHighlightColor(color: number): void;
   handleResize(): void;
-  applyTheme(): void;
+  applyColorTheme(): void;
 };
 
 export const getStructureViewer = async (
   container: HTMLDivElement,
   onHighlightClick: (sequencePositions: SequencePosition[]) => void,
-  theme?: string,
+  colorTheme?: string,
 ): Promise<StructureViewer> => {
   const plugin = new PluginContext(spec);
   await plugin.init();
@@ -175,12 +175,12 @@ export const getStructureViewer = async (
         "all-models",
         { useDefaultIfSingleModel: true },
       );
-      this.applyTheme();
+      this.applyColorTheme();
     },
 
-    applyTheme() {
+    applyColorTheme() {
       let colouringTheme: string;
-      if (theme === 'alphamissense') {
+      if (colorTheme === 'alphamissense') {
         colouringTheme =
             AlphaMissenseColorTheme.propertyProvider.descriptor.name;
       } else {

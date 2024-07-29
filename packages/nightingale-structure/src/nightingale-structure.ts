@@ -87,7 +87,7 @@ class NightingaleStructure extends withManager(
   "custom-download-url"?: string;
 
   @property({ type: String })
-  "theme"?: string;
+  "color-theme"?: string;
 
   @state()
   selectedMolecule?: {
@@ -173,7 +173,7 @@ class NightingaleStructure extends withManager(
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
-      getStructureViewer(structureViewerDiv, this.updateHighlight, this.theme).then(
+      getStructureViewer(structureViewerDiv, this.updateHighlight, this['color-theme']).then(
         (structureViewer) => {
           this.#structureViewer = structureViewer;
           // Remove initial "#" and possible trailing opacity value
@@ -199,6 +199,9 @@ class NightingaleStructure extends withManager(
       const color = this["highlight-color"].substring(1, 7);
       this.#structureViewer?.changeHighlightColor(parseInt(color, 16));
       this.#structureViewer?.plugin.handleResize();
+    }
+    if (changedProperties.has("color-theme")) {
+      this.#structureViewer?.applyColorTheme();
     }
   }
 
