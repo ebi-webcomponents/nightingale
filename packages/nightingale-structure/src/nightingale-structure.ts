@@ -66,6 +66,7 @@ export type PredictionData = {
   cifUrl?: string;
   pdbUrl?: string;
   distogramUrl?: string;
+  amAnnotationsUrl?: string;
 };
 
 const uniProtMappingUrl = "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/";
@@ -74,7 +75,7 @@ const alphaFoldMappingUrl = "https://alphafold.ebi.ac.uk/api/prediction/";
 
 @customElementOnce("nightingale-structure")
 class NightingaleStructure extends withManager(
-  withHighlight(NightingaleElement),
+  withHighlight(NightingaleElement)
 ) {
   @property({ type: String })
   "protein-accession"?: string;
@@ -84,6 +85,9 @@ class NightingaleStructure extends withManager(
 
   @property({ type: String })
   "custom-download-url"?: string;
+
+  @property({ type: String })
+  "theme"?: string;
 
   @state()
   selectedMolecule?: {
@@ -169,13 +173,13 @@ class NightingaleStructure extends withManager(
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
-      getStructureViewer(structureViewerDiv, this.updateHighlight).then(
+      getStructureViewer(structureViewerDiv, this.updateHighlight, this.theme).then(
         (structureViewer) => {
           this.#structureViewer = structureViewer;
           // Remove initial "#" and possible trailing opacity value
           const color = this["highlight-color"].substring(1, 7);
           this.#structureViewer.changeHighlightColor(parseInt(color, 16));
-        },
+        }
       );
     }
   }
@@ -239,7 +243,7 @@ class NightingaleStructure extends withManager(
     if (this.isAF()) {
       const afPredictions = await this.loadAFEntry(this["protein-accession"]);
       const afInfo = afPredictions.find(
-        (prediction) => prediction.entryId === this["structure-id"],
+        (prediction) => prediction.entryId === this["structure-id"]
       );
       // Note: maybe use bcif instead of cif, but I have issues loading it atm
       if (afInfo?.cifUrl) {
@@ -255,12 +259,12 @@ class NightingaleStructure extends withManager(
         await this.#structureViewer?.loadCifUrl(
           `${this["custom-download-url"]}${this[
             "structure-id"
-          ].toLowerCase()}.cif`,
+          ].toLowerCase()}.cif`
         );
         this.clearMessage();
       } else {
         await this.#structureViewer?.loadPdb(
-          this["structure-id"].toLowerCase(),
+          this["structure-id"].toLowerCase()
         );
         this.clearMessage();
       }
@@ -288,7 +292,7 @@ class NightingaleStructure extends withManager(
   }
 
   updateHighlight(
-    sequencePositions: { chain: string; position: number }[],
+    sequencePositions: { chain: string; position: number }[]
   ): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
@@ -314,8 +318,8 @@ class NightingaleStructure extends withManager(
               pos.position,
               pos.position,
               "PDB_UP",
-              this.selectedMolecule?.mappings,
-            ).filter((t) => t.chain === pos.chain),
+              this.selectedMolecule?.mappings
+            ).filter((t) => t.chain === pos.chain)
           )
           .filter(Boolean);
       } catch (error) {
@@ -364,7 +368,7 @@ class NightingaleStructure extends withManager(
             start,
             end,
             "UP_PDB",
-            this.selectedMolecule?.mappings,
+            this.selectedMolecule?.mappings
           );
         })
         .filter(Boolean);

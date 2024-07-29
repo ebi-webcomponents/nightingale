@@ -41,7 +41,10 @@ type AfConfidence = PropertyWrapper<
 export const DefaultServerUrl = "";
 
 export const isApplicable = (model?: Model): boolean => {
-  return !!model && Model.isFromPdbArchive(model);
+  if (model?.entryId.startsWith('AF')) {
+    return true;
+  }
+  return false;
 };
 
 export interface Info {
