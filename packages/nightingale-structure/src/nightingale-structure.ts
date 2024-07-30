@@ -173,7 +173,7 @@ class NightingaleStructure extends withManager(
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
-      getStructureViewer(structureViewerDiv, this.updateHighlight, this['color-theme']).then(
+      getStructureViewer(structureViewerDiv, this.updateHighlight, this["color-theme"]).then(
         (structureViewer) => {
           this.#structureViewer = structureViewer;
           // Remove initial "#" and possible trailing opacity value
@@ -201,7 +201,7 @@ class NightingaleStructure extends withManager(
       this.#structureViewer?.plugin.handleResize();
     }
     if (changedProperties.has("color-theme")) {
-      this.#structureViewer?.applyColorTheme();
+      this.#structureViewer?.applyColorTheme(this["color-theme"]);
     }
   }
 

@@ -94,7 +94,7 @@ export type StructureViewer = {
   clearHighlight(): void;
   changeHighlightColor(color: number): void;
   handleResize(): void;
-  applyColorTheme(): void;
+  applyColorTheme(colorTheme?: string): void;
 };
 
 export const getStructureViewer = async (
@@ -175,10 +175,10 @@ export const getStructureViewer = async (
         "all-models",
         { useDefaultIfSingleModel: true },
       );
-      this.applyColorTheme();
+      this.applyColorTheme(colorTheme);
     },
 
-    applyColorTheme() {
+    applyColorTheme(colorTheme) {
       let colouringTheme: string;
       if (colorTheme === 'alphamissense') {
         colouringTheme =
