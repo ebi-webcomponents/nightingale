@@ -33,34 +33,44 @@ const hexToPDBeMolstarColor = (hexColor: string) => {
   return { r: rgb.r, g: rgb.g, b: rgb.b };
 };
 
+const getAverage = (scores: number[]) => {
+  return scores.reduce((a: number, b: number) => a + b, 0) / scores.length;
+};
+
 export const AlphaMissenseColorTheme = CustomElementProperty.create({
   label: "Colour by Alphamissense pathogenecity",
   name: "basic-wrapper-am-coloring",
   getData: async (model) => {
     const map = new Map();
-    const residueIndex = model.atomicHierarchy.residueAtomSegments.index;
-    const residueRowCount = model.atomicHierarchy.atoms._rowCount;
-    const response = await fetch(
-      `https://alphafold.ebi.ac.uk/files/${model.entry}-aa-substitutions.csv`
-    );
-    const rawText = await response.text();
+    if (model.entry.startsWith("AF")) {
+      const residueIndex = model.atomicHierarchy.residueAtomSegments.index;
+      const residueRowCount = model.atomicHierarchy.atoms._rowCount;
+      const response = await fetch(
+        `https://alphafold.ebi.ac.uk/files/${model.entry}-aa-substitutions.csv`
+      );
+      const rawText = await response.text();
 
-    const positions: Array<number> = [];
+      const scores: Array<Array<number>> = [];
 
-    for (const [i, row] of rawText.split(rowSplitter).entries()) {
-      if (i === 0 || !row) {
-        continue;
+      for (const [i, row] of rawText.split(rowSplitter).entries()) {
+        if (i === 0 || !row) {
+          continue;
+        }
+        const cellContents = row.match(cellSplitter);
+        if (!cellContents)
+          throw new Error(
+            `FormatError: cannot parse "${row}" as a mutation (should look like Y123A)`
+          );
+        const seqId = +cellContents[2];
+        (scores[seqId - 1] ??= []).push(+cellContents[4]);
       }
-      const cellContents = row.match(cellSplitter);
-      if (cellContents) {
-        positions.push(+cellContents[4]);
+
+      for (let i = 0, _i = residueRowCount; i < _i; i++) {
+        const averageScore = getAverage(scores[residueIndex[i]]);
+        map.set(i, averageScore);
       }
+      return { value: map };
     }
-
-    for (let i = 0, _i = residueRowCount; i < _i; i++) {
-      map.set(i, positions[residueIndex[i]]);
-    }
-
     return { value: map };
   },
   coloring: {
