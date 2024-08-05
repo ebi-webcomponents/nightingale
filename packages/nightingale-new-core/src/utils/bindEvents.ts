@@ -7,6 +7,7 @@ export const HIGHLIGHT_EVENT = "highlight-event";
 type EventType = "click" | "mouseover" | "mouseout" | "reset";
 
 type FeatureData = {
+  accession: string;
   feature?: FeatureData | null;
   fragments?: Array<{
     start: number;
@@ -14,7 +15,6 @@ type FeatureData = {
   }>;
   start?: number;
   end?: number;
-  protvistaFeatureId: string;
 };
 type SequenceBaseData = {
   position: number;
@@ -68,7 +68,7 @@ export function createEvent(
     }
   }
   if (withId) {
-    detail.selectedId = (feature as FeatureData)?.protvistaFeatureId;
+    detail.selectedId = (feature as FeatureData)?.accession;
   }
   return new CustomEvent("change", {
     detail,

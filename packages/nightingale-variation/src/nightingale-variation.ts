@@ -28,7 +28,6 @@ export type VariationDatum = {
   xrefNames: string[];
   hasPredictions: boolean;
   tooltipContent?: string;
-  protvistaFeatureId: string;
   alternativeSequence?: string;
   internalId?: string;
   wildType?: string;
