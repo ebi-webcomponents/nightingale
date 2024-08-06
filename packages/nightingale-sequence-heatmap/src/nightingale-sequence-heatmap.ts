@@ -16,7 +16,6 @@ import NightingaleElement, {
 import { Heatmap } from "heatmap-component";
 import { formatDataItem } from "heatmap-component/lib/heatmap-component/utils";
 import {
-  interpolateYlOrRd,
   scaleSequential,
   Selection as d3Selection,
 } from "d3";
