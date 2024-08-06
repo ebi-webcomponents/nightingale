@@ -542,7 +542,7 @@ class NightingaleTrack extends withManager(
 
   protected updateHighlight() {
     if (!this.#highlighted) return;
-    const highlighs = this.#highlighted
+    const highlights = this.#highlighted
       .selectAll<
         SVGRectElement,
         {
@@ -552,11 +552,11 @@ class NightingaleTrack extends withManager(
       >("rect")
       .data(this.highlightedRegion.segments);
 
-    highlighs
+    highlights
       .enter()
       .append("rect")
       .style("pointer-events", "none")
-      .merge(highlighs)
+      .merge(highlights)
       .attr("fill", this["highlight-color"])
       .attr("height", this.height)
       .attr("x", (d) => this.getXFromSeqPosition(d.start))
@@ -564,7 +564,7 @@ class NightingaleTrack extends withManager(
         Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
       );
 
-    highlighs.exit().remove();
+    highlights.exit().remove();
   }
 
   zoomRefreshed() {
