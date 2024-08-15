@@ -21,7 +21,7 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   options: {
     "min-width"?: number;
     "min-height"?: number;
-  } = {}
+  } = {},
 ) => {
   class WithResizable extends withDimensions(superClass) {
     #intitialOptions = { ...defaultOptions, ...options };

@@ -75,7 +75,7 @@ const aaList = [
 
 @customElement("nightingale-variation")
 class NightingaleVariation extends withManager(
-  withSVGHighlight(NightingaleElement)
+  withSVGHighlight(NightingaleElement),
 ) {
   /**
    * Indicates the data is in the format of the protein API and needs to be transformed acordingly
@@ -269,7 +269,7 @@ class NightingaleVariation extends withManager(
   updateScale() {
     if (this.yScale) {
       const aaToDisplay = aaList.filter((aa) =>
-        this.condensedView ? this.processedData?.aaPresence[aa] : true
+        this.condensedView ? this.processedData?.aaPresence[aa] : true,
       );
       if (this.rowHeight) {
         this.height =
@@ -283,7 +283,7 @@ class NightingaleVariation extends withManager(
       this.svg?.attr("width", this.width).attr("height", this.height);
 
       const yAxisLScale = axisLeft(this.yScale).tickSize(
-        -this.getWidthWithMargins()
+        -this.getWidthWithMargins(),
       );
       this.axisLeft
         ?.attr("class", "variation-y-left axis")
@@ -295,7 +295,7 @@ class NightingaleVariation extends withManager(
           "transform",
           `translate(${
             this.getWidthWithMargins() - this["margin-right"] + 2
-          }, 0)`
+          }, 0)`,
         )
         .attr("class", "variation-y-right axis")
         .call(yAxisRScale);

@@ -72,7 +72,9 @@ Allows dynamic setting of heatmap color palette
 
 ```javascript
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
-  const heatmapElement = document.getElementById("id-for-nightingale-sequence-heatmap");
+  const heatmapElement = document.getElementById(
+    "id-for-nightingale-sequence-heatmap",
+  );
 
   const colorScale = d3.scaleLinear(
     [0, 1], // score value domain
@@ -88,7 +90,9 @@ Allows dynamic setting of tooltip HTML content
 
 ```javascript
 customElements.whenDefined("nightingale-sequence-heatmap").then(() => {
-  const heatmapElement = document.getElementById("id-for-nightingale-sequence-heatmap");
+  const heatmapElement = document.getElementById(
+    "id-for-nightingale-sequence-heatmap",
+  );
 
   heatmapElement.heatmapInstance.setTooltip((d, x, y, xIndex, yIndex) => {
     let returnHTML = `

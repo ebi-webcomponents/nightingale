@@ -26,7 +26,7 @@ export const customElementOnce =
   (tagName: string): CustomElementDecorator =>
   (
     classOrTarget: CustomElementClass | Constructor<HTMLElement>,
-    context?: ClassDecoratorContext<Constructor<HTMLElement>>
+    context?: ClassDecoratorContext<Constructor<HTMLElement>>,
   ) => {
     if (!window.customElements.get(tagName))
       if (context) customElement(tagName)(classOrTarget, context);

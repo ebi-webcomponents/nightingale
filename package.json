@@ -12,7 +12,7 @@
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
     "lint:eslint": "eslint 'packages/**/*.ts'",
     "lint:lit-analyzer": "lit-analyzer packages/*/src/**/*.{js,ts}",
-    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
+    "format": "prettier \"**/*.{cjs,html,js,md,ts}\" --ignore-path ./.eslintignore --write",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --node-resolve --watch",

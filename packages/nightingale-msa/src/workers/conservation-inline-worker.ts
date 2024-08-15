@@ -9,7 +9,7 @@ declare const self: Worker & { previous: unknown };
 export const calculateConservation = (
   sequences: SequencesMSA,
   sampleSize: number | null = null,
-  isWorker = false
+  isWorker = false,
 ) => {
   const aLetterOffset = "A".charCodeAt(0);
   const lettersInAlphabet = 26;

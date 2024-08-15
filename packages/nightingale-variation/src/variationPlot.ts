@@ -20,7 +20,7 @@ class VariationPlot {
       HTMLElement | SVGElement | null,
       unknown
     >,
-    element: NightingaleVariation
+    element: NightingaleVariation,
   ) {
     const ftWidth = element.getSingleBaseWidth();
     const half = ftWidth / 2;
