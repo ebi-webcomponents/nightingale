@@ -125,10 +125,6 @@
             .getElementById("heatmapHotmap")
             .setHeatmapData(xDomain, yDomain, data);
 
-          // await document.getElementById("heatmapHotmap").updateComplete.then(() => {
-          //   const colorScale = d3.scaleLinear([0, 1], ["lightblue", "blue"]);
-          //   document.getElementById("heatmapHotmap").heatmapInstance.setColor((d) => colorScale(d.score));
-          // });
           setTimeout(() => {
             const colorScale = d3.scaleLinear([0, 1], ["lightblue", "blue"]);
             document
