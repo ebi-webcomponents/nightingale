@@ -49,7 +49,7 @@ class NightingaleManager extends NightingaleElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("change", this.changeListener as EventListener);
-    this.style.display = "unset";
+    this.style.display = "block"; // check wherever we have a manager
   }
 
   override attributeChangedCallback(
