@@ -20,7 +20,7 @@ export type Filter = {
 
 @customElement("nightingale-filter")
 class NightingaleFilter extends NightingaleElement {
-  @property({ type: Array<Filter> })
+  @property({attribute: false})
   filters?: Filter[] = [];
   @property({ type: Array })
   selectedFilters?: string[] = [];
@@ -106,7 +106,7 @@ class NightingaleFilter extends NightingaleElement {
           `
               : options.colors[0]
           };`}
-          checked="true"
+          checked
           .value="${name}"
           @change="${() => this.toggleFilter(name)}"
         />

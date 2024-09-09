@@ -176,7 +176,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
         <div id="${this["heatmap-id"]}" style=${styleMap(
             heatmapStyles,
-          )}" />`;
+          )} />`;
     } else {
       return html`
         <div id="${this["heatmap-id"]}_loading" style=${styleMap(
