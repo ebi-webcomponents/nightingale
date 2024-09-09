@@ -192,21 +192,20 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence corre
           style="position: absolute; width: 100%; height: 100%;"
           width="0"
         />
-          <svg
-            class="heatmap-svg"
-            style="position: absolute; width: 100%; height: 100%;"
-          >
-            <rect
-              class="heatmap-marker-y"
-              height="0"
-              rx="1"
-              ry="1"
-              width="NaN"
-              x="NaN"
-              y="0"
-            />
-          </svg>
-        </div>
+        <svg
+          class="heatmap-svg"
+          style="position: absolute; width: 100%; height: 100%;"
+        >
+          <rect
+            class="heatmap-marker-y"
+            height="0"
+            rx="1"
+            ry="1"
+            width="NaN"
+            x="NaN"
+            y="0"
+          />
+        </svg>
       </div>
     </div>
   </div>
@@ -408,7 +407,6 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence heatm
           class="heatmap-svg"
           style="position: absolute; width: 100%; height: 100%;"
         />
-        </div>
       </div>
     </div>
   </div>
@@ -610,7 +608,6 @@ exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
           class="heatmap-svg"
           style="position: absolute; width: 100%; height: 100%;"
         />
-        </div>
       </div>
     </div>
   </div>
