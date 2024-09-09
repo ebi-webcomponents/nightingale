@@ -21,8 +21,8 @@ const DEAFULT_COLOR_SCHEME = "clustal2";
 @customElement("nightingale-msa")
 class NightingaleMSA extends withManager(
   withResizable(
-    withHighlight(withMargin(withDimensions(withPosition(NightingaleElement))))
-  )
+    withHighlight(withMargin(withDimensions(withPosition(NightingaleElement)))),
+  ),
 ) {
   @property({
     attribute: "color-scheme",
@@ -55,7 +55,7 @@ class NightingaleMSA extends withManager(
   overlayConservtion?: boolean = false;
 
   worker = new Worker(
-    window.URL.createObjectURL(new Blob([conservationInlineWorkerString]))
+    window.URL.createObjectURL(new Blob([conservationInlineWorkerString])),
   );
 
   private sequenceViewer?: SequenceViewerComponent | null;
@@ -68,7 +68,7 @@ class NightingaleMSA extends withManager(
         new CustomEvent("conservationProgress", {
           bubbles: true,
           detail: e.data,
-        })
+        }),
       );
       if (e.data.progress === 1) {
         const conservation = {
@@ -174,7 +174,7 @@ class NightingaleMSA extends withManager(
           },
           fillColor: this["highlight-color"],
           borderColor: this["highlight-color"],
-        }) as Region
+        }) as Region,
     );
   }
   protected firstUpdated() {

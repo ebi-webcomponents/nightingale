@@ -42,7 +42,7 @@ SequenceHeatmap.args = {
 SequenceHeatmap.play = async () => {
   await customElements.whenDefined("nightingale-sequence-heatmap");
   const heatmapElement = document.getElementsByTagName(
-    "nightingale-sequence-heatmap"
+    "nightingale-sequence-heatmap",
   )[0] as any;
   if (heatmapElement) heatmapElement.setHeatmapData(xDomain, yDomain, data);
 };

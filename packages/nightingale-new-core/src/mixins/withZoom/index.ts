@@ -37,10 +37,10 @@ export interface WithZoomInterface
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
-  superClass: T
+  superClass: T,
 ) => {
   class WithZoom extends withMargin(
-    withPosition(withResizable(withDimensions(superClass)))
+    withPosition(withResizable(withDimensions(superClass))),
   ) {
     _applyZoomTranslation: () => void;
     /**
@@ -157,7 +157,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     attributeChangedCallback(
       name: string,
       oldValue: string | null,
-      newValue: string | null
+      newValue: string | null,
     ): void {
       super.attributeChangedCallback(name, oldValue, newValue);
 
@@ -190,12 +190,12 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
                 "display-start": Math.max(1, start),
                 "display-end": Math.min(
                   this.length || 0,
-                  Math.max(end - 1, start + 1) // To make sure it never zooms in deeper than showing 2 bases covering the full width
+                  Math.max(end - 1, start + 1), // To make sure it never zooms in deeper than showing 2 bases covering the full width
                 ),
               },
               bubbles: true,
               cancelable: true,
-            })
+            }),
           );
         }
       }
@@ -208,7 +208,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         1,
         // +1 because the displayend base should be included
         (this.length || 0) /
-          (1 + (this["display-end"] || 0) - (this["display-start"] || 0))
+          (1 + (this["display-end"] || 0) - (this["display-start"] || 0)),
       );
       // The deltaX gets calculated using the position of the first base to display in original scale
       const dx = -this.originXScale(this["display-start"] || 0);
@@ -219,7 +219,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           this.zoom.transform,
           zoomIdentity // Identity transformation
             .scale(k) // Scaled by our scaled factor
-            .translate(dx, 0) // Translated by the delta
+            .translate(dx, 0), // Translated by the delta
         );
       }
       this.dontDispatch = false;

@@ -14,7 +14,7 @@ export interface WithSVGHighlightInterface
   updateHighlight: () => void;
 }
 const withSVGHighlight = <T extends Constructor<NightingaleBaseElement>>(
-  superClass: T
+  superClass: T,
 ) => {
   class WithSVGHighlight extends withZoom(withHighlight(superClass)) {
     protected highlighted?: Selection<
@@ -53,7 +53,7 @@ const withSVGHighlight = <T extends Constructor<NightingaleBaseElement>>(
         .attr("height", this.height)
         .attr("x", (d) => this.getXFromSeqPosition(d.start))
         .attr("width", (d) =>
-          Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
+          Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1)),
         );
 
       highlighs.exit().remove();

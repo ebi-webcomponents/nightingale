@@ -208,7 +208,7 @@ const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
 };
 
 export const transformData = (
-  data: ProteinsAPIVariation
+  data: ProteinsAPIVariation,
 ): {
   sequence: string;
   variants: VariationDatum[];
@@ -218,9 +218,10 @@ export const transformData = (
     (variant) =>
       ({
         ...variant,
-        accession: (variant.genomicLocation || []).length !== 0 
-            ? (variant.genomicLocation || [])[0] 
-            : '',
+        accession:
+          (variant.genomicLocation || []).length !== 0
+            ? (variant.genomicLocation || [])[0]
+            : "",
         variant: variant.alternativeSequence
           ? variant.alternativeSequence
           : AminoAcid.Empty,
@@ -230,7 +231,7 @@ export const transformData = (
         //   tooltipContent: formatTooltip(variant),
         protvistaFeatureId: String(Math.random()),
         consequenceType: variant.consequenceType,
-      }) as VariationDatum
+      }) as VariationDatum,
   );
   if (!variants) return null;
   return { sequence, variants };
