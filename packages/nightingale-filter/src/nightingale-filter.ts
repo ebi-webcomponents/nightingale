@@ -57,14 +57,6 @@ class NightingaleFilter extends NightingaleElement {
     });
     return html`
       <style>
-        :host {
-          font-size: 0.8rem;
-        }
-
-        :host[disabled] {
-          opacity: 0.5;
-        }
-
         .protvista_checkbox {
           position: relative;
           cursor: pointer;
