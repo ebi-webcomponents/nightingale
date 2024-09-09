@@ -1,0 +1,37 @@
+{
+  "name": "@nightingale-elements/nightingale-filter",
+  "version": "5.0.0",
+  "description": "Filter component",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+"module": "dist/index.js",
+"type": "module",
+"types": "dist/index.d.ts",
+"scripts": {
+  "build": "rollup --config ../../rollup.config.mjs"
+},
+"publishConfig": {
+  "access": "public"
+},
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^5.0.0",
+    "@nightingale-elements/nightingale-manager": "^5.0.0",
+    "lodash-es": "^4.17.11"
+  },
+  "keywords": [
+    "nightingale",
+    "customelements",
+    "webcomponents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+}
