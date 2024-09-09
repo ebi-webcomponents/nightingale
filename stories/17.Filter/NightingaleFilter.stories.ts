@@ -11,7 +11,7 @@ export default {
 
 const Template: Story<{
   for: string;
-}> = (args) => {
+}> = () => {
   setTimeout(async () => {
     await customElements.whenDefined("nightingale-filter");
     const filterComponent = document.getElementById("filter") as unknown as NightingaleFilter;
