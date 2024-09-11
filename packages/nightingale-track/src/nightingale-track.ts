@@ -201,7 +201,7 @@ class NightingaleTrack extends withManager(
     }
   }
 
-  getResidueShape(f: PTM & { feature: Feature; position: number }) {
+  #getPTMResidueShape(f: PTM & { feature: Feature; position: number }) {
     let ptmLength = 1;
     // For longer proteins, the PTMs have to be shown prominent in the first look
     if (this.length && this.length > 500) {
@@ -394,7 +394,7 @@ class NightingaleTrack extends withManager(
       .enter()
       .append("path")
       .attr("class", (f) => `${this.getShape(f)} residue`)
-      .attr("d", (f) => this.getResidueShape(f))
+      .attr("d", (f) => this.#getPTMResidueShape(f))
       .attr(
         "transform",
         (f) =>
@@ -496,7 +496,7 @@ class NightingaleTrack extends withManager(
 
       residueG
         .selectAll<SVGPathElement, PTM & { feature: Feature; position: number; }>("path.residue")
-        .attr("d", (f) => this.getResidueShape(f))
+        .attr("d", (f) => this.#getPTMResidueShape(f))
         .attr(
           "transform",
           (f) =>
