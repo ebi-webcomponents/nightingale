@@ -201,6 +201,20 @@ class NightingaleTrack extends withManager(
     }
   }
 
+  getResidueShape(f: PTM & { feature: Feature; position: number }) {
+    let ptmLength = 1;
+    // For longer proteins, the PTMs have to be shown prominent in the first look
+    if (this.length && this.length > 500) {
+      ptmLength = this.getSingleBaseWidth() < 4 ? 4 : 1;
+    }
+    return this.featureShape.getFeatureShape(
+      this.getSingleBaseWidth() / 2, // Halve the width of the ptm residue to distinguish between each other if one follows next closely
+      this.layoutObj?.getFeatureHeight(f) || 0,
+      ptmLength,
+      this.getShape(f)
+    );
+  }
+
   protected getFeatureColor(f: Feature | { feature: Feature }): string {
     const defaultColor = "gray";
     if ((f as Feature).color) {
@@ -380,19 +394,7 @@ class NightingaleTrack extends withManager(
       .enter()
       .append("path")
       .attr("class", (f) => `${this.getShape(f)} residue`)
-      .attr("d", (f) => {
-        let ptmLength = 1;
-        // For longer proteins, the PTMs have to be shown prominent in the first look
-        if (this.length && this.length > 500) {
-          ptmLength = this.getSingleBaseWidth() < 4 ? 4 : 1;
-        }
-        return this.featureShape.getFeatureShape(
-          this.getSingleBaseWidth() / 2, // Halve the width of the ptm residue to distinguish between each other if one follows next closely
-          this.layoutObj?.getFeatureHeight() || 0,
-          ptmLength,
-          this.getShape(f)
-        );
-      })
+      .attr("d", (f) => this.getResidueShape(f))
       .attr(
         "transform",
         (f) =>
@@ -405,7 +407,7 @@ class NightingaleTrack extends withManager(
           },
           ${this.layoutObj?.getFeatureYPos(f.feature)})`
       )
-      .attr("fill", "#06038D")
+      .attr("fill", getColorByType("PTM"))
       .style("fill-opacity", ({ feature }) =>
         feature.opacity ? feature.opacity : 0.9
       )
@@ -457,11 +459,11 @@ class NightingaleTrack extends withManager(
 
       const residueG = this.seqG.selectAll("g.residue-group").data(
         this.#data.reduce(
-          (acc: unknown[], f) =>
-            acc.concat([
+          (featureAcc: unknown[], f) =>
+            featureAcc.concat([
               f.ptms?.reduce(
-                (acc2: unknown[]) =>
-                  acc2.concat((ptm: PTM) =>
+                (ptmAcc: unknown[]) =>
+                  ptmAcc.concat((ptm: PTM) =>
                     Object.assign({}, ptm, {
                       feature: f,
                       position: ptm.position,
@@ -493,19 +495,8 @@ class NightingaleTrack extends withManager(
         );
 
       residueG
-        .selectAll<SVGPathElement, Feature & PTM>("path.residue")
-        .attr("d", (f) => {
-          let ptmLength = 1;
-          if (this.length && this.length > 500) {
-            ptmLength = this.getSingleBaseWidth() < 4 ? 4 : 1;
-          }
-          return this.featureShape.getFeatureShape(
-            this.getSingleBaseWidth() / 2,
-            this.layoutObj?.getFeatureHeight(f) || 0,
-            ptmLength,
-            this.getShape(f)
-          );
-        })
+        .selectAll<SVGPathElement, PTM & { feature: Feature; position: number; }>("path.residue")
+        .attr("d", (f) => this.getResidueShape(f))
         .attr(
           "transform",
           (f) =>
