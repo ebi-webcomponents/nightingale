@@ -65,11 +65,10 @@ export const AlphaMissenseColorTheme = CustomElementProperty.create({
         (scores[seqId - 1] ??= []).push(+cellContents[4]);
       }
 
-      for (let i = 0, _i = residueRowCount; i < _i; i++) {
+      for (let i = 0; i < residueRowCount; i++) {
         const averageScore = getAverage(scores[residueIndex[i]]);
         map.set(i, averageScore);
       }
-      return { value: map };
     }
     return { value: map };
   },

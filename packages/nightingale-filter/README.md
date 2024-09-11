@@ -24,11 +24,11 @@ The filter configuration
     name: "filter_name",
     type: {
       name: "group_name",
-      text: "Group Label"
+      text: "group_label"
     },
     options: {
-      labels: ["Filter option label"],
-      colors: ["#333"] // Array so you can specify colour ranges
+      label: "filter_option_label",
+      color: "#333"
     },
     filterData: item => {} // the filter function
   }

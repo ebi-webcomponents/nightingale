@@ -25,6 +25,8 @@ import {
 } from "heatmap-component/lib/heatmap-component/scales";
 import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/utils/Region";
 
+const ALPHAMISSENSE_BLUE = "#3d5493";
+const ALPHAMISSENSE_RED = "#9a131a";
 interface HotmapData {
   xValue: number;
   yValue: string;
@@ -312,7 +314,7 @@ class NightingaleSequenceHeatmap extends withManager(
     const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
     const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
 
-    const colorScale = scaleSequential([dataMin, dataMax], ["#3d5493", "#9a131a"]);
+    const colorScale = scaleSequential([dataMin, dataMax], [ALPHAMISSENSE_BLUE, ALPHAMISSENSE_RED]);
     hm.setColor((d) => colorScale(d.score));
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {

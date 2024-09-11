@@ -14,8 +14,8 @@ const filterConfig = [
       text: 'Filter Consequence',
     },
     options: {
-      labels: ['Likely pathogenic or pathogenic'],
-      colors: [scaleColors.UPDiseaseColor],
+      label: 'Likely pathogenic or pathogenic',
+      color: scaleColors.UPDiseaseColor,
     },
     filterData: () => {},
   },
@@ -26,8 +26,8 @@ const filterConfig = [
       text: 'Filter Consequence',
     },
     options: {
-      labels: ['Predicted consequence'],
-      colors: [scaleColors.predictedColor],
+      label: 'Predicted consequence',
+      color: scaleColors.predictedColor,
     },
     filterData: () => {},
   },
@@ -38,8 +38,8 @@ const filterConfig = [
       text: 'Filter Consequence',
     },
     options: {
-      labels: ['Likely benign or benign'],
-      colors: [scaleColors.UPNonDiseaseColor],
+      label: 'Likely benign or benign',
+      color: scaleColors.UPNonDiseaseColor,
     },
     filterData: () => {},
   },
@@ -50,8 +50,8 @@ const filterConfig = [
       text: 'Filter Consequence',
     },
     options: {
-      labels: ['Uncertain significance'],
-      colors: [scaleColors.othersColor],
+      label: 'Uncertain significance',
+      color: scaleColors.othersColor,
     },
     filterData: () => {},
   },

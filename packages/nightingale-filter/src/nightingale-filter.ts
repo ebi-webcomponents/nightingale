@@ -12,18 +12,16 @@ export type Filter = {
     text: string;
   };
   options: {
-    labels: string[];
-    colors: string[];
+    label: string;
+    color: string;
   };
   filterData: (data: unknown) => unknown;
 };
 
 @customElement("nightingale-filter")
 class NightingaleFilter extends NightingaleElement {
-  @property({attribute: false})
+  @property({ attribute: false })
   filters?: Filter[] = [];
-  @property({ type: Array })
-  selectedFilters?: string[] = [];
   @property({ type: String })
   for: string = "";
 
@@ -33,7 +31,6 @@ class NightingaleFilter extends NightingaleElement {
   constructor() {
     super();
     this.filters = [];
-    this.selectedFilters = [];
   }
 
   connectedCallback() {
@@ -52,9 +49,7 @@ class NightingaleFilter extends NightingaleElement {
   }
 
   render() {
-    const groupByType = groupBy(this.filters, (f: Filter) => {
-      return f.type.text;
-    });
+    const groupByType = groupBy(this.filters, (f: Filter) => f.type.text);
     return html`
       <style>
         .protvista_checkbox {
@@ -73,11 +68,11 @@ class NightingaleFilter extends NightingaleElement {
           line-height: 1rem;
         }
       </style>
-      ${Object.keys(groupByType).map(
-        (type) => html`
+      ${Object.entries(groupByType).map(
+        ([type, group]) => html`
           <h4>${type}</h4>
           <div>
-            ${groupByType[type].map(
+            ${group.map(
               (filterItem) => html` ${this.getCheckBox(filterItem)} `
             )}
           </div>
@@ -88,29 +83,18 @@ class NightingaleFilter extends NightingaleElement {
 
   getCheckBox(filterItem: Filter) {
     const { name, options } = filterItem;
-    const { labels } = options;
+    const { label, color } = options;
 
-    if (options.colors.length == null) {
-      options.colors = [...options.colors];
-    }
-    const isCompound = options.colors.length > 1;
     return html`
       <label class="protvista_checkbox" tabindex="0">
         <input
           type="checkbox"
-          style=${`accent-color: ${
-            isCompound
-              ? `
-            linear-gradient(${options.colors[0]},
-            ${options.colors[1]})
-          `
-              : options.colors[0]
-          };`}
+          style=${`accent-color: ${color}`}
           checked
           .value="${name}"
           @change="${() => this.toggleFilter(name)}"
         />
-        <span class="protvista_checkbox_label"> ${labels.join("/")} </span>
+        <span class="protvista_checkbox_label"> ${label} </span>
       </label>
     `;
   }
@@ -121,9 +105,6 @@ class NightingaleFilter extends NightingaleElement {
     } else {
       this.#deselected.delete(name);
     }
-    this.selectedFilters = this.filters
-      ?.filter((f) => !this.#deselected.has(f.name))
-      .map((f) => f.name);
 
     this.dispatchEvent(
       new CustomEvent("change", {
@@ -134,11 +115,8 @@ class NightingaleFilter extends NightingaleElement {
           handler: "property",
           for: this.for,
           value: this.filters
-            ?.filter((filter) => this.selectedFilters?.includes(filter.name))
-            .map((filter) => ({
-              category: filter.type.name,
-              filterFn: filter.filterData,
-            })),
+            ?.filter((f) => !this.#deselected.has(f.name))
+            .map((f) => f.name),
         },
       })
     );
