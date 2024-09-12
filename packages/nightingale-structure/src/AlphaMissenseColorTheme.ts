@@ -37,6 +37,24 @@ const getAverage = (scores: number[]) => {
   return scores.reduce((a: number, b: number) => a + b, 0) / scores.length;
 };
 
+export const parseAMData = (rawText: string) => {
+  const scores: Array<Array<number>> = [];
+
+  for (const [i, row] of rawText.split(rowSplitter).entries()) {
+    if (i === 0 || !row) {
+      continue;
+    }
+    const cellContents = row.match(cellSplitter);
+    if (!cellContents)
+      throw new Error(
+        `FormatError: cannot parse "${row}" as a mutation (should look like Y123A)`
+      );
+    const seqId = +cellContents[2];
+    (scores[seqId - 1] ??= []).push(+cellContents[4]);
+  }
+  return scores;
+};
+
 export const AlphaMissenseColorTheme = CustomElementProperty.create({
   label: "Colour by Alphamissense pathogenecity",
   name: "basic-wrapper-am-coloring",
@@ -45,25 +63,12 @@ export const AlphaMissenseColorTheme = CustomElementProperty.create({
     if (model.entry.startsWith("AF")) {
       const residueIndex = model.atomicHierarchy.residueAtomSegments.index;
       const residueRowCount = model.atomicHierarchy.atoms._rowCount;
+
       const response = await fetch(
         `https://alphafold.ebi.ac.uk/files/${model.entry}-aa-substitutions.csv`
       );
       const rawText = await response.text();
-
-      const scores: Array<Array<number>> = [];
-
-      for (const [i, row] of rawText.split(rowSplitter).entries()) {
-        if (i === 0 || !row) {
-          continue;
-        }
-        const cellContents = row.match(cellSplitter);
-        if (!cellContents)
-          throw new Error(
-            `FormatError: cannot parse "${row}" as a mutation (should look like Y123A)`
-          );
-        const seqId = +cellContents[2];
-        (scores[seqId - 1] ??= []).push(+cellContents[4]);
-      }
+      const scores = parseAMData(rawText);
 
       for (let i = 0; i < residueRowCount; i++) {
         const averageScore = getAverage(scores[residueIndex[i]]);
