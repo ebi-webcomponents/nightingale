@@ -65,33 +65,35 @@ class NightingaleManager extends NightingaleElement {
   }
 
   applyAttributes() {
-    this.protvistaElements.forEach((element: HTMLElement) => {
-      this["reflected-attributes"]?.forEach((value, type) => {
-        if (value === false || value === null || value === undefined) {
-          element.removeAttribute(type);
-        } else {
-          element.setAttribute(type, typeof value === "boolean" ? "" : value);
-        }
-      });
-      // Default properties
-      if (this.length) {
-        element.setAttribute("length", `${this.length}`);
-      }
-      if (this["display-end"]) {
-        element.setAttribute("display-end", `${this["display-end"]}`);
-      }
-      if (this["display-start"]) {
-        element.setAttribute("display-start", `${this["display-start"]}`);
-      }
-      if (this.highlight) {
-        element.setAttribute("highlight", this.highlight);
+    this.protvistaElements.forEach((element: HTMLElement) => this.applyAttributesOnElement(element));
+  }
+
+  private applyAttributesOnElement(element: HTMLElement): void {
+    this["reflected-attributes"]?.forEach((value, type) => {
+      if (value === false || value === null || value === undefined) {
+        element.removeAttribute(type);
+      } else {
+        element.setAttribute(type, typeof value === "boolean" ? "" : value);
       }
     });
+    // Default properties
+    if (this.length) {
+      element.setAttribute("length", `${this.length}`);
+    }
+    if (this["display-end"]) {
+      element.setAttribute("display-end", `${this["display-end"]}`);
+    }
+    if (this["display-start"]) {
+      element.setAttribute("display-start", `${this["display-start"]}`);
+    }
+    if (this.highlight) {
+      element.setAttribute("highlight", this.highlight);
+    }
   }
 
   register(element: NightingaleElement) {
     this.protvistaElements.add(element);
-    this.applyAttributes();
+    this.applyAttributesOnElement(element);
   }
 
   unregister(element: NightingaleElement) {
