@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-track",
-  "version": "3.8.21",
+  "version": "3.8.22",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",
@@ -26,7 +26,7 @@
   "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-track": "^3.8.21"
+    "protvista-track": "^3.8.22"
   },
   "devDependencies": {
     "d3": "^5.7.0"

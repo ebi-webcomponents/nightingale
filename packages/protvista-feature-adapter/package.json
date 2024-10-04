@@ -1,6 +1,6 @@
 {
   "name": "protvista-feature-adapter",
-  "version": "3.8.21",
+  "version": "3.8.22",
   "files": [
     "dist",
     "src"
@@ -22,7 +22,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "protvista-track": "^3.8.21",
+    "protvista-track": "^3.8.22",
     "uuid": "^8.3.1"
   },
   "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
