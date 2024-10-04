@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation-adapter",
-  "version": "3.8.18",
+  "version": "3.8.19",
   "description": "Data adapter for variation data",
   "files": [
     "dist",
@@ -34,7 +34,7 @@
     "d3-scale": "^3.2.3",
     "data-loader": "^3.8.18",
     "lodash-es": "^4.17.11",
-    "protvista-feature-adapter": "^3.8.18",
+    "protvista-feature-adapter": "^3.8.19",
     "protvista-variation": "^3.8.18",
     "uuid": "^8.3.1"
   },
