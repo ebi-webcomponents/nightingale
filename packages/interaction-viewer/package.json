@@ -1,6 +1,6 @@
 {
   "name": "interaction-viewer",
-  "version": "3.8.20",
+  "version": "3.8.21",
   "description": "Display interaction information for different proteins and overlay information about diseases and subcellular location.",
   "main": "dist/interaction-viewer.js",
   "module": "dist/es/index.js",
@@ -34,12 +34,12 @@
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "Apache-2.0",
   "dependencies": {
-    "data-loader": "^3.8.20",
+    "data-loader": "^3.8.21",
     "lit": "^2.1.1",
     "lodash-es": "^4.17.11",
-    "protvista-tooltip": "^3.8.20"
+    "protvista-tooltip": "^3.8.21"
   },
-  "gitHead": "337d88a3df2e52243aed81a123740d82917779db",
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9",
   "devDependencies": {
     "d3": "^5.7.0"
   },

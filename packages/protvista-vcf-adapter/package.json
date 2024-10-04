@@ -1,6 +1,6 @@
 {
   "name": "protvista-vcf-adapter",
-  "version": "3.8.20",
+  "version": "3.8.21",
   "files": [
     "dist",
     "types",
@@ -26,12 +26,12 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "data-loader": "^3.8.20",
+    "data-loader": "^3.8.21",
     "lit-html": "^1.3.0",
-    "protvista-feature-adapter": "^3.8.20",
-    "protvista-variation": "^3.8.20",
-    "protvista-variation-adapter": "^3.8.20",
+    "protvista-feature-adapter": "^3.8.21",
+    "protvista-variation": "^3.8.21",
+    "protvista-variation-adapter": "^3.8.21",
     "vcftojson": "^1.1.0"
   },
-  "gitHead": "726779864966d11f966f337f2dd84aa4f58d944a"
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

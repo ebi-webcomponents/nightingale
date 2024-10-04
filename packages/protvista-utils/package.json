@@ -1,6 +1,6 @@
 {
   "name": "protvista-utils",
-  "version": "3.8.20",
+  "version": "3.8.21",
   "description": "Collection of utilities for ProtVista components",
   "files": [
     "dist",
@@ -26,5 +26,5 @@
   "module": "src/index.js",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

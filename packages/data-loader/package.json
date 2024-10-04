@@ -1,6 +1,6 @@
 {
   "name": "data-loader",
-  "version": "3.8.20",
+  "version": "3.8.21",
   "description": "data-loader Custom Element to load data declaratively",
   "files": [
     "dist",
@@ -32,7 +32,7 @@
     "protvista"
   ],
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9",
   "dependencies": {
     "@types/lodash-es": "4.17.3",
     "lodash-es": "^4.17.11"

@@ -1,6 +1,6 @@
 {
   "name": "protvista-filter",
-  "version": "3.8.20",
+  "version": "3.8.21",
   "description": "Filter component for variants",
   "files": [
     "dist",
@@ -30,5 +30,5 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "gitHead": "337d88a3df2e52243aed81a123740d82917779db"
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

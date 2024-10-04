@@ -1,6 +1,6 @@
 {
   "name": "protvista-overlay",
-  "version": "3.8.20",
+  "version": "3.8.21",
   "files": [
     "dist",
     "src"
@@ -23,5 +23,5 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "gitHead": "3768065ef5b1f65e31acbf52e86cac3d98e347fb"
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }
