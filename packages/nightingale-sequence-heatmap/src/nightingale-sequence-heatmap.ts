@@ -447,24 +447,24 @@ class NightingaleSequenceHeatmap extends withManager(
       }
     });
 
-    this.heatmapInstance.events.hover.subscribe((d) => {
-      // data to send to nightingale can be null if hover outside boundaries
-      let toSend = null;
-      if (d && d.cell && d.cell.xIndex) {
-        toSend = `${d.cell.xIndex + 1}:${d.cell.xIndex + 1}`;
-      }
-      // On heatmap zoom dispatch event to Nightingale
-      this.dispatchEvent(
-        new CustomEvent("change", {
-          detail: {
-            value: toSend,
-            type: "highlight",
-          },
-          bubbles: true,
-          cancelable: true,
-        })
-      );
-    });
+    // this.heatmapInstance.events.hover.subscribe((d) => {
+    //   // data to send to nightingale can be null if hover outside boundaries
+    //   let toSend = null;
+    //   if (d && d.cell && d.cell.xIndex) {
+    //     toSend = `${d.cell.xIndex + 1}:${d.cell.xIndex + 1}`;
+    //   }
+    //   // On heatmap zoom dispatch event to Nightingale
+    //   this.dispatchEvent(
+    //     new CustomEvent("change", {
+    //       detail: {
+    //         value: toSend,
+    //         type: "highlight",
+    //       },
+    //       bubbles: true,
+    //       cancelable: true,
+    //     })
+    //   );
+    // });
   }
 
   /**
