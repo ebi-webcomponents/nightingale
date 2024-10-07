@@ -202,6 +202,7 @@ const Template: Story<{
               display-end=${args["display-end"]}
               highlight-event="onmouseover"
               highlight-color=${args["highlight-color"]}
+              use-ctrl-to-zoom
             ></nightingale-sequence-heatmap>
           </div>
           <div style="line-height: 0">

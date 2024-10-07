@@ -75,6 +75,12 @@ class NightingaleLinegraphTrack extends withManager(
   @property({ type: String })
   type?: string | null;
 
+  @property({type: Boolean})
+  "show-label-name"?: false;
+
+  @property({type: Boolean})
+  "highlight-on-click"?: false;
+
   yScale?: ScaleLinear<number, number>;
   #highlighted?: Selection<
     SVGGElement,
@@ -200,7 +206,7 @@ class NightingaleLinegraphTrack extends withManager(
 
     mousePerLine
       .append("text")
-      .attr("transform", "translate(10,3)")
+      .attr("transform", "translate(10,0)")
       .attr("pointer-events", "none");
 
     this.#overlay = mouseG
@@ -251,7 +257,11 @@ class NightingaleLinegraphTrack extends withManager(
             .text((d) => {
               const value = d.values.find((v) => v.position === seqPosition);
               features[d.name] = value;
-              return value ? value.value : "";
+              const label = value ? `${d.name}${value.value === 1 ? '': 's'}` : "";
+              if (this["show-label-name"]) {
+                return value ? `${value.value} ${label}` : ''; 
+              }
+              return value ? value.value : ''; 
             });
 
           chartGroup
@@ -284,7 +294,7 @@ class NightingaleLinegraphTrack extends withManager(
           const detail = {
             eventtype: "mouseover",
             feature: features,
-            highlight: `${seqPosition}:${seqPosition}`,
+            highlight: this["highlight-on-click"] ? `${seqPosition}:${seqPosition}` : '',
             type: this.type,
             target: this,
           };
@@ -296,6 +306,26 @@ class NightingaleLinegraphTrack extends withManager(
             }),
           );
         }
+      })
+      .on('click', (event) => {
+        const mouse = d3Mouse(event);
+
+        const seqPosition = Math.floor(
+          this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
+        );
+        const detail = {
+          eventtype: "mouseover",
+          highlight: `${seqPosition}:${seqPosition}`,
+          type: this.type,
+          target: this,
+        };
+        this.dispatchEvent(
+          new CustomEvent("change", {
+            detail,
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
       });
   }
 
