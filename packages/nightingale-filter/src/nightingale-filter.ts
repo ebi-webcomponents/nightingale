@@ -52,6 +52,10 @@ class NightingaleFilter extends NightingaleElement {
     const groupByType = groupBy(this.filters, (f: Filter) => f.type.text);
     return html`
       <style>
+        .group {
+          margin-bottom: 2.5rem;
+        }
+
         .protvista_checkbox {
           position: relative;
           cursor: pointer;
@@ -71,7 +75,7 @@ class NightingaleFilter extends NightingaleElement {
       ${Object.entries(groupByType).map(
         ([type, group]) => html`
           <h4>${type}</h4>
-          <div>
+          <div class="group">
             ${group.map(
               (filterItem) => html` ${this.getCheckBox(filterItem)} `
             )}
