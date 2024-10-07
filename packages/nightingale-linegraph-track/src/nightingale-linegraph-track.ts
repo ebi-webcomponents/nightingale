@@ -294,7 +294,7 @@ class NightingaleLinegraphTrack extends withManager(
           const detail = {
             eventtype: "mouseover",
             feature: features,
-            highlight: this["highlight-on-click"] ? `${seqPosition}:${seqPosition}` : '',
+            highlight: this["highlight-on-click"] ? '' : `${seqPosition}:${seqPosition}`,
             type: this.type,
             target: this,
           };
@@ -314,7 +314,7 @@ class NightingaleLinegraphTrack extends withManager(
           this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
         );
         const detail = {
-          eventtype: "mouseover",
+          eventtype: "click",
           highlight: `${seqPosition}:${seqPosition}`,
           type: this.type,
           target: this,
