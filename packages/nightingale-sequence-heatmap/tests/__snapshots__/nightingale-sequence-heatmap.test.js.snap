@@ -14,7 +14,8 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence corre
   width="500"
 >
   <!---->
-   
+  
+        
   <style>
     
           #
@@ -224,7 +225,8 @@ exports[`nightingale-sequence-heatmap tests it should display the sequence heatm
   width="500"
 >
   <!---->
-   
+  
+        
   <style>
     
           #
@@ -424,7 +426,8 @@ exports[`nightingale-sequence-heatmap tests it should zoom in 1`] = `
   width="500"
 >
   <!---->
-   
+  
+        
   <style>
     
           #
