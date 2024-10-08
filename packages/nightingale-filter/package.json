@@ -1,24 +1,24 @@
 {
   "name": "@nightingale-elements/nightingale-filter",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Filter component",
   "files": [
     "dist",
     "src"
   ],
   "main": "dist/index.js",
-"module": "dist/index.js",
-"type": "module",
-"types": "dist/index.d.ts",
-"scripts": {
-  "build": "rollup --config ../../rollup.config.mjs"
-},
-"publishConfig": {
-  "access": "public"
-},
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.0.0",
-    "@nightingale-elements/nightingale-manager": "^5.0.0",
+    "@nightingale-elements/nightingale-manager": "^5.1.0",
+    "@nightingale-elements/nightingale-new-core": "^5.1.0",
     "lodash-es": "^4.17.11"
   },
   "keywords": [
