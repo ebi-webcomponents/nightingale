@@ -3,7 +3,6 @@ import { html } from "lit";
 import groupBy from "lodash-es/groupBy";
 
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
-import NightingaleManager from "@nightingale-elements/nightingale-manager";
 
 export type Filter = {
   name: string;
@@ -26,7 +25,7 @@ class NightingaleFilter extends NightingaleElement {
   for: string = "";
 
   #deselected = new Set();
-  #manager?: NightingaleManager;
+  #manager: any;
 
   constructor() {
     super();
@@ -36,7 +35,7 @@ class NightingaleFilter extends NightingaleElement {
   connectedCallback() {
     super.connectedCallback();
     if (this.closest("nightingale-manager")) {
-      this.#manager = this.closest("nightingale-manager") as NightingaleManager;
+      this.#manager = this.closest("nightingale-manager");
       this.#manager.register(this);
     }
   }
