@@ -25,6 +25,7 @@ class NightingaleFilter extends NightingaleElement {
   for: string = "";
 
   #deselected = new Set();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   #manager: any;
 
   constructor() {
