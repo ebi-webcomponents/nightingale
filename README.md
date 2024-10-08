@@ -39,3 +39,23 @@ Run `yarn build && yarn storybook` to run the application locally.
 ### Build
 
 Run `yarn build-storybook` to build the application ready for deployment.
+
+### Publish
+
+Ensure lerna is installed globally via:
+
+```
+yarn global add lerna
+```
+
+Login to npm:
+
+```
+npm login
+```
+
+Finally publish with lerna:
+
+```
+lerna publish
+```
