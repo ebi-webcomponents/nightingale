@@ -4,6 +4,7 @@ import NightingaleBaseElement, {
 } from "../../nightingale-base-element";
 import withDimensions, { WithDimensionsInterface } from "../withDimensions";
 
+
 const DEFAULT_MIN_HEIGHT = 10;
 const DEFAULT_MIN_WIDTH = 10;
 
@@ -12,10 +13,12 @@ export interface WithResizableInterface extends WithDimensionsInterface {
   "min-height": number;
   onDimensionsChange(): void;
 }
+
 const defaultOptions = {
   "min-width": DEFAULT_MIN_WIDTH,
   "min-height": DEFAULT_MIN_HEIGHT,
 };
+
 const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
   options: {
@@ -23,66 +26,56 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
     "min-height"?: number;
   } = {},
 ) => {
-  class WithResizable extends withDimensions(superClass) {
+  class WithResizable extends withDimensions(superClass) implements WithResizableInterface {
     #intitialOptions = { ...defaultOptions, ...options };
-    #observer?: ResizeObserver;
     @property({ type: Number, reflect: true })
     "min-width": number = this.#intitialOptions["min-width"];
     @property({ type: Number, reflect: true })
     "min-height": number = this.#intitialOptions["min-height"];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(...rest: any[]) {
-      super(...rest);
-      this.onResize = this.onResize.bind(this);
-      this.listenForResize = this.listenForResize.bind(this);
-    }
+    onDimensionsChange() { }
 
-    private useAvailableWidth() {
-      //Only change this.width if the value in width hasn't been set via its attribute
-      if (this.getAttribute("width") === null) {
-        this.style.width = "100%";
-        this.width = Math.max(this.offsetWidth, this["min-width"]);
-      }
-    }
-    private useAvailableHeight() {
-      //Only change this.height if the value in height hasn't been set via its attribute
-      if (this.getAttribute("height") === null) {
-        this.style.height = "100%";
-        this.height = Math.max(this.offsetHeight, this["min-height"]);
-      }
-    }
-    onDimensionsChange() {}
-
-    connectedCallback() {
-      this.useAvailableWidth();
-      this.useAvailableHeight();
-      this.listenForResize();
+    override connectedCallback() {
       super.connectedCallback();
+      // Set some `width` and `height` values to avoid errors
+      this.width ??= this["min-width"];
+      this.height ??= this["min-height"];
+      if (this.getAttribute("width") === null) this.style.width = "100%";
+      if (this.getAttribute("height") === null) this.style.height = "100%";
+      SingletonResizeObserver.observe(this);
     }
-    disconnectedCallback() {
-      if (this.#observer) {
-        this.#observer.unobserve(this);
-      }
+    override disconnectedCallback() {
+      SingletonResizeObserver.unobserve(this);
       super.disconnectedCallback();
-    }
-
-    private onResize() {
-      const w = this.width;
-      const h = this.height;
-      this.useAvailableWidth();
-      this.useAvailableHeight();
-      if (w !== this.width || h !== this.height) {
-        this.onDimensionsChange();
-      }
-    }
-
-    private listenForResize() {
-      this.#observer = new ResizeObserver(this.onResize);
-      this.#observer.observe(this);
     }
   }
   return WithResizable as Constructor<WithResizableInterface> & T;
 };
 
 export default withResizable;
+
+
+const SingletonResizeObserver = new ResizeObserver(entries => {
+  for (const entry of entries) {
+    const width = entry.contentBoxSize[0].inlineSize;
+    const height = entry.contentBoxSize[0].blockSize;
+    resize(entry.target as NightingaleBaseElement & WithResizableInterface, width, height);
+  }
+});
+
+function resize(element: NightingaleBaseElement & WithResizableInterface, newWidth: number, newHeight: number): void {
+  newWidth = Math.max(newWidth, element["min-width"]);
+  newHeight = Math.max(newHeight, element["min-height"]);
+  let changed = false;
+  if (newWidth !== element.width && element.getAttribute("width") === null) {
+    element.width = newWidth;
+    changed = true;
+  }
+  if (newHeight !== element.height && element.getAttribute("height") === null) {
+    element.height = newHeight;
+    changed = true;
+  }
+  if (changed) {
+    element.onDimensionsChange();
+  }
+}
