@@ -1,0 +1,40 @@
+{
+  "name": "@nightingale-elements/nightingale-track-canvas",
+  "version": "5.2.0",
+  "description": "Basic track type of the viewer, implemented via HTML canvas.",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js ./tests/*"
+  },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^5.2.0",
+    "@nightingale-elements/nightingale-track": "^5.2.0",
+    "d3": "7.9.0"
+  }
+}
