@@ -79,7 +79,6 @@ Data to be loaded in the component. It uses one of two formats:
      xrefNames: string[];
      hasPredictions: boolean;
      tooltipContent?: string;
-     protvistaFeatureId: string;
      alternativeSequence?: string;
      internalId?: string;
      wildType?: string;

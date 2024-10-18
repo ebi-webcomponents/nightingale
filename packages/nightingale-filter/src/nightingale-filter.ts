@@ -67,6 +67,10 @@ class NightingaleFilter extends NightingaleElement {
           outline: none;
         }
 
+        .protvista_checkbox_input {
+          margin: 0 0.25rem 0 0;
+        }
+
         .protvista_checkbox_label {
           margin-left: 0.2rem;
           line-height: 1rem;
@@ -96,6 +100,7 @@ class NightingaleFilter extends NightingaleElement {
           style=${`accent-color: ${color}`}
           checked
           .value="${name}"
+          class="protvista_checkbox_input"
           @change="${() => this.toggleFilter(name)}"
         />
         <span class="protvista_checkbox_label"> ${label} </span>

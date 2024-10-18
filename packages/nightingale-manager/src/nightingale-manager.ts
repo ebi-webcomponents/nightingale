@@ -4,32 +4,29 @@ import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 @customElement("nightingale-manager")
 class NightingaleManager extends NightingaleElement {
   @property({
+    attribute: "reflected-attributes",
     converter: {
-      fromAttribute: (value): Map<string, null> | null => {
-        if (!value) {
+      fromAttribute: (reflectedAttributesString): Map<string, null> | null => {
+        if (!reflectedAttributesString) {
           return null;
         }
-        const attributes = value.split(",");
-        if (attributes.indexOf("type") !== -1)
-          throw new Error("'type' can't be used as a protvista attribute");
-        if (attributes.indexOf("value") !== -1)
-          throw new Error("'value' can't be used as a protvista attribute");
-        const mapToReturn = new Map(
-          attributes
+        const reflectedAttributes = reflectedAttributesString.split(",");
+        if (reflectedAttributes.includes("type"))
+          throw new Error("'type' can't be used as a Nightingale attribute");
+        if (reflectedAttributes.includes("value"))
+          throw new Error("'value' can't be used as a Nightingale attribute");
+        return new Map(
+          reflectedAttributes
             .filter(
               (attr: string) =>
-                !NightingaleManager.observedAttributes.includes(attr),
+                !NightingaleManager.observedAttributes.includes(attr)
             )
-            .map((attr: string) => [attr, null]),
+            .map((attr: string) => [attr, null])
         );
-        return mapToReturn;
-      },
-      toAttribute: (value: []) => {
-        return value.join(",");
       },
     },
   })
-  "reflected-attributes"?: Map<string, null> = new Map();
+  "reflectedAttributes"?: Map<string, null> = new Map();
 
   @property({ type: Number })
   length?: number;
@@ -44,7 +41,7 @@ class NightingaleManager extends NightingaleElement {
   "highlight"?: string;
 
   @state()
-  protvistaElements = new Set<HTMLElement>();
+  htmlElements = new Set<HTMLElement>();
 
   @state()
   propertyValues = new Map<string, string>();
@@ -52,21 +49,21 @@ class NightingaleManager extends NightingaleElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("change", this.changeListener as EventListener);
-    this.style.display = "unset";
+    this.style.display = "block"; // check wherever we have a manager
   }
 
   override attributeChangedCallback(
     attr: string,
     previousValue: string | null,
-    newValue: string | null,
+    newValue: string | null
   ) {
     super.attributeChangedCallback(attr, previousValue, newValue);
     this.applyAttributes();
   }
 
   applyAttributes() {
-    this.protvistaElements.forEach((element: HTMLElement) => {
-      this["reflected-attributes"]?.forEach((value, type) => {
+    this.htmlElements.forEach((element: HTMLElement) => {
+      this.reflectedAttributes?.forEach((value, type) => {
         if (value === false || value === null || value === undefined) {
           element.removeAttribute(type);
         } else {
@@ -90,12 +87,12 @@ class NightingaleManager extends NightingaleElement {
   }
 
   register(element: NightingaleElement) {
-    this.protvistaElements.add(element);
+    this.htmlElements.add(element);
     this.applyAttributes();
   }
 
   unregister(element: NightingaleElement) {
-    this.protvistaElements.delete(element);
+    this.htmlElements.delete(element);
   }
 
   applyProperties(forElementId: string) {
@@ -109,7 +106,7 @@ class NightingaleManager extends NightingaleElement {
         (element as any)[type] = value;
       });
     } else {
-      this.protvistaElements.forEach((element: HTMLElement) => {
+      this.htmlElements.forEach((element: HTMLElement) => {
         if (!element) {
           return;
         }
@@ -122,11 +119,11 @@ class NightingaleManager extends NightingaleElement {
   }
 
   isRegisteredAttribute(attributeName: string) {
-    if (!this["reflected-attributes"]) {
+    if (!this.reflectedAttributes) {
       return false;
     }
     return (
-      [...this["reflected-attributes"].keys()].includes(attributeName) ||
+      [...this.reflectedAttributes.keys()].includes(attributeName) ||
       NightingaleManager.observedAttributes.includes(attributeName)
     );
   }
@@ -142,11 +139,11 @@ class NightingaleManager extends NightingaleElement {
         break;
       default:
         if (this.isRegisteredAttribute(e.detail.type)) {
-          this["reflected-attributes"]?.set(e.detail.type, e.detail.value);
+          this.reflectedAttributes?.set(e.detail.type, e.detail.value);
         }
         Object.keys(e.detail).forEach((key) => {
           if (this.isRegisteredAttribute(key)) {
-            this["reflected-attributes"]?.set(key, e.detail[key]);
+            this.reflectedAttributes?.set(key, e.detail[key]);
           }
         });
         this.applyAttributes();
