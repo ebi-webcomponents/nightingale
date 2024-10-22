@@ -129,12 +129,12 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     if (!this.fragmentCollection) return;
 
     const scale = this.canvasScale;
-    ctx.lineWidth = scale * 1;
+    ctx.lineWidth = scale * LINE_WIDTH;
     const baseWidth = scale * this.getSingleBaseWidth();
     const height = scale * Math.max(0, this.layoutObj?.getFeatureHeight() ?? 0); // Yes, sometimes `getFeatureHeight` returns negative numbers ¯\_(ツ)_/¯
     const optXPadding = Math.min(scale * 1.5, 0.25 * baseWidth); // To avoid overlap/touch for certain shapes (line, bridge, helix, strand)
-    const leftEdgeSeq = this.getSeqPositionFromX(0 - SYMBOL_RADIUS) ?? -Infinity;
-    const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + SYMBOL_RADIUS) ?? Infinity;
+    const leftEdgeSeq = this.getSeqPositionFromX(0 - SYMBOL_RADIUS - 0.5 * LINE_WIDTH) ?? -Infinity;
+    const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + SYMBOL_RADIUS + 0.5 * LINE_WIDTH) ?? Infinity;
     // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
 
     // Draw features
@@ -194,8 +194,9 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
 
   private getFragmentAt(svgX: number, svgY: number): ExtendedFragment | undefined {
     if (!this.fragmentCollection) return undefined;
-    const seqStart = this.getSeqPositionFromX(svgX - SYMBOL_RADIUS);
-    const seqEnd = this.getSeqPositionFromX(svgX + SYMBOL_RADIUS);
+    const halfLineWidth = 0.5 * LINE_WIDTH;
+    const seqStart = this.getSeqPositionFromX(svgX - SYMBOL_RADIUS - halfLineWidth);
+    const seqEnd = this.getSeqPositionFromX(svgX + SYMBOL_RADIUS + halfLineWidth);
     if (seqStart === undefined || seqEnd === undefined) return undefined;
 
     const fragments = this.fragmentCollection.overlappingItems(seqStart, seqEnd);
@@ -205,16 +206,16 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     const isPointed = (fragment: ExtendedFragment) => {
       const feature = this.data[fragment.featureIndex];
       const y = this.layoutObj?.getFeatureYPos(feature) ?? 0;
-      const yOK = y <= svgY && svgY <= y + featureHeight;
+      const yOK = (y - halfLineWidth <= svgY) && (svgY <= y + featureHeight + halfLineWidth);
       if (!yOK) return false;
       const fragmentLength = (fragment.end ?? fragment.start) + 1 - fragment.start;
       const xStart = this.getXFromSeqPosition(fragment.start);
       const xEnd = xStart + fragmentLength * baseWidth;
-      if (xStart <= svgX && svgX <= xEnd) return true; // pointing at range (for symbol and range shapes)
+      if ((xStart - halfLineWidth <= svgX) && (svgX <= xEnd + halfLineWidth)) return true; // pointing at range (for symbol and range shapes)
       if (shapeCategory(this.getShape(feature)) !== "range") {
         // Symbol shapes
         const xMid = xStart + 0.5 * fragmentLength * baseWidth;
-        if (xMid - SYMBOL_RADIUS <= svgX && svgX <= xMid + SYMBOL_RADIUS) return true; // pointing at symbol (for symbol shapes only)
+        if ((xMid - SYMBOL_RADIUS - halfLineWidth <= svgX) && (svgX <= xMid + SYMBOL_RADIUS + halfLineWidth)) return true; // pointing at symbol (for symbol shapes only)
       }
       return false;
     };
@@ -312,3 +313,4 @@ function getFragmentCollection(data: Feature[]): RangeCollection<ExtendedFragmen
 // Magic number from packages/nightingale-track/src/FeatureShape.ts:
 const SYMBOL_SIZE = 10;
 const SYMBOL_RADIUS = 0.5 * SYMBOL_SIZE;
+const LINE_WIDTH = 1;
