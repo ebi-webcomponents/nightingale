@@ -93,6 +93,12 @@ class NightingaleTrack extends withManager(
     if (String(this.layout).toLowerCase() === "non-overlapping")
       return new NonOverlappingLayout({
         layoutHeight: this.height,
+        margin: {
+          top: this["margin-top"],
+          bottom: this["margin-bottom"],
+          left: this["margin-left"],
+          right: this["margin-right"],
+        },
       });
     return new DefaultLayout({
       layoutHeight: this.height,

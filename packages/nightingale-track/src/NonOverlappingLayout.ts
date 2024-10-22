@@ -1,3 +1,4 @@
+import { clamp } from "lodash-es";
 import DefaultLayout, { LayoutOptions } from "./DefaultLayout";
 import { Feature } from "./nightingale-track";
 
@@ -26,14 +27,25 @@ function reverseSome<T>(array: T[], predicate: (value: T, index: number, array: 
 
 
 export default class NonOverlappingLayout extends DefaultLayout {
+  /** Height of a row, including gap between rows */
   protected rowHeight: number;
-  featuresMap = new Map();
+  /** Height of a feature, excluding gap between rows */
+  protected featureHeight: number;
+  /** Y coordinate of the top of the first row */
+  protected topOffset: number;
+
+  featuresMap = new Map<Feature, number>();
   #rows: Feature[][];
 
   constructor(options: LayoutOptions) {
-    super(options);
+    super({
+      ...options,
+      minHeight: options.minHeight ?? 0.1, // Using a non-zero value to keep SVG shapes targetable with cursor
+      maxHeight: options.maxHeight ?? 15,
+    });
     this.rowHeight = 0;
-    this.minHeight = 15;
+    this.featureHeight = 0;
+    this.topOffset = 0;
     this.#rows = [];
   }
 
@@ -62,32 +74,20 @@ export default class NonOverlappingLayout extends DefaultLayout {
         };
       }
     }
-    this.rowHeight = Math.min(
-      this.layoutHeight / this.#rows.length,
-      this.minHeight,
-    );
-  }
-
-  getOffset() {
-    // this offset is required for centering if the number of rows doesn't
-    // fill the layout
-    if (this.#rows.length * this.rowHeight < this.layoutHeight) {
-      return this.layoutHeight / 2 - (this.#rows.length * this.rowHeight) / 2;
-    }
-    return 0;
+    const usableHeight = clamp(this.layoutHeight - this.margin.top - this.margin.bottom, 0, this.#rows.length * (this.maxHeight + this.gap));
+    this.rowHeight = usableHeight / Math.max(this.#rows.length, 1);
+    this.featureHeight = clamp(this.rowHeight - this.gap, this.minHeight, this.maxHeight);
+    const center = 0.5 * (this.margin.top + this.layoutHeight - this.margin.bottom);
+    this.topOffset = center - 0.5 * usableHeight;
   }
 
   getFeatureYPos(feature: Feature) {
-    const rowNumber = this.featuresMap.get(feature);
-    return (
-      this.getOffset() +
-      this.rowHeight * rowNumber +
-      this.margin.top +
-      this.margin.bottom
-    );
+    const rowIndex = this.featuresMap.get(feature) ?? 0;
+    const center = this.topOffset + (rowIndex + 0.5) * this.rowHeight;
+    return center - 0.5 * this.featureHeight;
   }
 
   getFeatureHeight() {
-    return this.rowHeight - this.margin.top - this.margin.bottom;
+    return this.featureHeight;
   }
 }
