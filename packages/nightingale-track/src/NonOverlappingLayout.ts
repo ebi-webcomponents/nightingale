@@ -40,7 +40,6 @@ export default class NonOverlappingLayout extends DefaultLayout {
   constructor(options: LayoutOptions) {
     super({
       ...options,
-      minHeight: options.minHeight ?? 0.1, // Using a non-zero value to keep SVG shapes targetable with cursor
       maxHeight: options.maxHeight ?? 15,
     });
     this.rowHeight = 0;

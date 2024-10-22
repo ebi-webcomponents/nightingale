@@ -33,14 +33,6 @@ export default class DefaultLayout {
 
   features: Feature[];
 
-  static readonly OptionDefaults: Required<LayoutOptions> = {
-    layoutHeight: 0,
-    margin: { top: 1, bottom: 1, left: 0, right: 0 },
-    minHeight: 17,
-    maxHeight: Infinity,
-    gap: 2,
-  };
-
   constructor({
     layoutHeight,
     margin = {
@@ -49,7 +41,7 @@ export default class DefaultLayout {
       left: 0,
       right: 0,
     },
-    minHeight = 17,
+    minHeight = 0.1, // Using a non-zero value to keep SVG shapes targetable with cursor
     maxHeight = Infinity,
     gap = 2,
   }: LayoutOptions) {
