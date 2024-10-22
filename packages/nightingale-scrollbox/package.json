@@ -1,0 +1,38 @@
+{
+  "name": "@nightingale-elements/nightingale-scrollbox",
+  "version": "5.2.0",
+  "description": "Component for smart rendering of scrollboxes in Nightingale",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js ./tests/*"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "Adam Midlik <midlik@gmail.com>",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^5.2.0"
+  }
+}
