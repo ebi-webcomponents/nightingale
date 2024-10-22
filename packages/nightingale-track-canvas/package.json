@@ -27,7 +27,7 @@
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
+  "author": "Adam Midlik <midlik@gmail.com>",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
