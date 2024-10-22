@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-links",
-  "version": "5.0.0",
+  "version": "5.2.0",
   "files": [
     "dist",
     "src"
@@ -30,8 +30,8 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.0.0",
-    "@nightingale-elements/nightingale-track": "^5.0.0",
+    "@nightingale-elements/nightingale-new-core": "^5.2.0",
+    "@nightingale-elements/nightingale-track": "^5.2.0",
     "d3": "7.9.0",
     "lodash-es": "^4.17.15"
   }

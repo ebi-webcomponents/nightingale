@@ -23,7 +23,7 @@ type SequenceBaseData = {
 
 type detailInterface = {
   eventType: EventType;
-  // coords: null | [number, number];
+  coords: null | [number, number];
   feature?: FeatureData | SequenceBaseData | null;
   target?: HTMLElement;
   highlight?: string;
@@ -40,20 +40,23 @@ export function createEvent(
   end?: number,
   target?: HTMLElement,
   event?: Event,
-  element?: NightingaleBaseElement & WithHighlightInterface,
+  element?: NightingaleBaseElement & WithHighlightInterface
 ): Event {
   // Variation features have a different shape
   if (feature) {
     // eslint-disable-next-line no-param-reassign
     feature = (feature as FeatureData)?.feature || feature;
   }
+
   const detail: detailInterface = {
     eventType: type,
-    // TODO: add coordinates
-    // coords: WithNightingaleEvents._getClickCoords(),
     feature,
     target,
     parentEvent: event,
+    coords:
+      event && "pageX" in event && "pageY" in event
+        ? [event.pageX as number, event.pageY as number]
+        : null,
   };
   if (withHighlight) {
     if ((feature as FeatureData)?.fragments) {
@@ -80,7 +83,7 @@ export function createEvent(
 export default function bindEvents<T extends BaseType>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   feature: Selection<T, any, any, any>,
-  element: NightingaleBaseElement,
+  element: NightingaleBaseElement
 ) {
   feature
     .on("mouseover", function (event: Event, datum: unknown) {
@@ -93,8 +96,8 @@ export default function bindEvents<T extends BaseType>(
           (datum as FeatureData).start ?? (datum as SequenceBaseData).position,
           (datum as FeatureData).end ?? (datum as SequenceBaseData).position,
           this as unknown as HTMLElement,
-          event,
-        ),
+          event
+        )
       );
     })
     .on("mouseout", () => {
@@ -102,8 +105,8 @@ export default function bindEvents<T extends BaseType>(
         createEvent(
           "mouseout",
           null,
-          element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover",
-        ),
+          element.getAttribute(HIGHLIGHT_EVENT) === "onmouseover"
+        )
       );
     })
     .on("click", function (event: Event, datum: unknown) {
@@ -117,8 +120,8 @@ export default function bindEvents<T extends BaseType>(
           (datum as FeatureData).end ?? (datum as SequenceBaseData).position,
           this as unknown as HTMLElement,
           event,
-          element as NightingaleBaseElement & WithHighlightInterface,
-        ),
+          element as NightingaleBaseElement & WithHighlightInterface
+        )
       );
     });
 }

@@ -13,6 +13,7 @@ const Template: Story<{
   highlight: string;
   "highlight-color": string;
   "--custom-structure-height": string;
+  "color-theme": string;
 }> = (args) => {
   return html` <h3>Structure</h3>
     <h3>Structure viewer</h3>
@@ -23,6 +24,7 @@ const Template: Story<{
       highlight="${args["highlight"]}"
       highlight-color=${args["highlight-color"]}
       style="--custom-structure-height: ${args["--custom-structure-height"]}"
+      color-theme="${args["color-theme"]}"
     ></nightingale-structure>`;
 };
 
@@ -42,5 +44,6 @@ AlphaFoldStructure.args = {
   highlight: "290:315",
   "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
   "--custom-structure-height": "480px",
+  "color-theme": "alphamissense"
 };
 AlphaFoldStructure.storyName = "AlphaFold Structure";
