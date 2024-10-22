@@ -131,7 +131,7 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     const scale = this.canvasScale;
     ctx.lineWidth = scale * 1;
     const baseWidth = scale * this.getSingleBaseWidth();
-    const height = scale * Math.max(1, this.layoutObj?.getFeatureHeight() ?? 0); // Yes, sometimes `getFeatureHeight` returns negative numbers ¯\_(ツ)_/¯
+    const height = scale * Math.max(0, this.layoutObj?.getFeatureHeight() ?? 0); // Yes, sometimes `getFeatureHeight` returns negative numbers ¯\_(ツ)_/¯
     const optXPadding = Math.min(scale * 1.5, 0.25 * baseWidth); // To avoid overlap/touch for certain shapes (line, bridge, helix, strand)
     const leftEdgeSeq = this.getSeqPositionFromX(0 - SYMBOL_RADIUS) ?? -Infinity;
     const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + SYMBOL_RADIUS) ?? Infinity;
