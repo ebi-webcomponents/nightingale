@@ -25,7 +25,7 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
     super.connectedCallback();
     this.manager = new ScrollboxManager(this.getRoot()!, {
       onRegister: (target, data) => {
-        console.log('register', target.id, data, 'onRegister =', this.onRegister)
+        // console.log('register', target.id, data, 'onRegister =', this.onRegister)
         this.onRegister?.(target, data);
       },
       onEnter: (target, data) => this.onEnter?.(target, data),

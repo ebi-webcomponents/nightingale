@@ -204,21 +204,6 @@ const Template: Story<{
 export const Scrollbox = Template.bind({});
 Scrollbox.args = {};
 Scrollbox.play = async () => {
-  const subject = new BehaviorSubject('a');
-  subject.subscribe(async v => {
-    
-    console.log('Subscriber 1', v);
-    await fetch('pdbe.org');
-    console.log('Subscriber 1 done with', v);
-  })
-  await firstValueFrom(subject.asObservable())
-  console.log('awaited')
-  subject.subscribe(async v => {
-    console.log('Subscriber 2', v);
-    console.log('Subscriber 2 done with', v);
-  })
-  subject.next('b');
-  // return;
   await customElements.whenDefined("nightingale-track");
 
   const placeholderHtml = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
@@ -227,7 +212,7 @@ Scrollbox.play = async () => {
 
   for (const scrollbox of document.getElementsByTagName("nightingale-scrollbox") as HTMLCollectionOf<NightingaleScrollbox<TData>>) {
     for (const item of scrollbox.getElementsByTagName("nightingale-scrollbox-item") as HTMLCollectionOf<NightingaleScrollboxItem<TData>>) {
-      console.log('scrollbox', scrollbox, 'item', item);
+      // console.log('scrollbox', scrollbox, 'item', item);
     }
     scrollbox.onRegister = target => { target.innerHTML = placeholderHtml; };
     scrollbox.onEnter = (target, data) => {
