@@ -1,10 +1,11 @@
 import { Meta, Story } from "@storybook/web-components";
+import { rgb } from "d3";
 import { html } from "lit-html";
 import { range } from "lodash-es";
-import "../../packages/nightingale-navigation/src/index.ts";
-import "../../packages/nightingale-saver/src/index.ts";
-import { ScrollboxManager } from "../../packages/nightingale-scrollbox/src/scrollbox-manager";
-import { rgb } from "d3";
+import "../../packages/nightingale-navigation/src/index";
+import "../../packages/nightingale-scrollbox/src/index";
+import { NightingaleScrollbox, NightingaleScrollboxItem } from "../../packages/nightingale-scrollbox/src/index";
+import { BehaviorSubject, AsyncSubject, firstValueFrom, Subject, of, concatMap, delay } from 'rxjs';
 
 export default {
   title: "Components/Utils/Scrollbox",
@@ -149,8 +150,12 @@ const style = html`
 function makeRow(id: string) {
   return html`
     <div class="track-box row-box" id="track-box-${id}">
-      <div class="label-box label">${id}</div>
-      <div id="${id}" class="main-box target"></div>
+      <div class="label-box label">
+        ${id}
+      </div>
+      <div class="main-box">
+        <nightingale-scrollbox-item id="${id}" class="target"></nightingale-scrollbox-item>
+      </div>
     </div>
   `;
 }
@@ -185,9 +190,11 @@ const Template: Story<{
             </div>
           </div>
 
-          <div id="tracks" class="scrollbox">
-            ${tracks}
-          </div>
+          <nightingale-scrollbox root-margin="-32">
+            <div id="tracks" class="scrollbox">
+              ${tracks}
+            </div>
+          </nightingale-scrollbox>
         </div>
       </nightingale-manager>
     </div>
@@ -197,19 +204,36 @@ const Template: Story<{
 export const Scrollbox = Template.bind({});
 Scrollbox.args = {};
 Scrollbox.play = async () => {
+  const subject = new BehaviorSubject('a');
+  subject.subscribe(async v => {
+    
+    console.log('Subscriber 1', v);
+    await fetch('pdbe.org');
+    console.log('Subscriber 1 done with', v);
+  })
+  await firstValueFrom(subject.asObservable())
+  console.log('awaited')
+  subject.subscribe(async v => {
+    console.log('Subscriber 2', v);
+    console.log('Subscriber 2 done with', v);
+  })
+  subject.next('b');
+  // return;
   await customElements.whenDefined("nightingale-track");
 
   const placeholderHtml = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
 
-  const scrollboxMgr = new ScrollboxManager<{ id: string }>(document.getElementById("tracks") as HTMLDivElement, {
-    onRegister: (target, data) => {
-      console.log('registering target', target, 'with data', data)
-      target.innerHTML = placeholderHtml;
-    },
-    onEnter: (target, data) => {
-      target.innerHTML = `
-        <nightingale-track
-          id="${data.id}" 
+  type TData = { id: string };
+
+  for (const scrollbox of document.getElementsByTagName("nightingale-scrollbox") as HTMLCollectionOf<NightingaleScrollbox<TData>>) {
+    for (const item of scrollbox.getElementsByTagName("nightingale-scrollbox-item") as HTMLCollectionOf<NightingaleScrollboxItem<TData>>) {
+      console.log('scrollbox', scrollbox, 'item', item);
+    }
+    scrollbox.onRegister = target => { target.innerHTML = placeholderHtml; };
+    scrollbox.onEnter = (target, data) => {
+      target.data
+      target.innerHTML = `<nightingale-track
+          id="${data?.id}" 
           min-width="500" height="18"
           length="400" display-start="1" display-end="400"
           highlight-event="onmouseover" highlight-color="#EB3BFF22" 
@@ -219,14 +243,7 @@ Scrollbox.play = async () => {
       for (const track of target.getElementsByTagName("nightingale-track")) {
         (track as any).data = demoData;
       }
-    },
-    onExit: (target, data) => {
-      target.innerHTML = placeholderHtml;
-    },
-  }, {
-    rootMargin: -50,
-  });
-  for (const target of document.getElementsByClassName("target")) {
-    scrollboxMgr.register(target, { id: `track-${target.id}` });
+    };
+    scrollbox.onExit = target => { target.innerHTML = placeholderHtml; };
   }
 }
