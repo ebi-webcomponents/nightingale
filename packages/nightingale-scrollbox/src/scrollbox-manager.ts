@@ -1,23 +1,14 @@
 
 /** State of a target element. Target element lifecycle:
- * - undefined -> "hidden" (run `onRegister`);
+ * - undefined -> "new" (run `onRegister`);
+ * - "new" -> "visible" (run `onEnter`);
+ * - "new" -> "hidden" (run `onExit`);
  * - "hidden" -> "visible" (run `onEnter`);
  * - "visible" -> "hidden" (run `onExit`);
- * - "visible" -> undefined (run `onUnregister`);
  * - "hidden" -> undefined (run `onUnregister`);
- * 
- * undefined -> hidden <-> visible -> undefined
- *                 \----------------> undefined
- * 
- * undefined ---\----------\
- *             hidden <-> visible 
- *                \----------\-----> undefined
- * 
- * undefined ---> new ---\----------\
- *                      hidden <-> visible 
- *                         \----------\-----> undefined
+ * - "visible" -> undefined (run `onUnregister`);
  */
-type State = undefined | "hidden" | "visible";
+type State = undefined | "new" | "hidden" | "visible";
 
 export interface Registration {
   unregister: () => void,
@@ -25,11 +16,11 @@ export interface Registration {
 
 export class ScrollboxManager<TTarget extends Element, TCustomData> {
   private readonly _customData = new Map<TTarget, TCustomData>();
-  private readonly _currentState = new Map<TTarget, State>();
-  private readonly _requiredState = new Map<TTarget, State>();
-  /** Set of targets for which an update loop is currently running. */
   private readonly _observer: IntersectionObserver;
   private readonly _queues = new Map<TTarget, AsyncQueue>;
+
+  private readonly _currentState = new Map<TTarget, State>();
+  private readonly _requiredState = new Map<TTarget, State>();
 
   constructor(
     private readonly _root: HTMLDivElement,
@@ -44,19 +35,30 @@ export class ScrollboxManager<TTarget extends Element, TCustomData> {
     }
   ) {
     const margin = normalizeCssLength(options?.rootMargin);
-    this._observer = new IntersectionObserver(entries => this._handle(entries), { root: _root, rootMargin: `${margin} 0px ${margin} 0px` });
+    this._observer = new IntersectionObserver(entries => this.observerCallback(entries), { root: _root, rootMargin: `${margin} 0px ${margin} 0px` });
   }
   get root() { return this._root; }
 
-  private _handle(entries: IntersectionObserverEntry[]) {
+  private observerCallback(entries: IntersectionObserverEntry[]) {
     for (const entry of entries) {
-      this._updateState(entry.target as TTarget, entry.isIntersecting ? "visible" : "hidden");
+      const target = entry.target as TTarget;
+      if (entry.isIntersecting) {
+        this.enter(target);
+      } else {
+        this.exit(target);
+      }
     }
   }
+
   register(target: TTarget, customData: TCustomData): Registration {
     this._customData.set(target, customData);
-    this._queues.set(target, new AsyncQueue());
-    this._updateState(target, "hidden");
+    const queue = new AsyncQueue();
+    this._queues.set(target, queue);
+    this._requiredState.set(target, "new");
+    queue.enqueue(async () => {
+      await this.callbacks.onRegister?.(target, customData);
+      this._currentState.set(target, "new");
+    });
     this._observer.observe(target);
     return {
       unregister: () => this.unregister(target),
@@ -64,53 +66,43 @@ export class ScrollboxManager<TTarget extends Element, TCustomData> {
   }
   unregister(target: TTarget) {
     this._observer.unobserve(target);
-    this._updateState(target, undefined);
+    const queue = this._queues.get(target);
+    this._queues.delete(target);
+    this._requiredState.delete(target);
+    queue?.enqueue(async () => {
+      await this.callbacks.onUnregister?.(target, this._customData.get(target)!);
+      this._customData.delete(target);
+      this._currentState.delete(target);
+    });
   }
+  private enter(target: TTarget) {
+    this._requiredState.set(target, "visible");
+    this._queues.get(target)?.enqueue(async () => {
+      if (this._requiredState.get(target) !== "visible") return; // skip if required state changed in the meantime
+      if (this._currentState.get(target) === "visible") return; // skip if already in required state
+      await this.callbacks.onEnter?.(target, this._customData.get(target)!);
+      this._currentState.set(target, "visible");
+    });
+  }
+  private exit(target: TTarget) {
+    this._requiredState.set(target, "hidden");
+    this._queues.get(target)?.enqueue(async () => {
+      if (this._requiredState.get(target) !== "hidden") return; // skip if required state changed in the meantime
+      if (this._currentState.get(target) === "hidden") return; // skip if already in required state
+      await this.callbacks.onExit?.(target, this._customData.get(target)!);
+      this._currentState.set(target, "hidden");
+    });
+  }
+
   dispose() {
-    const targets = Array.from(this._requiredState.keys());
+    const targets = Array.from(this._queues.keys());
     for (const target of targets) {
       this.unregister(target);
     }
     this._observer.disconnect();
   }
-  private _updateState(target: TTarget, state: State) {
-    if (state === undefined) this._requiredState.delete(target);
-    else this._requiredState.set(target, state);
-    this._queues.get(target)?.enqueue(() => this.enterState(target, state));
-  }
-  private async enterState(target: TTarget, state: State): Promise<void> {
-    if (this._requiredState.get(target) !== state) return;
-
-    const current = this._currentState.get(target);
-    if (current === state) return;
-
-    if (!this._customData.has(target)) throw new Error(`AssertionError: customData missing for element ${target.id}`);
-    const customData = this._customData.get(target) as TCustomData;
-
-    if (state === undefined) {
-      // Target has been unregistered ("hidden"/"visible" -> undefined)
-      this._customData.delete(target);
-      this._queues.delete(target);
-      await this.callbacks.onUnregister?.(target, customData);
-    } else if (state === "hidden") {
-      if (current === undefined) {
-        // Target has been registered (undefined -> "hidden")
-        await this.callbacks.onRegister?.(target, customData);
-      } else if (current === "visible") {
-        // Target was visible, not anymore ("visible" -> "hidden")
-        await this.callbacks.onExit?.(target, customData);
-      }
-    } else if (state === "visible") {
-      // Target has become visible ("hidden" -> "visible")
-      await this.callbacks.onEnter?.(target, customData);
-    } else {
-      throw new Error("AssertionError");
-    }
-
-    if (state === undefined) this._currentState.delete(target);
-    else this._currentState.set(target, state);
-  }
 }
+
 
 /** Convert string|number length into valid CSS length (42, "42", "42px" -> "42px"; undefined, null, "" -> "0px") */
 function normalizeCssLength(cssLength: string | number | undefined | null): string {

@@ -160,7 +160,7 @@ function makeRow(id: string) {
   `;
 }
 
-const nTracks = 20;
+const nTracks = 200;
 
 const Template: Story<{
 }> = (args) => {
@@ -215,7 +215,7 @@ Scrollbox.play = async () => {
       // console.log('scrollbox', scrollbox, 'item', item);
     }
     scrollbox.onRegister = target => { target.innerHTML = placeholderHtml; };
-    scrollbox.onEnter = (target, data) => {
+    scrollbox.onEnter = async (target, data) => {
       target.data
       target.innerHTML = `<nightingale-track
           id="${data?.id}" 
