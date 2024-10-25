@@ -160,7 +160,7 @@ function makeRow(id: string) {
   `;
 }
 
-const nTracks = 200;
+const nTracks = 20;
 
 const Template: Story<{
 }> = (args) => {
@@ -206,19 +206,26 @@ Scrollbox.args = {};
 Scrollbox.play = async () => {
   await customElements.whenDefined("nightingale-track");
 
-  const placeholderHtml = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
+  // const placeholderHtml = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
+  const placeholderHtml = 'O';
 
   type TData = { id: string };
 
   for (const scrollbox of document.getElementsByTagName("nightingale-scrollbox") as HTMLCollectionOf<NightingaleScrollbox<TData>>) {
     for (const item of scrollbox.getElementsByTagName("nightingale-scrollbox-item") as HTMLCollectionOf<NightingaleScrollboxItem<TData>>) {
       // console.log('scrollbox', scrollbox, 'item', item);
+      item.data = { id: item.id }
     }
-    scrollbox.onRegister = target => { target.innerHTML = placeholderHtml; };
-    scrollbox.onEnter = async (target, data) => {
-      target.data
+    scrollbox.onRegister(async target => {
+      console.log('onRegister', target.data?.id)
+      await sleep(2000);
+      console.log('onRegister done', target.data?.id)
+    });
+    await sleep(1000);
+    scrollbox.onEnter(async target => {
+      console.log('onEnter', target.id)
       target.innerHTML = `<nightingale-track
-          id="${data?.id}" 
+          id="${target.data?.id}" 
           min-width="500" height="18"
           length="400" display-start="1" display-end="400"
           highlight-event="onmouseover" highlight-color="#EB3BFF22" 
@@ -228,7 +235,14 @@ Scrollbox.play = async () => {
       for (const track of target.getElementsByTagName("nightingale-track")) {
         (track as any).data = demoData;
       }
-    };
-    scrollbox.onExit = target => { target.innerHTML = placeholderHtml; };
+    });
+    scrollbox.onExit(target => {
+      console.log('onExit', target.id)
+      target.innerHTML = placeholderHtml;
+    });
   }
+}
+
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

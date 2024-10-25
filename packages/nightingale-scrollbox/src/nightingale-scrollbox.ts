@@ -13,24 +13,50 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
   @property({ type: String })
   "haze-color"?: string;
 
-  private manager?: ScrollboxManager<NightingaleScrollboxItem<TCustomData>, TCustomData | undefined>;
+  private manager?: ScrollboxManager<NightingaleScrollboxItem<TCustomData>>;
 
   // TODO these might require setters to apply to already registered targets?
-  onRegister?: (target: NightingaleScrollboxItem<TCustomData>, customData?: TCustomData) => void | Promise<void>;
-  onEnter?: (target: NightingaleScrollboxItem<TCustomData>, customData?: TCustomData) => void | Promise<void>;
-  onExit?: (target: NightingaleScrollboxItem<TCustomData>, customData?: TCustomData) => void | Promise<void>;
-  onUnregister?: (target: NightingaleScrollboxItem<TCustomData>, customData?: TCustomData) => void | Promise<void>;
+  // _onRegister?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>;
+  // _onEnter?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>;
+  // _onExit?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>;
+  // _onUnregister?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>;
+
+  // TODO run new onRegister on already registered targets (same for enter, exit) - in ScrollboxManager!
+  onRegister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
+    this.manager?.onRegister(callback);
+  }
+  onEnter(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
+    this.manager?.onEnter(callback);
+  }
+  onExit(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
+    this.manager?.onExit(callback);
+  }
+  onUnregister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
+    this.manager?.onUnregister(callback);
+  }
+  // onEnter(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
+  //   this._onEnter = callback ?? undefined;
+  //   if (this.manager) {
+  //     if (this.manager && callback) {
+  //       for (const target of this.manager.targets) {
+  //         // this.manager.
+  //         callback(target, target.data);
+  //       }
+  //     }
+  //   }
+  //   // TODO run on already registered targets (same for enter, exit)
+  // }
+
 
   override connectedCallback() {
     super.connectedCallback();
     this.manager = new ScrollboxManager(this.getRoot()!, {
-      onRegister: (target, data) => {
-        // console.log('register', target.id, data, 'onRegister =', this.onRegister)
-        this.onRegister?.(target, data);
-      },
-      onEnter: (target, data) => this.onEnter?.(target, data),
-      onExit: (target, data) => this.onExit?.(target, data),
-      onUnregister: (target, data) => this.onUnregister?.(target, data),
+      // onRegister: target => {
+      //   this._onRegister?.(target);
+      // },
+      // onEnter: target => this._onEnter?.(target),
+      // onExit: target => this._onExit?.(target),
+      // onUnregister: target => this._onUnregister?.(target),
     }, {
       rootMargin: this["root-margin"], // TODO recreate manager when attr changes
     });
@@ -45,7 +71,7 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
   }
 
   register(item: NightingaleScrollboxItem<TCustomData>) {
-    this.manager?.register(item, item.data); // TODO solve issue of when data are set
+    this.manager?.register(item); // TODO solve issue of when data are set
   }
   unregister(item: NightingaleScrollboxItem<TCustomData>) {
     this.manager?.unregister(item);

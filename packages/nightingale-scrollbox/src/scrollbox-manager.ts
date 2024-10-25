@@ -14,21 +14,25 @@ export interface Registration {
   unregister: () => void,
 }
 
-export class ScrollboxManager<TTarget extends Element, TCustomData> {
-  private readonly _customData = new Map<TTarget, TCustomData>();
+export class ScrollboxManager<TTarget extends Element> {
+  private readonly _targets = new Set<TTarget>;
   private readonly _observer: IntersectionObserver;
   private readonly _queues = new Map<TTarget, AsyncQueue>;
 
   private readonly _currentState = new Map<TTarget, State>();
   private readonly _requiredState = new Map<TTarget, State>();
 
+  get targets() {
+    return this._targets as ReadonlySet<TTarget>;
+  }
+
   constructor(
     private readonly _root: HTMLDivElement,
     private readonly callbacks: {
-      onRegister?: (target: TTarget, customData: TCustomData) => void | Promise<void>,
-      onEnter?: (target: TTarget, customData: TCustomData) => void | Promise<void>,
-      onExit?: (target: TTarget, customData: TCustomData) => void | Promise<void>,
-      onUnregister?: (target: TTarget, customData: TCustomData) => void | Promise<void>,
+      onRegister?: (target: TTarget) => void | Promise<void>,
+      onEnter?: (target: TTarget) => void | Promise<void>,
+      onExit?: (target: TTarget) => void | Promise<void>,
+      onUnregister?: (target: TTarget) => void | Promise<void>,
     },
     options?: {
       rootMargin?: string | number,
@@ -50,14 +54,17 @@ export class ScrollboxManager<TTarget extends Element, TCustomData> {
     }
   }
 
-  register(target: TTarget, customData: TCustomData): Registration {
-    this._customData.set(target, customData);
+  register(target: TTarget): Registration {
+    if (this._targets.has(target)) throw new Error(`Cannot register target ${target} because it is already registered.`)
+    this._targets.add(target);
     const queue = new AsyncQueue();
     this._queues.set(target, queue);
     this._requiredState.set(target, "new");
     queue.enqueue(async () => {
-      await this.callbacks.onRegister?.(target, customData);
+      console.log('registering', target.id)
+      await this.callbacks.onRegister?.(target);
       this._currentState.set(target, "new");
+      console.log('registered', target.id)
     });
     this._observer.observe(target);
     return {
@@ -65,14 +72,17 @@ export class ScrollboxManager<TTarget extends Element, TCustomData> {
     };
   }
   unregister(target: TTarget) {
+    if (!this._targets.has(target)) throw new Error(`Cannot unregister target ${target} because it is not registered.`)
+    this._targets.delete(target);
     this._observer.unobserve(target);
     const queue = this._queues.get(target);
     this._queues.delete(target);
     this._requiredState.delete(target);
     queue?.enqueue(async () => {
-      await this.callbacks.onUnregister?.(target, this._customData.get(target)!);
-      this._customData.delete(target);
+      console.log('unregistering', target.id)
+      await this.callbacks.onUnregister?.(target);
       this._currentState.delete(target);
+      console.log('unregistered', target.id)
     });
   }
   private enter(target: TTarget) {
@@ -80,8 +90,10 @@ export class ScrollboxManager<TTarget extends Element, TCustomData> {
     this._queues.get(target)?.enqueue(async () => {
       if (this._requiredState.get(target) !== "visible") return; // skip if required state changed in the meantime
       if (this._currentState.get(target) === "visible") return; // skip if already in required state
-      await this.callbacks.onEnter?.(target, this._customData.get(target)!);
+      console.log('entering', target.id)
+      await this.callbacks.onEnter?.(target);
       this._currentState.set(target, "visible");
+      console.log('entered', target.id)
     });
   }
   private exit(target: TTarget) {
@@ -89,9 +101,49 @@ export class ScrollboxManager<TTarget extends Element, TCustomData> {
     this._queues.get(target)?.enqueue(async () => {
       if (this._requiredState.get(target) !== "hidden") return; // skip if required state changed in the meantime
       if (this._currentState.get(target) === "hidden") return; // skip if already in required state
-      await this.callbacks.onExit?.(target, this._customData.get(target)!);
+      console.log('exiting', target.id)
+      await this.callbacks.onExit?.(target);
       this._currentState.set(target, "hidden");
+      console.log('exited', target.id)
     });
+  }
+
+  onRegister(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+    // TODO encapsulate callback with queue and state per target, set callback in a queue job (avoid double run)
+    this.callbacks.onRegister = callback ?? undefined;
+    for (const target of this.targets) {
+      this._queues.get(target)?.enqueue(async () => {
+        console.log('additional onRegister', target.id)
+        await callback?.(target);
+      });
+    }
+  }
+  onEnter(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+    // TODO encapsulate callback with queue and state per target, set callback in a queue job (avoid double run)
+    this.callbacks.onEnter = callback ?? undefined;
+    for (const target of this.targets) {
+      this._queues.get(target)?.enqueue(async () => {
+        console.log('additional onEnter', target.id)
+        if (this._currentState.get(target) === 'visible') {
+          await callback?.(target);
+        }
+      });
+    }
+  }
+  onExit(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+    // TODO encapsulate callback with queue and state per target, set callback in a queue job (avoid double run)
+    this.callbacks.onExit = callback ?? undefined;
+    for (const target of this.targets) {
+      this._queues.get(target)?.enqueue(async () => {
+        console.log('additional onExit', target.id)
+        if (this._currentState.get(target) === 'hidden') {
+          await callback?.(target);
+        }
+      });
+    }
+  }
+  onUnregister(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+    this.callbacks.onUnregister = callback ?? undefined;
   }
 
   dispose() {
