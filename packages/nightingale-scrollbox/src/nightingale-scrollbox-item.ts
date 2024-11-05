@@ -13,6 +13,8 @@ export class NightingaleScrollboxItem<TCustomData> extends NightingaleElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.style.width = "100%";
+    this.style.height = "100%";
     if (this.closest("nightingale-scrollbox")) {
       customElements.whenDefined("nightingale-scrollbox").then(() => {
         this.scrollbox = this.closest<NightingaleScrollbox<TCustomData>>("nightingale-scrollbox") ?? undefined;
