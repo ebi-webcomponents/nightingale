@@ -1,12 +1,16 @@
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
-import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { ScrollboxManager } from "./scrollbox-manager";
 import { NightingaleScrollbox } from "./nightingale-scrollbox";
 
 
 @customElement("nightingale-scrollbox-item")
 export class NightingaleScrollboxItem<TCustomData> extends NightingaleElement {
+  @property({ type: String })
+  "content-visible"?: string;
+
+  @property({ type: String })
+  "content-hidden"?: string;
+
   private scrollbox?: NightingaleScrollbox<TCustomData>;
 
   data?: TCustomData;

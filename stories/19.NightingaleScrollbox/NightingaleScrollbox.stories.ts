@@ -2,10 +2,10 @@ import { Meta, Story } from "@storybook/web-components";
 import { rgb } from "d3";
 import { html } from "lit-html";
 import { range } from "lodash-es";
+import { AsyncSubject, BehaviorSubject, concatMap, delay, firstValueFrom, of, Subject } from 'rxjs';
 import "../../packages/nightingale-navigation/src/index";
 import "../../packages/nightingale-scrollbox/src/index";
 import { NightingaleScrollbox, NightingaleScrollboxItem } from "../../packages/nightingale-scrollbox/src/index";
-import { BehaviorSubject, AsyncSubject, firstValueFrom, Subject, of, concatMap, delay } from 'rxjs';
 
 export default {
   title: "Components/Utils/Scrollbox",
@@ -148,13 +148,24 @@ const style = html`
 
 
 function makeRow(id: string) {
+  const contentVisible = `
+    <nightingale-track
+      id="track-${id}" 
+      min-width="500" height="18"
+      length="400" display-start="1" display-end="400"
+      highlight-event="onmouseover" highlight-color="#EB3BFF22" 
+      margin-color="transparent" 
+      layout="default" use-ctrl-to-zoom>
+    </nightingale-track>`;
+  const contentHidden = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
+
   return html`
     <div class="track-box row-box" id="track-box-${id}">
       <div class="label-box label">
         ${id}
       </div>
       <div class="main-box">
-        <nightingale-scrollbox-item id="${id}" class="target"></nightingale-scrollbox-item>
+        <nightingale-scrollbox-item id="${id}" class="target" content-visible=${contentVisible} content-hidden=${contentHidden}></nightingale-scrollbox-item>
       </div>
     </div>
   `;
@@ -206,13 +217,12 @@ Scrollbox.args = {};
 Scrollbox.play = async () => {
   await customElements.whenDefined("nightingale-track");
 
-  const placeholderHtml = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
-
   type TData = { id: string };
 
   for (const scrollbox of document.getElementsByTagName("nightingale-scrollbox") as HTMLCollectionOf<NightingaleScrollbox<TData>>) {
     for (const item of scrollbox.getElementsByTagName("nightingale-scrollbox-item") as HTMLCollectionOf<NightingaleScrollboxItem<TData>>) {
       // console.log('scrollbox', scrollbox, 'item', item);
+      // item.removeAttribute("content-hidden");
       item.data = { id: item.id }
     }
     // await sleep(2000);
@@ -224,21 +234,21 @@ Scrollbox.play = async () => {
     // await sleep(2000);
     scrollbox.onEnter(async target => {
       console.log('onEnter', target.id)
-      target.innerHTML = `<nightingale-track
-          id="${target.data?.id}" 
-          min-width="500" height="18"
-          length="400" display-start="1" display-end="400"
-          highlight-event="onmouseover" highlight-color="#EB3BFF22" 
-          margin-color="transparent" 
-          layout="default" use-ctrl-to-zoom>
-        </nightingale-track>`;
+      // target.innerHTML = `<nightingale-track
+      //     id="${target.data?.id}" 
+      //     min-width="500" height="18"
+      //     length="400" display-start="1" display-end="400"
+      //     highlight-event="onmouseover" highlight-color="#EB3BFF22" 
+      //     margin-color="transparent" 
+      //     layout="default" use-ctrl-to-zoom>
+      //   </nightingale-track>`;
       for (const track of target.getElementsByTagName("nightingale-track")) {
         (track as any).data = demoData;
       }
     });
     scrollbox.onExit(target => {
       console.log('onExit', target.id)
-      target.innerHTML = placeholderHtml;
+      // target.innerHTML = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
     });
   }
 }

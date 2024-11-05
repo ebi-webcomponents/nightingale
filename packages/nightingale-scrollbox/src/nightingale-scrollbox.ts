@@ -1,8 +1,8 @@
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { ScrollboxManager } from "./scrollbox-manager";
 import { NightingaleScrollboxItem } from "./nightingale-scrollbox-item";
+import { ScrollboxManager } from "./scrollbox-manager";
 
 
 @customElement("nightingale-scrollbox")
@@ -19,10 +19,24 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
     this.manager?.onRegister(callback);
   }
   onEnter(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
-    this.manager?.onEnter(callback);
+    // this.manager?.onEnter(callback);
+    this.manager?.onEnter(async target => {
+      const content = target["content-visible"];
+      if (content !== undefined && content !== null) {
+        target.innerHTML = content;
+      }
+      await callback?.(target);
+    });
   }
   onExit(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
-    this.manager?.onExit(callback);
+    // this.manager?.onExit(callback);
+    this.manager?.onExit(async target => {
+      const content = target["content-hidden"];
+      if (content !== undefined && content !== null) {
+        target.innerHTML = content;
+      }
+      await callback?.(target);
+    });
   }
   onUnregister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.manager?.onUnregister(callback);
@@ -45,7 +59,7 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
   }
 
   register(item: NightingaleScrollboxItem<TCustomData>) {
-    this.manager?.register(item); // TODO solve issue of when data are set
+    this.manager?.register(item);
   }
   unregister(item: NightingaleScrollboxItem<TCustomData>) {
     this.manager?.unregister(item);

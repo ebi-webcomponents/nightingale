@@ -27,7 +27,6 @@ export class ScrollboxManager<TTarget extends Element> {
   ) {
     const margin = normalizeCssLength(options?.rootMargin);
     this._observer = new IntersectionObserver(entries => this.observerCallback(entries), { root: _root, rootMargin: `${margin} 0px ${margin} 0px` });
-    console.log('obs', this._observer)
   }
   get root() { return this._root; }
 
