@@ -1,6 +1,7 @@
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 import { customElement, property } from "lit/decorators.js";
 import { NightingaleScrollbox } from "./nightingale-scrollbox";
+import { ScrollboxItem } from "./scrollbox-item";
 
 
 @customElement("nightingale-scrollbox-item")
@@ -31,4 +32,6 @@ export class NightingaleScrollboxItem<TCustomData> extends NightingaleElement {
     this.scrollbox = undefined;
     super.disconnectedCallback();
   }
+
+  public readonly item = new ScrollboxItem<this>(this);
 }

@@ -246,10 +246,10 @@ Scrollbox.play = async () => {
         (track as any).data = demoData;
       }
     });
-    scrollbox.onExit(target => {
-      console.log('onExit', target.id)
-      // target.innerHTML = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
-    });
+    // scrollbox.onExit(target => {
+    //   console.log('onExit', target.id)
+    //   // target.innerHTML = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
+    // });
   }
 }
 
