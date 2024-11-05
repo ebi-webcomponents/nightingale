@@ -201,10 +201,8 @@ const Template: Story<{
             </div>
           </div>
 
-          <nightingale-scrollbox root-margin="-32">
-            <div id="tracks" class="scrollbox">
+          <nightingale-scrollbox root-margin="-32px" class="scrollbox">
               ${tracks}
-            </div>
           </nightingale-scrollbox>
         </div>
       </nightingale-manager>
