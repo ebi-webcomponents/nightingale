@@ -13,30 +13,16 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
   @property({ type: String })
   "haze-color"?: string;
 
-  private manager?: ScrollboxManager<NightingaleScrollboxItem<TCustomData>>;
+  private manager?: ScrollboxManager<TCustomData>;
 
   onRegister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.manager?.onRegister(callback);
   }
   onEnter(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
-    // this.manager?.onEnter(callback);
-    this.manager?.onEnter(async target => {
-      const content = target["content-visible"];
-      if (content !== undefined && content !== null) {
-        target.innerHTML = content;
-      }
-      await callback?.(target);
-    });
+    this.manager?.onEnter(callback);
   }
   onExit(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
-    // this.manager?.onExit(callback);
-    this.manager?.onExit(async target => {
-      const content = target["content-hidden"];
-      if (content !== undefined && content !== null) {
-        target.innerHTML = content;
-      }
-      await callback?.(target);
-    });
+    this.manager?.onExit(callback);
   }
   onUnregister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.manager?.onUnregister(callback);

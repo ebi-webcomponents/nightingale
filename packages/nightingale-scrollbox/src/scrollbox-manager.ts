@@ -1,24 +1,21 @@
 import { NightingaleScrollboxItem } from "./nightingale-scrollbox-item";
-import { ScrollboxItem } from "./scrollbox-item";
 
 export interface Registration {
   unregister: () => void,
 }
 
-// export class ScrollboxManager<TTarget extends Element> {
-export class ScrollboxManager<TTarget extends NightingaleScrollboxItem<any>> {
-  private readonly _targets = new Set<TTarget>;
-  // private readonly _scrollboxItems = new Map<TTarget, ScrollboxItem<TTarget>>;
+export class ScrollboxManager<TCustomData> {
+  private readonly _targets = new Set<NightingaleScrollboxItem<TCustomData>>;
   private readonly _observer: IntersectionObserver;
 
   get targets() {
-    return this._targets as ReadonlySet<TTarget>;
+    return this._targets as ReadonlySet<NightingaleScrollboxItem<TCustomData>>;
   }
   private readonly callbacks: {
-    onRegister?: (target: TTarget) => void | Promise<void>,
-    onEnter?: (target: TTarget) => void | Promise<void>,
-    onExit?: (target: TTarget) => void | Promise<void>,
-    onUnregister?: (target: TTarget) => void | Promise<void>,
+    onRegister?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>,
+    onEnter?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>,
+    onExit?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>,
+    onUnregister?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>,
   } = {};
 
   constructor(
@@ -34,67 +31,57 @@ export class ScrollboxManager<TTarget extends NightingaleScrollboxItem<any>> {
 
   private observerCallback(entries: IntersectionObserverEntry[]) {
     for (const entry of entries) {
-      const target = entry.target as TTarget;
+      const target = entry.target as NightingaleScrollboxItem<TCustomData>;
       if (entry.isIntersecting) {
-        // this._scrollboxItems.get(target)!.enter();
-        target.item.enter();
+        target.enter();
       } else {
-        // this._scrollboxItems.get(target)!.exit();
-        target.item.exit();
+        target.exit();
       }
     }
   }
 
-  register(target: TTarget): Registration {
+  register(target: NightingaleScrollboxItem<TCustomData>): Registration {
     if (this._targets.has(target)) throw new Error(`Cannot register target ${target} because it is already registered.`)
     this._targets.add(target);
-    // const item = new ScrollboxItem(target);
-    target.item.onRegister(this.callbacks.onRegister);
-    target.item.onEnter(this.callbacks.onEnter);
-    target.item.onExit(this.callbacks.onExit);
-    target.item.onUnregister(this.callbacks.onUnregister);
-    target.item.register();
-    // this._scrollboxItems.set(target, item);
+    target.onRegister(this.callbacks.onRegister);
+    target.onEnter(this.callbacks.onEnter);
+    target.onExit(this.callbacks.onExit);
+    target.onUnregister(this.callbacks.onUnregister);
+    target.register();
     this._observer.observe(target);
     return {
       unregister: () => this.unregister(target),
     };
   }
-  unregister(target: TTarget) {
+  unregister(target: NightingaleScrollboxItem<TCustomData>) {
     if (!this._targets.has(target)) throw new Error(`Cannot unregister target ${target} because it is not registered.`)
     this._targets.delete(target);
     this._observer.unobserve(target);
-    // this._scrollboxItems.get(target)!.unregister();
-    // this._scrollboxItems.delete(target);
-    target.item.unregister();
+    target.unregister();
   }
 
-  onRegister(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+  onRegister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.callbacks.onRegister = callback ?? undefined;
     for (const target of this.targets) {
-      // this._scrollboxItems.get(target)!.onRegister(callback);
-      target.item.onRegister(callback);
+      target.onRegister(callback);
     }
   }
-  onEnter(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+  onEnter(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.callbacks.onEnter = callback ?? undefined;
     for (const target of this.targets) {
-      // this._scrollboxItems.get(target)!.onEnter(callback);
-      target.item.onEnter(callback);
+      target.onEnter(callback);
     }
   }
-  onExit(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+  onExit(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.callbacks.onExit = callback ?? undefined;
     for (const target of this.targets) {
-      // this._scrollboxItems.get(target)!.onExit(callback);
-      target.item.onExit(callback);
+      target.onExit(callback);
     }
   }
-  onUnregister(callback: ((target: TTarget) => void | Promise<void>) | null | undefined) {
+  onUnregister(callback: ((target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>) | null | undefined) {
     this.callbacks.onUnregister = callback ?? undefined;
     for (const target of this.targets) {
-      // this._scrollboxItems.get(target)!.onUnregister(callback);
-      target.item.onUnregister(callback);
+      target.onUnregister(callback);
     }
   }
 
