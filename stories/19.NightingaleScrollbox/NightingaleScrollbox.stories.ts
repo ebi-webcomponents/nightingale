@@ -190,7 +190,7 @@ const Template: Story<{
             </div>
           </div>
 
-          <nightingale-scrollbox root-margin="-32">
+          <nightingale-scrollbox root-margin="0">
             <div id="tracks" class="scrollbox">
               ${tracks}
             </div>
@@ -207,7 +207,7 @@ Scrollbox.play = async () => {
   await customElements.whenDefined("nightingale-track");
 
   // const placeholderHtml = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
-  const placeholderHtml = 'O';
+  const placeholderHtml = '';
 
   type TData = { id: string };
 
@@ -216,12 +216,13 @@ Scrollbox.play = async () => {
       // console.log('scrollbox', scrollbox, 'item', item);
       item.data = { id: item.id }
     }
+    // await sleep(2000);
     scrollbox.onRegister(async target => {
       console.log('onRegister', target.data?.id)
-      await sleep(2000);
+      // await sleep(1000);
       console.log('onRegister done', target.data?.id)
     });
-    await sleep(1000);
+    // await sleep(2000);
     scrollbox.onEnter(async target => {
       console.log('onEnter', target.id)
       target.innerHTML = `<nightingale-track
