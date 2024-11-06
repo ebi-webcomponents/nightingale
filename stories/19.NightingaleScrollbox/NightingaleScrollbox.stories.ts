@@ -2,7 +2,6 @@ import { Meta, Story } from "@storybook/web-components";
 import { rgb } from "d3";
 import { html } from "lit-html";
 import { range } from "lodash-es";
-import { AsyncSubject, BehaviorSubject, concatMap, delay, firstValueFrom, of, Subject } from 'rxjs';
 import "../../packages/nightingale-navigation/src/index";
 import "../../packages/nightingale-scrollbox/src/index";
 import { NightingaleScrollbox, NightingaleScrollboxItem } from "../../packages/nightingale-scrollbox/src/index";
@@ -173,8 +172,12 @@ function makeRow(id: string) {
 
 const nTracks = 20;
 
-const Template: Story<{
-}> = (args) => {
+interface StoryArgs {
+  "root-margin": string,
+  "haze-color": string,
+}
+
+const Template: Story<StoryArgs> = args => {
   const tracks = range(nTracks).map(i => makeRow(`target-${i}`));
   return html`
     ${style}
@@ -201,7 +204,7 @@ const Template: Story<{
             </div>
           </div>
 
-          <nightingale-scrollbox root-margin="-32px" class="scrollbox">
+          <nightingale-scrollbox root-margin=${args["root-margin"]} class="scrollbox">
               ${tracks}
           </nightingale-scrollbox>
         </div>
@@ -211,7 +214,10 @@ const Template: Story<{
 };
 
 export const Scrollbox = Template.bind({});
-Scrollbox.args = {};
+Scrollbox.args = {
+  "root-margin": "0px",
+  "haze-color": "none",
+};
 Scrollbox.play = async () => {
   await customElements.whenDefined("nightingale-track");
 
@@ -232,21 +238,12 @@ Scrollbox.play = async () => {
     // await sleep(2000);
     scrollbox.onEnter(async target => {
       console.log('onEnter', target.id)
-      // target.innerHTML = `<nightingale-track
-      //     id="${target.data?.id}" 
-      //     min-width="500" height="18"
-      //     length="400" display-start="1" display-end="400"
-      //     highlight-event="onmouseover" highlight-color="#EB3BFF22" 
-      //     margin-color="transparent" 
-      //     layout="default" use-ctrl-to-zoom>
-      //   </nightingale-track>`;
       for (const track of target.getElementsByTagName("nightingale-track")) {
         (track as any).data = demoData;
       }
     });
     // scrollbox.onExit(target => {
     //   console.log('onExit', target.id)
-    //   // target.innerHTML = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
     // });
   }
 }

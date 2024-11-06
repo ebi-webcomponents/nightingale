@@ -15,14 +15,17 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
   override connectedCallback() {
     super.connectedCallback();
     this.initObserver();
-    //  TODO recreate observer when attr changes
   }
   override disconnectedCallback() {
     this.dispose();
     super.disconnectedCallback();
   }
-  override render() {
-    return html`<div class="nightingale-scrollbox"></div>`;
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    super.attributeChangedCallback(name, oldValue, newValue);
+    if (name === "root-margin" && newValue !== oldValue) {
+      this.disposeObserver();
+      this.initObserver();
+    }
   }
 
   private readonly _targets = new Set<NightingaleScrollboxItem<TCustomData>>;
@@ -38,7 +41,7 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
     onUnregister?: (target: NightingaleScrollboxItem<TCustomData>) => void | Promise<void>,
   } = {};
 
-  initObserver() {
+  private initObserver() {
     const margin = normalizeCssLength(this["root-margin"]);
     this._observer = new IntersectionObserver(entries => this.observerCallback(entries), { root: this, rootMargin: `${margin} 0px ${margin} 0px` });
     const targets = Array.from(this.targets);
@@ -46,11 +49,10 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
       this._observer.observe(target);
     }
   }
-  disposeObserver() {
+  private disposeObserver() {
     this._observer?.disconnect();
     this._observer = undefined;
   }
-
   private observerCallback(entries: IntersectionObserverEntry[]) {
     for (const entry of entries) {
       const target = entry.target as NightingaleScrollboxItem<TCustomData>;
