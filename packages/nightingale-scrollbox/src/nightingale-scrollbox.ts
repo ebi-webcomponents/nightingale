@@ -6,15 +6,21 @@ import { NightingaleScrollboxItem } from "./nightingale-scrollbox-item";
 
 @customElement("nightingale-scrollbox")
 export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
+  /** Amount added to the top and bottom side of the bounding box before the intersection test is performed.
+   * Can be a number or CSS length.
+   * This lets you adjust the bounds outward so that the target element is considered visible even if it is still hidden but is close to the visible area. */
   @property({ type: String })
   "root-margin"?: string;
 
-  @property({ type: String })
-  "haze-color"?: string;
+  /** If this attribute is set, wheel scrolling will be disabled whenever Ctrl (or Meta/Command) key is pressed.
+   * This helps to prevent bad user experience when some elements in the scrollbox have special Ctrl+Wheel behavior but gaps between elements still have default scrolling behavior. */
+  @property({ type: Boolean })
+  "disable-scroll-with-ctrl"?: boolean;
 
   override connectedCallback() {
     super.connectedCallback();
     this.initObserver();
+    this.disableScrollWithCtrl(this["disable-scroll-with-ctrl"]);
   }
   override disconnectedCallback() {
     this.dispose();
@@ -22,9 +28,14 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
   }
   override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === "root-margin" && newValue !== oldValue) {
-      this.disposeObserver();
-      this.initObserver();
+    if (this.isConnected && newValue !== oldValue) {
+      if (name === "root-margin") {
+        this.disposeObserver();
+        this.initObserver();
+      }
+      if (name === "disable-scroll-with-ctrl") {
+        this.disableScrollWithCtrl(this["disable-scroll-with-ctrl"]);
+      }
     }
   }
 
@@ -116,6 +127,12 @@ export class NightingaleScrollbox<TCustomData> extends NightingaleElement {
     }
     this.disposeObserver();
   }
+
+  /** Disable or enable scrolling behavior with Ctrl or Meta/Command key pressed. */
+  private disableScrollWithCtrl(disable: boolean | undefined) {
+    if (disable) this.addEventListener('wheel', preventScrollIfCtrl);
+    else this.removeEventListener('wheel', preventScrollIfCtrl);
+  }
 }
 
 
@@ -128,4 +145,11 @@ function normalizeCssLength(cssLength: string | number | undefined | null): stri
 
 export interface Registration {
   unregister: () => void,
+}
+
+/** Event handler for WheelEvent which prevents default scrolling behavior when Ctrl or Meta/Command key if pressed. */
+function preventScrollIfCtrl(event: WheelEvent) {
+  if (event.ctrlKey || event.metaKey) {
+    event.preventDefault();
+  }
 }

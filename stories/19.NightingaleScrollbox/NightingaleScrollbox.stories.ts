@@ -170,11 +170,11 @@ function makeRow(id: string) {
   `;
 }
 
-const nTracks = 20;
+const nTracks = 200;
 
 interface StoryArgs {
   "root-margin": string,
-  "haze-color": string,
+  "disable-scroll-with-ctrl": boolean,
 }
 
 const Template: Story<StoryArgs> = args => {
@@ -204,8 +204,8 @@ const Template: Story<StoryArgs> = args => {
             </div>
           </div>
 
-          <nightingale-scrollbox root-margin=${args["root-margin"]} class="scrollbox">
-              ${tracks}
+          <nightingale-scrollbox root-margin=${args["root-margin"]} ?disable-scroll-with-ctrl=${args["disable-scroll-with-ctrl"]} class="scrollbox">
+            ${tracks}
           </nightingale-scrollbox>
         </div>
       </nightingale-manager>
@@ -216,7 +216,7 @@ const Template: Story<StoryArgs> = args => {
 export const Scrollbox = Template.bind({});
 Scrollbox.args = {
   "root-margin": "0px",
-  "haze-color": "none",
+  "disable-scroll-with-ctrl": true,
 };
 Scrollbox.play = async () => {
   await customElements.whenDefined("nightingale-track");
