@@ -1,6 +1,8 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
+import { Selection } from "d3";
+
 import heatmapStyleSheet from "./heatmap-component.css";
 
 import NightingaleElement, {
@@ -87,6 +89,13 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapInstance?: Heatmap<number, string, HotmapData>;
   firstZoom = false;
 
+  margins?: Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
+
   connectedCallback() {
     super.connectedCallback();
   }
@@ -129,8 +138,8 @@ class NightingaleSequenceHeatmap extends withManager(
       width: this.getWidthWithMargins() + "px",
       height: this.height + "px",
       zIndex: 1,
-      paddingLeft: this["margin-left"] + "px",
-      paddingRight: this["margin-right"] + "px",
+      marginLeft: this["margin-left"] + "px",
+      marginRight: this["margin-right"] + "px",
       paddingTop: this["margin-top"] + "px",
       paddingBottom: this["margin-bottom"] + "px",
     };
@@ -175,7 +184,9 @@ class NightingaleSequenceHeatmap extends withManager(
           ${heatmapStyleSheet}
         </style>
 
-        <div id="${this["heatmap-id"]}" style=${styleMap(heatmapStyles)} />`;
+        <div id="container">
+          <div id="${this["heatmap-id"]}" style=${styleMap(heatmapStyles)} />
+        </div>`;
     } else {
       return html` <div
         id="${this["heatmap-id"]}_loading"
@@ -557,6 +568,11 @@ class NightingaleSequenceHeatmap extends withManager(
           exit: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
         ) => exit.remove()
       );
+
+    // heatmapInstanceMarker.state.dom.svg.selectAll("g.margin").remove();
+    // this.margins = heatmapInstanceMarker.state.dom.svg.append("g").attr("class", "margin");
+
+    // this.renderMarginOnGroup(this.margins);
   }
 }
 export default NightingaleSequenceHeatmap;

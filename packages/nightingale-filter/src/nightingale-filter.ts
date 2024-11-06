@@ -52,6 +52,10 @@ class NightingaleFilter extends NightingaleElement {
     const groupByType = groupBy(this.filters, (f: Filter) => f.type.text);
     return html`
       <style>
+        .group-title {
+          line-height: normal;
+        }
+
         .group {
           margin-bottom: 2.5rem;
         }
@@ -78,7 +82,7 @@ class NightingaleFilter extends NightingaleElement {
       </style>
       ${Object.entries(groupByType).map(
         ([type, group]) => html`
-          <h4>${type}</h4>
+          <h4 class="group-title">${type}</h4>
           <div class="group">
             ${group.map(
               (filterItem) => html` ${this.getCheckBox(filterItem)} `
