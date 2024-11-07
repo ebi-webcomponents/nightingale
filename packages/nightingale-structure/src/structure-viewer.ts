@@ -12,10 +12,10 @@ import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
 import { Script } from "molstar/lib/mol-script/script";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 import { Color } from "molstar/lib/mol-util/color";
-import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
+import { ChainIdColorThemeProvider } from "molstar/lib/mol-theme/color/chain-id";
 
 import AfConfidenceScore from "./af-confidence/behavior";
-import { AlphaMissenseColorTheme } from "./AlphaMissenseColorTheme";
+import AlphaMissenseColorTheme from "./AlphaMissenseColorTheme";
 import { AfConfidenceColorThemeProvider } from "./af-confidence/color";
 
 const viewerOptions = {
@@ -100,7 +100,7 @@ export type StructureViewer = {
 export const getStructureViewer = async (
   container: HTMLDivElement,
   onHighlightClick: (sequencePositions: SequencePosition[]) => void,
-  colorTheme?: string,
+  colorTheme?: string
 ): Promise<StructureViewer> => {
   const plugin = new PluginContext(spec);
   await plugin.init();
@@ -113,15 +113,15 @@ export const getStructureViewer = async (
 
   if (AlphaMissenseColorTheme.colorThemeProvider)
     plugin.representation.structure.themes.colorThemeRegistry.add(
-      AlphaMissenseColorTheme.colorThemeProvider,
+      AlphaMissenseColorTheme.colorThemeProvider
     );
   if (AlphaMissenseColorTheme.labelProvider)
     plugin.managers.lociLabels.addProvider(
-      AlphaMissenseColorTheme.labelProvider,
+      AlphaMissenseColorTheme.labelProvider
     );
-    plugin.customModelProperties.register(
+  plugin.customModelProperties.register(
     AlphaMissenseColorTheme.propertyProvider,
-    true,
+    true
   );
 
   // const data = await plugin.builders.data.download({ url: '...' }, { state: { isGhost: true } });
@@ -156,37 +156,37 @@ export const getStructureViewer = async (
     async loadPdb(pdb) {
       await this.loadCifUrl(
         `https://www.ebi.ac.uk/pdbe/model-server/v1/${pdb.toLowerCase()}/full?encoding=bcif`,
-        true,
+        true
       );
     },
     async loadCifUrl(url, isBinary = false): Promise<void> {
       const data = await plugin.builders.data.download(
         { url, isBinary },
-        { state: { isGhost: true } },
+        { state: { isGhost: true } }
       );
 
       const trajectory = await plugin.builders.structure.parseTrajectory(
         data,
-        "mmcif",
+        "mmcif"
       );
 
       await plugin.builders.structure.hierarchy.applyPreset(
         trajectory,
         "all-models",
-        { useDefaultIfSingleModel: true },
+        { useDefaultIfSingleModel: true }
       );
       this.applyColorTheme(colorTheme);
     },
 
     applyColorTheme(colorTheme) {
       let colouringTheme: string;
-      if (colorTheme === 'alphamissense') {
+      if (colorTheme === "alphamissense") {
         colouringTheme =
-            AlphaMissenseColorTheme.propertyProvider.descriptor.name;
+          AlphaMissenseColorTheme.propertyProvider.descriptor.name;
       } else {
         colouringTheme = AfConfidenceColorThemeProvider.name;
       }
-  
+
       // apply colouring
       plugin?.dataTransaction(async () => {
         for (const s of plugin?.managers.structure.hierarchy.current
@@ -195,7 +195,7 @@ export const getStructureViewer = async (
             s.components,
             {
               color: colouringTheme as typeof ChainIdColorThemeProvider.name,
-            },
+            }
           );
         }
       });
@@ -226,11 +226,11 @@ export const getStructureViewer = async (
                     Q.struct.atomProperty.macromolecular.auth_asym_id(),
                     chain,
                   ]),
-                ]),
-              ),
+                ])
+              )
             ),
           }),
-        data,
+        data
       );
       const loci = StructureSelection.toLociWithSourceUnits(sel);
       plugin.managers.camera.focusLoci(loci);
