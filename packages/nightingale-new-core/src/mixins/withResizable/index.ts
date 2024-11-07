@@ -4,7 +4,6 @@ import NightingaleBaseElement, {
 } from "../../nightingale-base-element";
 import withDimensions, { WithDimensionsInterface } from "../withDimensions";
 
-
 const DEFAULT_MIN_HEIGHT = 10;
 const DEFAULT_MIN_WIDTH = 10;
 
@@ -24,16 +23,19 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
   options: {
     "min-width"?: number;
     "min-height"?: number;
-  } = {},
+  } = {}
 ) => {
-  class WithResizable extends withDimensions(superClass) implements WithResizableInterface {
+  class WithResizable
+    extends withDimensions(superClass)
+    implements WithResizableInterface
+  {
     #intitialOptions = { ...defaultOptions, ...options };
     @property({ type: Number, reflect: true })
     "min-width": number = this.#intitialOptions["min-width"];
     @property({ type: Number, reflect: true })
     "min-height": number = this.#intitialOptions["min-height"];
 
-    onDimensionsChange() { }
+    onDimensionsChange() {}
 
     override connectedCallback() {
       super.connectedCallback();
@@ -54,16 +56,25 @@ const withResizable = <T extends Constructor<NightingaleBaseElement>>(
 
 export default withResizable;
 
-
-const SingletonResizeObserver = new ResizeObserver(entries => {
-  for (const entry of entries) {
-    const width = entry.contentBoxSize[0].inlineSize;
-    const height = entry.contentBoxSize[0].blockSize;
-    resize(entry.target as NightingaleBaseElement & WithResizableInterface, width, height);
-  }
+const SingletonResizeObserver = new ResizeObserver((entries) => {
+  window.requestAnimationFrame(() => {
+    for (const entry of entries) {
+      const width = entry.contentBoxSize[0].inlineSize;
+      const height = entry.contentBoxSize[0].blockSize;
+      resize(
+        entry.target as NightingaleBaseElement & WithResizableInterface,
+        width,
+        height
+      );
+    }
+  });
 });
 
-function resize(element: NightingaleBaseElement & WithResizableInterface, newWidth: number, newHeight: number): void {
+function resize(
+  element: NightingaleBaseElement & WithResizableInterface,
+  newWidth: number,
+  newHeight: number
+): void {
   newWidth = Math.max(newWidth, element["min-width"]);
   newHeight = Math.max(newHeight, element["min-height"]);
   let changed = false;
