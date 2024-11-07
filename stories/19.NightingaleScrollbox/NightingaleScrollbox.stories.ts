@@ -1,10 +1,10 @@
 import { Meta, Story } from "@storybook/web-components";
-import { rgb } from "d3";
 import { html } from "lit-html";
 import { range } from "lodash-es";
 import "../../packages/nightingale-navigation/src/index";
 import "../../packages/nightingale-scrollbox/src/index";
 import { NightingaleScrollbox, NightingaleScrollboxItem } from "../../packages/nightingale-scrollbox/src/index";
+
 
 export default {
   title: "Components/Utils/Scrollbox",
@@ -12,19 +12,19 @@ export default {
 
 const defaultData = [
   {
-    accession: "feature1a",
+    accession: "feature1",
     start: 1,
     end: 2,
     color: "blue",
   },
   {
-    accession: "feature1b",
+    accession: "feature1",
     start: 49,
     end: 50,
     color: "red",
   },
   {
-    accession: "feature1c",
+    accession: "feature1",
     start: 10,
     end: 20,
     color: "#342ea2",
@@ -39,9 +39,7 @@ const defaultData = [
     accession: "feature3",
     start: 15, end: 18,
     locations: [
-      {
-        fragments: [{ start: 15, end: 15 }],
-      },
+      { fragments: [{ start: 15, end: 15 }] },
       { fragments: [{ start: 18, end: 18 }] },
     ],
     color: "#A4Aea2",
@@ -50,92 +48,41 @@ const defaultData = [
     accession: "feature4",
     start: 20, end: 32,
     locations: [
-      {
-        fragments: [
-          { start: 20, end: 23 },
-          { start: 26, end: 32 },
-        ],
-      },
+      { fragments: [{ start: 20, end: 23 }, { start: 26, end: 32 }] },
     ],
   },
 ];
-
-function makeDemoData() {
-  const ResidueColorsShades = ["#eeeeff", "#ddddff", "#ccccff", "#bbbbff", "#aaaaff", "#8888ff", "#6666ff", "#4444ff", "#2222ff", "#0000ff",];
-  function colors(color: string) { return { color: rgb(color).darker(), fill: color }; }
-  return [
-    ...range(70).map(i => ({
-      accession: `feature${i}`,
-      start: i + 1,
-      end: i + 1,
-      color: rgb(ResidueColorsShades[Math.floor(i / 5) % ResidueColorsShades.length]).darker(),
-      fill: ResidueColorsShades[Math.floor(i / 5) % ResidueColorsShades.length],
-    })),
-    { start: 90, end: 130, ...colors("#4169e1"), shape: "rectangle" },
-    { start: 131, end: 131, ...colors("#ff7900"), shape: "rectangle" },
-    { start: 132, end: 132, ...colors("#ff7900"), shape: "rectangle" },
-    { start: 133, end: 139, ...colors("#d3d3d3"), shape: "rectangle" },
-    { start: 140, end: 155, ...colors("#4169e1"), shape: "rectangle" },
-
-    { start: 170, end: 190, ...colors("#1b9e77"), shape: "roundRectangle" },
-    { start: 195, end: 204, ...colors("#d95f02"), shape: "discontinuosEnd" },
-    { start: 206, end: 214, ...colors("#7570b3"), shape: "discontinuos" },
-    { start: 216, end: 225, ...colors("#e7298a"), shape: "discontinuosStart" },
-
-    { start: 235, end: 244, ...colors("#9e9e9e"), shape: "line" },
-    { start: 245, end: 265, ...colors("#ff64a4"), shape: "helix" },
-    { start: 266, end: 269, ...colors("#9e9e9e"), shape: "line" },
-    { start: 270, end: 290, ...colors("#ffcc02"), shape: "strand" },
-    { start: 291, end: 295, ...colors("#9e9e9e"), shape: "line" },
-
-    { start: 310, end: 310, ...colors("#1b9e77"), shape: "circle" },
-    { start: 320, end: 320, ...colors("#d95f02"), shape: "triangle" },
-    { start: 330, end: 330, ...colors("#7570b3"), shape: "diamond" },
-    { start: 340, end: 340, ...colors("#e7298a"), shape: "pentagon" },
-    { start: 350, end: 350, ...colors("#66a61e"), shape: "hexagon" },
-    { start: 360, end: 360, ...colors("#e6ab02"), shape: "chevron" },
-    { start: 370, end: 370, ...colors("#a6761d"), shape: "catFace" },
-    { start: 380, end: 380, ...colors("#1b9e77"), shape: "arrow" },
-    { start: 390, end: 390, ...colors("#d95f02"), shape: "wave" },
-    { start: 400, end: 400, ...colors("#7570b3"), shape: "doubleBar" },
-  ];
-}
-const demoData = makeDemoData();
-
 
 const style = html`
 <style>
   h1 {
     font-size: 1.5rem;
   }
-  nightingale-track {
-    margin-top: 7px;
-  }
   .scrollbox {
     height: 300px;
     overflow-y: scroll;
   }
-  .track-box {
-    height: 32px;
-    margin-top: 3px;
-    width: 100%;
-  }
-  .row-box {
+  .row {
     display: flex;
     flex-direction: row;
     line-height: normal;
+    width: 100%;
+  }
+  .track-row {
+    height: 32px;
+    margin-block: 3px;
   }
   .label-box {
     width: 80px;
     align-content: center;
-    padding-left: 4px;
-  }
-  .label {
-    background-color: gainsboro;
+    padding-left: 6px;
   }
   .main-box {
     flex-grow: 1;
     position: relative;
+  }
+  nightingale-track {
+    margin-top: 7px;
   }
   .spinner {
     height: 20px;
@@ -149,28 +96,32 @@ const style = html`
 function makeRow(id: string) {
   const contentVisible = `
     <nightingale-track
-      id="track-${id}" 
+      id="${id}-track" 
       min-width="500" height="18"
-      length="400" display-start="1" display-end="400"
+      length="50" display-start="1" display-end="50"
       highlight-event="onmouseover" highlight-color="#EB3BFF22" 
       margin-color="transparent" 
       layout="default" use-ctrl-to-zoom>
     </nightingale-track>`;
-  const contentHidden = '<img class="spinner" src="https://www.ebi.ac.uk/pdbe/pdbe-kb/proteins/assets/img/loader.gif"></img>';
+  const contentHidden = `
+    <svg class="spinner" viewBox="0 0 200 200">
+      <style>
+        .spinner-path { stroke-dasharray: 339 226; stroke-dashoffset: 0; animation: spinner linear normal infinite; animation-duration: 2s; }
+        @keyframes spinner { 0% { stroke-dashoffset: 565; } 100% { stroke-dashoffset: 0; } }
+      </style>
+      <path class="spinner-path" fill="transparent" stroke="#72B260" stroke-width="20" d="M 100 10  A 90 90 0 1 1 100 190 A 90 90 0 1 1 100 10"></path>
+    </svg>`;
 
   return html`
-    <div class="track-box row-box" id="track-box-${id}">
-      <div class="label-box label">
-        ${id}
-      </div>
+    <div class="row track-row">
+      <div class="label-box" style="background-color: gainsboro">${id}</div>
       <div class="main-box">
-        <nightingale-scrollbox-item id="${id}" class="target" content-visible=${contentVisible} content-hidden=${contentHidden}></nightingale-scrollbox-item>
+        <nightingale-scrollbox-item id=${id} content-visible=${contentVisible} content-hidden=${contentHidden}></nightingale-scrollbox-item>
       </div>
     </div>
   `;
 }
 
-const nTracks = 200;
 
 interface StoryArgs {
   "root-margin": string,
@@ -178,34 +129,35 @@ interface StoryArgs {
 }
 
 const Template: Story<StoryArgs> = args => {
-  const tracks = range(nTracks).map(i => makeRow(`target-${i}`));
+  const nRows = 100;
+  const rows = range(nRows).map(i => makeRow(`item-${i}`));
   return html`
     ${style}
     <div id="nightingale-root">
       <nightingale-manager>
-        <div style="display:flex; flex-direction: column; width: 700px;">
+        <div style="display:flex; flex-direction: column; width: 700px; max-width: 100%; border: solid 1px gray;">
           <div style="margin-right: 15px;">
-            <div class="row-box">
+            <div class="row">
               <div class="label-box"></div>
               <div class="main-box">
-                <nightingale-navigation id="navigation" min-width="500" height="50" length="400" display-start="1" display-end="400" highlight-color="#EB3BFF22" margin-color="transparent" show-highlight>
+                <nightingale-navigation id="navigation" min-width="500" height="50" length="50" display-start="1" display-end="50" highlight-color="#EB3BFF22" margin-color="transparent" show-highlight>
                 </nightingale-navigation>
               </div>
             </div>
 
-            <div class="row-box">
+            <div class="row">
               <div class="label-box"></div>
               <div class="main-box">
                 <nightingale-sequence id="sequence"
-                  sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASViubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
-                  min-width="500" height="30" length="400" display-start="1" display-end="400" highlight-event="onmouseover" highlight-color="#EB3BFF22" margin-color="transparent" use-ctrl-to-zoom>
+                  sequence="iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV"
+                  min-width="500" height="30" length="50" display-start="1" display-end="50" highlight-event="onmouseover" highlight-color="#EB3BFF22" margin-color="transparent" use-ctrl-to-zoom>
                 </nightingale-sequence>
               </div>
             </div>
           </div>
 
           <nightingale-scrollbox root-margin=${args["root-margin"]} ?disable-scroll-with-ctrl=${args["disable-scroll-with-ctrl"]} class="scrollbox">
-            ${tracks}
+            ${rows}
           </nightingale-scrollbox>
         </div>
       </nightingale-manager>
@@ -214,40 +166,33 @@ const Template: Story<StoryArgs> = args => {
 };
 
 export const Scrollbox = Template.bind({});
+
 Scrollbox.args = {
   "root-margin": "0px",
   "disable-scroll-with-ctrl": true,
 };
+
 Scrollbox.play = async () => {
+  type TData = { message: string };
   await customElements.whenDefined("nightingale-track");
-
-  type TData = { id: string };
-
   for (const scrollbox of document.getElementsByTagName("nightingale-scrollbox") as HTMLCollectionOf<NightingaleScrollbox<TData>>) {
     for (const item of scrollbox.getElementsByTagName("nightingale-scrollbox-item") as HTMLCollectionOf<NightingaleScrollboxItem<TData>>) {
-      // console.log('scrollbox', scrollbox, 'item', item);
-      // item.removeAttribute("content-hidden");
-      item.data = { id: item.id }
+      item.data = { message: `This is ${item.id}` };
     }
-    // await sleep(2000);
-    scrollbox.onRegister(async target => {
-      console.log('onRegister', target.data?.id)
-      // await sleep(1000);
-      console.log('onRegister done', target.data?.id)
+    scrollbox.onRegister(async item => {
+      console.log("registering", item.id, item.data);
     });
-    // await sleep(2000);
-    scrollbox.onEnter(async target => {
-      console.log('onEnter', target.id)
-      for (const track of target.getElementsByTagName("nightingale-track")) {
-        (track as any).data = demoData;
+    scrollbox.onEnter(async item => {
+      console.log("entering", item.id, item.data);
+      for (const track of item.getElementsByTagName("nightingale-track")) {
+        (track as any).data = defaultData;
       }
     });
-    // scrollbox.onExit(target => {
-    //   console.log('onExit', target.id)
-    // });
+    scrollbox.onExit(item => {
+      console.log("exiting", item.id, item.data);
+    });
+    scrollbox.onUnregister(item => {
+      console.log("unregistering", item.id, item.data);
+    });
   }
-}
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
