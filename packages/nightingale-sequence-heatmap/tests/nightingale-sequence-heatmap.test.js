@@ -3,6 +3,7 @@ import { xDomain, yDomain, data } from "./mockData/mockdata";
 
 let rendered;
 
+// TODO: unskip once a strategy for testing canvas has been decided
 // eslint-disable-next-line jest/no-disabled-tests
 describe.skip("nightingale-sequence-heatmap tests", () => {
   beforeEach(async () => {
