@@ -1,9 +1,13 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { Selection } from "d3";
-
-import heatmapStyleSheet from "./heatmap-component.css";
+import { scaleSequential, Selection as d3Selection } from "d3";
+import { Heatmap } from "heatmap-component";
+import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
+import {
+  Box,
+  scaleDistance,
+} from "heatmap-component/lib/heatmap-component/scales";
 
 import NightingaleElement, {
   customElementOnce,
@@ -15,14 +19,9 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { Heatmap } from "heatmap-component";
-import { scaleSequential, Selection as d3Selection } from "d3";
-import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
-import {
-  Box,
-  scaleDistance,
-} from "heatmap-component/lib/heatmap-component/scales";
 import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/utils/Region";
+
+import heatmapStyleSheet from "./heatmap-component.css";
 
 const ALPHAMISSENSE_BLUE = "#3d5493";
 const ALPHAMISSENSE_RED = "#9a131a";
@@ -88,13 +87,6 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapData?: HotmapData[];
   heatmapInstance?: Heatmap<number, string, HotmapData>;
   firstZoom = false;
-
-  margins?: Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement | SVGElement | null,
-    unknown
-  >;
 
   connectedCallback() {
     super.connectedCallback();
@@ -568,11 +560,6 @@ class NightingaleSequenceHeatmap extends withManager(
           exit: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
         ) => exit.remove()
       );
-
-    // heatmapInstanceMarker.state.dom.svg.selectAll("g.margin").remove();
-    // this.margins = heatmapInstanceMarker.state.dom.svg.append("g").attr("class", "margin");
-
-    // this.renderMarginOnGroup(this.margins);
   }
 }
 export default NightingaleSequenceHeatmap;
