@@ -20,23 +20,33 @@ describe("nightingale-interpro-track tests", () => {
     document.querySelector("nightingale-interpro-track").remove();
   });
 
-  test("it should display the track correctly", async () => {
-    expect(rendered).toMatchSnapshot();
+  test("it should show nightingale-interpro-track and the current number of residue features coverage mask rects and no highlight", async () => {
+    expect(document.querySelector("nightingale-interpro-track")).toBeDefined();
+    expect(
+      document.querySelectorAll("path.feature.rectangle.residue").length
+    ).toBe(16);
+    expect(document.querySelectorAll("rect").length).toBe(13);
+    expect(document.querySelector("g.highlighted>rect")).toBeFalsy();
   });
 
-  test("it should zoom in", (done) => {
+  test("it should zoom in with correct number of features and location groups and no highlight", (done) => {
     rendered.setAttribute("display-start", "260");
     rendered.setAttribute("display-end", "264");
     window.requestAnimationFrame(() => {
-      expect(rendered).toMatchSnapshot();
+      expect(
+        document.querySelectorAll("path.rectangle.child-fragment.feature")
+          .length
+      ).toBe(6);
+      expect(document.querySelectorAll("g.location-group").length).toBe(2);
+      expect(document.querySelector("g.highlighted>rect")).toBeFalsy();
       done();
     });
   });
 
-  test("it should display the sequence correctly after highlight", (done) => {
+  test("it should display the highlight", (done) => {
     rendered.setAttribute("highlight", "10:30");
     window.requestAnimationFrame(() => {
-      expect(rendered).toMatchSnapshot();
+      expect(document.querySelector("g.highlighted>rect")).toBeTruthy();
       done();
     });
   });
