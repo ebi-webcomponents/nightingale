@@ -1,7 +1,13 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import heatmapStyleSheet from "./heatmap-component.css";
+import { scaleSequential, Selection as d3Selection } from "d3";
+import { Heatmap } from "heatmap-component";
+import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
+import {
+  Box,
+  scaleDistance,
+} from "heatmap-component/lib/heatmap-component/scales";
 
 import NightingaleElement, {
   customElementOnce,
@@ -13,14 +19,9 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { Heatmap } from "heatmap-component";
-import { scaleSequential, Selection as d3Selection } from "d3";
-import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
-import {
-  Box,
-  scaleDistance,
-} from "heatmap-component/lib/heatmap-component/scales";
 import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/utils/Region";
+
+import heatmapStyleSheet from "./heatmap-component.css";
 
 const ALPHAMISSENSE_BLUE = "#3d5493";
 const ALPHAMISSENSE_RED = "#9a131a";
@@ -129,8 +130,8 @@ class NightingaleSequenceHeatmap extends withManager(
       width: this.getWidthWithMargins() + "px",
       height: this.height + "px",
       zIndex: 1,
-      paddingLeft: this["margin-left"] + "px",
-      paddingRight: this["margin-right"] + "px",
+      marginLeft: this["margin-left"] + "px",
+      marginRight: this["margin-right"] + "px",
       paddingTop: this["margin-top"] + "px",
       paddingBottom: this["margin-bottom"] + "px",
     };
@@ -175,7 +176,9 @@ class NightingaleSequenceHeatmap extends withManager(
           ${heatmapStyleSheet}
         </style>
 
-        <div id="${this["heatmap-id"]}" style=${styleMap(heatmapStyles)} />`;
+        <div id="container">
+          <div id="${this["heatmap-id"]}" style=${styleMap(heatmapStyles)} />
+        </div>`;
     } else {
       return html` <div
         id="${this["heatmap-id"]}_loading"
