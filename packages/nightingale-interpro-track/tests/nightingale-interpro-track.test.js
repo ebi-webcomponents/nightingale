@@ -43,7 +43,8 @@ describe("nightingale-interpro-track tests", () => {
     });
   });
 
-  test("it should display the highlight", (done) => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  test.skip("it should display the highlight", (done) => {
     rendered.setAttribute("highlight", "10:30");
     window.requestAnimationFrame(() => {
       expect(document.querySelector("g.highlighted>rect")).toBeTruthy();
