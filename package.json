@@ -6,7 +6,7 @@
     "prebuild": "npm run clean",
     "build": "lerna run build",
     "build:watch": "lerna exec -- rollup --config ../../rollup.config.mjs --watch",
-    "test": "lerna run test",
+    "test": "yarn jest",
     "clean": "rimraf packages/**/dist",
     "clean:modules": "rimraf node_modules packages/**/node_modules",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
