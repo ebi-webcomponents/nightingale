@@ -2,7 +2,6 @@ import NightingaleNavigation from "../dist/index";
 
 let rendered: NightingaleNavigation;
 
-// TODO: undo 2024-11-08
 // eslint-disable-next-line jest/no-disabled-tests
 describe.skip("nightingale-navigation tests", () => {
   beforeEach(() => {
