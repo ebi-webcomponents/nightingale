@@ -3,9 +3,7 @@ import * as data from "./taxonomy.min.json";
 
 let rendered: NightingaleSunburst;
 
-// TODO: undo 2024-11-08
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip("nightingale-sunburst tests", () => {
+describe("nightingale-sunburst tests", () => {
   beforeEach(async () => {
     rendered = new NightingaleSunburst();
     rendered.setAttribute("size", "200");
