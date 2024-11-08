@@ -20,7 +20,7 @@ describe("nightingale-interpro-track tests", () => {
     document.querySelector("nightingale-interpro-track").remove();
   });
 
-  test("it should show nightingale-interpro-track and the current number of residue features coverage mask rects and no highlight", async () => {
+  test("it should show nightingale-interpro-track and the current number of residue features coverage mask rects and no highlight", () => {
     expect(document.querySelector("nightingale-interpro-track")).toBeDefined();
     expect(
       document.querySelectorAll("path.feature.rectangle.residue").length
