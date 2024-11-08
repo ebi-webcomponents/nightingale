@@ -13,16 +13,16 @@ jobs:
       - name: 🔧 Install
         run: |
           yarn
+      - name: 🧪 Test - Lint
+        run: |
+          yarn lint
+      - name: 🧪 Test - Unit
+        run: |
+          yarn test
       - name: 🔧 Build
         run: |
           yarn clean
           yarn build
-      - name: 🧪 Test - Unit
-        run: |
-          yarn test
-      - name: 🧪 Test - Lint
-        run: |
-          yarn lint
       - name: 📚 Storybook
         run: |
           yarn build-storybook
