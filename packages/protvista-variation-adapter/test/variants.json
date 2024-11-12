@@ -33,7 +33,7 @@
         }
       ],
       "cytogeneticBand": "21q21.3",
-      "genomicLocation": "NC_000021.9:g.26112051C>A",
+      "genomicLocation": ["NC_000021.9:g.26112051C>A"],
       "locations": [
         {
           "loc": "p.Lys51Asn",
@@ -168,7 +168,7 @@
           "id": "MN908947.3:21568:T:A"
         }
       ],
-      "genomicLocation": "NC_045512.2:g.21568T>A",
+      "genomicLocation": ["NC_045512.2:g.21568T>A"],
       "locations": [
         {
           "loc": "p.Phe2Leu",

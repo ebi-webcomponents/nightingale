@@ -7,7 +7,7 @@
   ],
   "main": "dist/protvista-variation-graph.js",
   "module": "src/protvista-variation-graph.js",
-  "version": "3.8.10",
+  "version": "3.8.22",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "protvista-track": "^3.8.10"
+    "protvista-track": "^3.8.22"
   },
   "devDependencies": {
     "d3": "^5.7.0"
@@ -32,5 +32,5 @@
   "peerDependencies": {
     "d3": "5.X"
   },
-  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

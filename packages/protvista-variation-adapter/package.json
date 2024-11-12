@@ -1,6 +1,6 @@
 {
   "name": "protvista-variation-adapter",
-  "version": "3.8.11",
+  "version": "3.8.22",
   "description": "Data adapter for variation data",
   "files": [
     "dist",
@@ -29,13 +29,13 @@
   ],
   "author": "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
   "license": "MIT",
-  "gitHead": "726779864966d11f966f337f2dd84aa4f58d944a",
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9",
   "dependencies": {
     "d3-scale": "^3.2.3",
-    "data-loader": "^3.8.4",
+    "data-loader": "^3.8.22",
     "lodash-es": "^4.17.11",
-    "protvista-feature-adapter": "^3.8.11",
-    "protvista-variation": "^3.8.10",
+    "protvista-feature-adapter": "^3.8.22",
+    "protvista-variation": "^3.8.22",
     "uuid": "^8.3.1"
   },
   "peerDependencies": {

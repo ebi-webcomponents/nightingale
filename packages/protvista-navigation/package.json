@@ -1,6 +1,6 @@
 {
   "name": "protvista-navigation",
-  "version": "3.8.10",
+  "version": "3.8.22",
   "description": "Navigation component for the ProtVista tool",
   "files": [
     "dist",
@@ -23,10 +23,10 @@
   "module": "src/protvista-navigation.js",
   "author": "Xavier Watkins <xwatkins@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80",
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9",
   "dependencies": {
     "lodash-es": "^4.17.11",
-    "protvista-utils": "^3.8.10"
+    "protvista-utils": "^3.8.22"
   },
   "devDependencies": {
     "d3": "^5.7.0"

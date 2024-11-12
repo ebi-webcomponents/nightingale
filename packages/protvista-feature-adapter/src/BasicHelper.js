@@ -14,11 +14,18 @@ export const renameProperties = (features) => {
 };
 
 const formatSource = (source) => {
-  return source.name?.toLowerCase() === "PubMed".toLowerCase()
-    ? `${source.id}&nbsp;(<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>)`
-    : `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${
-        source.id
-      }</a>&nbsp;${source.name ? `(${source.name})` : ""}`;
+  if (source.name?.toLowerCase() === "PubMed".toLowerCase()) {
+    return `${source.id}&nbsp;(<a href='${source.url}' style="color:#FFF" target='_blank'>${source.name}</a>&nbsp;<a href='${source.alternativeUrl}' style="color:#FFF" target='_blank'>EuropePMC</a>)`;
+  }
+  const sourceLink = `&nbsp;<a href='${source.url}' style="color:#FFF" target='_blank'>${source.id}</a>`;
+  if (source.name) {
+    // Temporary until we get the expected value as 'PeptideAtlas' instead of 'HppPeptideAtlas'
+    if (source.name.startsWith("Hpp")) {
+      return `${sourceLink}&nbsp;(${source.name.slice(3)})`;
+    }
+    return `${sourceLink}&nbsp;(${source.name})`;
+  }
+  return sourceLink;
 };
 
 export const getEvidenceFromCodes = (evidenceList) => {
@@ -58,13 +65,13 @@ const getPTMEvidence = (ptms) => {
   );
   const uniqueIds = [...new Set(ids.flat())];
   // Urls in the payload are not relevant. For 'Glue project' dataset, Dataset ID and publication reference is hardcoded. Need to be checked in 2024 if it still exists in the payload
-  const prideArchive = "https://www.ebi.ac.uk/pride/archive/projects/";
+  const proteomexchange =
+    "https://proteomecentral.proteomexchange.org/dataset/";
   return `
   <ul>${uniqueIds
     .map((id) => {
       const datasetID = id === "Glue project" ? "PXD012174" : id;
-      return `<li title='${datasetID}' style="padding: .25rem 0">${datasetID}&nbsp;(<a href="${prideArchive}${datasetID}" style="color:#FFF" target="_blank">PRIDE</a>
-      ${
+      return `<li title='${datasetID}' style="padding: .25rem 0">${datasetID}&nbsp;(<a href="${proteomexchange}${datasetID}" style="color:#FFF" target="_blank">ProteomeXchange</a>${
         id === "Glue project"
           ? `)</li><li title="publication" style="padding: .25rem 0">Publication:&nbsp;31819260&nbsp;(<a href="https://pubmed.ncbi.nlm.nih.gov/31819260" style="color:#FFF" target="_blank">PubMed</a>)</li>`
           : `&nbsp;<a href="http://www.peptideatlas.org/builds/rice/phospho/" style="color:#FFF" target="_blank">PeptideAtlas</a>)</li>`
@@ -206,11 +213,11 @@ export const formatTooltip = (feature) => {
                         ref.properties["Universal Spectrum Id"]
                       }" style="color:#FFF" target="_blank">View on ProteomeXchange</a>
                       </li>
-                      <li style="text-indent: 2em">PSM Count: ${
-                        ref.properties["PSM Count"]
+                      <li style="text-indent: 2em">PSM Count (0.05 gFLR): ${
+                        ref.properties["PSM Count (0.05 gFLR)"]
                       }</li>
-                      <li style="text-indent: 2em">Site probability: ${
-                        ref.properties["Site probability"]
+                      <li style="text-indent: 2em">Final site probability: ${
+                        ref.properties["Final site probability"]
                       }</li>
                       `
                   )

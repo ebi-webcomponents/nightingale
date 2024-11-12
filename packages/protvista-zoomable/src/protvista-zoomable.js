@@ -174,7 +174,10 @@ class ProtvistaZoomable extends HTMLElement {
       ])
       .filter(() => {
         if (!(d3Event instanceof WheelEvent)) return true;
-        if (this.hasAttribute("scroll-filter")) {
+        if (this.hasAttribute("no-scroll")) {
+          return false;
+        }
+        if (this.hasAttribute("filter-scroll")) {
           const scrollableAttribute = this.getAttribute("scrollable");
           if (scrollableAttribute) return scrollableAttribute === "true";
         }

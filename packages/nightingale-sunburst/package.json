@@ -1,6 +1,6 @@
 {
   "name": "nightingale-sunburst",
-  "version": "3.8.4",
+  "version": "3.8.22",
   "files": [
     "dist",
     "src"
@@ -28,5 +28,6 @@
     "d3": "^5.7.0",
     "lit-element": "^2.4.0",
     "lodash-es": "^4.17.11"
-  }
+  },
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

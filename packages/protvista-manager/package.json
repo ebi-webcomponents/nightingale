@@ -1,6 +1,6 @@
 {
   "name": "protvista-manager",
-  "version": "3.8.4",
+  "version": "3.8.22",
   "description": "Manager component for the ProtVista tool",
   "main": "dist/protvista-manager.js",
   "module": "src/protvista-manager.js",
@@ -23,7 +23,7 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
-  "gitHead": "5a756316482fa31d085602d46438861fb45e5178",
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9",
   "dependencies": {
     "lodash-es": "^4.17.11"
   }

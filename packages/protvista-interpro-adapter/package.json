@@ -1,6 +1,6 @@
 {
   "name": "protvista-interpro-adapter",
-  "version": "3.8.4",
+  "version": "3.8.22",
   "files": [
     "dist",
     "src"
@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "dependencies": {
+    "color-hash": "2.0.2"
+  },
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

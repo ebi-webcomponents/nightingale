@@ -7,7 +7,7 @@
   ],
   "main": "dist/nightingale-heatmap.js",
   "module": "src/nightingale-heatmap.js",
-  "version": "3.8.4",
+  "version": "3.8.22",
   "keywords": [
     "nightingale",
     "webcomponents",
@@ -28,5 +28,6 @@
   },
   "peerDependencies": {
     "d3": "5.X"
-  }
+  },
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }

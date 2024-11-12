@@ -107,8 +107,10 @@ export const formatTooltip = (variant: Variant): string =>
                     : ``
                 }
                 ${
-                  variant.genomicLocation
-                    ? `<h5>Location</h5><p>${variant.genomicLocation}</p>`
+                  variant.genomicLocation?.length
+                    ? `<h5>Location</h5><p>${variant.genomicLocation.join(
+                        ", "
+                      )}</p>`
                     : ``
                 }
                 ${

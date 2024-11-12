@@ -126,7 +126,9 @@ Object {
         },
       ],
       "end": "51",
-      "genomicLocation": "NC_000021.9:g.26112051C>A",
+      "genomicLocation": Array [
+        "NC_000021.9:g.26112051C>A",
+      ],
       "hasPredictions": true,
       "locations": Array [
         Object {
@@ -226,7 +228,9 @@ Object {
       "codon": "TTT/TTA",
       "consequenceType": "missense",
       "end": "2",
-      "genomicLocation": "NC_045512.2:g.21568T>A",
+      "genomicLocation": Array [
+        "NC_045512.2:g.21568T>A",
+      ],
       "hasPredictions": undefined,
       "locations": Array [
         Object {

@@ -1,6 +1,6 @@
 {
   "name": "protvista-coloured-sequence",
-  "version": "3.8.10",
+  "version": "3.8.22",
   "description": "Track that colors each base by a given function. The default function is hydrophobicity",
   "files": [
     "dist",
@@ -11,8 +11,8 @@
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "dependencies": {
-    "protvista-sequence": "^3.8.10",
-    "protvista-utils": "^3.8.10"
+    "protvista-sequence": "^3.8.22",
+    "protvista-utils": "^3.8.22"
   },
   "repository": {
     "type": "git",
@@ -33,5 +33,5 @@
   "peerDependencies": {
     "d3": "5.X"
   },
-  "gitHead": "563f7872ea6e92d7dc343cadcc7c4ed887c39d80"
+  "gitHead": "d5953d40c908b47eacce04bdc585af8a71eeebc9"
 }
