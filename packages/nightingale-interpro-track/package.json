@@ -36,6 +36,6 @@
     "@nightingale-elements/nightingale-new-core": "^5.3.2",
     "@nightingale-elements/nightingale-track": "^5.3.2",
     "d3": "7.9.0",
-    "lodash-es": "4.17.15"
+    "lodash-es": "4.17.21"
   }
 }
