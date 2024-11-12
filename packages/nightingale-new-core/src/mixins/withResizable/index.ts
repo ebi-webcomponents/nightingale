@@ -59,13 +59,15 @@ export default withResizable;
 const SingletonResizeObserver = new ResizeObserver((entries) => {
   window.requestAnimationFrame(() => {
     for (const entry of entries) {
-      const width = entry.contentBoxSize[0].inlineSize;
-      const height = entry.contentBoxSize[0].blockSize;
-      resize(
-        entry.target as NightingaleBaseElement & WithResizableInterface,
-        width,
-        height
-      );
+      const width = entry.contentBoxSize?.[0].inlineSize;
+      const height = entry.contentBoxSize?.[0].blockSize;
+      if (typeof width !== "undefined" && typeof height !== "undefined") {
+        resize(
+          entry.target as NightingaleBaseElement & WithResizableInterface,
+          width,
+          height
+        );
+      }
     }
   });
 });
