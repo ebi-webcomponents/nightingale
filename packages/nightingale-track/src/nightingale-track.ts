@@ -103,7 +103,7 @@ class NightingaleTrack extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  #highlighted?: Selection<
+  protected highlighted?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
@@ -120,6 +120,12 @@ class NightingaleTrack extends withManager(
     if (String(this.layout).toLowerCase() === "non-overlapping")
       return new NonOverlappingLayout({
         layoutHeight: this.height,
+        margin: {
+          top: this["margin-top"],
+          bottom: this["margin-bottom"],
+          left: this["margin-left"],
+          right: this["margin-right"],
+        },
       });
     return new DefaultLayout({
       layoutHeight: this.height,
@@ -146,22 +152,18 @@ class NightingaleTrack extends withManager(
   }
 
   static normalizeLocations(data: Feature[]) {
-    return data.map((obj) => {
-      const { locations, start, end } = obj;
-      return locations
-        ? obj
-        : Object.assign(obj, {
-            locations: [
-              {
-                fragments: [
-                  {
-                    start,
-                    end,
-                  },
-                ],
-              },
-            ],
-          });
+    return data.map(feature => {
+      if (feature.locations) {
+        // Add missing `start`/`end` based on `locations`
+        feature.start ??= getStartFromLocations(feature.locations);
+        feature.end ??= getEndFromLocations(feature.locations);
+      } else {
+        // Add missing `locations` based on `start`/`end`
+        feature.start ??= 1;
+        feature.end ??= feature.start;
+        feature.locations = [{ fragments: [{ start: feature.start, end: feature.end }] }];
+      }
+      return feature;
     });
   }
 
@@ -284,7 +286,7 @@ class NightingaleTrack extends withManager(
     if (!this.svg) return;
     this.seqG = this.svg.append("g").attr("class", "sequence-features");
     this.createFeatures();
-    this.#highlighted = this.svg.append("g").attr("class", "highlighted");
+    this.highlighted = this.svg.append("g").attr("class", "highlighted");
     this.margins = this.svg.append("g").attr("class", "margin");
   }
 
@@ -532,8 +534,8 @@ class NightingaleTrack extends withManager(
   }
 
   protected updateHighlight() {
-    if (!this.#highlighted) return;
-    const highlights = this.#highlighted
+    if (!this.highlighted) return;
+    const highlights = this.highlighted
       .selectAll<
         SVGRectElement,
         {
@@ -575,3 +577,29 @@ export default NightingaleTrack;
 
 export { DefaultLayout };
 export { getColorByType };
+
+
+/** Return leftmost start of fragment */
+function getStartFromLocations(locations: FeatureLocation[]): number | undefined {
+  let start: number | undefined = undefined;
+  for (const location of locations) {
+    for (const fragment of location.fragments) {
+      if (start === undefined || fragment.start < start) {
+        start = fragment.start;
+      }
+    }
+  }
+  return start;
+}
+/** Return rightmost end of fragment */
+function getEndFromLocations(locations: FeatureLocation[]): number | undefined {
+  let end: number | undefined = undefined;
+  for (const location of locations) {
+    for (const fragment of location.fragments) {
+      if (end === undefined || fragment.end > end) {
+        end = fragment.end;
+      }
+    }
+  }
+  return end;
+}
