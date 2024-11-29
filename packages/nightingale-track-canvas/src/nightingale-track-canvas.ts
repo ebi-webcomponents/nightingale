@@ -7,7 +7,7 @@ import { last, RangeCollection, Refresher } from "./utils/utils";
 
 
 type Fragment = FeatureLocation["fragments"][number]
-type ExtendedFragment = Fragment & { featureIndex: number, location: FeatureLocation };
+type ExtendedFragment = Fragment & { featureIndex: number };
 
 
 @customElementOnce("nightingale-track-canvas")
@@ -297,7 +297,7 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
     if (!feature.locations) continue;
     for (const location of feature.locations) {
       for (const fragment of location.fragments) {
-        out.push({ ...fragment, featureIndex: i, location });
+        out.push({ ...fragment, featureIndex: i });
       }
     }
   }
