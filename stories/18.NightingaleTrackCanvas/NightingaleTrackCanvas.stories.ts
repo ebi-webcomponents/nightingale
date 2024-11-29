@@ -186,13 +186,13 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
       ${options.showNightingaleTrackCanvas ? nightingaleTrackCanvas({ ...args, length: options.length, id: i }) : undefined}
     `);
     return html`
-      <style>
-        .row { line-height: 0; margin-top: 2px; display: flex; align-items: center; }
-        .label { width: 40px; line-height: initial; font-size: 0.8rem; text-align: center; overflow: hidden; }
-      </style>
       <nightingale-saver element-id="nightingale-root" background-color="white" scale-factor="2"></nightingale-saver>
       <span>Use Ctrl+scroll to zoom.</span>
       <div id="nightingale-root">
+        <style>
+          .row { line-height: 0; margin-top: 2px; display: flex; align-items: center; }
+          .label { width: 40px; line-height: initial; font-size: 0.8rem; text-align: center; overflow: hidden; }
+        </style>
         <nightingale-manager>
           <div style="display:flex; flex-direction: column; width: 100%;">
             ${nightingaleNavigation({ ...args, length: options.length })}

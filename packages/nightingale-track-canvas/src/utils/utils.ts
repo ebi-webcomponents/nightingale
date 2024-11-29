@@ -72,7 +72,7 @@ function firstGteqIndexInRange<T>(sortedArray: ArrayLike<T>, query: number, star
     // key(sortedArray[i]) < query for each i < start
     // key(sortedArray[i]) >= query for each i >= end
     while (end - start > 4) {
-        const mid = (start + end) >> 1;
+        const mid = (start + end) >> 1; // Floored mean of start and end
         if (key(sortedArray[mid]) >= query) {
             end = mid;
         } else {
@@ -115,9 +115,9 @@ export class RangeCollection<T> {
         this.bins = {};
         for (let i = 0; i < items.length; i++) {
             const length = this.stops[i] - this.starts[i];
-            let binSpans = 1;
-            while (binSpans < length) binSpans *= this.Q;
-            (this.bins[binSpans] ??= []).push(i);
+            let binSpan = 1;
+            while (binSpan < length) binSpan *= this.Q;
+            (this.bins[binSpan] ??= []).push(i);
         }
         this.binSpans = sortNumeric(Object.keys(this.bins).map(Number));
         for (const binSpan of this.binSpans) {
@@ -148,8 +148,8 @@ export class RangeCollection<T> {
     private overlappingItemIndicesInBin(binSpan: number, start: number, stop: number, out: number[]): number[] {
         out.length = 0;
         const bin = this.bins[binSpan];
-        const from = firstGteqIndex(bin, Math.floor(start) - binSpan + 1, i => this.starts[i]);
-        const to = firstGteqIndex(bin, Math.ceil(stop), i => this.starts[i]);
+        const from = firstGteqIndex(bin, start - binSpan, i => this.starts[i]);
+        const to = firstGteqIndex(bin, stop, i => this.starts[i]);
         for (let j = from; j < to; j++) {
             const i = bin[j];
             if (this.stops[i] > start) {
