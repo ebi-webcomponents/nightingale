@@ -55,8 +55,7 @@ export class NightingaleScrollbox<TData> extends NightingaleElement {
   private initObserver() {
     const margin = normalizeCssLength(this["root-margin"]);
     this.observer = new IntersectionObserver(entries => this.observerCallback(entries), { root: this, rootMargin: `${margin} 0px ${margin} 0px` });
-    const items = Array.from(this.items);
-    for (const item of items) {
+    for (const item of this.items) {
       this.observer.observe(item);
     }
   }
