@@ -76,6 +76,7 @@ class NightingaleSaver extends NightingaleElement {
         zoom: scaleFactor,
       })
       .then(() => {
+        copyCanvases(element, canvas, scaleFactor);
         const image = canvas
           .toDataURL(`image/${this.fileFormat}`, 1.0)
           .replace(`image/${this.fileFormat}`, "image/octet-stream");
@@ -145,3 +146,54 @@ const wrapHTML = (html: string) =>
   <body>${html}</body>
 </html>
 `;
+
+
+/** Render contents of all HTML canvas elements within `srcElement` into `destCanvas`. */
+function copyCanvases(srcElement: HTMLElement, destCanvas: HTMLCanvasElement, destScale: number = 1) {
+  const destCtx = destCanvas.getContext("2d");
+  if (!destCtx) {
+    console.error("Failed to write to destination canvas.");
+    return;
+  }
+
+  const parentBox = srcElement.getBoundingClientRect();
+  const srcCanvases = srcElement.querySelectorAll('canvas');
+  for (const srcCanvas of srcCanvases) {
+    if (srcCanvas === destCanvas) continue;
+    const box = srcCanvas.getBoundingClientRect();
+    const destX = destScale * (box.x - parentBox.x);
+    const destY = destScale * (box.y - parentBox.y);
+    const destWidth = destScale * box.width;
+    const destHeight = destScale * box.height;
+    // Try render high-resolution image, if `srcCanvas` belongs to an element supporting `getImageData` (e.g. `NightingaleTrackCanvas`):
+    type GetImageDataFunc = (options?: { scale?: number }) => ImageData | undefined;
+    const nightingaleElement = findAncestor(srcCanvas, elem => 'getImageData' in elem && typeof elem.getImageData === 'function') as { getImageData: GetImageDataFunc } | undefined;
+    const image = nightingaleElement?.getImageData({ scale: destScale });
+    if (image) {
+      // Copy rendered image with required resolution
+      const offscreen = new OffscreenCanvas(image.width, image.height);
+      offscreen.getContext('2d')?.putImageData(image, 0, 0);
+      destCtx.drawImage(offscreen,
+        0, 0, offscreen.width, offscreen.height,
+        destX, destY, destWidth, destHeight,
+      );
+    } else {
+      // Copy canvas content as is (will be blurred if destination size is larger)
+      destCtx.drawImage(srcCanvas,
+        0, 0, srcCanvas.width, srcCanvas.height,
+        destX, destY, destWidth, destHeight,
+      );
+    }
+  }
+}
+
+/** Return nearest DOM ancestor which fulfills `predicate`, if any. */
+function findAncestor(element: HTMLElement | null, predicate: (elem: HTMLElement) => Boolean): HTMLElement | undefined {
+  while (element) {
+    if (predicate(element)) {
+      return element;
+    }
+    element = element.parentElement;
+  }
+  return undefined;
+}
