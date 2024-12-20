@@ -1,7 +1,13 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import heatmapStyleSheet from "./heatmap-component.css";
+import { scaleSequential, Selection as d3Selection } from "d3";
+import { Heatmap } from "heatmap-component";
+import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
+import {
+  Box,
+  scaleDistance,
+} from "heatmap-component/lib/heatmap-component/scales";
 
 import NightingaleElement, {
   customElementOnce,
@@ -13,19 +19,12 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { Heatmap } from "heatmap-component";
-import {
-  interpolateYlOrRd,
-  scaleSequential,
-  Selection as d3Selection,
-} from "d3";
-import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
-import {
-  Box,
-  scaleDistance,
-} from "heatmap-component/lib/heatmap-component/scales";
 import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/utils/Region";
 
+import heatmapStyleSheet from "./heatmap-component.css";
+
+const ALPHAMISSENSE_BLUE = "#3d5493";
+const ALPHAMISSENSE_RED = "#9a131a";
 interface HotmapData {
   xValue: number;
   yValue: string;
@@ -44,7 +43,7 @@ const formatDataItem = (item: unknown): string => {
 };
 
 const hexToRgb = (
-  hex: string,
+  hex: string
 ): { r: number; g: number; b: number; a?: number } | null => {
   let result = null;
   if (hex.length === 7)
@@ -66,10 +65,10 @@ class NightingaleSequenceHeatmap extends withManager(
   withZoom(
     withResizable(
       withMargin(
-        withPosition(withDimensions(withHighlight(NightingaleElement))),
-      ),
-    ),
-  ),
+        withPosition(withDimensions(withHighlight(NightingaleElement)))
+      )
+    )
+  )
 ) {
   /**
    * Mandatory field in order for heatmap component to work properly
@@ -79,6 +78,9 @@ class NightingaleSequenceHeatmap extends withManager(
 
   @property({ type: Number })
   "hm-highlight-width": number = 0;
+
+  @property({ type: Boolean })
+  "use-ctrl-to-zoom": false;
 
   heatmapDomainX?: number[];
   heatmapDomainY?: string[];
@@ -124,20 +126,17 @@ class NightingaleSequenceHeatmap extends withManager(
    * @returns lit-html to render for this component
    */
   render() {
-    const mainStyles = {
-      width: this.width + "px",
-      paddingLeft: this["margin-left"] + "px",
-      paddingRight: this["margin-right"] + "px",
+    const heatmapStyles = {
+      width: this.getWidthWithMargins() + "px",
+      height: this.height + "px",
+      zIndex: 1,
+      marginLeft: this["margin-left"] + "px",
+      marginRight: this["margin-right"] + "px",
       paddingTop: this["margin-top"] + "px",
       paddingBottom: this["margin-bottom"] + "px",
     };
-    const heatmapStyles = {
-      width: this.width - this["margin-left"] - this["margin-right"] + "px",
-      height: this.height + "px",
-      zIndex: 1,
-    };
     const loadingStyles = {
-      width: this.width - 20 + "px",
+      width: this.getWidthWithMargins() + "px",
       textAlign: "center",
     };
 
@@ -157,8 +156,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
     if (this.heatmapData) {
       // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
-      return html`
-        <style>
+      return html` <style>
           #${this["heatmap-id"]} {
             /** Position of bottom-left corner of tooltip box relative to the mouse position */
             --tooltip-offset-x: 5px;
@@ -178,43 +176,105 @@ class NightingaleSequenceHeatmap extends withManager(
           ${heatmapStyleSheet}
         </style>
 
-        <div class="container" style=${styleMap(mainStyles)}">
-          <div id="${this["heatmap-id"]}" style=${styleMap(
-            heatmapStyles,
-          )}"></div>
+        <div id="container">
+          <div id="${this["heatmap-id"]}" style=${styleMap(heatmapStyles)} />
         </div>`;
     } else {
-      return html`
-        <div id="${this["heatmap-id"]}_loading" style=${styleMap(
-          loadingStyles,
-        )}">
-          <svg width="200px" height="200px"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;">
-            <circle cx="75" cy="50" fill="#363a3c" r="6.39718">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.875s"></animate>
-            </circle>
-            <circle cx="67.678" cy="67.678" fill="#363a3c" r="4.8">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.75s"></animate>
-            </circle>
-            <circle cx="50" cy="75" fill="#363a3c" r="4.8">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.625s"></animate>
-            </circle>
-            <circle cx="32.322" cy="67.678" fill="#363a3c" r="4.8">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.5s"></animate>
-            </circle>
-            <circle cx="25" cy="50" fill="#363a3c" r="4.8">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.375s"></animate>
-            </circle>
-            <circle cx="32.322" cy="32.322" fill="#363a3c" r="4.80282">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.25s"></animate>
-            </circle>
-            <circle cx="50" cy="25" fill="#363a3c" r="6.40282">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="-0.125s"></animate>
-            </circle>
-            <circle cx="67.678" cy="32.322" fill="#363a3c" r="7.99718">
-                <animate attributeName="r" values="4.8;4.8;8;4.8;4.8" times="0;0.1;0.2;0.3;1" dur="1s" repeatCount="indefinite" begin="0s"></animate>
-            </circle>
-          </svg>
-        </div>`;
+      return html` <div
+        id="${this["heatmap-id"]}_loading"
+        style=${styleMap(loadingStyles)}
+      >
+        <svg
+          width="200px"
+          height="200px"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="xMidYMid"
+          style="background: none;"
+        >
+          <circle cx="75" cy="50" fill="#363a3c" r="6.39718">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.875s"
+            ></animate>
+          </circle>
+          <circle cx="67.678" cy="67.678" fill="#363a3c" r="4.8">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.75s"
+            ></animate>
+          </circle>
+          <circle cx="50" cy="75" fill="#363a3c" r="4.8">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.625s"
+            ></animate>
+          </circle>
+          <circle cx="32.322" cy="67.678" fill="#363a3c" r="4.8">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.5s"
+            ></animate>
+          </circle>
+          <circle cx="25" cy="50" fill="#363a3c" r="4.8">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.375s"
+            ></animate>
+          </circle>
+          <circle cx="32.322" cy="32.322" fill="#363a3c" r="4.80282">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.25s"
+            ></animate>
+          </circle>
+          <circle cx="50" cy="25" fill="#363a3c" r="6.40282">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="-0.125s"
+            ></animate>
+          </circle>
+          <circle cx="67.678" cy="32.322" fill="#363a3c" r="7.99718">
+            <animate
+              attributeName="r"
+              values="4.8;4.8;8;4.8;4.8"
+              times="0;0.1;0.2;0.3;1"
+              dur="1s"
+              repeatCount="indefinite"
+              begin="0s"
+            ></animate>
+          </circle>
+        </svg>
+      </div>`;
     }
   }
 
@@ -223,7 +283,7 @@ class NightingaleSequenceHeatmap extends withManager(
    * Here we bind heatmap events in case a heatmap instance does not exist
    */
   updated(
-    _changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>,
+    _changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>
   ): void {
     if (this.heatmapData && !this.heatmapInstance) {
       this.renderHeatmap();
@@ -318,13 +378,15 @@ class NightingaleSequenceHeatmap extends withManager(
     const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
     const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
 
-    const colorScale = scaleSequential([dataMin, dataMax], interpolateYlOrRd);
+    const colorScale = scaleSequential(
+      [dataMin, dataMax],
+      [ALPHAMISSENSE_BLUE, ALPHAMISSENSE_RED]
+    );
     hm.setColor((d) => colorScale(d.score));
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
       const returnHTML = `
         <b>You are at</b> <br />
-
         x,y: <b>${d.xValue},${d.yValue}</b><br />
         score: <b>${formatDataItem(d.score)}</b>`;
       return returnHTML;
@@ -363,7 +425,7 @@ class NightingaleSequenceHeatmap extends withManager(
             },
             bubbles: true,
             cancelable: true,
-          }),
+          })
         );
       }
       let xMaxDiff = d.xMax - 1;
@@ -380,7 +442,7 @@ class NightingaleSequenceHeatmap extends withManager(
             },
             bubbles: true,
             cancelable: true,
-          }),
+          })
         );
       }
       if (!this.firstZoom) {
@@ -388,8 +450,8 @@ class NightingaleSequenceHeatmap extends withManager(
       }
     });
 
-    this.heatmapInstance.events.hover.subscribe((d) => {
-      // data to send to nightingale can be null if hover outside boundaries
+    this.heatmapInstance.events.select.subscribe((d) => {
+      // data to send to nightingale can be null if click is outside boundaries
       let toSend = null;
       if (d && d.cell && d.cell.xIndex) {
         toSend = `${d.cell.xIndex + 1}:${d.cell.xIndex + 1}`;
@@ -403,7 +465,7 @@ class NightingaleSequenceHeatmap extends withManager(
           },
           bubbles: true,
           cancelable: true,
-        }),
+        })
       );
     });
   }
@@ -429,10 +491,14 @@ class NightingaleSequenceHeatmap extends withManager(
     if (!this.heatmapInstance) {
       return;
     }
+    // use heatmap's ctrl to zoom extension
+    if (this["use-ctrl-to-zoom"]) {
+      this.heatmapInstance.extensions.zoom?.update({ scrollRequireCtrl: true });
+    }
+
     // any so we can use private marker attributes
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const heatmapInstanceMarker = <any>this.heatmapInstance.extensions.marker!;
-
     // support for multiple segments
     const className = HeatmapClassNames.MarkerY;
 
@@ -441,12 +507,7 @@ class NightingaleSequenceHeatmap extends withManager(
       .data(this.highlightedRegion.segments)
       .join(
         (
-          enter: d3Selection<
-            SVGRectElement,
-            SegmentType,
-            SVGElement,
-            undefined
-          >,
+          enter: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
         ) =>
           enter
             .append("rect")
@@ -456,7 +517,7 @@ class NightingaleSequenceHeatmap extends withManager(
             .attr("x", (d: SegmentType) => {
               // calculate x according to worldToCanvas scale of heatmap plot
               return heatmapInstanceMarker.state.scales.worldToCanvas.x(
-                d.start - 1,
+                d.start - 1
               );
             })
             // y value is start of canvas
@@ -466,13 +527,13 @@ class NightingaleSequenceHeatmap extends withManager(
               // and number of residues that need to be shown
               return scaleDistance(
                 heatmapInstanceMarker.state.scales.worldToCanvas.x,
-                Math.max(d.end - d.start + 1, 1),
+                Math.max(d.end - d.start + 1, 1)
               );
             })
             // height value is canvas size
             .attr(
               "height",
-              Box.height(heatmapInstanceMarker.state.boxes.canvas),
+              Box.height(heatmapInstanceMarker.state.boxes.canvas)
             ),
         // update is basically same as enter
         (
@@ -481,23 +542,23 @@ class NightingaleSequenceHeatmap extends withManager(
             SegmentType,
             SVGElement,
             undefined
-          >,
+          >
         ) =>
           update
             .attr("x", (d: SegmentType) => {
               return heatmapInstanceMarker.state.scales.worldToCanvas.x(
-                d.start - 1,
+                d.start - 1
               );
             })
             .attr("width", (d: SegmentType) => {
               return scaleDistance(
                 heatmapInstanceMarker.state.scales.worldToCanvas.x,
-                Math.max(d.end - d.start + 1, 1),
+                Math.max(d.end - d.start + 1, 1)
               );
             }),
         (
-          exit: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>,
-        ) => exit.remove(),
+          exit: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
+        ) => exit.remove()
       );
   }
 }

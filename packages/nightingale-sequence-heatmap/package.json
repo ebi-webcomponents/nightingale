@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-sequence-heatmap",
-  "version": "5.0.0",
+  "version": "5.3.0",
   "description": "Nightingale wrapper for PDBe Canvas Heatmap library (hotmap)",
   "keywords": [
     "nightingale",
@@ -19,9 +19,9 @@
     "src"
   ],
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^4.5.0",
+    "@nightingale-elements/nightingale-new-core": "4.5.0",
     "d3": "7.8.5",
-    "heatmap-component": "^1.0.1"
+    "heatmap-component": "1.0.1"
   },
   "publishConfig": {
     "access": "public"

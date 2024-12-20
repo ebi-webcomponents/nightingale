@@ -25,10 +25,11 @@ Object.defineProperties(window.HTMLElement.prototype, {
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
-window.ResizeObserver = class ResizeObserver {
-  observe = jest.fn();
-  unobserve = jest.fn();
-};
+window.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
 // This is to handle getBBox on SVGElements which lack support
 // You can override the mockReturnValue in your tests

@@ -38,7 +38,7 @@ describe("Layout bumping", () => {
   });
 
   test("should be on second row", () => {
-    expect(layout.getFeatureYPos(features[1])).toEqual(8);
+    expect(layout.getFeatureYPos(features[1])).toBeCloseTo(7.3333, 3);
   });
 
   test("should be back on first row", () => {
@@ -46,10 +46,10 @@ describe("Layout bumping", () => {
   });
 
   test("should be back on third row", () => {
-    expect(layout.getFeatureYPos(features[3])).toEqual(14);
+    expect(layout.getFeatureYPos(features[3])).toBeCloseTo(12.6666, 3);
   });
 
-  test("should be on second row", () => {
-    expect(layout.getFeatureYPos(features[4])).toEqual(8);
+  test("should be on second row again", () => {
+    expect(layout.getFeatureYPos(features[4])).toBeCloseTo(7.3333, 3);
   });
 });

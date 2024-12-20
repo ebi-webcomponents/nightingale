@@ -6,7 +6,7 @@
     "prebuild": "npm run clean",
     "build": "lerna run build",
     "build:watch": "lerna exec -- rollup --config ../../rollup.config.mjs --watch",
-    "test": "lerna run test",
+    "test": "yarn jest",
     "clean": "rimraf packages/**/dist",
     "clean:modules": "rimraf node_modules packages/**/node_modules",
     "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
@@ -34,12 +34,12 @@
     "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-typescript": "11.1.6",
     "@storybook/addon-a11y": "6.5.16",
-    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-actions": "6.5.16",
     "@storybook/addon-essentials": "6.5.16",
     "@storybook/addon-links": "6.5.16",
     "@storybook/addon-storysource": "6.5.16",
-    "@storybook/builder-webpack5": "^6.5.16",
-    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/builder-webpack5": "6.5.16",
+    "@storybook/manager-webpack5": "6.5.16",
     "@storybook/web-components": "6.5.16",
     "@types/d3": "7.4.3",
     "@types/jest": "29.5.12",
@@ -74,6 +74,6 @@
   ],
   "customElements": "custom-elements.json",
   "dependencies": {
-    "rimraff": "^0.0.1-security"
+    "rimraff": "0.0.1-security"
   }
 }

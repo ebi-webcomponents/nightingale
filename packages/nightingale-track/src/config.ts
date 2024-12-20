@@ -305,6 +305,20 @@ export const config = {
     shape: "rectangle",
     color: "#8585fc",
   },
+  PTM: {
+    name: "ptm",
+    label: "PTM residue",
+    tooltip: "",
+    shape: "rectangle",
+    color: "#06038D",
+  },
+  EPITOPE: {
+    name: "epitope",
+    label: "Epitopes",
+    tooltip: "",
+    shape: "rectangle",
+    color: "#4ade33",
+  },
   ANTIGEN: {
     name: "antigen",
     label: "Antibody binding sequences",

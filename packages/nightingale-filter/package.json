@@ -1,7 +1,7 @@
 {
-  "name": "@nightingale-elements/nightingale-linegraph-track",
-  "description": "Nightingale Line Graph",
+  "name": "@nightingale-elements/nightingale-filter",
   "version": "5.3.2",
+  "description": "Filter component",
   "files": [
     "dist",
     "src"
@@ -13,12 +13,18 @@
   "scripts": {
     "build": "rollup --config ../../rollup.config.mjs"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nightingale-elements/nightingale-manager": "^5.3.2",
+    "@nightingale-elements/nightingale-new-core": "^5.3.2",
+    "lodash-es": "4.17.11"
+  },
   "keywords": [
     "nightingale",
-    "webcomponents",
     "customelements",
-    "line",
-    "graph"
+    "webcomponents"
   ],
   "repository": {
     "type": "git",
@@ -27,12 +33,5 @@
   "bugs": {
     "url": "https://github.com/ebi-webcomponents/nightingale/issues"
   },
-  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.3.2",
-    "d3": "7.9.0"
-  }
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/"
 }
