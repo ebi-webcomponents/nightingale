@@ -29,6 +29,7 @@
     "customelements",
     "variation"
   ],
+  "sideEffects": false,
   "authors": [
     "Xavier Watkins &lt;xwatkins@ebi.ac.uk&gt;",
     "Gustavo Salazar &lt;gsalazar@ebi.ac.uk&gt;"

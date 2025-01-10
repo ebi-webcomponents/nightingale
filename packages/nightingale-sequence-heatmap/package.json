@@ -7,6 +7,7 @@
     "heatmap",
     "hotmap"
   ],
+  "sideEffects": false,
   "author": "Marcelo Afonso <marcelo@ebi.ac.uk>",
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "license": "ISC",

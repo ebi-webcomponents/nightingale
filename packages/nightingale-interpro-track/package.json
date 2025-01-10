@@ -27,6 +27,7 @@
     "webcomponents",
     "customelements"
   ],
+  "sideEffects": false,
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
   "publishConfig": {
