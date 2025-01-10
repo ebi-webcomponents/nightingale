@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-filter",
-  "version": "5.4.0",
+  "version": "5.4.1-alpha.0",
   "description": "Filter component",
   "files": [
     "dist",
@@ -17,8 +17,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-manager": "^5.4.0",
-    "@nightingale-elements/nightingale-new-core": "^5.4.0",
+    "@nightingale-elements/nightingale-manager": "^5.4.1-alpha.0",
+    "@nightingale-elements/nightingale-new-core": "^5.4.1-alpha.0",
     "lodash-es": "4.17.11"
   },
   "keywords": [

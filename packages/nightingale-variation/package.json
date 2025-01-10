@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-variation",
-  "version": "5.4.0",
+  "version": "5.4.1-alpha.0",
   "description": "Variation viewer component",
   "files": [
     "dist",
@@ -39,8 +39,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.0",
-    "@nightingale-elements/nightingale-track": "^5.4.0",
+    "@nightingale-elements/nightingale-new-core": "^5.4.1-alpha.0",
+    "@nightingale-elements/nightingale-track": "^5.4.1-alpha.0",
     "d3": "7.8.5",
     "lodash-es": "4.17.15"
   }
