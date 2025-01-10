@@ -1,40 +1,40 @@
-const path = require("path");
+import { dirname, join } from "path";
+import remarkGfm from "remark-gfm";
 
 module.exports = {
-  stories: [
-    "../stories/**/*.stories.mdx",
-    "../stories/**/*.stories.@(js|jsx|ts|tsx)",
-  ],
+  stories: ["../stories/**/*.mdx", "../stories/**/*.stories.@(js|jsx|ts|tsx)"],
+
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-a11y",
-    "@storybook/addon-storysource",
-    "@storybook/addon-actions",
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-essentials"),
+    getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-storysource"),
+    getAbsolutePath("@storybook/addon-actions"),
+    getAbsolutePath("@storybook/addon-mdx-gfm"),
+    {
+      name: "@storybook/addon-docs",
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
   ],
+
   typescript: {
     check: false,
   },
-  core: {
-    builder: "webpack5",
+
+  framework: {
+    name: getAbsolutePath("@storybook/web-components-vite"),
+    options: {},
   },
-  webpackFinal: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@nightingale-elements/nightingale-new-core": path.resolve(
-        __dirname,
-        "../packages/nightingale-new-core/src/index.ts",
-      ),
-    };
-    config.module.rules.push({
-      test: /\.(ts|tsx)$/,
-      include: path.resolve(__dirname, "../packages"),
-      loader: "ts-loader",
-    });
-    config.module.rules.push({
-      test: /\.(tsv)$/,
-      type: "asset/source",
-    });
-    return config;
-  },
+
+  docs: {},
 };
+
+function getAbsolutePath(value) {
+  return dirname(require.resolve(join(value, "package.json")));
+}

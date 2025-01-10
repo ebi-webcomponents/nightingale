@@ -27,7 +27,7 @@ After these steps we can use the component just as you would a regular HTML tag.
 <Sandpack
   template="static"
   files={{
-    "index.html": `<!-- Firstly create an importmap to resolve module imports -->
+    "index.html": `{/* Firstly create an importmap to resolve module imports */}
   <script type="importmap">
   {
     "imports": {
@@ -35,11 +35,11 @@ After these steps we can use the component just as you would a regular HTML tag.
     }
   }
 </script>
-<!-- Import the component -->
+{/* Import the component */}
 <script type="module">
   import "@nightingale-elements/nightingale-sequence@latest";
 </script>
-<!-- Use the component just as you would a regular HTML tag -->
+{/* Use the component just as you would a regular HTML tag */}
 <nightingale-sequence
   sequence="SEQUENCESEQUENCESEQUENCESEQUENCE"
   width="800"
@@ -67,7 +67,7 @@ it's also possible to load this as a property as seen in the following code snip
 <Sandpack
   template="static"
   files={{
-    "index.html": `<!-- Firstly create an importmap to resolve module imports -->
+    "index.html": `{/* Firstly create an importmap to resolve module imports */}
   <script type="importmap">
   {
     "imports": {
@@ -85,7 +85,7 @@ it's also possible to load this as a property as seen in the following code snip
     seq.data = "SEQUENCESEQUENCESEQUENCESEQUENCE";
   })
 </script>
-<!-- Use the component just as you would a regular HTML tag -->
+{/* Use the component just as you would a regular HTML tag */}
 <nightingale-sequence
   width="800"
   height="40"
