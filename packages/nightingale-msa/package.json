@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-msa",
-  "version": "5.4.1-alpha.1",
+  "version": "5.4.0",
   "files": [
     "dist",
     "src"
@@ -20,7 +20,6 @@
     "webcomponents",
     "customelements"
   ],
-  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -30,7 +29,7 @@
   },
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1-alpha.1",
+    "@nightingale-elements/nightingale-new-core": "^5.4.0",
     "d3": "7.9.0"
   }
 }

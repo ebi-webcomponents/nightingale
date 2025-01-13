@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-scrollbox",
-  "version": "5.4.1-alpha.1",
+  "version": "5.4.0",
   "description": "Component for smart rendering of scrollboxes in Nightingale",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -19,7 +19,6 @@
     "webcomponents",
     "customelements"
   ],
-  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/ebi-webcomponents/nightingale.git"
@@ -34,6 +33,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1-alpha.1"
+    "@nightingale-elements/nightingale-new-core": "^5.4.0"
   }
 }
