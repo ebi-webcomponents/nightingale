@@ -74,6 +74,33 @@ export type Feature = {
 // TODO: height is not triggering a full redrawn when is changed after first render
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
+
+export interface SequenceConservationData {
+  // TODO revise data schema
+  index: number[],
+  conservation_score: number[],
+  probability_A: number[],
+  probability_C: number[],
+  probability_D: number[],
+  probability_E: number[],
+  probability_F: number[],
+  probability_G: number[],
+  probability_H: number[],
+  probability_I: number[],
+  probability_K: number[],
+  probability_L: number[],
+  probability_M: number[],
+  probability_N: number[],
+  probability_P: number[],
+  probability_Q: number[],
+  probability_R: number[],
+  probability_S: number[],
+  probability_T: number[],
+  probability_V: number[],
+  probability_W: number[],
+  probability_Y: number[],
+}
+
 @customElementOnce("nightingale-conservation-track")
 class NightingaleConservationTrack extends withManager(
   withZoom(
@@ -91,11 +118,7 @@ class NightingaleConservationTrack extends withManager(
   @property({ type: String })
   layout?: "non-overlapping" | "default";
 
-  protected featureShape = new FeatureShape();
-  protected layoutObj?: DefaultLayout | NonOverlappingLayout;
-  #originalData: Feature[] = [];
-  #data: Feature[] = [];
-  filters = null;
+  #conservationData?: SequenceConservationData;
 
   protected seqG?: Selection<
     SVGGElement,
@@ -116,39 +139,9 @@ class NightingaleConservationTrack extends withManager(
     unknown
   >;
 
-  getLayout() {
-    if (String(this.layout).toLowerCase() === "non-overlapping")
-      return new NonOverlappingLayout({
-        layoutHeight: this.height,
-        margin: {
-          top: this["margin-top"],
-          bottom: this["margin-bottom"],
-          left: this["margin-left"],
-          right: this["margin-right"],
-        },
-      });
-    return new DefaultLayout({
-      layoutHeight: this.height,
-      margin: {
-        top: this["margin-top"],
-        bottom: this["margin-bottom"],
-        left: this["margin-left"],
-        right: this["margin-right"],
-      },
-    });
-  }
-
   connectedCallback() {
     super.connectedCallback();
-    this.layoutObj = this.getLayout();
-    if (this.#data) this.createTrack();
-
-    // TODO: re-enable when the dataloadre is implemented
-    // this.addEventListener("load", (e) => {
-    //   if (_includes(this.children, e.target)) {
-    //     this.data = e.detail.payload;
-    //   }
-    // });
+    if (this.data) this.createTrack();
   }
 
   static normalizeLocations(data: Feature[]) {
@@ -167,25 +160,13 @@ class NightingaleConservationTrack extends withManager(
     });
   }
 
-  processData(data: Feature[]) {
-    this.#originalData = NightingaleConservationTrack.normalizeLocations(data);
-  }
-
-  set data(data: Feature[]) {
-    this.processData(data);
-    this.applyFilters();
-    this.layoutObj = this.getLayout();
+  set data(data: SequenceConservationData | undefined) {
+    this.#conservationData = data;
     this.createTrack();
   }
   get data() {
-    return this.#data;
+    return this.#conservationData;
   }
-  // TODO: re-enable filters
-  // set filters(filters) {
-  //   this._filters = filters;
-  //   this.applyFilters();
-  //   this.createTrack();
-  // }
 
   attributeChangedCallback(
     name: string,
@@ -197,24 +178,8 @@ class NightingaleConservationTrack extends withManager(
       ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) ||
       name.startsWith("margin-")
     ) {
-      this.applyFilters();
-      this.layoutObj = this.getLayout();
       this.createTrack();
     }
-  }
-
-  #getPTMResidueShape(f: PTM & { feature: Feature; position: number }) {
-    let ptmLength = 1;
-    // For longer proteins, the PTMs have to be shown prominent in the first look
-    if (this.length && this.length > 500) {
-      ptmLength = this.getSingleBaseWidth() < 4 ? 4 : 1;
-    }
-    return this.featureShape.getFeatureShape(
-      this.getSingleBaseWidth() / 2, // Halve the width of the ptm residue to distinguish between each other if one follows next closely
-      this.layoutObj?.getFeatureHeight(f) || 0,
-      ptmLength,
-      this.getShape(f)
-    );
   }
 
   protected getFeatureColor(f: Feature | { feature: Feature }): string {
@@ -271,10 +236,7 @@ class NightingaleConservationTrack extends withManager(
   }
 
   protected createTrack() {
-    if (!this.#data) {
-      return;
-    }
-    this.layoutObj?.init(this.#data);
+    console.log("createTrack", this.data);
 
     this.svg?.selectAll("g").remove();
 
@@ -285,248 +247,12 @@ class NightingaleConservationTrack extends withManager(
 
     if (!this.svg) return;
     this.seqG = this.svg.append("g").attr("class", "sequence-features");
-    this.createFeatures();
     this.highlighted = this.svg.append("g").attr("class", "highlighted");
     this.margins = this.svg.append("g").attr("class", "margin");
   }
 
-  protected createFeatures() {
-    if (!this.seqG) return;
-    const featuresG = this.seqG.selectAll("g.feature-group").data(this.#data);
-
-    const locationsG = featuresG
-      .enter()
-      .append("g")
-      .attr("class", "feature-group")
-      .attr("id", (d) => `g_${d.accession}`)
-      .selectAll("g.location-group")
-      .data((d) =>
-        (d.locations || []).map((loc) =>
-          Object.assign({}, loc, {
-            feature: d,
-          })
-        )
-      )
-      .enter()
-      .append("g")
-      .attr("class", "location-group");
-
-    const fragmentGroup = locationsG
-      .selectAll("g.fragment-group")
-      .data((d) =>
-        d.fragments.map((loc) =>
-          Object.assign({}, loc, {
-            feature: d.feature,
-          })
-        )
-      )
-      .enter()
-      .append("g")
-      .attr("class", "fragment-group");
-
-    fragmentGroup
-      .append("path")
-      .attr("class", (f) => `${this.getShape(f)} feature`)
-      .attr("d", (f) =>
-        this.featureShape.getFeatureShape(
-          this.getSingleBaseWidth(),
-          this.layoutObj?.getFeatureHeight() || 0,
-          f.end ? f.end - f.start + 1 : 1,
-          this.getShape(f)
-        )
-      )
-      .attr(
-        "transform",
-        (f) =>
-          `translate(${this.getXFromSeqPosition(f.start)},${
-            this.layoutObj?.getFeatureYPos(f.feature) || 0
-          })`
-      )
-      .style("fill", (f) => this.getFeatureFillColor(f))
-      .attr("stroke", (f) => this.getFeatureColor(f))
-      .style("fill-opacity", ({ feature }) =>
-        feature.opacity ? feature.opacity : 0.9
-      )
-      .style("stroke-opacity", ({ feature }) =>
-        feature.opacity ? feature.opacity : 0.9
-      );
-
-    const residueGroup = fragmentGroup
-      .selectAll("g.residue-group")
-      .data((d) =>
-        d.feature.ptms
-          ? [
-              d.feature.ptms?.map((ptm) =>
-                Object.assign({}, ptm, {
-                  feature: d.feature,
-                  position: ptm.position,
-                })
-              ),
-            ]
-          : []
-      )
-      .enter()
-      .append("g")
-      .attr("class", "residue-group");
-
-    fragmentGroup
-      .append("rect")
-      .attr("class", "outer-rectangle feature")
-      .attr("width", (f) =>
-        Math.max(
-          0,
-          this.getSingleBaseWidth() * (f.end ? f.end - f.start + 1 : 1)
-        )
-      )
-      .attr("height", this.layoutObj?.getFeatureHeight() || 0)
-      .attr(
-        "transform",
-        (f) =>
-          `translate(${this.getXFromSeqPosition(f.start)},${
-            this.layoutObj?.getFeatureYPos(f.feature) || 0
-          })`
-      )
-      .style("fill", "transparent")
-      .attr("stroke", "transparent")
-      .call(bindEvents, this);
-
-    residueGroup
-      .selectAll("g.residue")
-      .data((d) => d)
-      .enter()
-      .append("path")
-      .attr("class", (f) => `${this.getShape(f)} residue`)
-      .attr("d", (f) => this.#getPTMResidueShape(f))
-      .attr(
-        "transform",
-        (f) =>
-          // It is placed in the middle of a single bandwidth
-          `translate(${
-            this.getXFromSeqPosition(
-              Number(f.feature.start) + Number(f.position) - 1
-            ) +
-            this.getSingleBaseWidth() / 4
-          },
-          ${this.layoutObj?.getFeatureYPos(f.feature)})`
-      )
-      .attr("fill", getColorByType("PTM"))
-      .style("fill-opacity", ({ feature }) =>
-        feature.opacity ? feature.opacity : 0.9
-      )
-      .style("stroke-opacity", ({ feature }) => {
-        return feature.opacity ? feature.opacity : 0.9;
-      })
-      .call(bindEvents, this);
-  }
-
-  private applyFilters() {
-    if ((this.filters || []).length <= 0) {
-      this.#data = this.#originalData;
-      return;
-    }
-    // TODO: re-enable filters
-    //   // Filters are OR-ed within a category and AND-ed between categories
-    //   const groupedFilters = _groupBy(this._filters, "category");
-    //   const filteredGroups = Object.values(groupedFilters).map((filterGroup) => {
-    //     const filteredData = filterGroup.map((filterItem) =>
-    //       filterItem.filterFn(this.#originalData)
-    //     );
-    //     return _union(...filteredData);
-    //   });
-    //   const intersection = _intersection(...filteredGroups);
-    //   this._data = intersection;
-  }
-
   refresh() {
     if (this.xScale && this.seqG) {
-      const fragmentG = this.seqG.selectAll("g.fragment-group").data(
-        this.#data.reduce(
-          (acc: unknown[], f) =>
-            acc.concat(
-              (f.locations || []).reduce(
-                (acc2: unknown[], e) =>
-                  acc2.concat(
-                    e.fragments.map((loc) =>
-                      Object.assign({}, loc, {
-                        feature: f,
-                      })
-                    )
-                  ),
-                []
-              )
-            ),
-          []
-        )
-      );
-
-      const residueG = this.seqG.selectAll("g.residue-group").data(
-        this.#data.reduce(
-          (featureAcc: unknown[], f) =>
-            featureAcc.concat([
-              f.ptms?.reduce(
-                (ptmAcc: unknown[]) =>
-                  ptmAcc.concat((ptm: PTM) =>
-                    Object.assign({}, ptm, {
-                      feature: f,
-                      position: ptm.position,
-                    })
-                  ),
-                []
-              ),
-            ]),
-          []
-        )
-      );
-
-      fragmentG
-        .selectAll<SVGPathElement, Feature>("path.feature")
-        .attr("d", (f) =>
-          this.featureShape.getFeatureShape(
-            this.getSingleBaseWidth(),
-            this.layoutObj?.getFeatureHeight() || 0,
-            f?.end && f?.start ? f.end - f.start + 1 : 1,
-            this.getShape(f)
-          )
-        )
-        .attr(
-          "transform",
-          (f) =>
-            `translate(${this.getXFromSeqPosition(
-              f.start || 0
-            )},${this.layoutObj?.getFeatureYPos(f.feature as Feature)})`
-        );
-
-      residueG
-        .selectAll<SVGPathElement, PTM & { feature: Feature; position: number; }>("path.residue")
-        .attr("d", (f) => this.#getPTMResidueShape(f))
-        .attr(
-          "transform",
-          (f) =>
-            `translate(${
-              this.getXFromSeqPosition(
-                Number(f.feature?.start) + Number(f.position) - 1
-              ) +
-              this.getSingleBaseWidth() / 4
-            },${this.layoutObj?.getFeatureYPos(f.feature as Feature)})`
-        );
-
-      fragmentG
-        .selectAll<SVGRectElement, Feature>("rect.outer-rectangle")
-        .attr("width", (f) =>
-          Math.max(
-            0,
-            this.getSingleBaseWidth() *
-              (f?.end && f?.start ? f.end - f.start + 1 : 1)
-          )
-        )
-        .attr("height", this.layoutObj?.getFeatureHeight() || 0)
-        .attr(
-          "transform",
-          (f) =>
-            `translate(${this.getXFromSeqPosition(f.start || 0)},${
-              this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0
-            })`
-        );
     }
     this.updateHighlight();
 
@@ -568,8 +294,15 @@ class NightingaleConservationTrack extends withManager(
     this.createTrack();
   }
 
-  render() {
-    return html`<svg class="container"></svg>`;
+  override render() {
+    return html`
+      <div class="container">
+        <div style="position: relative; z-index: 0;">
+          <canvas style="position: absolute; left: 0; top: 0; z-index: -1;"></canvas>
+          <svg></svg>
+        </div>
+      </div>
+    `;
   }
 }
 
