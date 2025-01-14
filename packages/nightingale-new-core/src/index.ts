@@ -1,4 +1,5 @@
 export { default as withDimensions } from "./mixins/withDimensions/index";
+export { default as withCanvas } from "./mixins/withCanvas/index";
 export { default as withPosition } from "./mixins/withPosition/index";
 export { default as withMargin } from "./mixins/withMargin/index";
 export { default as withResizable } from "./mixins/withResizable/index";

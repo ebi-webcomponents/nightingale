@@ -1,50 +1,18 @@
-import { createEvent, customElementOnce } from "@nightingale-elements/nightingale-new-core";
+import { createEvent, customElementOnce, withCanvas } from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack, { Feature, FeatureLocation, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
 import { drawRange, drawSymbol, drawUnknown, shapeCategory } from "./utils/draw-shapes";
 import { last, RangeCollection, Refresher } from "./utils/utils";
 
-
 type Fragment = FeatureLocation["fragments"][number]
 type ExtendedFragment = Fragment & { featureIndex: number };
 
 
 @customElementOnce("nightingale-track-canvas")
-export default class NightingaleTrackCanvas extends NightingaleTrack {
-  private canvas?: Selection<HTMLCanvasElement, unknown, HTMLElement, unknown>;
-  private canvasCtx?: CanvasRenderingContext2D;
-  /** Ratio of canvas logical size versus canvas display size */
-  private canvasScale: number = 1;
+export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack) {
   /** Feature fragments, stored in a data structure for fast range queries */
   private fragmentCollection?: RangeCollection<ExtendedFragment>;
-
-
-  override connectedCallback(): void {
-    super.connectedCallback();
-    // Correctly adjust canvasScale on resize:
-    select(window).on(`resize.NightingaleTrackCanvas-${this.id}`, () => {
-      const devicePixelRatio = getDevicePixelRatio();
-      if (devicePixelRatio !== this.canvasScale) {
-        this.canvasScale = devicePixelRatio;
-        this.refresh();
-      }
-    });
-  }
-
-  override disconnectedCallback(): void {
-    select(window).on(`resize.NightingaleTrackCanvas-${this.id}`, null);
-    super.disconnectedCallback();
-  }
-
-  override onDimensionsChange(): void {
-    super.onDimensionsChange();
-    if (this.canvas && !this.canvas.empty()) {
-      this.canvas.style("width", `${this.width}px`);
-      this.canvas.style("height", `${this.height}px`);
-      this.canvasScale = getDevicePixelRatio();
-    }
-  }
 
   protected override createTrack() {
     if (this.svg) {
@@ -54,9 +22,6 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     if (!this.data) return;
     this.layoutObj?.init(this.data);
     this.svg = select(this).selectAll<SVGSVGElement, unknown>("svg");
-    this.canvas = select(this).selectAll<HTMLCanvasElement, unknown>("canvas");
-    this.canvasCtx = this.canvas.node()?.getContext("2d") ?? undefined;
-    this.onDimensionsChange();
     this.fragmentCollection = getFragmentCollection(this.data);
     if (this.svg) { // this check is necessary because `svg` setter does not always set
       this.bindEvents(this.svg);
@@ -78,6 +43,11 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
         </div>
       </div>
     `;
+  }
+
+  override onCanvasScaleChange() {
+    super.onCanvasScaleChange();
+    this.refresh();
   }
 
 
@@ -284,10 +254,6 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
   }
 }
 
-
-function getDevicePixelRatio(): number {
-  return window?.devicePixelRatio ?? 1;
-}
 
 function getAllFragments(data: Feature[]): ExtendedFragment[] {
   const out: ExtendedFragment[] = [];
