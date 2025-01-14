@@ -10,11 +10,10 @@ export default { title: "Components/Tracks/NightingaleConservationTrack" } as Me
 
 const DefaultArgs = {
   "min-width": 400,
-  "height": 24,
+  "height": 200,
   "highlight-event": "onmouseover", // "onmouseover"|"onclick"
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd", // "transparent"
-  "layout": "non-overlapping", // "default"|"non-overlapping"
 };
 type Args = typeof DefaultArgs;
 
@@ -181,13 +180,13 @@ function nightingaleTrackCanvas(args: Args & { length: number, id: number }) {
       <nightingale-track-canvas
         id="canvas-track-${args["id"]}"
         min-width="${args["min-width"]}"
-        height=${args["height"]}
+        height="30"
         length="${args["length"]}"
         highlight-event="${args["highlight-event"]}"
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
         use-ctrl-to-zoom
-        layout="${args["layout"]}"
+        layout="non-overlapping"
       >
       </nightingale-track-canvas>
     </div>`;
@@ -206,7 +205,6 @@ function nightingaleConservationTrack(args: Args & { length: number, id: number 
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
         use-ctrl-to-zoom
-        layout="${args["layout"]}"
       >
       </nightingale-conservation-track>
     </div>`;

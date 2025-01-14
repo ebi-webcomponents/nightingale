@@ -1,75 +1,26 @@
-import { select, Selection } from "d3";
 import NightingaleElement, {
+  customElementOnce,
+  withCanvas,
   withDimensions,
-  withPosition,
-  withMargin,
-  withResizable,
   withHighlight,
   withManager,
+  withMargin,
+  withPosition,
+  withResizable,
   withZoom,
-  bindEvents,
-  customElementOnce,
 } from "@nightingale-elements/nightingale-new-core";
-
-// import _includes from "lodash-es/includes";
-// import _groupBy from "lodash-es/groupBy";
-// import _union from "lodash-es/union";
-// import _intersection from "lodash-es/intersection";
-
-import { html } from "lit";
+import { select, Selection } from "d3";
+import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
-import FeatureShape, { Shapes } from "./FeatureShape";
-import NonOverlappingLayout from "./NonOverlappingLayout";
-import DefaultLayout from "./DefaultLayout";
-import { getShapeByType, getColorByType } from "./ConfigHelper";
 
-export type FeatureLocation = {
+type FeatureLocation = {
   fragments: Array<{
     start: number;
     end: number;
   }>;
 };
 
-type PTM = {
-  name: string;
-  position: number;
-  sources: string[];
-  dbReferences: DBReference[];
-};
-
-type DBReference = {
-  id: string;
-  properties: Properties;
-};
-
-type Properties = {
-  "Pubmed ID": string;
-  "PSM Score": string;
-  "Dataset ID": string;
-  "Site q value": string;
-  "Universal Spectrum Id": string;
-  "PSM Count (0.05 gFLR)": string;
-  "Confidence score": "Gold" | "Silver" | "Bronze";
-  "Final site probability": string;
-  "Organism part": string;
-  Proforma: string;
-};
-
-export type Feature = {
-  accession: string;
-  color?: string;
-  fill?: string;
-  shape?: Shapes;
-  tooltipContent?: string;
-  type?: string;
-  locations?: Array<FeatureLocation>;
-  feature?: Feature;
-  start?: number;
-  end?: number;
-  opacity?: number;
-  ptms?: Array<PTM>;
-};
 
 // TODO: height is not triggering a full redrawn when is changed after first render
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
@@ -102,22 +53,17 @@ export interface SequenceConservationData {
 }
 
 @customElementOnce("nightingale-conservation-track")
-class NightingaleConservationTrack extends withManager(
-  withZoom(
-    withResizable(
-      withMargin(
-        withPosition(withDimensions(withHighlight(NightingaleElement)))
+class NightingaleConservationTrack extends withCanvas(
+  withManager(
+    withZoom(
+      withResizable(
+        withMargin(
+          withPosition(withDimensions(withHighlight(NightingaleElement)))
+        )
       )
     )
   )
 ) {
-  @property({ type: String })
-  color?: string | null;
-  @property({ type: String })
-  shape?: string | null;
-  @property({ type: String })
-  layout?: "non-overlapping" | "default";
-
   #conservationData?: SequenceConservationData;
 
   protected seqG?: Selection<
@@ -144,22 +90,6 @@ class NightingaleConservationTrack extends withManager(
     if (this.data) this.createTrack();
   }
 
-  static normalizeLocations(data: Feature[]) {
-    return data.map(feature => {
-      if (feature.locations) {
-        // Add missing `start`/`end` based on `locations`
-        feature.start ??= getStartFromLocations(feature.locations);
-        feature.end ??= getEndFromLocations(feature.locations);
-      } else {
-        // Add missing `locations` based on `start`/`end`
-        feature.start ??= 1;
-        feature.end ??= feature.start;
-        feature.locations = [{ fragments: [{ start: feature.start, end: feature.end }] }];
-      }
-      return feature;
-    });
-  }
-
   set data(data: SequenceConservationData | undefined) {
     this.#conservationData = data;
     this.createTrack();
@@ -180,59 +110,6 @@ class NightingaleConservationTrack extends withManager(
     ) {
       this.createTrack();
     }
-  }
-
-  protected getFeatureColor(f: Feature | { feature: Feature }): string {
-    const defaultColor = "gray";
-    if ((f as Feature).color) {
-      return (f as Feature).color || defaultColor;
-    }
-    if ((f as { feature: Feature })?.feature?.color) {
-      return (f as { feature: Feature })?.feature?.color || defaultColor;
-    }
-    if (this.color) {
-      return this.color;
-    }
-    if ((f as Feature).type) {
-      return getColorByType((f as Feature).type as string);
-    }
-    if ((f as { feature: Feature })?.feature?.type) {
-      return getColorByType((f as { feature: Feature }).feature.type as string);
-    }
-    return defaultColor;
-  }
-
-  protected getFeatureFillColor(f: Feature | { feature: Feature }) {
-    const defaultColor = "gray";
-    if ((f as Feature).fill) {
-      return (f as Feature).fill || defaultColor;
-    }
-    if ((f as { feature: Feature })?.feature?.fill) {
-      return (f as { feature: Feature }).feature.fill || defaultColor;
-    }
-    return this.getFeatureColor(f);
-  }
-
-  protected getShape(f: Feature | { feature: Feature }): Shapes {
-    const defaultShape = "rectangle";
-    if ((f as Feature).shape) {
-      return (f as Feature).shape || defaultShape;
-    }
-    if ((f as { feature: Feature })?.feature?.shape) {
-      return (f as { feature: Feature }).feature.shape || defaultShape;
-    }
-    if (this.shape) {
-      return this.shape as Shapes;
-    }
-    if ((f as Feature).type) {
-      return getShapeByType((f as Feature).type as string) as Shapes;
-    }
-    if ((f as { feature: Feature }).feature?.type) {
-      return getShapeByType(
-        (f as { feature: Feature }).feature.type as string
-      ) as Shapes;
-    }
-    return defaultShape;
   }
 
   protected createTrack() {
@@ -290,7 +167,8 @@ class NightingaleConservationTrack extends withManager(
     if (this.getWidthWithMargins() > 0) this.refresh();
   }
 
-  firstUpdated() {
+  override firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
     this.createTrack();
   }
 
@@ -307,9 +185,6 @@ class NightingaleConservationTrack extends withManager(
 }
 
 export default NightingaleConservationTrack;
-
-export { DefaultLayout };
-export { getColorByType };
 
 
 /** Return leftmost start of fragment */
