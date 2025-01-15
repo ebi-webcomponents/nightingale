@@ -18,8 +18,9 @@ import { property } from "lit/decorators.js";
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = ["letter-order"];
 
-const MAX_FONT_SIZE = 120;
-const MIN_FONT_SIZE = 4;
+const MAX_FONT_SIZE = 24;
+const FADE_FONT_SIZE = 12;
+const MIN_FONT_SIZE = 6;
 
 /** Order of amino acids in a column (top-to-bottom) */
 const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
@@ -141,6 +142,7 @@ class NightingaleConservationTrack extends withCanvas(
       // Call this.data setter to recompute this.positions
       this.data = this.data; // eslint-disable-line no-self-assign
     } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) || name.startsWith("margin-")) {
+      this.onDimensionsChange();
       this.createTrack();
     }
   }
@@ -172,7 +174,7 @@ class NightingaleConservationTrack extends withCanvas(
     // if (!this.needsRedraw()) return;
     this.adjustCanvasCtxLogicalSize();
     this.drawCanvasContent();
-    this.drawSvgLetters();
+    // this.drawSvgLetters();
   }
 
   private drawCanvasContent() {
@@ -187,7 +189,10 @@ class NightingaleConservationTrack extends withCanvas(
     ctx.lineWidth = scale * LINE_WIDTH; // TODO reduce lineWidth when zoomed out a lot
     ctx.strokeStyle = "rgb(211,211,211)";
     ctx.globalAlpha = 1;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle"; // TODO make alignment suck less and solve jumping on zoom (alphabetic should fix jumping, but how to align it?)
     const baseWidth = scale * this.getSingleBaseWidth();
+    const fontOpacity = (baseWidth < scale * FADE_FONT_SIZE) ? (baseWidth - scale * MIN_FONT_SIZE) / (scale * FADE_FONT_SIZE - scale * MIN_FONT_SIZE) : 1;
     const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
     const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + 0.5 * LINE_WIDTH) ?? Infinity;
     // TODO test edge cases for above
@@ -201,14 +206,25 @@ class NightingaleConservationTrack extends withCanvas(
         if (seqId > rightEdgeSeq) continue;
         // TODO use binary search or similar to select range
         const x = scale * this.getXFromSeqPosition(seqId);
+        const textX = x + 0.5 * baseWidth;
         for (const letter in this.positions?.start) {
           const start = Math.min(this.positions.start[letter][i], 1) * canvasHeight;
           const end = Math.min(this.positions.end[letter][i], 1) * canvasHeight;
           // TODO top and bottom margin
           const height = end - start;
           ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
+          ctx.globalAlpha = 1;
           ctx.fillRect(x, start, baseWidth, height);
           ctx.strokeRect(x, start, baseWidth, height);
+
+          const fontSize = Math.min(baseWidth, height, scale * MAX_FONT_SIZE);
+          if (fontSize < scale * MIN_FONT_SIZE) continue;
+
+          const textY = start + 0.5 * height;
+          ctx.fillStyle = "black";
+          ctx.font = `${fontSize}px Arial`;
+          ctx.globalAlpha = fontOpacity;
+          ctx.fillText(letter, textX, textY);
         }
       }
     }
@@ -235,7 +251,7 @@ class NightingaleConservationTrack extends withCanvas(
 
     const baseWidth = this.getSingleBaseWidth();
     if (baseWidth < MIN_FONT_SIZE) return;
-    
+
     console.time('draw letters')
     const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
     const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
