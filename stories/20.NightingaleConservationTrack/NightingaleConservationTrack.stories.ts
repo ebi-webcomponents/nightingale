@@ -183,7 +183,7 @@ function nightingaleConservationTrack(args: Args & { length: number, id: number 
     <div class="row">
       <div class="label">Conservation</div>
       <nightingale-conservation-track
-        id="track-${args["id"]}"
+        id="track-conservation-${args["id"]}"
         min-width="${args["min-width"]}"
         height=${args["height"]}
         length="${args["length"]}"
@@ -243,5 +243,5 @@ export const Track = makeStory({
   nTracks: 1,
   showNightingaleTrack: true,
   showNightingaleTrackCanvas: true,
-  length: 60,
+  length: 486,
 });

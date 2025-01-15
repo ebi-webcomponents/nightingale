@@ -18,11 +18,14 @@ import { property } from "lit/decorators.js";
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = ["letter-order"];
 
+const MAX_FONT_SIZE = 120;
+const MIN_FONT_SIZE = 4;
+
 /** Order of amino acids in a column (top-to-bottom) */
 const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
 /** Color to be used for unknown amino acids */
 const DEFAULT_COLOR = "#AAAAAA";
-/** Colors for amino acid groups */
+/** Colors for amino acid groups, based on Clustal (https://www.jalview.org/help/html/colourSchemes/clustal.html) */
 const AMINO_GROUP_COLOR = {
   aromatic: "#15A4A4",
   polar: "#15C015",
@@ -33,7 +36,7 @@ const AMINO_GROUP_COLOR = {
   cysteine: "#F08080",
   glycine: "#F09048",
 };
-/** Colors for individual amino acids */
+/** Colors for individual amino acids, based on Clustal (https://www.jalview.org/help/html/colourSchemes/clustal.html) */
 const AMINO_ACID_COLOR = {
   H: AMINO_GROUP_COLOR.aromatic,
   Y: AMINO_GROUP_COLOR.aromatic,
@@ -97,7 +100,7 @@ class NightingaleConservationTrack extends withCanvas(
   #conservationData?: SequenceConservationData;
   private positions?: YPositions;
 
-  protected seqG?: Selection<
+  protected svgLettersGroup?: Selection<
     SVGGElement,
     unknown,
     HTMLElement | SVGElement | null,
@@ -151,7 +154,7 @@ class NightingaleConservationTrack extends withCanvas(
       .attr("height", this.height);
 
     if (!this.svg) return;
-    this.seqG = this.svg.append("g").attr("class", "sequence-features");
+    this.svgLettersGroup = this.svg.append("g").attr("class", "letters").style("font-family", "sans-serif"); // Helvetica, Arial, FreeSans, "Liberation Sans", sans-serif
     this.highlighted = this.svg.append("g").attr("class", "highlighted");
   }
 
@@ -169,11 +172,13 @@ class NightingaleConservationTrack extends withCanvas(
     // if (!this.needsRedraw()) return;
     this.adjustCanvasCtxLogicalSize();
     this.drawCanvasContent();
+    this.drawSvgLetters();
   }
 
   private drawCanvasContent() {
     const ctx = this.canvasCtx;
     if (!ctx) return;
+    console.time('drawCanvasContent')
     const canvasWidth = ctx.canvas.width;
     const canvasHeight = ctx.canvas.height;
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -197,8 +202,8 @@ class NightingaleConservationTrack extends withCanvas(
         // TODO use binary search or similar to select range
         const x = scale * this.getXFromSeqPosition(seqId);
         for (const letter in this.positions?.start) {
-          const start = Math.min(this.positions.start[letter][i], 1) * scale * canvasHeight;
-          const end = Math.min(this.positions.end[letter][i], 1) * scale * canvasHeight;
+          const start = Math.min(this.positions.start[letter][i], 1) * canvasHeight;
+          const end = Math.min(this.positions.end[letter][i], 1) * canvasHeight;
           // TODO top and bottom margin
           const height = end - start;
           ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
@@ -218,6 +223,52 @@ class NightingaleConservationTrack extends withCanvas(
     ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
     ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
     ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
+    console.timeEnd('drawCanvasContent')
+  }
+
+  private drawSvgLetters() {
+    // TODO factor out all computations in common with `drawCanvasContent`
+    if (!this.svgLettersGroup) return;
+    this.svgLettersGroup.selectChildren().remove();
+
+    if (!this.data) return;
+
+    const baseWidth = this.getSingleBaseWidth();
+    if (baseWidth < MIN_FONT_SIZE) return;
+    
+    console.time('draw letters')
+    const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
+    const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
+    // TODO test edge cases for above
+    // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
+    this.svgLettersGroup
+      .style("cursor", "default")
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "central");
+
+    for (let i = 0; i < this.data.index.length; i++) {
+      const seqId = this.data.index[i];
+      if (seqId + 1 < leftEdgeSeq) continue;
+      if (seqId > rightEdgeSeq) continue;
+      // TODO use binary search or similar to select range
+      const x = this.getXFromSeqPosition(seqId) + 0.5 * baseWidth;
+      for (const letter in this.positions?.start) {
+        // TODO use D3 broadcast instead of `for`
+        const start = Math.min(this.positions.start[letter][i], 1) * this.height;
+        const end = Math.min(this.positions.end[letter][i], 1) * this.height;
+        // TODO top and bottom margin
+        const height = end - start;
+        const y = start + 0.5 * height;
+        const textSize = Math.min(baseWidth, height, MAX_FONT_SIZE);
+        if (textSize < MIN_FONT_SIZE) continue;
+        this.svgLettersGroup.append("text")
+          .attr("x", x)
+          .attr("y", y)
+          .attr("font-size", textSize)
+          .text(letter);
+      }
+    }
+    console.timeEnd('draw letters')
   }
 
 
@@ -271,6 +322,11 @@ class NightingaleConservationTrack extends withCanvas(
         </div>
       </div>
     `;
+  }
+
+  override onCanvasScaleChange() {
+    super.onCanvasScaleChange();
+    this.refresh();
   }
 }
 
