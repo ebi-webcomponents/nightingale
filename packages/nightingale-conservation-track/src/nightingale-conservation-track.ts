@@ -15,8 +15,8 @@ import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 
-// TODO: height is not triggering a full redrawn when is changed after first render
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
+const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = ["letter-order"];
 
 /** Order of amino acids in a column (top-to-bottom) */
 const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
@@ -67,6 +67,8 @@ interface YPositions {
   end: { [letter: string]: number[] },
 }
 
+type LetterOrder = "property" | "probability";
+
 export interface SequenceConservationData {
   /** Sequence number for each position */
   index: number[],
@@ -88,6 +90,10 @@ class NightingaleConservationTrack extends withCanvas(
     )
   )
 ) {
+  /** Order of amino acids within a column (top-to-bottom) */
+  @property({ type: String })
+  "letter-order": LetterOrder = "property";
+
   #conservationData?: SequenceConservationData;
   private positions?: YPositions;
 
@@ -111,30 +117,32 @@ class NightingaleConservationTrack extends withCanvas(
 
   set data(data: SequenceConservationData | undefined) {
     this.#conservationData = data;
-    this.positions = data ? computePositions(data.probabilities, AMINO_ACID_ORDER) : undefined;
+    if (data) {
+      if (this['letter-order'] === 'probability') {
+        this.positions = computePositions_ProbabilityOrder(data.probabilities);
+      } else {
+        this.positions = computePositions_FixedOrder(data.probabilities, AMINO_ACID_ORDER);
+      }
+    } else {
+      this.positions = undefined
+    }
     this.createTrack();
   }
   get data() {
     return this.#conservationData;
   }
 
-  attributeChangedCallback(
-    name: string,
-    oldValue: string | null,
-    newValue: string | null
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (
-      ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) ||
-      name.startsWith("margin-")
-    ) {
+    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
+      // Call this.data setter to recompute this.positions
+      this.data = this.data; // eslint-disable-line no-self-assign
+    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) || name.startsWith("margin-")) {
       this.createTrack();
     }
   }
 
   protected createTrack() {
-    console.log("createTrack", this.data);
-
     this.svg?.selectAll("g").remove();
 
     this.svg = select(this as unknown as NightingaleElement)
@@ -171,7 +179,7 @@ class NightingaleConservationTrack extends withCanvas(
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const scale = this.canvasScale;
-    ctx.lineWidth = scale * LINE_WIDTH;
+    ctx.lineWidth = scale * LINE_WIDTH; // TODO reduce lineWidth when zoomed out a lot
     ctx.strokeStyle = "rgb(211,211,211)";
     ctx.globalAlpha = 1;
     const baseWidth = scale * this.getSingleBaseWidth();
@@ -180,7 +188,6 @@ class NightingaleConservationTrack extends withCanvas(
     // TODO test edge cases for above
     // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
 
-    console.log("drawCanvasContent", leftEdgeSeq, rightEdgeSeq)
     // Draw features
     if (this.data) {
       for (let i = 0; i < this.data.index.length; i++) {
@@ -272,9 +279,8 @@ export default NightingaleConservationTrack;
 
 const LINE_WIDTH = 1;
 
-function computePositions(probabilities: Probabilities, order: string[]): YPositions {
+function computePositions_FixedOrder(probabilities: Probabilities, order: string[]): YPositions {
   const normalizedOrder = normalizeOrder(Object.keys(probabilities), order);
-  console.log(computePositions, normalizedOrder)
   const start: { [letter: string]: number[] } = {};
   const end: { [letter: string]: number[] } = {};
   for (const letter of normalizedOrder) {
@@ -292,7 +298,27 @@ function computePositions(probabilities: Probabilities, order: string[]): YPosit
   }
   return { start, end };
 }
-// TODO implement probability-based ordering
+
+function computePositions_ProbabilityOrder(probabilities: Probabilities): YPositions {
+  const alphabet = Object.keys(probabilities);
+  const start: { [letter: string]: number[] } = {};
+  const end: { [letter: string]: number[] } = {};
+  for (const letter of alphabet) {
+    start[letter] = [];
+    end[letter] = [];
+  }
+  const n = Math.max(0, ...alphabet.map(letter => probabilities[letter].length));
+  for (let i = 0; i < n; i++) {
+    let cum = 0;
+    alphabet.sort((a, b) => probabilities[a][i] - probabilities[b][i]);
+    for (const letter of alphabet) {
+      start[letter].push(cum);
+      cum += probabilities[letter][i];
+      end[letter].push(cum);
+    }
+  }
+  return { start, end };
+}
 
 function normalizeOrder(present: string[], order: string[]) {
   const presentSet = new Set(present);

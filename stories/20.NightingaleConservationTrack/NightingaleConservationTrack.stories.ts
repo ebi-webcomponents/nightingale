@@ -1,9 +1,9 @@
-import { Meta, Story } from "@storybook/web-components";
+import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { range, rgb } from "d3";
 import { html } from "lit-html";
-import "../../packages/nightingale-track-canvas/src/index";
 import "../../packages/nightingale-conservation-track/src/index";
 import { SequenceConservationData } from "../../packages/nightingale-conservation-track/src/nightingale-conservation-track";
+import "../../packages/nightingale-track-canvas/src/index";
 
 
 export default { title: "Components/Tracks/NightingaleConservationTrack" } as Meta;
@@ -15,27 +15,17 @@ const DefaultArgs = {
   "highlight-event": "onmouseover", // "onmouseover"|"onclick"
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd", // "transparent"
+  "letter-order": "property", // "transparent"
 };
 type Args = typeof DefaultArgs;
+
+const ArgTypes: Partial<ArgTypes<Args>> = {
+  "letter-order": { control: "select", options: ["property", "probability"] },
+};
 
 
 const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIAEDEEWKRLRSLLSPTFTSGKLKEMVPIIAQYGDVLVRNLRREAETGKPVTLKDVFGAYSMDVITSTSFGVNIDSLNNPQDPFVENTKKLLRFDFLDPFFLSITVFPFLIPILEVLNICVFPREVTNFLRKSVKRMKESRLEDTQKHRVDFLQLMIDSQNSKETESHKALSDLELVAQSIIFIFAGYETTSSVLSFIMYELATHPDVQQKLQEEIDAVLPNKAPPTYDTVLQMEYLDMVVNETLRLFPIAMRLERVCKKDVEINGMFIPKGVVVMIPSYALHRDPKYWTEPEKFLPERFSKKNKDNIDPYIYTPFGSGPRNCIGMRFALMNMKLALIRVLQNFSFKPCKETQIPLKLSLGGLLQPEKPVVLKVESRDGTVSGAHHHH";
 
-/** Create a sequence of given `length` */
-function makeSequence(length: number) {
-  const n = Math.ceil(length / sampleSequence.length);
-  return range(n).map(() => sampleSequence).join("").slice(0, length);
-}
-
-
-const Colors = ["#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d"];
-const Shapes = [
-  "rectangle", "roundRectangle", "line", "bridge",
-  "discontinuosEnd", "discontinuos", "discontinuosStart",
-  "helix", "strand",
-  "circle", "triangle", "diamond", "pentagon", "hexagon",
-  "chevron", "catFace", "arrow", "wave", "doubleBar",
-];
 
 const defaultData = [
   {
@@ -132,26 +122,6 @@ function prepareConservationData(data: typeof defaultConservationData): Sequence
 }
 
 
-/** Create dummy data with one feature per residue */
-function makeResidueData(start: number, end: number) {
-  return makeSpanData(start, end, 1, 0);
-}
-
-/** Create dummy data with one feature per a span of residues (e.g. 1-10, 11-20, 21-30...) */
-function makeSpanData(start: number, end: number, spanLength: number = 10, gapLength: number = 0) {
-  return range(start, end + 1, spanLength + gapLength).map((start_, i) => ({
-    accession: `feature${i}`,
-    tooltipContent: `feature${i}`,
-    start: start_,
-    end: start_ + spanLength - 1,
-    color: rgb(Colors[i % Colors.length]).darker().toString(),
-    fill: Colors[i % Colors.length],
-    shape: Shapes[i % Shapes.length],
-    opacity: 0.9,
-  }));
-}
-
-
 function nightingaleNavigation(args: Args & { length: number }) {
   return html`
     <div class="row">
@@ -170,7 +140,7 @@ function nightingaleNavigation(args: Args & { length: number }) {
 }
 
 function nightingaleSequence(args: Args & { length: number }) {
-  const sequence = makeSequence(args["length"]);
+  const sequence = sampleSequence;
   return html`
     <div class="row">
       <div class="label"></div>
@@ -221,6 +191,7 @@ function nightingaleConservationTrack(args: Args & { length: number, id: number 
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
         use-ctrl-to-zoom
+        letter-order=${args["letter-order"]}
       >
       </nightingale-conservation-track>
     </div>`;
@@ -253,6 +224,7 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
 
   const story: Story<Args> = template.bind({});
   story.args = { ...DefaultArgs };
+  story.argTypes = ArgTypes;
   story.play = async () => {
     await customElements.whenDefined("nightingale-track-canvas");
     for (const track of document.getElementsByTagName("nightingale-track-canvas")) {
