@@ -3,6 +3,7 @@ import { range, rgb } from "d3";
 import { html } from "lit-html";
 import "../../packages/nightingale-track-canvas/src/index";
 import "../../packages/nightingale-conservation-track/src/index";
+import { SequenceConservationData } from "../../packages/nightingale-conservation-track/src/nightingale-conservation-track";
 
 
 export default { title: "Components/Tracks/NightingaleConservationTrack" } as Meta;
@@ -18,7 +19,7 @@ const DefaultArgs = {
 type Args = typeof DefaultArgs;
 
 
-const sampleSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
+const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIAEDEEWKRLRSLLSPTFTSGKLKEMVPIIAQYGDVLVRNLRREAETGKPVTLKDVFGAYSMDVITSTSFGVNIDSLNNPQDPFVENTKKLLRFDFLDPFFLSITVFPFLIPILEVLNICVFPREVTNFLRKSVKRMKESRLEDTQKHRVDFLQLMIDSQNSKETESHKALSDLELVAQSIIFIFAGYETTSSVLSFIMYELATHPDVQQKLQEEIDAVLPNKAPPTYDTVLQMEYLDMVVNETLRLFPIAMRLERVCKKDVEINGMFIPKGVVVMIPSYALHRDPKYWTEPEKFLPERFSKKNKDNIDPYIYTPFGSGPRNCIGMRFALMNMKLALIRVLQNFSFKPCKETQIPLKLSLGGLLQPEKPVVLKVESRDGTVSGAHHHH";
 
 /** Create a sequence of given `length` */
 function makeSequence(length: number) {
@@ -114,6 +115,21 @@ const defaultConservationData = { // https://www.ebi.ac.uk/pdbe/graph-api/pdb/se
   "length": 482,
   "seq_id": "f605e37dc591194cfc8a9a7b94c629c5"
 };
+
+function prepareConservationData(data: typeof defaultConservationData): SequenceConservationData {
+  const out: SequenceConservationData = {
+    index: data.data.index,
+    conservation_score: data.data.conservation_score,
+    probabilities: {},
+  };
+  for (const field in data.data) {
+    if (data.data.hasOwnProperty(field) && field.startsWith('probability_')) {
+      const letter = field.slice('probability_'.length);
+      out.probabilities[letter] = data.data[field as keyof typeof data.data];
+    }
+  }
+  return out;
+}
 
 
 /** Create dummy data with one feature per residue */
@@ -244,7 +260,7 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
     }
     await customElements.whenDefined("nightingale-conservation-track");
     for (const track of document.getElementsByTagName("nightingale-conservation-track")) {
-      (track as any).data = defaultConservationData.data;
+      (track as any).data = prepareConservationData(defaultConservationData);
     }
   };
   return story;

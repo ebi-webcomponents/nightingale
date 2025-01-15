@@ -13,7 +13,9 @@ export interface WithCanvasInterface {
   /** Ratio of canvas logical size versus canvas display size. */
   canvasScale: number,
   /** Runs when device pixel ratio (`this.canvasScale`) changes, e.g. when browser zoom is changed or browser window is moved to a different screen. */
-  onCanvasScaleChange(): void;
+  onCanvasScaleChange(): void,
+  /** Adjust width and height of `this.canvasCtx` based on canvas size and scale if needed (clears canvas content!). Subclass should call this method just before redrawing the canvas. */
+  adjustCanvasCtxLogicalSize(): void,
 }
 
 const withCanvas = <T extends Constructor<NightingaleBaseElement & WithResizableInterface>>(
@@ -56,6 +58,18 @@ const withCanvas = <T extends Constructor<NightingaleBaseElement & WithResizable
 
     onCanvasScaleChange(): void {
       // optional implementation in subclasses
+    }
+
+    adjustCanvasCtxLogicalSize() {
+      if (!this.canvasCtx) return;
+      const newWidth = Math.floor(this.width * this.canvasScale);
+      const newHeight = Math.floor(this.height * this.canvasScale);
+      if (this.canvasCtx.canvas.width !== newWidth) {
+        this.canvasCtx.canvas.width = newWidth;
+      }
+      if (this.canvasCtx.canvas.height !== newHeight) {
+        this.canvasCtx.canvas.height = newHeight;
+      }
     }
 
     private updateCanvasScale() {

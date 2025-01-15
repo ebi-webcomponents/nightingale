@@ -33,6 +33,10 @@ Ratio of canvas logical size versus canvas display size (device pixel ratio).
 
 ##### Methods
 
+###### `adjustCanvasCtxLogicalSize(): void`
+
+Adjust width and height of `this.canvasCtx` based on canvas size and scale if needed (clears canvas content!). Subclass should call this method just before redrawing the canvas.
+
 ###### `onCanvasScaleChange(): void`
 
 Runs when device pixel ratio (`this.canvasScale`) changes, e.g. when browser zoom is changed or browser window is moved to a different screen. Subclasses can override this to run custom code whenever `this.canvasScale` changes.

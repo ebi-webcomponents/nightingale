@@ -74,20 +74,8 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
   /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
   private _draw(): void {
     if (!this.needsRedraw()) return;
-    this.adjustCanvasLogicalSize();
+    this.adjustCanvasCtxLogicalSize();
     this.drawCanvasContent();
-  }
-
-  private adjustCanvasLogicalSize() {
-    if (!this.canvasCtx) return;
-    const newWidth = Math.floor(this.width * this.canvasScale);
-    const newHeight = Math.floor(this.height * this.canvasScale);
-    if (this.canvasCtx.canvas.width !== newWidth) {
-      this.canvasCtx.canvas.width = newWidth;
-    }
-    if (this.canvasCtx.canvas.height !== newHeight) {
-      this.canvasCtx.canvas.height = newHeight;
-    }
   }
 
   private drawCanvasContent() {

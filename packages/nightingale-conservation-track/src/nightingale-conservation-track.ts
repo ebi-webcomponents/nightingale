@@ -9,47 +9,71 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
+import { Refresher } from "@nightingale-elements/nightingale-track-canvas/src/utils/utils"; // TODO move Refresher to shared lib
 import { select, Selection } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 
-type FeatureLocation = {
-  fragments: Array<{
-    start: number;
-    end: number;
-  }>;
-};
-
-
 // TODO: height is not triggering a full redrawn when is changed after first render
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
 
+/** Order of amino acids in a column (top-to-bottom) */
+const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
+/** Color to be used for unknown amino acids */
+const DEFAULT_COLOR = "#AAAAAA";
+/** Colors for amino acid groups */
+const AMINO_GROUP_COLOR = {
+  aromatic: "#15A4A4",
+  polar: "#15C015",
+  hydrophobic: "#80A0F0",
+  negative: "#C048C0",
+  proline: "#C0C000",
+  positive: "#F01505",
+  cysteine: "#F08080",
+  glycine: "#F09048",
+};
+/** Colors for individual amino acids */
+const AMINO_ACID_COLOR = {
+  H: AMINO_GROUP_COLOR.aromatic,
+  Y: AMINO_GROUP_COLOR.aromatic,
+  S: AMINO_GROUP_COLOR.polar,
+  T: AMINO_GROUP_COLOR.polar,
+  N: AMINO_GROUP_COLOR.polar,
+  Q: AMINO_GROUP_COLOR.polar,
+  A: AMINO_GROUP_COLOR.hydrophobic,
+  V: AMINO_GROUP_COLOR.hydrophobic,
+  L: AMINO_GROUP_COLOR.hydrophobic,
+  I: AMINO_GROUP_COLOR.hydrophobic,
+  M: AMINO_GROUP_COLOR.hydrophobic,
+  F: AMINO_GROUP_COLOR.hydrophobic,
+  W: AMINO_GROUP_COLOR.hydrophobic,
+  D: AMINO_GROUP_COLOR.negative,
+  E: AMINO_GROUP_COLOR.negative,
+  P: AMINO_GROUP_COLOR.proline,
+  K: AMINO_GROUP_COLOR.positive,
+  R: AMINO_GROUP_COLOR.positive,
+  C: AMINO_GROUP_COLOR.cysteine,
+  G: AMINO_GROUP_COLOR.glycine,
+};
+
+
+/** Amino acid probability for each amino acid for each position */
+interface Probabilities { [letter: string]: number[] }
+
+/** Vertical position for each amino acid for each position */
+interface YPositions {
+  start: { [letter: string]: number[] },
+  end: { [letter: string]: number[] },
+}
 
 export interface SequenceConservationData {
-  // TODO revise data schema
+  /** Sequence number for each position */
   index: number[],
-  conservation_score: number[],
-  probability_A: number[],
-  probability_C: number[],
-  probability_D: number[],
-  probability_E: number[],
-  probability_F: number[],
-  probability_G: number[],
-  probability_H: number[],
-  probability_I: number[],
-  probability_K: number[],
-  probability_L: number[],
-  probability_M: number[],
-  probability_N: number[],
-  probability_P: number[],
-  probability_Q: number[],
-  probability_R: number[],
-  probability_S: number[],
-  probability_T: number[],
-  probability_V: number[],
-  probability_W: number[],
-  probability_Y: number[],
+  /** Conservation score for each position */
+  conservation_score: number[], // TODO find out if needed, remove otherwise
+  /** Amino acid probability for each amino acid for each position */
+  probabilities: Probabilities,
 }
 
 @customElementOnce("nightingale-conservation-track")
@@ -65,6 +89,7 @@ class NightingaleConservationTrack extends withCanvas(
   )
 ) {
   #conservationData?: SequenceConservationData;
+  private positions?: YPositions;
 
   protected seqG?: Selection<
     SVGGElement,
@@ -78,12 +103,6 @@ class NightingaleConservationTrack extends withCanvas(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  protected margins?: Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement | SVGElement | null,
-    unknown
-  >;
 
   connectedCallback() {
     super.connectedCallback();
@@ -92,6 +111,7 @@ class NightingaleConservationTrack extends withCanvas(
 
   set data(data: SequenceConservationData | undefined) {
     this.#conservationData = data;
+    this.positions = data ? computePositions(data.probabilities, AMINO_ACID_ORDER) : undefined;
     this.createTrack();
   }
   get data() {
@@ -125,15 +145,78 @@ class NightingaleConservationTrack extends withCanvas(
     if (!this.svg) return;
     this.seqG = this.svg.append("g").attr("class", "sequence-features");
     this.highlighted = this.svg.append("g").attr("class", "highlighted");
-    this.margins = this.svg.append("g").attr("class", "margin");
   }
 
   refresh() {
-    if (this.xScale && this.seqG) {
-    }
+    this.requestDraw();
     this.updateHighlight();
+  }
 
-    this.renderMarginOnGroup(this.margins);
+
+  /** Request canvas redraw. */
+  private requestDraw = () => this._drawer.requestRefresh();
+  private readonly _drawer = Refresher(() => this._draw());
+  /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
+  private _draw(): void {
+    // if (!this.needsRedraw()) return;
+    this.adjustCanvasCtxLogicalSize();
+    this.drawCanvasContent();
+  }
+
+  private drawCanvasContent() {
+    const ctx = this.canvasCtx;
+    if (!ctx) return;
+    const canvasWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    const scale = this.canvasScale;
+    ctx.lineWidth = scale * LINE_WIDTH;
+    ctx.strokeStyle = "rgb(211,211,211)";
+    ctx.globalAlpha = 1;
+    const baseWidth = scale * this.getSingleBaseWidth();
+    const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
+    const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + 0.5 * LINE_WIDTH) ?? Infinity;
+    // TODO test edge cases for above
+    // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
+
+    console.log("drawCanvasContent", leftEdgeSeq, rightEdgeSeq)
+    // Draw features
+    if (this.data) {
+      for (let i = 0; i < this.data.index.length; i++) {
+        const seqId = this.data.index[i];
+        if (seqId + 1 < leftEdgeSeq) continue;
+        if (seqId > rightEdgeSeq) continue;
+        // TODO use binary search or similar to select range
+        const x = scale * this.getXFromSeqPosition(seqId);
+        for (const letter in this.positions?.start) {
+          const start = Math.min(this.positions.start[letter][i], 1) * scale * canvasHeight;
+          const end = Math.min(this.positions.end[letter][i], 1) * scale * canvasHeight;
+          // TODO top and bottom margin
+          const height = end - start;
+          ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
+          ctx.fillRect(x, start, baseWidth, height);
+          ctx.strokeRect(x, start, baseWidth, height);
+        }
+      }
+    }
+
+    // Draw margins
+    ctx.fillStyle = this["margin-color"];
+    const marginLeft = this["margin-left"] * scale;
+    const marginRight = this["margin-right"] * scale;
+    const marginTop = this["margin-top"] * scale;
+    const marginBottom = this["margin-bottom"] * scale;
+    ctx.fillRect(0, 0, marginLeft, canvasHeight);
+    ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
+    ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
+    ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
+  }
+
+
+  /** Inverse of `this.getXFromSeqPosition`. */
+  getSeqPositionFromX(x: number): number | undefined {
+    return this.xScale?.invert(x - this["margin-left"]);
   }
 
   protected updateHighlight() {
@@ -187,27 +270,34 @@ class NightingaleConservationTrack extends withCanvas(
 export default NightingaleConservationTrack;
 
 
-/** Return leftmost start of fragment */
-function getStartFromLocations(locations: FeatureLocation[]): number | undefined {
-  let start: number | undefined = undefined;
-  for (const location of locations) {
-    for (const fragment of location.fragments) {
-      if (start === undefined || fragment.start < start) {
-        start = fragment.start;
-      }
+const LINE_WIDTH = 1;
+
+function computePositions(probabilities: Probabilities, order: string[]): YPositions {
+  const normalizedOrder = normalizeOrder(Object.keys(probabilities), order);
+  console.log(computePositions, normalizedOrder)
+  const start: { [letter: string]: number[] } = {};
+  const end: { [letter: string]: number[] } = {};
+  for (const letter of normalizedOrder) {
+    start[letter] = [];
+    end[letter] = [];
+  }
+  const n = Math.max(0, ...normalizedOrder.map(letter => probabilities[letter].length));
+  for (let i = 0; i < n; i++) {
+    let cum = 0;
+    for (const letter of normalizedOrder) {
+      start[letter].push(cum);
+      cum += probabilities[letter][i];
+      end[letter].push(cum);
     }
   }
-  return start;
+  return { start, end };
 }
-/** Return rightmost end of fragment */
-function getEndFromLocations(locations: FeatureLocation[]): number | undefined {
-  let end: number | undefined = undefined;
-  for (const location of locations) {
-    for (const fragment of location.fragments) {
-      if (end === undefined || fragment.end > end) {
-        end = fragment.end;
-      }
-    }
-  }
-  return end;
+// TODO implement probability-based ordering
+
+function normalizeOrder(present: string[], order: string[]) {
+  const presentSet = new Set(present);
+  const orderSet = new Set(order);
+  const ordered = order.filter(s => presentSet.has(s));
+  const rest = present.filter(s => !orderSet.has(s));
+  return ordered.concat(rest);
 }
