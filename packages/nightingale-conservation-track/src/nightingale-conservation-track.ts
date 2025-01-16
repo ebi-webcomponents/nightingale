@@ -9,7 +9,7 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { Refresher } from "@nightingale-elements/nightingale-track-canvas/src/utils/utils"; // TODO move Refresher to shared lib
+import { firstGteqIndex, Refresher } from "@nightingale-elements/nightingale-track-canvas/src/utils/utils"; // TODO move Refresher to shared lib
 import { select, Selection } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
@@ -60,6 +60,8 @@ const AMINO_ACID_COLOR = {
 const STROKE_COLOR = "#D3D3D3";
 /** Line width for rectangle stroke */
 const LINE_WIDTH = 1;
+/** Maximum line width relative to column width (overrides `LINE_WIDTH` when zoomed out too much) */
+const MAX_REL_LINE_WIDTH = 0.2;
 
 
 /** Amino acid probability for each amino acid for each position */
@@ -204,34 +206,36 @@ class NightingaleConservationTrack extends withCanvas(
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const scale = this.canvasScale;
-    ctx.lineWidth = scale * LINE_WIDTH; // TODO reduce lineWidth when zoomed out a lot
-    ctx.strokeStyle = STROKE_COLOR;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
     const baseWidthInCss = this.getSingleBaseWidth();
     const baseWidth = scale * baseWidthInCss;
     const fontOpacity = this.getFontOpacity(baseWidthInCss);
-    const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
-    const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + 0.5 * LINE_WIDTH) ?? Infinity;
-    const yOffset = scale * this['margin-top'];
+    const columnOffset = scale * this['margin-top'];
     const columnHeight = scale * (this['height'] - this['margin-top'] - this['margin-bottom']);
-    // TODO test edge cases for above
-    // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
+
+    ctx.lineWidth = scale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * baseWidthInCss); // TODO reduce lineWidth when zoomed out a lot
+    ctx.strokeStyle = STROKE_COLOR;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     // Draw features
     if (this.data) {
-      for (let i = 0; i < this.data.index.length; i++) {
+      // const leftEdgeSeq = this.getSeqPositionFromX(this["margin-left"] - 0.5 * LINE_WIDTH) ?? -Infinity;
+      // const rightEdgeSeq = this.getSeqPositionFromX(this["width"] - this["margin-right"] + 0.5 * LINE_WIDTH) ?? Infinity;
+      const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
+      const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
+      // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
+      const iFrom = Math.max(0, firstGteqIndex(this.data.index, leftEdgeSeq - 1, x => x));
+      const iTo = Math.min(this.data.index.length, firstGteqIndex(this.data.index, rightEdgeSeq, x => x));
+      
+      for (let i = iFrom; i < iTo; i++) {
         const seqId = this.data.index[i];
-        if (seqId + 1 < leftEdgeSeq) continue;
-        if (seqId > rightEdgeSeq) continue;
-        // TODO use binary search or similar to select range
         const x = scale * this.getXFromSeqPosition(seqId);
         const textX = x + 0.5 * baseWidth;
         for (const letter in this.positions?.start) {
           const relStart = Math.min(this.positions.start[letter][i], 1);
           const relEnd = Math.min(this.positions.end[letter][i], 1);
-          const start = relStart * columnHeight + yOffset;
-          const end = relEnd * columnHeight + yOffset;
+          const start = relStart * columnHeight + columnOffset;
+          const end = relEnd * columnHeight + columnOffset;
           const height = end - start;
 
           // Draw rectangle
@@ -254,6 +258,7 @@ class NightingaleConservationTrack extends withCanvas(
     }
 
     // Draw margins
+    ctx.globalAlpha = 1;
     ctx.fillStyle = this["margin-color"];
     const marginLeft = this["margin-left"] * scale;
     const marginRight = this["margin-right"] * scale;
@@ -392,7 +397,7 @@ function computePositions_FixedOrder(probabilities: Probabilities, order: string
     let cum = 0;
     for (const letter of normalizedOrder) {
       start[letter].push(cum);
-      cum += probabilities[letter][i];
+      cum += probabilities[letter][i] ?? 0;
       end[letter].push(cum);
     }
   }
@@ -410,10 +415,10 @@ function computePositions_ProbabilityOrder(probabilities: Probabilities): YPosit
   const n = Math.max(0, ...alphabet.map(letter => probabilities[letter].length));
   for (let i = 0; i < n; i++) {
     let cum = 0;
-    alphabet.sort((a, b) => probabilities[a][i] - probabilities[b][i]);
+    alphabet.sort((a, b) => (probabilities[b][i] ?? 0) - (probabilities[a][i] ?? 0));
     for (const letter of alphabet) {
       start[letter].push(cum);
-      cum += probabilities[letter][i];
+      cum += probabilities[letter][i] ?? 0;
       end[letter].push(cum);
     }
   }
