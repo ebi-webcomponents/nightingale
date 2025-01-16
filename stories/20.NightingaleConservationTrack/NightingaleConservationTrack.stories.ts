@@ -15,8 +15,6 @@ const DefaultArgs = {
   "highlight-event": "onmouseover", // "onmouseover"|"onclick"
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd", // "transparent"
-  "margin-left": "20",
-  "margin-right": "20",
   "letter-order": "property", // "transparent"
 };
 type Args = typeof DefaultArgs;
@@ -135,8 +133,6 @@ function nightingaleNavigation(args: Args & { length: number }) {
         length="${args["length"]}"
         highlight-color=${args["highlight-color"]}
         margin-color=${args["margin-color"]}
-        margin-left=${args["margin-left"]}
-        margin-right=${args["margin-right"]}
         show-highlight
       >
       </nightingale-navigation>
@@ -157,8 +153,6 @@ function nightingaleSequence(args: Args & { length: number }) {
         highlight-event="${args["highlight-event"]}"
         highlight-color=${args["highlight-color"]}
         margin-color=${args["margin-color"]}
-        margin-left=${args["margin-left"]}
-        margin-right=${args["margin-right"]}
         use-ctrl-to-zoom
       >
       </nightingale-sequence>
@@ -177,8 +171,6 @@ function nightingaleTrackCanvas(args: Args & { length: number, id: number }) {
         highlight-event="${args["highlight-event"]}"
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
-        margin-left=${args["margin-left"]}
-        margin-right=${args["margin-right"]}
         use-ctrl-to-zoom
         layout="non-overlapping"
       >
@@ -198,8 +190,6 @@ function nightingaleConservationTrack(args: Args & { length: number, id: number 
         highlight-event="${args["highlight-event"]}"
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
-        margin-left=${args["margin-left"]}
-        margin-right=${args["margin-right"]}
         margin-top=10
         margin-bottom=20
         use-ctrl-to-zoom

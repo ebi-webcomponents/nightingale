@@ -15,8 +15,12 @@ import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 
-const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height", "font-family", "min-font-size", "fade-font-size", "max-font-size"] as const satisfies (keyof NightingaleConservationTrack)[];
-const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = ["letter-order"] as const satisfies (keyof NightingaleConservationTrack)[];
+const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
+  "length", "width", "height",
+  "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
+  "font-family", "min-font-size", "fade-font-size", "max-font-size",
+] satisfies (keyof NightingaleConservationTrack)[];
+const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = ["letter-order"] satisfies (keyof NightingaleConservationTrack)[];
 
 /** Order of amino acids in a column (top-to-bottom) */
 const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
@@ -118,50 +122,38 @@ class NightingaleConservationTrack extends withCanvas(
 
 
   #conservationData?: SequenceConservationData;
-  private positions?: YPositions;
+  private yPositions?: YPositions;
+  protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
-  protected svgLettersGroup?: Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement | SVGElement | null,
-    unknown
-  >;
-  protected highlighted?: Selection<
-    SVGGElement,
-    unknown,
-    HTMLElement | SVGElement | null,
-    unknown
-  >;
 
   connectedCallback() {
     super.connectedCallback();
     if (this.data) this.createTrack();
   }
 
+  get data(): SequenceConservationData | undefined {
+    return this.#conservationData;
+  }
   set data(data: SequenceConservationData | undefined) {
     this.#conservationData = data;
     if (data) {
-      if (this['letter-order'] === 'probability') {
-        this.positions = computePositions_ProbabilityOrder(data.probabilities);
+      if (this["letter-order"] === "probability") {
+        this.yPositions = computeYPositions_ProbabilityOrder(data.probabilities);
       } else {
-        this.positions = computePositions_FixedOrder(data.probabilities, AMINO_ACID_ORDER);
+        this.yPositions = computeYPositions_FixedOrder(data.probabilities, AMINO_ACID_ORDER);
       }
     } else {
-      this.positions = undefined
+      this.yPositions = undefined
     }
     this.createTrack();
-  }
-  get data() {
-    return this.#conservationData;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name as any)) {
-      // Call this.data setter to recompute this.positions
+    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
+      // Calling `this.data` setter to recompute `this.positions` and run `this.createTrack()`
       this.data = this.data; // eslint-disable-line no-self-assign
-      // this.data setter calls this.createTrack()
-    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name as any) || name.startsWith("margin-")) {
+    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
       this.onDimensionsChange();
       this.createTrack();
     }
@@ -176,7 +168,6 @@ class NightingaleConservationTrack extends withCanvas(
       .attr("height", this.height);
 
     if (!this.svg) return;
-    this.svgLettersGroup = this.svg.append("g").attr("class", "letters").style("font-family", "sans-serif"); // Helvetica, Arial, FreeSans, "Liberation Sans", sans-serif
     this.highlighted = this.svg.append("g").attr("class", "highlighted");
   }
 
@@ -185,132 +176,116 @@ class NightingaleConservationTrack extends withCanvas(
     this.updateHighlight();
   }
 
+  private _drawStamp: Record<string, unknown> = {};
+  /** If `_drawStamp` has become outdated since the last call to this function, update `_drawStamp` and return true. Otherwise return false. */
+  private needsRedraw(): boolean {
+    const stamp: typeof this._drawStamp = {
+      data: this.data,
+      canvas: this.canvasCtx,
+      extent: `${this.width}x${this.height}@${this.canvasScale}/${this.getSeqPositionFromX(0)}:${this.getSeqPositionFromX(this.width)}`,
+    };
+    for (const attr of ATTRIBUTES_THAT_TRIGGER_DATA_RESET) {
+      stamp[attr] = this.getAttribute(attr);
+    }
+    for (const attr of ATTRIBUTES_THAT_TRIGGER_REFRESH) {
+      stamp[attr] = this.getAttribute(attr);
+    }
+
+    if (objectShallowEquals(stamp, this._drawStamp)) {
+      return false;
+    } else {
+      this._drawStamp = stamp;
+      return true;
+    }
+  }
 
   /** Request canvas redraw. */
   private requestDraw = () => this._drawer.requestRefresh();
   private readonly _drawer = Refresher(() => this._draw());
   /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
   private _draw(): void {
-    // if (!this.needsRedraw()) return;
+    if (!this.needsRedraw()) return;
     this.adjustCanvasCtxLogicalSize();
-    this.drawCanvasContent();
-    // this.drawSvgLetters();
+    this.clearCanvas();
+    this.drawColumns();
+    this.drawMargins();
   }
 
-  private drawCanvasContent() {
+  private clearCanvas() {
     const ctx = this.canvasCtx;
     if (!ctx) return;
-    console.time('drawCanvasContent')
-    const canvasWidth = ctx.canvas.width;
-    const canvasHeight = ctx.canvas.height;
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }
+
+  private drawColumns() {
+    const ctx = this.canvasCtx;
+    if (!ctx) return;
+    if (!this.data) return;
 
     const scale = this.canvasScale;
     const baseWidthInCss = this.getSingleBaseWidth();
     const baseWidth = scale * baseWidthInCss;
     const fontOpacity = this.getFontOpacity(baseWidthInCss);
-    const columnOffset = scale * this['margin-top'];
-    const columnHeight = scale * (this['height'] - this['margin-top'] - this['margin-bottom']);
+    const columnOffset = scale * this["margin-top"];
+    const columnHeight = scale * (this["height"] - this["margin-top"] - this["margin-bottom"]);
 
-    ctx.lineWidth = scale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * baseWidthInCss); // TODO reduce lineWidth when zoomed out a lot
+    ctx.lineWidth = scale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * baseWidthInCss);
     ctx.strokeStyle = STROKE_COLOR;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Draw features
-    if (this.data) {
-      // const leftEdgeSeq = this.getSeqPositionFromX(this["margin-left"] - 0.5 * LINE_WIDTH) ?? -Infinity;
-      // const rightEdgeSeq = this.getSeqPositionFromX(this["width"] - this["margin-right"] + 0.5 * LINE_WIDTH) ?? Infinity;
-      const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
-      const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
-      // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
-      const iFrom = Math.max(0, firstGteqIndex(this.data.index, leftEdgeSeq - 1, x => x));
-      const iTo = Math.min(this.data.index.length, firstGteqIndex(this.data.index, rightEdgeSeq, x => x));
-      
-      for (let i = iFrom; i < iTo; i++) {
-        const seqId = this.data.index[i];
-        const x = scale * this.getXFromSeqPosition(seqId);
-        const textX = x + 0.5 * baseWidth;
-        for (const letter in this.positions?.start) {
-          const relStart = Math.min(this.positions.start[letter][i], 1);
-          const relEnd = Math.min(this.positions.end[letter][i], 1);
-          const start = relStart * columnHeight + columnOffset;
-          const end = relEnd * columnHeight + columnOffset;
-          const height = end - start;
+    const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
+    const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
+    const iFrom = Math.max(0, firstGteqIndex(this.data.index, leftEdgeSeq - 1, x => x));
+    const iTo = Math.min(this.data.index.length, firstGteqIndex(this.data.index, rightEdgeSeq, x => x));
 
-          // Draw rectangle
-          ctx.globalAlpha = 1;
-          ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
-          ctx.fillRect(x, start, baseWidth, height);
-          ctx.strokeRect(x, start, baseWidth, height);
+    for (let i = iFrom; i < iTo; i++) {
+      const x = scale * this.getXFromSeqPosition(this.data.index[i]);
+      const textX = x + 0.5 * baseWidth;
 
-          // Draw letter
-          if (fontOpacity === 0) continue;
-          const fontSize = Math.min(baseWidth, height, scale * this["max-font-size"]);
-          if (fontSize < scale * this["min-font-size"]) continue;
-          const textY = start + 0.5 * height;
-          ctx.globalAlpha = fontOpacity;
-          ctx.fillStyle = "black";
-          ctx.font = `${fontSize}px ${this["font-family"]}`;
-          ctx.fillText(letter, textX, textY);
-        }
+      for (const letter in this.yPositions?.start) {
+        const relStart = Math.min(this.yPositions.start[letter][i], 1);
+        const relEnd = Math.min(this.yPositions.end[letter][i], 1);
+        const start = relStart * columnHeight + columnOffset;
+        const end = relEnd * columnHeight + columnOffset;
+        const height = end - start;
+
+        // Draw rectangle
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
+        ctx.fillRect(x, start, baseWidth, height);
+        ctx.strokeRect(x, start, baseWidth, height);
+
+        // Draw letter
+        if (fontOpacity === 0) continue;
+        const fontSize = Math.min(baseWidth, height, scale * this["max-font-size"]);
+        if (fontSize < scale * this["min-font-size"]) continue;
+        const textY = start + 0.5 * height;
+        ctx.globalAlpha = fontOpacity;
+        ctx.fillStyle = "black";
+        ctx.font = `${fontSize}px ${this["font-family"]}`;
+        ctx.fillText(letter, textX, textY);
       }
     }
+  }
 
-    // Draw margins
+  private drawMargins() {
+    const ctx = this.canvasCtx;
+    if (!ctx) return;
+
+    const canvasWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+    const marginLeft = this["margin-left"] * this.canvasScale;
+    const marginRight = this["margin-right"] * this.canvasScale;
+    const marginTop = this["margin-top"] * this.canvasScale;
+    const marginBottom = this["margin-bottom"] * this.canvasScale;
+
     ctx.globalAlpha = 1;
     ctx.fillStyle = this["margin-color"];
-    const marginLeft = this["margin-left"] * scale;
-    const marginRight = this["margin-right"] * scale;
-    const marginTop = this["margin-top"] * scale;
-    const marginBottom = this["margin-bottom"] * scale;
     ctx.fillRect(0, 0, marginLeft, canvasHeight);
     ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
     ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
     ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
-    console.timeEnd('drawCanvasContent')
-  }
-
-  private drawSvgLetters() {
-    if (!this.svgLettersGroup) return;
-    this.svgLettersGroup.selectChildren().remove();
-
-    if (!this.data) return;
-
-    const baseWidth = this.getSingleBaseWidth();
-    if (baseWidth < this["min-font-size"]) return;
-
-    console.time('draw letters')
-    const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
-    const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
-    this.svgLettersGroup
-      .style("cursor", "default")
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "central");
-
-    for (let i = 0; i < this.data.index.length; i++) {
-      const seqId = this.data.index[i];
-      if (seqId + 1 < leftEdgeSeq) continue;
-      if (seqId > rightEdgeSeq) continue;
-      // TODO use binary search or similar to select range
-      const x = this.getXFromSeqPosition(seqId) + 0.5 * baseWidth;
-      for (const letter in this.positions?.start) {
-        // TODO use D3 broadcast instead of `for`
-        const start = Math.min(this.positions.start[letter][i], 1) * this.height;
-        const end = Math.min(this.positions.end[letter][i], 1) * this.height;
-        // TODO top and bottom margin
-        const height = end - start;
-        const y = start + 0.5 * height;
-        const textSize = Math.min(baseWidth, height, this["max-font-size"]);
-        if (textSize < this["min-font-size"]) continue;
-        this.svgLettersGroup.append("text")
-          .attr("x", x)
-          .attr("y", y)
-          .attr("font-size", textSize)
-          .text(letter);
-      }
-    }
-    console.timeEnd('draw letters')
   }
 
   private getFontOpacity(baseWidthInCss: number): number {
@@ -331,13 +306,7 @@ class NightingaleConservationTrack extends withCanvas(
   protected updateHighlight() {
     if (!this.highlighted) return;
     const highlights = this.highlighted
-      .selectAll<
-        SVGRectElement,
-        {
-          start: number;
-          end: number;
-        }[]
-      >("rect")
+      .selectAll<SVGRectElement, { start: number, end: number }[]>("rect")
       .data(this.highlightedRegion.segments);
 
     highlights
@@ -347,10 +316,8 @@ class NightingaleConservationTrack extends withCanvas(
       .merge(highlights)
       .attr("fill", this["highlight-color"])
       .attr("height", this.height)
-      .attr("x", (d) => this.getXFromSeqPosition(d.start))
-      .attr("width", (d) =>
-        Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1))
-      );
+      .attr("x", d => this.getXFromSeqPosition(d.start))
+      .attr("width", d => Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1)));
 
     highlights.exit().remove();
   }
@@ -384,7 +351,7 @@ class NightingaleConservationTrack extends withCanvas(
 export default NightingaleConservationTrack;
 
 
-function computePositions_FixedOrder(probabilities: Probabilities, order: string[]): YPositions {
+function computeYPositions_FixedOrder(probabilities: Probabilities, order: string[]): YPositions {
   const normalizedOrder = normalizeOrder(Object.keys(probabilities), order);
   const start: { [letter: string]: number[] } = {};
   const end: { [letter: string]: number[] } = {};
@@ -404,7 +371,7 @@ function computePositions_FixedOrder(probabilities: Probabilities, order: string
   return { start, end };
 }
 
-function computePositions_ProbabilityOrder(probabilities: Probabilities): YPositions {
+function computeYPositions_ProbabilityOrder(probabilities: Probabilities): YPositions {
   const alphabet = Object.keys(probabilities);
   const start: { [letter: string]: number[] } = {};
   const end: { [letter: string]: number[] } = {};
@@ -431,4 +398,14 @@ function normalizeOrder(present: string[], order: string[]) {
   const ordered = order.filter(s => presentSet.has(s));
   const rest = present.filter(s => !orderSet.has(s));
   return ordered.concat(rest);
+}
+
+function objectShallowEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+  for (const key in a) {
+    if (a[key] !== b[key]) return false;
+  }
+  for (const key in b) {
+    if (a[key] !== b[key]) return false;
+  }
+  return true;
 }
