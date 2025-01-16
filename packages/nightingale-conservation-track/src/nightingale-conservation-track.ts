@@ -1,4 +1,5 @@
 import NightingaleElement, {
+  createEvent,
   customElementOnce,
   withCanvas,
   withDimensions,
@@ -9,8 +10,8 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { firstGteqIndex, Refresher } from "@nightingale-elements/nightingale-track-canvas/src/utils/utils"; // TODO move Refresher to shared lib
-import { select, Selection } from "d3";
+import { firstEqIndex, firstGteqIndex, Refresher } from "@nightingale-elements/nightingale-track-canvas/src/utils/utils"; // TODO move Refresher to shared lib
+import { BaseType, select, Selection } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -23,17 +24,17 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = ["letter-order"] satisfies (keyof NightingaleConservationTrack)[];
 
 /** Order of amino acids in a column (top-to-bottom) */
-const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
+const AMINO_ACID_ORDER = Array.from("HYAVLIMFWSTQNKRDEPCG"); // Old Protvista order: HYSTQNAVLIMFWDEPKRCG
 /** Color to be used for unknown amino acids */
 const DEFAULT_COLOR = "#AAAAAA";
 /** Colors for amino acid groups, based on Clustal (https://www.jalview.org/help/html/colourSchemes/clustal.html) */
 const AMINO_GROUP_COLOR = {
   aromatic: "#15A4A4",
-  polar: "#15C015",
   hydrophobic: "#80A0F0",
+  polar: "#15C015",
+  positive: "#F01505",
   negative: "#C048C0",
   proline: "#C0C000",
-  positive: "#F01505",
   cysteine: "#F08080",
   glycine: "#F09048",
 };
@@ -41,10 +42,6 @@ const AMINO_GROUP_COLOR = {
 const AMINO_ACID_COLOR = {
   H: AMINO_GROUP_COLOR.aromatic,
   Y: AMINO_GROUP_COLOR.aromatic,
-  S: AMINO_GROUP_COLOR.polar,
-  T: AMINO_GROUP_COLOR.polar,
-  N: AMINO_GROUP_COLOR.polar,
-  Q: AMINO_GROUP_COLOR.polar,
   A: AMINO_GROUP_COLOR.hydrophobic,
   V: AMINO_GROUP_COLOR.hydrophobic,
   L: AMINO_GROUP_COLOR.hydrophobic,
@@ -52,11 +49,15 @@ const AMINO_ACID_COLOR = {
   M: AMINO_GROUP_COLOR.hydrophobic,
   F: AMINO_GROUP_COLOR.hydrophobic,
   W: AMINO_GROUP_COLOR.hydrophobic,
+  S: AMINO_GROUP_COLOR.polar,
+  T: AMINO_GROUP_COLOR.polar,
+  N: AMINO_GROUP_COLOR.polar,
+  Q: AMINO_GROUP_COLOR.polar,
+  K: AMINO_GROUP_COLOR.positive,
+  R: AMINO_GROUP_COLOR.positive,
   D: AMINO_GROUP_COLOR.negative,
   E: AMINO_GROUP_COLOR.negative,
   P: AMINO_GROUP_COLOR.proline,
-  K: AMINO_GROUP_COLOR.positive,
-  R: AMINO_GROUP_COLOR.positive,
   C: AMINO_GROUP_COLOR.cysteine,
   G: AMINO_GROUP_COLOR.glycine,
 };
@@ -88,8 +89,9 @@ export interface SequenceConservationData {
   probabilities: Probabilities,
 }
 
+
 @customElementOnce("nightingale-conservation-track")
-class NightingaleConservationTrack extends withCanvas(
+export default class NightingaleConservationTrack extends withCanvas(
   withManager(
     withZoom(
       withResizable(
@@ -160,15 +162,18 @@ class NightingaleConservationTrack extends withCanvas(
   }
 
   protected createTrack() {
-    this.svg?.selectAll("g").remove();
-
+    if (this.svg) {
+      this.svg.selectAll("g").remove();
+      this.unbindEvents(this.svg);
+    }
     this.svg = select(this as unknown as NightingaleElement)
       .selectAll<SVGSVGElement, unknown>("svg")
       .attr("width", this.width)
       .attr("height", this.height);
-
-    if (!this.svg) return;
-    this.highlighted = this.svg.append("g").attr("class", "highlighted");
+    if (this.svg) { // this check is necessary because `svg` setter does not always set
+      this.bindEvents(this.svg);
+      this.highlighted = this.svg.append("g").attr("class", "highlighted");
+    }
   }
 
   refresh() {
@@ -346,9 +351,83 @@ class NightingaleConservationTrack extends withCanvas(
     super.onCanvasScaleChange();
     this.refresh();
   }
-}
 
-export default NightingaleConservationTrack;
+
+  private bindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
+    target.on("click.NightingaleConservationTrack", (event: MouseEvent) => this.handleClick(event));
+    target.on("mousemove.NightingaleConservationTrack", (event: MouseEvent) => this.handleMousemove(event));
+    target.on("mouseout.NightingaleConservationTrack", () => this.handleMouseout());
+  }
+
+  private unbindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
+    target.on("click.NightingaleConservationTrack", null);
+    target.on("mousemove.NightingaleConservationTrack", null);
+    target.on("mouseout.NightingaleConservationTrack", null);
+  }
+
+  private handleClick(event: MouseEvent): void {
+    const pointed = this.getPointedAminoAcid(event.offsetX, event.offsetY);
+    if (pointed === undefined) {
+      return;
+    }
+    const withHighlight = this.getAttribute("highlight-event") === "onclick";
+    const customEvent = createEvent(
+      "click",
+      pointed,
+      withHighlight,
+      true,
+      pointed.position,
+      pointed.position,
+      event.target instanceof HTMLElement ? event.target : undefined,
+      event,
+      this,
+    );
+    this.dispatchEvent(customEvent);
+  }
+
+  private handleMousemove(event: MouseEvent): void {
+    const pointed = this.getPointedAminoAcid(event.offsetX, event.offsetY);
+    if (pointed === undefined) {
+      return this.handleMouseout();
+    }
+    const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
+    const customEvent = createEvent(
+      "mouseover",
+      pointed,
+      withHighlight,
+      false,
+      pointed.position,
+      pointed.position,
+      event.target instanceof HTMLElement ? event.target : undefined,
+      event,
+      this,
+    );
+    this.dispatchEvent(customEvent);
+  }
+
+  private handleMouseout(): void {
+    const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
+    const customEvent = createEvent("mouseout", null, withHighlight);
+    this.dispatchEvent(customEvent);
+  }
+
+  private getPointedAminoAcid(svgX: number, svgY: number): { position: number, aa: string } | undefined {
+    if (!this.data) return undefined;
+    if (!this.yPositions) return undefined;
+    const continuousPosition = this.getSeqPositionFromX(svgX);
+    if (continuousPosition === undefined) return undefined;
+    const position = Math.floor(continuousPosition);
+    const i = firstEqIndex(this.data.index, position, x => x);
+    if (i === undefined) return undefined;
+    const relativeY = (svgY - this["margin-top"]) / (this["height"] - this["margin-top"] - this["margin-bottom"]);
+    for (const letter in this.yPositions.start) {
+      if (relativeY >= this.yPositions.start[letter][i] && relativeY < this.yPositions.end[letter][i]) {
+        return { position, aa: letter };
+      }
+    }
+    return undefined;
+  }
+}
 
 
 function computeYPositions_FixedOrder(probabilities: Probabilities, order: string[]): YPositions {

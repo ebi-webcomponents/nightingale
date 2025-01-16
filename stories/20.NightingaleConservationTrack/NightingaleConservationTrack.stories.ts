@@ -1,5 +1,5 @@
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
-import { range, rgb } from "d3";
+import { range } from "d3";
 import { html } from "lit-html";
 import "../../packages/nightingale-conservation-track/src/index";
 import { SequenceConservationData } from "../../packages/nightingale-conservation-track/src/nightingale-conservation-track";
@@ -12,14 +12,15 @@ export default { title: "Components/Tracks/NightingaleConservationTrack" } as Me
 const DefaultArgs = {
   "min-width": 400,
   "height": 200,
-  "highlight-event": "onmouseover", // "onmouseover"|"onclick"
+  "highlight-event": "onmouseover",
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd", // "transparent"
-  "letter-order": "property", // "transparent"
+  "letter-order": "property",
 };
 type Args = typeof DefaultArgs;
 
 const ArgTypes: Partial<ArgTypes<Args>> = {
+  "highlight-event": { control: "select", options: ["onmouseover", "onclick"] },
   "letter-order": { control: "select", options: ["property", "probability"] },
 };
 
