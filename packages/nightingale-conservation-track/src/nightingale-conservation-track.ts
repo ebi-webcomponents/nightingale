@@ -15,12 +15,8 @@ import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 
-const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
-const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = ["letter-order"];
-
-const MAX_FONT_SIZE = 24;
-const FADE_FONT_SIZE = 12;
-const MIN_FONT_SIZE = 6;
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height", "font-family", "min-font-size", "fade-font-size", "max-font-size"] as const satisfies (keyof NightingaleConservationTrack)[];
+const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = ["letter-order"] as const satisfies (keyof NightingaleConservationTrack)[];
 
 /** Order of amino acids in a column (top-to-bottom) */
 const AMINO_ACID_ORDER = Array.from("HYSTQNAVLIMFWDEPKRCG"); // TODO create more meaningful order?
@@ -60,6 +56,10 @@ const AMINO_ACID_COLOR = {
   C: AMINO_GROUP_COLOR.cysteine,
   G: AMINO_GROUP_COLOR.glycine,
 };
+/** Color for rectangle stroke */
+const STROKE_COLOR = "#D3D3D3";
+/** Line width for rectangle stroke */
+const LINE_WIDTH = 1;
 
 
 /** Amino acid probability for each amino acid for each position */
@@ -97,6 +97,23 @@ class NightingaleConservationTrack extends withCanvas(
   /** Order of amino acids within a column (top-to-bottom) */
   @property({ type: String })
   "letter-order": LetterOrder = "property";
+
+  /** Font family for labels (can be a list of multiple font families separated by comma, like in CSS) */
+  @property({ type: String })
+  "font-family": string = "Helvetica,sans-serif";
+
+  /** Font size below which labels are hidden */
+  @property({ type: Number })
+  "min-font-size": number = 6;
+
+  /** Column width below which labels are shown with lower opacity */
+  @property({ type: Number })
+  "fade-font-size": number = 12;
+
+  /** Maximum font size for labels */
+  @property({ type: Number })
+  "max-font-size": number = 24;
+
 
   #conservationData?: SequenceConservationData;
   private positions?: YPositions;
@@ -138,10 +155,11 @@ class NightingaleConservationTrack extends withCanvas(
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
+    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name as any)) {
       // Call this.data setter to recompute this.positions
       this.data = this.data; // eslint-disable-line no-self-assign
-    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) || name.startsWith("margin-")) {
+      // this.data setter calls this.createTrack()
+    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name as any) || name.startsWith("margin-")) {
       this.onDimensionsChange();
       this.createTrack();
     }
@@ -187,14 +205,16 @@ class NightingaleConservationTrack extends withCanvas(
 
     const scale = this.canvasScale;
     ctx.lineWidth = scale * LINE_WIDTH; // TODO reduce lineWidth when zoomed out a lot
-    ctx.strokeStyle = "rgb(211,211,211)";
-    ctx.globalAlpha = 1;
+    ctx.strokeStyle = STROKE_COLOR;
     ctx.textAlign = "center";
-    ctx.textBaseline = "middle"; // TODO make alignment suck less and solve jumping on zoom (alphabetic should fix jumping, but how to align it?)
-    const baseWidth = scale * this.getSingleBaseWidth();
-    const fontOpacity = (baseWidth < scale * FADE_FONT_SIZE) ? (baseWidth - scale * MIN_FONT_SIZE) / (scale * FADE_FONT_SIZE - scale * MIN_FONT_SIZE) : 1;
+    ctx.textBaseline = "middle";
+    const baseWidthInCss = this.getSingleBaseWidth();
+    const baseWidth = scale * baseWidthInCss;
+    const fontOpacity = this.getFontOpacity(baseWidthInCss);
     const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
     const rightEdgeSeq = this.getSeqPositionFromX(canvasWidth / scale + 0.5 * LINE_WIDTH) ?? Infinity;
+    const yOffset = scale * this['margin-top'];
+    const columnHeight = scale * (this['height'] - this['margin-top'] - this['margin-bottom']);
     // TODO test edge cases for above
     // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
 
@@ -208,22 +228,26 @@ class NightingaleConservationTrack extends withCanvas(
         const x = scale * this.getXFromSeqPosition(seqId);
         const textX = x + 0.5 * baseWidth;
         for (const letter in this.positions?.start) {
-          const start = Math.min(this.positions.start[letter][i], 1) * canvasHeight;
-          const end = Math.min(this.positions.end[letter][i], 1) * canvasHeight;
-          // TODO top and bottom margin
+          const relStart = Math.min(this.positions.start[letter][i], 1);
+          const relEnd = Math.min(this.positions.end[letter][i], 1);
+          const start = relStart * columnHeight + yOffset;
+          const end = relEnd * columnHeight + yOffset;
           const height = end - start;
-          ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
+
+          // Draw rectangle
           ctx.globalAlpha = 1;
+          ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
           ctx.fillRect(x, start, baseWidth, height);
           ctx.strokeRect(x, start, baseWidth, height);
 
-          const fontSize = Math.min(baseWidth, height, scale * MAX_FONT_SIZE);
-          if (fontSize < scale * MIN_FONT_SIZE) continue;
-
+          // Draw letter
+          if (fontOpacity === 0) continue;
+          const fontSize = Math.min(baseWidth, height, scale * this["max-font-size"]);
+          if (fontSize < scale * this["min-font-size"]) continue;
           const textY = start + 0.5 * height;
-          ctx.fillStyle = "black";
-          ctx.font = `${fontSize}px Arial`;
           ctx.globalAlpha = fontOpacity;
+          ctx.fillStyle = "black";
+          ctx.font = `${fontSize}px ${this["font-family"]}`;
           ctx.fillText(letter, textX, textY);
         }
       }
@@ -243,20 +267,17 @@ class NightingaleConservationTrack extends withCanvas(
   }
 
   private drawSvgLetters() {
-    // TODO factor out all computations in common with `drawCanvasContent`
     if (!this.svgLettersGroup) return;
     this.svgLettersGroup.selectChildren().remove();
 
     if (!this.data) return;
 
     const baseWidth = this.getSingleBaseWidth();
-    if (baseWidth < MIN_FONT_SIZE) return;
+    if (baseWidth < this["min-font-size"]) return;
 
     console.time('draw letters')
     const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
     const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
-    // TODO test edge cases for above
-    // This is better than this["display-start"], this["display-end"]+1, because it considers margins and symbol size
     this.svgLettersGroup
       .style("cursor", "default")
       .attr("text-anchor", "middle")
@@ -275,8 +296,8 @@ class NightingaleConservationTrack extends withCanvas(
         // TODO top and bottom margin
         const height = end - start;
         const y = start + 0.5 * height;
-        const textSize = Math.min(baseWidth, height, MAX_FONT_SIZE);
-        if (textSize < MIN_FONT_SIZE) continue;
+        const textSize = Math.min(baseWidth, height, this["max-font-size"]);
+        if (textSize < this["min-font-size"]) continue;
         this.svgLettersGroup.append("text")
           .attr("x", x)
           .attr("y", y)
@@ -287,6 +308,15 @@ class NightingaleConservationTrack extends withCanvas(
     console.timeEnd('draw letters')
   }
 
+  private getFontOpacity(baseWidthInCss: number): number {
+    if (baseWidthInCss < this["min-font-size"]) {
+      return 0;
+    } else if (baseWidthInCss < this["fade-font-size"]) {
+      return (baseWidthInCss - this["min-font-size"]) / (this["fade-font-size"] - this["min-font-size"]);
+    } else {
+      return 1;
+    }
+  }
 
   /** Inverse of `this.getXFromSeqPosition`. */
   getSeqPositionFromX(x: number): number | undefined {
@@ -348,8 +378,6 @@ class NightingaleConservationTrack extends withCanvas(
 
 export default NightingaleConservationTrack;
 
-
-const LINE_WIDTH = 1;
 
 function computePositions_FixedOrder(probabilities: Probabilities, order: string[]): YPositions {
   const normalizedOrder = normalizeOrder(Object.keys(probabilities), order);

@@ -190,6 +190,8 @@ function nightingaleConservationTrack(args: Args & { length: number, id: number 
         highlight-event="${args["highlight-event"]}"
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
+        margin-top=10
+        margin-bottom=20
         use-ctrl-to-zoom
         letter-order=${args["letter-order"]}
       >
