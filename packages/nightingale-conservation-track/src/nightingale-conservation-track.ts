@@ -411,7 +411,7 @@ export default class NightingaleConservationTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
-  private getPointedAminoAcid(svgX: number, svgY: number): { position: number, aa: string } | undefined {
+  private getPointedAminoAcid(svgX: number, svgY: number): { position: number, aa: string, probability: number } | undefined {
     if (!this.data) return undefined;
     if (!this.yPositions) return undefined;
     const continuousPosition = this.getSeqPositionFromX(svgX);
@@ -422,7 +422,7 @@ export default class NightingaleConservationTrack extends withCanvas(
     const relativeY = (svgY - this["margin-top"]) / (this["height"] - this["margin-top"] - this["margin-bottom"]);
     for (const letter in this.yPositions.start) {
       if (relativeY >= this.yPositions.start[letter][i] && relativeY < this.yPositions.end[letter][i]) {
-        return { position, aa: letter };
+        return { position, aa: letter, probability: this.data.probabilities[letter][i] ?? 0 };
       }
     }
     return undefined;
