@@ -1,15 +1,17 @@
+import { Selection } from "d3";
+import { property } from "lit/decorators.js";
 import NightingaleBaseElement, {
   Constructor,
 } from "../../nightingale-base-element";
-import { property } from "lit/decorators.js";
-import { Selection } from "d3";
 
 import withDimensions, { WithDimensionsInterface } from "../withDimensions";
 
+
 const DEFAULT_MARGIN_COLOR = "#FFFFFFDD";
+
 export interface withMarginInterface
   extends NightingaleBaseElement,
-    WithDimensionsInterface {
+  WithDimensionsInterface {
   "margin-top": number;
   "margin-bottom": number;
   "margin-left": number;
@@ -34,6 +36,7 @@ const defaultOptions = {
   "margin-right": 10,
   "margin-color": DEFAULT_MARGIN_COLOR,
 };
+
 const withMargin = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
   options: {
@@ -44,20 +47,18 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
     "margin-color"?: string | null;
   } = {},
 ) => {
-  class WithMargin extends withDimensions(superClass) {
-    #intitialOptions = { ...defaultOptions, ...options };
+  class WithMargin extends withDimensions(superClass) implements withMarginInterface {
+    #initialOptions = { ...defaultOptions, ...options };
     @property({ type: Number })
-    "margin-top": number = this.#intitialOptions["margin-top"];
+    "margin-top": number = this.#initialOptions["margin-top"];
     @property({ type: Number })
-    "margin-bottom": number = this.#intitialOptions["margin-bottom"];
+    "margin-bottom": number = this.#initialOptions["margin-bottom"];
     @property({ type: Number })
-    "margin-left": number = this.#intitialOptions["margin-left"];
+    "margin-left": number = this.#initialOptions["margin-left"];
     @property({ type: Number })
-    "margin-right": number = this.#intitialOptions["margin-right"];
+    "margin-right": number = this.#initialOptions["margin-right"];
     @property({ type: String })
-    "margin-color" = this.#intitialOptions["margin-color"];
-
-    #created = false;
+    "margin-color": string = this.#initialOptions["margin-color"] ?? DEFAULT_MARGIN_COLOR;
 
     getWidthWithMargins() {
       return this.width
@@ -79,44 +80,44 @@ const withMargin = <T extends Constructor<NightingaleBaseElement>>(
     ) {
       if (!g) return;
 
-      if (!this.#created || g.select("rect").empty()) {
+      if (g.select("rect").empty()) {
         g.append("rect")
           .style("pointer-events", "none")
-          .attr("class", "margin-left")
-          .attr("x", 0);
+          .attr("class", "margin-left");
         g.append("rect")
           .style("pointer-events", "none")
           .attr("class", "margin-right");
         g.append("rect")
           .style("pointer-events", "none")
-          .attr("class", "margin-top")
-          .attr("width", this.width)
-          .attr("x", 0)
-          .attr("y", 0);
+          .attr("class", "margin-top");
         g.append("rect")
           .style("pointer-events", "none")
-          .attr("class", "margin-bottom")
-          .attr("width", this.width)
-          .attr("x", 0);
-
-        this.#created = true;
+          .attr("class", "margin-bottom");
       }
 
       g.select("rect.margin-left")
-        .attr("fill", this["margin-color"] || DEFAULT_MARGIN_COLOR)
-        .attr("height", this.height)
-        .attr("width", this["margin-left"]);
+        .attr("fill", this["margin-color"])
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", this["margin-left"])
+        .attr("height", this["height"]);
       g.select("rect.margin-right")
-        .attr("fill", this["margin-color"] || DEFAULT_MARGIN_COLOR)
-        .attr("height", this.height)
-        .attr("x", this.width - this["margin-right"])
-        .attr("width", this["margin-right"]);
+        .attr("fill", this["margin-color"])
+        .attr("x", this["width"] - this["margin-right"])
+        .attr("y", 0)
+        .attr("width", this["margin-right"])
+        .attr("height", this["height"]);
       g.select("rect.margin-top")
-        .attr("fill", this["margin-color"] || DEFAULT_MARGIN_COLOR)
+        .attr("fill", this["margin-color"])
+        .attr("x", this["margin-left"])
+        .attr("y", 0)
+        .attr("width", this["width"] - this["margin-left"] - this["margin-right"])
         .attr("height", this["margin-top"]);
       g.select("rect.margin-bottom")
-        .attr("fill", this["margin-color"] || DEFAULT_MARGIN_COLOR)
-        .attr("y", this.height - this["margin-bottom"])
+        .attr("fill", this["margin-color"])
+        .attr("x", this["margin-left"])
+        .attr("y", this["height"] - this["margin-bottom"])
+        .attr("width", this["width"] - this["margin-left"] - this["margin-right"])
         .attr("height", this["margin-bottom"]);
     }
   }
