@@ -81,11 +81,10 @@ interface YPositions {
 
 type LetterOrder = "property" | "probability";
 
+/** Type for `NightingaleConservationTrack.data`` */
 export interface SequenceConservationData {
   /** Sequence number for each position */
   index: number[],
-  /** Conservation score for each position */
-  conservation_score: number[], // TODO find out if needed, remove otherwise
   /** Amino acid probability for each amino acid for each position */
   probabilities: Probabilities,
 }
@@ -103,7 +102,7 @@ export default class NightingaleConservationTrack extends withCanvas(
     )
   )
 ) {
-  /** Order of amino acids within a column (top-to-bottom) */
+  /** Order of amino acids within a column (top-to-bottom). property = fixed order based on amino acid grouping, probability = on every position sort by descending probability */
   @property({ type: String })
   "letter-order": LetterOrder = "property";
 
@@ -124,7 +123,7 @@ export default class NightingaleConservationTrack extends withCanvas(
   "max-font-size": number = 24;
 
 
-  #conservationData?: SequenceConservationData;
+  #data?: SequenceConservationData;
   private yPositions?: YPositions;
   protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
@@ -134,11 +133,12 @@ export default class NightingaleConservationTrack extends withCanvas(
     if (this.data) this.createTrack();
   }
 
+  /** Sequence conservation data, e.g. `{ index: [1, 2, 3, 4, 5], probabilities: { A: [0.1, 0.1, 0, 0.2, 0.3], C: [0, 0.05, 0.1, 0.1, 0], ... }}` */
   get data(): SequenceConservationData | undefined {
-    return this.#conservationData;
+    return this.#data;
   }
   set data(data: SequenceConservationData | undefined) {
-    this.#conservationData = data;
+    this.#data = data;
     if (data) {
       if (this["letter-order"] === "probability") {
         this.yPositions = computeYPositions_ProbabilityOrder(data.probabilities);

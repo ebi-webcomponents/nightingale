@@ -75,7 +75,7 @@ const defaultData = [
   },
 ];
 
-const defaultConservationData = { // https://www.ebi.ac.uk/pdbe/graph-api/pdb/sequence_conservation/1tqn/1
+const defaultConservationData = { // real data from https://www.ebi.ac.uk/pdbe/graph-api/pdb/sequence_conservation/1tqn/1
   "identifier": "1tqn",
   "main_track_color": "#808080",
   "sub_track_color": "#d3d3d3",
@@ -110,7 +110,6 @@ const defaultConservationData = { // https://www.ebi.ac.uk/pdbe/graph-api/pdb/se
 function prepareConservationData(data: typeof defaultConservationData): SequenceConservationData {
   const out: SequenceConservationData = {
     index: data.data.index,
-    conservation_score: data.data.conservation_score,
     probabilities: {},
   };
   for (const field in data.data) {
