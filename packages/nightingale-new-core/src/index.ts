@@ -10,6 +10,8 @@ export { default as withZoom } from "./mixins/withZoom/index";
 export { default as bindEvents, createEvent } from "./utils/bindEvents";
 export { contrastingColor, getColor } from "./utils/colors";
 export { default as Region } from "./utils/Region";
+export * as BinarySearch from "./utils/binary-search";
+export { Refresher } from "./utils/refresher";
 export { default as customElementOnce } from "./decorators/customElementOnce";
 import NightingaleElement from "./nightingale-base-element";
 export default NightingaleElement;

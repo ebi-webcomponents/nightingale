@@ -27,7 +27,6 @@ import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import NightingaleElement, {
-  createEvent,
   withDimensions,
   withHighlight,
   withManager,

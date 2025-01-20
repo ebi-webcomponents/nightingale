@@ -1,9 +1,9 @@
-import { createEvent, customElementOnce, withCanvas } from "@nightingale-elements/nightingale-new-core";
+import { createEvent, customElementOnce, Refresher, withCanvas } from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack, { Feature, FeatureLocation, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
 import { drawRange, drawSymbol, drawUnknown, shapeCategory } from "./utils/draw-shapes";
-import { last, RangeCollection, Refresher } from "./utils/utils";
+import { last, RangeCollection } from "./utils/utils";
 
 type Fragment = FeatureLocation["fragments"][number]
 type ExtendedFragment = Fragment & { featureIndex: number };

@@ -1,6 +1,8 @@
 import NightingaleElement, {
+  BinarySearch,
   createEvent,
   customElementOnce,
+  Refresher,
   withCanvas,
   withDimensions,
   withHighlight,
@@ -10,7 +12,6 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { firstEqIndex, firstGteqIndex, Refresher } from "@nightingale-elements/nightingale-track-canvas/src/utils/utils"; // TODO move Refresher to shared lib
 import { BaseType, select, Selection } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
@@ -241,8 +242,8 @@ export default class NightingaleConservationTrack extends withCanvas(
 
     const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
     const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
-    const iFrom = Math.max(0, firstGteqIndex(this.data.index, leftEdgeSeq - 1, x => x));
-    const iTo = Math.min(this.data.index.length, firstGteqIndex(this.data.index, rightEdgeSeq, x => x));
+    const iFrom = Math.max(0, BinarySearch.firstGteqIndex(this.data.index, leftEdgeSeq - 1, x => x));
+    const iTo = Math.min(this.data.index.length, BinarySearch.firstGteqIndex(this.data.index, rightEdgeSeq, x => x));
 
     for (let i = iFrom; i < iTo; i++) {
       const x = scale * this.getXFromSeqPosition(this.data.index[i]);
@@ -418,7 +419,7 @@ export default class NightingaleConservationTrack extends withCanvas(
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
-    const i = firstEqIndex(this.data.index, position, x => x);
+    const i = BinarySearch.firstEqIndex(this.data.index, position, x => x);
     if (i === undefined) return undefined;
     const relativeY = (svgY - this["margin-top"]) / (this["height"] - this["margin-top"] - this["margin-bottom"]);
     for (const letter in this.yPositions.start) {
