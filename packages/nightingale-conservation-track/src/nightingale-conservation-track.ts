@@ -356,7 +356,7 @@ export default class NightingaleConservationTrack extends withCanvas(
   private bindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
     target.on("click.NightingaleConservationTrack", (event: MouseEvent) => this.handleClick(event));
     target.on("mousemove.NightingaleConservationTrack", (event: MouseEvent) => this.handleMousemove(event));
-    target.on("mouseout.NightingaleConservationTrack", () => this.handleMouseout());
+    target.on("mouseout.NightingaleConservationTrack", (event: MouseEvent) => this.handleMouseout(event));
   }
 
   private unbindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
@@ -388,7 +388,7 @@ export default class NightingaleConservationTrack extends withCanvas(
   private handleMousemove(event: MouseEvent): void {
     const pointed = this.getPointedAminoAcid(event.offsetX, event.offsetY);
     if (pointed === undefined) {
-      return this.handleMouseout();
+      return this.handleMouseout(event);
     }
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
     const customEvent = createEvent(
@@ -405,9 +405,10 @@ export default class NightingaleConservationTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
-  private handleMouseout(): void {
+  private handleMouseout(event: MouseEvent): void {
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
-    const customEvent = createEvent("mouseout", null, withHighlight);
+    const customEvent = createEvent("mouseout", null, withHighlight, undefined, undefined, undefined,
+      event.target instanceof HTMLElement ? event.target : undefined, event, this);
     this.dispatchEvent(customEvent);
   }
 

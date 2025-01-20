@@ -166,8 +166,6 @@ function nightingaleSequence(args: Args & { length: number }) {
         highlight-event="${args["highlight-event"]}"
         highlight-color=${args["highlight-color"]}
         margin-color=${args["margin-color"]}
-        margin-top=10
-        margin-bottom=10
         use-ctrl-to-zoom
       >
       </nightingale-sequence>
@@ -186,8 +184,6 @@ function nightingaleTrackCanvas(args: Args & { length: number, id: number }) {
         highlight-event="${args["highlight-event"]}"
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
-        margin-top=10
-        margin-bottom=10
         use-ctrl-to-zoom
         layout="non-overlapping"
       >
@@ -205,13 +201,12 @@ function nightingaleLinegraphTrack(args: Args & { length: number, id: number }) 
         height="44"
         length="${args["length"]}"
         highlight-event="${args["highlight-event"]}"
+        ?highlight-on-click="${args["highlight-event"] === "onclick"}"
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
-        margin-top=10
-        margin-bottom=10
         use-ctrl-to-zoom
-        letter-order=${args["letter-order"]}
       >
+        <style>.mouse-over-effects { opacity: 0; }</style>
       </nightingale-linegraph-track>
     </div>`;
 }
@@ -278,6 +273,10 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
     await customElements.whenDefined("nightingale-conservation-track");
     for (const track of document.getElementsByTagName("nightingale-conservation-track")) {
       (track as any).data = prepareConservationData(defaultConservationData);
+    }
+    await customElements.whenDefined("nightingale-manager");
+    for (const mgr of document.getElementsByTagName("nightingale-manager")) {
+      mgr.addEventListener('change', (e: any) => console.log(e.detail.eventType ?? e.detail.eventtype, e.target.id, e.detail));
     }
   };
   return story;

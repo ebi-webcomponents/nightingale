@@ -1,38 +1,39 @@
-import { customElement, property } from "lit/decorators.js";
-import { html } from "lit";
 import {
-  scaleLinear,
-  ScaleLinear,
-  select,
-  Selection,
-  line,
   area,
-  max,
-  min,
-  interpolateRainbow,
+  Area,
+  curveBasis,
+  curveCardinal,
+  CurveFactory,
   curveLinear,
   curveLinearClosed,
   curveMonotoneX,
   curveMonotoneY,
-  curveBasis,
-  curveCardinal,
+  curveNatural,
   curveStep,
   curveStepAfter,
   curveStepBefore,
-  curveNatural,
-  CurveFactory,
-  Area,
-  Line,
   pointer as d3Mouse,
+  interpolateRainbow,
+  line,
+  Line,
+  max,
+  min,
+  scaleLinear,
+  ScaleLinear,
+  select,
+  Selection,
 } from "d3";
+import { html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
 import NightingaleElement, {
+  createEvent,
   withDimensions,
-  withPosition,
-  withMargin,
-  withResizable,
   withHighlight,
   withManager,
+  withMargin,
+  withPosition,
+  withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
 
@@ -62,6 +63,16 @@ export type LineData = {
   values: Array<LineValue>;
 };
 
+interface ChangeEventDetail {
+  eventtype: "mouseover" | "mouseout" | "click",
+  feature: Record<string, LineValue | undefined> | undefined,
+  type: NightingaleLinegraphTrack['type'],
+  target: NightingaleLinegraphTrack,
+  parentEvent: MouseEvent,
+  highlight?: string,
+}
+
+
 @customElement("nightingale-linegraph-track")
 class NightingaleLinegraphTrack extends withManager(
   withZoom(
@@ -75,10 +86,10 @@ class NightingaleLinegraphTrack extends withManager(
   @property({ type: String })
   type?: string | null;
 
-  @property({type: Boolean})
+  @property({ type: Boolean })
   "show-label-name"?: false;
 
-  @property({type: Boolean})
+  @property({ type: Boolean })
   "highlight-on-click"?: false;
 
   yScale?: ScaleLinear<number, number>;
@@ -209,124 +220,148 @@ class NightingaleLinegraphTrack extends withManager(
       .attr("transform", "translate(10,0)")
       .attr("pointer-events", "none");
 
+    const handleMouseout = (event: MouseEvent) => {
+      // on mouse out hide circles and text
+      chartGroup.selectAll(".mouse-per-line circle").style("opacity", "0");
+      chartGroup.selectAll(".mouse-per-line text").style("opacity", "0");
+      const detail: ChangeEventDetail = {
+        eventtype: "mouseout",
+        feature: undefined,
+        type: this.type,
+        target: this,
+        parentEvent: event,
+        // cannot have highlight:undefined here, because NightingaleManager treats undefined differently than missing
+      };
+      if (!this["highlight-on-click"]) detail.highlight = "";
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    };
+
+    const handleMousemove = (event: MouseEvent) => {
+      // mouse moving over canvas
+      const mouse = d3Mouse(event);
+
+      // Showing the circle and text only when the mouse is moving over the paths
+      const outOfRange =
+        mouse[0] < (this.xScale?.(beginning) || 0) + this["margin-left"]
+        || mouse[0] > (this.xScale?.(end) || 0) + this.getSingleBaseWidth() + this["margin-left"];
+
+      if (outOfRange) {
+        return handleMouseout(event);
+      }
+
+      const features: Record<string, LineValue | undefined> = {};
+      const seqPosition = Math.floor(
+        this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
+      );
+
+      chartGroup
+        .selectAll<SVGCircleElement, LineData>(".mouse-per-line circle")
+        .style("opacity", (d) => {
+          // In case there is a gap or break in the graph, circle and text are not shown
+          const value = d.values.find((v) => v.position === seqPosition);
+          if (value) {
+            return value.value ? "1" : "0";
+          }
+          return "0";
+        });
+      chartGroup.selectAll(".mouse-per-line text").style("opacity", "1");
+
+      chartGroup
+        .selectAll<SVGTextContentElement, LineData>(".mouse-per-line text")
+        .text((d) => {
+          const value = d.values.find((v) => v.position === seqPosition);
+          features[d.name] = value;
+          const label = value ? `${d.name}${value.value === 1 ? '' : 's'}` : "";
+          if (this["show-label-name"]) {
+            return value ? `${value.value} ${label}` : '';
+          }
+          return value ? value.value : '';
+        });
+
+      chartGroup
+        .selectAll<SVGGElement, LineData>(".mouse-per-line")
+        .attr("transform", (d, i) => {
+          let beginning = 0;
+          let end = lines.nodes()[i].getTotalLength();
+          let pos: DOMPoint;
+          /*
+         Finding the nearest point in the path to the mouse pointer using iterative dichotomy.
+         Example can be found here - https://bl.ocks.org/larsenmtl/e3b8b7c2ca4787f77d78f58d41c3da91
+         */
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            const target = Math.floor((beginning + end) / 2);
+            pos = lines.nodes()[i].getPointAtLength(target);
+            if (
+              (target === end || target === beginning) &&
+              pos.x !== mouse[0]
+            ) {
+              break;
+            }
+            if (pos.x > mouse[0]) end = target;
+            else if (pos.x < mouse[0]) beginning = target;
+            else break; // position found
+          }
+          return `translate(${mouse[0]},${pos?.y || 0})`;
+        });
+
+      const detail: ChangeEventDetail = {
+        eventtype: "mouseover",
+        feature: features,
+        type: this.type,
+        target: this,
+        parentEvent: event,
+        // cannot have highlight:undefined here, because NightingaleManager treats undefined differently than missing
+      };
+      if (!this["highlight-on-click"]) detail.highlight = `${seqPosition}:${seqPosition}`;
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    };
+
+    const handleClick = (event: MouseEvent) => {
+      const mouse = d3Mouse(event);
+
+      const seqPosition = Math.floor(
+        this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
+      );
+      const detail: ChangeEventDetail = {
+        eventtype: "click",
+        feature: undefined,
+        type: this.type,
+        target: this,
+        parentEvent: event,
+        // cannot have highlight:undefined here, because NightingaleManager treats undefined differently than missing
+      };
+      if (this["highlight-on-click"]) detail.highlight = `${seqPosition}:${seqPosition}`;
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    };
+
     this.#overlay = mouseG
       .append("rect") // append a rect to catch mouse movements on canvas
       .attr("width", this.width) // can't catch mouse events on a g element
       .attr("height", this.height)
       .attr("fill", "none")
       .attr("pointer-events", "all")
-      .on("mouseout", () => {
-        // on mouse out hide circles and text
-        chartGroup.selectAll(".mouse-per-line circle").style("opacity", "0");
-        chartGroup.selectAll(".mouse-per-line text").style("opacity", "0");
-      })
-      .on("mousemove", (event) => {
-        // mouse moving over canvas
-        const mouse = d3Mouse(event);
-
-        // Showing the circle and text only when the mouse is moving over the paths
-        if (
-          mouse[0] < (this.xScale?.(beginning) || 0) + this["margin-left"] ||
-          mouse[0] >
-            (this.xScale?.(end) || 0) +
-              this.getSingleBaseWidth() +
-              this["margin-left"]
-        ) {
-          chartGroup.selectAll(".mouse-per-line circle").style("opacity", "0");
-          chartGroup.selectAll(".mouse-per-line text").style("opacity", "0");
-        } else {
-          const features: Record<string, LineValue | undefined> = {};
-          const seqPosition = Math.floor(
-            this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
-          );
-
-          chartGroup
-            .selectAll<SVGCircleElement, LineData>(".mouse-per-line circle")
-            .style("opacity", (d) => {
-              // In case there is a gap or break in the graph, circle and text are not shown
-              const value = d.values.find((v) => v.position === seqPosition);
-              if (value) {
-                return value.value ? "1" : "0";
-              }
-              return "0";
-            });
-          chartGroup.selectAll(".mouse-per-line text").style("opacity", "1");
-
-          chartGroup
-            .selectAll<SVGTextContentElement, LineData>(".mouse-per-line text")
-            .text((d) => {
-              const value = d.values.find((v) => v.position === seqPosition);
-              features[d.name] = value;
-              const label = value ? `${d.name}${value.value === 1 ? '': 's'}` : "";
-              if (this["show-label-name"]) {
-                return value ? `${value.value} ${label}` : ''; 
-              }
-              return value ? value.value : ''; 
-            });
-
-          chartGroup
-            .selectAll<SVGGElement, LineData>(".mouse-per-line")
-            .attr("transform", (d, i) => {
-              let beginning = 0;
-              let end = lines.nodes()[i].getTotalLength();
-              let pos: DOMPoint;
-              /*
-             Finding the nearest point in the path to the mouse pointer using iterative dichotomy.
-             Example can be found here - https://bl.ocks.org/larsenmtl/e3b8b7c2ca4787f77d78f58d41c3da91
-             */
-              // eslint-disable-next-line no-constant-condition
-              while (true) {
-                const target = Math.floor((beginning + end) / 2);
-                pos = lines.nodes()[i].getPointAtLength(target);
-                if (
-                  (target === end || target === beginning) &&
-                  pos.x !== mouse[0]
-                ) {
-                  break;
-                }
-                if (pos.x > mouse[0]) end = target;
-                else if (pos.x < mouse[0]) beginning = target;
-                else break; // position found
-              }
-              return `translate(${mouse[0]},${pos?.y || 0})`;
-            });
-
-          const detail = {
-            eventtype: "mouseover",
-            feature: features,
-            highlight: this["highlight-on-click"] ? '' : `${seqPosition}:${seqPosition}`,
-            type: this.type,
-            target: this,
-          };
-          this.dispatchEvent(
-            new CustomEvent("change", {
-              detail,
-              bubbles: true,
-              cancelable: true,
-            }),
-          );
-        }
-      })
-      .on('click', (event) => {
-        const mouse = d3Mouse(event);
-
-        const seqPosition = Math.floor(
-          this.xScale?.invert(mouse[0] - this["margin-left"]) || 0,
-        );
-        const detail = {
-          eventtype: "click",
-          highlight: `${seqPosition}:${seqPosition}`,
-          type: this.type,
-          target: this,
-        };
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail,
-            bubbles: true,
-            cancelable: true,
-          }),
-        );
-      });
+      .on("mouseout", handleMouseout)
+      .on("mousemove", handleMousemove)
+      .on('click', handleClick);
   }
 
   refresh() {
