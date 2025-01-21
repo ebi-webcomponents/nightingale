@@ -8,7 +8,7 @@ export default { title: "Components/Tracks/NightingaleConservationTrack" } as Me
 
 
 const DefaultArgs = {
-  "letter-order": "property",
+  "letter-order": "default",
   "min-width": 400,
   "height": 200,
   "highlight-event": "onmouseover",
@@ -19,7 +19,7 @@ type Args = typeof DefaultArgs;
 
 const ArgumentTypes: Partial<ArgTypes<Args>> = {
   "highlight-event": { control: "select", options: ["onmouseover", "onclick"] },
-  "letter-order": { control: "select", options: ["property", "probability"] },
+  "letter-order": { control: "select", options: ["default", "probability"] },
 };
 
 

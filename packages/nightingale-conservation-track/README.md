@@ -2,7 +2,7 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-conservation-track.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-conservation-track)
 
-The `nightingale-conservation-track` component is used to display sequence conservation across a set of sequences. It displays a column for each sequence position, which is divided into rectangles based on probabilities of individual amino acids occurring on this position. Each rectangle contains a label with one-letter code of the amino acid (if space allows). The input sequence conservation data can be provided via the `data` property.
+The `nightingale-conservation-track` component is used to display sequence conservation across a set of sequences. It displays a column for each sequence position, which is divided into rectangles based on probabilities of individual amino acids occurring on this position. Each rectangle contains a label with one-letter code of the amino acid (if space allows). Rectangles are colored based on amino acid groups (aromatic, hydrophobic, polar, positive, negative, proline, cysteine, glycine). The input sequence conservation data can be provided via the `data` property.
 
 As `nightingale-conservation-track` implements from `withZoom` and `withHighlight`, it will respond to zooming changes, highlight events and emit events when interacting with features (helpful if you want to display tooltips).
 
@@ -15,7 +15,7 @@ Most of the rendering is implemented via HTML canvas, but some non-critical part
   id="my-track-id"
   height="200"
   min-width="200"
-  letter-order="property"
+  letter-order="default"
   font-family="Helvetica,sans-serif"
   min-font-size="6"
   fade-font-size="12"
@@ -50,10 +50,10 @@ track.data = {
 
 ### Atributes
 
-#### `letter-order?: "property" | "probability" (default: "property")`
+#### `letter-order?: "default" | "probability" (default: "default")`
 
 Order of amino acids within a column (top-to-bottom).
-- "property" - fixed order based on amino acid grouping
+- "default" - fixed order based on amino acid groups
 - "probability" - on every position sort by descending probability
 
 #### `font-family?: string (default: "Helvetica,sans-serif")`
@@ -77,6 +77,8 @@ Maximum font size for labels. Set equal to `min-font-size` to keep font size con
 #### `data: { index: number[], probabilities: { [letter: string]: number[] } }`
 
 Gets or sets sequence conservation data. See example above.
+
+The keys in the `probabilities` object are typically one-letter amino acid codes but can be arbitrary strings (e.g. nucleotides: A, C, G, T).
 
 ### Other attributes and properties
 

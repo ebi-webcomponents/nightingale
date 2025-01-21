@@ -79,7 +79,7 @@ interface YPositions {
   end: { [letter: string]: number[] },
 }
 
-type LetterOrder = "property" | "probability";
+type LetterOrder = "default" | "probability";
 
 /** Type for `NightingaleConservationTrack.data`` */
 export interface SequenceConservationData {
@@ -102,9 +102,9 @@ export default class NightingaleConservationTrack extends withCanvas(
     )
   )
 ) {
-  /** Order of amino acids within a column (top-to-bottom). property = fixed order based on amino acid grouping, probability = on every position sort by descending probability */
+  /** Order of amino acids within a column (top-to-bottom). default = fixed order based on amino acid groups, probability = on every position sort by descending probability */
   @property({ type: String })
-  "letter-order": LetterOrder = "property";
+  "letter-order": LetterOrder = "default";
 
   /** Font family for labels (can be a list of multiple font families separated by comma, like in CSS) */
   @property({ type: String })
