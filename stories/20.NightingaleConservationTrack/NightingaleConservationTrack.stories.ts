@@ -1,25 +1,23 @@
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
-import { range } from "d3";
 import { html } from "lit-html";
 import "../../packages/nightingale-conservation-track/src/index";
-import { SequenceConservationData } from "../../packages/nightingale-conservation-track/src/nightingale-conservation-track";
-import "../../packages/nightingale-track-canvas/src/index";
+import { type SequenceConservationData } from "../../packages/nightingale-conservation-track/src/nightingale-conservation-track";
 
 
 export default { title: "Components/Tracks/NightingaleConservationTrack" } as Meta;
 
 
 const DefaultArgs = {
+  "letter-order": "property",
   "min-width": 400,
   "height": 200,
   "highlight-event": "onmouseover",
   "highlight-color": "#EB3BFF22",
-  "margin-color": "#80808040", // "transparent"
-  "letter-order": "property",
+  "margin-color": "#ffffffdd",
 };
 type Args = typeof DefaultArgs;
 
-const ArgTypes: Partial<ArgTypes<Args>> = {
+const ArgumentTypes: Partial<ArgTypes<Args>> = {
   "highlight-event": { control: "select", options: ["onmouseover", "onclick"] },
   "letter-order": { control: "select", options: ["property", "probability"] },
 };
@@ -27,55 +25,7 @@ const ArgTypes: Partial<ArgTypes<Args>> = {
 
 const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIAEDEEWKRLRSLLSPTFTSGKLKEMVPIIAQYGDVLVRNLRREAETGKPVTLKDVFGAYSMDVITSTSFGVNIDSLNNPQDPFVENTKKLLRFDFLDPFFLSITVFPFLIPILEVLNICVFPREVTNFLRKSVKRMKESRLEDTQKHRVDFLQLMIDSQNSKETESHKALSDLELVAQSIIFIFAGYETTSSVLSFIMYELATHPDVQQKLQEEIDAVLPNKAPPTYDTVLQMEYLDMVVNETLRLFPIAMRLERVCKKDVEINGMFIPKGVVVMIPSYALHRDPKYWTEPEKFLPERFSKKNKDNIDPYIYTPFGSGPRNCIGMRFALMNMKLALIRVLQNFSFKPCKETQIPLKLSLGGLLQPEKPVVLKVESRDGTVSGAHHHH";
 
-
-const defaultData = [
-  {
-    accession: "feature1",
-    start: 1,
-    end: 2,
-    color: "pink",
-  },
-  {
-    accession: "feature1",
-    start: 49,
-    end: 50,
-    color: "red",
-  },
-  {
-    accession: "feature1",
-    start: 10,
-    end: 20,
-    color: "#342ea2",
-  },
-  {
-    accession: "feature2",
-    locations: [{ fragments: [{ start: 30, end: 45 }] }],
-    color: "#A42ea2",
-  },
-  {
-    accession: "feature3",
-    locations: [
-      {
-        fragments: [{ start: 15, end: 15 }],
-      },
-      { fragments: [{ start: 18, end: 18 }] },
-    ],
-    color: "#A4Aea2",
-  },
-  {
-    accession: "feature4",
-    locations: [
-      {
-        fragments: [
-          { start: 20, end: 23 },
-          { start: 26, end: 32 },
-        ],
-      },
-    ],
-  },
-];
-
-const defaultConservationData = { // real data from https://www.ebi.ac.uk/pdbe/graph-api/pdb/sequence_conservation/1tqn/1
+const sampleConservationData = { // real data from https://www.ebi.ac.uk/pdbe/graph-api/pdb/sequence_conservation/1tqn/1
   "identifier": "1tqn",
   "main_track_color": "#808080",
   "sub_track_color": "#d3d3d3",
@@ -107,7 +57,7 @@ const defaultConservationData = { // real data from https://www.ebi.ac.uk/pdbe/g
   "seq_id": "f605e37dc591194cfc8a9a7b94c629c5"
 };
 
-function prepareConservationData(data: typeof defaultConservationData): SequenceConservationData {
+function prepareConservationData(data: typeof sampleConservationData): SequenceConservationData {
   const out: SequenceConservationData = {
     index: data.data.index,
     probabilities: {},
@@ -121,7 +71,7 @@ function prepareConservationData(data: typeof defaultConservationData): Sequence
   return out;
 }
 
-function prepareLinegraphData(data: typeof defaultConservationData) {
+function prepareLinegraphData(data: typeof sampleConservationData) {
   const chart1 = {
     name: "chart1",
     color: "#707070",
@@ -171,25 +121,6 @@ function nightingaleSequence(args: Args & { length: number }) {
     </div>`;
 }
 
-function nightingaleTrackCanvas(args: Args & { length: number, id: number }) {
-  return html`
-    <div class="row">
-      <div class="label">Basic</div>
-      <nightingale-track-canvas
-        id="canvas-track-${args["id"]}"
-        min-width="${args["min-width"]}"
-        height="30"
-        length="${args["length"]}"
-        highlight-event="${args["highlight-event"]}"
-        highlight-color="${args["highlight-color"]}"
-        margin-color=${args["margin-color"]}
-        use-ctrl-to-zoom
-        layout="non-overlapping"
-      >
-      </nightingale-track-canvas>
-    </div>`;
-}
-
 function nightingaleLinegraphTrack(args: Args & { length: number, id: number }) {
   return html`
     <div class="row">
@@ -232,13 +163,8 @@ function nightingaleConservationTrack(args: Args & { length: number, id: number 
 }
 
 
-function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, showNightingaleTrackCanvas: boolean, length: number }): Story<Args> {
+function makeStory(options: { length: number }): Story<Args> {
   const template: Story<Args> = (args: Args) => {
-    const tracks = range(options.nTracks).map(i => html`
-      ${nightingaleTrackCanvas({ ...args, length: options.length, id: i })}
-      ${nightingaleLinegraphTrack({ ...args, length: options.length, id: i })}
-      ${nightingaleConservationTrack({ ...args, length: options.length, id: i })}
-    `);
     return html`
       <nightingale-saver element-id="nightingale-root" background-color="white" scale-factor="2"></nightingale-saver>
       <span>Use Ctrl+scroll to zoom.</span>
@@ -251,7 +177,8 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
           <div style="display:flex; flex-direction: column; width: 100%;">
             ${nightingaleNavigation({ ...args, length: options.length })}
             ${nightingaleSequence({ ...args, length: options.length })}
-            ${tracks}
+            ${nightingaleLinegraphTrack({ ...args, length: options.length, id: 0 })}
+            ${nightingaleConservationTrack({ ...args, length: options.length, id: 0 })}
           </div>
         </nightingale-manager>
       </div>`;
@@ -259,23 +186,15 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
 
   const story: Story<Args> = template.bind({});
   story.args = { ...DefaultArgs };
-  story.argTypes = ArgTypes;
+  story.argTypes = ArgumentTypes;
   story.play = async () => {
-    await customElements.whenDefined("nightingale-track-canvas");
-    for (const track of document.getElementsByTagName("nightingale-track-canvas")) {
-      (track as any).data = defaultData;
-    }
     await customElements.whenDefined("nightingale-linegraph-track");
     for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
-      (track as any).data = prepareLinegraphData(defaultConservationData);
+      (track as any).data = prepareLinegraphData(sampleConservationData);
     }
     await customElements.whenDefined("nightingale-conservation-track");
     for (const track of document.getElementsByTagName("nightingale-conservation-track")) {
-      (track as any).data = prepareConservationData(defaultConservationData);
-    }
-    await customElements.whenDefined("nightingale-manager");
-    for (const mgr of document.getElementsByTagName("nightingale-manager")) {
-      mgr.addEventListener('change', (e: any) => console.log(e.detail.eventType ?? e.detail.eventtype, e.target.id, e.detail));
+      (track as any).data = prepareConservationData(sampleConservationData);
     }
   };
   return story;
@@ -283,8 +202,5 @@ function makeStory(options: { nTracks: number, showNightingaleTrack: boolean, sh
 
 
 export const Track = makeStory({
-  nTracks: 1,
-  showNightingaleTrack: true,
-  showNightingaleTrackCanvas: true,
-  length: 486,
+  length: sampleSequence.length,
 });
