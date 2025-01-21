@@ -1,20 +1,20 @@
-import { property } from "lit/decorators.js";
 import {
-  scaleLinear,
   zoom as d3zoom,
-  zoomIdentity,
-  ScaleLinear,
-  ZoomBehavior,
   D3ZoomEvent,
+  scaleLinear,
+  ScaleLinear,
   Selection,
+  ZoomBehavior,
+  zoomIdentity,
 } from "d3";
+import { property } from "lit/decorators.js";
 
 import NightingaleBaseElement, {
   Constructor,
 } from "../../nightingale-base-element";
 import withDimensions, { WithDimensionsInterface } from "../withDimensions";
-import withPosition, { withPositionInterface } from "../withPosition";
 import withMargin, { withMarginInterface } from "../withMargin";
+import withPosition, { withPositionInterface } from "../withPosition";
 import withResizable, { WithResizableInterface } from "../withResizable";
 
 
@@ -166,6 +166,10 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         }
         // One of the observable attributes changed, so the scale needs to be redefined.
         this.applyZoomTranslation();
+        if (name === 'display-start' || name === 'display-end') {
+          console.log('display', this["display-start"], this["display-end"],
+            'scaleExtent', ...this.zoom!.scaleExtent(), 'translateExtent', ...this.zoom!.translateExtent())
+        }
       }
     }
 
@@ -190,6 +194,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
                   this.length || 0,
                   Math.max(end - 1, start + 1), // To make sure it never zooms in deeper than showing 2 bases covering the full width
                 ),
+                // TODO avoid re-clamping here?: "display-start": start, "display-end": end - 1,
               },
               bubbles: true,
               cancelable: true,
@@ -208,6 +213,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         (this.length || 0) /
         (1 + (this["display-end"] || 0) - (this["display-start"] || 0)),
       );
+      // TODO avoid re-clamping here?: const k = (this.length || 0) / (1 + (this["display-end"] || 0) - (this["display-start"] || 0)); // +1 because the displayend base should be included
       // The deltaX gets calculated using the position of the first base to display in original scale
       const dx = -this.originXScale(this["display-start"] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
