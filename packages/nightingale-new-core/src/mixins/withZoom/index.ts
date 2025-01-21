@@ -41,17 +41,9 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     withPosition(withResizable(withDimensions(superClass))),
   ) implements WithZoomInterface {
     _applyZoomTranslation: () => void;
-    /**
-     * Base scale without any transformations, only updated in `updateScaleDomain`
-     */
+    /** Base scale without any transformations, only updated in `updateScaleDomain` */
     private originXScale?: ScaleLinear<number, number>;
-    /**
-     * Temporary scale. It contains the transformations caused by zoom events, but not yet reflected in `display-start` and `display-end`.
-     */
-    private tmpXScale?: ScaleLinear<number, number>;
-    /**
-     * Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`.
-     */
+    /** Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`. */
     xScale?: ScaleLinear<number, number>;
     _zoom?: ZoomBehavior<SVGSVGElement, unknown>;
     _svg?: SVGSelection;
@@ -119,7 +111,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         // The max width should match the start of the n+1 base
         .domain([1, (this.length || 0) + 1])
         .range([0, this.getWidthWithMargins()]);
-      this.tmpXScale = this.originXScale.copy();
       this.xScale ??= this.originXScale.copy(); // Do not force set `xScale`, will be updated in `zoomed`
       this.zoom?.translateExtent([
         [0, 0],
@@ -175,32 +166,28 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
     zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
       // Redefines the xScale using the original scale and transform it with the captured event data.
-      if (this.originXScale)
-        this.tmpXScale = d3Event.transform.rescaleX(this.originXScale);
+      if (!this.originXScale) return;
 
-      // New positions based in the updated scale
-      const [start, end] = this?.tmpXScale?.domain() || [0, 0];
+      // Temporary scale. It contains the transformations caused by zoom events, but not yet reflected in `display-start` and `display-end`.
+      const tmpXScale = d3Event.transform.rescaleX(this.originXScale);
 
-      if (this.tmpXScale) {
-        if (this.dontDispatch) {
-          this.xScale = this.tmpXScale;
-        } else {
-          this.dispatchEvent(
-            // Dispatches the event so the manager can propagate this changes to other  components
-            new CustomEvent("change", {
-              detail: {
-                "display-start": Math.max(1, start),
-                "display-end": Math.min(
-                  this.length || 0,
-                  Math.max(end - 1, start + 1), // To make sure it never zooms in deeper than showing 2 bases covering the full width
-                ),
-                // TODO avoid re-clamping here?: "display-start": start, "display-end": end - 1,
-              },
-              bubbles: true,
-              cancelable: true,
-            }),
-          );
-        }
+      if (this.dontDispatch) {
+        this.xScale = tmpXScale;
+      } else {
+        // New positions based in the updated scale
+        const [start, end] = tmpXScale.domain();
+        this.dispatchEvent(
+          // Dispatches the event so the manager can propagate this changes to other  components
+          new CustomEvent("change", {
+            detail: {
+              "display-start": Math.max(1, start),
+              "display-end": Math.min(this.length ?? 0, Math.max(end - 1, start + 1)), // To make sure it never zooms in deeper than showing 2 bases covering the full width
+              // TODO avoid re-clamping here?: "display-start": start, "display-end": end - 1,
+            },
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
       }
     }
 
