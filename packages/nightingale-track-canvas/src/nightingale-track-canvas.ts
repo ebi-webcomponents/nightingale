@@ -74,7 +74,7 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
       <div class="container">
         <div style="position: relative; z-index: 0;">
           <canvas style="position: absolute; left: 0; top: 0; z-index: -1;"></canvas>
-          <svg></svg>
+          <svg style="background-color: #80808080;"></svg>
         </div>
       </div>
     `;
@@ -185,11 +185,6 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
       console.warn(`NightingaleTrackCanvas: Drawing shape "${shape}" is not implemented. Will draw question marks instead ¯\\_(ツ)_/¯`);
       this._unknownShapeWarningPrinted.add(shape);
     }
-  }
-
-  /** Inverse of `this.getXFromSeqPosition`. */
-  getSeqPositionFromX(x: number): number | undefined {
-    return this.xScale?.invert(x - this["margin-left"]);
   }
 
   private getFragmentAt(svgX: number, svgY: number): ExtendedFragment | undefined {

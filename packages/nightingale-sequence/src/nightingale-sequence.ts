@@ -185,9 +185,13 @@ class NightingaleSequence extends withManager(
         this.#axis.call(xAxis);
       }
 
+      // this.#axis.attr(
+      //   "transform",
+      //   `translate(${this["margin-left"] + half},${this["margin-top"]})`,
+      // );
       this.#axis.attr(
         "transform",
-        `translate(${this["margin-left"] + half},${this["margin-top"]})`,
+        `translate(${half},${this["margin-top"]})`,
       );
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
