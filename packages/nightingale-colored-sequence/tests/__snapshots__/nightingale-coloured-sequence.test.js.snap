@@ -255,6 +255,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         style="pointer-events: none;"
         width="10"
         x="0"
+        y="0"
       />
       <rect
         class="margin-right"
@@ -263,14 +264,15 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         style="pointer-events: none;"
         width="10"
         x="790"
+        y="0"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="0"
       />
       <rect
@@ -278,8 +280,8 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="40"
       />
     </g>
