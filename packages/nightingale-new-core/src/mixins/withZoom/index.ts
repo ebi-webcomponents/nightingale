@@ -53,14 +53,14 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     "use-ctrl-to-zoom" = false;
 
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(...args: any[]) {
-      super(...args);
+    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // constructor(...args: any[]) {
+    //   super(...args);
 
-      this.updateScaleDomain = this.updateScaleDomain.bind(this);
-      this._initZoom = this._initZoom.bind(this);
-      this.zoomed = this.zoomed.bind(this);
-    }
+    //   // this.updateScaleDomain = this.updateScaleDomain.bind(this);
+    //   // this._initZoom = this._initZoom.bind(this);
+    //   // this.zoomed = this.zoomed.bind(this);
+    // }
 
     override connectedCallback() {
       this.updateScaleDomain();
@@ -117,7 +117,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           }
           return true;
         })
-        .on("zoom", this.zoomed);
+        .on("zoom", z => this.handleZoom(z));
     }
 
     override attributeChangedCallback(
@@ -141,7 +141,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       }
     }
 
-    zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
+    /** Handle zoom event coming from the D3 zoom behavior */
+    private handleZoom(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
       // Redefines the xScale using the original scale and transform it with the captured event data.
       if (!this.originXScale) return;
 
