@@ -53,15 +53,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     "use-ctrl-to-zoom" = false;
 
 
-    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // constructor(...args: any[]) {
-    //   super(...args);
-
-    //   // this.updateScaleDomain = this.updateScaleDomain.bind(this);
-    //   // this._initZoom = this._initZoom.bind(this);
-    //   // this.zoomed = this.zoomed.bind(this);
-    // }
-
     override connectedCallback() {
       this.updateScaleDomain();
       this._initZoom();
@@ -98,11 +89,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         [0, 0],
         [this.getWidthWithMargins(), 0],
       ]);
+      this.adjustExtent();
     }
 
-    _initZoom() {
-      this._zoom = d3zoom<SVGSVGElement, unknown>()
-        .scaleExtent([1, Infinity])
+    private adjustExtent() {
+      this.zoom?.scaleExtent([1, Infinity])
         .translateExtent([
           [0, 0],
           [this.getWidthWithMargins(), 0],
@@ -110,7 +101,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         .extent([
           [0, 0],
           [this.getWidthWithMargins(), 0],
-        ])
+        ]);
+    }
+
+    _initZoom() {
+      this._zoom = d3zoom<SVGSVGElement, unknown>()
         .filter((event) => {
           if (event?.type === "wheel") {
             return !this["use-ctrl-to-zoom"] || event.ctrlKey;
@@ -118,6 +113,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           return true;
         })
         .on("zoom", z => this.handleZoom(z));
+      this.adjustExtent();
     }
 
     override attributeChangedCallback(
@@ -158,9 +154,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           // Dispatches the event so the manager can propagate this changes to other  components
           new CustomEvent("change", {
             detail: {
-              "display-start": Math.max(1, start),
-              "display-end": Math.min(this.length ?? 0, Math.max(end - 1, start + 1)), // To make sure it never zooms in deeper than showing 2 bases covering the full width
-              // TODO avoid re-clamping here?: "display-start": start, "display-end": end - 1,
+              // "display-start": Math.max(1, start),
+              // "display-end": Math.min(this.length ?? 0, Math.max(end - 1, start + 1)), // To make sure it never zooms in deeper than showing 2 bases covering the full width
+              "display-start": start,
+              "display-end": end - 1, // To make sure it never zooms in deeper than showing 2 bases covering the full width
+              // TODO re-clamping here?
             },
             bubbles: true,
             cancelable: true,
@@ -188,13 +186,15 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     private _applyZoomTranslation() {
       if (!this.svg || !this.originXScale) return;
       // Calculating the scale factor based in the current start/end coordinates and the length of the sequence.
-      const k = Math.max(
-        1,
-        // +1 because the displayend base should be included
-        (this.length || 0) /
-        (1 + (this["display-end"] || 0) - (this["display-start"] || 0)),
-      );
-      // TODO avoid re-clamping here?: const k = (this.length || 0) / (1 + (this["display-end"] || 0) - (this["display-start"] || 0)); // +1 because the displayend base should be included
+      // const k = Math.max(
+      //   1,
+      //   // +1 because the displayend base should be included
+      //   (this.length || 0) /
+      //   (1 + (this["display-end"] || 0) - (this["display-start"] || 0)),
+      // );
+      const k = (this.length || 0) / (1 + (this["display-end"] || 0) - (this["display-start"] || 0)); // +1 because the displayend base should be included
+      // TODO re-clamping here?
+      
       // The deltaX gets calculated using the position of the first base to display in original scale
       const dx = -this.originXScale(this["display-start"] || 0);
       this.dontDispatch = true; // This is to avoid infinite loops
