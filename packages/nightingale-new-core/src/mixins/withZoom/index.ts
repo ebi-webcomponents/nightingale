@@ -40,17 +40,18 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   class WithZoom extends withMargin(
     withPosition(withResizable(withDimensions(superClass))),
   ) implements WithZoomInterface {
-    _applyZoomTranslation: () => void;
     /** Base scale without any transformations, only updated in `updateScaleDomain` */
     private originXScale?: ScaleLinear<number, number>;
     /** Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`. */
     xScale?: ScaleLinear<number, number>;
-    _zoom?: ZoomBehavior<SVGSVGElement, unknown>;
-    _svg?: SVGSelection;
-    dontDispatch?: boolean;
+
+    private _zoom?: ZoomBehavior<SVGSVGElement, unknown>;
+    private _svg?: SVGSelection;
+    private dontDispatch?: boolean;
 
     @property({ type: Boolean })
     "use-ctrl-to-zoom" = false;
+
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
@@ -59,35 +60,16 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.updateScaleDomain = this.updateScaleDomain.bind(this);
       this._initZoom = this._initZoom.bind(this);
       this.zoomed = this.zoomed.bind(this);
-      this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
-      let aboutToApply = false;
-      // Postponing the zoom translation to the next frame.
-      // This helps in case several attributes are changed almost at the same time,
-      // in this way, only one refresh will be called.
-      this.applyZoomTranslation = () => {
-        if (aboutToApply) return;
-        aboutToApply = true;
-        requestAnimationFrame(() => {
-          aboutToApply = false;
-          this._applyZoomTranslation();
-        });
-      };
-      // this.scrollFilter = new ScrollFilter(this);
-      // this.wheelListener = (event) => this.scrollFilter.wheel(event);
     }
 
-    connectedCallback() {
+    override connectedCallback() {
       this.updateScaleDomain();
       this._initZoom();
-      // if (this.hasAttribute("filter-scroll")) {
-      //   document.addEventListener("wheel", this.wheelListener, { capture: true });
-      // }
       super.connectedCallback();
       this.onDimensionsChange();
     }
 
-    disconnectedCallback() {
-      // document.removeEventListener("wheel", this.wheelListener);
+    override disconnectedCallback() {
       super.disconnectedCallback();
     }
 
@@ -134,16 +116,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
             return !this["use-ctrl-to-zoom"] || event.ctrlKey;
           }
           return true;
-          // TODO: deal with event filters
-          //   if (this.hasAttribute("scroll-filter")) {
-          //     const scrollableAttribute = this.getAttribute("scrollable");
-          //     if (scrollableAttribute) return scrollableAttribute === "true";
-          //   }
         })
         .on("zoom", this.zoomed);
     }
 
-    attributeChangedCallback(
+    override attributeChangedCallback(
       name: string,
       oldValue: string | null,
       newValue: string | null,
@@ -191,7 +168,23 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       }
     }
 
-    applyZoomTranslation() {
+    private _zoomTranslationRequested = false;
+
+    /** Apply zoom translation in the next frame.
+     * Postponing the zoom translation to the next frame
+     * helps in case several attributes are changed almost at the same time.
+     * In this way, only one refresh will be called.*/
+    applyZoomTranslation = () => {
+      if (this._zoomTranslationRequested) return;
+      this._zoomTranslationRequested = true;
+      requestAnimationFrame(() => {
+        this._zoomTranslationRequested = false;
+        this._applyZoomTranslation();
+      });
+    }
+
+    /** Apply zoom translation immediately */
+    private _applyZoomTranslation() {
       if (!this.svg || !this.originXScale) return;
       // Calculating the scale factor based in the current start/end coordinates and the length of the sequence.
       const k = Math.max(
@@ -216,15 +209,17 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.dontDispatch = false;
       this.zoomRefreshed();
     }
+
     zoomRefreshed() {
       super.render();
     }
 
-    render() {
+    override render() {
       this.applyZoomTranslation();
       return super.render();
     }
-    public override onDimensionsChange() {
+
+    override onDimensionsChange() {
       super.onDimensionsChange();
       this.svg?.attr("width", this.width);
       this.svg?.attr("height", this.height);
