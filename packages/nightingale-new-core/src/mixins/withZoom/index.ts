@@ -20,6 +20,9 @@ import withResizable, { WithResizableInterface } from "../withResizable";
 
 const MIN_ZOOMED_COLUMNS = 2;
 
+const ZOOM_SENSITIVITY = 1;
+const PAN_SENSITIVITY = 0.6;
+
 type SVGSelection = Selection<SVGSVGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 export interface WithZoomInterface
@@ -97,24 +100,23 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       }
       this.zoomBehavior = d3zoom();
       // TODO implement wheelAction and uncomment the following lines
-      // this.zoomBehavior.filter(e => (e instanceof WheelEvent) ? (this.wheelAction(e).kind === 'zoom') : true);
-      // this.zoomBehavior.wheelDelta(e => {
-      //     // Default function is: -e.deltaY * (e.deltaMode === 1 ? 0.05 : e.deltaMode ? 1 : 0.002) * (e.ctrlKey ? 10 : 1)
-      //     const action = this.wheelAction(e);
-      //     return action.kind === 'zoom' ? this.params.zoomSensitivity * action.delta : 0;
-      // });
+      this.zoomBehavior.filter(e => (e instanceof WheelEvent) ? (this.wheelAction(e).kind === 'zoom') : true);
+      this.zoomBehavior.wheelDelta(e => {
+        // Default function is: -e.deltaY * (e.deltaMode === 1 ? 0.05 : e.deltaMode ? 1 : 0.002) * (e.ctrlKey ? 10 : 1)
+        const action = this.wheelAction(e);
+        return action.kind === 'zoom' ? ZOOM_SENSITIVITY * action.delta : 0;
+      });
       this.zoomBehavior.on('zoom', e => this.handleZoom(e));
 
       this.svg.call(this.zoomBehavior as any);
-      // TODO implement handleWheel and uncomment the following lines
-      // this.svg.on('wheel.customzoom', e => this.handleWheel(e)); // Avoid naming the event 'wheel.zoom', that would conflict with zoom behavior
+      this.svg.on('wheel.customzoom', e => this.handleWheel(e)); // Avoid naming the event 'wheel.zoom', that would conflict with zoom behavior
       this.adjustZoomExtent();
       this.adjustZoom();
     }
 
     /** Handle zoom event coming from the D3 zoom behavior */
     private handleZoom(event: D3ZoomEvent<SVGSVGElement, unknown>) {
-      console.log('handleZoom', event.transform, !this.suppressEmit)
+      // console.log('handleZoom', event.transform, !this.suppressEmit)
       if (!this.suppressEmit) {
         const [viewportMin, viewportMax] = this.viewport();
         this.emitZoom(event.transform.invertX(viewportMin), event.transform.invertX(viewportMax) - 1); // subtracting 1 to convert to end-inclusive display-end
@@ -189,6 +191,79 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.zoomBehavior.transform(this.svg as any, currentZoom);
       this.suppressEmit = false;
       this.zoomRefreshed();
+    }
+
+    /** Used to merge multiple wheel events into one gesture (needed for correct functioning on Mac touchpad) */
+    private readonly currentWheelGesture = { lastTimestamp: 0, lastAbsDelta: 0, ctrlKey: false, shiftKey: false, altKey: false, metaKey: false };
+
+    /** Categorize wheel event to one of action kinds */
+    private wheelAction(e: WheelEvent): { kind: 'ignore' } | { kind: 'showHelp' } | { kind: 'zoom', delta: number } | { kind: 'pan', deltaX: number, deltaY: number } {
+      console.log('wheelAction', e)
+      const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      const isVertical = Math.abs(e.deltaX) < Math.abs(e.deltaY);
+
+      const modeSpeed = (e.deltaMode === 1) ? 25 : e.deltaMode ? 500 : 1; // scroll in lines vs pages vs pixels
+      const speedup = this['use-ctrl-to-zoom'] ? 1 : (this.currentWheelGesture.ctrlKey || this.currentWheelGesture.metaKey ? 10 : 1);
+
+      if (isHorizontal) {
+        console.log('wheelAction', e, 'pan')
+        return { kind: 'pan', deltaX: -e.deltaX * modeSpeed * speedup, deltaY: 0 };
+      }
+      if (isVertical) {
+        if (this.currentWheelGesture.shiftKey) {
+          console.log('wheelAction', e, 'pan')
+          return { kind: 'pan', deltaX: -e.deltaY * modeSpeed * speedup, deltaY: 0 };
+        }
+        if (this['use-ctrl-to-zoom'] && !this.currentWheelGesture.ctrlKey && !this.currentWheelGesture.metaKey) {
+          console.log('wheelAction', e, 'ignore')
+          return (Math.abs(e.deltaY) * modeSpeed >= 5) ? { kind: 'showHelp' } : { kind: 'ignore' };
+        }
+        console.log('wheelAction', e, 'zoom')
+        return { kind: 'zoom', delta: -e.deltaY * 0.002 * modeSpeed * speedup };
+        // Default function for zoom behavior is: -e.deltaY * (e.deltaMode === 1 ? 0.05 : e.deltaMode ? 1 : 0.002) * (e.ctrlKey ? 10 : 1)
+      }
+      console.log('wheelAction', e, 'ignore')
+      return { kind: 'ignore' };
+    }
+
+    /** Handle event coming directly from the mouse wheel (customizes basic D3 zoom behavior) */
+    private handleWheel(e: WheelEvent): void {
+      if (!this.svg) return;
+      e.preventDefault(); // avoid scrolling or previous-page gestures
+
+      // Magic to handle touchpad scrolling on Mac
+      this.updateCurrentWheelGesture(e);
+
+      if (this.zoomBehavior) {
+        const action = this.wheelAction(e);
+        if (action.kind === 'pan') {
+          const shiftX = PAN_SENSITIVITY * action.deltaX / this.getSingleBaseWidth();
+          this.zoomBehavior.translateBy(this.svg as any, shiftX, 0);
+        }
+        if (action.kind === 'showHelp') {
+          this.showScrollingMessage();
+        }
+      }
+      // TODO emulate hover?
+    }
+    
+    showScrollingMessage(){
+      // TODO
+    }
+
+    /** Magic to handle touchpad scrolling on Mac (when user lifts fingers from touchpad, but the browser is still getting wheel events) */
+    private updateCurrentWheelGesture(e: WheelEvent): void {
+      const now = Date.now();
+      const absDelta = Math.max(Math.abs(e.deltaX), Math.abs(e.deltaY));
+      if (now > this.currentWheelGesture.lastTimestamp + 150 || absDelta > this.currentWheelGesture.lastAbsDelta + 1) {
+        // Starting a new gesture
+        this.currentWheelGesture.ctrlKey = e.ctrlKey;
+        this.currentWheelGesture.shiftKey = e.shiftKey;
+        this.currentWheelGesture.altKey = e.altKey;
+        this.currentWheelGesture.metaKey = e.metaKey;
+      }
+      this.currentWheelGesture.lastTimestamp = now;
+      this.currentWheelGesture.lastAbsDelta = absDelta;
     }
 
     private _zoomTranslationRequested = false;
