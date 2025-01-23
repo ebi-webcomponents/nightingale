@@ -26,11 +26,7 @@ const PAN_SENSITIVITY = 0.6;
 
 type SVGSelection = Selection<SVGSVGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
-export interface WithZoomInterface
-  extends WithDimensionsInterface,
-  withPositionInterface,
-  withMarginInterface,
-  WithResizableInterface {
+export interface WithZoomInterface extends WithDimensionsInterface, withPositionInterface, withMarginInterface, WithResizableInterface {
   xScale?: ScaleLinear<number, number>;
   svg?: SVGSelection;
   getSingleBaseWidth(): number;
@@ -38,6 +34,8 @@ export interface WithZoomInterface
   getSeqPositionFromX(x: number): number | undefined;
   updateScaleDomain(): void;
   applyZoomTranslation(): void;
+  /** Method to be called whenever zoom changes, subclasses can override to perform their stuff */
+  zoomRefreshed(): void;
 }
 
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];

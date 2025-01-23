@@ -58,8 +58,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
   @property({ type: String })
   label?: string | null = null;
 
-  layout = undefined;
-  protected layoutObj?: InterproEntryLayout;
+  protected override layoutObj?: InterproEntryLayout;
   #contributors?: InterProFeature[];
   #coverage?: Segment[];
   #haveCreatedFeatures = false;
@@ -81,19 +80,19 @@ class NightingaleInterproTrack extends NightingaleTrack {
     this["margin-bottom"] = 2;
   }
 
-  protected createTrack() {
+  protected override createTrack() {
     if (!this.layoutObj) return;
     this.layoutObj.expanded = !!this.expanded;
     this.#childrenG = undefined;
     super.createTrack();
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     this.#haveCreatedFeatures = false;
   }
 
-  attributeChangedCallback(
+  override attributeChangedCallback(
     name: string,
     oldValue: string | null,
     newValue: string | null,
@@ -114,7 +113,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     if (this.data) this.createTrack();
   }
 
-  getLayout() {
+  override getLayout() {
     return new InterproEntryLayout({
       layoutHeight: this.height,
       expanded: !!this.expanded,
@@ -122,7 +121,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     });
   }
 
-  protected createFeatures() {
+  protected override createFeatures() {
     if (!this.seqG) return;
     this.layoutObj?.init(this.data as InterProFeature[], this.#contributors);
     // eslint-disable-next-line
@@ -308,17 +307,16 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return this.featureShape.getFeatureShape(
       this.getSingleBaseWidth(),
       this.layoutObj?.getFeatureHeight(`${f.accession}_${f.k}_${f.i}_${f.j}`) ||
-        0,
+      0,
       f.end && f.start ? f.end - f.start + 1 : 1,
       "rectangle",
     );
   }
   private getResidueTransform(f: ResidueDatum) {
-    return `translate(${this.getXFromSeqPosition(f.start || 1)},${
-      this["margin-top"] +
+    return `translate(${this.getXFromSeqPosition(f.start || 1)},${this["margin-top"] +
       (this.layoutObj?.getFeatureYPos(`${f.accession}_${f.k}_${f.i}_${f.j}`) ||
         0)
-    })`;
+      })`;
   }
   private getResidueFill(f: ResidueDatum, expanded: boolean) {
     return expanded ? this.getFeatureColor(f) : "white";
@@ -334,7 +332,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
     return datum?.feature?.accession || null;
   }
 
-  private refreshLabels(base: LabelGroup, padding = 2) {
+  private refreshLabels(base: LabelGroup | undefined, padding = 2) {
+    if (!base) return;
     base
       .attr("x", (f) => {
         const start = getVisibleStart(this["display-start"], f.start);
@@ -376,7 +375,8 @@ class NightingaleInterproTrack extends NightingaleTrack {
         ),
       );
   }
-  private refreshFeatures(base: BaseGroup, expanded = true) {
+  private refreshFeatures(base: BaseGroup | undefined, expanded = true) {
+    if (!base) return;
     const numberOfSibillings = new Set(
       base.data().map((f) => f.feature?.accession),
     ).size;
@@ -404,15 +404,15 @@ class NightingaleInterproTrack extends NightingaleTrack {
       .attr(
         "transform",
         (f) =>
-          `translate(${this.getXFromSeqPosition(f.start || 1)},${
-            this["margin-top"] +
-            (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0)
+          `translate(${this.getXFromSeqPosition(f.start || 1)},${this["margin-top"] +
+          (this.layoutObj?.getFeatureYPos(f.feature as Feature) || 0)
           })`,
       )
       .style("pointer-events", expanded ? "auto" : "none");
   }
 
-  private refreshCoverLine(base: BaseGroup, expanded = true) {
+  private refreshCoverLine(base: BaseGroup | undefined, expanded = true) {
+    if (!base) return;
     base
       .attr("x1", (f) => this.getXFromSeqPosition(f.start || 1))
       .attr("x2", (f) => this.getXFromSeqPosition((f.end || 0) + 1))
@@ -434,7 +434,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
       .attr("visibility", expanded ? "visible" : "hidden");
   }
 
-  refresh() {
+  override refresh() {
     if (this.#haveCreatedFeatures && this.layoutObj) {
       this.layoutObj.expanded = !!this.expanded;
       this.layoutObj.init(this.data as InterProFeature[], this.#contributors);

@@ -103,13 +103,13 @@ class NightingaleHeatmap extends withResizable(
   get data(): HeatmapData {
     return this.#data;
   }
-  willUpdate(changedProperties: PropertyValues<this>) {
+  override willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("symmetric")) {
       this.#data = this.processData(this.#rawData);
     }
   }
 
-  render() {
+  override render() {
     this.style.display = "block";
     return html`
       <canvas class="canvas-heatmap" style="position: absolute"></canvas
@@ -133,7 +133,7 @@ class NightingaleHeatmap extends withResizable(
       </svg>
     `;
   }
-  protected firstUpdated(): void {
+  protected override firstUpdated(): void {
     const mousemove = (event: MouseEvent) => {
       if (!this.#x || !this.#y) return;
       const xDomainValue = Math.floor(
@@ -159,7 +159,7 @@ class NightingaleHeatmap extends withResizable(
     select(".canvas-heatmap").on("mousemove", mousemove);
     select(".canvas-heatmap").on("mouseout", mouseout);
   }
-  protected updated(): void {
+  protected override updated(): void {
     this.colorScale = scaleLinear<string, string>()
       .domain([0, 1])
       .range([this.bottomColor || "", this.topColor || ""]);

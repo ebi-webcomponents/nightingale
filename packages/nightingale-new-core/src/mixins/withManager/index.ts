@@ -8,7 +8,7 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
   class WithManager extends superClass {
     manager?: HTMLElement | null;
 
-    connectedCallback() {
+    override connectedCallback() {
       if (this.closest("nightingale-manager")) {
         customElements.whenDefined("nightingale-manager").then(() => {
           this.manager = this.closest("nightingale-manager");
@@ -21,7 +21,7 @@ const withManager = <T extends Constructor<NightingaleBaseElement>>(
       super.connectedCallback();
     }
 
-    disconnectedCallback() {
+    override disconnectedCallback() {
       if (this.manager) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (this.manager as any).unregister(this);

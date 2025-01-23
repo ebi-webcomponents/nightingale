@@ -69,7 +69,8 @@ export class WheelHelper {
     private updateCurrentWheelGesture(e: WheelEvent): void {
         const now = Date.now();
         const absDelta = Math.max(Math.abs(e.deltaX), Math.abs(e.deltaY));
-        if (now > this.currentWheelGesture.lastTimestamp + 150 || absDelta > this.currentWheelGesture.lastAbsDelta + 1) {
+        // console.log('time', now - this.currentWheelGesture.lastTimestamp, e.ctrlKey, absDelta, e.deltaX, e.deltaY);
+        if (e.deltaMode !== 0 || now > this.currentWheelGesture.lastTimestamp + 150 || absDelta >= 120 || absDelta > this.currentWheelGesture.lastAbsDelta + 5) {
             // Starting a new gesture
             this.currentWheelGesture.ctrlKey = e.ctrlKey;
             this.currentWheelGesture.shiftKey = e.shiftKey;

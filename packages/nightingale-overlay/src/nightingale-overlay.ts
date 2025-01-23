@@ -32,7 +32,7 @@ class NightingaleOverlay extends NightingaleElement {
     this.sizeObserver.observe(document.body);
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     if (this.for as string) {
       this.currentTarget = document.getElementById(this.for as string);
@@ -40,11 +40,11 @@ class NightingaleOverlay extends NightingaleElement {
     this.addEventListeners();
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     this.removeEventListeners();
   }
 
-  willUpdate(changedProperties: PropertyValues<this>) {
+  override willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("for")) {
       this.removeEventListeners();
       this.currentTarget = document.getElementById(this.for as string);
@@ -85,7 +85,7 @@ class NightingaleOverlay extends NightingaleElement {
     );
   }
 
-  render() {
+  override render() {
     const rect = this.currentTarget?.getBoundingClientRect();
     return html` <div
       style="
@@ -115,7 +115,7 @@ class NightingaleOverlay extends NightingaleElement {
     </div>`;
   }
 
-  updated() {
+  override updated() {
     this.overlay = this.getElementsByTagName("div")[0];
     this.ticking = false;
   }

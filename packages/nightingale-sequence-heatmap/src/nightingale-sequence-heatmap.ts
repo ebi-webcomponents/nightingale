@@ -88,16 +88,12 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapInstance?: Heatmap<number, string, HotmapData>;
   firstZoom = false;
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
   /**
    * Nightingale lifecycle function that runs before zoomRefreshed
    * needs to be overriden so zoomRefreshed works since it's svg coupled
    * (see withZoom)
    */
-  applyZoomTranslation() {
+  override applyZoomTranslation() {
     this.zoomRefreshed();
   }
 
@@ -125,7 +121,7 @@ class NightingaleSequenceHeatmap extends withManager(
    *
    * @returns lit-html to render for this component
    */
-  render() {
+ override render() {
     const heatmapStyles = {
       width: this.getWidthWithMargins() + "px",
       height: this.height + "px",
@@ -282,7 +278,7 @@ class NightingaleSequenceHeatmap extends withManager(
    * Function runs after whole lit element update cycle is done
    * Here we bind heatmap events in case a heatmap instance does not exist
    */
-  updated(
+  override updated(
     _changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>
   ): void {
     if (this.heatmapData && !this.heatmapInstance) {

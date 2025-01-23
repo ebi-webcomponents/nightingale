@@ -20,8 +20,8 @@ abstract class DraggingComponent extends withZoom(
   withPosition(withDimensions(NightingaleElement)),
 ) {
   "use-ctrl-to-zoom" = true;
-  "margin-right" = 0;
-  "margin-left" = 0;
+  override "margin-right" = 0;
+  override "margin-left" = 0;
 
   @state()
   mouse = {
@@ -61,7 +61,7 @@ abstract class DraggingComponent extends withZoom(
     oldPosition?: RawPosition,
   ): void;
 
-  firstUpdated() {
+  override firstUpdated() {
     this.container = document.getElementById(this.uniqueId);
     window.requestAnimationFrame(() => {
       this.svg = select(this).select("div");
@@ -114,12 +114,12 @@ abstract class DraggingComponent extends withZoom(
     this.swapContexts();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
     this.handleZooomChanged();
   }
   abstract handleZooomChanged(): void;
 
-  render() {
+  override render() {
     const style = {
       width: `${this.width}px`,
       height: `${this.height}px`,

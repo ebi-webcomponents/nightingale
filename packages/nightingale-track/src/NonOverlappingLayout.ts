@@ -21,7 +21,7 @@ export default class NonOverlappingLayout extends DefaultLayout {
     });
   }
 
-  init(features: Feature[]) {
+  override init(features: Feature[]) {
     const { featuresMap, rows } = placeFeaturesIntoRows(features);
     this.featuresMap = featuresMap;
     const usableHeight = clamp(this.layoutHeight - this.margin.top - this.margin.bottom, 0, rows.length * (this.maxHeight + this.gap));
@@ -31,13 +31,13 @@ export default class NonOverlappingLayout extends DefaultLayout {
     this.topOffset = center - 0.5 * usableHeight;
   }
 
-  getFeatureYPos(feature: Feature) {
+  override getFeatureYPos(feature: Feature) {
     const rowIndex = this.featuresMap.get(feature) ?? 0;
     const center = this.topOffset + (rowIndex + 0.5) * this.rowHeight;
     return center - 0.5 * this.featureHeight;
   }
 
-  getFeatureHeight() {
+  override getFeatureHeight() {
     return this.featureHeight;
   }
 }

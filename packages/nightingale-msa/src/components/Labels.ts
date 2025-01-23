@@ -23,13 +23,13 @@ class Labels extends LitElement {
   })
   activeLabel = "";
 
-  willUpdate(changedProperties: PropertyValues<this>) {
+  override willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("y")) {
       const ul = this.renderRoot.querySelector("ul");
       if (ul) ul.scrollTop = this.y;
     }
   }
-  render() {
+  override render() {
     const ulStyle = {
       width: `${this.width}px`,
       height: `${this.height}px`,

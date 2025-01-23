@@ -161,7 +161,7 @@ class SequenceViewerComponent extends DraggingComponent {
     };
   }
 
-  willUpdate(changedProperties: PropertyValues<this>) {
+  override willUpdate(changedProperties: PropertyValues<this>) {
     // only need to check changed properties for an expensive computation.
     if (
       changedProperties.has("sequences") ||
@@ -188,7 +188,7 @@ class SequenceViewerComponent extends DraggingComponent {
     }
   }
 
-  firstUpdated() {
+  override firstUpdated() {
     super.firstUpdated();
     this.container?.addEventListener("mousemove", this.onMouseMove);
     this.container?.addEventListener("click", this.onClick);
@@ -198,12 +198,12 @@ class SequenceViewerComponent extends DraggingComponent {
     }) as EventListener);
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
     this.container?.removeEventListener("mousemove", this.onMouseMove);
   }
 
-  handleZooomChanged(): void {
+  override handleZooomChanged(): void {
     this.tileWidth = this.getSingleBaseWidth();
     this.position = {
       xPos: ((this["display-start"] || 1) - 1) * this.tileWidth,
@@ -572,10 +572,10 @@ class SequenceViewerComponent extends DraggingComponent {
     );
   }
 
-  render() {
+  override render() {
     return super.render();
   }
-  updated() {
+  override updated() {
     this.draw();
   }
 }
