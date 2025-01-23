@@ -61,6 +61,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       return this._svg;
     }
     set svg(svg: SVGSelection) {
+      console.log('set svg', svg)
       this._svg = svg;
       this.addZoomBehavior();
     }
@@ -107,6 +108,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.svg.call(this.zoomBehavior as any);
       // TODO implement handleWheel and uncomment the following lines
       // this.svg.on('wheel.customzoom', e => this.handleWheel(e)); // Avoid calling the event 'wheel.zoom', that would conflict with zoom behavior
+      this.adjustZoomExtent();
+      this.adjustZoom();
     }
 
     /** Handle zoom event coming from the D3 zoom behavior */
@@ -114,6 +117,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       const [xMin, xMax] = this.wholeWorldRange();
       console.log('handleZoom', event.transform, !this.suppressEmit)
       this.xScale = scaleLinear([xMin, xMax], [event.transform.applyX(xMin), event.transform.applyX(xMax)]);
+      // TODO only update the scale when attrs change
       console.log('scale', this.xScale.domain(), this.xScale.range())
       if (!this.suppressEmit) this.emitZoom();
       // TODO emulate hover?
@@ -125,12 +129,13 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     emitZoom(): void {
       const [viewportMin, viewportMax] = this.viewport();
       const start = this.getSeqPositionFromX(viewportMin) ?? 1;
-      const end = this.getSeqPositionFromX(viewportMax) ?? 2;
+      const end = (this.getSeqPositionFromX(viewportMax) ?? 2) - 1;
+      if (almostEqual(start, this["display-start"]) && almostEqual(end, this["display-end"])) return;
       console.log('emitZoom', start, end)
       this.dispatchEvent(
         // Dispatches the event so the manager can propagate this changes to other  components
         new CustomEvent("change", {
-          detail: { "display-start": start, "display-end": end - 1 },
+          detail: { "display-start": start, "display-end": end },
           // TODO re-clamping here?
           bubbles: true,
           cancelable: true,
@@ -169,6 +174,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       const maxZoom = Math.max(viewportWidth / minZoomedDatapoints, minZoom); // zoom-in
       this.zoomBehavior.scaleExtent([minZoom, maxZoom]);
       this.zoomBehavior.extent([[viewportMin, 0], [viewportMax, 0]]);
+      console.log('adjustZoomExtent', this.length, this.width, [1, length + 1], [minZoom, maxZoom], [viewportMin, viewportMax])
+
     }
     /** Synchronize the state of the zoom behavior with the visWorld box (e.g. when canvas resizes) */
     private adjustZoom(): void {
@@ -223,3 +230,9 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 };
 
 export default withZoom;
+
+function almostEqual(a: number | undefined, b: number | undefined, epsilon = 0.0001) {
+  if (a === undefined && b === undefined) return true;
+  if (a === undefined || b === undefined) return false;
+  return Math.abs(a - b) < epsilon;
+}
