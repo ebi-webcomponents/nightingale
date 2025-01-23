@@ -107,42 +107,42 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
       this.svg.call(this.zoomBehavior as any);
       // TODO implement handleWheel and uncomment the following lines
-      // this.svg.on('wheel.customzoom', e => this.handleWheel(e)); // Avoid calling the event 'wheel.zoom', that would conflict with zoom behavior
+      // this.svg.on('wheel.customzoom', e => this.handleWheel(e)); // Avoid naming the event 'wheel.zoom', that would conflict with zoom behavior
       this.adjustZoomExtent();
       this.adjustZoom();
     }
 
     /** Handle zoom event coming from the D3 zoom behavior */
     private handleZoom(event: D3ZoomEvent<SVGSVGElement, unknown>) {
-      const [xMin, xMax] = this.wholeWorldRange();
       console.log('handleZoom', event.transform, !this.suppressEmit)
-      this.xScale = scaleLinear([xMin, xMax], [event.transform.applyX(xMin), event.transform.applyX(xMax)]);
-      // TODO only update the scale when attrs change
-      console.log('scale', this.xScale.domain(), this.xScale.range())
-      if (!this.suppressEmit) this.emitZoom();
+      if (!this.suppressEmit) {
+        const [viewportMin, viewportMax] = this.viewport();
+        this.emitZoom(event.transform.invertX(viewportMin), event.transform.invertX(viewportMax) - 1); // subtracting 1 to convert to end-inclusive display-end
+      }
       // TODO emulate hover?
     }
 
     /** Emit a zoom event, based on the current zoom.
      * `origin` is an identifier of the event originator
      * (to avoid infinite loop when multiple component listen to zoom and change it). */
-    emitZoom(): void {
-      const [viewportMin, viewportMax] = this.viewport();
-      const start = this.getSeqPositionFromX(viewportMin) ?? 1;
-      const end = (this.getSeqPositionFromX(viewportMax) ?? 2) - 1;
-      if (almostEqual(start, this["display-start"]) && almostEqual(end, this["display-end"])) return;
-      console.log('emitZoom', start, end)
+    private emitZoom(displayStart: number, displayEnd: number): void {
+      // Re-clamping the values here because just D3 zoom constraints can produce values like 0.99999996
+      displayStart = Math.max(displayStart, 1);
+      displayEnd = Math.min(displayEnd, (this.length ?? 1));
+
+      if (displayStart === this["display-start"] && displayEnd === this["display-end"]) return;
+      console.log('emitZoom', displayStart, displayEnd)
       this.dispatchEvent(
         // Dispatches the event so the manager can propagate this changes to other  components
         new CustomEvent("change", {
-          detail: { "display-start": start, "display-end": end },
-          // TODO re-clamping here?
+          detail: { "display-start": displayStart, "display-end": displayEnd },
           bubbles: true,
           cancelable: true,
         }),
       );
     }
     zoomRefreshed() {
+      // TODO review how this is used in subclasses, include in the interface if it is to be overridden
       super.render();
     }
 
@@ -183,6 +183,8 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       if (!this.zoomBehavior) return;
       const currentZoom = this.visWorldToZoomTransform(this.displayRange());
       console.log('adjustZoom', this.displayRange(), currentZoom)
+      this.xScale = scaleLinear(this.displayRange(), this.viewport());
+
       this.suppressEmit = true;
       this.zoomBehavior.transform(this.svg as any, currentZoom);
       this.suppressEmit = false;
