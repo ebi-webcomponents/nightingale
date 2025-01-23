@@ -66,7 +66,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       return this._svg;
     }
     set svg(svg: SVGSelection) {
-      console.log('set svg', svg)
+      // console.log('set svg', svg)
       this._svg = svg;
       this.addZoomBehavior();
     }
@@ -84,7 +84,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
           this.adjustZoom();
         }
         if (name === "display-start" || name === "display-end") {
-          console.log('attributeChangedCallback', this.id, name, oldValue, newValue, 'display', this["display-start"], this["display-end"])
+          // console.log('attributeChangedCallback', this.id, name, oldValue, newValue, 'display', this["display-start"], this["display-end"])
           this.adjustZoom();
         }
         if (name == "use-ctrl-to-zoom" && this.wheelHelper) {
@@ -96,13 +96,17 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     /** Initialize zoom behavior (also remove any existing zoom behavior) */
     private addZoomBehavior(): void {
       if (!this.svg) return;
+
+      // Remove any old behavior
       if (this.zoomBehavior) {
-        // Remove any old behavior
         this.zoomBehavior.on('zoom', null);
         this.zoomBehavior = undefined;
-        this.wheelHelper?.dispose();
+      }
+      if (this.wheelHelper) {
+        this.wheelHelper.dispose();
         this.wheelHelper = undefined;
       }
+
       this.wheelHelper = new WheelHelper(this.svg);
       this.wheelHelper.scrollRequiresCtrl = this["use-ctrl-to-zoom"];
       this.wheelHelper.handlePan = shift => this.zoomBehavior?.translateBy(this.svg as any, PAN_SENSITIVITY * shift / this.getSingleBaseWidth(), 0);
@@ -111,13 +115,12 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.zoomBehavior = d3zoom();
       this.zoomBehavior.filter(e => (e instanceof WheelEvent) ? (this.wheelHelper?.wheelAction(e).kind === 'zoom') : true);
       this.zoomBehavior.wheelDelta(e => {
-        // Default function is: -e.deltaY * (e.deltaMode === 1 ? 0.05 : e.deltaMode ? 1 : 0.002) * (e.ctrlKey ? 10 : 1)
         const action = this.wheelHelper?.wheelAction(e);
         return action?.kind === 'zoom' ? ZOOM_SENSITIVITY * action.delta : 0;
       });
       this.zoomBehavior.on('zoom', e => this.handleZoom(e));
+      this.svg.call(this.zoomBehavior);
 
-      this.svg.call(this.zoomBehavior as any);
       this.adjustZoomExtent();
       this.adjustZoom();
     }
@@ -184,7 +187,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       const maxZoom = Math.max(viewportWidth / minZoomedDatapoints, minZoom); // zoom-in
       this.zoomBehavior.scaleExtent([minZoom, maxZoom]);
       this.zoomBehavior.extent([[viewportMin, 0], [viewportMax, 0]]);
-      console.log('adjustZoomExtent', this.length, this.width, [1, length + 1], [minZoom, maxZoom], [viewportMin, viewportMax])
+      // console.log('adjustZoomExtent', this.length, this.width, [1, length + 1], [minZoom, maxZoom], [viewportMin, viewportMax])
 
     }
     /** Synchronize the state of the zoom behavior with the visWorld box (e.g. when canvas resizes) */
@@ -192,7 +195,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       if (!this.svg) return;
       if (!this.zoomBehavior) return;
       const currentZoom = this.visWorldToZoomTransform(this.displayRange());
-      console.log('adjustZoom', this.displayRange(), currentZoom)
+      // console.log('adjustZoom', this.displayRange(), currentZoom)
       this.xScale = scaleLinear(this.displayRange(), this.viewport());
 
       this.suppressEmit = true;
