@@ -71,6 +71,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
     updateScaleDomain() {
       this.adjustZoomExtent();
+      // this.adjustZoom();
     }
 
     override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -88,6 +89,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         if (name == "use-ctrl-to-zoom" && this.wheelHelper) {
           this.wheelHelper.scrollRequiresCtrl = this["use-ctrl-to-zoom"];
         }
+        this.zoomRefreshed();
       }
     }
 
@@ -154,7 +156,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
     zoomRefreshed() {
       // TODO review how this is used in subclasses, include in the interface if it is to be overridden
-      super.render();
+      // super.render();
     }
 
     /** Convert visWorld box to zoom transform */
@@ -167,9 +169,11 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
     }
 
     private viewport(): [number, number] { return [this["margin-left"], this["width"] - this["margin-right"]]; }
-    private displayRange(): [number, number] { return [this["display-start"] ?? 1, (this["display-end"] ?? this.length ?? 1) + 1]; }
-    private wholeWorldRange(): [number, number] { return [1, (this.length ?? 1) + 1]; }
-
+    private displayRange(): [number, number] {
+      const displayStart = this["display-start"] ?? 1;
+      const displayEnd = (this["display-end"] === undefined || this["display-end"] === -1) ? (this.length ?? 1) : this["display-end"];
+      return [displayStart, displayEnd + 1];
+    }
 
     /** Adjust zoom extent based on current data and canvas size
      * (limit maximum zoom in/out and translation to avoid getting out of the data world) */
@@ -186,7 +190,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.zoomBehavior.scaleExtent([minZoom, maxZoom]);
       this.zoomBehavior.extent([[viewportMin, 0], [viewportMax, 0]]);
       // console.log('adjustZoomExtent', this.length, this.width, [1, length + 1], [minZoom, maxZoom], [viewportMin, viewportMax])
-
     }
     /** Synchronize the state of the zoom behavior with the visWorld box (e.g. when canvas resizes) */
     private adjustZoom(): void {

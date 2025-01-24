@@ -115,6 +115,7 @@ abstract class DraggingComponent extends withZoom(
   }
 
   override zoomRefreshed() {
+    super.zoomRefreshed();
     this.handleZooomChanged();
   }
   abstract handleZooomChanged(): void;

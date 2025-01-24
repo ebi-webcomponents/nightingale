@@ -85,6 +85,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     this.layoutObj.expanded = !!this.expanded;
     this.#childrenG = undefined;
     super.createTrack();
+    this.zoomRefreshed();
   }
 
   override connectedCallback() {
