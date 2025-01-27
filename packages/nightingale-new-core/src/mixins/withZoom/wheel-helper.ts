@@ -3,8 +3,8 @@ import { Selection } from "d3";
 
 /** Helper class to deal with customizing zoom behavior (e.g. only zooming when Ctrl is pressed, using horizontal scroll to pan) */
 export class WheelHelper {
+    /** Function to be performed when user pans horizontally (by horizontal scroll, or Shift + vertical scroll ) */
     handlePan?: (shift: number) => void;
-    handleShowHelp?: (shift: number) => void;
     scrollRequiresCtrl: boolean = false;
 
     constructor(public readonly target: Selection<any, unknown, any, unknown>) {
@@ -19,7 +19,7 @@ export class WheelHelper {
     private readonly currentWheelGesture = { lastTimestamp: 0, lastAbsDelta: 0, ctrlKey: false, shiftKey: false, altKey: false, metaKey: false };
 
     /** Categorize wheel event to one of action kinds */
-    public wheelAction(e: WheelEvent): { kind: 'ignore', showHelp: boolean } | { kind: 'zoom', delta: number } | { kind: 'pan', deltaX: number, deltaY: number } {
+    public wheelAction(e: WheelEvent): { kind: 'ignore' } | { kind: 'zoom', delta: number } | { kind: 'pan', deltaX: number, deltaY: number } {
         const isPinch = e.ctrlKey && e.deltaMode === 0 && e.deltaX === 0 && e.deltaY !== Math.floor(e.deltaY); // Trying to recognize pinch gesture on Mac touchpad
         const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
         const isVertical = Math.abs(e.deltaX) < Math.abs(e.deltaY);
@@ -38,7 +38,7 @@ export class WheelHelper {
                 return { kind: 'pan', deltaX: -e.deltaY * modeSpeed * speedup, deltaY: 0 };
             }
             if (this.scrollRequiresCtrl && !this.currentWheelGesture.ctrlKey && !this.currentWheelGesture.metaKey) {
-                return { kind: 'ignore', showHelp: Math.abs(e.deltaY) * modeSpeed >= 5 };
+                return { kind: 'ignore' };
             }
             return { kind: 'zoom', delta: -e.deltaY * 0.002 * modeSpeed * speedup };
             // Default function for zoom behavior is: -e.deltaY * (e.deltaMode === 1 ? 0.05 : e.deltaMode ? 1 : 0.002) * (e.ctrlKey ? 10 : 1)
@@ -59,9 +59,6 @@ export class WheelHelper {
         if (action.kind === 'pan') {
             this.handlePan?.(action.deltaX);
         }
-        if (action.kind === 'ignore' && action.showHelp) {
-            this.handleShowHelp?.(0);
-        }
         // action kind "zoom" is handled by the zoom behavior
     }
 
@@ -69,7 +66,6 @@ export class WheelHelper {
     private updateCurrentWheelGesture(e: WheelEvent): void {
         const now = Date.now();
         const absDelta = Math.max(Math.abs(e.deltaX), Math.abs(e.deltaY));
-        // console.log('time', now - this.currentWheelGesture.lastTimestamp, e.ctrlKey, absDelta, e.deltaX, e.deltaY);
         if (e.deltaMode !== 0 || now > this.currentWheelGesture.lastTimestamp + 150 || absDelta >= 120 || absDelta > this.currentWheelGesture.lastAbsDelta + 5) {
             // Starting a new gesture
             this.currentWheelGesture.ctrlKey = e.ctrlKey;

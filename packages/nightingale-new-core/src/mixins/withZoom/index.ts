@@ -110,7 +110,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.wheelHelper = new WheelHelper(this.svg);
       this.wheelHelper.scrollRequiresCtrl = this["use-ctrl-to-zoom"];
       this.wheelHelper.handlePan = shift => this.zoomBehavior?.translateBy(this.svg as any, PAN_SENSITIVITY * shift / this.getSingleBaseWidth(), 0);
-      this.wheelHelper.handleShowHelp = () => console.warn('Use Ctrl+scroll to zoom.');
 
       this.zoomBehavior = d3zoom();
       this.zoomBehavior.filter(e => (e instanceof WheelEvent) ? (this.wheelHelper?.wheelAction(e).kind === 'zoom') : true);
