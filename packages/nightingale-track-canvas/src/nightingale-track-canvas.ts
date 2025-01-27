@@ -39,7 +39,7 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
       <div class="container">
         <div style="position: relative; z-index: 0;">
           <canvas style="position: absolute; left: 0; top: 0; z-index: -1;"></canvas>
-          <svg style="background-color: #80808080;"></svg>
+          <svg></svg>
         </div>
       </div>
     `;
@@ -50,17 +50,21 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
     this.refresh();
   }
 
-
-  private _drawStamp: { data?: Feature[], canvas?: CanvasRenderingContext2D, extent?: string } = {};
+  private _drawStamp: Record<string, unknown> = {};
   /** If `_drawStamp` has become outdated since the last call to this function, update `_drawStamp` and return true.
    * Otherwise return false. */
   private needsRedraw(): boolean {
-    const stamp = {
-      data: this.data,
-      canvas: this.canvasCtx,
-      extent: `${this.width}x${this.height}@${this.canvasScale}/${this.getSeqPositionFromX(0)}:${this.getSeqPositionFromX(this.width)}`,
-    };
-    if (stamp.data === this._drawStamp.data && stamp.canvas === this._drawStamp.canvas && stamp.extent === this._drawStamp.extent) {
+    const PROPS_THAT_TRIGGER_REDRAW = [
+      'data', 'canvasCtx', 'width', 'height', 'canvasScale',
+      'length', 'display-start', 'display-end',
+      'margin-color', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+    ] satisfies (keyof this)[];
+    const stamp: typeof this._drawStamp = {};
+    for (const attr of PROPS_THAT_TRIGGER_REDRAW) {
+      stamp[attr] = this[attr];
+    }
+
+    if (objectShallowEquals(stamp, this._drawStamp)) {
       return false;
     } else {
       this._drawStamp = stamp;
@@ -257,6 +261,16 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
 function getFragmentCollection(data: Feature[]): RangeCollection<ExtendedFragment> {
   const fragments = getAllFragments(data);
   return new RangeCollection(fragments, { start: f => f.start, stop: f => (f.end ?? f.start) + 1 });
+}
+
+function objectShallowEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+  for (const key in a) {
+    if (a[key] !== b[key]) return false;
+  }
+  for (const key in b) {
+    if (a[key] !== b[key]) return false;
+  }
+  return true;
 }
 
 

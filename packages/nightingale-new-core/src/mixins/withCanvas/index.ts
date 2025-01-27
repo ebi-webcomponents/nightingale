@@ -22,7 +22,6 @@ const withCanvas = <T extends Constructor<NightingaleBaseElement & WithResizable
   superClass: T,
 ) => {
   class WithCanvas extends superClass implements WithCanvasInterface {
-    canvasFoo: string = "canvasFoo1";
     canvas?: Selection<HTMLCanvasElement, unknown, HTMLElement, unknown>;
     canvasCtx?: CanvasRenderingContext2D;
     canvasScale: number = 1;
