@@ -119,6 +119,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
       this.adjustZoomExtent();
       this.adjustZoom();
+      this.requestZoomRefreshed();
     }
 
     /** Handle zoom event coming from the D3 zoom behavior */
@@ -128,7 +129,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         const [viewportMin, viewportMax] = this.viewport();
         this.emitZoom(event.transform.invertX(viewportMin), event.transform.invertX(viewportMax) - 1); // subtracting 1 to convert to end-inclusive display-end
       }
-      // TODO emulate hover?
     }
 
     /** Emit a zoom event, based on the current zoom.
@@ -186,29 +186,28 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.zoomBehavior.extent([[viewportMin, 0], [viewportMax, 0]]);
       // console.log('adjustZoomExtent', this.length, this.width, [1, length + 1], [minZoom, maxZoom], [viewportMin, viewportMax])
     }
+
     /** Synchronize the state of the zoom behavior with the visWorld box (e.g. when canvas resizes) */
     private adjustZoom(): void {
       if (!this.svg) return;
       if (!this.zoomBehavior) return;
       const currentZoom = this.visWorldToZoomTransform(this.displayRange());
-      // console.log('adjustZoom', this.displayRange(), currentZoom)
       this.xScale = scaleLinear(this.displayRange(), this.viewport());
 
       this.suppressEmit = true;
       this.zoomBehavior.transform(this.svg as any, currentZoom);
       this.suppressEmit = false;
-      this.requestZoomRefreshed();
     }
-
     
     /** Synchronize the state of the zoom behavior with the display-start, display-end attributes
      * and call `zoomRefreshed` method in the next animation frame. */
     applyZoomTranslation() {
       this.adjustZoom();
+      this.requestZoomRefreshed();
     }
     
     private _zoomRefreshedRequested = false;
-    
+
     /** Apply `zoomRefreshed` in the next frame.
      * Postponing rendering to the next frame
      * helps in case several attributes are changed almost at the same time.
@@ -228,6 +227,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.svg?.attr("height", this.height);
       this.adjustZoomExtent();
       this.adjustZoom();
+      this.requestZoomRefreshed();
     }
 
     getXFromSeqPosition(position: number) {
