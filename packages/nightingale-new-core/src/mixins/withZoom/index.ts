@@ -27,6 +27,7 @@ const PAN_SENSITIVITY = 0.6;
 type SVGSelection = Selection<SVGSVGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 export interface WithZoomInterface extends WithDimensionsInterface, withPositionInterface, withMarginInterface, WithResizableInterface {
+  /** Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`. */
   xScale?: ScaleLinear<number, number>;
   svg?: SVGSelection;
   getSingleBaseWidth(): number;
@@ -47,9 +48,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   class WithZoom extends withMargin(
     withPosition(withResizable(withDimensions(superClass))),
   ) implements WithZoomInterface {
-    // /** Base scale without any transformations, only updated in `updateScaleDomain` */
-    // private originXScale?: ScaleLinear<number, number>;
-    /** Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`. */
     xScale?: ScaleLinear<number, number>;
 
     private zoomBehavior?: ZoomBehavior<SVGSVGElement, unknown>;
@@ -71,7 +69,6 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
     updateScaleDomain() {
       this.adjustZoomExtent();
-      // this.adjustZoom();
     }
 
     override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -89,7 +86,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
         if (name == "use-ctrl-to-zoom" && this.wheelHelper) {
           this.wheelHelper.scrollRequiresCtrl = this["use-ctrl-to-zoom"];
         }
-        this.zoomRefreshed();
+        this.requestZoomRefreshed();
       }
     }
 
@@ -154,8 +151,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       );
     }
     zoomRefreshed() {
-      // TODO review how this is used in subclasses, include in the interface if it is to be overridden
-      // super.render();
+      // to be overridden by subclasses
     }
 
     /** Convert visWorld box to zoom transform */
@@ -201,23 +197,29 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       this.suppressEmit = true;
       this.zoomBehavior.transform(this.svg as any, currentZoom);
       this.suppressEmit = false;
-      this.zoomRefreshed();
+      this.requestZoomRefreshed();
     }
 
-    private _zoomTranslationRequested = false;
-
-    /** Apply zoom translation in the next frame.
-     * Postponing the zoom translation to the next frame
+    
+    /** Synchronize the state of the zoom behavior with the display-start, display-end attributes
+     * and call `zoomRefreshed` method in the next animation frame. */
+    applyZoomTranslation() {
+      this.adjustZoom();
+    }
+    
+    private _zoomRefreshedRequested = false;
+    
+    /** Apply `zoomRefreshed` in the next frame.
+     * Postponing rendering to the next frame
      * helps in case several attributes are changed almost at the same time.
      * In this way, only one refresh will be called.*/
-    applyZoomTranslation = () => {
-      this.adjustZoom();
-      // if (this._zoomTranslationRequested) return;
-      // this._zoomTranslationRequested = true;
-      // requestAnimationFrame(() => {
-      //   this._zoomTranslationRequested = false;
-      //   this._applyZoomTranslation();
-      // });
+    private requestZoomRefreshed = () => {
+      if (this._zoomRefreshedRequested) return;
+      this._zoomRefreshedRequested = true;
+      requestAnimationFrame(() => {
+        this._zoomRefreshedRequested = false;
+        this.zoomRefreshed();
+      });
     }
 
     override onDimensionsChange() {
