@@ -50,7 +50,7 @@ export default class InterproEntryLayout extends DefaultLayout {
     this.padding = padding;
   }
 
-  init(features: InterProFeature[], children?: InterProFeature[]) {
+  override init(features: InterProFeature[], children?: InterProFeature[]) {
     let yPos = 0;
     this.#heightMap = new Map();
     this.#yPositionMap = new Map();
@@ -198,12 +198,12 @@ export default class InterproEntryLayout extends DefaultLayout {
     return acc;
   }
 
-  getFeatureYPos(feature: Feature | string) {
+  override getFeatureYPos(feature: Feature | string) {
     const acc = InterproEntryLayout.getAccFromFeature(feature);
     return this.#yPositionMap.get(acc) || 0;
   }
 
-  getFeatureHeight(feature: Feature | string) {
+  override getFeatureHeight(feature: Feature | string) {
     const acc = InterproEntryLayout.getAccFromFeature(feature);
     return this.#heightMap.get(acc) || 0;
   }

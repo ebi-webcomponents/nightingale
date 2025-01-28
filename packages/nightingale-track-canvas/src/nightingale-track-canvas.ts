@@ -1,50 +1,18 @@
-import { createEvent, customElementOnce } from "@nightingale-elements/nightingale-new-core";
+import { createEvent, customElementOnce, Refresher, withCanvas } from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack, { Feature, FeatureLocation, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
 import { drawRange, drawSymbol, drawUnknown, shapeCategory } from "./utils/draw-shapes";
-import { last, RangeCollection, Refresher } from "./utils/utils";
-
+import { last, RangeCollection } from "./utils/utils";
 
 type Fragment = FeatureLocation["fragments"][number]
 type ExtendedFragment = Fragment & { featureIndex: number };
 
 
 @customElementOnce("nightingale-track-canvas")
-export default class NightingaleTrackCanvas extends NightingaleTrack {
-  private canvas?: Selection<HTMLCanvasElement, unknown, HTMLElement, unknown>;
-  private canvasCtx?: CanvasRenderingContext2D;
-  /** Ratio of canvas logical size versus canvas display size */
-  private canvasScale: number = 1;
+export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack) {
   /** Feature fragments, stored in a data structure for fast range queries */
   private fragmentCollection?: RangeCollection<ExtendedFragment>;
-
-
-  override connectedCallback(): void {
-    super.connectedCallback();
-    // Correctly adjust canvasScale on resize:
-    select(window).on(`resize.NightingaleTrackCanvas-${this.id}`, () => {
-      const devicePixelRatio = getDevicePixelRatio();
-      if (devicePixelRatio !== this.canvasScale) {
-        this.canvasScale = devicePixelRatio;
-        this.refresh();
-      }
-    });
-  }
-
-  override disconnectedCallback(): void {
-    select(window).on(`resize.NightingaleTrackCanvas-${this.id}`, null);
-    super.disconnectedCallback();
-  }
-
-  override onDimensionsChange(): void {
-    super.onDimensionsChange();
-    if (this.canvas && !this.canvas.empty()) {
-      this.canvas.style("width", `${this.width}px`);
-      this.canvas.style("height", `${this.height}px`);
-      this.canvasScale = getDevicePixelRatio();
-    }
-  }
 
   protected override createTrack() {
     if (this.svg) {
@@ -54,9 +22,6 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     if (!this.data) return;
     this.layoutObj?.init(this.data);
     this.svg = select(this).selectAll<SVGSVGElement, unknown>("svg");
-    this.canvas = select(this).selectAll<HTMLCanvasElement, unknown>("canvas");
-    this.canvasCtx = this.canvas.node()?.getContext("2d") ?? undefined;
-    this.onDimensionsChange();
     this.fragmentCollection = getFragmentCollection(this.data);
     if (this.svg) { // this check is necessary because `svg` setter does not always set
       this.bindEvents(this.svg);
@@ -80,17 +45,26 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     `;
   }
 
+  override onCanvasScaleChange() {
+    super.onCanvasScaleChange();
+    this.refresh();
+  }
 
-  private _drawStamp: { data?: Feature[], canvas?: CanvasRenderingContext2D, extent?: string } = {};
+  private _drawStamp: Record<string, unknown> = {};
   /** If `_drawStamp` has become outdated since the last call to this function, update `_drawStamp` and return true.
    * Otherwise return false. */
   private needsRedraw(): boolean {
-    const stamp = {
-      data: this.data,
-      canvas: this.canvasCtx,
-      extent: `${this.width}x${this.height}@${this.canvasScale}/${this.getSeqPositionFromX(0)}:${this.getSeqPositionFromX(this.width)}`,
-    };
-    if (stamp.data === this._drawStamp.data && stamp.canvas === this._drawStamp.canvas && stamp.extent === this._drawStamp.extent) {
+    const PROPS_THAT_TRIGGER_REDRAW = [
+      "data", "canvasCtx", "width", "height", "canvasScale",
+      "length", "display-start", "display-end",
+      "margin-color", "margin-left", "margin-right", "margin-top", "margin-bottom",
+    ] satisfies (keyof this)[];
+    const stamp: typeof this._drawStamp = {};
+    for (const attr of PROPS_THAT_TRIGGER_REDRAW) {
+      stamp[attr] = this[attr];
+    }
+
+    if (objectShallowEquals(stamp, this._drawStamp)) {
       return false;
     } else {
       this._drawStamp = stamp;
@@ -104,20 +78,8 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
   /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
   private _draw(): void {
     if (!this.needsRedraw()) return;
-    this.adjustCanvasLogicalSize();
+    this.adjustCanvasCtxLogicalSize();
     this.drawCanvasContent();
-  }
-
-  private adjustCanvasLogicalSize() {
-    if (!this.canvasCtx) return;
-    const newWidth = Math.floor(this.width * this.canvasScale);
-    const newHeight = Math.floor(this.height * this.canvasScale);
-    if (this.canvasCtx.canvas.width !== newWidth) {
-      this.canvasCtx.canvas.width = newWidth;
-    }
-    if (this.canvasCtx.canvas.height !== newHeight) {
-      this.canvasCtx.canvas.height = newHeight;
-    }
   }
 
   private drawCanvasContent() {
@@ -187,11 +149,6 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     }
   }
 
-  /** Inverse of `this.getXFromSeqPosition`. */
-  getSeqPositionFromX(x: number): number | undefined {
-    return this.xScale?.invert(x - this["margin-left"]);
-  }
-
   private getFragmentAt(svgX: number, svgY: number): ExtendedFragment | undefined {
     if (!this.fragmentCollection) return undefined;
     const halfLineWidth = 0.5 * LINE_WIDTH;
@@ -226,7 +183,7 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
   private bindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
     target.on("click.NightingaleTrackCanvas", (event: MouseEvent) => this.handleClick(event));
     target.on("mousemove.NightingaleTrackCanvas", (event: MouseEvent) => this.handleMousemove(event));
-    target.on("mouseout.NightingaleTrackCanvas", () => this.handleMouseout());
+    target.on("mouseout.NightingaleTrackCanvas", (event: MouseEvent) => this.handleMouseout(event));
   }
 
   private unbindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
@@ -259,7 +216,7 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
   private handleMousemove(event: MouseEvent): void {
     const fragment = this.getFragmentAt(event.offsetX, event.offsetY);
     if (!fragment) {
-      return this.handleMouseout();
+      return this.handleMouseout(event);
     }
     const feature = this.data[fragment.featureIndex];
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
@@ -277,17 +234,14 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     this.dispatchEvent(customEvent);
   }
 
-  private handleMouseout(): void {
+  private handleMouseout(event: MouseEvent): void {
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
-    const customEvent = createEvent("mouseout", null, withHighlight);
+    const customEvent = createEvent("mouseout", null, withHighlight, undefined, undefined, undefined,
+      event.target instanceof HTMLElement ? event.target : undefined, event, this);
     this.dispatchEvent(customEvent);
   }
 }
 
-
-function getDevicePixelRatio(): number {
-  return window?.devicePixelRatio ?? 1;
-}
 
 function getAllFragments(data: Feature[]): ExtendedFragment[] {
   const out: ExtendedFragment[] = [];
@@ -307,6 +261,16 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
 function getFragmentCollection(data: Feature[]): RangeCollection<ExtendedFragment> {
   const fragments = getAllFragments(data);
   return new RangeCollection(fragments, { start: f => f.start, stop: f => (f.end ?? f.start) + 1 });
+}
+
+function objectShallowEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+  for (const key in a) {
+    if (a[key] !== b[key]) return false;
+  }
+  for (const key in b) {
+    if (a[key] !== b[key]) return false;
+  }
+  return true;
 }
 
 

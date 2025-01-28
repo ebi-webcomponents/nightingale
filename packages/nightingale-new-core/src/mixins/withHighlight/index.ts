@@ -51,7 +51,7 @@ const withHighlight = <T extends Constructor<NightingaleBaseElement>>(
       );
       this.updateHighlight();
     }
-    attributeChangedCallback(
+    override attributeChangedCallback(
       name: string,
       oldValue: string | null,
       newValue: string | null,

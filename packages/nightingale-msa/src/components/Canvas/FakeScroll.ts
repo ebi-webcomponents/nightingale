@@ -112,7 +112,7 @@ class FakeScroll extends LitElement {
     return { showX, showY };
   }
 
-  render() {
+  override render() {
     const style = {
       position: "absolute",
       "overflow-x": "auto",
@@ -147,7 +147,7 @@ class FakeScroll extends LitElement {
       <div style=${object2style(childStyle)}></div>
     </div> `;
   }
-  protected updated(): void {
+  protected override updated(): void {
     const fakescroll = this.renderRoot.querySelector("#fakescroll");
     if (fakescroll !== this.el) {
       this.el = fakescroll as HTMLDivElement;

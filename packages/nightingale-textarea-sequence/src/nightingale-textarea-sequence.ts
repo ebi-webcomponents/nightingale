@@ -34,7 +34,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
   quill: Q.Quill | null = null;
 
   @property({ type: String })
-  id = "";
+  override id = "";
   @property({ type: String })
   name = "sequence";
 
@@ -88,7 +88,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
   #valid = true;
   #formatSequence: FormatSequenceFunction = formatSequence;
 
-  attributeChangedCallback(
+  override attributeChangedCallback(
     name: string,
     _old: string | null,
     value: string | null,
@@ -130,7 +130,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
     debounce(() => this.format(), SHORT_DEBOUNCE_TIME);
   }
 
-  render() {
+  override render() {
     const inlineCSS = `
       .sequence-editor {
         border: 1px solid #ccc;
@@ -155,7 +155,7 @@ class TextareaSequence extends withDimensions(NightingaleElement) {
       <input type="hidden" name="${this.name}" />
     `;
   }
-  firstUpdated() {
+  override firstUpdated() {
     Quill.register("modules/formatter", (quill: Q.Quill) => {
       quill.on(
         "text-change",
