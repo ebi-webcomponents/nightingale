@@ -90,23 +90,12 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapData?: HeatmapData[];
   heatmapInstance?: Heatmap<number, string, HeatmapData>;
 
-  /**
-   * Nightingale lifecycle function that runs before zoomRefreshed
-   * needs to be overriden so zoomRefreshed works since it's svg coupled
-   * (see withZoom)
-   */
-  override applyZoomTranslation() {
-    this.zoomRefreshed();
-  }
-
-  /**
-   * Nightingale lifecycle function to update zooming (see withZoom)
-   */
-  override zoomRefreshed() {
-    super.zoomRefreshed();
-    this.triggerHeatmapZoom();
-    this.updateHighlight();
-  }
+  // /** Nightingale lifecycle function to update zooming (see withZoom) */
+  // override zoomRefreshed() {
+  //   super.zoomRefreshed();
+  //   this.triggerHeatmapZoom();
+  //   this.updateHighlight();
+  // }
 
   /**
    * Nightingale lifecycle function to update highlight (see withHighlight)
@@ -114,6 +103,17 @@ class NightingaleSequenceHeatmap extends withManager(
    */
   protected updateHighlight() {
     this.triggerHeatmapHighlight();
+  }
+
+  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
+    super.attributeChangedCallback(name, _old, value);
+    if (name === "highlight") {
+      console.log("attributeChangedCallback highlight", value, this.highlightedRegion);
+      this.updateHighlight();
+    }
+    if (name === "display-start" || name === "display-end") {
+      this.triggerHeatmapZoom();
+    }
   }
 
   /**
@@ -195,13 +195,12 @@ class NightingaleSequenceHeatmap extends withManager(
   override updated(
     _changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>
   ): void {
+    super.updated(_changedProperties);
     if (this.heatmapData && !this.heatmapInstance) {
+      this.svg = select(this).select("div#container"); // necessary for WithZoom mixin to work
       this.renderHeatmap();
       this.bindHeatmapEvents();
-      this.svg = select(this).select("div#container"); // necessary for WithZoom mixin to work
     }
-    // Manual first trigger of highlight in case property is preset on component
-    this.applyZoomTranslation();
   }
 
   /**
