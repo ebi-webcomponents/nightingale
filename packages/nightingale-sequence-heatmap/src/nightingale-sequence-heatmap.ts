@@ -102,7 +102,8 @@ class NightingaleSequenceHeatmap extends withManager(
   /**
    * Nightingale lifecycle function to update zooming (see withZoom)
    */
-  zoomRefreshed() {
+  override zoomRefreshed() {
+    super.zoomRefreshed();
     this.triggerHeatmapZoom();
     this.updateHighlight();
   }
