@@ -90,13 +90,6 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapData?: HeatmapData[];
   heatmapInstance?: Heatmap<number, string, HeatmapData>;
 
-  // /** Nightingale lifecycle function to update zooming (see withZoom) */
-  // override zoomRefreshed() {
-  //   super.zoomRefreshed();
-  //   this.triggerHeatmapZoom();
-  //   this.updateHighlight();
-  // }
-
   /**
    * Nightingale lifecycle function to update highlight (see withHighlight)
    * has to be manually triggered from render (zoomRefreshed and updated in this case)
@@ -108,7 +101,6 @@ class NightingaleSequenceHeatmap extends withManager(
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value);
     if (name === "highlight") {
-      console.log("attributeChangedCallback highlight", value, this.highlightedRegion);
       this.updateHighlight();
     }
     if (name === "display-start" || name === "display-end") {
