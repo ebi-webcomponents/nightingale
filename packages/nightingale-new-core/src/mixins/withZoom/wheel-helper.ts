@@ -1,13 +1,16 @@
 import { Selection } from "d3";
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySelection = Selection<any, unknown, any, unknown>;
+
+
 /** Helper class to deal with customizing zoom behavior (e.g. only zooming when Ctrl is pressed, using horizontal scroll to pan) */
 export class WheelHelper {
     /** Function to be performed when user pans horizontally (by horizontal scroll, or Shift + vertical scroll ) */
     handlePan?: (shift: number) => void;
     scrollRequiresCtrl: boolean = false;
-
-    constructor(public readonly target: Selection<any, unknown, any, unknown>) {
+    constructor(public readonly target: AnySelection) {
         this.target.on('wheel.WheelHelper', e => this.handleWheel(e)); // Avoid naming the event 'wheel.zoom', that would conflict with zoom behavior
     }
 
