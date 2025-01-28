@@ -55,9 +55,9 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
    * Otherwise return false. */
   private needsRedraw(): boolean {
     const PROPS_THAT_TRIGGER_REDRAW = [
-      'data', 'canvasCtx', 'width', 'height', 'canvasScale',
-      'length', 'display-start', 'display-end',
-      'margin-color', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom',
+      "data", "canvasCtx", "width", "height", "canvasScale",
+      "length", "display-start", "display-end",
+      "margin-color", "margin-left", "margin-right", "margin-top", "margin-bottom",
     ] satisfies (keyof this)[];
     const stamp: typeof this._drawStamp = {};
     for (const attr of PROPS_THAT_TRIGGER_REDRAW) {

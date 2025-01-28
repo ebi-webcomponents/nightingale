@@ -1,7 +1,7 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { scaleSequential, Selection as d3Selection } from "d3";
+import { scaleSequential, Selection as d3Selection, select } from "d3";
 import { Heatmap } from "heatmap-component";
 import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
 import {
@@ -52,11 +52,11 @@ const hexToRgb = (
     result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
-        r: hexComponentToNumber(result[1]),
-        g: hexComponentToNumber(result[2]),
-        b: hexComponentToNumber(result[3]),
-        a: hex.length === 9 ? hexComponentToNumber(result[4]) : undefined,
-      }
+      r: hexComponentToNumber(result[1]),
+      g: hexComponentToNumber(result[2]),
+      b: hexComponentToNumber(result[3]),
+      a: hex.length === 9 ? hexComponentToNumber(result[4]) : undefined,
+    }
     : null;
 };
 
@@ -86,7 +86,6 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapDomainY?: string[];
   heatmapData?: HotmapData[];
   heatmapInstance?: Heatmap<number, string, HotmapData>;
-  firstZoom = false;
 
   /**
    * Nightingale lifecycle function that runs before zoomRefreshed
@@ -121,7 +120,7 @@ class NightingaleSequenceHeatmap extends withManager(
    *
    * @returns lit-html to render for this component
    */
- override render() {
+  override render() {
     const heatmapStyles = {
       width: this.getWidthWithMargins() + "px",
       height: this.height + "px",
@@ -180,96 +179,7 @@ class NightingaleSequenceHeatmap extends withManager(
         id="${this["heatmap-id"]}_loading"
         style=${styleMap(loadingStyles)}
       >
-        <svg
-          width="200px"
-          height="200px"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid"
-          style="background: none;"
-        >
-          <circle cx="75" cy="50" fill="#363a3c" r="6.39718">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.875s"
-            ></animate>
-          </circle>
-          <circle cx="67.678" cy="67.678" fill="#363a3c" r="4.8">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.75s"
-            ></animate>
-          </circle>
-          <circle cx="50" cy="75" fill="#363a3c" r="4.8">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.625s"
-            ></animate>
-          </circle>
-          <circle cx="32.322" cy="67.678" fill="#363a3c" r="4.8">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.5s"
-            ></animate>
-          </circle>
-          <circle cx="25" cy="50" fill="#363a3c" r="4.8">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.375s"
-            ></animate>
-          </circle>
-          <circle cx="32.322" cy="32.322" fill="#363a3c" r="4.80282">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.25s"
-            ></animate>
-          </circle>
-          <circle cx="50" cy="25" fill="#363a3c" r="6.40282">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="-0.125s"
-            ></animate>
-          </circle>
-          <circle cx="67.678" cy="32.322" fill="#363a3c" r="7.99718">
-            <animate
-              attributeName="r"
-              values="4.8;4.8;8;4.8;4.8"
-              times="0;0.1;0.2;0.3;1"
-              dur="1s"
-              repeatCount="indefinite"
-              begin="0s"
-            ></animate>
-          </circle>
-        </svg>
+        ${loaderSvg}
       </div>`;
     }
   }
@@ -284,6 +194,8 @@ class NightingaleSequenceHeatmap extends withManager(
     if (this.heatmapData && !this.heatmapInstance) {
       this.renderHeatmap();
       this.bindHeatmapEvents();
+      this.svg = select(this).select("div#container");
+      console.log("svg", this, this.svg);
     }
     // Manual first trigger of highlight in case property is preset on component
     this.applyZoomTranslation();
@@ -352,7 +264,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
   /**
    * Main heatmap rendering function. Should only be triggered once
-   * Necessary to bind zoom and hover events between Heatmap component and Nightingale
+   * Necessary to bind hover and select events between Heatmap component and Nightingale
    */
   renderHeatmap() {
     const hm = Heatmap.create({
@@ -387,7 +299,6 @@ class NightingaleSequenceHeatmap extends withManager(
         score: <b>${formatDataItem(d.score)}</b>`;
       return returnHTML;
     });
-    hm.setZooming({ axis: "x" });
     hm.setVisualParams({ xGapPixels: 0, yGapPixels: 0 });
     this.heatmapInstance = hm;
 
@@ -403,49 +314,7 @@ class NightingaleSequenceHeatmap extends withManager(
    */
   bindHeatmapEvents() {
     if (!this.heatmapInstance) return;
-    this.heatmapInstance.events.zoom.subscribe((d) => {
-      // no data, stop zoom from occurring
-      if (!d) return;
-      // On heatmap zoom dispatch event to Nightingale
-      let xDiff = d.xMin;
-      // if not zoomed yet but display attr values exist
-      if (!this.firstZoom && this["display-start"]) {
-        xDiff = this["display-start"];
-      }
-      if (xDiff !== this["display-start"]) {
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              value: xDiff,
-              type: "display-start",
-            },
-            bubbles: true,
-            cancelable: true,
-          })
-        );
-      }
-      let xMaxDiff = d.xMax - 1;
-      // if not zoomed yet but display attr values exist
-      if (!this.firstZoom && this["display-end"]) {
-        xMaxDiff = this["display-end"];
-      }
-      if (xMaxDiff !== this["display-end"]) {
-        this.dispatchEvent(
-          new CustomEvent("change", {
-            detail: {
-              value: xMaxDiff,
-              type: "display-end",
-            },
-            bubbles: true,
-            cancelable: true,
-          })
-        );
-      }
-      if (!this.firstZoom) {
-        this.firstZoom = true;
-      }
-    });
-
+    
     this.heatmapInstance.events.select.subscribe((d) => {
       // data to send to nightingale can be null if click is outside boundaries
       let toSend = null;
@@ -486,10 +355,6 @@ class NightingaleSequenceHeatmap extends withManager(
   triggerHeatmapHighlight() {
     if (!this.heatmapInstance) {
       return;
-    }
-    // use heatmap's ctrl to zoom extension
-    if (this["use-ctrl-to-zoom"]) {
-      this.heatmapInstance.extensions.zoom?.update({ scrollRequireCtrl: true });
     }
 
     // any so we can use private marker attributes
@@ -559,3 +424,97 @@ class NightingaleSequenceHeatmap extends withManager(
   }
 }
 export default NightingaleSequenceHeatmap;
+
+
+const loaderSvg = html`
+  <svg
+    width="200px"
+    height="200px"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 0 100 100"
+    preserveAspectRatio="xMidYMid"
+    style="background: none;"
+  >
+    <circle cx="75" cy="50" fill="#363a3c" r="6.39718">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.875s"
+      ></animate>
+    </circle>
+    <circle cx="67.678" cy="67.678" fill="#363a3c" r="4.8">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.75s"
+      ></animate>
+    </circle>
+    <circle cx="50" cy="75" fill="#363a3c" r="4.8">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.625s"
+      ></animate>
+    </circle>
+    <circle cx="32.322" cy="67.678" fill="#363a3c" r="4.8">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.5s"
+      ></animate>
+    </circle>
+    <circle cx="25" cy="50" fill="#363a3c" r="4.8">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.375s"
+      ></animate>
+    </circle>
+    <circle cx="32.322" cy="32.322" fill="#363a3c" r="4.80282">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.25s"
+      ></animate>
+    </circle>
+    <circle cx="50" cy="25" fill="#363a3c" r="6.40282">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="-0.125s"
+      ></animate>
+    </circle>
+    <circle cx="67.678" cy="32.322" fill="#363a3c" r="7.99718">
+      <animate
+        attributeName="r"
+        values="4.8;4.8;8;4.8;4.8"
+        times="0;0.1;0.2;0.3;1"
+        dur="1s"
+        repeatCount="indefinite"
+        begin="0s"
+      ></animate>
+    </circle>
+  </svg>
+`;
