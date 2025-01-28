@@ -23,9 +23,11 @@ import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/uti
 
 import heatmapStyleSheet from "./heatmap-component.css";
 
+
 const ALPHAMISSENSE_BLUE = "#3d5493";
 const ALPHAMISSENSE_RED = "#9a131a";
-interface HotmapData {
+
+interface HeatmapData {
   xValue: number;
   yValue: string;
   score: number;
@@ -60,6 +62,7 @@ const hexToRgb = (
     : null;
 };
 
+
 @customElementOnce("nightingale-sequence-heatmap")
 class NightingaleSequenceHeatmap extends withManager(
   withZoom(
@@ -84,8 +87,8 @@ class NightingaleSequenceHeatmap extends withManager(
 
   heatmapDomainX?: number[];
   heatmapDomainY?: string[];
-  heatmapData?: HotmapData[];
-  heatmapInstance?: Heatmap<number, string, HotmapData>;
+  heatmapData?: HeatmapData[];
+  heatmapInstance?: Heatmap<number, string, HeatmapData>;
 
   /**
    * Nightingale lifecycle function that runs before zoomRefreshed
@@ -194,8 +197,7 @@ class NightingaleSequenceHeatmap extends withManager(
     if (this.heatmapData && !this.heatmapInstance) {
       this.renderHeatmap();
       this.bindHeatmapEvents();
-      this.svg = select(this).select("div#container");
-      console.log("svg", this, this.svg);
+      this.svg = select(this).select("div#container"); // necessary for WithZoom mixin to work
     }
     // Manual first trigger of highlight in case property is preset on component
     this.applyZoomTranslation();
@@ -207,32 +209,17 @@ class NightingaleSequenceHeatmap extends withManager(
    * @param yDomain string[]: list of heatmap row categories
    * @param data array of objects containing some mandatory fields: xValue (resid id), yValue (row categ) and score (float value mapped to color)
    */
-  setHeatmapData(xDomain: number[], yDomain: string[], data: HotmapData[]) {
+  setHeatmapData(xDomain: number[], yDomain: string[], data: HeatmapData[]) {
     this.heatmapDomainX = xDomain;
     this.heatmapDomainY = yDomain;
-    // render heatmap if not initialized
-    if (!this.heatmapData) {
-      this.heatmapData = data;
-    }
-    // just set new data if initialized
-    else {
-      this.heatmapData = data;
-      this.heatmapInstance!.setData({
-        xDomain: xDomain,
-        yDomain: yDomain,
-        data: data,
-        x: (d) => {
-          const x = d.xValue;
-          return x;
-        },
-        y: (d) => {
-          if (d.yValue) {
-            return d.yValue;
-          }
-          return "none";
-        },
-      });
-    }
+    this.heatmapData = data;
+    this.heatmapInstance?.setData({
+      xDomain: xDomain,
+      yDomain: yDomain,
+      data: data,
+      x: d => d.xValue,
+      y: d => d.yValue ?? "none",
+    });
     // call lit lifecycle update
     this.requestUpdate();
   }
@@ -271,16 +258,8 @@ class NightingaleSequenceHeatmap extends withManager(
       xDomain: this.heatmapDomainX!,
       yDomain: this.heatmapDomainY!,
       data: this.heatmapData!,
-      x: (d) => {
-        const x = d.xValue;
-        return x;
-      },
-      y: (d) => {
-        if (d.yValue) {
-          return d.yValue;
-        }
-        return "none";
-      },
+      x: d => d.xValue,
+      y: d => d.yValue ?? "none",
     });
 
     const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
@@ -304,7 +283,7 @@ class NightingaleSequenceHeatmap extends withManager(
 
     this.heatmapInstance.render(this["heatmap-id"]!);
     // first zoom trigger if it exists
-    this.heatmapInstance.events.render.subscribe((_) => {
+    this.heatmapInstance.events.render.subscribe(() => {
       this.requestUpdate();
     });
   }
@@ -314,25 +293,29 @@ class NightingaleSequenceHeatmap extends withManager(
    */
   bindHeatmapEvents() {
     if (!this.heatmapInstance) return;
-    
-    this.heatmapInstance.events.select.subscribe((d) => {
-      // data to send to nightingale can be null if click is outside boundaries
-      let toSend = null;
-      if (d && d.cell && d.cell.xIndex) {
-        toSend = `${d.cell.xIndex + 1}:${d.cell.xIndex + 1}`;
+
+    this.heatmapInstance.events.hover.subscribe((d) => {
+      if (this.getAttribute("highlight-event") === "onmouseover") {
+        this.dispatchHighlight(d.cell?.x);
       }
-      // On heatmap zoom dispatch event to Nightingale
-      this.dispatchEvent(
-        new CustomEvent("change", {
-          detail: {
-            value: toSend,
-            type: "highlight",
-          },
-          bubbles: true,
-          cancelable: true,
-        })
-      );
     });
+    this.heatmapInstance.events.select.subscribe((d) => {
+      if (this.getAttribute("highlight-event") === "onclick") {
+        this.dispatchHighlight(d.cell?.x);
+      }
+    });
+  }
+
+  private dispatchHighlight(seqPosition: number | undefined) {
+    // Data to send to nightingale can be null if pointer is outside boundaries
+    const highlight = seqPosition !== undefined ? `${seqPosition}:${seqPosition}` : null;
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: { type: "highlight", value: highlight },
+        bubbles: true,
+        cancelable: true,
+      })
+    );
   }
 
   /**
