@@ -141,7 +141,7 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     const fragments = this.fragmentCollection.overlappingItems(leftEdgeSeq, rightEdgeSeq);
     for (const fragment of fragments) {
       const iFeature = fragment.featureIndex;
-      const fragmentLength = (fragment.end ?? fragment.start) + 1 - fragment.start;
+      const fragmentLength = Number(fragment.end ?? fragment.start) + 1 - fragment.start;
       const x = scale * this.getXFromSeqPosition(fragment.start);
       const width = fragmentLength * baseWidth;
       const y = scale * (this.layoutObj?.getFeatureYPos(this.data[iFeature]) ?? 0);
