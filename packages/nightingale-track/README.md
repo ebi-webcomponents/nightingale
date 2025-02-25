@@ -81,7 +81,9 @@ type Feature = {
   fill?: string,
   shape?:
     | "rectangle"
+    | "roundRectangle"
     | "bridge"
+    | "line"
     | "diamond"
     | "chevron"
     | "catFace"
@@ -91,7 +93,14 @@ type Feature = {
     | "pentagon"
     | "circle"
     | "arrow"
-    | "doubleBar",
+    | "doubleBar"
+    | "discontinuosStart"
+    | "discontinuos"
+    | "discontinuosEnd"
+    | "helix"
+    | "strand"
+    | "tag"
+    | "doubleEndedTag"
   tooltipContent?: string,
   type?: string,
   locations?: Array<FeatureLocation>,
