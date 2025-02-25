@@ -197,7 +197,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     this.#residuesG = createResidueGroup(this.#featuresG);
     createResiduePaths({
       baseG: this.#residuesG,
-      getResidueShape: (d) => this.getPTMResidueShape(d),
+      getResidueShape: (d) => this.getResidueShape(d),
       getResidueTransform: (d) => this.getResidueTransform(d),
       getResidueFill: (d) => this.getResidueFill(d, !!this.expanded),
       element: this,
@@ -287,7 +287,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
       // this.child_residuesLoc =
       createResiduePaths({
         baseG: this.#childResiduesG,
-        getResidueShape: (d) => this.getPTMResidueShape(d),
+        getResidueShape: (d) => this.getResidueShape(d),
         getResidueTransform: (d) => this.getResidueTransform(d),
         getResidueFill: (d) => this.getResidueFill(d, !!d.feature?.expanded),
         element: this,
@@ -304,7 +304,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
     );
     this.#haveCreatedFeatures = true;
   }
-  private getPTMResidueShape(f: ResidueDatum) {
+  private getResidueShape(f: ResidueDatum) {
     return this.featureShape.getFeatureShape(
       this.getSingleBaseWidth(),
       this.layoutObj?.getFeatureHeight(`${f.accession}_${f.k}_${f.i}_${f.j}`) ||
@@ -459,7 +459,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
         refreshResiduePaths({
           baseG: this.#residuesG,
           expanded: !!this.expanded,
-          getResidueShape: (d) => this.getPTMResidueShape(d),
+          getResidueShape: (d) => this.getResidueShape(d),
           getResidueTransform: (d) => this.getResidueTransform(d),
           getResidueFill: (d) => this.getResidueFill(d, !!this.expanded),
         });
@@ -498,7 +498,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
           refreshResiduePaths({
             baseG: this.#childResiduesG,
             expanded: !!this.expanded,
-            getResidueShape: (d) => this.getPTMResidueShape(d),
+            getResidueShape: (d) => this.getResidueShape(d),
             getResidueTransform: (d) => this.getResidueTransform(d),
             getResidueFill: (d) =>
               this.getResidueFill(d, !!d.feature?.expanded),
