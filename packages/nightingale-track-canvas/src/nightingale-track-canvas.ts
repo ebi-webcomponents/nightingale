@@ -1,13 +1,12 @@
 import { createEvent, customElementOnce } from "@nightingale-elements/nightingale-new-core";
-import NightingaleTrack, { Feature, FeatureLocation, Shapes } from "@nightingale-elements/nightingale-track";
+import NightingaleTrack, { Feature, FeatureLocation, getColorByType, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
 import { drawRange, drawSymbol, drawUnknown, shapeCategory } from "./utils/draw-shapes";
 import { last, RangeCollection, Refresher } from "./utils/utils";
 
-
 type Fragment = FeatureLocation["fragments"][number]
-type ExtendedFragment = Fragment & { featureIndex: number };
+type ExtendedFragment = Fragment & { featureIndex: number, isResidue?: boolean };
 
 
 @customElementOnce("nightingale-track-canvas")
@@ -141,12 +140,22 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
     const fragments = this.fragmentCollection.overlappingItems(leftEdgeSeq, rightEdgeSeq);
     for (const fragment of fragments) {
       const iFeature = fragment.featureIndex;
-      const fragmentLength = Number(fragment.end ?? fragment.start) + 1 - Number(fragment.start);
-      const x = scale * this.getXFromSeqPosition(fragment.start);
-      const width = fragmentLength * baseWidth;
+      let fragmentLength = Number(fragment.end ?? fragment.start) - Number(fragment.start) + 1;
+      let x = scale * this.getXFromSeqPosition(fragment.start);
+      let width = fragmentLength * baseWidth;
       const y = scale * (this.layoutObj?.getFeatureYPos(this.data[iFeature]) ?? 0);
       const shape = this.getShape(this.data[iFeature]);
-      ctx.fillStyle = this.getFeatureFillColor(this.data[iFeature]);
+
+      if (fragment.isResidue) {
+        // fragmentLength is 1 for residue. Below logic sets fragment length as 4 to show it prominent for longer proteins in the first look
+        fragmentLength = baseWidth < 4 ? 4 : fragmentLength;
+        x += baseWidth / 4; // To place the residue in the middle of a single basewidth
+        width = fragmentLength * baseWidth / 2; // Halve the width to distinguish between residues if one follows next closely 
+        ctx.fillStyle = getColorByType("PTM");
+      } else {
+        ctx.fillStyle = this.getFeatureFillColor(this.data[iFeature]);
+      }
+
       ctx.strokeStyle = this.getFeatureColor(this.data[iFeature]);
       ctx.globalAlpha = (this.data[iFeature].opacity ?? 0.9);
 
@@ -298,6 +307,12 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
     for (const location of feature.locations) {
       for (const fragment of location.fragments) {
         out.push({ ...fragment, featureIndex: i });
+      }
+    }
+    if (feature.start && feature.residuesToHighlight) {
+      for (const residue of feature.residuesToHighlight) {
+        const positionInSequence = Number(feature.start) + Number(residue.position) - 1;
+        out.push({start: positionInSequence , end: positionInSequence, featureIndex: i, isResidue: true});
       }
     }
   }

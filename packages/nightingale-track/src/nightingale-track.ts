@@ -32,7 +32,7 @@ export type FeatureLocation = {
 };
 
 type Residue = {
-  name: string;
+  name?: string;
   position: number;
 };
 

@@ -53,7 +53,10 @@ const defaultData = [
     accession: "feature1",
     start: 10,
     end: 20,
-    color: "#342ea2",
+    color: "#F0E68C",
+    residuesToHighlight: [{
+      position: 5,
+    }]
   },
   {
     accession: "feature2",
