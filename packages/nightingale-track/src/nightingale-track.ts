@@ -389,7 +389,7 @@ class NightingaleTrack extends withManager(
           },
           ${this.layoutObj?.getFeatureYPos(f.feature)})`
       )
-      .attr("fill", getColorByType("PTM"))
+      .attr("fill", getColorByType("RESIDUE"))
       .style("fill-opacity", ({ feature }) =>
         feature.opacity ? feature.opacity : 0.9
       )

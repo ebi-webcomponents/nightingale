@@ -155,7 +155,7 @@ export default class NightingaleTrackCanvas extends NightingaleTrack {
         } 
         x += baseWidth / 4; // To place the residue in the middle of a single basewidth
         width = fragmentLength * baseWidth / 2; // Halve the width to distinguish between residues if one follows next closely
-        ctx.fillStyle = getColorByType("PTM");
+        ctx.fillStyle = getColorByType("RESIDUE");
       } else {
         ctx.fillStyle = this.getFeatureFillColor(this.data[iFeature]);
       }
