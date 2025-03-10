@@ -313,7 +313,7 @@ export default class FeatureShape {
   tag() {
     const h = this.#ftHeight;
     const w = this.#ftWidth;
-    const d1 = Math.sqrt(2 * Math.pow(h, 2));
+    const d1 = Math.sqrt(2) * h
     const d2 = Math.sqrt(Math.pow(h, 2) - Math.pow(d1 / 2, 2));
     return [
       `M0,${h / 2}`,
