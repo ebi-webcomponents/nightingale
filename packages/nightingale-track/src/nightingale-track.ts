@@ -187,12 +187,13 @@ class NightingaleTrack extends withManager(
     let residueLength = 1;
      // Below logic is to show it prominent for longer proteins until the point where residueLength is enough to be visible on itself.
      const optimalWidth = 6;
-     const widthDifference = optimalWidth - this.getSingleBaseWidth();
-     if (this.getSingleBaseWidth() < optimalWidth && widthDifference > residueLength) {
+     const singleBaseWidth = this.getSingleBaseWidth();
+     const widthDifference = optimalWidth - singleBaseWidth;
+     if (singleBaseWidth < optimalWidth && widthDifference > residueLength) {
       residueLength = widthDifference;
      }
     return this.featureShape.getFeatureShape(
-      this.getSingleBaseWidth() / 2, // Halve the width of the residue to distinguish between each other if one follows next closely
+      singleBaseWidth / 2, // Halve the width of the residue to distinguish between each other if one follows next closely
       this.layoutObj?.getFeatureHeight(f) || 0,
       residueLength,
       this.getShape(f)
