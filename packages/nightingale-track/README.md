@@ -112,7 +112,6 @@ type Feature = {
     | "discontinuosEnd"
     | "helix"
     | "strand"
-    | "tag"
     | "leftEndedTag"
     | "rightEndedTag"
     | "doubleEndedTag"
