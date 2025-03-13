@@ -305,8 +305,8 @@ export const config = {
     shape: "rectangle",
     color: "#8585fc",
   },
-  PTM: {
-    name: "ptm",
+  RESIDUE: {
+    name: "residue",
     label: "PTM residue",
     tooltip: "",
     shape: "rectangle",
