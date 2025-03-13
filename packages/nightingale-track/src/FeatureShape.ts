@@ -5,7 +5,6 @@ export type Shapes =
   | "roundRectangle"
   | "bridge"
   | "line"
-  | "bridge"
   | "diamond"
   | "chevron"
   | "catFace"
@@ -20,7 +19,15 @@ export type Shapes =
   | "discontinuos"
   | "discontinuosEnd"
   | "helix"
-  | "strand";
+  | "strand"
+  | "leftEndedTag"
+  | "rightEndedTag"
+  | "doubleEndedTag";
+
+type TagOptions = {
+  left?: boolean;
+  right?: boolean;
+};
 
 export default class FeatureShape {
   #ftLength = 1;
@@ -58,15 +65,21 @@ export default class FeatureShape {
       case "doubleBar":
         return () => this.doubleBar();
       case "discontinuosStart":
-        return () => this.discontinuosStart();
+        return () => this.discontinuousStart();
       case "discontinuos":
-        return () => this.discontinuos();
+        return () => this.discontinuous();
       case "discontinuosEnd":
-        return () => this.discontinuosEnd();
+        return () => this.discontinuousEnd();
       case "helix":
         return () => this.helix();
       case "strand":
         return () => this.strand();
+      case "leftEndedTag":
+        return () => this.tag({left: true});
+      case "rightEndedTag":
+        return () => this.tag({right: true});
+      case "doubleEndedTag":
+        return () => this.tag({left: true, right: true});
       default:
         return () => this.rectangle();
     }
@@ -255,19 +268,19 @@ export default class FeatureShape {
     return `L${qh},${3 * qh}L0,${2 * qh}L${qh},${qh}`;
   }
 
-  discontinuosStart() {
+  discontinuousStart() {
     return `M0,0L${this.#ftWidth},0L${this.#ftWidth},${this.#ftHeight}L0,${
       this.#ftHeight
     }${this.#getBrokenStart()}Z`;
   }
 
-  discontinuos() {
+  discontinuous() {
     return `M0,0L${this.#ftWidth},0${this.#getBrokenEnd()}L0,${
       this.#ftHeight
     }${this.#getBrokenStart()}Z`;
   }
 
-  discontinuosEnd() {
+  discontinuousEnd() {
     return `M0,0L${this.#ftWidth},0${this.#getBrokenEnd()}L0,${
       this.#ftHeight
     }Z`;
@@ -303,5 +316,38 @@ export default class FeatureShape {
       this.#ftHeight
     }Z`;
     return rect + triangle;
+  }
+
+  tag(options: TagOptions = {}) {
+    const h = this.#ftHeight;
+    const w = this.#ftWidth;
+    const d = h / Math.sqrt(2);
+    let path = `M0,${h / 2}`;
+
+    if (options.left) {
+      path += ` L${d},0`;
+    } else {
+      path += ` L0,0`;
+    }
+
+    if (options.right) {
+      path += ` L${w - d},0`;
+    } else {
+      path += ` L${w},0`;
+    }
+
+    if (options.right) {
+      path += ` L${w},${h / 2} L${w - d},${h}`;
+    } else {
+      path += ` L${w},${h}`;
+    }
+
+    if (options.left) {
+      path += ` L${d},${h}`;
+    } else {
+      path += ` L0,${h}`;
+    }
+
+    return path + " Z";
   }
 }
