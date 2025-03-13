@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-track",
-  "version": "5.4.1",
+  "version": "5.5.0",
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",

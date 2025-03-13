@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-interpro-track",
-  "version": "5.4.1",
+  "version": "5.5.0",
   "description": "Interpro extension of the track type.",
   "files": [
     "dist",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^5.4.1",
-    "@nightingale-elements/nightingale-track": "^5.4.1",
+    "@nightingale-elements/nightingale-track": "^5.5.0",
     "d3": "7.9.0",
     "lodash-es": "4.17.15"
   }
