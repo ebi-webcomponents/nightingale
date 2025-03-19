@@ -1,12 +1,12 @@
 import { createEvent, customElementOnce, Refresher, withCanvas } from "@nightingale-elements/nightingale-new-core";
-import NightingaleTrack, { Feature, FeatureLocation, Shapes } from "@nightingale-elements/nightingale-track";
+import NightingaleTrack, { Feature, FeatureLocation, getColorByType, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
 import { drawRange, drawSymbol, drawUnknown, shapeCategory } from "./utils/draw-shapes";
 import { last, RangeCollection } from "./utils/utils";
 
 type Fragment = FeatureLocation["fragments"][number]
-type ExtendedFragment = Fragment & { featureIndex: number };
+type ExtendedFragment = Fragment & { featureIndex: number, isResidue?: boolean };
 
 
 @customElementOnce("nightingale-track-canvas")
@@ -99,12 +99,26 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
     const fragments = this.fragmentCollection.overlappingItems(leftEdgeSeq, rightEdgeSeq);
     for (const fragment of fragments) {
       const iFeature = fragment.featureIndex;
-      const fragmentLength = (fragment.end ?? fragment.start) + 1 - fragment.start;
-      const x = scale * this.getXFromSeqPosition(fragment.start);
-      const width = fragmentLength * baseWidth;
+      let fragmentLength = Number(fragment.end ?? fragment.start) - Number(fragment.start) + 1;
+      let x = scale * this.getXFromSeqPosition(fragment.start);
+      let width = fragmentLength * baseWidth;
       const y = scale * (this.layoutObj?.getFeatureYPos(this.data[iFeature]) ?? 0);
       const shape = this.getShape(this.data[iFeature]);
-      ctx.fillStyle = this.getFeatureFillColor(this.data[iFeature]);
+ 
+      if (fragment.isResidue) {
+        // fragmentLength is 1 for residue. Below logic is to show it prominent for longer proteins until the point where fragmentLength is enough to be visible on itself.
+        const optimalWidth = 6;
+        const widthDifference = optimalWidth - baseWidth;
+        if (baseWidth < optimalWidth && widthDifference > fragmentLength) {
+          fragmentLength = widthDifference;
+        } 
+        x += baseWidth / 4; // To place the residue in the middle of a single basewidth
+        width = fragmentLength * baseWidth / 2; // Halve the width to distinguish between residues if one follows next closely
+        ctx.fillStyle = getColorByType("RESIDUE");
+      } else {
+        ctx.fillStyle = this.getFeatureFillColor(this.data[iFeature]);
+      }
+
       ctx.strokeStyle = this.getFeatureColor(this.data[iFeature]);
       ctx.globalAlpha = (this.data[iFeature].opacity ?? 0.9);
 
@@ -253,6 +267,12 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
     for (const location of feature.locations) {
       for (const fragment of location.fragments) {
         out.push({ ...fragment, featureIndex: i });
+      }
+    }
+    if (feature.start && feature.residuesToHighlight) {
+      for (const residue of feature.residuesToHighlight) {
+        const positionInSequence = Number(feature.start) + Number(residue.position) - 1;
+        out.push({start: positionInSequence , end: positionInSequence, featureIndex: i, isResidue: true});
       }
     }
   }
