@@ -104,14 +104,14 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
       let width = fragmentLength * baseWidth;
       const y = scale * (this.layoutObj?.getFeatureYPos(this.data[iFeature]) ?? 0);
       const shape = this.getShape(this.data[iFeature]);
- 
+
       if (fragment.isResidue) {
         // fragmentLength is 1 for residue. Below logic is to show it prominent for longer proteins until the point where fragmentLength is enough to be visible on itself.
         const optimalWidth = 6;
         const widthDifference = optimalWidth - baseWidth;
         if (baseWidth < optimalWidth && widthDifference > fragmentLength) {
           fragmentLength = widthDifference;
-        } 
+        }
         x += baseWidth / 4; // To place the residue in the middle of a single basewidth
         width = fragmentLength * baseWidth / 2; // Halve the width to distinguish between residues if one follows next closely
         ctx.fillStyle = getColorByType("RESIDUE");
@@ -251,8 +251,17 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
 
   private handleMouseout(event: MouseEvent): void {
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
-    const customEvent = createEvent("mouseout", null, withHighlight, undefined, undefined, undefined,
-      event.target instanceof HTMLElement ? event.target : undefined, event, this);
+    const customEvent = createEvent(
+      "mouseout",
+      null,
+      withHighlight,
+      undefined,
+      undefined,
+      undefined,
+      event.target instanceof HTMLElement ? event.target : undefined,
+      event,
+      this
+    );
     this.dispatchEvent(customEvent);
   }
 }
@@ -272,7 +281,7 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
     if (feature.start && feature.residuesToHighlight) {
       for (const residue of feature.residuesToHighlight) {
         const positionInSequence = Number(feature.start) + Number(residue.position) - 1;
-        out.push({start: positionInSequence , end: positionInSequence, featureIndex: i, isResidue: true});
+        out.push({ start: positionInSequence, end: positionInSequence, featureIndex: i, isResidue: true });
       }
     }
   }

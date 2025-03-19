@@ -4,7 +4,7 @@ import "../../packages/nightingale-conservation-track/src/index";
 import { type SequenceConservationData } from "../../packages/nightingale-conservation-track/src/nightingale-conservation-track";
 
 
-export default { title: "Components/Tracks/NightingaleConservationTrack" } as Meta;
+export default { title: "Components/Tracks/Conservation Track" } as Meta;
 
 
 const DefaultArgs = {
@@ -201,6 +201,6 @@ function makeStory(options: { length: number }): Story<Args> {
 }
 
 
-export const Track = makeStory({
+export const LinegraphAndConservation = makeStory({
   length: sampleSequence.length,
 });
