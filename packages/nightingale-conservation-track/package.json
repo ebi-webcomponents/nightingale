@@ -1,0 +1,39 @@
+{
+  "name": "@nightingale-elements/nightingale-conservation-track",
+  "version": "5.4.0",
+  "description": "Track for showing residue probabilities on individual sequence positions.",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ../../rollup.config.mjs",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js ./tests/*"
+  },
+  "keywords": [
+    "nightingale",
+    "webcomponents",
+    "customelements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebi-webcomponents/nightingale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebi-webcomponents/nightingale/issues"
+  },
+  "homepage": "https://ebi-webcomponents.github.io/nightingale/",
+  "author": "Adam Midlik <midlik@gmail.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nightingale-elements/nightingale-new-core": "^5.4.0",
+    "d3": "7.9.0"
+  }
+}
