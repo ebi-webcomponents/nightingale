@@ -404,8 +404,17 @@ export default class NightingaleConservationTrack extends withCanvas(
 
   private handleMouseout(event: MouseEvent): void {
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
-    const customEvent = createEvent("mouseout", null, withHighlight, undefined, undefined, undefined,
-      event.target instanceof HTMLElement ? event.target : undefined, event, this);
+    const customEvent = createEvent(
+      "mouseout",
+      null,
+      withHighlight,
+      undefined,
+      undefined,
+      undefined,
+      event.target instanceof HTMLElement ? event.target : undefined,
+      event,
+      this
+    );
     this.dispatchEvent(customEvent);
   }
 

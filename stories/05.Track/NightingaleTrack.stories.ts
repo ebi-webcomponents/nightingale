@@ -99,6 +99,7 @@ export const TrackWithSymbols = Template.bind({});
 TrackWithSymbols.args = {
   ...Track.args,
   height: 500,
+  "display-end": 100,
   layout: "non-overlapping",
 };
 TrackWithSymbols.play = async () => {

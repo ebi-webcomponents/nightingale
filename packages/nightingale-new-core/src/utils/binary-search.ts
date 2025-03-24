@@ -10,7 +10,7 @@ export function firstGteqIndex<T>(sortedArray: ArrayLike<T>, query: number, key:
  * Return `undefined` if `key(element) !== query` for all elements. */
 export function firstEqIndex<T>(sortedArray: ArrayLike<T>, query: number, key: (element: T) => number): number | undefined {
     const index = firstGteqIndex(sortedArray, query, key);
-    if (key(sortedArray[index]) === query) return index;
+    if (index < sortedArray.length && key(sortedArray[index]) === query) return index;
     else return undefined;
 }
 
@@ -21,7 +21,7 @@ function firstGteqIndexInRange<T>(sortedArray: ArrayLike<T>, query: number, star
     // Invariants:
     // key(sortedArray[i]) < query for each i < start
     // key(sortedArray[i]) >= query for each i >= end
-    while (end - start > 4) {
+    while (end - start > 4) { // Threshold 4 will use the lowest number of comparisons on average (though this optimization is not super critical)
         const mid = (start + end) >> 1; // Floored mean of start and end
         if (key(sortedArray[mid]) >= query) {
             end = mid;
