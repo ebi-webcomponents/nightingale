@@ -128,7 +128,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         height="100"
         style="opacity: 1;"
         width="52"
-        x="582"
+        x="581.9999999999999"
         y="0"
       />
       <rect
@@ -146,7 +146,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         height="100"
         style="opacity: 1;"
         width="52"
-        x="686"
+        x="686.0000000000001"
         y="0"
       />
       <rect
@@ -165,12 +165,12 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       font-family="sans-serif"
       font-size="10"
       text-anchor="middle"
-      transform="translate(36,0)"
+      transform="translate(26,0)"
     >
       <g
         class="tick"
         opacity="1"
-        transform="translate(208.5,0)"
+        transform="translate(218.5,0)"
       >
         <text
           dy="0.71em"
@@ -184,7 +184,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       <g
         class="tick"
         opacity="1"
-        transform="translate(468.5,0)"
+        transform="translate(478.5,0)"
       >
         <text
           dy="0.71em"
@@ -198,7 +198,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
       <g
         class="tick"
         opacity="1"
-        transform="translate(728.5,0)"
+        transform="translate(738.5,0)"
       >
         <text
           dy="0.71em"
@@ -319,7 +319,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        x="608"
+        x="607.9999999999999"
       >
         A
       </text>
@@ -337,7 +337,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        x="712"
+        x="712.0000000000001"
       >
         D
       </text>
@@ -527,7 +527,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         height="100"
         style="opacity: 1;"
         width="52"
-        x="582"
+        x="581.9999999999999"
         y="0"
       />
       <rect
@@ -545,7 +545,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         height="100"
         style="opacity: 1;"
         width="52"
-        x="686"
+        x="686.0000000000001"
         y="0"
       />
       <rect
@@ -564,12 +564,12 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       font-family="sans-serif"
       font-size="10"
       text-anchor="middle"
-      transform="translate(36,0)"
+      transform="translate(26,0)"
     >
       <g
         class="tick"
         opacity="1"
-        transform="translate(208.5,0)"
+        transform="translate(218.5,0)"
       >
         <text
           dy="0.71em"
@@ -583,7 +583,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       <g
         class="tick"
         opacity="1"
-        transform="translate(468.5,0)"
+        transform="translate(478.5,0)"
       >
         <text
           dy="0.71em"
@@ -597,7 +597,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       <g
         class="tick"
         opacity="1"
-        transform="translate(728.5,0)"
+        transform="translate(738.5,0)"
       >
         <text
           dy="0.71em"
@@ -718,7 +718,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        x="608"
+        x="607.9999999999999"
       >
         A
       </text>
@@ -736,7 +736,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         font-size="25"
         style="pointer-events: none; font-family: monospace;"
         text-anchor="middle"
-        x="712"
+        x="712.0000000000001"
       >
         D
       </text>
@@ -862,12 +862,12 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       font-family="sans-serif"
       font-size="10"
       text-anchor="middle"
-      transform="translate(140,0)"
+      transform="translate(130,0)"
     >
       <g
         class="tick"
         opacity="1"
-        transform="translate(0.5,0)"
+        transform="translate(10.5,0)"
       >
         <text
           dy="0.71em"
@@ -881,7 +881,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       <g
         class="tick"
         opacity="1"
-        transform="translate(260.5,0)"
+        transform="translate(270.5,0)"
       >
         <text
           dy="0.71em"
@@ -895,7 +895,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       <g
         class="tick"
         opacity="1"
-        transform="translate(520.5,0)"
+        transform="translate(530.5,0)"
       >
         <text
           dy="0.71em"
@@ -909,7 +909,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
       <g
         class="tick"
         opacity="1"
-        transform="translate(780.5,0)"
+        transform="translate(790.5,0)"
       >
         <text
           dy="0.71em"

@@ -130,7 +130,7 @@ class NightingaleVariation extends withManager(
     this["margin-bottom"] = 10;
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
 
     // scale for Amino Acids
@@ -251,12 +251,12 @@ class NightingaleVariation extends withManager(
   // }
 
   // Calling render again
-  firstUpdated() {
+  override firstUpdated() {
     this.createFeatures();
     this.createHighlightGroup();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
     if (this.series) {
       this.updateScale();
       if (this.variationPlot)
@@ -307,7 +307,7 @@ class NightingaleVariation extends withManager(
     }
   }
 
-  render() {
+  override render() {
     return html`<style>
         ${NightingaleVariation.css}
       </style>

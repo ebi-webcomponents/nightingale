@@ -33,7 +33,7 @@ class NightingaleFilter extends NightingaleElement {
     this.filters = [];
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     if (this.closest("nightingale-manager")) {
       this.#manager = this.closest("nightingale-manager");
@@ -41,14 +41,14 @@ class NightingaleFilter extends NightingaleElement {
     }
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
     if (this.#manager) {
       this.#manager.unregister(this);
     }
   }
 
-  render() {
+  override render() {
     const groupByType = groupBy(this.filters, (f: Filter) => f.type.text);
     return html`
       <style>

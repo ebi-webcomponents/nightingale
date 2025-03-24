@@ -128,7 +128,7 @@ export default class NightingaleConservationTrack extends withCanvas(
   protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     if (this.data) this.createTrack();
   }
@@ -151,7 +151,7 @@ export default class NightingaleConservationTrack extends withCanvas(
     this.createTrack();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
     if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
       // Calling `this.data` setter to recompute `this.positions` and run `this.createTrack()`
@@ -304,11 +304,6 @@ export default class NightingaleConservationTrack extends withCanvas(
     }
   }
 
-  /** Inverse of `this.getXFromSeqPosition`. */
-  getSeqPositionFromX(x: number): number | undefined {
-    return this.xScale?.invert(x - this["margin-left"]);
-  }
-
   protected updateHighlight() {
     if (!this.highlighted) return;
     const highlights = this.highlighted
@@ -328,7 +323,8 @@ export default class NightingaleConservationTrack extends withCanvas(
     highlights.exit().remove();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
+    super.zoomRefreshed();
     if (this.getWidthWithMargins() > 0) this.refresh();
   }
 

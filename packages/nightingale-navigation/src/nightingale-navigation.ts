@@ -187,7 +187,7 @@ class NightingaleNavigation extends withManager(
     this.updateHighlight();
   }
 
-  onDimensionsChange() {
+  override onDimensionsChange() {
     if (!this.#x) return;
     this.#x.range([
       this["margin-left"] + (this["ruler-padding"] as number),
@@ -205,15 +205,15 @@ class NightingaleNavigation extends withManager(
     if (this.#viewport) this.#brushG?.call(this.#viewport);
   }
 
-  render() {
+  override render() {
     return html`<svg class="container"></svg>`;
   }
-  updated(changedProperties: Map<string, unknown>) {
+  override updated(changedProperties: Map<string, unknown>) {
     this.renderD3();
     super.updated(changedProperties);
   }
 
-  firstUpdated() {
+  override firstUpdated() {
     this.createNavRuler();
   }
   renderD3() {

@@ -60,14 +60,15 @@ const Template: Story<{
           height="50"
           length="184"
           id="navigation"
-          display-start="50"
-          display-end="130"
+          display-start=${args.displayStart}
+          display-end=${args.displayEnd}
         ></nightingale-navigation>
       </div>
       <nightingale-msa
         id="msa"
         height=${args.height}
         color-scheme=${args.colorScheme}
+        length="184"
         display-start=${args.displayStart}
         display-end=${args.displayEnd}
         label-width="100"
@@ -107,6 +108,7 @@ export const MinimalMSA = () => html`
     <nightingale-msa
       id="msa-2"
       height="200"
+      length="184"
       display-start="50"
       display-end="130"
       color-scheme="clustal2"
@@ -189,6 +191,7 @@ export const MSAWithFeatures = () => html`
     <nightingale-msa
       id="msa-2"
       height="200"
+      length="184"
       display-start="50"
       display-end="130"
       color-scheme="clustal2"

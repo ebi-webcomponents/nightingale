@@ -32,15 +32,19 @@ The D3 selection to the root `svg` element rendered in the component. The zoomin
 
 ###### `getSingleBaseWidth(): number`
 
-Uses the current scale to calculate the with of a single base on the sequence.
+Uses the current scale to calculate the width of a single base on the sequence.
 
 ###### `getXFromSeqPosition(position: number): number`
 
 Gets the coordinates in the SVG for a given position in the sequence
 
+###### `getSeqPositionFromX(position: number): number`
+
+Inverse to `getXFromSeqPosition`
+
 ###### `updateScaleDomain(): void`
 
-called this method to trigger an update on the scale. This only will have an effect if `length`, `width` or `margin-*` have been modified manually.
+Call this method to trigger an update on the scale. This only will have an effect if `length`, `width` or `margin-*` have been modified manually.
 
 ##### Mixins
 

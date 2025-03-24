@@ -71,7 +71,7 @@ class NightingaleSequence extends withManager(
   chWidth?: number;
   chHeight?: number;
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     const ticks = parseInt(this.getAttribute("numberofticks") || "", 10);
     this.numberOfTicks = Number.isInteger(ticks)
@@ -145,11 +145,11 @@ class NightingaleSequence extends withManager(
     }
   }
 
-  firstUpdated() {
+  override firstUpdated() {
     this.createSequence();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
     this.renderD3();
   }
 
@@ -185,9 +185,13 @@ class NightingaleSequence extends withManager(
         this.#axis.call(xAxis);
       }
 
+      // this.#axis.attr(
+      //   "transform",
+      //   `translate(${this["margin-left"] + half},${this["margin-top"]})`,
+      // );
       this.#axis.attr(
         "transform",
-        `translate(${this["margin-left"] + half},${this["margin-top"]})`,
+        `translate(${half},${this["margin-top"]})`,
       );
       this.#axis.select(".domain").remove();
       this.#axis.selectAll(".tick line").remove();
@@ -305,7 +309,7 @@ class NightingaleSequence extends withManager(
     highlighs.exit().remove();
   }
 
-  render() {
+  override render() {
     return html`<svg class="container"></svg>`;
   }
 }

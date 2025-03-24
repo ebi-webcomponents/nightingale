@@ -108,7 +108,7 @@ class NightingaleStructure extends withManager(
     this.updateHighlight = this.updateHighlight.bind(this);
   }
 
-  protected render() {
+  protected override render() {
     return html`<style>
         /* nightingale-structure h4 {
           display: inline;
@@ -169,7 +169,7 @@ class NightingaleStructure extends withManager(
       </div>`;
   }
 
-  protected firstUpdated() {
+  protected override firstUpdated() {
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
@@ -184,7 +184,7 @@ class NightingaleStructure extends withManager(
     }
   }
 
-  protected updated(changedProperties: Map<PropertyKey, unknown>): void {
+  protected override updated(changedProperties: Map<PropertyKey, unknown>): void {
     if (changedProperties.has("structure-id")) {
       this.selectMolecule();
     }
@@ -205,7 +205,7 @@ class NightingaleStructure extends withManager(
     }
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
     // Clean up
     this.#structureViewer?.plugin.dispose();

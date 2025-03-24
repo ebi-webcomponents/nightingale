@@ -4,12 +4,12 @@ import { LitElement } from "lit";
 export type Constructor<T = {}> = new (...args: any[]) => T;
 
 class NightingaleElement extends LitElement {
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     this.style.display = "inline-block";
     this.style.lineHeight = "0";
   }
-  createRenderRoot() {
+  override createRenderRoot() {
     return this;
   }
 }

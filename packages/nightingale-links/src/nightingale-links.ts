@@ -50,7 +50,7 @@ class NightingaleLinks extends NightingaleTrack {
   #contacts?: ContactObject;
   contactPoints?: Selection<SVGCircleElement, number, SVGGElement, unknown>;
 
-  willUpdate(changedProperties: PropertyValues<this>) {
+  override willUpdate(changedProperties: PropertyValues<this>) {
     if (
       changedProperties.has("minDistance") ||
       changedProperties.has("minProbability")
@@ -89,7 +89,7 @@ class NightingaleLinks extends NightingaleTrack {
     return this.#contacts?.selected;
   }
 
-  protected createTrack() {
+  protected override createTrack() {
     if (!this.#contacts) {
       return;
     }
@@ -137,7 +137,7 @@ class NightingaleLinks extends NightingaleTrack {
     );
   }
 
-  createFeatures(): void {
+  override createFeatures(): void {
     if (!this.#contacts) return;
 
     this.seqG?.selectAll("g.contact-group").remove();
@@ -241,7 +241,7 @@ class NightingaleLinks extends NightingaleTrack {
       ?.attr("d", (d: number[]) => this.arc(d))
       .attr("stroke-width", this.#contacts.isHold ? 3 : 1);
   }
-  refresh(): void {
+  override refresh(): void {
     if (!this.#contacts || !this.contactPoints) return;
     this.contactPoints
       .attr(

@@ -125,7 +125,7 @@ class NightingaleLinegraphTrack extends withManager(
     this.yScale = scaleLinear();
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     if (this.#data) this.createTrack();
   }
@@ -376,7 +376,7 @@ class NightingaleLinegraphTrack extends withManager(
       this.renderMarginOnGroup(this.#margins);
     }
   }
-  onDimensionsChange(): void {
+  override onDimensionsChange(): void {
     super.onDimensionsChange();
     this.#overlay?.attr("width", this.width).attr("height", this.height);
   }
@@ -438,15 +438,15 @@ class NightingaleLinegraphTrack extends withManager(
     highlighs.exit().remove();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
     this.refresh();
   }
 
-  firstUpdated() {
+  override firstUpdated() {
     this.createTrack();
   }
 
-  render() {
+  override render() {
     return html`<svg class="container"></svg>`;
   }
 }

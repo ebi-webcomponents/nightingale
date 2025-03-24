@@ -118,7 +118,7 @@ class NightingaleTrack extends withManager(
     });
   }
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     this.layoutObj = this.getLayout();
     if (this.#data) this.createTrack();
@@ -167,7 +167,7 @@ class NightingaleTrack extends withManager(
   //   this.createTrack();
   // }
 
-  attributeChangedCallback(
+  override attributeChangedCallback(
     name: string,
     oldValue: string | null,
     newValue: string | null
@@ -543,15 +543,16 @@ class NightingaleTrack extends withManager(
     highlights.exit().remove();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
+    super.zoomRefreshed();
     if (this.getWidthWithMargins() > 0) this.refresh();
   }
 
-  firstUpdated() {
+  override firstUpdated() {
     this.createTrack();
   }
 
-  render() {
+  override render() {
     return html`<svg class="container"></svg>`;
   }
 }
