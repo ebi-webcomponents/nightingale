@@ -364,6 +364,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         style="pointer-events: none;"
         width="10"
         x="0"
+        y="0"
       />
       <rect
         class="margin-right"
@@ -372,14 +373,15 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         style="pointer-events: none;"
         width="10"
         x="790"
+        y="0"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="0"
       />
       <rect
@@ -387,8 +389,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly 1`]
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="100"
       />
     </g>
@@ -769,6 +771,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         style="pointer-events: none;"
         width="10"
         x="0"
+        y="0"
       />
       <rect
         class="margin-right"
@@ -777,14 +780,15 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         style="pointer-events: none;"
         width="10"
         x="790"
+        y="0"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="0"
       />
       <rect
@@ -792,8 +796,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="100"
       />
     </g>
@@ -963,6 +967,7 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         style="pointer-events: none;"
         width="10"
         x="0"
+        y="0"
       />
       <rect
         class="margin-right"
@@ -971,14 +976,15 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         style="pointer-events: none;"
         width="10"
         x="790"
+        y="0"
       />
       <rect
         class="margin-top"
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="0"
       />
       <rect
@@ -986,8 +992,8 @@ exports[`nightingale-sequence tests it should display the sequence correctly aft
         fill="#FFFFFFDD"
         height="0"
         style="pointer-events: none;"
-        width="800"
-        x="0"
+        width="780"
+        x="10"
         y="100"
       />
     </g>
