@@ -153,8 +153,7 @@ class NightingaleOverlay extends NightingaleElement {
   };
 
   handleWheel = (event: WheelEvent) => {
-    const isVertical = Math.abs(event.deltaX) < Math.abs(event.deltaY);
-    if (!this.ticking && this.over && isVertical) {
+    if (!this.ticking && this.over && Math.abs(event.deltaX) < Math.abs(event.deltaY)) {
       window.requestAnimationFrame(() => {
         if (this.overlay)
           this.overlay.style.visibility = event.ctrlKey ? "hidden" : "visible";
