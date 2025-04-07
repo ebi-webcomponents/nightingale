@@ -100,9 +100,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 
       // Remove any old behavior
       this.zoomBehavior?.on("zoom", null);
-      this.zoomBehavior = undefined;
       this.wheelHelper?.dispose();
-      this.wheelHelper = undefined;
 
       // Add new behavior
       this.wheelHelper = new WheelHelper(this.svg);

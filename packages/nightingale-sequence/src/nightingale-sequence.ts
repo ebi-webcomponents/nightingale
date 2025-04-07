@@ -30,7 +30,6 @@ class NightingaleSequence extends withManager(
 ) {
   @property({ type: String })
   sequence?: string | null;
-  // svg?: Selection<SVGSVGElement, unknown, HTMLElement | null, unknown>;
   #seq_bg?: Selection<
     SVGGElement,
     SequenceBaseType | unknown,
@@ -185,10 +184,6 @@ class NightingaleSequence extends withManager(
         this.#axis.call(xAxis);
       }
 
-      // this.#axis.attr(
-      //   "transform",
-      //   `translate(${this["margin-left"] + half},${this["margin-top"]})`,
-      // );
       this.#axis.attr(
         "transform",
         `translate(${half},${this["margin-top"]})`,
