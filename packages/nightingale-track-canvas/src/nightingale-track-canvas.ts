@@ -1,4 +1,4 @@
-import { createEvent, customElementOnce, Refresher, withCanvas } from "@nightingale-elements/nightingale-new-core";
+import { createEvent, customElementOnce, Refresher, Stamp, withCanvas } from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack, { Feature, FeatureLocation, getColorByType, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
@@ -50,34 +50,28 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
     this.refresh();
   }
 
-  private _drawStamp: Record<string, unknown> = {};
-  /** If `_drawStamp` has become outdated since the last call to this function, update `_drawStamp` and return true.
-   * Otherwise return false. */
-  private needsRedraw(): boolean {
-    const PROPS_THAT_TRIGGER_REDRAW = [
-      "data", "canvasCtx", "width", "height", "canvasScale",
-      "length", "display-start", "display-end",
-      "margin-color", "margin-left", "margin-right", "margin-top", "margin-bottom",
-    ] satisfies (keyof this)[];
-    const stamp: typeof this._drawStamp = {};
-    for (const attr of PROPS_THAT_TRIGGER_REDRAW) {
-      stamp[attr] = this[attr];
-    }
-
-    if (objectShallowEquals(stamp, this._drawStamp)) {
-      return false;
-    } else {
-      this._drawStamp = stamp;
-      return true;
-    }
-  }
+  private readonly _drawStamp = new Stamp(() => ({
+    "data": this["data"],
+    "canvasCtx": this["canvasCtx"],
+    "width": this["width"],
+    "height": this["height"],
+    "canvasScale": this["canvasScale"],
+    "length": this["length"],
+    "display-start": this["display-start"],
+    "display-end": this["display-end"],
+    "margin-color": this["margin-color"],
+    "margin-left": this["margin-left"],
+    "margin-right": this["margin-right"],
+    "margin-top": this["margin-top"],
+    "margin-bottom": this["margin-bottom"],
+  }));
 
   /** Request canvas redraw. */
   private requestDraw = () => this._drawer.requestRefresh();
   private readonly _drawer = Refresher(() => this._draw());
   /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
   private _draw(): void {
-    if (!this.needsRedraw()) return;
+    if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     this.drawCanvasContent();
   }
@@ -290,16 +284,6 @@ function getAllFragments(data: Feature[]): ExtendedFragment[] {
 function getFragmentCollection(data: Feature[]): RangeCollection<ExtendedFragment> {
   const fragments = getAllFragments(data);
   return new RangeCollection(fragments, { start: f => f.start, stop: f => (f.end ?? f.start) + 1 });
-}
-
-function objectShallowEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
-  for (const key in a) {
-    if (a[key] !== b[key]) return false;
-  }
-  for (const key in b) {
-    if (a[key] !== b[key]) return false;
-  }
-  return true;
 }
 
 

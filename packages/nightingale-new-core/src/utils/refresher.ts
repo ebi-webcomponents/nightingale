@@ -40,3 +40,50 @@ function sleep(ms: number): Promise<void> {
         resolve();
     }, ms));
 }
+
+/** Helper for deciding when to skip potentially time-consuming actions (e.g. canvas draw).
+ * Assumes that we can skip if the "stamp" value has not changed.
+ * Example usage:
+ * ```
+ * const stamp = new Stamp(() => {
+ *     // Compute current stamp value
+ * });
+ * ...
+ * if (stamp.update().changed){
+ *     // Run stuff
+ * } else {
+ *     // Skip stuff
+ * }
+ * ``` */
+export class Stamp {
+    constructor(
+        /** Function that returns current stamp value. */
+        public readonly stampFunction: () => Record<string, unknown>,
+    ) { }
+
+    private currentStampValue: Record<string, unknown> = {};
+
+    /** Update the current stamp value (using the return value of `stampFunction`).
+     * Return `true` if the stamp value has changed since the last `update`, `false` otherwise.
+     * (Stamp value comparison is performed by shallow object comparison.) */
+    update() {
+        const oldValue = this.currentStampValue;
+        this.currentStampValue = this.stampFunction();
+        return {
+            oldValue,
+            newValue: this.currentStampValue,
+            changed: !objectShallowEquals(oldValue, this.currentStampValue),
+        };
+    }
+}
+
+/** Shallow object comparison */
+function objectShallowEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+    for (const key in a) {
+        if (a[key] !== b[key]) return false;
+    }
+    for (const key in b) {
+        if (a[key] !== b[key]) return false;
+    }
+    return true;
+}
