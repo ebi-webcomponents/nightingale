@@ -1,20 +1,20 @@
-import { customElement, property } from "lit/decorators.js";
-import "./components/Canvas/SequenceViewer";
-import "./components/Labels";
-import LabelsComponent from "./components/Labels";
-import SequenceViewerComponent from "./components/Canvas/SequenceViewer";
-import { html } from "lit";
 import NightingaleElement, {
-  withManager,
-  withPosition,
-  withMargin,
   withDimensions,
   withHighlight,
+  withManager,
+  withMargin,
+  withPosition,
   withResizable,
 } from "@nightingale-elements/nightingale-new-core";
-import conservationInlineWorkerString from "./workers/conservation-inline-worker";
-import object2style from "./utils/object2style";
+import { html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import "./components/Canvas/SequenceViewer";
+import SequenceViewerComponent from "./components/Canvas/SequenceViewer";
+import "./components/Labels";
+import LabelsComponent from "./components/Labels";
 import { Region, SequencesMSA } from "./types/types";
+import object2style from "./utils/object2style";
+import conservationInlineWorkerString from "./workers/conservation-inline-worker";
 
 const DEAFULT_TILE_HEIGHT = 20;
 const DEAFULT_COLOR_SCHEME = "clustal2";
@@ -102,7 +102,7 @@ class NightingaleMSA extends withManager(
     return this.sequenceViewer?.getColorMap();
   }
 
-  render() {
+  override render() {
     const containerStyle = {
       display: "flex",
       "align-items": "stretch",
@@ -133,13 +133,13 @@ class NightingaleMSA extends withManager(
         : ""}
       <div style=${object2style(containerStyle)}>
         ${labelWidth > 0
-          ? html`<msa-labels
+        ? html`<msa-labels
               width=${labelWidth}
               height=${this.height}
               tile-height=${tileHeight}
               active-label=${this.activeLabel || ""}
             ></msa-labels>`
-          : ""}
+        : ""}
 
         <div style=${object2style(leftMarginStyle)}></div>
         <msa-sequence-viewer
@@ -159,7 +159,7 @@ class NightingaleMSA extends withManager(
         : ""}
     `;
   }
-  updated() {
+  override updated() {
     if (!this.sequenceViewer?.sequences) return;
     this.sequenceViewer.highlight = this.highlightedRegion.segments.map(
       ({ start, end }) =>
@@ -177,7 +177,7 @@ class NightingaleMSA extends withManager(
         }) as Region,
     );
   }
-  protected firstUpdated() {
+  protected override firstUpdated() {
     this.sequenceViewer = this.renderRoot.querySelector("msa-sequence-viewer");
     this.labelPanel = this.renderRoot.querySelector("msa-labels");
 

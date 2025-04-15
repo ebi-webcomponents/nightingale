@@ -8,6 +8,7 @@
     "declarationMap": true,
     "lib": ["es2019", "dom"],
     "strict": true,
+    "noImplicitOverride": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "allowJs": true, // Required by ts-jest to transform lit

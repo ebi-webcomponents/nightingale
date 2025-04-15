@@ -63,7 +63,7 @@ class NightingaleColoredSequence extends NightingaleSequence {
     range: string[];
   } = defaultScale;
 
-  protected createSequence() {
+  protected override createSequence() {
     super.createSequence();
 
     this.#uniqueID = Math.random().toString(36).substring(7);
@@ -108,7 +108,7 @@ class NightingaleColoredSequence extends NightingaleSequence {
     return scale;
   }
 
-  renderD3() {
+  override renderD3() {
     if (this.seq_g) {
       this.svg?.attr("width", this.width).attr("height", this.height);
 

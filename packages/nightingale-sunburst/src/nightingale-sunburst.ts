@@ -192,7 +192,7 @@ class NightingaleSunburst extends LitElement {
     return this.colorFn()(this.topOptions.indexOf(name?.toLowerCase() || null));
   }
 
-  updated(changedProperties: PropertyValues<this>) {
+  override updated(changedProperties: PropertyValues<this>) {
     if (
       changedProperties.has("side") ||
       changedProperties.has("max-depth") ||
@@ -384,11 +384,11 @@ class NightingaleSunburst extends LitElement {
     }
   }
 
-  createRenderRoot() {
+  override createRenderRoot() {
     return this;
   }
 
-  firstUpdated() {
+  override firstUpdated() {
     this.getElementsByTagName("canvas")?.[0].addEventListener(
       "click",
       this.handleClick,
@@ -399,7 +399,7 @@ class NightingaleSunburst extends LitElement {
     );
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
     this.getElementsByTagName("canvas")?.[0].removeEventListener(
       "click",
@@ -411,7 +411,7 @@ class NightingaleSunburst extends LitElement {
     );
   }
 
-  render() {
+  override render() {
     return html` <canvas
       width="${this.side as number}px"
       height="${this.side as number}px"

@@ -103,7 +103,7 @@ class NightingaleSaver extends NightingaleElement {
       });
   }
 
-  render() {
+  override render() {
     /* The component only supports button as child and it has to be the first child element. If not, an error is thrown. By default,
         a save button is shown if nothing is specified. */
     let button;

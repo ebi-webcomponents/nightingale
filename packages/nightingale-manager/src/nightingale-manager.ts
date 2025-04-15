@@ -46,7 +46,7 @@ class NightingaleManager extends NightingaleElement {
   @state()
   propertyValues = new Map<string, string>();
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     this.addEventListener("change", this.changeListener as EventListener);
     this.style.display = "block"; // check wherever we have a manager

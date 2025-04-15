@@ -1,4 +1,4 @@
-import { createEvent, customElementOnce, Refresher, withCanvas } from "@nightingale-elements/nightingale-new-core";
+import { createEvent, customElementOnce, Refresher, Stamp, withCanvas } from "@nightingale-elements/nightingale-new-core";
 import NightingaleTrack, { Feature, FeatureLocation, getColorByType, Shapes } from "@nightingale-elements/nightingale-track";
 import { BaseType, select, Selection } from "d3";
 import { html } from "lit";
@@ -50,30 +50,28 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
     this.refresh();
   }
 
-
-  private _drawStamp: { data?: Feature[], canvas?: CanvasRenderingContext2D, extent?: string } = {};
-  /** If `_drawStamp` has become outdated since the last call to this function, update `_drawStamp` and return true.
-   * Otherwise return false. */
-  private needsRedraw(): boolean {
-    const stamp = {
-      data: this.data,
-      canvas: this.canvasCtx,
-      extent: `${this.width}x${this.height}@${this.canvasScale}/${this.getSeqPositionFromX(0)}:${this.getSeqPositionFromX(this.width)}`,
-    };
-    if (stamp.data === this._drawStamp.data && stamp.canvas === this._drawStamp.canvas && stamp.extent === this._drawStamp.extent) {
-      return false;
-    } else {
-      this._drawStamp = stamp;
-      return true;
-    }
-  }
+  private readonly _drawStamp = new Stamp(() => ({
+    "data": this["data"],
+    "canvasCtx": this["canvasCtx"],
+    "width": this["width"],
+    "height": this["height"],
+    "canvasScale": this["canvasScale"],
+    "length": this["length"],
+    "display-start": this["display-start"],
+    "display-end": this["display-end"],
+    "margin-color": this["margin-color"],
+    "margin-left": this["margin-left"],
+    "margin-right": this["margin-right"],
+    "margin-top": this["margin-top"],
+    "margin-bottom": this["margin-bottom"],
+  }));
 
   /** Request canvas redraw. */
   private requestDraw = () => this._drawer.requestRefresh();
   private readonly _drawer = Refresher(() => this._draw());
   /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
   private _draw(): void {
-    if (!this.needsRedraw()) return;
+    if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     this.drawCanvasContent();
   }
@@ -157,11 +155,6 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
       console.warn(`NightingaleTrackCanvas: Drawing shape "${shape}" is not implemented. Will draw question marks instead ¯\\_(ツ)_/¯`);
       this._unknownShapeWarningPrinted.add(shape);
     }
-  }
-
-  /** Inverse of `this.getXFromSeqPosition`. */
-  getSeqPositionFromX(x: number): number | undefined {
-    return this.xScale?.invert(x - this["margin-left"]);
   }
 
   private getFragmentAt(svgX: number, svgY: number): ExtendedFragment | undefined {

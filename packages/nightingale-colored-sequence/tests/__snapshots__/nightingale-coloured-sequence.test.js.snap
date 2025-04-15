@@ -137,7 +137,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         fill="rgb(106, 92, 149)"
         height="40"
         width="52"
-        x="582"
+        x="581.9999999999999"
       />
       <rect
         class="base_bg feature"
@@ -155,7 +155,7 @@ exports[`nightingale-colored-sequence tests it should display the colored sequen
         fill="rgb(96, 83, 159)"
         height="40"
         width="52"
-        x="686"
+        x="686.0000000000001"
       />
       <rect
         class="base_bg feature"

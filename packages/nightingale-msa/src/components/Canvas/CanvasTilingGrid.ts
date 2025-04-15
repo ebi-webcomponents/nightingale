@@ -75,17 +75,19 @@ class CanvasTilingGridComponent {
           });
         },
       });
-      this.props.ctx.drawImage(
-        canvasTile,
-        0,
-        0,
-        tileWidth,
-        tileHeight,
-        xPos,
-        yPos,
-        tileWidth,
-        tileHeight,
-      );
+      if (canvasTile.width > 0 && canvasTile.height > 0) {
+        this.props.ctx.drawImage(
+          canvasTile,
+          0,
+          0,
+          tileWidth,
+          tileHeight,
+          xPos,
+          yPos,
+          tileWidth,
+          tileHeight,
+        );
+      }
     }
   }
 

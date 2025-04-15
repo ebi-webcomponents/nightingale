@@ -1,247 +1,231 @@
-import { property } from "lit/decorators.js";
 import {
-  scaleLinear,
   zoom as d3zoom,
-  zoomIdentity,
-  ScaleLinear,
-  ZoomBehavior,
   D3ZoomEvent,
+  scaleLinear,
+  ScaleLinear,
   Selection,
+  ZoomBehavior,
+  ZoomTransform,
 } from "d3";
+import { property } from "lit/decorators.js";
 
 import NightingaleBaseElement, {
   Constructor,
 } from "../../nightingale-base-element";
 import withDimensions, { WithDimensionsInterface } from "../withDimensions";
-import withPosition, { withPositionInterface } from "../withPosition";
 import withMargin, { withMarginInterface } from "../withMargin";
+import withPosition, { withPositionInterface } from "../withPosition";
 import withResizable, { WithResizableInterface } from "../withResizable";
+import { WheelHelper } from "./wheel-helper";
 
+
+const MIN_ZOOMED_COLUMNS = 2;
+
+const ZOOM_SENSITIVITY = 1;
+const PAN_SENSITIVITY = 0.6;
 
 type SVGSelection = Selection<SVGSVGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
-export interface WithZoomInterface
-  extends WithDimensionsInterface,
-  withPositionInterface,
-  withMarginInterface,
-  WithResizableInterface {
+export interface WithZoomInterface extends WithDimensionsInterface, withPositionInterface, withMarginInterface, WithResizableInterface {
+  /** Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`. */
   xScale?: ScaleLinear<number, number>;
+  /** Target for zooming events */
   svg?: SVGSelection;
-  updateScaleDomain(): void;
   getSingleBaseWidth(): number;
+  /** Compute X coordinate within this HTML element from sequence position */
   getXFromSeqPosition(position: number): number;
+  /** Compute sequence position from X coordinate within this HTML element */
+  getSeqPositionFromX(x: number): number | undefined;
+  updateScaleDomain(): void;
   applyZoomTranslation(): void;
+  /** Method to be called whenever zoom changes, subclasses can override to perform their stuff */
+  zoomRefreshed(): void;
 }
+
 const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
+
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
   superClass: T,
 ) => {
-  class WithZoom extends withMargin(
-    withPosition(withResizable(withDimensions(superClass))),
-  ) implements WithZoomInterface {
-    _applyZoomTranslation: () => void;
-    /**
-     * Base scale without any transformations, only updated in `updateScaleDomain`
-     */
-    private originXScale?: ScaleLinear<number, number>;
-    /**
-     * Temporary scale. It contains the transformations caused by zoom events, but not yet reflected in `display-start` and `display-end`.
-     */
-    private tmpXScale?: ScaleLinear<number, number>;
-    /**
-     * Current scale, the one used to calculate any positions. Calculated based on `display-start` and `display-end`.
-     */
+  class WithZoom extends withMargin(withPosition(withResizable(withDimensions(superClass)))) implements WithZoomInterface {
     xScale?: ScaleLinear<number, number>;
-    _zoom?: ZoomBehavior<SVGSVGElement, unknown>;
-    _svg?: SVGSelection;
-    dontDispatch?: boolean;
+
+    private zoomBehavior?: ZoomBehavior<SVGSVGElement, unknown>;
+    private _svg?: SVGSelection;
+    private dontDispatch = false;
+    private wheelHelper?: WheelHelper;
 
     @property({ type: Boolean })
     "use-ctrl-to-zoom" = false;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(...args: any[]) {
-      super(...args);
-
-      this.updateScaleDomain = this.updateScaleDomain.bind(this);
-      this._initZoom = this._initZoom.bind(this);
-      this.zoomed = this.zoomed.bind(this);
-      this._applyZoomTranslation = this.applyZoomTranslation.bind(this);
-      let aboutToApply = false;
-      // Postponing the zoom translation to the next frame.
-      // This helps in case several attributes are changed almost at the same time,
-      // in this way, only one refresh will be called.
-      this.applyZoomTranslation = () => {
-        if (aboutToApply) return;
-        aboutToApply = true;
-        requestAnimationFrame(() => {
-          aboutToApply = false;
-          this._applyZoomTranslation();
-        });
-      };
-      // this.scrollFilter = new ScrollFilter(this);
-      // this.wheelListener = (event) => this.scrollFilter.wheel(event);
-    }
-
-    connectedCallback() {
-      this.updateScaleDomain();
-      this._initZoom();
-      // if (this.hasAttribute("filter-scroll")) {
-      //   document.addEventListener("wheel", this.wheelListener, { capture: true });
-      // }
-      super.connectedCallback();
-      this.onDimensionsChange();
-    }
-
-    disconnectedCallback() {
-      // document.removeEventListener("wheel", this.wheelListener);
-      super.disconnectedCallback();
-    }
-
-    get zoom() {
-      return this._zoom;
-    }
-
-    set svg(svg: SVGSelection) {
-      if (!svg || !this._zoom) return;
-      this._svg = svg;
-      svg.call(this._zoom).on("dblclick.zoom", null);
-      this.applyZoomTranslation();
-    }
-
     get svg(): SVGSelection | undefined {
       return this._svg;
     }
-
-    updateScaleDomain() {
-      this.originXScale = scaleLinear()
-        // The max width should match the start of the n+1 base
-        .domain([1, (this.length || 0) + 1])
-        .range([0, this.getWidthWithMargins()]);
-      this.tmpXScale = this.originXScale.copy();
-      this.xScale ??= this.originXScale.copy(); // Do not force set `xScale`, will be updated in `zoomed`
-      this.zoom?.translateExtent([
-        [0, 0],
-        [this.getWidthWithMargins(), 0],
-      ]);
+    set svg(svg: SVGSelection) {
+      this._svg = svg;
+      this.addZoomBehavior();
     }
 
-    _initZoom() {
-      this._zoom = d3zoom<SVGSVGElement, unknown>()
-        .scaleExtent([1, Infinity])
-        .translateExtent([
-          [0, 0],
-          [this.getWidthWithMargins(), 0],
-        ])
-        .extent([
-          [0, 0],
-          [this.getWidthWithMargins(), 0],
-        ])
-        .filter((event) => {
-          if (event?.type === "wheel") {
-            return !this["use-ctrl-to-zoom"] || event.ctrlKey;
-          }
-          return true;
-          // TODO: deal with event filters
-          //   if (this.hasAttribute("scroll-filter")) {
-          //     const scrollableAttribute = this.getAttribute("scrollable");
-          //     if (scrollableAttribute) return scrollableAttribute === "true";
-          //   }
-        })
-        .on("zoom", this.zoomed);
-    }
-
-    attributeChangedCallback(
-      name: string,
-      oldValue: string | null,
-      newValue: string | null,
-    ): void {
+    override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
       super.attributeChangedCallback(name, oldValue, newValue);
-
       const newV = newValue === "null" ? null : newValue;
       if (oldValue !== newV) {
         if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
-          this.updateScaleDomain();
+          this.adjustZoomConstraints();
+          this.adjustZoom();
         }
-        // One of the observable attributes changed, so the scale needs to be redefined.
-        this.applyZoomTranslation();
-      }
-    }
-
-    zoomed(d3Event: D3ZoomEvent<SVGSVGElement, unknown>) {
-      // Redefines the xScale using the original scale and transform it with the captured event data.
-      if (this.originXScale)
-        this.tmpXScale = d3Event.transform.rescaleX(this.originXScale);
-
-      // New positions based in the updated scale
-      const [start, end] = this?.tmpXScale?.domain() || [0, 0];
-
-      if (this.tmpXScale) {
-        if (this.dontDispatch) {
-          this.xScale = this.tmpXScale;
-        } else {
-          this.dispatchEvent(
-            // Dispatches the event so the manager can propagate this changes to other  components
-            new CustomEvent("change", {
-              detail: {
-                "display-start": Math.max(1, start),
-                "display-end": Math.min(
-                  this.length || 0,
-                  Math.max(end - 1, start + 1), // To make sure it never zooms in deeper than showing 2 bases covering the full width
-                ),
-              },
-              bubbles: true,
-              cancelable: true,
-            }),
-          );
+        if (name === "display-start" || name === "display-end") {
+          this.adjustZoom();
         }
+        if (name == "use-ctrl-to-zoom" && this.wheelHelper) {
+          this.wheelHelper.scrollRequiresCtrl = this["use-ctrl-to-zoom"];
+        }
+        this.requestZoomRefreshed();
       }
     }
 
-    applyZoomTranslation() {
-      if (!this.svg || !this.originXScale) return;
-      // Calculating the scale factor based in the current start/end coordinates and the length of the sequence.
-      const k = Math.max(
-        1,
-        // +1 because the displayend base should be included
-        (this.length || 0) /
-        (1 + (this["display-end"] || 0) - (this["display-start"] || 0)),
-      );
-      // The deltaX gets calculated using the position of the first base to display in original scale
-      const dx = -this.originXScale(this["display-start"] || 0);
-      this.dontDispatch = true; // This is to avoid infinite loops
-      if (this.zoom) {
-        this.svg.call(
-          // We trigger a zoom action
-          this.zoom.transform,
-          zoomIdentity // Identity transformation
-            .scale(k) // Scaled by our scaled factor
-            .translate(dx, 0), // Translated by the delta
-        );
-      }
-      this.dontDispatch = false;
-      this.zoomRefreshed();
-    }
-    zoomRefreshed() {
-      super.render();
-    }
-
-    render() {
-      this.applyZoomTranslation();
-      return super.render();
-    }
-    public override onDimensionsChange() {
+    override onDimensionsChange() {
       super.onDimensionsChange();
       this.svg?.attr("width", this.width);
       this.svg?.attr("height", this.height);
-      this.updateScaleDomain();
-      this.applyZoomTranslation();
+      this.adjustZoomConstraints();
+      this.adjustZoom();
+      this.requestZoomRefreshed();
+    }
+
+    /** Initialize zoom behavior (also remove any existing zoom behavior) */
+    private addZoomBehavior(): void {
+      if (!this.svg) return;
+
+      // Remove any old behavior
+      this.zoomBehavior?.on("zoom", null);
+      this.wheelHelper?.dispose();
+
+      // Add new behavior
+      this.wheelHelper = new WheelHelper(this.svg);
+      this.wheelHelper.scrollRequiresCtrl = this["use-ctrl-to-zoom"];
+      this.wheelHelper.handlePan = shift => {
+        if (this.svg) this.zoomBehavior?.translateBy(this.svg, PAN_SENSITIVITY * shift / this.getSingleBaseWidth(), 0);
+      }
+
+      this.zoomBehavior = d3zoom();
+      this.zoomBehavior.filter(e => (e instanceof WheelEvent) ? (this.wheelHelper?.wheelAction(e).kind === "zoom") : true);
+      this.zoomBehavior.wheelDelta(e => {
+        const action = this.wheelHelper?.wheelAction(e);
+        return action?.kind === "zoom" ? ZOOM_SENSITIVITY * action.delta : 0;
+      });
+      this.zoomBehavior.on("zoom", e => this.handleZoom(e));
+      this.svg.call(this.zoomBehavior);
+
+      this.adjustZoomConstraints();
+      this.adjustZoom();
+      this.requestZoomRefreshed();
+    }
+
+    /** Handle zoom event coming from the D3 zoom behavior */
+    private handleZoom(event: D3ZoomEvent<SVGSVGElement, unknown>) {
+      // Only dispatch event, scale will be updated as response to attribute change
+      if (!this.dontDispatch) {
+        const [viewportMin, viewportMax] = this.viewport();
+        this.dispatchDisplayRange(event.transform.invertX(viewportMin), event.transform.invertX(viewportMax) - 1); // subtracting 1 to convert to end-inclusive display-end
+      }
+    }
+
+    /** Dispatch a "change" event with new values for "display-start" and "display-end" attributes
+     * so the manager can propagate these changes to other components. */
+    private dispatchDisplayRange(displayStart: number, displayEnd: number): void {
+      // Re-clamping the values here because just D3 zoom constraints can produce values like 0.99999996
+      displayStart = Math.max(displayStart, 1);
+      displayEnd = Math.min(displayEnd, (this.length ?? 1));
+
+      if (displayStart === this["display-start"] && displayEnd === this["display-end"]) return;
+
+      this.dispatchEvent(
+        new CustomEvent("change", {
+          detail: { "display-start": displayStart, "display-end": displayEnd },
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    }
+
+    /** Adjust zoom constraints based on current viewport and sequence length
+     * (limit maximum zoom in/out and translation to avoid getting out of the sequence range) */
+    private adjustZoomConstraints(): void {
+      if (!this.zoomBehavior) return;
+
+      const length = this.length ?? 1;
+      const [viewportMin, viewportMax] = this.viewport();
+      const viewportWidth = viewportMax - viewportMin;
+      const minZoom = viewportWidth / length; // zoom-out
+      const maxZoom = Math.max(viewportWidth / MIN_ZOOMED_COLUMNS, minZoom); // zoom-in
+
+      this.zoomBehavior.translateExtent([[1, 0], [length + 1, 0]]);
+      this.zoomBehavior.scaleExtent([minZoom, maxZoom]);
+      this.zoomBehavior.extent([[viewportMin, 0], [viewportMax, 0]]);
+    }
+
+    /** Synchronize `xScale` and state of the zoom behavior with the "display-start" and "display-end" attributes */
+    private adjustZoom(): void {
+      if (!this.svg) return;
+      if (!this.zoomBehavior) return;
+
+      const displayRange = this.displayRange();
+      const viewport = this.viewport();
+      this.xScale = scaleLinear(displayRange, viewport);
+
+      this.dontDispatch = true;
+      this.zoomBehavior.transform(this.svg, getZoomTransform(displayRange, viewport));
+      this.dontDispatch = false;
+    }
+
+    /** Apply `zoomRefreshed` in the next animation frame.
+     * Postponing rendering to the next frame
+     * helps in case several attributes are changed almost at the same time.
+     * In this way, only one refresh will be called.*/
+    private requestZoomRefreshed = () => {
+      if (this._zoomRefreshedRequested) return;
+      this._zoomRefreshedRequested = true;
+      requestAnimationFrame(() => {
+        this._zoomRefreshedRequested = false;
+        this.zoomRefreshed();
+      });
+    }
+    private _zoomRefreshedRequested = false;
+
+    private viewport(): [number, number] {
+      return [this["margin-left"], this["width"] - this["margin-right"]];
+    }
+
+    private displayRange(): [number, number] {
+      const displayStart = this["display-start"] ?? 1;
+      const displayEnd = (this["display-end"] === undefined || this["display-end"] === -1) ? (this.length ?? 1) : this["display-end"];
+      return [displayStart, displayEnd + 1];
+    }
+
+    updateScaleDomain() {
+      this.adjustZoomConstraints();
+    }
+
+    /** Synchronize state of the zoom behavior with the display-start, display-end attributes
+     * and call `zoomRefreshed` method in the next animation frame. */
+    applyZoomTranslation() {
+      this.adjustZoom();
+      this.requestZoomRefreshed();
+    }
+
+    zoomRefreshed() {
+      // to be overridden by subclasses
     }
 
     getXFromSeqPosition(position: number) {
       if (!this.xScale) return -1;
-      return this["margin-left"] + this.xScale(position);
+      return this.xScale(position);
+    }
+
+    getSeqPositionFromX(x: number): number | undefined {
+      return this.xScale?.invert(x);
     }
 
     getSingleBaseWidth() {
@@ -253,3 +237,12 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
 };
 
 export default withZoom;
+
+
+/** Convert display range (sequence numbers, end exclusive) and viewport (canvas space) to D3 zoom transform */
+function getZoomTransform(displayRange: [number, number], viewport: [number, number]): ZoomTransform {
+  const k = (viewport[1] - viewport[0]) / (displayRange[1] - displayRange[0]);
+  const x = viewport[0] - k * displayRange[0];
+  const y = 0;
+  return new ZoomTransform(k, x, y);
+}

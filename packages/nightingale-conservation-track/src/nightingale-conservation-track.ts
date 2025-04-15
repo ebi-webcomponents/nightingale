@@ -3,6 +3,7 @@ import NightingaleElement, {
   createEvent,
   customElementOnce,
   Refresher,
+  Stamp,
   withCanvas,
   withDimensions,
   withHighlight,
@@ -128,7 +129,7 @@ export default class NightingaleConservationTrack extends withCanvas(
   protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
     if (this.data) this.createTrack();
   }
@@ -151,7 +152,7 @@ export default class NightingaleConservationTrack extends withCanvas(
     this.createTrack();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
     if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
       // Calling `this.data` setter to recompute `this.positions` and run `this.createTrack()`
@@ -182,13 +183,13 @@ export default class NightingaleConservationTrack extends withCanvas(
     this.updateHighlight();
   }
 
-  private _drawStamp: Record<string, unknown> = {};
-  /** If `_drawStamp` has become outdated since the last call to this function, update `_drawStamp` and return true. Otherwise return false. */
-  private needsRedraw(): boolean {
-    const stamp: typeof this._drawStamp = {
-      data: this.data,
-      canvas: this.canvasCtx,
-      extent: `${this.width}x${this.height}@${this.canvasScale}/${this.getSeqPositionFromX(0)}:${this.getSeqPositionFromX(this.width)}`,
+  private readonly _drawStamp = new Stamp(() => {
+    const stamp: Record<string, unknown> = {
+      "data": this["data"],
+      "canvasCtx": this["canvasCtx"],
+      "canvasScale": this["canvasScale"],
+      "display-start": this["display-start"],
+      "display-end": this["display-end"],
     };
     for (const attr of ATTRIBUTES_THAT_TRIGGER_DATA_RESET) {
       stamp[attr] = this.getAttribute(attr);
@@ -196,21 +197,15 @@ export default class NightingaleConservationTrack extends withCanvas(
     for (const attr of ATTRIBUTES_THAT_TRIGGER_REFRESH) {
       stamp[attr] = this.getAttribute(attr);
     }
-
-    if (objectShallowEquals(stamp, this._drawStamp)) {
-      return false;
-    } else {
-      this._drawStamp = stamp;
-      return true;
-    }
-  }
+    return stamp;
+  });
 
   /** Request canvas redraw. */
   private requestDraw = () => this._drawer.requestRefresh();
   private readonly _drawer = Refresher(() => this._draw());
   /** Do not call directly! Call `requestDraw` instead to avoid browser freezing. */
   private _draw(): void {
-    if (!this.needsRedraw()) return;
+    if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     this.clearCanvas();
     this.drawColumns();
@@ -304,11 +299,6 @@ export default class NightingaleConservationTrack extends withCanvas(
     }
   }
 
-  /** Inverse of `this.getXFromSeqPosition`. */
-  getSeqPositionFromX(x: number): number | undefined {
-    return this.xScale?.invert(x - this["margin-left"]);
-  }
-
   protected updateHighlight() {
     if (!this.highlighted) return;
     const highlights = this.highlighted
@@ -328,7 +318,8 @@ export default class NightingaleConservationTrack extends withCanvas(
     highlights.exit().remove();
   }
 
-  zoomRefreshed() {
+  override zoomRefreshed() {
+    super.zoomRefreshed();
     if (this.getWidthWithMargins() > 0) this.refresh();
   }
 
@@ -488,14 +479,4 @@ function normalizeOrder(present: string[], order: string[]) {
   const ordered = order.filter(s => presentSet.has(s));
   const rest = present.filter(s => !orderSet.has(s));
   return ordered.concat(rest);
-}
-
-function objectShallowEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
-  for (const key in a) {
-    if (a[key] !== b[key]) return false;
-  }
-  for (const key in b) {
-    if (a[key] !== b[key]) return false;
-  }
-  return true;
 }
