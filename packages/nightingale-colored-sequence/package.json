@@ -16,6 +16,7 @@
   },
   "author": "Gustavo Salazar <gsalazar@ebi.ac.uk>",
   "license": "ISC",
+  "sideEffects": false,
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^5.4.1",
     "@nightingale-elements/nightingale-sequence": "^5.4.1",

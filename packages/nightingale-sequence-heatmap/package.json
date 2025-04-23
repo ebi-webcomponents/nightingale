@@ -18,6 +18,7 @@
     "dist",
     "src"
   ],
+  "sideEffects": false,
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^5.4.0",
     "d3": "7.9.0",
