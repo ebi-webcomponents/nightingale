@@ -32,6 +32,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": false,
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^5.4.1",
     "@nightingale-elements/nightingale-track": "^5.5.0",
