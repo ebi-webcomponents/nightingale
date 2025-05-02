@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-track-canvas",
-  "version": "5.5.0",
+  "version": "5.5.1-beta.0",
   "description": "Basic track type of the viewer, implemented via HTML canvas.",
   "files": [
     "dist",
@@ -34,8 +34,8 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1",
-    "@nightingale-elements/nightingale-track": "^5.5.0",
+    "@nightingale-elements/nightingale-new-core": "^5.5.1-beta.0",
+    "@nightingale-elements/nightingale-track": "^5.5.1-beta.0",
     "d3": "7.9.0"
   }
 }

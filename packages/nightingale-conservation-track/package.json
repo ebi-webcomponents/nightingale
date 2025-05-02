@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-conservation-track",
-  "version": "5.4.0",
+  "version": "5.5.1-beta.0",
   "description": "Track for showing residue probabilities on individual sequence positions.",
   "files": [
     "dist",
@@ -34,7 +34,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.0",
+    "@nightingale-elements/nightingale-new-core": "^5.5.1-beta.0",
     "d3": "7.9.0"
   }
 }

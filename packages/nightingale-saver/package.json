@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-saver",
-  "version": "5.4.1",
+  "version": "5.5.1-beta.0",
   "description": "Saver component for Nightingale components",
   "files": [
     "dist",
@@ -35,7 +35,7 @@
   "license": "MIT",
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1",
+    "@nightingale-elements/nightingale-new-core": "^5.5.1-beta.0",
     "rasterizehtml": "1.3.1"
   }
 }

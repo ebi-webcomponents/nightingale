@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-scrollbox",
-  "version": "5.4.1",
+  "version": "5.5.1-beta.0",
   "description": "Component for smart rendering of scrollboxes in Nightingale",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -34,6 +34,6 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1"
+    "@nightingale-elements/nightingale-new-core": "^5.5.1-beta.0"
   }
 }
