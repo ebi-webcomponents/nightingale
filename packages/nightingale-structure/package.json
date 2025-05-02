@@ -7,7 +7,7 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "5.4.1",
+  "version": "5.6.0",
   "scripts": {
     "build": "rollup --config ../../rollup.config.mjs"
   },
@@ -36,7 +36,7 @@
   "homepage": "https://ebi-webcomponents.github.io/nightingale/",
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1",
+    "@nightingale-elements/nightingale-new-core": "^5.6.0",
     "d3": "7.9.0",
     "molstar": "3.44.0"
   }

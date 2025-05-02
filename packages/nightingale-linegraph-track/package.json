@@ -1,7 +1,7 @@
 {
   "name": "@nightingale-elements/nightingale-linegraph-track",
   "description": "Nightingale Line Graph",
-  "version": "5.4.1",
+  "version": "5.6.0",
   "files": [
     "dist",
     "src"
@@ -33,7 +33,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.4.1",
+    "@nightingale-elements/nightingale-new-core": "^5.6.0",
     "d3": "7.9.0"
   }
 }
