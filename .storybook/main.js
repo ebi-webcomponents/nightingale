@@ -23,8 +23,13 @@ module.exports = {
       ...config.resolve.alias,
       "@nightingale-elements/nightingale-new-core": path.resolve(
         __dirname,
-        "../packages/nightingale-new-core/src/index.ts",
+        "../packages/nightingale-new-core/src/index.ts"
       ),
+    };
+    config.optimization = {
+      ...config.optimization,
+      usedExports: false,
+      sideEffects: false,
     };
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
