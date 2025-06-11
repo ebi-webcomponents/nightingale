@@ -143,10 +143,21 @@ class NightingaleStructure extends withManager(
           font-weight: bold;
         }
 
+        .structure-viewer-message-content {
+          white-space: pre-wrap;
+          line-height: normal;
+        }
+
         .structure-viewer-messages > button {
-          font-size: 50%;
+          font-size: 75%;
           font-weight: bold;
-          margin-inline-start: 1ch;
+          position: absolute;
+          top: -2px;
+          right: 0px;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          padding: 0px 3px;
         }
       </style>
       <div id="molstar-parent" class="structure-viewer-container">
@@ -156,7 +167,11 @@ class NightingaleStructure extends withManager(
         ></canvas>
         ${this.message
           ? html`<div class="structure-viewer-messages">
-              <span>${this.message?.title}:</span> ${this.message?.content}
+              <span>${this.message?.title}</span>:
+              <span
+                class="structure-viewer-message-content"
+                .innerHTML=${this.message?.content}
+              ></span>
               <button
                 type="button"
                 title="close message"
@@ -173,14 +188,16 @@ class NightingaleStructure extends withManager(
     const structureViewerDiv =
       this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
     if (structureViewerDiv) {
-      getStructureViewer(structureViewerDiv, this.updateHighlight, this["color-theme"]).then(
-        (structureViewer) => {
-          this.#structureViewer = structureViewer;
-          // Remove initial "#" and possible trailing opacity value
-          const color = this["highlight-color"].substring(1, 7);
-          this.#structureViewer.changeHighlightColor(parseInt(color, 16));
-        }
-      );
+      getStructureViewer(
+        structureViewerDiv,
+        this.updateHighlight,
+        this["color-theme"]
+      ).then((structureViewer) => {
+        this.#structureViewer = structureViewer;
+        // Remove initial "#" and possible trailing opacity value
+        const color = this["highlight-color"].substring(1, 7);
+        this.#structureViewer.changeHighlightColor(parseInt(color, 16));
+      });
     }
   }
 
@@ -341,6 +358,19 @@ class NightingaleStructure extends withManager(
       .map((residue) => `${residue.start}:${residue.end}`)
       .join(",");
     this.highlight = highlight;
+
+    const tooltip = translated
+      .map((residue, index) => {
+        const structurePosition = sequencePositions[index].position;
+        const proteinPosition =
+          residue.start === residue.end
+            ? residue.start
+            : `${residue.start}:${residue.end}`;
+        return `Chain: ${residue.chain}, Position: ${structurePosition} <br /><b>${this["protein-accession"]}</b>: ${proteinPosition}`;
+      })
+      .join("");
+
+    this.showMessage(`${this["structure-id"]}`, tooltip);
     const event = new CustomEvent("change", {
       detail: {
         highlight,
@@ -388,7 +418,6 @@ class NightingaleStructure extends withManager(
       return;
     }
     this.#structureViewer?.highlight(translatedPositions);
-    this.clearMessage();
   }
 }
 
