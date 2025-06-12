@@ -366,7 +366,7 @@ class NightingaleStructure extends withManager(
           residue.start === residue.end
             ? residue.start
             : `${residue.start}:${residue.end}`;
-        return `Chain: ${residue.chain}, Position: ${structurePosition} <br /><b>${this["protein-accession"]}</b>: ${proteinPosition}`;
+        return `<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span>: ${residue.chain}, <span data-article-id="structure_section#description-of-structure-table-contents">Position</span>: ${structurePosition} <br /><b>${this["protein-accession"]}</b>: ${proteinPosition}`;
       })
       .join("");
 
