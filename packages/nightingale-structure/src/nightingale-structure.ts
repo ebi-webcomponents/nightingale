@@ -360,13 +360,12 @@ class NightingaleStructure extends withManager(
     this.highlight = highlight;
 
     const tooltip = translated
-      .map((residue, index) => {
-        const structurePosition = sequencePositions[index].position;
+      .map((residue) => {
         const proteinPosition =
           residue.start === residue.end
             ? residue.start
             : `${residue.start}:${residue.end}`;
-        return `<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span>: ${residue.chain}, <span data-article-id="structure_section#description-of-structure-table-contents">Position</span>: ${structurePosition} <br /><b>${this["protein-accession"]}</b>: ${proteinPosition}`;
+        return `<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span> ${residue.chain}<br /><b>${this["protein-accession"]}</b>: ${proteinPosition}`;
       })
       .join("");
 
