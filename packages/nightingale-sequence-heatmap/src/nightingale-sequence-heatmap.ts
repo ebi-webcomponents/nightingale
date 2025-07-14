@@ -1,7 +1,7 @@
 import { PropertyValueMap, html } from "lit";
 import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { scaleSequential, Selection as d3Selection, select } from "d3";
+import { scaleSequential, Selection as d3Selection, select, EnterElement } from "d3";
 import { Heatmap } from "heatmap-component";
 import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
 import {
@@ -22,6 +22,8 @@ import NightingaleElement, {
 import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/utils/Region";
 
 import heatmapStyleSheet from "./heatmap-component.css";
+import { State } from "heatmap-component/lib/heatmap-component/state";
+import { MarkerExtensionParams } from "heatmap-component/lib/heatmap-component/extensions/marker";
 
 
 const ALPHAMISSENSE_BLUE = "#3d5493";
@@ -276,7 +278,15 @@ class NightingaleSequenceHeatmap extends withManager(
     this.heatmapInstance.render(this["heatmap-id"]!);
     // first zoom trigger if it exists
     this.heatmapInstance.events.render.subscribe(() => {
+      // console.log('render1', this.heatmapInstance?.events.resize.value)
       this.requestUpdate();
+      // console.log('render2', this.heatmapInstance?.events.resize.value)
+      // setTimeout(() => {
+      //   // console.log('render3', this.heatmapInstance?.events.resize.value);
+      //   const state = (this.heatmapInstance as any)?.state;
+      //   console.log('scales: canvas', ...state.scales.canvasToWorld.x.domain(), 'world', ...state.scales.canvasToWorld.x.range(),)
+      //   // this.heatmapInstance?.events.resize.next(this.heatmapInstance.events.resize.value);
+      // }, 2000)
     });
   }
 
@@ -301,6 +311,8 @@ class NightingaleSequenceHeatmap extends withManager(
   private dispatchHighlight(seqPosition: number | undefined) {
     // Data to send to nightingale can be null if pointer is outside boundaries
     const highlight = seqPosition !== undefined ? `${seqPosition}:${seqPosition}` : null;
+    // console.log('heatmap dispatchHighlight', seqPosition)
+    // console.log('svg', this.svg)
     this.dispatchEvent(
       new CustomEvent("change", {
         detail: { type: "highlight", value: highlight },
@@ -328,73 +340,35 @@ class NightingaleSequenceHeatmap extends withManager(
    * Function to trigger Heatmap highlighting from Nightingale
    */
   triggerHeatmapHighlight() {
-    if (!this.heatmapInstance) {
-      return;
-    }
+    const heatmapInstanceMarker = this.heatmapInstance?.extensions.marker;
+    if (!heatmapInstanceMarker) return;
 
-    // any so we can use private marker attributes
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const heatmapInstanceMarker = <any>this.heatmapInstance.extensions.marker!;
+    const params = heatmapInstanceMarker?.getParams();
+    const heatmapState = (this.heatmapInstance as any).state as State<unknown, unknown, unknown>;
+
     // support for multiple segments
     const className = HeatmapClassNames.MarkerY;
-
-    heatmapInstanceMarker.state.dom.svg
-      .selectAll("." + className)
+    heatmapState.dom?.svg
+      .selectAll<SVGRectElement, SegmentType>("." + className)
       .data(this.highlightedRegion.segments)
       .join(
-        (
-          enter: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
-        ) =>
+        (enter: d3Selection<EnterElement, SegmentType, any, any>) =>
           enter
             .append("rect")
             .attr("class", className)
-            .attr("rx", heatmapInstanceMarker.params.markerCornerRadius)
-            .attr("ry", heatmapInstanceMarker.params.markerCornerRadius)
-            .attr("x", (d: SegmentType) => {
-              // calculate x according to worldToCanvas scale of heatmap plot
-              return heatmapInstanceMarker.state.scales.worldToCanvas.x(
-                d.start - 1
-              );
-            })
-            // y value is start of canvas
-            .attr("y", heatmapInstanceMarker.state.boxes.canvas.ymin)
-            .attr("width", (d: SegmentType) => {
-              // calculate width according to worldToCanvas scale of heatmap plot
-              // and number of residues that need to be shown
-              return scaleDistance(
-                heatmapInstanceMarker.state.scales.worldToCanvas.x,
-                Math.max(d.end - d.start + 1, 1)
-              );
-            })
-            // height value is canvas size
-            .attr(
-              "height",
-              Box.height(heatmapInstanceMarker.state.boxes.canvas)
-            ),
+            .attr("rx", params.markerCornerRadius)
+            .attr("ry", params.markerCornerRadius)
+            .attr("x", d => heatmapState.scales.worldToSvg.x(d.start - 1))
+            .attr("y", heatmapState.boxes.svg.ymin)
+            .attr("width", d => scaleDistance(heatmapState.scales.worldToSvg.x, Math.max(d.end - d.start + 1, 1)))
+            .attr("height", Box.height(heatmapState.boxes.svg)),
         // update is basically same as enter
-        (
-          update: d3Selection<
-            SVGRectElement,
-            SegmentType,
-            SVGElement,
-            undefined
-          >
-        ) =>
+        (update: d3Selection<SVGRectElement, SegmentType, any, any>) =>
           update
-            .attr("x", (d: SegmentType) => {
-              return heatmapInstanceMarker.state.scales.worldToCanvas.x(
-                d.start - 1
-              );
-            })
-            .attr("width", (d: SegmentType) => {
-              return scaleDistance(
-                heatmapInstanceMarker.state.scales.worldToCanvas.x,
-                Math.max(d.end - d.start + 1, 1)
-              );
-            }),
-        (
-          exit: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
-        ) => exit.remove()
+            .attr("x", d => heatmapState.scales.worldToSvg.x(d.start - 1))
+            .attr("width", d => scaleDistance(heatmapState.scales.worldToSvg.x, Math.max(d.end - d.start + 1, 1))),
+        (exit: d3Selection<SVGRectElement, SegmentType, any, any>) =>
+          exit.remove(),
       );
   }
 }
