@@ -150,23 +150,27 @@ class NightingaleSequenceHeatmap extends withManager(
     if (this.heatmapData) {
       // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
       return html` <style>
-          #${this["heatmap-id"]} {
-            /** Position of bottom-left corner of tooltip box relative to the mouse position */
-            --tooltip-offset-x: 5px;
-            /** Position of bottom-left corner of tooltip box relative to the mouse position */
-            --tooltip-offset-y: 8px;
+          /* Default heatmap-component CSS */
+          ${heatmapStyleSheet}
+
+          /* Nightingale CSS */
+          .heatmap-tooltip-content,
+          .heatmap-pinned-tooltip-content {
+            line-height: 1;
           }
           .heatmap-marker-x {
-            fill: ${colorString} !important;
-            fill-opacity: ${fillValue} !important;
-            stroke-width: ${highlightWidth} !important;
+            fill: ${colorString};
+            fill-opacity: ${fillValue};
+            stroke-width: ${highlightWidth};
           }
           .heatmap-marker-y {
-            fill: ${colorString} !important;
-            fill-opacity: ${fillValue} !important;
-            stroke-width: ${highlightWidth} !important;
+            fill: ${colorString};
+            fill-opacity: ${fillValue};
+            stroke-width: ${highlightWidth};
           }
-          ${heatmapStyleSheet}
+          .heatmap-svg[pointing-data] {
+            cursor: default;
+          }
         </style>
 
         <div id="container">
