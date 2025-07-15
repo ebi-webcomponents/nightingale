@@ -86,8 +86,10 @@ customElements.whenDefined("nightingale-sequence-heatmap").then( async() => {
   heatmapElement.setHeatmapData(xDomain, yDomain, data);
 
   const colorScale = d3.scaleLinear(
-    [0, 1], // score value domain
-    ["#ffffff", "#00441b"], // color range to map values
+    // Score value domain:
+    [0, 0.1132, 0.2264, 0.3395, 0.4527, 0.5895, 0.7264, 0.8632, 1],
+    // Corresponding colors:
+    ["#2166ac", "#4290bf", "#8cbcd4", "#c3d6e0", "#e2e2e2", "#edcdba", "#e99e7c", "#d15e4b", "#b2182b"] 
   );
 
   await heatmapElement.updateComplete.then(() => {

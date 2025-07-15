@@ -8,16 +8,16 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { scaleSequential, select, Selection } from "d3";
-import { Heatmap } from "heatmap-component";
+import { max, min, select, Selection } from "d3";
+import { ColorScale, Heatmap } from "heatmap-component";
 import { html, PropertyValueMap } from "lit";
 import { styleMap } from "lit-html/directives/style-map.js";
 import { property } from "lit/decorators.js";
 import heatmapStyleSheet from "./heatmap-component.css";
 
 
-const ALPHAMISSENSE_BLUE = "#3d5493";
-const ALPHAMISSENSE_RED = "#9a131a";
+/** Default coloring scheme (YlGn scheme from ColorBrewer) */
+const DEFAULT_COLORS = "#ffffe5 #f7fcb9 #d9f0a3 #addd8e #78c679 #41ab5d #238443 #006837 #004529".split(" ");
 
 interface HeatmapData {
   xValue: number;
@@ -220,13 +220,11 @@ class NightingaleSequenceHeatmap extends withManager(
       y: d => d.yValue ?? "none",
     });
 
-    const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
-    const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
+    const dataMin = min(this.heatmapData?.map(d => d.score) ?? []) ?? 0;
+    const dataMax = max(this.heatmapData?.map(d => d.score) ?? []) ?? 1;
 
-    const colorScale = scaleSequential(
-      [dataMin, dataMax],
-      [ALPHAMISSENSE_BLUE, ALPHAMISSENSE_RED]
-    );
+    const scaleValues = DEFAULT_COLORS.map((_, i) => dataMin + (dataMax - dataMin) * i / (DEFAULT_COLORS.length - 1));
+    const colorScale = ColorScale.continuous(scaleValues, DEFAULT_COLORS);
     hm.setColor((d) => colorScale(d.score));
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
