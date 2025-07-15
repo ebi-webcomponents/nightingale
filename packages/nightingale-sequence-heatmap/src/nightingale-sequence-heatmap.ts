@@ -1,14 +1,3 @@
-import { PropertyValueMap, html } from "lit";
-import { property } from "lit/decorators.js";
-import { styleMap } from "lit-html/directives/style-map.js";
-import { scaleSequential, Selection as d3Selection, select } from "d3";
-import { Heatmap } from "heatmap-component";
-import { Class as HeatmapClassNames } from "heatmap-component/lib/heatmap-component/class-names";
-import {
-  Box,
-  scaleDistance,
-} from "heatmap-component/lib/heatmap-component/scales";
-
 import NightingaleElement, {
   customElementOnce,
   withDimensions,
@@ -19,13 +8,16 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { SegmentType } from "@nightingale-elements/nightingale-new-core/dist/utils/Region";
-
+import { max, min, select, Selection } from "d3";
+import { ColorScale, Heatmap } from "heatmap-component";
+import { html, PropertyValueMap } from "lit";
+import { styleMap } from "lit-html/directives/style-map.js";
+import { property } from "lit/decorators.js";
 import heatmapStyleSheet from "./heatmap-component.css";
 
 
-const ALPHAMISSENSE_BLUE = "#3d5493";
-const ALPHAMISSENSE_RED = "#9a131a";
+/** Default coloring scheme (YlGn scheme from ColorBrewer) */
+const DEFAULT_COLORS = "#ffffe5 #f7fcb9 #d9f0a3 #addd8e #78c679 #41ab5d #238443 #006837 #004529".split(" ");
 
 interface HeatmapData {
   xValue: number;
@@ -34,33 +26,6 @@ interface HeatmapData {
   // unknown so we are flexible to user data formats
   [key: string]: unknown;
 }
-
-const hexComponentToNumber = (hexComp: string): number => {
-  return parseInt(hexComp, 16);
-};
-
-const formatDataItem = (item: unknown): string => {
-  if (typeof item === "number") return item.toFixed(3);
-  else return JSON.stringify(item);
-};
-
-const hexToRgb = (
-  hex: string
-): { r: number; g: number; b: number; a?: number } | null => {
-  let result = null;
-  if (hex.length === 7)
-    result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (hex.length === 9)
-    result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-      r: hexComponentToNumber(result[1]),
-      g: hexComponentToNumber(result[2]),
-      b: hexComponentToNumber(result[3]),
-      a: hex.length === 9 ? hexComponentToNumber(result[4]) : undefined,
-    }
-    : null;
-};
 
 
 @customElementOnce("nightingale-sequence-heatmap")
@@ -89,18 +54,36 @@ class NightingaleSequenceHeatmap extends withManager(
   heatmapDomainY?: string[];
   heatmapData?: HeatmapData[];
   heatmapInstance?: Heatmap<number, string, HeatmapData>;
+  protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
   /**
    * Nightingale lifecycle function to update highlight (see withHighlight)
    * has to be manually triggered from render (zoomRefreshed and updated in this case)
    */
   protected updateHighlight() {
-    this.triggerHeatmapHighlight();
+    if (!this.highlighted) return;
+
+    const highlights = this.highlighted
+      .selectAll<SVGRectElement, { start: number, end: number }[]>("rect")
+      .data(this.highlightedRegion.segments);
+
+    highlights
+      .enter()
+      .append("rect")
+      .style("pointer-events", "none")
+      .merge(highlights)
+      .attr("fill", this["highlight-color"])
+      .attr("y", 0)
+      .attr("height", this.height)
+      .attr("x", d => this.getXFromSeqPosition(d.start) - this["margin-left"]) // subtracting margin-left because highlights are rendered in the heatmap-component's SVG, which does not cover the margins
+      .attr("width", d => Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1)));
+
+    highlights.exit().remove();
   }
 
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value);
-    if (name === "highlight") {
+    if (name === "highlight" || name === "highlight-color") {
       this.updateHighlight();
     }
     if (name === "display-start" || name === "display-end") {
@@ -131,50 +114,31 @@ class NightingaleSequenceHeatmap extends withManager(
       textAlign: "center",
     };
 
-    // required to allow hex with alpha channel to work with fill property
-    let colorString = this["highlight-color"];
-    let fillValue = 0.9;
-
-    const highlightWidth = this["hm-highlight-width"];
-
-    const rgb = hexToRgb(this["highlight-color"]);
-    if (rgb) {
-      colorString = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-      fillValue = rgb.a
-        ? parseFloat(formatDataItem(0.9 * (rgb.a / 256.0)))
-        : 0.9;
-    }
-
     if (this.heatmapData) {
       // style tag here may seem strange but see: https://lit.dev/docs/v1/lit-html/styling-templates/#rendering-in-shadow-dom
       return html` <style>
-          #${this["heatmap-id"]} {
-            /** Position of bottom-left corner of tooltip box relative to the mouse position */
-            --tooltip-offset-x: 5px;
-            /** Position of bottom-left corner of tooltip box relative to the mouse position */
-            --tooltip-offset-y: 8px;
-          }
-          .heatmap-marker-x {
-            fill: ${colorString} !important;
-            fill-opacity: ${fillValue} !important;
-            stroke-width: ${highlightWidth} !important;
-          }
-          .heatmap-marker-y {
-            fill: ${colorString} !important;
-            fill-opacity: ${fillValue} !important;
-            stroke-width: ${highlightWidth} !important;
-          }
+          /* Default heatmap-component CSS */
           ${heatmapStyleSheet}
+
+          /* Nightingale CSS */
+          .heatmap-tooltip-content,
+          .heatmap-pinned-tooltip-content {
+            line-height: 1;
+          }
+          .heatmap-marker-x,
+          .heatmap-marker-y {
+            display: none;
+          }
+          .heatmap-svg[pointing-data] {
+            cursor: default;
+          }
         </style>
 
         <div id="container">
           <div id="${this["heatmap-id"]}" style=${styleMap(heatmapStyles)} />
         </div>`;
     } else {
-      return html` <div
-        id="${this["heatmap-id"]}_loading"
-        style=${styleMap(loadingStyles)}
-      >
+      return html` <div id="${this["heatmap-id"]}_loading" style=${styleMap(loadingStyles)}>
         ${loaderSvg}
       </div>`;
     }
@@ -189,9 +153,11 @@ class NightingaleSequenceHeatmap extends withManager(
   ): void {
     super.updated(_changedProperties);
     if (this.heatmapData && !this.heatmapInstance) {
-      this.svg = select(this).select("div#container"); // necessary for WithZoom mixin to work
       this.renderHeatmap();
+      this.svg = select(this).select("div#container"); // necessary for WithZoom mixin to work
+      this.highlighted = select(this).select("svg.heatmap-svg").append("g").classed("highlighted", true);
       this.bindHeatmapEvents();
+      this.updateHighlight();
     }
   }
 
@@ -254,20 +220,18 @@ class NightingaleSequenceHeatmap extends withManager(
       y: d => d.yValue ?? "none",
     });
 
-    const dataMin = Math.min(...this.heatmapData!.map((datum) => datum.score));
-    const dataMax = Math.max(...this.heatmapData!.map((datum) => datum.score));
+    const dataMin = min(this.heatmapData?.map(d => d.score) ?? []) ?? 0;
+    const dataMax = max(this.heatmapData?.map(d => d.score) ?? []) ?? 1;
 
-    const colorScale = scaleSequential(
-      [dataMin, dataMax],
-      [ALPHAMISSENSE_BLUE, ALPHAMISSENSE_RED]
-    );
+    const scaleValues = DEFAULT_COLORS.map((_, i) => dataMin + (dataMax - dataMin) * i / (DEFAULT_COLORS.length - 1));
+    const colorScale = ColorScale.continuous(scaleValues, DEFAULT_COLORS);
     hm.setColor((d) => colorScale(d.score));
 
     hm.setTooltip((d, _x, _y, _xIndex, _yIndex) => {
       const returnHTML = `
         <b>You are at</b> <br />
         x,y: <b>${d.xValue},${d.yValue}</b><br />
-        score: <b>${formatDataItem(d.score)}</b>`;
+        score: <b>${d.score.toFixed(3)}</b>`;
       return returnHTML;
     });
     hm.setVisualParams({ xGapPixels: 0, yGapPixels: 0 });
@@ -322,80 +286,6 @@ class NightingaleSequenceHeatmap extends withManager(
         xMax: toEnd,
       });
     }
-  }
-
-  /**
-   * Function to trigger Heatmap highlighting from Nightingale
-   */
-  triggerHeatmapHighlight() {
-    if (!this.heatmapInstance) {
-      return;
-    }
-
-    // any so we can use private marker attributes
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const heatmapInstanceMarker = <any>this.heatmapInstance.extensions.marker!;
-    // support for multiple segments
-    const className = HeatmapClassNames.MarkerY;
-
-    heatmapInstanceMarker.state.dom.svg
-      .selectAll("." + className)
-      .data(this.highlightedRegion.segments)
-      .join(
-        (
-          enter: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
-        ) =>
-          enter
-            .append("rect")
-            .attr("class", className)
-            .attr("rx", heatmapInstanceMarker.params.markerCornerRadius)
-            .attr("ry", heatmapInstanceMarker.params.markerCornerRadius)
-            .attr("x", (d: SegmentType) => {
-              // calculate x according to worldToCanvas scale of heatmap plot
-              return heatmapInstanceMarker.state.scales.worldToCanvas.x(
-                d.start - 1
-              );
-            })
-            // y value is start of canvas
-            .attr("y", heatmapInstanceMarker.state.boxes.canvas.ymin)
-            .attr("width", (d: SegmentType) => {
-              // calculate width according to worldToCanvas scale of heatmap plot
-              // and number of residues that need to be shown
-              return scaleDistance(
-                heatmapInstanceMarker.state.scales.worldToCanvas.x,
-                Math.max(d.end - d.start + 1, 1)
-              );
-            })
-            // height value is canvas size
-            .attr(
-              "height",
-              Box.height(heatmapInstanceMarker.state.boxes.canvas)
-            ),
-        // update is basically same as enter
-        (
-          update: d3Selection<
-            SVGRectElement,
-            SegmentType,
-            SVGElement,
-            undefined
-          >
-        ) =>
-          update
-            .attr("x", (d: SegmentType) => {
-              return heatmapInstanceMarker.state.scales.worldToCanvas.x(
-                d.start - 1
-              );
-            })
-            .attr("width", (d: SegmentType) => {
-              return scaleDistance(
-                heatmapInstanceMarker.state.scales.worldToCanvas.x,
-                Math.max(d.end - d.start + 1, 1)
-              );
-            }),
-        (
-          exit: d3Selection<SVGRectElement, SegmentType, SVGElement, undefined>
-        ) => exit.remove()
-      );
   }
 }
 export default NightingaleSequenceHeatmap;

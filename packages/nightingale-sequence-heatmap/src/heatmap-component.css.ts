@@ -1,4 +1,18 @@
 const heatmapStyles = `
+/**
+ * heatmap-component
+ * @version 1.2.0
+ * @link https://github.com/PDBeurope/heatmap-component
+ * @license Apache-2.0
+ */
+
+:root {
+    /** Position of bottom-left corner of tooltip box relative to the mouse position */
+    --tooltip-offset-x: 5px;
+    /** Position of bottom-left corner of tooltip box relative to the mouse position */
+    --tooltip-offset-y: 8px;
+}
+
 .heatmap-main-div {
     font-family: sans-serif;
 }
@@ -7,6 +21,32 @@ const heatmapStyles = `
     /* Set background-color here to change the background of the heatmap */
     background-color: none;
 }
+
+.heatmap-svg[pointing-data] {
+    /** Show "pointer" cursor when hovering over a cell with data */
+    cursor: pointer;
+}
+
+
+/* Marker extension */
+
+.heatmap-marker {
+    stroke: black;
+    stroke-width: 4;
+    fill: none;
+    pointer-events: none;
+}
+
+.heatmap-marker-x,
+.heatmap-marker-y {
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+    pointer-events: none;
+}
+
+
+/* Tooltip extension */
 
 .heatmap-tooltip-box,
 .heatmap-pinned-tooltip-box {
@@ -26,7 +66,6 @@ const heatmapStyles = `
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
     pointer-events: initial;
     width: max-content;
-    line-height: 1;
 }
 
 .heatmap-pinned-tooltip-close {
@@ -63,6 +102,9 @@ const heatmapStyles = `
     fill: black;
 }
 
+
+/* Overlay (Zoom extension) */
+
 .heatmap-overlay {
     position: absolute;
     width: 100%;
@@ -96,16 +138,21 @@ const heatmapStyles = `
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
 }
 
-.heatmap-marker {
-    stroke: black;
-    stroke-width: 4;
-    fill: none;
+
+/* Brush extension */
+
+.heatmap-brush-close {
+    cursor: pointer;
 }
 
-.heatmap-marker-x,
-.heatmap-marker-y {
+.heatmap-brush-close .cross {
+    fill: black;
     stroke: black;
-    stroke-width: 2;
-    fill: none;
-}`;
+}
+
+.heatmap-brush-close .circle {
+    fill: white;
+    stroke: white;
+}
+`;
 export default heatmapStyles;
