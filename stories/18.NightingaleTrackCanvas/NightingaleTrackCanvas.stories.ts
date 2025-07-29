@@ -20,7 +20,7 @@ const DefaultArgs = {
 type Args = typeof DefaultArgs;
 
 
-const sampleSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
+const sampleSequence = "MLPGLALLLLAAWTARALEVPTDGNAGLLAEPQIAMFCGRLNMHMNVQNGKWDSDPSGT";
 
 /** Create a sequence of given `length` */
 function makeSequence(length: number) {

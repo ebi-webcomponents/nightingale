@@ -6,7 +6,7 @@ export default {
   title: "Components/Tracks/Sequence",
 } as Meta;
 
-const defaultSequence = "iubcbcIUENACBPAOUBCASFUBRUABBRWOAUVBISVBAISBVDOASV";
+const defaultSequence = "MLPGLALLLLAAWTARALEVPTDGNAGLLAEPQIAMFCGRLNMHMNVQNGKWDSDPSGT";
 
 const Template: Story<{
   width: number;
