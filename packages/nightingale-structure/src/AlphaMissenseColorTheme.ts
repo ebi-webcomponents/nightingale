@@ -19,7 +19,7 @@ const AM_COLOR_SCALE = {
   ],
 };
 
-const amColorScale = scaleLinear(
+export const amColorScale = scaleLinear(
   AM_COLOR_SCALE.checkpoints,
   AM_COLOR_SCALE.colors
 );
