@@ -10,6 +10,7 @@ export default {
 const Template: Story<{
   "protein-accession": string;
   "structure-id": string;
+  "model-url": string;
   highlight: string;
   "highlight-color": string;
   "--custom-structure-height": string;
@@ -21,6 +22,7 @@ const Template: Story<{
       id="track"
       protein-accession="${args["protein-accession"]}"
       structure-id="${args["structure-id"]}"
+      model-url="${args["model-url"]}"
       highlight="${args["highlight"]}"
       highlight-color=${args["highlight-color"]}
       style="--custom-structure-height: ${args["--custom-structure-height"]}"
@@ -47,3 +49,11 @@ AlphaFoldStructure.args = {
   "color-theme": "alphamissense"
 };
 AlphaFoldStructure.storyName = "AlphaFold Structure";
+
+export const StructureLoadByUrl = Template.bind({});
+StructureLoadByUrl.args = {
+  "model-url": "https://swissmodel.expasy.org/3d-beacons/uniprot/P05067.cif?range=30-189&template=7mrm.1.A&provider=swissmodel",
+  highlight: "30:189",
+  "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
+  "--custom-structure-height": "480px",
+};
