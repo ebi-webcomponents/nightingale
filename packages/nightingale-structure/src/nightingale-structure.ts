@@ -168,7 +168,7 @@ class NightingaleStructure extends withManager(
           id="molstar-canvas"
           style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"
         ></canvas>
-        ${this.message
+        ${this.message && this["structure-id"]
           ? html`<div class="structure-viewer-messages">
               <span>${this.message?.title}</span>:
               <span
@@ -346,8 +346,8 @@ class NightingaleStructure extends withManager(
   ): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
-      !sequencePositions?.length ||
-      sequencePositions.some((pos) => !Number.isInteger(pos.position))
+      (!sequencePositions?.length ||
+      sequencePositions.some((pos) => !Number.isInteger(pos.position)))
     ) {
       return;
     }
