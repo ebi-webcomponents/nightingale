@@ -286,7 +286,7 @@ class NightingaleStructure extends withManager(
         );
         // Note: maybe use bcif instead of cif, but I have issues loading it atm
         if (afInfo?.cifUrl) {
-          await this.#structureViewer?.loadCifUrl(afInfo.cifUrl, false);
+          await this.#structureViewer?.loadFromUrl(afInfo.cifUrl, false);
           this.clearMessage();
         }
         // mappings = await this.#structureViewer.loadAF(afPredictions.b);
@@ -297,7 +297,7 @@ class NightingaleStructure extends withManager(
             Object.values(pdbEntry)[0].UniProt[this["protein-accession"]]
               ?.mappings;
           if (this["custom-download-url"]) {
-            await this.#structureViewer?.loadCifUrl(
+            await this.#structureViewer?.loadFromUrl(
               `${this["custom-download-url"]}${this[
                 "structure-id"
               ].toLowerCase()}.cif`
@@ -320,7 +320,7 @@ class NightingaleStructure extends withManager(
 
     if (this["model-url"]) {
       this.#structureViewer?.plugin.clear();
-      await this.#structureViewer?.loadCifUrl(this["model-url"]);
+      await this.#structureViewer?.loadFromUrl(this["model-url"]);
       this.clearMessage();
     }
   }
