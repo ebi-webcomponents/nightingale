@@ -89,7 +89,7 @@ type Range = { chain: string; start: number; end: number };
 export type StructureViewer = {
   plugin: PluginContext;
   loadPdb(pdb: string): Promise<void>;
-  loadCifUrl(url: string, isBinary?: boolean): Promise<void>;
+  loadFromUrl(url: string, isBinary?: boolean): Promise<void>;
   highlight(ranges: Range[]): void;
   clearHighlight(): void;
   changeHighlightColor(color: number): void;
@@ -154,12 +154,12 @@ export const getStructureViewer = async (
   const structureViewer: StructureViewer = {
     plugin,
     async loadPdb(pdb) {
-      await this.loadCifUrl(
+      await this.loadFromUrl(
         `https://www.ebi.ac.uk/pdbe/model-server/v1/${pdb.toLowerCase()}/full?encoding=bcif`,
         true
       );
     },
-    async loadCifUrl(url, isBinary = false): Promise<void> {
+    async loadFromUrl(url, isBinary = false): Promise<void> {
       const data = await plugin.builders.data.download(
         { url, isBinary },
         { state: { isGhost: true } }
@@ -167,7 +167,7 @@ export const getStructureViewer = async (
 
       const trajectory = await plugin.builders.structure.parseTrajectory(
         data,
-        "mmcif"
+        url.endsWith(".pdb") ? "pdb" : "mmcif"
       );
 
       await plugin.builders.structure.hierarchy.applyPreset(

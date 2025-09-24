@@ -40,7 +40,36 @@ type AfConfidence = PropertyWrapper<
 
 export const DefaultServerUrl = "";
 
-export const isApplicable = (model?: Model): boolean => !!model?.entryId.startsWith('AF');
+export const isApplicable = (model?: Model): boolean => {
+  if (!model?.entryId?.startsWith("AF")) return false;
+
+  // check if the mmCIF contains HETATM records - if yes, it's AlphaFlll and not AlphaFold
+  const sourceData = model?.sourceData as { data?: Model } | undefined;
+  const data = sourceData?.data as { frame?: unknown } | undefined;
+  const frame = data?.frame as { categories?: unknown } | undefined;
+  const categories = frame?.categories as { atom_site?: unknown } | undefined;
+  if (
+    categories &&
+    typeof categories === "object" &&
+    "atom_site" in categories &&
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (categories as any).atom_site
+  ) {
+    const groupPDB = (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      categories["atom_site"] as { getField?: (name: string) => any }
+    )?.getField?.("group_PDB");
+    if (groupPDB && groupPDB.isDefined) {
+      for (let i = 0; i < groupPDB.rowCount; i++) {
+        const val = groupPDB.str(i); // use str() to get the value
+        if (val === "HETATM") {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+};
 
 export interface Info {
   timestamp_utc: string;
@@ -61,7 +90,7 @@ export type Schema = typeof Schema;
 
 const tryGetInfoFromCif = (
   categoryName: string,
-  model: Model,
+  model: Model
 ): undefined | Info => {
   if (
     !MmcifFormat.is(model.sourceData) ||
@@ -71,7 +100,7 @@ const tryGetInfoFromCif = (
   }
   const timestampField =
     model.sourceData.data.frame.categories[categoryName].getField(
-      "metric_value",
+      "metric_value"
     );
   if (!timestampField || timestampField.rowCount === 0) return;
 
@@ -83,7 +112,7 @@ const tryGetInfoFromCif = (
 
 const fromCif = (
   ctx: CustomProperty.Context,
-  model: Model,
+  model: Model
 ): AfConfidence | undefined => {
   const info = tryGetInfoFromCif("ma_qa_metric_local", model);
   if (!info) return;
@@ -97,7 +126,7 @@ export async function fromCifOrServer(
   ctx: CustomProperty.Context,
   model: Model,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  props: AfConfidenceProps,
+  props: AfConfidenceProps
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   const cif = fromCif(ctx, model);
@@ -129,7 +158,7 @@ function getCifData(model: Model) {
   return {
     residues: toTable(
       Schema.local_metric_values,
-      model.sourceData.data.frame.categories.ma_qa_metric_local,
+      model.sourceData.data.frame.categories.ma_qa_metric_local
     ),
   };
 }
@@ -158,7 +187,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
   obtain: async (
     ctx: CustomProperty.Context,
     data: Model,
-    props: Partial<AfConfidenceProps>,
+    props: Partial<AfConfidenceProps>
   ) => {
     const p = { ...PD.getDefaultValues(AfConfidenceParams), ...props };
     const conf = await fromCifOrServer(ctx, data, p);
@@ -168,7 +197,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
 
 function createScoreMapFromCif(
   modelData: Model,
-  residueData: Table<typeof Schema.local_metric_values>,
+  residueData: Table<typeof Schema.local_metric_values>
 ): AfConfidence["data"] | undefined {
   const ret = new Map<ResidueIndex, [number, string]>();
   const { label_asym_id, label_seq_id, metric_value, _rowCount } = residueData;
@@ -181,7 +210,7 @@ function createScoreMapFromCif(
       "1",
       label_asym_id.value(i),
       label_seq_id.value(i),
-      "",
+      ""
     );
 
     let confidencyCategory = "Very low";

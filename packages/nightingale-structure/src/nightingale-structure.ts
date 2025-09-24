@@ -81,10 +81,13 @@ class NightingaleStructure extends withManager(
   "protein-accession"?: string;
 
   @property({ type: String })
-  "structure-id": string;
+  "structure-id"?: string;
 
   @property({ type: String })
   "custom-download-url"?: string;
+
+  @property({ type: String })
+  "model-url"?: string;
 
   @property({ type: String })
   "color-theme"?: string;
@@ -165,7 +168,7 @@ class NightingaleStructure extends withManager(
           id="molstar-canvas"
           style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"
         ></canvas>
-        ${this.message
+        ${this.message && this["structure-id"]
           ? html`<div class="structure-viewer-messages">
               <span>${this.message?.title}</span>:
               <span
@@ -197,12 +200,18 @@ class NightingaleStructure extends withManager(
         // Remove initial "#" and possible trailing opacity value
         const color = this["highlight-color"].substring(1, 7);
         this.#structureViewer.changeHighlightColor(parseInt(color, 16));
+        this.selectMolecule();
       });
     }
   }
 
-  protected override updated(changedProperties: Map<PropertyKey, unknown>): void {
-    if (changedProperties.has("structure-id")) {
+  protected override updated(
+    changedProperties: Map<PropertyKey, unknown>
+  ): void {
+    if (
+      changedProperties.has("structure-id") ||
+      changedProperties.has("model-url")
+    ) {
       this.selectMolecule();
     }
     if (
@@ -250,49 +259,70 @@ class NightingaleStructure extends withManager(
     }
   }
 
-  isAF(): boolean {
-    return this["structure-id"].startsWith("AF-");
+  isAF(): boolean | undefined {
+    return this["structure-id"]?.startsWith("AF-");
   }
 
   // Use the url above for testing
   async selectMolecule(): Promise<void> {
-    if (!this["structure-id"] || !this["protein-accession"]) {
+    if (this["structure-id"] && this["model-url"]) {
+      console.error(
+        "Structure ID and Model URL both are present. Provide only one that you would want to take precedence"
+      );
       return;
     }
+    // if (
+    //   !this["structure-id"] ||
+    //   !this["protein-accession"]
+    // ) {
+    //   return;
+    // }
     let mappings;
-    if (this.isAF()) {
-      const afPredictions = await this.loadAFEntry(this["protein-accession"]);
-      const afInfo = afPredictions.find(
-        (prediction) => prediction.entryId === this["structure-id"]
-      );
-      // Note: maybe use bcif instead of cif, but I have issues loading it atm
-      if (afInfo?.cifUrl) {
-        await this.#structureViewer?.loadCifUrl(afInfo.cifUrl, false);
-        this.clearMessage();
-      }
-      // mappings = await this.#structureViewer.loadAF(afPredictions.b);
-    } else {
-      const pdbEntry = await this.loadPDBEntry(this["structure-id"]);
-      mappings =
-        Object.values(pdbEntry)[0].UniProt[this["protein-accession"]]?.mappings;
-      if (this["custom-download-url"]) {
-        await this.#structureViewer?.loadCifUrl(
-          `${this["custom-download-url"]}${this[
-            "structure-id"
-          ].toLowerCase()}.cif`
+    if (this["structure-id"] && this["protein-accession"]) {
+      if (this.isAF()) {
+        const afPredictions = await this.loadAFEntry(this["protein-accession"]);
+        const afInfo = afPredictions.find(
+          (prediction) => prediction.entryId === this["structure-id"]
         );
-        this.clearMessage();
+        // Note: maybe use bcif instead of cif, but I have issues loading it atm
+        if (afInfo?.cifUrl) {
+          await this.#structureViewer?.loadFromUrl(afInfo.cifUrl, false);
+          this.clearMessage();
+        }
+        // mappings = await this.#structureViewer.loadAF(afPredictions.b);
       } else {
-        await this.#structureViewer?.loadPdb(
-          this["structure-id"].toLowerCase()
-        );
-        this.clearMessage();
+        const pdbEntry = await this.loadPDBEntry(this["structure-id"]);
+        if (pdbEntry) {
+          mappings =
+            Object.values(pdbEntry)[0].UniProt[this["protein-accession"]]
+              ?.mappings;
+          if (this["custom-download-url"]) {
+            await this.#structureViewer?.loadFromUrl(
+              `${this["custom-download-url"]}${this[
+                "structure-id"
+              ].toLowerCase()}.cif`
+            );
+            this.clearMessage();
+          } else {
+            await this.#structureViewer?.loadPdb(
+              this["structure-id"].toLowerCase()
+            );
+            this.clearMessage();
+          }
+        }
       }
+
+      this.selectedMolecule = {
+        id: this["structure-id"],
+        mappings,
+      };
     }
-    this.selectedMolecule = {
-      id: this["structure-id"],
-      mappings,
-    };
+
+    if (this["model-url"]) {
+      this.#structureViewer?.plugin.clear();
+      await this.#structureViewer?.loadFromUrl(this["model-url"]);
+      this.clearMessage();
+    }
   }
 
   private showMessage(title: string, content: string, timeoutMs?: number) {
@@ -316,8 +346,8 @@ class NightingaleStructure extends withManager(
   ): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
-      !sequencePositions?.length ||
-      sequencePositions.some((pos) => !Number.isInteger(pos.position))
+      (!sequencePositions?.length ||
+      sequencePositions.some((pos) => !Number.isInteger(pos.position)))
     ) {
       return;
     }
