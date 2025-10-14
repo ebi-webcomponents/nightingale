@@ -49,8 +49,7 @@ export type PDBData = Record<
 >;
 
 export type AlphaFoldPayload = Array<{
-  entryId: string;
-  modelEntityId?: string;
+  modelEntityId: string;
   toolUsed?: string;
   providerId?: string;
   entityType?: string;
@@ -83,11 +82,6 @@ export type AlphaFoldPayload = Array<{
   msaUrl?: string;
   plddtDocUrl?: string;
   paeDocUrl?: string;
-  uniprotSequence?: string;
-  uniprotStart?: number;
-  uniprotEnd?: number;
-  isReferenceProteome?: boolean;
-  isReviewed?: boolean;
   amAnnotationsUrl?: string;
   amAnnotationsHg19Url?: string;
   amAnnotationsHg38Url?: string;
@@ -306,7 +300,7 @@ class NightingaleStructure extends withManager(
       if (this.isAF()) {
         const afPredictions = await this.loadAFEntry(this["protein-accession"]);
         const afInfo = afPredictions.find(
-          (prediction) => prediction.entryId === this["structure-id"]
+          (prediction) => prediction.modelEntityId === this["structure-id"]
         );
         // Note: maybe use bcif instead of cif, but I have issues loading it atm
         if (afInfo?.cifUrl) {
