@@ -48,26 +48,44 @@ export type PDBData = Record<
   }
 >;
 
-export type PredictionData = {
-  entryId: string;
+export type AlphaFoldPayload = Array<{
+  modelEntityId: string;
+  toolUsed?: string;
+  providerId?: string;
+  entityType?: string;
+  isUniProt?: boolean;
+  modelCreatedDate?: Date;
+  sequenceVersionDate?: Date;
+  globalMetricValue?: number;
+  fractionPlddtVeryLow?: number;
+  fractionPlddtLow?: number;
+  fractionPlddtConfident?: number;
+  fractionPlddtVeryHigh?: number;
+  latestVersion?: number;
+  allVersions?: number[];
+  sequence?: string;
+  sequenceStart?: number;
+  sequenceEnd?: number;
+  sequenceChecksum?: string;
+  isUniProtReviewed?: boolean;
   gene?: string;
   uniprotAccession?: string;
   uniprotId?: string;
   uniprotDescription?: string;
   taxId?: number;
   organismScientificName?: string;
-  uniprotStart?: number;
-  uniprotEnd?: number;
-  uniprotSequence?: string;
-  modelCreatedDate?: string;
-  latestVersion?: number;
-  allVersions?: number[];
+  isUniProtReferenceProteome?: boolean;
   bcifUrl?: string;
   cifUrl?: string;
   pdbUrl?: string;
-  distogramUrl?: string;
+  paeImageUrl?: string;
+  msaUrl?: string;
+  plddtDocUrl?: string;
+  paeDocUrl?: string;
   amAnnotationsUrl?: string;
-};
+  amAnnotationsHg19Url?: string;
+  amAnnotationsHg38Url?: string;
+}>;
 
 const uniProtMappingUrl = "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/";
 
@@ -248,7 +266,7 @@ class NightingaleStructure extends withManager(
     }
   }
 
-  async loadAFEntry(id: string): Promise<PredictionData[]> {
+  async loadAFEntry(id: string): Promise<AlphaFoldPayload> {
     this.#structureViewer?.plugin.clear();
     this.showMessage("Loading", id);
     try {
@@ -282,7 +300,7 @@ class NightingaleStructure extends withManager(
       if (this.isAF()) {
         const afPredictions = await this.loadAFEntry(this["protein-accession"]);
         const afInfo = afPredictions.find(
-          (prediction) => prediction.entryId === this["structure-id"]
+          (prediction) => prediction.modelEntityId === this["structure-id"]
         );
         // Note: maybe use bcif instead of cif, but I have issues loading it atm
         if (afInfo?.cifUrl) {
@@ -346,8 +364,8 @@ class NightingaleStructure extends withManager(
   ): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
-      (!sequencePositions?.length ||
-      sequencePositions.some((pos) => !Number.isInteger(pos.position)))
+      !sequencePositions?.length ||
+      sequencePositions.some((pos) => !Number.isInteger(pos.position))
     ) {
       return;
     }
