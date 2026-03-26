@@ -38,6 +38,7 @@
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^5.6.0",
     "d3": "7.9.0",
+    "dompurify": "^3.0.0",
     "molstar": "3.44.0"
   }
 }
