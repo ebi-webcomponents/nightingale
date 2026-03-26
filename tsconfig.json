@@ -6,7 +6,7 @@
     "noEmitOnError": true,
     "declaration": true,
     "declarationMap": true,
-    "lib": ["es2019", "dom"],
+    "lib": ["es2019", "dom", "dom.iterable"],
     "strict": true,
     "noImplicitOverride": true,
     "esModuleInterop": false,
@@ -17,6 +17,7 @@
     "sourceMap": true,
     "inlineSources": true,
     "resolveJsonModule": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": []
   }
 }
