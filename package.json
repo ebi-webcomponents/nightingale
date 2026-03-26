@@ -73,8 +73,5 @@
     "packages/*"
   ],
   "customElements": "custom-elements.json",
-  "sideEffects": false,
-  "dependencies": {
-    "rimraff": "0.0.1-security"
-  }
+  "sideEffects": false
 }

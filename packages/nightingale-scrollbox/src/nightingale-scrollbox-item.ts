@@ -1,5 +1,6 @@
 import NightingaleElement from "@nightingale-elements/nightingale-new-core";
 import { customElement, property } from "lit/decorators.js";
+import DOMPurify from "dompurify";
 import { NightingaleScrollbox } from "./nightingale-scrollbox";
 
 
@@ -85,7 +86,7 @@ export class NightingaleScrollboxItem<TData> extends NightingaleElement {
 
   private setContent(content: string | null | undefined) {
     if (content === undefined || content === null) return;
-    this.innerHTML = content;
+    this.innerHTML = DOMPurify.sanitize(content);
   }
 
   /** Set or remove "onRegister" callback function. Also run this callback function if the item is already registered (i.e. in "new", "visible", or "hidden" state). */

@@ -48,6 +48,12 @@ export const calculateConservation = (
 
 // Note that the line `const f = ${calculateConservation.toString()};` allows us to keep that
 // function's source code in TypeScript while also being transpiled into JavaScript.
+//
+// SECURITY: This pattern constructs code-as-string for a Blob-based Web Worker.
+// The Worker ONLY receives bioinformatics sequence data from the same origin.
+// Do NOT interpolate any untrusted or user-supplied data into this template string.
+// If this pattern needs to change, consider migrating to a standard Worker with a
+// bundled module file to restore TypeScript type safety and avoid code injection risks.
 const conservationInlineWorkerString = `
 self.addEventListener('message', (e) => {
   if (self.previous !== e.data) {

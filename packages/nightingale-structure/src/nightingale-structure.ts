@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
+import DOMPurify from "dompurify";
 
 import NightingaleElement, {
   withHighlight,
@@ -93,7 +94,7 @@ const alphaFoldMappingUrl = "https://alphafold.ebi.ac.uk/api/prediction/";
 
 @customElementOnce("nightingale-structure")
 class NightingaleStructure extends withManager(
-  withHighlight(NightingaleElement)
+  withHighlight(NightingaleElement),
 ) {
   @property({ type: String })
   "protein-accession"?: string;
@@ -191,7 +192,7 @@ class NightingaleStructure extends withManager(
               <span>${this.message?.title}</span>:
               <span
                 class="structure-viewer-message-content"
-                .innerHTML=${this.message?.content}
+                .innerHTML=${DOMPurify.sanitize(this.message?.content ?? "")}
               ></span>
               <button
                 type="button"
@@ -212,7 +213,7 @@ class NightingaleStructure extends withManager(
       getStructureViewer(
         structureViewerDiv,
         this.updateHighlight,
-        this["color-theme"]
+        this["color-theme"],
       ).then((structureViewer) => {
         this.#structureViewer = structureViewer;
         // Remove initial "#" and possible trailing opacity value
@@ -224,7 +225,7 @@ class NightingaleStructure extends withManager(
   }
 
   protected override updated(
-    changedProperties: Map<PropertyKey, unknown>
+    changedProperties: Map<PropertyKey, unknown>,
   ): void {
     if (
       changedProperties.has("structure-id") ||
@@ -285,7 +286,7 @@ class NightingaleStructure extends withManager(
   async selectMolecule(): Promise<void> {
     if (this["structure-id"] && this["model-url"]) {
       console.error(
-        "Structure ID and Model URL both are present. Provide only one that you would want to take precedence"
+        "Structure ID and Model URL both are present. Provide only one that you would want to take precedence",
       );
       return;
     }
@@ -300,7 +301,7 @@ class NightingaleStructure extends withManager(
       if (this.isAF()) {
         const afPredictions = await this.loadAFEntry(this["protein-accession"]);
         const afInfo = afPredictions.find(
-          (prediction) => prediction.modelEntityId === this["structure-id"]
+          (prediction) => prediction.modelEntityId === this["structure-id"],
         );
         // Note: maybe use bcif instead of cif, but I have issues loading it atm
         if (afInfo?.cifUrl) {
@@ -318,12 +319,12 @@ class NightingaleStructure extends withManager(
             await this.#structureViewer?.loadFromUrl(
               `${this["custom-download-url"]}${this[
                 "structure-id"
-              ].toLowerCase()}.cif`
+              ].toLowerCase()}.cif`,
             );
             this.clearMessage();
           } else {
             await this.#structureViewer?.loadPdb(
-              this["structure-id"].toLowerCase()
+              this["structure-id"].toLowerCase(),
             );
             this.clearMessage();
           }
@@ -360,7 +361,7 @@ class NightingaleStructure extends withManager(
   }
 
   updateHighlight(
-    sequencePositions: { chain: string; position: number }[]
+    sequencePositions: { chain: string; position: number }[],
   ): void {
     // sequencePositions assumed to be in PDB coordinate space
     if (
@@ -386,8 +387,8 @@ class NightingaleStructure extends withManager(
               pos.position,
               pos.position,
               "PDB_UP",
-              this.selectedMolecule?.mappings
-            ).filter((t) => t.chain === pos.chain)
+              this.selectedMolecule?.mappings,
+            ).filter((t) => t.chain === pos.chain),
           )
           .filter(Boolean);
       } catch (error) {
@@ -417,7 +418,7 @@ class NightingaleStructure extends withManager(
       })
       .join("");
 
-    this.showMessage(`${this["structure-id"]}`, tooltip);
+    this.showMessage(this["structure-id"] || "", tooltip);
     const event = new CustomEvent("change", {
       detail: {
         highlight,
@@ -448,7 +449,7 @@ class NightingaleStructure extends withManager(
             start,
             end,
             "UP_PDB",
-            this.selectedMolecule?.mappings
+            this.selectedMolecule?.mappings,
           );
         })
         .filter(Boolean);
