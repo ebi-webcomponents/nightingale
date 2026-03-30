@@ -255,6 +255,13 @@ export const config = {
     shape: "rectangle",
     color: "#FF9900",
   },
+  MUTAGENESIS: {
+    name: "mutagenesis site",
+    label: "Mutagenesis",
+    tooltip: "",
+    shape: "rectangle",
+    color: "#331100",
+  },
   TOPO_DOM: {
     name: "topological domain",
     label: "Topological domain",

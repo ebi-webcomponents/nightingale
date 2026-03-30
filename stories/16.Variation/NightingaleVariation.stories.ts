@@ -8,6 +8,9 @@ import "../../packages/nightingale-manager/src/index.ts";
 import variationP99999 from "../../packages/nightingale-variation/tests/P99999.variation.json";
 import variationP42336 from "../../packages/nightingale-variation/tests/P42336.variation.json";
 import { ProteinsAPIVariation } from "../../packages/nightingale-variation/src/proteinAPI.js";
+import NightingaleVariationType, {
+  VariationDatum,
+} from "../../packages/nightingale-variation/src";
 
 const data: Record<string, ProteinsAPIVariation> = {
   P99999: variationP99999 as unknown as ProteinsAPIVariation,
@@ -18,6 +21,12 @@ export default {
   title: "Components/Tracks/Variation",
 } as Meta;
 
+const randomColorConfig = () =>
+  `hsl(${Math.floor(Math.random() * 360)}, 70%, 70%)`;
+
+const predictionColorConfig = (v: VariationDatum) =>
+  v.originalData.predictions ? "orange" : "blue";
+
 const Template: Story<{
   rowHeight: number;
   width: number;
@@ -26,14 +35,19 @@ const Template: Story<{
   marginLeft: number;
   protein: "P99999" | "P42336";
   condensedView: boolean;
+  colorConfig: "random" | "prediction";
 }> = (args) => {
   setTimeout(async () => {
     await customElements.whenDefined("nightingale-variation");
     const variationTrack = document.getElementById("variation");
     if (variationTrack) {
-      (variationTrack as any).data = data[args.protein];
+      (variationTrack as NightingaleVariationType).data = data[args.protein];
+      (variationTrack as NightingaleVariationType).colorConfig =
+        args.colorConfig === "random"
+          ? randomColorConfig
+          : predictionColorConfig;
     }
-  }, 500);
+  }, 0);
   return html`
     <nightingale-variation
       id="variation"
@@ -57,23 +71,17 @@ BasicVariation.args = {
   marginLeft: 20,
   protein: "P99999",
   condensedView: false,
+  colorConfig: "random",
 };
 BasicVariation.argTypes = {
   protein: {
     options: ["P99999", "P42336"],
     control: { type: "radio" },
   },
-};
-
-BasicVariation.play = async (story) => {
-  await customElements.whenDefined("nightingale-variation");
-  const variationTrack = document.getElementById("variation");
-  if (variationTrack) {
-    (variationTrack as any).colorConfig = (v: any) => {
-      if (v.hasPredictions) return "green";
-      return "#DD2121";
-    };
-  }
+  colorConfig: {
+    options: ["random", "prediction"],
+    control: { type: "radio" },
+  },
 };
 
 export const NightingaleVariation = () => html`
@@ -111,5 +119,7 @@ export const NightingaleVariation = () => html`
 NightingaleVariation.play = async () => {
   await customElements.whenDefined("nightingale-variation");
   const variation = document.getElementById("links-2");
-  if (variation) (variation as any).data = data.P99999;
+  if (variation) {
+    (variation as NightingaleVariationType).data = data.P99999;
+  }
 };

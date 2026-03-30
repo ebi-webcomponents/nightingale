@@ -1,5 +1,5 @@
-import { html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { html, PropertyValues } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import NightingaleElement, {
   withSVGHighlight,
   withManager,
@@ -13,31 +13,41 @@ import {
   ScalePoint,
   Selection,
 } from "d3";
-// import _union from "lodash-es/union";
-// import _intersection from "lodash-es/intersection";
-// import _groupBy from "lodash-es/groupBy";
-import processVariants from "./processVariants";
-import VariationPlot from "./variationPlot";
-import { transformData, ProteinsAPIVariation } from "./proteinAPI";
+
+import { drawVariationPlot } from "./variationPlot";
+import { transformData } from "./proteinAPI";
+
+import type {
+  ProteinsAPIVariation,
+  Variant as OriginalVariant,
+} from "./proteinAPI";
 
 export type VariationDatum = {
-  accession: string;
-  variant: string;
-  start: number;
-  size?: number;
-  xrefNames: string[];
-  hasPredictions: boolean;
-  tooltipContent?: string;
-  alternativeSequence?: string;
-  internalId?: string;
-  wildType?: string;
-  color?: string;
-  consequenceType: string;
+  originalData: OriginalVariant;
+  transformedData: {
+    position: number;
+    mutatedType: string;
+    wildType: string;
+    internalID: `var_${string}`;
+  };
+  // accession: string;
+  // variant: string;
+  // start: number;
+  // size?: number;
+  // xrefNames: string[];
+  // hasPredictions: boolean;
+  // tooltipContent?: string;
+  // alternativeSequence?: string;
+  // internalId?: string;
+  // wildType?: string;
+  // color?: string;
+  // consequenceType: string;
 };
 
 export type VariationData = {
   sequence: string;
   variants: VariationDatum[];
+  aaPresence: Set<string>;
 };
 
 export type ProcessedVariationData = {
@@ -47,7 +57,7 @@ export type ProcessedVariationData = {
   variants: VariationDatum[];
 };
 
-const aaList = [
+export const aaList = [
   "G",
   "A",
   "V",
@@ -68,13 +78,13 @@ const aaList = [
   "Y",
   "W",
   "P",
-  "d",
-  "*",
+  "d", // Deleted
+  "*", // STOP codon
 ];
 
 @customElement("nightingale-variation")
 class NightingaleVariation extends withManager(
-  withSVGHighlight(NightingaleElement),
+  withSVGHighlight(NightingaleElement)
 ) {
   /**
    * Indicates the data is in the format of the protein API and needs to be transformed acordingly
@@ -96,15 +106,11 @@ class NightingaleVariation extends withManager(
 
   #data: VariationData | ProteinsAPIVariation | null | undefined;
 
-  processedData?: {
-    mutationArray: ProcessedVariationData[];
-    aaPresence: Record<string, boolean>;
-  } | null;
+  transformedData?: VariationData | null;
 
-  variationPlot?: VariationPlot;
   series?: Selection<
     SVGGElement,
-    ProcessedVariationData[],
+    VariationDatum[],
     HTMLElement | SVGElement | null,
     unknown
   >;
@@ -120,7 +126,7 @@ class NightingaleVariation extends withManager(
     HTMLElement | SVGElement | null,
     unknown
   >;
-  @state({})
+  @property()
   colorConfig: (v: VariationDatum) => string;
 
   constructor() {
@@ -141,10 +147,9 @@ class NightingaleVariation extends withManager(
 
   processData(data?: VariationData | ProteinsAPIVariation | null) {
     this.#data = data;
-    const transformedData = this.proteinAPI
+    this.transformedData = this.proteinAPI
       ? transformData(data as ProteinsAPIVariation)
       : (data as VariationData);
-    if (transformedData) this.processedData = processVariants(transformedData);
   }
 
   set data(data: VariationData | ProteinsAPIVariation | null | undefined) {
@@ -183,6 +188,10 @@ class NightingaleVariation extends withManager(
     nightingale-highlight {
       fill: #ffe999;
     }
+    
+    nightingale-variation .axis text {
+      font-family: monospace;
+    }
 
     nightingale-variation .variation-y-right line,
     nightingale-variation .axis path {
@@ -195,15 +204,13 @@ class NightingaleVariation extends withManager(
   }
 
   createFeatures() {
-    this.svg = select(this as unknown as NightingaleElement)
+    this.svg = select(this)
       .selectAll<SVGSVGElement, unknown>("svg")
-      .attr("id", "")
       .attr("width", this.width)
       .attr("height", this.height);
 
-    if (!this.processedData) return;
+    if (!this.transformedData) return;
 
-    this.variationPlot = new VariationPlot();
     // Group for the main chart
     const mainChart = this.svg
       .select("g.sequence-features")
@@ -217,7 +224,7 @@ class NightingaleVariation extends withManager(
       this.axisRight = mainChart.append("g");
     }
     // This is calling the data series render code for each of the items in the data
-    this.series = chartArea.datum(this.processedData.mutationArray);
+    this.series = chartArea.datum(this.transformedData.variants);
 
     this.updateScale();
   }
@@ -259,16 +266,22 @@ class NightingaleVariation extends withManager(
   override zoomRefreshed() {
     if (this.series) {
       this.updateScale();
-      if (this.variationPlot)
-        this.series.call(this.variationPlot.drawVariationPlot, this);
+      drawVariationPlot(this.series, this);
       this.updateHighlight();
+    }
+  }
+
+  override updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties);
+    if (this.series) {
+      drawVariationPlot(this.series, this);
     }
   }
 
   updateScale() {
     if (this.yScale) {
       const aaToDisplay = aaList.filter((aa) =>
-        this.condensedView ? this.processedData?.aaPresence[aa] : true,
+        this.condensedView ? this.transformedData?.aaPresence.has(aa) : true
       );
       if (this.rowHeight) {
         this.height =
@@ -282,7 +295,7 @@ class NightingaleVariation extends withManager(
       this.svg?.attr("width", this.width).attr("height", this.height);
 
       const yAxisLScale = axisLeft(this.yScale).tickSize(
-        -this.getWidthWithMargins(),
+        -this.getWidthWithMargins()
       );
       this.axisLeft
         ?.attr("class", "variation-y-left axis")
@@ -294,7 +307,7 @@ class NightingaleVariation extends withManager(
           "transform",
           `translate(${
             this.getWidthWithMargins() - this["margin-right"] + 2
-          }, 0)`,
+          }, 0)`
         )
         .attr("class", "variation-y-right axis")
         .call(yAxisRScale);

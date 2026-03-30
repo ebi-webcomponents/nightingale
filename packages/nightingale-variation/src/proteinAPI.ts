@@ -1,4 +1,4 @@
-import { VariationDatum } from "./nightingale-variation";
+import { aaList, VariationDatum } from "./nightingale-variation";
 
 export type ProteinsAPIVariation = {
   accession: string;
@@ -19,10 +19,10 @@ export type Variant = {
   // Note: one of the 2 following fields will be deprecated - don't know yet
   alternativeSequence?: AminoAcid;
   mutatedType?: AminoAcid;
-  begin: string;
-  end: string;
+  begin: string; // representing a number
+  end: string; // representing a number
   xrefs: Xref[];
-  cytogeneticBand: string;
+  cytogeneticBand?: string;
   genomicLocation?: string[];
   locations: Location[];
   codon?: string;
@@ -39,30 +39,30 @@ export type Variant = {
   ftId?: string;
 };
 
-export enum AminoAcid {
-  A = "A",
-  C = "C",
-  D = "D",
-  E = "E",
-  Empty = "*",
-  F = "F",
-  G = "G",
-  H = "H",
-  I = "I",
-  K = "K",
-  L = "L",
-  M = "M",
-  N = "N",
-  Nl = "NL",
-  P = "P",
-  Q = "Q",
-  R = "R",
-  S = "S",
-  T = "T",
-  V = "V",
-  W = "W",
-  Y = "Y",
-}
+export type AminoAcid =
+  | "A"
+  | "C"
+  | "D"
+  | "E"
+  | "*" // Empty
+  | "F"
+  | "G"
+  | "H"
+  | "I"
+  | "K"
+  | "L"
+  | "M"
+  | "N"
+  | "P"
+  | "Q"
+  | "R"
+  | "S"
+  | "T"
+  | "V"
+  | "W"
+  | "Y"
+  // above a bit useless, as we have some variants that have more than one AA
+  | string;
 
 export type Association = {
   name: string;
@@ -70,12 +70,13 @@ export type Association = {
   evidences: Evidence[];
   disease: boolean;
   description?: string;
+  clinicalSignificances?: ClinicalSignificance[];
 };
 
 export type Xref = {
   name: string;
   id: string;
-  url: string;
+  url?: string;
   alternativeUrl?: string;
 };
 
@@ -83,44 +84,43 @@ export type Xref = {
  * This has been imported from the backend enums but
  * might be best kept as a string...
  */
-export enum Source {
-  CLINVAR = "ClinVar",
-  ESP = "ESP",
-  EXAC = "ExAC",
-  GENOMES1K = "1000Genomes",
-  BOVINE_SNP50 = "BovineSNP50",
-  BOVINE_LD = "BovineLD",
-  BOVINE_HD = "BovineHD",
-  EQUINE_SNP50 = "EquineSNP50",
-  CHICKEN_600K = "Chicken600K",
-  KG_HQ = "1kg_hq",
-  COSMIC = "cosmic curated",
-  REVIEWED = "reviewed",
-  UNIPROT = "UniProt",
-  DBSNP = "dbSNP",
-  ENSEMBL = "Ensembl",
-  ENSEMBL_PLANTS = "EnsemblPlants",
-  VECTORBASE = "VectorBase",
-  REFSEQ = "RefSeq",
-  DBGAP = "dbGaP",
-  DDD = "DDD",
-  PHARMCOGKB = "PharmGKB",
-  ENSEMBL_FUNGI = "EnsemblFungi",
-  ENSEMBL_METAZOA = "EnsemblMetazoa",
-  GNOMAD_V2 = "gnomAD_v2.0",
-  GNOMAD_V3 = "gnomAD_v3.0",
-  TCGA = "NCI-TCGA",
-  TCGA_COSMIC = "NCI-TCGA Cosmic",
-  DECIPHER = "ddG2P",
-  TOPMED = "TOPMed",
-  GNOMAD = "gnomAD",
-  PHARMGKB = "pharmgkb",
-  SGRP = "SGRP",
-  SGD = "SGD",
-  JEFFARES_SNPS = "Jeffares_SNPs",
-  JEFFARES_INDELS = "Jeffares_Indels",
-  ENSEMBL_VIRUSES = "EnsemblViruses",
-}
+export type Source =
+  | "ClinVar"
+  | "ESP"
+  | "ExAC"
+  | "1000Genomes"
+  | "BovineSNP50"
+  | "BovineLD"
+  | "BovineHD"
+  | "EquineSNP50"
+  | "Chicken600K"
+  | "1kg_hq"
+  | "cosmic curated"
+  | "reviewed"
+  | "UniProt"
+  | "dbSNP"
+  | "Ensembl"
+  | "EnsemblPlants"
+  | "VectorBase"
+  | "RefSeq"
+  | "dbGaP"
+  | "DDD"
+  | "PharmGKB"
+  | "EnsemblFungi"
+  | "EnsemblMetazoa"
+  | "gnomAD_v2.0"
+  | "gnomAD_v3.0"
+  | "NCI-TCGA"
+  | "NCI-TCGA Cosmic"
+  | "ddG2P"
+  | "TOPMed"
+  | "gnomAD"
+  | "pharmgkb"
+  | "SGRP"
+  | "SGD"
+  | "Jeffares_SNPs"
+  | "Jeffares_Indels"
+  | "EnsemblViruses";
 
 export type Evidence = {
   code: string;
@@ -130,26 +130,27 @@ export type Evidence = {
 export type ClinicalSignificance = {
   type: ClinicalSignificanceType;
   sources: Source[];
+  reviewStatus?: string;
 };
 
-export enum ClinicalSignificanceType {
-  Benign = "Benign",
-  Disease = "Disease",
-  LikelyBenign = "Likely benign",
-  LikelyPathogenic = "Likely pathogenic",
-  Pathogenic = "Pathogenic",
-  Protective = "Protective",
-  VariantOfUncertainSignificance = "Variant of uncertain significance",
-}
+export type ClinicalSignificanceType =
+  | "Benign"
+  | "Disease"
+  | "Likely benign"
+  | "Likely pathogenic"
+  | "Pathogenic"
+  | "Protective"
+  | "Variant of uncertain significance"
+  | "Conflicting interpretations of pathogenicity";
 
-export enum ConsequenceType {
-  Empty = "-",
-  Frameshift = "frameshift",
-  InframeDeletion = "inframe deletion",
-  Insertion = "insertion",
-  Missense = "missense",
-  StopGained = "stop gained",
-}
+export type ConsequenceType =
+  | "-"
+  | "frameshift"
+  | "inframe deletion"
+  | "insertion"
+  | "missense"
+  | "stop gained"
+  | "stop lost";
 
 export type Description = {
   value: string;
@@ -177,61 +178,83 @@ export type Prediction = {
   version?: string;
 };
 
-export enum PredAlgorithmNameType {
-  PolyPhen = "PolyPhen",
-  Sift = "SIFT",
-}
+export type PredAlgorithmNameType = "PolyPhen" | "SIFT";
 
-export enum PredictionValType {
-  Benign = "benign",
-  Deleterious = "deleterious",
-  DeleteriousLowConfidence = "deleterious - low confidence",
-  PossiblyDamaging = "possibly damaging",
-  ProbablyDamaging = "probably damaging",
-  Tolerated = "tolerated",
-  ToleratedLowConfidence = "tolerated - low confidence",
-  Unknown = "unknown",
-}
+export type PredictionValType =
+  | "benign"
+  | "deleterious"
+  | "deleterious - low confidence"
+  | "possibly damaging"
+  | "probably damaging"
+  | "tolerated"
+  | "tolerated - low confidence"
+  | "unknown";
 
-export enum SourceType {
-  LargeScaleStudy = "large_scale_study",
-  Mixed = "mixed",
-  UniProt = "uniprot",
-}
+export type SourceType = "large_scale_study" | "mixed" | "uniprot";
 
-const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
-  const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
-  if (sourceType === "uniprot" || sourceType === "mixed") {
-    xrefNames.push("uniprot");
-  }
-  return xrefNames;
-};
+// const getSourceType = (xrefs: Xref[], sourceType: SourceType) => {
+//   const xrefNames = xrefs ? xrefs.map((ref) => ref.name) : [];
+//   if (sourceType === "uniprot" || sourceType === "mixed") {
+//     xrefNames.push("uniprot");
+//   }
+//   return xrefNames;
+// };
 
 export const transformData = (
   data: ProteinsAPIVariation
 ): {
   sequence: string;
   variants: VariationDatum[];
+  aaPresence: Set<string>;
 } | null => {
   const { sequence, features } = data;
-  const variants = features.map(
-    (variant) =>
-      ({
-        ...variant,
-        accession:
-          (variant.genomicLocation || []).length !== 0
-            ? (variant.genomicLocation || [])[0]
-            : String(Math.random()),
-        variant: variant.alternativeSequence
-          ? variant.alternativeSequence
-          : AminoAcid.Empty,
-        start: Number(variant.begin),
-        xrefNames: getSourceType(variant.xrefs, variant.sourceType),
-        hasPredictions: variant.predictions && variant.predictions.length > 0,
-        //   tooltipContent: formatTooltip(variant),
-        consequenceType: variant.consequenceType,
-      }) as VariationDatum
+  const aaNotPresent = new Set(aaList);
+  const variants = features.map((originalData) => {
+    const mutatedType =
+      // One will be deprecated at some point, but we don't know which
+      // If no alternative sequence: deletion, put lowercase "d"
+      originalData.alternativeSequence || originalData.mutatedType || "d";
+
+    aaNotPresent.delete(mutatedType);
+
+    const transformedData = {
+      position: +originalData.begin,
+      mutatedType,
+      wildType: originalData.wildType,
+    };
+
+    return {
+      originalData,
+      transformedData: {
+        ...transformedData,
+        internalID: `var_${transformedData.wildType}${transformedData.position}${transformedData.mutatedType}`,
+      },
+      // ...variant,
+      // accession:
+      //   (variant.genomicLocation || []).length !== 0
+      //     ? (variant.genomicLocation || [])[0]
+      //     : String(Math.random()),
+      // variant: variant.alternativeSequence
+      //   ? variant.alternativeSequence
+      //   : "*", // Empty
+      // start: Number(variant.begin),
+      // xrefNames: getSourceType(variant.xrefs, variant.sourceType),
+      // hasPredictions: variant.predictions
+      //   ? variant.predictions.length > 0
+      //   : false,
+      // consequenceType: variant.consequenceType,
+    } satisfies VariationDatum;
+  });
+
+  console.log(variants);
+
+  if (!variants) {
+    return null;
+  }
+
+  const aaPresence = new Set(
+    Array.from(aaList).filter((aa) => !aaNotPresent.has(aa))
   );
-  if (!variants) return null;
-  return { sequence, variants };
+
+  return { sequence, variants, aaPresence };
 };
