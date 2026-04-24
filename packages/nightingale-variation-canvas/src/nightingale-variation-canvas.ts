@@ -28,7 +28,7 @@ const DEFAULT_RADIUS = 5;
 /** Upper bound used when determining hit-test candidate positions; real `datum.size` values are typically ≤ 10. */
 const MAX_HIT_RADIUS = 10;
 
-/** Opacity at which variant circles are drawn. Matches `circle { opacity: 0.6 }` in SVG variation CSS. */
+/** Base opacity for variant circles. Matches `circle { opacity: 0.6 }` in SVG variation CSS. */
 const VARIANT_ALPHA = 0.6;
 
 @customElementOnce("nightingale-variation-canvas")
@@ -37,6 +37,10 @@ export default class NightingaleVariationCanvas extends withCanvas(
 ) {
   /** Variants indexed by sequence position for fast hit-testing. */
   private variantIndex?: Map<number, VariationDatum[]>;
+
+  /** Variant currently under the mouse. Drawn at full opacity to mirror the
+   * SVG `circle:hover { opacity: 1 }` affordance. */
+  private hoveredVariant: VariationDatum | null = null;
 
   override render() {
     return html`
@@ -123,6 +127,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
     "condensedView": this["condensedView"],
     "rowHeight": this["rowHeight"],
     "colorConfig": this["colorConfig"],
+    "hoveredVariant": this["hoveredVariant"],
   }));
 
   /** Request canvas redraw (debounced). */
@@ -153,7 +158,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
       this.getSeqPositionFromX(canvasWidth / scale + MAX_HIT_RADIUS) ?? Infinity;
     const marginTop = this["margin-top"];
 
-    ctx.globalAlpha = VARIANT_ALPHA;
+    const hovered = this.hoveredVariant;
 
     for (const entry of mutations) {
       if (entry.pos < leftEdgeSeq || entry.pos > rightEdgeSeq) continue;
@@ -169,6 +174,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
 
         const cy = scale * (marginTop + yRow);
         const r = scale * (variant.size ?? DEFAULT_RADIUS);
+        ctx.globalAlpha = variant === hovered ? 1 : VARIANT_ALPHA;
         ctx.fillStyle = variant.color ?? this.colorConfig(variant);
         ctx.beginPath();
         ctx.arc(cx, cy, r, 0, 2 * Math.PI);
@@ -177,6 +183,12 @@ export default class NightingaleVariationCanvas extends withCanvas(
     }
 
     ctx.globalAlpha = 1;
+  }
+
+  private setHoveredVariant(variant: VariationDatum | null): void {
+    if (this.hoveredVariant === variant) return;
+    this.hoveredVariant = variant;
+    this.requestDraw();
   }
 
   private getVariantAt(
@@ -276,6 +288,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
       this.handleMouseout(event);
       return;
     }
+    this.setHoveredVariant(variant);
     const withHighlight =
       this.getAttribute("highlight-event") === "onmouseover";
     const customEvent = createEvent(
@@ -293,6 +306,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
   }
 
   private handleMouseout(event: MouseEvent): void {
+    this.setHoveredVariant(null);
     const withHighlight =
       this.getAttribute("highlight-event") === "onmouseover";
     const customEvent = createEvent(
