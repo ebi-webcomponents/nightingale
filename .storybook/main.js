@@ -25,6 +25,10 @@ module.exports = {
         __dirname,
         "../packages/nightingale-new-core/src/index.ts"
       ),
+      "@nightingale-elements/nightingale-variation": path.resolve(
+        __dirname,
+        "../packages/nightingale-variation/src/index.ts"
+      ),
     };
     config.optimization = {
       ...config.optimization,
