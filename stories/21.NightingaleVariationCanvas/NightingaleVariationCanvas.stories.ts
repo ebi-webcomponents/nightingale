@@ -76,15 +76,10 @@ BasicVariationCanvas.play = async () => {
   }
 };
 
-export const SvgVsCanvasSideBySide = () => html`
+export const CompleteView = () => html`
   <style>
     .row {
       margin-top: 4px;
-    }
-    .label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 2px;
     }
   </style>
   <nightingale-manager style="width: 100%">
@@ -107,38 +102,20 @@ export const SvgVsCanvasSideBySide = () => html`
       ></nightingale-sequence>
     </div>
     <div class="row">
-      <div class="label">SVG</div>
-      <nightingale-variation
-        protein-api
-        id="variation-svg"
-        row-height="15"
-        length=${data.P99999.sequence.length}
-        highlight-color="rgba(30,200,20,0.2)"
-        highlight-event="onmouseover"
-        margin-left="20"
-        condensed-view
-      ></nightingale-variation>
-    </div>
-    <div class="row">
-      <div class="label">Canvas</div>
       <nightingale-variation-canvas
         protein-api
-        id="variation-canvas-compare"
+        id="variation-canvas-complete"
         row-height="15"
         length=${data.P99999.sequence.length}
         highlight-color="rgba(30,200,20,0.2)"
         highlight-event="onmouseover"
         margin-left="20"
-        condensed-view
       ></nightingale-variation-canvas>
     </div>
   </nightingale-manager>
 `;
-SvgVsCanvasSideBySide.play = async () => {
-  await customElements.whenDefined("nightingale-variation");
+CompleteView.play = async () => {
   await customElements.whenDefined("nightingale-variation-canvas");
-  const svg = document.getElementById("variation-svg");
-  if (svg) (svg as any).data = data.P99999;
-  const canvas = document.getElementById("variation-canvas-compare");
+  const canvas = document.getElementById("variation-canvas-complete");
   if (canvas) (canvas as any).data = data.P99999;
 };

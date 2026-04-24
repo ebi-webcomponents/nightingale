@@ -31,6 +31,7 @@ const MAX_HIT_RADIUS = 10;
 /** Base opacity for variant circles. Matches `circle { opacity: 0.6 }` in SVG variation CSS. */
 const VARIANT_ALPHA = 0.6;
 
+
 @customElementOnce("nightingale-variation-canvas")
 export default class NightingaleVariationCanvas extends withCanvas(
   NightingaleVariation,
@@ -41,6 +42,11 @@ export default class NightingaleVariationCanvas extends withCanvas(
   /** Variant currently under the mouse. Drawn at full opacity to mirror the
    * SVG `circle:hover { opacity: 1 }` affordance. */
   private hoveredVariant: VariationDatum | null = null;
+
+  /** Foreground canvas layered above the SVG (via `pointer-events: none`), used
+   * to redraw the hovered variant at full opacity on top of the SVG highlight
+   * band so the band doesn't tint the circle. */
+  private foregroundCanvasCtx?: CanvasRenderingContext2D;
 
   override render() {
     return html`
@@ -65,10 +71,17 @@ export default class NightingaleVariationCanvas extends withCanvas(
       </style>
       <div class="container">
         <div style="position: relative; z-index: 0;">
-          <canvas style="position: absolute; left: 0; top: 0; z-index: -1;"></canvas>
+          <canvas
+            class="background"
+            style="position: absolute; left: 0; top: 0; z-index: -1;"
+          ></canvas>
           <svg>
             <g class="sequence-features" />
           </svg>
+          <canvas
+            class="foreground"
+            style="position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none;"
+          ></canvas>
         </div>
       </div>
     `;
@@ -103,6 +116,14 @@ export default class NightingaleVariationCanvas extends withCanvas(
 
   override firstUpdated() {
     super.firstUpdated();
+    const foreground = this.renderRoot.querySelector<HTMLCanvasElement>(
+      "canvas.foreground",
+    );
+    this.foregroundCanvasCtx = foreground?.getContext("2d") ?? undefined;
+    if (foreground) {
+      foreground.style.width = `${this.width}px`;
+      foreground.style.height = `${this.height}px`;
+    }
     this.requestDraw();
   }
 
@@ -111,7 +132,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
     this.refresh();
   }
 
-  private readonly _drawStamp = new Stamp(() => ({
+  private readonly _backgroundStamp = new Stamp(() => ({
     "processedData": this["processedData"],
     "canvasCtx": this["canvasCtx"],
     "width": this["width"],
@@ -127,7 +148,6 @@ export default class NightingaleVariationCanvas extends withCanvas(
     "condensedView": this["condensedView"],
     "rowHeight": this["rowHeight"],
     "colorConfig": this["colorConfig"],
-    "hoveredVariant": this["hoveredVariant"],
   }));
 
   /** Request canvas redraw (debounced). */
@@ -135,9 +155,51 @@ export default class NightingaleVariationCanvas extends withCanvas(
   private readonly _drawer = Refresher(() => this._draw());
   /** Do not call directly — call `requestDraw` instead to avoid blocking the main thread. */
   private _draw(): void {
-    if (!this._drawStamp.update().changed) return;
-    this.adjustCanvasCtxLogicalSize();
-    this.drawCanvasContent();
+    const backgroundChanged = this._backgroundStamp.update().changed;
+    if (backgroundChanged) {
+      this.adjustCanvasCtxLogicalSize();
+      this.drawCanvasContent();
+    }
+    // Foreground is a single circle — cheap to redraw every tick, which covers
+    // hover changes without forcing a full background redraw.
+    this.adjustForegroundCtxLogicalSize();
+    this.drawForegroundContent();
+  }
+
+  private adjustForegroundCtxLogicalSize() {
+    const fg = this.foregroundCanvasCtx;
+    if (!fg) return;
+    const newWidth = Math.floor(this.width * this.canvasScale);
+    const newHeight = Math.floor(this.height * this.canvasScale);
+    if (fg.canvas.width !== newWidth) fg.canvas.width = newWidth;
+    if (fg.canvas.height !== newHeight) fg.canvas.height = newHeight;
+    fg.canvas.style.width = `${this.width}px`;
+    fg.canvas.style.height = `${this.height}px`;
+  }
+
+  private drawForegroundContent(): void {
+    const ctx = this.foregroundCanvasCtx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    const hovered = this.hoveredVariant;
+    if (!hovered || !this.yScale) return;
+    const aa = hovered.variant?.charAt(0);
+    if (!aa) return;
+    const yRow = this.yScale(aa);
+    if (yRow === undefined) return;
+
+    const scale = this.canvasScale;
+    const halfBaseWidth = 0.5 * this.getSingleBaseWidth();
+    const cx = scale * (this.getXFromSeqPosition(hovered.start) + halfBaseWidth);
+    const cy = scale * (this["margin-top"] + yRow);
+    const r = scale * (hovered.size ?? DEFAULT_RADIUS);
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = hovered.color ?? this.colorConfig(hovered);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.fill();
   }
 
   private drawCanvasContent() {
@@ -158,7 +220,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
       this.getSeqPositionFromX(canvasWidth / scale + MAX_HIT_RADIUS) ?? Infinity;
     const marginTop = this["margin-top"];
 
-    const hovered = this.hoveredVariant;
+    ctx.globalAlpha = VARIANT_ALPHA;
 
     for (const entry of mutations) {
       if (entry.pos < leftEdgeSeq || entry.pos > rightEdgeSeq) continue;
@@ -174,7 +236,6 @@ export default class NightingaleVariationCanvas extends withCanvas(
 
         const cy = scale * (marginTop + yRow);
         const r = scale * (variant.size ?? DEFAULT_RADIUS);
-        ctx.globalAlpha = variant === hovered ? 1 : VARIANT_ALPHA;
         ctx.fillStyle = variant.color ?? this.colorConfig(variant);
         ctx.beginPath();
         ctx.arc(cx, cy, r, 0, 2 * Math.PI);
@@ -272,7 +333,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
       withHighlight,
       true,
       variant.start,
-      undefined,
+      getVariantEnd(variant),
       event.target instanceof HTMLElement ? event.target : undefined,
       event,
       this,
@@ -297,7 +358,7 @@ export default class NightingaleVariationCanvas extends withCanvas(
       withHighlight,
       false,
       variant.start,
-      undefined,
+      getVariantEnd(variant),
       event.target instanceof HTMLElement ? event.target : undefined,
       event,
       this,
@@ -322,6 +383,17 @@ export default class NightingaleVariationCanvas extends withCanvas(
     );
     this.dispatchEvent(customEvent);
   }
+}
+
+/** Resolve a variant's end position for highlight-event dispatch. Protein-API
+ * variants carry `end` as a string (spread from the raw Variant type); plain
+ * VariationDatum objects have no `end` field — fall back to `start` so the
+ * column highlight still fires. */
+function getVariantEnd(variant: VariationDatum): number {
+  const end = (variant as unknown as { end?: number | string }).end;
+  if (end === undefined || end === null || end === "") return variant.start;
+  const n = Number(end);
+  return Number.isFinite(n) ? n : variant.start;
 }
 
 function buildVariantIndex(
