@@ -5,14 +5,15 @@
     <title>nightingale-variation-canvas benchmark</title>
     <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../node_modules/lit/polyfill-support.js"></script>
-    <script
-      type="module"
-      src="../../packages/nightingale-variation/dist/index.js"
-    ></script>
-    <script
-      type="module"
-      src="../../packages/nightingale-variation-canvas/dist/index.js"
-    ></script>
+    <!--
+      Bare imports below are resolved by `web-dev-server.config.mjs` to
+      `packages/*/src/index.ts`, so this page works against the source
+      directly — no `yarn build` step required.
+    -->
+    <script type="module">
+      import "@nightingale-elements/nightingale-variation";
+      import "@nightingale-elements/nightingale-variation-canvas";
+    </script>
     <style>
       body {
         font-family: system-ui, sans-serif;
@@ -60,9 +61,12 @@
       offscreen in <code>#stage</code>.
     </p>
     <p>
-      <strong>Prerequisite:</strong> run <code>yarn build</code> at the repo
-      root before opening this page — the benchmark imports from
-      <code>packages/*/dist/</code>.
+      <strong>How to run:</strong> from the repo root, run
+      <code>yarn benchmark:variation-canvas</code>. That starts the dev server
+      and opens this page in your browser; click <strong>Run benchmark</strong>
+      below to start the sweep. No build step is required — the dev server
+      compiles TypeScript on the fly and serves directly from
+      <code>packages/*/src</code>.
     </p>
     <button id="run">Run benchmark</button>
     <span id="status" style="margin-left: 12px; color: #666;"></span>
@@ -153,6 +157,19 @@
         return el;
       }
 
+      // The canvas component exposes `whenDrawn()` so we can await actual
+      // draw completion. The SVG component has no such hook — it draws
+      // synchronously inside `zoomRefreshed`, so a single RAF after the
+      // setter is enough to cover everything. Either way, this is more
+      // accurate than the previous double-RAF heuristic.
+      async function awaitDraw(el) {
+        if (typeof el.whenDrawn === "function") {
+          await el.whenDrawn();
+        } else {
+          await waitFrame();
+        }
+      }
+
       async function measureInitialLoad(tagName, data) {
         await customElements.whenDefined(tagName);
         const el = setupElement(tagName);
@@ -160,11 +177,8 @@
         await waitFrame();
         const start = performance.now();
         el.data = data;
-        // Yield twice — once for the Refresher sleep(0), once for the raf.
-        await waitFrame();
-        await waitFrame();
-        const elapsed = performance.now() - start;
-        return elapsed;
+        await awaitDraw(el);
+        return performance.now() - start;
       }
 
       async function measureRefresh(tagName, data) {
@@ -172,8 +186,7 @@
         const el = setupElement(tagName);
         await waitFrame();
         el.data = data;
-        await waitFrame();
-        await waitFrame();
+        await awaitDraw(el);
 
         const samples = [];
         let start = 1;
@@ -193,8 +206,7 @@
           const t = performance.now();
           el.setAttribute("display-start", String(start));
           el.setAttribute("display-end", String(end));
-          await waitFrame();
-          await waitFrame();
+          await awaitDraw(el);
           samples.push(performance.now() - t);
         }
         // Median is more stable than mean for these noisy measurements.
