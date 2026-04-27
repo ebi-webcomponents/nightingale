@@ -30,10 +30,18 @@ This component inherits from `nightingale-variation` and exposes the same attrib
 
 ## Parity gaps
 
-One intentional difference versus `nightingale-variation`:
+Intentional differences versus `nightingale-variation`:
 
 1. **`VariationDatum.internalId` is no longer set as a render side effect.** The SVG render path writes `d.internalId = "var_${wildType}${start}${mutation}"` while drawing. The canvas draw path does not. The field remains on the `VariationDatum` type for consumers that set it themselves.
 
+2. **Click / mouseover dispatch falls back to `start` when `end` is missing.** The SVG version passes `datum.end` straight through to the highlight-event payload, which can be `undefined`/`NaN` for raw `VariationDatum` objects. The canvas version uses `start` as the fallback when `end` is missing or non-numeric, so highlight events always carry a usable range.
+
 ## Performance
 
-See `dev/benchmarks/variation-canvas.html` for a reproducible benchmark comparing SVG vs canvas across variant counts.
+A reproducible benchmark comparing SVG vs canvas across variant counts lives at `dev/benchmarks/variation-canvas.html`. Run it with:
+
+```
+yarn benchmark:variation-canvas
+```
+
+That starts the dev server and opens the page in your browser. Click **Run benchmark** to start the sweep. No build step is required — the dev server compiles TypeScript on the fly and serves directly from `packages/*/src`.
