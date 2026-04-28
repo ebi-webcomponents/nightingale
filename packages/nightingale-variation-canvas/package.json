@@ -1,6 +1,6 @@
 {
   "name": "@nightingale-elements/nightingale-variation-canvas",
-  "version": "5.6.0",
+  "version": "5.9.0",
   "description": "Variation track type of the viewer, implemented via HTML canvas.",
   "files": [
     "dist",
@@ -35,7 +35,7 @@
   "sideEffects": false,
   "dependencies": {
     "@nightingale-elements/nightingale-new-core": "^5.6.0",
-    "@nightingale-elements/nightingale-variation": "^5.6.0",
+    "@nightingale-elements/nightingale-variation": "^5.9.0",
     "d3": "7.9.0"
   }
 }
