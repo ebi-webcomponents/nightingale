@@ -17,6 +17,7 @@
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --node-resolve --watch",
     "serve:prod": "MODE=prod yarn serve",
+    "benchmark:variation-canvas": "wds --node-resolve --watch --open /dev/benchmarks/variation-canvas.html",
     "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
