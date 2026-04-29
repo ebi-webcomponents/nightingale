@@ -14,6 +14,7 @@ import { html } from "lit";
 // Re-declared locally because `ProcessedVariationData` is not exported from
 // `@nightingale-elements/nightingale-variation`'s public entry point. Keep
 // this shape in sync with `packages/nightingale-variation/src/nightingale-variation.ts`.
+// Eventually `@nightingale-elements/nightingale-variation` will become obsolete.
 type ProcessedVariationData = {
   type: string;
   normal: string;
