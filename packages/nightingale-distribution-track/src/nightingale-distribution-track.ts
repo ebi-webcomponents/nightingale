@@ -13,7 +13,7 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { BaseType, select, Selection } from "d3";
+import { BaseType, select, Selection, color, scaleLinear, randomNormal, randomUniform, randomLcg } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -22,47 +22,11 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
   "font-family", "min-font-size", "fade-font-size", "max-font-size",
+  "y-min", "y-max", "hide-outliers",
 ] satisfies (keyof NightingaleDistributionTrack)[];
-const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = ["letter-order"] satisfies (keyof NightingaleDistributionTrack)[];
+const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleDistributionTrack)[];
 
-/** Order of amino acids in a column (top-to-bottom) */
-const AMINO_ACID_ORDER = Array.from("HYAVLIMFWSTQNKRDEPCG"); // Old Protvista order: HYSTQNAVLIMFWDEPKRCG
-/** Color to be used for unknown amino acids */
-const DEFAULT_COLOR = "#AAAAAA";
-/** Colors for amino acid groups, based on Clustal (https://www.jalview.org/help/html/colourSchemes/clustal.html) */
-const AMINO_GROUP_COLOR = {
-  aromatic: "#15A4A4",
-  hydrophobic: "#80A0F0",
-  polar: "#15C015",
-  positive: "#F01505",
-  negative: "#C048C0",
-  proline: "#C0C000",
-  cysteine: "#F08080",
-  glycine: "#F09048",
-};
-/** Colors for individual amino acids, based on Clustal (https://www.jalview.org/help/html/colourSchemes/clustal.html) */
-const AMINO_ACID_COLOR = {
-  H: AMINO_GROUP_COLOR.aromatic,
-  Y: AMINO_GROUP_COLOR.aromatic,
-  A: AMINO_GROUP_COLOR.hydrophobic,
-  V: AMINO_GROUP_COLOR.hydrophobic,
-  L: AMINO_GROUP_COLOR.hydrophobic,
-  I: AMINO_GROUP_COLOR.hydrophobic,
-  M: AMINO_GROUP_COLOR.hydrophobic,
-  F: AMINO_GROUP_COLOR.hydrophobic,
-  W: AMINO_GROUP_COLOR.hydrophobic,
-  S: AMINO_GROUP_COLOR.polar,
-  T: AMINO_GROUP_COLOR.polar,
-  N: AMINO_GROUP_COLOR.polar,
-  Q: AMINO_GROUP_COLOR.polar,
-  K: AMINO_GROUP_COLOR.positive,
-  R: AMINO_GROUP_COLOR.positive,
-  D: AMINO_GROUP_COLOR.negative,
-  E: AMINO_GROUP_COLOR.negative,
-  P: AMINO_GROUP_COLOR.proline,
-  C: AMINO_GROUP_COLOR.cysteine,
-  G: AMINO_GROUP_COLOR.glycine,
-};
+
 /** Color for rectangle stroke */
 const STROKE_COLOR = "#D3D3D3";
 /** Line width for rectangle stroke */
@@ -70,26 +34,38 @@ const LINE_WIDTH = 1;
 /** Maximum line width relative to column width (overrides `LINE_WIDTH` when zoomed out too much) */
 const MAX_REL_LINE_WIDTH = 0.2;
 
+/** Default fill color for boxes (stroke color will be derived from this) */
+const DEFAULT_DATA_COLOR = "#cccccc";
+/** Gap between columns relative to base width */
+const COLUMN_GAP = 0.2;
+/** Gap between boxes within a column relative to box width */
+const BOX_GAP = 0.1;
+/** Whisker width relative to box width */
+const WHISKER_REL_WIDTH = 0.6;
+/** Outlier jitter width relative to box width */
+const JITTER_REL_WIDTH = 0.4;
+/** Radius for the circles representing outliers */
+const OUTLIER_RADIUS = 2;
 
-/** Amino acid probability for each amino acid for each position */
-interface Probabilities { [letter: string]: number[] }
 
-/** Vertical position for each amino acid for each position */
-interface YPositions {
-  start: { [letter: string]: number[] },
-  end: { [letter: string]: number[] },
+interface Distribution {
+  position: number,
+  values: number[],
 }
 
-type LetterOrder = "default" | "probability";
+export interface DistributionDataset {
+  name: string,
+  color?: string,
+  positions: Distribution[],
+}
 
 /** Type for `NightingaleDistributionTrack.data`` */
-export interface DistributionData {
-  /** Sequence number for each position */
-  index: number[],
-  /** Amino acid probability for each amino acid for each position */
-  probabilities: Probabilities,
-}
+export type DistributionData = DistributionDataset[];
 
+const OptionalNumber = (str: string | null) => {
+  if (str) return Number(str);
+  return undefined;
+};
 
 @customElementOnce("nightingale-distribution-track")
 export default class NightingaleDistributionTrack extends withCanvas(
@@ -103,10 +79,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
     )
   )
 ) {
-  /** Order of amino acids within a column (top-to-bottom). default = fixed order based on amino acid groups, probability = on every position sort by descending probability */
-  @property({ type: String })
-  "letter-order": LetterOrder = "default";
-
   /** Font family for labels (can be a list of multiple font families separated by comma, like in CSS) */
   @property({ type: String })
   "font-family": string = "Helvetica,sans-serif";
@@ -123,9 +95,21 @@ export default class NightingaleDistributionTrack extends withCanvas(
   @property({ type: Number })
   "max-font-size": number = 24;
 
+  /** Bottom limit for Y-axis (default: minimum computed from data) */
+  @property({ converter: OptionalNumber })
+  "y-min"?: number;
+
+  /** Top limit for Y-axis (default: maximum computed from data) */
+  @property({ converter: OptionalNumber })
+  "y-max"?: number;
+
+  /** Turns off rendering of outliers */
+  @property({ type: Boolean })
+  "hide-outliers"?: boolean;
+
 
   #data?: DistributionData;
-  private yPositions?: YPositions;
+  private preprocessedData?: PreprocessedData;
   protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
@@ -134,22 +118,19 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (this.data) this.createTrack();
   }
 
-  /** Distribution data, e.g. TODO: example */
   get data(): DistributionData | undefined {
     return this.#data;
   }
   set data(data: DistributionData | undefined) {
     this.#data = data;
-    if (data) {
-      if (this["letter-order"] === "probability") {
-        this.yPositions = computeYPositions_ProbabilityOrder(data.probabilities);
-      } else {
-        this.yPositions = computeYPositions_FixedOrder(data.probabilities, AMINO_ACID_ORDER);
-      }
-    } else {
-      this.yPositions = undefined
-    }
+    this.preprocessedData = data ? preprocessData(data) : undefined;
     this.createTrack();
+  }
+  /** Return the range of Y values corresponding to bottom and top of the viewport (excluding margins) */
+  getYLimits(): [yMin: number, yMax: number] {
+    const yMin = this["y-min"] ?? this.preprocessedData?.yLimits.min ?? 0;
+    const yMax = this["y-max"] ?? this.preprocessedData?.yLimits.max ?? 100;
+    return [yMin, yMax];
   }
 
   override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -187,6 +168,8 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const stamp: Record<string, unknown> = {
       "data": this["data"],
       "canvasCtx": this["canvasCtx"],
+      "canvasWidth": this["width"],
+      "canvasHeight": this["height"],
       "canvasScale": this["canvasScale"],
       "display-start": this["display-start"],
       "display-end": this["display-end"],
@@ -208,7 +191,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     this.clearCanvas();
-    this.drawColumns();
+    this.drawBoxplot();
     this.drawMargins();
   }
 
@@ -218,54 +201,102 @@ export default class NightingaleDistributionTrack extends withCanvas(
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
-  private drawColumns() {
+  private drawBoxplot() {
     const ctx = this.canvasCtx;
     if (!ctx) return;
-    if (!this.data) return;
+    if (!this.data || !this.preprocessedData) return;
+
+    const nData = this.data.length;
 
     const scale = this.canvasScale;
     const baseWidthInCss = this.getSingleBaseWidth();
     const baseWidth = scale * baseWidthInCss;
-    const fontOpacity = this.getFontOpacity(baseWidthInCss);
     const columnOffset = scale * this["margin-top"];
     const columnHeight = scale * (this["height"] - this["margin-top"] - this["margin-bottom"]);
+    const xColumnOffset = baseWidth * 0.5 * COLUMN_GAP;
+    const xColumnWidth = baseWidth * (1 - COLUMN_GAP);
+    const xBoxWidth = xColumnWidth / nData * (1 - BOX_GAP);
+    const yScale = scaleLinear(this.getYLimits(), [columnOffset + columnHeight, columnOffset]);
+    const outlierRadius = scale * OUTLIER_RADIUS;
+
+    const yMedianExtra = scale * 1;
 
     ctx.lineWidth = scale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * baseWidthInCss);
     ctx.strokeStyle = STROKE_COLOR;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    const leftEdgeSeq = this.getSeqPositionFromX(0 - 0.5 * LINE_WIDTH) ?? -Infinity;
-    const rightEdgeSeq = this.getSeqPositionFromX(this.width + 0.5 * LINE_WIDTH) ?? Infinity;
-    const iFrom = Math.max(0, BinarySearch.firstGteqIndex(this.data.index, leftEdgeSeq - 1, x => x));
-    const iTo = Math.min(this.data.index.length, BinarySearch.firstGteqIndex(this.data.index, rightEdgeSeq, x => x));
+    const start = Math.floor(this.getSeqPositionFromX(0) ?? 1);
+    const end = Math.floor(this.getSeqPositionFromX(this.width) ?? 1);
+    for (let iData = 0; iData < nData; iData++) {
+      const dataset = this.preprocessedData.datasets[iData];
+      if (!dataset) continue;
 
-    for (let i = iFrom; i < iTo; i++) {
-      const x = scale * this.getXFromSeqPosition(this.data.index[i]);
-      const textX = x + 0.5 * baseWidth;
+      const dataColor = this.data[iData].color ?? DEFAULT_DATA_COLOR;
+      const boxFill = dataColor;
+      const boxStroke = color(boxFill)!.darker(2).formatHex();
 
-      for (const letter in this.yPositions?.start) {
-        const relStart = Math.min(this.yPositions.start[letter][i], 1);
-        const relEnd = Math.min(this.yPositions.end[letter][i], 1);
-        const start = relStart * columnHeight + columnOffset;
-        const end = relEnd * columnHeight + columnOffset;
-        const height = end - start;
+      const xBoxOffset = xColumnOffset + xColumnWidth * (iData + 0.5 * BOX_GAP) / nData;
+      const xCenter = xBoxOffset + 0.5 * xBoxWidth;
+      const xWhiskerHalfWidth = 0.5 * WHISKER_REL_WIDTH * xBoxWidth;
+      const xWhiskerOffset = xCenter - xWhiskerHalfWidth;
+      const xWhiskerEnd = xCenter + xWhiskerHalfWidth;
+      const xJitterHalfWidth = 0.5 * JITTER_REL_WIDTH * xBoxWidth;
 
-        // Draw rectangle
+      for (let i = start; i <= end; i++) {
+        const datum = dataset[i];
+        if (!datum) continue;
+
+        const x = scale * this.getXFromSeqPosition(i);
+        const yMedian = yScale(datum.median);
+        const yBoxLow = yScale(datum.boxLow);
+        const yBoxHigh = yScale(datum.boxHigh);
+        const yWhiskerLow = yScale(datum.whiskerLow);
+        const yWhiskerHigh = yScale(datum.whiskerHigh);
+
         ctx.globalAlpha = 1;
-        ctx.fillStyle = AMINO_ACID_COLOR[letter as keyof typeof AMINO_ACID_COLOR] ?? DEFAULT_COLOR;
-        ctx.fillRect(x, start, baseWidth, height);
-        ctx.strokeRect(x, start, baseWidth, height);
 
-        // Draw letter
-        if (fontOpacity === 0) continue;
-        const fontSize = Math.min(baseWidth, height, scale * this["max-font-size"]);
-        if (fontSize < scale * this["min-font-size"]) continue;
-        const textY = start + 0.5 * height;
-        ctx.globalAlpha = fontOpacity;
-        ctx.fillStyle = "black";
-        ctx.font = `${fontSize}px ${this["font-family"]}`;
-        ctx.fillText(letter, textX, textY);
+        // Whiskers
+        ctx.strokeStyle = boxStroke;
+        ctx.beginPath();
+        ctx.moveTo(x + xWhiskerOffset, yWhiskerHigh);
+        ctx.lineTo(x + xWhiskerEnd, yWhiskerHigh);
+        ctx.moveTo(x + xWhiskerOffset, yWhiskerLow);
+        ctx.lineTo(x + xWhiskerEnd, yWhiskerLow);
+        ctx.moveTo(x + xCenter, yWhiskerHigh);
+        ctx.lineTo(x + xCenter, yWhiskerLow);
+        ctx.stroke();
+
+        // Box
+        ctx.fillStyle = boxFill;
+        ctx.strokeStyle = boxStroke;
+        ctx.fillRect(x + xBoxOffset, yBoxHigh, xBoxWidth, yBoxLow - yBoxHigh);
+        ctx.strokeRect(x + xBoxOffset, yBoxHigh, xBoxWidth, yBoxLow - yBoxHigh);
+
+        // Median
+        ctx.fillStyle = boxStroke;
+        ctx.strokeStyle = boxStroke;
+        ctx.fillRect(x + xBoxOffset, yMedian - yMedianExtra, xBoxWidth, 2 * yMedianExtra);
+        ctx.strokeRect(x + xBoxOffset, yMedian - yMedianExtra, xBoxWidth, 2 * yMedianExtra);
+
+        // Outliers
+        if (!this["hide-outliers"]) {
+          const xJitter = xJitterHalfWidth !== 0 ?
+            randomUniform.source(randomLcg(i * nData + iData))(xCenter - xJitterHalfWidth, xCenter + xJitterHalfWidth)
+            : () => xCenter;
+          ctx.globalAlpha = 0.25;
+          ctx.fillStyle = boxStroke;
+          for (const outlier of datum.outliersHigh) {
+            ctx.beginPath();
+            ctx.arc(x + xJitter(), yScale(outlier), outlierRadius, 0, 2 * Math.PI);
+            ctx.fill();
+          }
+          for (const outlier of datum.outliersLow) {
+            ctx.beginPath();
+            ctx.arc(x + xJitter(), yScale(outlier), outlierRadius, 0, 2 * Math.PI);
+            ctx.fill();
+          }
+        }
       }
     }
   }
@@ -287,16 +318,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
     ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
     ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
     ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
-  }
-
-  private getFontOpacity(baseWidthInCss: number): number {
-    if (baseWidthInCss < this["min-font-size"]) {
-      return 0;
-    } else if (baseWidthInCss < this["fade-font-size"]) {
-      return (baseWidthInCss - this["min-font-size"]) / (this["fade-font-size"] - this["min-font-size"]);
-    } else {
-      return 1;
-    }
   }
 
   protected updateHighlight() {
@@ -358,14 +379,14 @@ export default class NightingaleDistributionTrack extends withCanvas(
   }
 
   private handleClick(event: MouseEvent): void {
-    const pointed = this.getPointedAminoAcid(event.offsetX, event.offsetY);
+    const pointed = this.getPointedDatum(event.offsetX, event.offsetY);
     if (pointed === undefined) {
       return;
     }
     const withHighlight = this.getAttribute("highlight-event") === "onclick";
     const customEvent = createEvent(
       "click",
-      pointed,
+      null, // TODO: pass (pointed.datum ?? null),
       withHighlight,
       true,
       pointed.position,
@@ -378,14 +399,14 @@ export default class NightingaleDistributionTrack extends withCanvas(
   }
 
   private handleMousemove(event: MouseEvent): void {
-    const pointed = this.getPointedAminoAcid(event.offsetX, event.offsetY);
+    const pointed = this.getPointedDatum(event.offsetX, event.offsetY);
     if (pointed === undefined) {
-      return this.handleMouseout(event);
+      return;
     }
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
     const customEvent = createEvent(
       "mouseover",
-      pointed,
+      null, // TODO: pass (pointed.datum ?? null),
       withHighlight,
       false,
       pointed.position,
@@ -413,70 +434,100 @@ export default class NightingaleDistributionTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
-  private getPointedAminoAcid(svgX: number, svgY: number): { position: number, aa: string, probability: number } | undefined {
-    if (!this.data) return undefined;
-    if (!this.yPositions) return undefined;
+  private getPointedDatum(svgX: number, svgY: number): { position: number, datum: PreprocessedDatum | undefined } | undefined {
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
-    const i = BinarySearch.firstEqIndex(this.data.index, position, x => x);
-    if (i === undefined) return undefined;
-    const relativeY = (svgY - this["margin-top"]) / (this["height"] - this["margin-top"] - this["margin-bottom"]);
-    for (const letter in this.yPositions.start) {
-      if (relativeY >= this.yPositions.start[letter][i] && relativeY < this.yPositions.end[letter][i]) {
-        return { position, aa: letter, probability: this.data.probabilities[letter][i] ?? 0 };
-      }
-    }
-    return undefined;
+    const datum = this.preprocessedData?.datasets[0][position]; // TODO: consider multiple datasets
+    return { position, datum };
   }
 }
 
 
-function computeYPositions_FixedOrder(probabilities: Probabilities, order: string[]): YPositions {
-  const normalizedOrder = normalizeOrder(Object.keys(probabilities), order);
-  const start: { [letter: string]: number[] } = {};
-  const end: { [letter: string]: number[] } = {};
-  for (const letter of normalizedOrder) {
-    start[letter] = [];
-    end[letter] = [];
+type PreprocessedData = ReturnType<typeof preprocessData>;
+
+function preprocessData(data: DistributionData) {
+  const preprocessedDatasets = data.map(preprocessDataset);
+  return {
+    datasets: preprocessedDatasets,
+    yLimits: getExtremes(preprocessedDatasets),
   }
-  const n = Math.max(0, ...normalizedOrder.map(letter => probabilities[letter].length));
-  for (let i = 0; i < n; i++) {
-    let cum = 0;
-    for (const letter of normalizedOrder) {
-      start[letter].push(cum);
-      cum += probabilities[letter][i] ?? 0;
-      end[letter].push(cum);
-    }
-  }
-  return { start, end };
 }
 
-function computeYPositions_ProbabilityOrder(probabilities: Probabilities): YPositions {
-  const alphabet = Object.keys(probabilities);
-  const start: { [letter: string]: number[] } = {};
-  const end: { [letter: string]: number[] } = {};
-  for (const letter of alphabet) {
-    start[letter] = [];
-    end[letter] = [];
+function preprocessDataset(dataset: DistributionDataset) {
+  const out: { [position: number]: PreprocessedDatum } = {};
+  for (const datum of dataset.positions) {
+    out[datum.position] = preprocessDatum(datum);
   }
-  const n = Math.max(0, ...alphabet.map(letter => probabilities[letter].length));
-  for (let i = 0; i < n; i++) {
-    let cum = 0;
-    alphabet.sort((a, b) => (probabilities[b][i] ?? 0) - (probabilities[a][i] ?? 0));
-    for (const letter of alphabet) {
-      start[letter].push(cum);
-      cum += probabilities[letter][i] ?? 0;
-      end[letter].push(cum);
-    }
-  }
-  return { start, end };
+  return out;
 }
 
-function normalizeOrder(present: string[], order: string[]) {
-  const presentSet = new Set(present);
-  const orderSet = new Set(order);
-  const ordered = order.filter(s => presentSet.has(s));
-  const rest = present.filter(s => !orderSet.has(s));
-  return ordered.concat(rest);
+interface PreprocessedDatum {
+  position: number,
+  values: number[],
+  median: number,
+  boxLow: number,
+  boxHigh: number,
+  whiskerLow: number,
+  whiskerHigh: number,
+  outliersLow: number[],
+  outliersHigh: number[],
+  minimum: number,
+  maximum: number,
+}
+
+function preprocessDatum(datum: Distribution): PreprocessedDatum {
+  const sorted = datum.values.slice().sort((a, b) => a - b);
+  const median = getQuantile(sorted, 0.5);
+  const q1 = getQuantile(sorted, 0.25);
+  const q3 = getQuantile(sorted, 0.75);
+  const iqr = q3 - q1;
+  /** Index of the first value >= q1 - 1.5 * IQR (low whisker) */
+  const iWhiskerLow = BinarySearch.firstGteqIndex(sorted, q1 - 1.5 * iqr, x => x)
+  const stop = BinarySearch.firstGteqIndex(sorted, q3 + 1.5 * iqr, x => x);
+  /** Index of the last value <= q3 + 1.5 * IQR (high whisker) */
+  const iWhiskerHigh = (stop >= sorted.length || sorted[stop] > q3 + 1.5 * iqr) ? stop - 1 : stop;
+
+  return {
+    position: datum.position,
+    values: sorted,
+    median,
+    boxLow: q1,
+    boxHigh: q3,
+    whiskerLow: sorted[iWhiskerLow],
+    whiskerHigh: sorted[iWhiskerHigh],
+    outliersLow: sorted.slice(0, iWhiskerLow),
+    outliersHigh: sorted.slice(iWhiskerHigh + 1, undefined),
+    minimum: sorted[0],
+    maximum: sorted[sorted.length - 1],
+  };
+}
+
+export function getQuantile(sortedValues: number[], p: number) {
+  const i_ = (sortedValues.length - 1) * p;
+  if (i_ >= sortedValues.length - 1) {
+    return sortedValues[sortedValues.length - 1];
+  }
+  const i = Math.floor(i_);
+  const q = i_ - i;
+  return sortedValues[i] * (1 - q) + sortedValues[i + 1] * q;
+}
+
+/** Gets the Y-axis limits for the given preprocessed data */
+function getExtremes(data: { [position: number]: PreprocessedDatum }[]) {
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (const dataset of data) {
+    for (const position in dataset) {
+      const datum = dataset[position];
+      if (datum.minimum < min) min = datum.minimum;
+      if (datum.maximum > max) max = datum.maximum;
+    }
+  }
+
+  return {
+    min: min === Infinity ? undefined : min,
+    max: max === -Infinity ? undefined : max,
+  };
 }

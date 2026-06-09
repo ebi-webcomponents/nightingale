@@ -187,6 +187,8 @@ export default class NightingaleConservationTrack extends withCanvas(
     const stamp: Record<string, unknown> = {
       "data": this["data"],
       "canvasCtx": this["canvasCtx"],
+      "canvasWidth": this["width"],
+      "canvasHeight": this["height"],
       "canvasScale": this["canvasScale"],
       "display-start": this["display-start"],
       "display-end": this["display-end"],
