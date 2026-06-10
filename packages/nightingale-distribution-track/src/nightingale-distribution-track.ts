@@ -13,7 +13,7 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { BaseType, select, Selection, color, scaleLinear, randomNormal, randomUniform, randomLcg } from "d3";
+import { BaseType, color, randomLcg, randomUniform, scaleLinear, select, Selection } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -46,6 +46,8 @@ const WHISKER_REL_WIDTH = 0.6;
 const JITTER_REL_WIDTH = 0.4;
 /** Radius for the circles representing outliers */
 const OUTLIER_RADIUS = 2;
+/** Column widths in CSS pixels, between which transition from "background" to "foreground" visualization happens */
+const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5];
 
 
 interface Distribution {
@@ -207,7 +209,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (!this.data || !this.preprocessedData) return;
 
     const nData = this.data.length;
-
     const scale = this.canvasScale;
     const baseWidthInCss = this.getSingleBaseWidth();
     const baseWidth = scale * baseWidthInCss;
@@ -215,11 +216,12 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const columnHeight = scale * (this["height"] - this["margin-top"] - this["margin-bottom"]);
     const xColumnOffset = baseWidth * 0.5 * COLUMN_GAP;
     const xColumnWidth = baseWidth * (1 - COLUMN_GAP);
+    const xColumnOffsetRight = xColumnOffset + xColumnWidth;
     const xBoxWidth = xColumnWidth / nData * (1 - BOX_GAP);
     const yScale = scaleLinear(this.getYLimits(), [columnOffset + columnHeight, columnOffset]);
     const outlierRadius = scale * OUTLIER_RADIUS;
-
     const yMedianExtra = scale * 1;
+    const [fgAlpha, bgAlpha] = this.getFgBgOpacity(baseWidthInCss / nData);
 
     ctx.lineWidth = scale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * baseWidthInCss);
     ctx.strokeStyle = STROKE_COLOR;
@@ -227,7 +229,47 @@ export default class NightingaleDistributionTrack extends withCanvas(
     ctx.textBaseline = "middle";
 
     const start = Math.floor(this.getSeqPositionFromX(0) ?? 1);
-    const end = Math.floor(this.getSeqPositionFromX(this.width) ?? 1);
+    /** Exclusive */
+    const stop = Math.floor(this.getSeqPositionFromX(this.width) ?? 1) + 1;
+
+    // "Background"
+    if (bgAlpha !== 0) {
+      for (let iData = 0; iData < nData; iData++) {
+        const dataset = this.preprocessedData.datasets[iData];
+        if (!dataset) continue;
+
+        const dataColor = this.data[iData].color ?? DEFAULT_DATA_COLOR;
+        const boxFill = dataColor;
+        const boxStroke = color(boxFill)!.darker(2).formatHex();
+        ctx.globalAlpha = 0.25 * bgAlpha;
+
+        const x = (i: number) => scale * this.getXFromSeqPosition(i);
+        // const yMin = (i: number) => yScale(dataset[i].minimum);
+        // const yMax = (i: number) => yScale(dataset[i].maximum);
+        const yWhiskerLow = (i: number) => yScale(dataset[i].whiskerLow);
+        const yWhiskerHigh = (i: number) => yScale(dataset[i].whiskerHigh);
+        // const yBoxLow = (i: number) => yScale(dataset[i].boxLow);
+        // const yBoxHigh = (i: number) => yScale(dataset[i].boxHigh);
+        const yMedianLow = (i: number) => yScale(dataset[i].median + yMedianExtra);
+        const yMedianHigh = (i: number) => yScale(dataset[i].median - yMedianExtra);
+
+        const segments = getContiguousSegments(start, stop, i => i in dataset);
+        for (const segment of segments) {
+          ctx.globalAlpha = 0.25 * bgAlpha;
+          ctx.fillStyle = boxFill;
+          // drawSilhouette(ctx, segment, x, yMin, yMax, [xColumnOffset, xColumnOffsetRight], 'fill');
+          drawSilhouette(ctx, segment, x, yWhiskerLow, yWhiskerHigh, [xColumnOffset, xColumnOffsetRight], 'fill');
+          // drawSilhouette(ctx, segment, x, yBoxLow, yBoxHigh, [xColumnOffset, xColumnOffsetRight], 'fill');
+          ctx.globalAlpha = 0.5 * bgAlpha;
+          ctx.fillStyle = boxStroke;
+          ctx.strokeStyle = boxStroke;
+          drawSilhouette(ctx, segment, x, yMedianLow, yMedianHigh, [xColumnOffset, xColumnOffsetRight], 'fill+stroke');
+        }
+      }
+    }
+
+    // "Foreground"
+    if (fgAlpha===0) return;
     for (let iData = 0; iData < nData; iData++) {
       const dataset = this.preprocessedData.datasets[iData];
       if (!dataset) continue;
@@ -243,7 +285,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const xWhiskerEnd = xCenter + xWhiskerHalfWidth;
       const xJitterHalfWidth = 0.5 * JITTER_REL_WIDTH * xBoxWidth;
 
-      for (let i = start; i <= end; i++) {
+      for (let i = start; i < stop; i++) {
         const datum = dataset[i];
         if (!datum) continue;
 
@@ -254,7 +296,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
         const yWhiskerLow = yScale(datum.whiskerLow);
         const yWhiskerHigh = yScale(datum.whiskerHigh);
 
-        ctx.globalAlpha = 1;
+        ctx.globalAlpha = fgAlpha;
 
         // Whiskers
         ctx.strokeStyle = boxStroke;
@@ -284,7 +326,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
           const xJitter = xJitterHalfWidth !== 0 ?
             randomUniform.source(randomLcg(i * nData + iData))(xCenter - xJitterHalfWidth, xCenter + xJitterHalfWidth)
             : () => xCenter;
-          ctx.globalAlpha = 0.25;
+          ctx.globalAlpha = 0.25 * fgAlpha;
           ctx.fillStyle = boxStroke;
           for (const outlier of datum.outliersHigh) {
             ctx.beginPath();
@@ -297,6 +339,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
             ctx.fill();
           }
         }
+        // TODO: fix outlier alpha rendering when 0 < fgAlpha < 1 (can be done without two canvases? with globalCompositeOperation?)
       }
     }
   }
@@ -318,6 +361,18 @@ export default class NightingaleDistributionTrack extends withCanvas(
     ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
     ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
     ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
+  }
+
+  private getFgBgOpacity(baseWidthInCss: number): [fgAlpha: number, bgAlpha: number] {
+    const [transitionMin, transitionMax] = FG_BG_TRANSITION_BASE_WIDTHS;
+    if (baseWidthInCss <= transitionMin) {
+      return [0, 1];
+    } else if (baseWidthInCss >= transitionMax) {
+      return [1, 0];
+    } else {
+      const fgAlpha = (baseWidthInCss - transitionMin) / (transitionMax - transitionMin);
+      return [fgAlpha, 1 - fgAlpha];
+    }
   }
 
   protected updateHighlight() {
@@ -530,4 +585,36 @@ function getExtremes(data: { [position: number]: PreprocessedDatum }[]) {
     min: min === Infinity ? undefined : min,
     max: max === -Infinity ? undefined : max,
   };
+}
+
+function getContiguousSegments(start: number, stop: number, isPresent: (i: number) => boolean): [start: number, stop: number][] {
+  const segments: [number, number][] = [];
+  for (let i = start; i < stop; i++) {
+    if (isPresent(i)) {
+      if (i === segments[segments.length - 1]?.[1]) {
+        segments[segments.length - 1][1]++;
+      } else {
+        segments.push([i, i + 1]);
+      }
+    }
+  }
+  return segments;
+}
+
+function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number, number], getX: (i: number) => number, getYLow: (i: number) => number, getYHigh: (i: number) => number, [columnOffsetLeft, columnOffsetRight]: [number, number], style: 'fill' | 'stroke' | 'fill+stroke') {
+  ctx.beginPath();
+  for (let i = sStart; i < sStop; i++) {
+    const x = getX(i);
+    const yHigh = getYHigh(i);
+    ctx.lineTo(x + columnOffsetLeft, yHigh);
+    ctx.lineTo(x + columnOffsetRight, yHigh);
+  }
+  for (let i = sStop - 1; i >= sStart; i--) {
+    const x = getX(i);
+    const yLow = getYLow(i);
+    ctx.lineTo(x + columnOffsetRight, yLow);
+    ctx.lineTo(x + columnOffsetLeft, yLow);
+  }
+  if (style.includes('fill')) ctx.fill();
+  if (style.includes('stroke')) ctx.stroke();
 }

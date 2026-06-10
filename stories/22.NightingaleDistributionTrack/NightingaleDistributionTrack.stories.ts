@@ -27,21 +27,41 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
 };
 
 
-const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIA";
+const nDataRepeat = 10;
+
+const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIA".repeat(nDataRepeat);
 
 function prepareDistributionData(data: DistributionData[number]): DistributionData {
+  const positions = data.positions.slice();
+  const shift = data.positions.length;
+  for (let i = 1; i < nDataRepeat; i++) {
+    for (const pos of data.positions) {
+      positions.push({ position: pos.position + i * shift, values: pos.values });
+    }
+  }
+
   return [
     {
       name: 'Data1',
       color: '#0088ff',
-      positions: data.positions,
+      positions: positions,
+      // positions: remove(positions, 3, 5, 6, 35), // DEBUG
     },
     {
       name: 'Data2',
       color: '#ff8800',
-      positions: data.positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.9) })),
+      positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
+      // positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
     },
   ];
+}
+
+function remove<T>(arr: T[], ...indices: number[]) {
+  const out = arr.slice();
+  for (const i of indices.sort((a, b) => b - a)) {
+    out.splice(i, 1);
+  }
+  return out;
 }
 
 function prepareLinegraphData(data: DistributionData) {
@@ -187,27 +207,3 @@ function makeStory(options: { length: number }): Story<Args> {
 export const LinegraphAndDistribution = makeStory({
   length: sampleSequence.length,
 });
-
-// function processDistributionData(csvData: string): DistributionData {
-//   console.log('csvData', csvData.length)
-//   const lines = csvData.trim().split('\n').map(line => line.trim()).filter(line => line.length > 0);
-//   const header = lines[0].split(',').map(h => h.trim());
-//   const unp_res_id = header.indexOf('unp_res_id');
-//   const raw_score = header.indexOf('raw_score');
-//   const grouped: { [unp_res_id: number]: number[] } = {};
-//   for (let i = 1; i < lines.length; i++) {
-//     const values = lines[i].split(',').map(v => v.trim());
-//     const resId = parseInt(values[unp_res_id]);
-//     const score = parseFloat(values[raw_score]);
-//     (grouped[resId] ??= []).push(score);
-//   }
-//   const resIds = Object.keys(grouped).map(Number).sort((a, b) => a - b);
-//   return {
-//     positions: resIds.map(pos => ({
-//       position: pos,
-//       values: grouped[pos]
-//     })),
-//     index: [1, 2, 3],
-//     probabilities: { 'A': [1, 1, 1] },
-//   };
-// }
