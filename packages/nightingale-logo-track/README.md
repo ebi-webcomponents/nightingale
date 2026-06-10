@@ -2,20 +2,31 @@
 
 [![Published on NPM](https://img.shields.io/npm/v/@nightingale-elements/nightingale-logo-track.svg)](https://www.npmjs.com/package/@nightingale-elements/nightingale-logo-track)
 
-The `nightingale-logo-track` component renders a sequence logo from a RNA (or DNA) multiple sequence alignment. Each column displays nucleotide letters scaled by their information content (IC), computed as the reduction in Shannon entropy relative to the maximum possible entropy for a 4-letter alphabet (2 bits). Gap-heavy columns are scaled down proportionally by coverage.
+The `nightingale-logo-track` component renders a sequence logo from a multiple sequence alignment. It works with both nucleotide (RNA/DNA) and amino acid (protein) alignments — the sequence type is detected automatically from the data. Each column displays letters scaled by their information content (IC), computed as the reduction in Shannon entropy relative to the maximum possible entropy for the alphabet. Gap-heavy columns are scaled down proportionally by coverage. The most-conserved residue is rendered at the top of each stack.
 
-**Colour scheme:**
+**Nucleotide colour scheme (RNA/DNA — up to 2 bits per column)**
 
-| Nucleotide | Colour |
-|------------|--------|
+| Base | Colour |
+|------|--------|
 | A | Green `#00CC00` |
 | C | Blue `#0000CC` |
-| G | Orange `#FFB300` |
+| G | Amber `#FFB300` |
 | U / T | Red `#CC0000` |
 
 DNA thymine (T) is automatically treated as RNA uracil (U).
 
-As `nightingale-logo-track` implements `withManager`, `withZoom`, and `withHighlight`, it will respond to zoom and pan events propagated by `nightingale-manager` and emit change events when the user interacts with it.
+**Amino acid colour scheme (protein — up to ~4.32 bits per column)**
+
+Colors follow the [WebLogo](https://weblogo.threeplusone.com) chemistry grouping:
+
+| Group | Residues | Colour |
+|-------|----------|--------|
+| Hydrophobic | A G V L I P F M W | Orange `#FF8C00` |
+| Polar uncharged | S T C Y N Q | Green `#00CC00` |
+| Positively charged | K R H | Blue `#0000CC` |
+| Negatively charged | D E | Red `#CC0000` |
+
+As `nightingale-logo-track` implements `withManager`, `withZoom`, and `withSVGHighlight`, it will respond to zoom, pan, and highlight events propagated by `nightingale-manager` and emit change events when the user interacts with it.
 
 ## Usage
 
@@ -87,14 +98,21 @@ Placing the track inside a `nightingale-manager` synchronises zoom, pan, and hig
 
 #### `sequences: Array<{ name: string; sequence: string }>`
 
-Gets or sets the multiple sequence alignment data. Each entry is an object with a `name` string and a `sequence` string containing single-letter nucleotide codes. Gap characters (`-`, `.`) and unrecognised characters are ignored when computing information content.
+Gets or sets the multiple sequence alignment data. Each entry is an object with a `name` string and a `sequence` string containing single-letter residue codes. Gap characters (`-`, `.`) and unrecognised characters are ignored when computing information content.
 
-Sequences can be RNA (`A`, `C`, `G`, `U`) or DNA (`A`, `C`, `G`, `T`); thymine is automatically converted to uracil for display purposes.
+The sequence type is detected automatically when `sequences` is set: if more than 5 % of non-gap characters are amino-acid-specific letters (anything outside `A C G T U N`), the track switches to protein mode and applies the amino acid colour scheme and a 20-letter IC ceiling. Otherwise it operates in nucleotide mode and DNA thymine is treated as uracil.
 
 ```javascript
+// RNA / DNA
 track.sequences = [
   { name: "seq1", sequence: "AAAGUCGGGCUUAUGCAACCGGU" },
   { name: "seq2", sequence: "AAACCCGAGCUUAUGCAACCGGU" },
+];
+
+// Protein — type detected automatically
+track.sequences = [
+  { name: "prot1", sequence: "AMSMSVLKHHFDA" },
+  { name: "prot2", sequence: "AMSMSVLRHHFDA" },
 ];
 ```
 
@@ -152,4 +170,4 @@ When set, scrolling only zooms if Ctrl (or Cmd on macOS) is held. Without this f
 
 ### Other attributes and properties
 
-This component inherits from `NightingaleElement` and implements the following mixins: `withManager`, `withZoom`, `withHighlight`, `withMargin`, `withPosition`, `withResizable`, `withDimensions`.
+This component inherits from `NightingaleElement` and implements the following mixins: `withManager`, `withSVGHighlight` (which includes `withZoom`, `withHighlight`, `withMargin`, `withPosition`, `withResizable`, `withDimensions`).
