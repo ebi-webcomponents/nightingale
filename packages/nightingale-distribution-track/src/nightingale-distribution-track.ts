@@ -49,6 +49,10 @@ const OUTLIER_RADIUS = 2;
 /** Column widths in CSS pixels, between which transition from "background" to "foreground" visualization happens */
 const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5];
 
+function makeStrokeColor(fillColor: string): string | undefined {
+  return color(fillColor)?.darker(2).formatHex();
+}
+
 
 interface Distribution {
   position: number,
@@ -193,7 +197,13 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     this.clearCanvas();
-    this.drawBoxplot();
+    const params = this.getDrawingMeasurements();
+    if (params.bgAlpha > 0) {
+      this.drawSimplifiedVisualization(params);
+    }
+    if (params.fgAlpha > 0) {
+      this.drawBoxplotVisualization(params);
+    }
     this.drawMargins();
   }
 
@@ -203,93 +213,35 @@ export default class NightingaleDistributionTrack extends withCanvas(
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
-  private drawBoxplot() {
+  /** Draw full boxplot visualization ("foreground" / zoomed-in) */
+  private drawBoxplotVisualization(params: ReturnType<typeof this.getDrawingMeasurements>) {
     const ctx = this.canvasCtx;
     if (!ctx) return;
     if (!this.data || !this.preprocessedData) return;
 
-    const nData = this.data.length;
-    const scale = this.canvasScale;
-    const baseWidthInCss = this.getSingleBaseWidth();
-    const baseWidth = scale * baseWidthInCss;
-    const columnOffset = scale * this["margin-top"];
-    const columnHeight = scale * (this["height"] - this["margin-top"] - this["margin-bottom"]);
-    const xColumnOffset = baseWidth * 0.5 * COLUMN_GAP;
-    const xColumnWidth = baseWidth * (1 - COLUMN_GAP);
-    const xColumnOffsetRight = xColumnOffset + xColumnWidth;
-    const xBoxWidth = xColumnWidth / nData * (1 - BOX_GAP);
-    const yScale = scaleLinear(this.getYLimits(), [columnOffset + columnHeight, columnOffset]);
-    const outlierRadius = scale * OUTLIER_RADIUS;
-    const yMedianExtra = scale * 1;
-    const [fgAlpha, bgAlpha] = this.getFgBgOpacity(baseWidthInCss / nData);
+    const { nDatasets, xColumnLeft, xColumnWidth, xScale, yScale, yMedianExtra, lineWidth, outlierRadius, fgAlpha, start, stop } = params;
+    ctx.lineWidth = lineWidth;
 
-    ctx.lineWidth = scale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * baseWidthInCss);
-    ctx.strokeStyle = STROKE_COLOR;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    const start = Math.floor(this.getSeqPositionFromX(0) ?? 1);
-    /** Exclusive */
-    const stop = Math.floor(this.getSeqPositionFromX(this.width) ?? 1) + 1;
-
-    // "Background"
-    if (bgAlpha !== 0) {
-      for (let iData = 0; iData < nData; iData++) {
-        const dataset = this.preprocessedData.datasets[iData];
-        if (!dataset) continue;
-
-        const dataColor = this.data[iData].color ?? DEFAULT_DATA_COLOR;
-        const boxFill = dataColor;
-        const boxStroke = color(boxFill)!.darker(2).formatHex();
-        ctx.globalAlpha = 0.25 * bgAlpha;
-
-        const x = (i: number) => scale * this.getXFromSeqPosition(i);
-        // const yMin = (i: number) => yScale(dataset[i].minimum);
-        // const yMax = (i: number) => yScale(dataset[i].maximum);
-        const yWhiskerLow = (i: number) => yScale(dataset[i].whiskerLow);
-        const yWhiskerHigh = (i: number) => yScale(dataset[i].whiskerHigh);
-        // const yBoxLow = (i: number) => yScale(dataset[i].boxLow);
-        // const yBoxHigh = (i: number) => yScale(dataset[i].boxHigh);
-        const yMedianLow = (i: number) => yScale(dataset[i].median + yMedianExtra);
-        const yMedianHigh = (i: number) => yScale(dataset[i].median - yMedianExtra);
-
-        const segments = getContiguousSegments(start, stop, i => i in dataset);
-        for (const segment of segments) {
-          ctx.globalAlpha = 0.25 * bgAlpha;
-          ctx.fillStyle = boxFill;
-          // drawSilhouette(ctx, segment, x, yMin, yMax, [xColumnOffset, xColumnOffsetRight], 'fill');
-          drawSilhouette(ctx, segment, x, yWhiskerLow, yWhiskerHigh, [xColumnOffset, xColumnOffsetRight], 'fill');
-          // drawSilhouette(ctx, segment, x, yBoxLow, yBoxHigh, [xColumnOffset, xColumnOffsetRight], 'fill');
-          ctx.globalAlpha = 0.5 * bgAlpha;
-          ctx.fillStyle = boxStroke;
-          ctx.strokeStyle = boxStroke;
-          drawSilhouette(ctx, segment, x, yMedianLow, yMedianHigh, [xColumnOffset, xColumnOffsetRight], 'fill+stroke');
-        }
-      }
-    }
-
-    // "Foreground"
-    if (fgAlpha===0) return;
-    for (let iData = 0; iData < nData; iData++) {
-      const dataset = this.preprocessedData.datasets[iData];
+    for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
+      const dataset = this.preprocessedData.datasets[iDataset];
       if (!dataset) continue;
 
-      const dataColor = this.data[iData].color ?? DEFAULT_DATA_COLOR;
+      const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
       const boxFill = dataColor;
-      const boxStroke = color(boxFill)!.darker(2).formatHex();
+      const boxStroke = makeStrokeColor(boxFill)!;
 
-      const xBoxOffset = xColumnOffset + xColumnWidth * (iData + 0.5 * BOX_GAP) / nData;
+      const xBoxOffset = xColumnLeft + (iDataset + 0.5 * BOX_GAP) * xColumnWidth / nDatasets;
+      const xBoxWidth = (1 - BOX_GAP) * xColumnWidth / nDatasets;
       const xCenter = xBoxOffset + 0.5 * xBoxWidth;
-      const xWhiskerHalfWidth = 0.5 * WHISKER_REL_WIDTH * xBoxWidth;
-      const xWhiskerOffset = xCenter - xWhiskerHalfWidth;
-      const xWhiskerEnd = xCenter + xWhiskerHalfWidth;
-      const xJitterHalfWidth = 0.5 * JITTER_REL_WIDTH * xBoxWidth;
+      const xWhiskerLeft = xCenter - 0.5 * WHISKER_REL_WIDTH * xBoxWidth;
+      const xWhiskerRight = xCenter + 0.5 * WHISKER_REL_WIDTH * xBoxWidth;
+      const xJitterHalfwidth = 0.5 * JITTER_REL_WIDTH * xBoxWidth;
 
       for (let i = start; i < stop; i++) {
         const datum = dataset[i];
         if (!datum) continue;
 
-        const x = scale * this.getXFromSeqPosition(i);
+        const x = xScale(i);
         const yMedian = yScale(datum.median);
         const yBoxLow = yScale(datum.boxLow);
         const yBoxHigh = yScale(datum.boxHigh);
@@ -301,10 +253,10 @@ export default class NightingaleDistributionTrack extends withCanvas(
         // Whiskers
         ctx.strokeStyle = boxStroke;
         ctx.beginPath();
-        ctx.moveTo(x + xWhiskerOffset, yWhiskerHigh);
-        ctx.lineTo(x + xWhiskerEnd, yWhiskerHigh);
-        ctx.moveTo(x + xWhiskerOffset, yWhiskerLow);
-        ctx.lineTo(x + xWhiskerEnd, yWhiskerLow);
+        ctx.moveTo(x + xWhiskerLeft, yWhiskerHigh);
+        ctx.lineTo(x + xWhiskerRight, yWhiskerHigh);
+        ctx.moveTo(x + xWhiskerLeft, yWhiskerLow);
+        ctx.lineTo(x + xWhiskerRight, yWhiskerLow);
         ctx.moveTo(x + xCenter, yWhiskerHigh);
         ctx.lineTo(x + xCenter, yWhiskerLow);
         ctx.stroke();
@@ -323,8 +275,8 @@ export default class NightingaleDistributionTrack extends withCanvas(
 
         // Outliers
         if (!this["hide-outliers"]) {
-          const xJitter = xJitterHalfWidth !== 0 ?
-            randomUniform.source(randomLcg(i * nData + iData))(xCenter - xJitterHalfWidth, xCenter + xJitterHalfWidth)
+          const xJitter = xJitterHalfwidth !== 0 ?
+            randomUniform.source(randomLcg(i * nDatasets + iDataset))(xCenter - xJitterHalfwidth, xCenter + xJitterHalfwidth)
             : () => xCenter;
           ctx.globalAlpha = 0.25 * fgAlpha;
           ctx.fillStyle = boxStroke;
@@ -342,6 +294,104 @@ export default class NightingaleDistributionTrack extends withCanvas(
         // TODO: fix outlier alpha rendering when 0 < fgAlpha < 1 (can be done without two canvases? with globalCompositeOperation?)
       }
     }
+  }
+
+  /** Draw simplified visualization ("background" / zoomed-out) */
+  private drawSimplifiedVisualization(params: ReturnType<typeof this.getDrawingMeasurements>) {
+    const ctx = this.canvasCtx;
+    if (!ctx) return;
+    if (!this.data || !this.preprocessedData) return;
+
+    const { nDatasets, xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, bgAlpha, start, stop } = params;
+    ctx.lineWidth = lineWidth;
+
+    for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
+      const dataset = this.preprocessedData.datasets[iDataset];
+      if (!dataset) continue;
+
+      const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
+      const boxFill = dataColor;
+      const boxStroke = makeStrokeColor(boxFill)!;
+      ctx.globalAlpha = 0.25 * bgAlpha;
+
+      // const yMin = (i: number) => yScale(dataset[i].minimum);
+      // const yMax = (i: number) => yScale(dataset[i].maximum);
+      const yWhiskerLow = (i: number) => yScale(dataset[i].whiskerLow);
+      const yWhiskerHigh = (i: number) => yScale(dataset[i].whiskerHigh);
+      // const yBoxLow = (i: number) => yScale(dataset[i].boxLow);
+      // const yBoxHigh = (i: number) => yScale(dataset[i].boxHigh);
+      const yMedianLow = (i: number) => yScale(dataset[i].median + yMedianExtra);
+      const yMedianHigh = (i: number) => yScale(dataset[i].median - yMedianExtra);
+
+      const segments = getContiguousSegments(start, stop, i => i in dataset);
+      for (const segment of segments) {
+        ctx.globalAlpha = 0.25 * bgAlpha;
+        ctx.fillStyle = boxFill;
+        // drawSilhouette(ctx, segment, xScale, yMin, yMax, [xColumnOffset, xColumnOffsetRight], 'fill');
+        drawSilhouette(ctx, segment, xScale, yWhiskerLow, yWhiskerHigh, [xColumnLeft, xColumnRight], 'fill');
+        // drawSilhouette(ctx, segment, xScale, yBoxLow, yBoxHigh, [xColumnOffset, xColumnOffsetRight], 'fill');
+        ctx.globalAlpha = 0.5 * bgAlpha;
+        ctx.fillStyle = boxStroke;
+        ctx.strokeStyle = boxStroke;
+        drawSilhouette(ctx, segment, xScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
+      }
+    }
+  }
+
+  private getDrawingMeasurements() {
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    const canvasScale = this.canvasScale;
+    const xBaseWidthInCss = this.getSingleBaseWidth();
+    const xBaseWidth = canvasScale * xBaseWidthInCss;
+    const xColumnLeft = xBaseWidth * 0.5 * COLUMN_GAP;
+    const xColumnWidth = xBaseWidth * (1 - COLUMN_GAP);
+    const xColumnRight = xColumnLeft + xColumnWidth;
+    const xScale = (i: number) => canvasScale * this.getXFromSeqPosition(i);
+
+    const yColumnOffset = canvasScale * this["margin-top"];
+    const yColumnHeight = canvasScale * (this["height"] - this["margin-top"] - this["margin-bottom"]);
+    const yScale = scaleLinear(this.getYLimits(), [yColumnOffset + yColumnHeight, yColumnOffset]);
+    const yMedianExtra = canvasScale * 1;
+
+    const lineWidth = canvasScale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * xBaseWidthInCss);
+    const outlierRadius = canvasScale * OUTLIER_RADIUS;
+
+
+    const [fgAlpha, bgAlpha] = this.getFgBgOpacity(xBaseWidthInCss / nDatasets);
+
+    const start = Math.floor(this.getSeqPositionFromX(0) ?? 1);
+    const stop = Math.floor(this.getSeqPositionFromX(this.width) ?? 1) + 1;
+
+    return {
+      /** Number of dataset (independent variables) */
+      nDatasets,
+      /** Ratio of canvas logical size versus canvas display size */
+      canvasScale,
+      /** Horizontal offset of the displayed column from the beginning of the slot, in canvas space */
+      xColumnLeft,
+      /** Horizontal offset of the right edge of displayed column from the beginning of the slot, in canvas space */
+      xColumnRight,
+      /** Width of displayed column, in canvas space */
+      xColumnWidth,
+      /** Scale from sequence position to horizontal offset of the slot in canvas space (does not consider column gap) */
+      xScale,
+      /** Scale from value of independent variable to vertical position in canvas space */
+      yScale,
+      /** Amount for vertically thickening the median rectangle, in canvas space */
+      yMedianExtra,
+      /** Line width for strokes, in canvas space */
+      lineWidth,
+      /** Circle radius for drawing outliers, in canvas space */
+      outlierRadius,
+      /** Opacity of the "foreground" (zoomed-in) visualization */
+      fgAlpha,
+      /** Opacity of the "background" (zoomed-out) visualization */
+      bgAlpha,
+      /** Sequence position of the first rendered datapoint */
+      start,
+      /** Sequence position of the last rendered datapoint + 1 */
+      stop,
+    };
   }
 
   private drawMargins() {
