@@ -2,10 +2,6 @@ import { getQuantile } from "../src/nightingale-distribution-track";
 
 
 describe("getQuantile", () => {
-  // test("foo", () => {
-  //   expect(2 + 2).toEqual(4);
-  // });
-
   // Basic quantile calculations
   test("calculates median (0.5 quantile) of odd-length array", () => {
     expect(getQuantile([1, 2, 3, 4, 5], 0.5)).toEqual(3);

@@ -27,8 +27,6 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleDistributionTrack)[];
 
 
-/** Color for rectangle stroke */
-const STROKE_COLOR = "#D3D3D3";
 /** Line width for rectangle stroke */
 const LINE_WIDTH = 1;
 /** Maximum line width relative to column width (overrides `LINE_WIDTH` when zoomed out too much) */
@@ -49,8 +47,8 @@ const OUTLIER_RADIUS = 2;
 /** Column widths in CSS pixels, between which transition from "background" to "foreground" visualization happens */
 const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5];
 
-function makeStrokeColor(fillColor: string): string | undefined {
-  return color(fillColor)?.darker(2).formatHex();
+function makeStrokeColor(dataColor: string): string | undefined {
+  return color(dataColor)?.darker(2).formatHex();
 }
 
 
@@ -196,39 +194,70 @@ export default class NightingaleDistributionTrack extends withCanvas(
   private _draw(): void {
     if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
-    this.clearCanvas();
-    const params = this.getDrawingMeasurements();
-    if (params.bgAlpha > 0) {
-      this.drawSimplifiedVisualization(params);
-    }
-    if (params.fgAlpha > 0) {
-      this.drawBoxplotVisualization(params);
-    }
-    this.drawMargins();
+    if (!this.canvasCtx) return;
+    this.clearCanvas(this.canvasCtx);
+    this.drawData(this.canvasCtx);
+    this.drawMargins(this.canvasCtx);
   }
 
-  private clearCanvas() {
-    const ctx = this.canvasCtx;
-    if (!ctx) return;
+  private getOffscreenCanvas(): [canvas: HTMLCanvasElement, canvasContext?: CanvasRenderingContext2D] {
+    this._offscreenCanvas ??= document.createElement("canvas");
+    const width = this.canvasCtx?.canvas.width ?? 1;
+    const height = this.canvasCtx?.canvas.height ?? 1;
+    if (this._offscreenCanvas.width !== width) {
+      this._offscreenCanvas.width = width;
+    }
+    if (this._offscreenCanvas.height !== height) {
+      this._offscreenCanvas.height = height;
+    }
+    const ctx = this._offscreenCanvas.getContext('2d') ?? undefined;
+    return [this._offscreenCanvas, ctx];
+  }
+  private _offscreenCanvas?: HTMLCanvasElement;
+
+  private clearCanvas(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
+  private drawData(ctx: CanvasRenderingContext2D) {
+    const [fgAlpha, bgAlpha] = this.getFgBgOpacity();
+
+    // Draw background (zoomed-out) visualization
+    if (bgAlpha > 0) {
+      this.drawSimplifiedVisualization(ctx, bgAlpha);
+    }
+
+    // Draw foreground (zoomed-in) visualization
+    if (fgAlpha === 1) {
+      // Draw foreground visualization directly
+      this.drawBoxplotVisualization(ctx);
+    } else if (fgAlpha > 0) {
+      // Draw foreground visualization via an auxiliary canvas (cannot be drawn directly to the main canvas, because overlapping outliers would create opacity > fgAlpha)
+      const [auxCanvas, auxCtx] = this.getOffscreenCanvas();
+      if (auxCtx) {
+        this.clearCanvas(auxCtx);
+        this.drawBoxplotVisualization(auxCtx);
+        ctx.globalAlpha = fgAlpha;
+        ctx.drawImage(auxCanvas, 0, 0);
+      }
+    }
+  }
+
   /** Draw full boxplot visualization ("foreground" / zoomed-in) */
-  private drawBoxplotVisualization(params: ReturnType<typeof this.getDrawingMeasurements>) {
-    const ctx = this.canvasCtx;
-    if (!ctx) return;
+  private drawBoxplotVisualization(ctx: CanvasRenderingContext2D) {
     if (!this.data || !this.preprocessedData) return;
 
-    const { nDatasets, xColumnLeft, xColumnWidth, xScale, yScale, yMedianExtra, lineWidth, outlierRadius, fgAlpha, start, stop } = params;
+    const { xColumnLeft, xColumnWidth, xScale, yScale, yMedianExtra, lineWidth, outlierRadius, start, stop } = this.getDrawingMeasurements();
     ctx.lineWidth = lineWidth;
 
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
       const dataset = this.preprocessedData.datasets[iDataset];
       if (!dataset) continue;
 
       const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
-      const boxFill = dataColor;
-      const boxStroke = makeStrokeColor(boxFill)!;
+      const fillColor = dataColor;
+      const strokeColor = makeStrokeColor(dataColor)!;
 
       const xBoxOffset = xColumnLeft + (iDataset + 0.5 * BOX_GAP) * xColumnWidth / nDatasets;
       const xBoxWidth = (1 - BOX_GAP) * xColumnWidth / nDatasets;
@@ -248,10 +277,10 @@ export default class NightingaleDistributionTrack extends withCanvas(
         const yWhiskerLow = yScale(datum.whiskerLow);
         const yWhiskerHigh = yScale(datum.whiskerHigh);
 
-        ctx.globalAlpha = fgAlpha;
+        ctx.globalAlpha = 1;
 
         // Whiskers
-        ctx.strokeStyle = boxStroke;
+        ctx.strokeStyle = strokeColor;
         ctx.beginPath();
         ctx.moveTo(x + xWhiskerLeft, yWhiskerHigh);
         ctx.lineTo(x + xWhiskerRight, yWhiskerHigh);
@@ -262,14 +291,14 @@ export default class NightingaleDistributionTrack extends withCanvas(
         ctx.stroke();
 
         // Box
-        ctx.fillStyle = boxFill;
-        ctx.strokeStyle = boxStroke;
+        ctx.fillStyle = fillColor;
+        ctx.strokeStyle = strokeColor;
         ctx.fillRect(x + xBoxOffset, yBoxHigh, xBoxWidth, yBoxLow - yBoxHigh);
         ctx.strokeRect(x + xBoxOffset, yBoxHigh, xBoxWidth, yBoxLow - yBoxHigh);
 
         // Median
-        ctx.fillStyle = boxStroke;
-        ctx.strokeStyle = boxStroke;
+        ctx.fillStyle = strokeColor;
+        ctx.strokeStyle = strokeColor;
         ctx.fillRect(x + xBoxOffset, yMedian - yMedianExtra, xBoxWidth, 2 * yMedianExtra);
         ctx.strokeRect(x + xBoxOffset, yMedian - yMedianExtra, xBoxWidth, 2 * yMedianExtra);
 
@@ -278,8 +307,8 @@ export default class NightingaleDistributionTrack extends withCanvas(
           const xJitter = xJitterHalfwidth !== 0 ?
             randomUniform.source(randomLcg(i * nDatasets + iDataset))(xCenter - xJitterHalfwidth, xCenter + xJitterHalfwidth)
             : () => xCenter;
-          ctx.globalAlpha = 0.25 * fgAlpha;
-          ctx.fillStyle = boxStroke;
+          ctx.globalAlpha = 0.25;
+          ctx.fillStyle = strokeColor;
           for (const outlier of datum.outliersHigh) {
             ctx.beginPath();
             ctx.arc(x + xJitter(), yScale(outlier), outlierRadius, 0, 2 * Math.PI);
@@ -291,28 +320,25 @@ export default class NightingaleDistributionTrack extends withCanvas(
             ctx.fill();
           }
         }
-        // TODO: fix outlier alpha rendering when 0 < fgAlpha < 1 (can be done without two canvases? with globalCompositeOperation?)
       }
     }
   }
 
   /** Draw simplified visualization ("background" / zoomed-out) */
-  private drawSimplifiedVisualization(params: ReturnType<typeof this.getDrawingMeasurements>) {
-    const ctx = this.canvasCtx;
-    if (!ctx) return;
+  private drawSimplifiedVisualization(ctx: CanvasRenderingContext2D, alpha: number) {
     if (!this.data || !this.preprocessedData) return;
 
-    const { nDatasets, xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, bgAlpha, start, stop } = params;
+    const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
     ctx.lineWidth = lineWidth;
 
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
       const dataset = this.preprocessedData.datasets[iDataset];
       if (!dataset) continue;
 
       const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
-      const boxFill = dataColor;
-      const boxStroke = makeStrokeColor(boxFill)!;
-      ctx.globalAlpha = 0.25 * bgAlpha;
+      const fillColor = dataColor;
+      const strokeColor = makeStrokeColor(dataColor)!;
 
       // const yMin = (i: number) => yScale(dataset[i].minimum);
       // const yMax = (i: number) => yScale(dataset[i].maximum);
@@ -325,21 +351,37 @@ export default class NightingaleDistributionTrack extends withCanvas(
 
       const segments = getContiguousSegments(start, stop, i => i in dataset);
       for (const segment of segments) {
-        ctx.globalAlpha = 0.25 * bgAlpha;
-        ctx.fillStyle = boxFill;
-        // drawSilhouette(ctx, segment, xScale, yMin, yMax, [xColumnOffset, xColumnOffsetRight], 'fill');
+        ctx.globalAlpha = 0.25 * alpha;
+        ctx.fillStyle = fillColor;
+        // drawSilhouette(ctx, segment, xScale, yMin, yMax, [xColumnLeft, xColumnRight], 'fill');
         drawSilhouette(ctx, segment, xScale, yWhiskerLow, yWhiskerHigh, [xColumnLeft, xColumnRight], 'fill');
-        // drawSilhouette(ctx, segment, xScale, yBoxLow, yBoxHigh, [xColumnOffset, xColumnOffsetRight], 'fill');
-        ctx.globalAlpha = 0.5 * bgAlpha;
-        ctx.fillStyle = boxStroke;
-        ctx.strokeStyle = boxStroke;
+        // drawSilhouette(ctx, segment, xScale, yBoxLow, yBoxHigh, [xColumnLeft, xColumnRight], 'fill');
+
+        ctx.globalAlpha = 0.5 * alpha;
+        ctx.fillStyle = strokeColor;
+        ctx.strokeStyle = strokeColor;
         drawSilhouette(ctx, segment, xScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
       }
     }
   }
 
+  private drawMargins(ctx: CanvasRenderingContext2D) {
+    const canvasWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+    const marginLeft = this["margin-left"] * this.canvasScale;
+    const marginRight = this["margin-right"] * this.canvasScale;
+    const marginTop = this["margin-top"] * this.canvasScale;
+    const marginBottom = this["margin-bottom"] * this.canvasScale;
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = this["margin-color"];
+    ctx.fillRect(0, 0, marginLeft, canvasHeight);
+    ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
+    ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
+    ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
+  }
+
   private getDrawingMeasurements() {
-    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     const canvasScale = this.canvasScale;
     const xBaseWidthInCss = this.getSingleBaseWidth();
     const xBaseWidth = canvasScale * xBaseWidthInCss;
@@ -356,15 +398,10 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const lineWidth = canvasScale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * xBaseWidthInCss);
     const outlierRadius = canvasScale * OUTLIER_RADIUS;
 
-
-    const [fgAlpha, bgAlpha] = this.getFgBgOpacity(xBaseWidthInCss / nDatasets);
-
     const start = Math.floor(this.getSeqPositionFromX(0) ?? 1);
     const stop = Math.floor(this.getSeqPositionFromX(this.width) ?? 1) + 1;
 
     return {
-      /** Number of dataset (independent variables) */
-      nDatasets,
       /** Ratio of canvas logical size versus canvas display size */
       canvasScale,
       /** Horizontal offset of the displayed column from the beginning of the slot, in canvas space */
@@ -383,10 +420,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
       lineWidth,
       /** Circle radius for drawing outliers, in canvas space */
       outlierRadius,
-      /** Opacity of the "foreground" (zoomed-in) visualization */
-      fgAlpha,
-      /** Opacity of the "background" (zoomed-out) visualization */
-      bgAlpha,
       /** Sequence position of the first rendered datapoint */
       start,
       /** Sequence position of the last rendered datapoint + 1 */
@@ -394,33 +427,19 @@ export default class NightingaleDistributionTrack extends withCanvas(
     };
   }
 
-  private drawMargins() {
-    const ctx = this.canvasCtx;
-    if (!ctx) return;
-
-    const canvasWidth = ctx.canvas.width;
-    const canvasHeight = ctx.canvas.height;
-    const marginLeft = this["margin-left"] * this.canvasScale;
-    const marginRight = this["margin-right"] * this.canvasScale;
-    const marginTop = this["margin-top"] * this.canvasScale;
-    const marginBottom = this["margin-bottom"] * this.canvasScale;
-
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = this["margin-color"];
-    ctx.fillRect(0, 0, marginLeft, canvasHeight);
-    ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
-    ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
-    ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
-  }
-
-  private getFgBgOpacity(baseWidthInCss: number): [fgAlpha: number, bgAlpha: number] {
+  /** Compute opacity for the "foreground" (zoomed-in) and "background" (zoomed-out) visualization */
+  private getFgBgOpacity(): [fgAlpha: number, bgAlpha: number] {
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    /** Approximate boxplot box width, in CSS pixels. No need to consider column gap and box gap here. */
+    const boxWidth = this.getSingleBaseWidth() / nDatasets;
     const [transitionMin, transitionMax] = FG_BG_TRANSITION_BASE_WIDTHS;
-    if (baseWidthInCss <= transitionMin) {
+
+    if (boxWidth <= transitionMin) {
       return [0, 1];
-    } else if (baseWidthInCss >= transitionMax) {
+    } else if (boxWidth >= transitionMax) {
       return [1, 0];
     } else {
-      const fgAlpha = (baseWidthInCss - transitionMin) / (transitionMax - transitionMin);
+      const fgAlpha = (boxWidth - transitionMin) / (transitionMax - transitionMin);
       return [fgAlpha, 1 - fgAlpha];
     }
   }
@@ -539,7 +558,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
-  private getPointedDatum(svgX: number, svgY: number): { position: number, datum: PreprocessedDatum | undefined } | undefined {
+  private getPointedDatum(svgX: number, _svgY: number): { position: number, datum: PreprocessedDatum | undefined } | undefined {
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
