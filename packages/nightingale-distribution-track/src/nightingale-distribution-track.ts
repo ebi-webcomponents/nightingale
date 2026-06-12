@@ -585,43 +585,10 @@ function preprocessData(data: DistributionData) {
 function preprocessDataset(dataset: DistributionDataset) {
   const out: { [position: number]: PreprocessedDatum } = {};
 
-  // const flat = dataset.positions.flatMap(pos => pos.values);
-  // console.time('flat sort')
-  // flat.sort((a, b) => a - b)
-  // console.timeEnd('flat sort')
-  // multisort(dataset.positions.map(pos => pos.values))
-
   for (const datum of dataset.positions) {
     out[datum.position] = preprocessDatum(datum);
   }
   return out;
-}
-
-function multisort(arrays: number[][]) {
-  const n = arrays.reduce((count, array) => count + array.length, 0);
-  const indices = new Uint32Array(n);
-  const sources = new Uint32Array(n);
-  const values = new Float32Array(n);
-  let target = 0;
-  console.time('multisort fill')
-  for (let iArray = 0, nArrays = arrays.length; iArray < nArrays; iArray++) {
-    const array = arrays[iArray];
-    for (let i = 0, m = array.length; i < m; i++) {
-      indices[target] = target;
-      sources[target] = iArray;
-      values[target] = array[i];
-      target++;
-    }
-  }
-  console.timeEnd('multisort fill')
-
-  console.time('multisort sort')
-  // values.sort();
-  indices.sort((i, j) => sources[i] - sources[j] || values[i] - values[j]);
-  console.timeEnd('multisort sort')
-
-  // const flat = dataset.positions.flatMap(pos => pos.values);
-  // TODO: continue here
 }
 
 interface PreprocessedDatum {
@@ -639,7 +606,7 @@ interface PreprocessedDatum {
 }
 
 function preprocessDatum(datum: Distribution): PreprocessedDatum {
-  const sorted = new Float32Array(datum.values).sort();
+  const sorted = sortIfNeeded(new Float32Array(datum.values));
   const median = getQuantile(sorted, 0.5);
   const q1 = getQuantile(sorted, 0.25);
   const q3 = getQuantile(sorted, 0.75);
@@ -666,6 +633,25 @@ function preprocessDatum(datum: Distribution): PreprocessedDatum {
   };
 }
 
+/** Check whether `array` is sorted, sort if not. */
+function sortIfNeeded<T extends TypedArray>(array: T): T {
+  if (!arrayIsSorted(array)) {
+    array.sort();
+  }
+  return array;
+}
+
+/** Decide whether `array` is sorted. */
+function arrayIsSorted(array: TypedArray): boolean {
+  for (let i = 1, n = array.length; i < n; i++) {
+    if (array[i - 1] > array[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/** Get p-quantile of the dataset. Input values must be sorted for this to work. */
 export function getQuantile(sortedValues: ArrayLike<number>, p: number) {
   const i_ = (sortedValues.length - 1) * p;
   if (i_ >= sortedValues.length - 1) {

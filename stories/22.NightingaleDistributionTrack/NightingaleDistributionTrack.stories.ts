@@ -33,7 +33,8 @@ const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDG
 
 function prepareDistributionData(data: DistributionData[number]): DistributionData {
   console.time('prepareDistributionData')
-  const positions = data.positions.slice();
+  // const positions = data.positions.slice();
+  const positions = data.positions.map(pos => ({ position: pos.position, values: pos.values.sort() }));
   const shift = data.positions.length;
   for (let i = 1; i < nDataRepeat; i++) {
     for (const pos of data.positions) {
