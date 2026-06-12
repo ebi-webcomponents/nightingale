@@ -27,11 +27,12 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
 };
 
 
-const nDataRepeat = 10;
+const nDataRepeat = 100;
 
 const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIA".repeat(nDataRepeat);
 
 function prepareDistributionData(data: DistributionData[number]): DistributionData {
+  console.time('prepareDistributionData')
   const positions = data.positions.slice();
   const shift = data.positions.length;
   for (let i = 1; i < nDataRepeat; i++) {
@@ -39,6 +40,7 @@ function prepareDistributionData(data: DistributionData[number]): DistributionDa
       positions.push({ position: pos.position + i * shift, values: pos.values });
     }
   }
+  console.timeEnd('prepareDistributionData')
 
   return [
     {
@@ -47,12 +49,12 @@ function prepareDistributionData(data: DistributionData[number]): DistributionDa
       positions: positions,
       // positions: remove(positions, 3, 5, 6, 35), // DEBUG
     },
-    {
-      name: 'Data2',
-      color: '#ff8800',
-      positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
-      // positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
-    },
+    // {
+    //   name: 'Data2',
+    //   color: '#ff8800',
+    //   positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
+    //   // positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
+    // },
   ];
 }
 
@@ -93,7 +95,7 @@ function nightingaleNavigation(args: Args & { length: number }) {
         highlight-color=${args["highlight-color"]}
         margin-color=${args["margin-color"]}
         show-highlight 
-        display-end="10"
+        display-end="100"
       >
       </nightingale-navigation>
     </div>`;
@@ -188,13 +190,13 @@ function makeStory(options: { length: number }): Story<Args> {
   story.args = { ...DefaultArgs };
   story.argTypes = ArgumentTypes;
   const distributionData = prepareDistributionData(sampleDistributionData as any);
-  const linegraphData = prepareLinegraphData(distributionData);
+  // const linegraphData = prepareLinegraphData(distributionData);
 
   story.play = async () => {
-    await customElements.whenDefined("nightingale-linegraph-track");
-    for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
-      (track as any).data = linegraphData;
-    }
+    // await customElements.whenDefined("nightingale-linegraph-track");
+    // for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
+    //   (track as any).data = linegraphData;
+    // }
     await customElements.whenDefined("nightingale-distribution-track");
     for (const track of document.getElementsByTagName("nightingale-distribution-track")) {
       (track as any).data = distributionData;

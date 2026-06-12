@@ -13,7 +13,7 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { BaseType, color, randomLcg, randomUniform, scaleLinear, select, Selection } from "d3";
+import { BaseType, color, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -127,7 +127,9 @@ export default class NightingaleDistributionTrack extends withCanvas(
   }
   set data(data: DistributionData | undefined) {
     this.#data = data;
+    console.time('preprocessData')
     this.preprocessedData = data ? preprocessData(data) : undefined;
+    console.timeEnd('preprocessData')
     this.createTrack();
   }
   /** Return the range of Y values corresponding to bottom and top of the viewport (excluding margins) */
@@ -195,9 +197,11 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     if (!this.canvasCtx) return;
+    console.time('draw distr')
     this.clearCanvas(this.canvasCtx);
     this.drawData(this.canvasCtx);
     this.drawMargins(this.canvasCtx);
+    console.timeEnd('draw distr')
   }
 
   private getOffscreenCanvas(): [canvas: HTMLCanvasElement, canvasContext?: CanvasRenderingContext2D] {
@@ -580,54 +584,123 @@ function preprocessData(data: DistributionData) {
 
 function preprocessDataset(dataset: DistributionDataset) {
   const out: { [position: number]: PreprocessedDatum } = {};
+
+  // const flat = dataset.positions.flatMap(pos => pos.values);
+  // console.time('flat sort')
+  // flat.sort((a, b) => a - b)
+  // console.timeEnd('flat sort')
+  // multisort(dataset.positions.map(pos => pos.values))
+
   for (const datum of dataset.positions) {
     out[datum.position] = preprocessDatum(datum);
   }
   return out;
 }
 
+function multisort(arrays: number[][]) {
+  const n = arrays.reduce((count, array) => count + array.length, 0);
+  const indices = new Uint32Array(n);
+  const sources = new Uint32Array(n);
+  const values = new Float32Array(n);
+  let target = 0;
+  console.time('multisort fill')
+  for (let iArray = 0, nArrays = arrays.length; iArray < nArrays; iArray++) {
+    const array = arrays[iArray];
+    for (let i = 0, m = array.length; i < m; i++) {
+      indices[target] = target;
+      sources[target] = iArray;
+      values[target] = array[i];
+      target++;
+    }
+  }
+  console.timeEnd('multisort fill')
+
+  console.time('multisort sort')
+  // values.sort();
+  indices.sort((i, j) => sources[i] - sources[j] || values[i] - values[j]);
+  console.timeEnd('multisort sort')
+
+  // const flat = dataset.positions.flatMap(pos => pos.values);
+  // TODO: continue here
+}
+
 interface PreprocessedDatum {
   position: number,
-  values: number[],
+  values: number[] | TypedArray,
   median: number,
   boxLow: number,
   boxHigh: number,
   whiskerLow: number,
   whiskerHigh: number,
-  outliersLow: number[],
-  outliersHigh: number[],
+  outliersLow: number[] | TypedArray,
+  outliersHigh: number[] | TypedArray,
   minimum: number,
   maximum: number,
 }
 
 function preprocessDatum(datum: Distribution): PreprocessedDatum {
-  const sorted = datum.values.slice().sort((a, b) => a - b);
-  const median = getQuantile(sorted, 0.5);
-  const q1 = getQuantile(sorted, 0.25);
-  const q3 = getQuantile(sorted, 0.75);
+  // const sorted = new Float32Array(datum.values).sort();
+  const values = new Float32Array(datum.values);
+
+  const [q1, med, q3] = sneakyQuartiles(values);
+
+  // const medTrue = getQuantile(sorted, 0.5);
+  // const q1True = getQuantile(sorted, 0.25);
+  // const q3True = getQuantile(sorted, 0.75);
+
+  // if (med !== medTrue) throw new Error('med !== medTrue')
+  // if (q1 !== q1True) throw new Error('q1 !== q1True')
+  // if (q3 !== q3True) throw new Error('q3 !== q3True')
+
   const iqr = q3 - q1;
-  /** Index of the first value >= q1 - 1.5 * IQR (low whisker) */
-  const iWhiskerLow = BinarySearch.firstGteqIndex(sorted, q1 - 1.5 * iqr, x => x)
-  const stop = BinarySearch.firstGteqIndex(sorted, q3 + 1.5 * iqr, x => x);
-  /** Index of the last value <= q3 + 1.5 * IQR (high whisker) */
-  const iWhiskerHigh = (stop >= sorted.length || sorted[stop] > q3 + 1.5 * iqr) ? stop - 1 : stop;
+  // /** Index of the first value >= q1 - 1.5 * IQR (low whisker) */
+  // const iWhiskerLow = BinarySearch.firstGteqIndex(sorted, q1 - 1.5 * iqr, x => x)
+  // const stop = BinarySearch.firstGteqIndex(sorted, q3 + 1.5 * iqr, x => x);
+  // /** Index of the last value <= q3 + 1.5 * IQR (high whisker) */
+  // const iWhiskerHigh = (stop >= sorted.length || sorted[stop] > q3 + 1.5 * iqr) ? stop - 1 : stop;
+  const _whiskerLow = q1 - 1.5 * iqr;
+  const _whiskerHigh = q3 + 1.5 * iqr;
+  const iWhiskerLow = splitByPivot(values, 0, values.length, _whiskerLow, getAux(values.length));
+  const iWhiskerHighExcl = splitByPivot(values, iWhiskerLow, values.length, _whiskerHigh, getAux(values.length)); // This is not exact if _whiskerHigh occurs in data
+  const whiskerLow = min(values, iWhiskerLow, iWhiskerHighExcl);
+  const whiskerHigh = max(values, iWhiskerLow, iWhiskerHighExcl);
 
   return {
     position: datum.position,
-    values: sorted,
-    median,
+    values: values,
+    median: med,
     boxLow: q1,
     boxHigh: q3,
-    whiskerLow: sorted[iWhiskerLow],
-    whiskerHigh: sorted[iWhiskerHigh],
-    outliersLow: sorted.slice(0, iWhiskerLow),
-    outliersHigh: sorted.slice(iWhiskerHigh + 1, undefined),
-    minimum: sorted[0],
-    maximum: sorted[sorted.length - 1],
+    // whiskerLow: sorted[iWhiskerLow],
+    // whiskerHigh: sorted[iWhiskerHigh],
+    whiskerLow,
+    whiskerHigh,
+    // outliersLow: sorted.slice(0, iWhiskerLow),
+    // outliersHigh: sorted.slice(iWhiskerHigh + 1, undefined),
+    outliersLow: values.slice(0, iWhiskerLow),
+    outliersHigh: values.slice(iWhiskerHighExcl, undefined),
+    // minimum: sorted[0],
+    // maximum: sorted[sorted.length - 1],
+    minimum: min(values),
+    maximum: max(values),
   };
 }
 
-export function getQuantile(sortedValues: number[], p: number) {
+// TIMINGS (nDatasets=1, nRepeat=1000):
+// preprocessData original: 2055 ms
+// preprocessData original Float32Array: 560 ms
+// preprocessData sneakyQuartiles: 526 ms
+
+// flat sort: 3150 ms
+// flat sort Float32Array: 564 ms
+// multisort sort: 2472 ms
+
+// preprocessData - only compute medians (sort): 2028
+// preprocessData - only compute medians (sort, Float32Array): 500
+// preprocessData - only compute medians (d3): 1409
+// preprocessData - only compute medians (d3, Float32Array): 1485
+
+export function getQuantile(sortedValues: ArrayLike<number>, p: number) {
   const i_ = (sortedValues.length - 1) * p;
   if (i_ >= sortedValues.length - 1) {
     return sortedValues[sortedValues.length - 1];
@@ -686,4 +759,118 @@ function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number,
   }
   if (style.includes('fill')) ctx.fill();
   if (style.includes('stroke')) ctx.stroke();
+}
+
+export function max(array: ArrayLike<number>, from = 0, to = array.length): number {
+  let out = array[from];
+  for (let i = from; i < to; i++) {
+    const value = array[i];
+    if (value > out) out = value;
+  }
+  return out;
+}
+
+export function min(array: ArrayLike<number>, from = 0, to = array.length): number {
+  let out = array[from];
+  for (let i = from; i < to; i++) {
+    const value = array[i];
+    if (value < out) out = value;
+  }
+  return out;
+}
+
+export function sneakyQuartiles(values: Float32Array): [q1: number, median: number, q3: number] {
+  if (values.length < 4) {
+    values.sort();
+    return [getQuantile(values, 0.25), getQuantile(values, 0.5), getQuantile(values, 0.75)];
+  }
+
+  const j1_ = (values.length - 1) * 0.25;
+  const j1 = Math.ceil(j1_);
+  const z1 = j1 - j1_;
+
+  const j2_ = (values.length - 1) * 0.5;
+  const j2 = Math.ceil(j2_);
+  const z2 = j2 - j2_;
+
+  const j3_ = (values.length - 1) * 0.75;
+  const j3 = Math.ceil(j3_);
+  const z3 = j3 - j3_;
+
+  split(values, j2, 0, undefined);
+  split(values, j1, 0, j2);
+  split(values, j3, j2, undefined);
+
+  const q1 = max(values, 0, j1) * z1 + min(values, j1, j2) * (1 - z1);
+  const q2 = max(values, j1, j2) * z2 + min(values, j2, j3) * (1 - z2);
+  const q3 = max(values, j2, j3) * z3 + min(values, j3, undefined) * (1 - z3);
+  return [q1, q2, q3];
+}
+
+function mid(a: number, b: number, c: number): number {
+  if (a < b) {
+    if (b < c) return b;
+    if (a < c) return c;
+    return a;
+  } else {
+    // a >= b
+    if (b > c) return b;
+    if (a > c) return c;
+    return a;
+  }
+}
+
+let _aux: Float32Array | undefined;
+function getAux(length: number): Float32Array {
+  if (_aux?.length !== length) {
+    _aux = new Float32Array(length);
+  }
+  return _aux;
+}
+
+/** Rearrange values in `array[from:to]` so that `max(array[from:splitPosition]) <= min(array[splitPosition:to])`. */
+function split(array: Float32Array, splitPosition: number, from = 0, to = array.length) {
+  const aux = getAux(array.length);
+  // let pivLow = min(array, from, to);
+  // let pivHigh = max(array, from, to);
+
+  while (true) {
+    let pivot = mid(array[0], array[splitPosition], array[array.length - 1]);
+    // let pivot = (pivLow * (to - splitPosition) + pivHigh * (splitPosition - from)) / (to - from);
+    let s = splitByPivot(array, from, to, pivot, aux);
+    if (s === from || s === to) {
+      const minimum = min(array, from, to);
+      const maximum = max(array, from, to);
+      if (minimum === maximum) return;
+      pivot = 0.5 * (minimum + maximum);
+      s = splitByPivot(array, from, to, pivot, aux);
+    }
+    if (s === splitPosition) {
+      return;
+    } else if (s < splitPosition) {
+      from = s;
+      // pivLow = pivot;
+    } else {
+      to = s;
+      // pivHigh = pivot;
+    }
+  }
+}
+
+/** Rearrange values in `array[from:to]` so that all values <pivot occur before all values >=pivot. Return index of the first value >=pivot. */
+function splitByPivot(array: Float32Array, from: number, to: number, pivot: number, aux: Float32Array) {
+  let tgtLeft = from;
+  let tgtRight = to - 1;
+  for (let i = from; i < to; i++) {
+    const element = array[i];
+    if (element < pivot) {
+      aux[tgtLeft++] = element;
+    } else {
+      aux[tgtRight--] = element;
+    }
+  }
+  for (let i = from; i < to; i++) {
+    array[i] = aux[i];
+  }
+  return tgtLeft;
 }
