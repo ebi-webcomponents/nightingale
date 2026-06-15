@@ -1,7 +1,7 @@
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../../packages/nightingale-distribution-track/src/index";
-import { type DistributionData } from "../../packages/nightingale-distribution-track/src/nightingale-distribution-track";
+import { type DistributionData, ZoomedOutRangeOptions } from "../../packages/nightingale-distribution-track/src/nightingale-distribution-track";
 import sampleDistributionData from "../../packages/nightingale-distribution-track/tests/mockData/sample-1.json";
 
 
@@ -17,6 +17,7 @@ const DefaultArgs = {
   "y-min": 0 as number | undefined,
   "y-max": undefined as number | undefined,
   "hide-outliers": false,
+  "zoomed-out-range": 'whiskers',
 };
 type Args = typeof DefaultArgs;
 
@@ -24,10 +25,13 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
   "highlight-event": { control: "select", options: ["onmouseover", "onclick"] },
   "y-min": { control: "select", options: [undefined, 0, 100, 200, 300, 400, 500] },
   "y-max": { control: "select", options: [undefined, 0, 100, 200, 300, 400, 500] },
+  "zoomed-out-range": { control: "select", options: ZoomedOutRangeOptions },
 };
 
 
 const nDataRepeat = 100;
+// Around 100k datapoints (nDataRepeat=1000), canvas draw takes > 40ms
+// Around 400k datapoints (nDataRepeat=4000), aliasing makes data invisible (causes artifacts even before)
 
 const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIA".repeat(nDataRepeat);
 
@@ -68,18 +72,19 @@ function remove<T>(arr: T[], ...indices: number[]) {
 }
 
 function prepareLinegraphData(data: DistributionData) {
+  console.time('prepareLinegraphData')
   const values = data[0].positions.map(pos => ({ position: pos.position, value: pos.values.reduce((a, b) => a + b, 0) / pos.values.length }));
-  const bulgarianConstant = 10 / Math.max(...values.map(v => v.value));
-  values.forEach(v => v.value *= bulgarianConstant); // I don't know how to set Y-range to linegraph track, this will do
+  const max = values.reduce((old, v) => v.value > old ? v.value : old, 0);
 
   const chart1 = {
     name: "chart1",
     color: "#707070",
     fill: "#808080",
     lineCurve: "curveStep",
-    range: [0, 10],
+    range: [0, max],
     values: values,
   };
+  console.timeEnd('prepareLinegraphData')
   return [chart1];
 }
 
@@ -155,11 +160,12 @@ function nightingaleDistributionTrack(args: Args & { length: number, id: number 
         highlight-color="${args["highlight-color"]}"
         margin-color=${args["margin-color"]}
         margin-top=10
-        margin-bottom=20
+        margin-bottom=10
         use-ctrl-to-zoom
         y-min=${args["y-min"]}
         y-max=${args["y-max"]}
         ?hide-outliers=${args["hide-outliers"]}
+        zoomed-out-range=${args["zoomed-out-range"]}
       >
       </nightingale-distribution-track>
     </div>`;
@@ -191,13 +197,13 @@ function makeStory(options: { length: number }): Story<Args> {
   story.args = { ...DefaultArgs };
   story.argTypes = ArgumentTypes;
   const distributionData = prepareDistributionData(sampleDistributionData as any);
-  // const linegraphData = prepareLinegraphData(distributionData);
+  const linegraphData = prepareLinegraphData(distributionData);
 
   story.play = async () => {
-    // await customElements.whenDefined("nightingale-linegraph-track");
-    // for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
-    //   (track as any).data = linegraphData;
-    // }
+    await customElements.whenDefined("nightingale-linegraph-track");
+    for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
+      (track as any).data = linegraphData;
+    }
     await customElements.whenDefined("nightingale-distribution-track");
     for (const track of document.getElementsByTagName("nightingale-distribution-track")) {
       (track as any).data = distributionData;

@@ -14,7 +14,7 @@ import NightingaleElement, {
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
 import { BaseType, color, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
-import { html, PropertyValues } from "lit";
+import { html, PropertyDeclaration, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 
@@ -22,7 +22,7 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
   "font-family", "min-font-size", "fade-font-size", "max-font-size",
-  "y-min", "y-max", "hide-outliers",
+  "y-min", "y-max", "hide-outliers", "zoomed-out-range",
 ] satisfies (keyof NightingaleDistributionTrack)[];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleDistributionTrack)[];
 
@@ -66,10 +66,31 @@ export interface DistributionDataset {
 /** Type for `NightingaleDistributionTrack.data`` */
 export type DistributionData = DistributionDataset[];
 
-const OptionalNumber = (str: string | null) => {
+type AttributeConverter<T> = NonNullable<PropertyDeclaration<T>['converter']>;
+
+const OptionalNumberAttributeConverter: AttributeConverter<number | undefined> = (str) => {
   if (str) return Number(str);
   return undefined;
 };
+
+function EnumAttributeConverter<T extends string, D extends T>(allowedValues: readonly T[], defaultValue?: D): AttributeConverter<T> {
+  const theDefault = defaultValue ?? allowedValues[0];
+
+  return (str) => {
+    if (!str) {
+      return theDefault;
+    }
+    if (allowedValues.includes(str as T)) {
+      return str as T;
+    } else {
+      console.warn(`Value '${str}' is not valid for attribute of type ${allowedValues.map(v => `'${v}'`).join(' | ')}. Falling back to default value ('${theDefault}').`);
+      return theDefault;
+    }
+  };
+}
+
+export const ZoomedOutRangeOptions = ['extremes', 'whiskers', 'box', 'none'] as const;
+export type ZoomedOutRangeOption = typeof ZoomedOutRangeOptions[number];
 
 @customElementOnce("nightingale-distribution-track")
 export default class NightingaleDistributionTrack extends withCanvas(
@@ -100,16 +121,20 @@ export default class NightingaleDistributionTrack extends withCanvas(
   "max-font-size": number = 24;
 
   /** Bottom limit for Y-axis (default: minimum computed from data) */
-  @property({ converter: OptionalNumber })
+  @property({ converter: OptionalNumberAttributeConverter })
   "y-min"?: number;
 
   /** Top limit for Y-axis (default: maximum computed from data) */
-  @property({ converter: OptionalNumber })
+  @property({ converter: OptionalNumberAttributeConverter })
   "y-max"?: number;
 
   /** Turns off rendering of outliers */
   @property({ type: Boolean })
   "hide-outliers"?: boolean;
+
+  /** What kind of data should be shown as shaded range in zoomed-out visualization */
+  @property({ converter: EnumAttributeConverter(ZoomedOutRangeOptions, 'whiskers') })
+  "zoomed-out-range": ZoomedOutRangeOption; // TODO: enum-type in other components?
 
 
   #data?: DistributionData;
@@ -344,23 +369,43 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
-      // const yMin = (i: number) => yScale(dataset[i].minimum);
-      // const yMax = (i: number) => yScale(dataset[i].maximum);
-      const yWhiskerLow = (i: number) => yScale(dataset[i].whiskerLow);
-      const yWhiskerHigh = (i: number) => yScale(dataset[i].whiskerHigh);
-      // const yBoxLow = (i: number) => yScale(dataset[i].boxLow);
-      // const yBoxHigh = (i: number) => yScale(dataset[i].boxHigh);
       const yMedianLow = (i: number) => yScale(dataset[i].median + yMedianExtra);
       const yMedianHigh = (i: number) => yScale(dataset[i].median - yMedianExtra);
 
-      const segments = getContiguousSegments(start, stop, i => i in dataset);
-      for (const segment of segments) {
-        ctx.globalAlpha = 0.25 * alpha;
-        ctx.fillStyle = fillColor;
-        // drawSilhouette(ctx, segment, xScale, yMin, yMax, [xColumnLeft, xColumnRight], 'fill');
-        drawSilhouette(ctx, segment, xScale, yWhiskerLow, yWhiskerHigh, [xColumnLeft, xColumnRight], 'fill');
-        // drawSilhouette(ctx, segment, xScale, yBoxLow, yBoxHigh, [xColumnLeft, xColumnRight], 'fill');
+      let yRangeLow: ((i: number) => number) | undefined;
+      let yRangeHigh: ((i: number) => number) | undefined;
+      switch (this['zoomed-out-range']) {
+        case 'extremes':
+          yRangeLow = (i: number) => yScale(dataset[i].minimum);
+          yRangeHigh = (i: number) => yScale(dataset[i].maximum);
+          break;
+        case 'whiskers':
+          yRangeLow = (i: number) => yScale(dataset[i].whiskerLow);
+          yRangeHigh = (i: number) => yScale(dataset[i].whiskerHigh);
+          break;
+        case 'box':
+          yRangeLow = (i: number) => yScale(dataset[i].boxLow);
+          yRangeHigh = (i: number) => yScale(dataset[i].boxHigh);
+          break;
+        case 'none':
+          yRangeLow = undefined;
+          yRangeHigh = undefined;
+          break;
+      }
 
+      const segments = getContiguousSegments(start, stop, i => i in dataset);
+
+      // Shaded range
+      if (yRangeLow && yRangeHigh) {
+        for (const segment of segments) {
+          ctx.globalAlpha = 0.25 * alpha;
+          ctx.fillStyle = fillColor;
+          drawSilhouette(ctx, segment, xScale, yRangeLow, yRangeHigh, [xColumnLeft, xColumnRight], 'fill');
+        }
+      }
+
+      // Median
+      for (const segment of segments) {
         ctx.globalAlpha = 0.5 * alpha;
         ctx.fillStyle = strokeColor;
         ctx.strokeStyle = strokeColor;
@@ -712,3 +757,6 @@ function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number,
   if (style.includes('fill')) ctx.fill();
   if (style.includes('stroke')) ctx.stroke();
 }
+
+// TODO: implement data pooling/smoothing for too zoomed-out visualization (like heatmap)
+// TODO: axis ticks
