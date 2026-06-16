@@ -280,17 +280,17 @@ export default class NightingaleDistributionTrack extends withCanvas(
 
   /** Draw full boxplot visualization ("foreground" / zoomed-in) */
   private drawBoxplotVisualization(ctx: CanvasRenderingContext2D) {
-    if (!this.data || !this.preprocessedData) return;
+    if (!this.preprocessedData) return;
 
     const { xColumnLeft, xColumnWidth, xScale, yScale, yMedianExtra, lineWidth, outlierRadius, start, stop } = this.getDrawingMeasurements();
     ctx.lineWidth = lineWidth;
 
-    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    const nDatasets = this.preprocessedData.datasets.length;
     for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
       const dataset = this.preprocessedData.datasets[iDataset];
       if (!dataset) continue;
 
-      const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
+      const dataColor = dataset.color ?? DEFAULT_DATA_COLOR;
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
@@ -302,7 +302,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const xJitterHalfwidth = 0.5 * JITTER_REL_WIDTH * xBoxWidth;
 
       for (let i = start; i < stop; i++) {
-        const datum = dataset[i];
+        const datum = dataset.positions[i];
         if (!datum) continue;
 
         const x = xScale(i);
@@ -366,32 +366,32 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
     ctx.lineWidth = lineWidth;
 
-    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    const nDatasets = this.preprocessedData.datasets.length;
     for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
       const dataset = this.preprocessedData.datasets[iDataset];
       if (!dataset) continue;
 
-      const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
+      const dataColor = dataset.color ?? DEFAULT_DATA_COLOR;
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
-      const yMedianLow = (i: number) => yScale(dataset[i].median) + yMedianExtra;
-      const yMedianHigh = (i: number) => yScale(dataset[i].median) - yMedianExtra;
+      const yMedianLow = (i: number) => yScale(dataset.positions[i].median) + yMedianExtra;
+      const yMedianHigh = (i: number) => yScale(dataset.positions[i].median) - yMedianExtra;
 
       let yRangeLow: ((i: number) => number) | undefined;
       let yRangeHigh: ((i: number) => number) | undefined;
       switch (this['zoomed-out-range']) {
         case 'extremes':
-          yRangeLow = (i: number) => yScale(dataset[i].minimum);
-          yRangeHigh = (i: number) => yScale(dataset[i].maximum);
+          yRangeLow = (i: number) => yScale(dataset.positions[i].minimum);
+          yRangeHigh = (i: number) => yScale(dataset.positions[i].maximum);
           break;
         case 'whiskers':
-          yRangeLow = (i: number) => yScale(dataset[i].whiskerLow);
-          yRangeHigh = (i: number) => yScale(dataset[i].whiskerHigh);
+          yRangeLow = (i: number) => yScale(dataset.positions[i].whiskerLow);
+          yRangeHigh = (i: number) => yScale(dataset.positions[i].whiskerHigh);
           break;
         case 'box':
-          yRangeLow = (i: number) => yScale(dataset[i].boxLow);
-          yRangeHigh = (i: number) => yScale(dataset[i].boxHigh);
+          yRangeLow = (i: number) => yScale(dataset.positions[i].boxLow);
+          yRangeHigh = (i: number) => yScale(dataset.positions[i].boxHigh);
           break;
         case 'none':
           yRangeLow = undefined;
@@ -399,7 +399,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
           break;
       }
 
-      const segments = getContiguousSegments(start, stop, i => i in dataset);
+      const segments = getContiguousSegments(start, stop, i => i in dataset.positions);
 
       // Shaded range
       if (yRangeLow && yRangeHigh) {
@@ -421,7 +421,8 @@ export default class NightingaleDistributionTrack extends withCanvas(
   }
 
   // TODO: continue here
-  // TODO: try to use downsampling
+  // TODO: change downsampling to always halve (better performance and more consistent first transition)
+  // TODO: fade-out transition when downsampling?
 
   /** Draw simplified visualization ("background" / zoomed-out) */
   private drawSimplifiedVisualization(ctx: CanvasRenderingContext2D, alpha: number) {
@@ -435,9 +436,9 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const dataset = this.preprocessedData.datasets[iDataset];
       if (!dataset) continue;
 
-      const { offset, length, downsamplers } = getDownsamplerForDataset(dataset); // TODO: refactor this to compute only once
+      const { offset, length, downsamplers } = dataset.downsampling;
 
-      const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
+      const dataColor = dataset.color ?? DEFAULT_DATA_COLOR;
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
@@ -702,13 +703,14 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
-    const datum = this.preprocessedData?.datasets[0][position]; // TODO: consider multiple datasets
+    const datum = this.preprocessedData?.datasets[0].positions[position]; // TODO: consider multiple datasets
     return { position, datum };
   }
 }
 
 
 type PreprocessedData = ReturnType<typeof preprocessData>;
+type PreprocessedDataset = ReturnType<typeof preprocessDataset>;
 
 function preprocessData(data: DistributionData) {
   const preprocessedDatasets = data.map(preprocessDataset);
@@ -719,12 +721,17 @@ function preprocessData(data: DistributionData) {
 }
 
 function preprocessDataset(dataset: DistributionDataset) {
-  const out: { [position: number]: PreprocessedDatum } = {};
+  const preprocessedPositions: PreprocessedPositions = {};
 
   for (const datum of dataset.positions) {
-    out[datum.position] = preprocessDatum(datum);
+    preprocessedPositions[datum.position] = preprocessDatum(datum);
   }
-  return out;
+  // return out;
+  return {
+    ...dataset,
+    positions: preprocessedPositions,
+    downsampling: getDownsamplerForDataset(preprocessedPositions),
+  };
 }
 
 interface PreprocessedDatum {
@@ -740,6 +747,8 @@ interface PreprocessedDatum {
   minimum: number,
   maximum: number,
 }
+
+type PreprocessedPositions = { [position: number]: PreprocessedDatum }
 
 function preprocessDatum(datum: Distribution): PreprocessedDatum {
   const sorted = sortIfNeeded(new Float32Array(datum.values));
@@ -799,13 +808,13 @@ export function getQuantile(sortedValues: ArrayLike<number>, p: number) {
 }
 
 /** Gets the Y-axis limits for the given preprocessed data */
-function getExtremes(data: { [position: number]: PreprocessedDatum }[]) {
+function getExtremes(data: PreprocessedDataset[]) {
   let min = Infinity;
   let max = -Infinity;
 
   for (const dataset of data) {
-    for (const position in dataset) {
-      const datum = dataset[position];
+    for (const position in dataset.positions) {
+      const datum = dataset.positions[position];
       if (datum.minimum < min) min = datum.minimum;
       if (datum.maximum > max) max = datum.maximum;
     }
@@ -849,8 +858,8 @@ function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number,
   if (style.includes('stroke')) ctx.stroke();
 }
 
-function datasetToArrays(dataset: PreprocessedData['datasets'][number]) {
-  const positions = Object.values(dataset).map(d => d.position);
+function datasetToArrays(data: PreprocessedPositions) {
+  const positions = Object.values(data).map(d => d.position);
   const offset = min(positions) ?? 1;
   const stop = (max(positions) ?? 0) + 1;
   const length = stop - offset;
@@ -861,7 +870,7 @@ function datasetToArrays(dataset: PreprocessedData['datasets'][number]) {
   const whiskerHigh = new Float32Array(length).fill(NaN);
   const minimum = new Float32Array(length).fill(NaN);
   const maximum = new Float32Array(length).fill(NaN);
-  for (const pos of Object.values(dataset)) {
+  for (const pos of Object.values(data)) {
     median[pos.position - offset] = pos.median;
     boxLow[pos.position - offset] = pos.boxLow;
     boxHigh[pos.position - offset] = pos.boxHigh;
@@ -877,8 +886,8 @@ function datasetToArrays(dataset: PreprocessedData['datasets'][number]) {
   };
 }
 
-function getDownsamplerForDataset(dataset: PreprocessedData['datasets'][number]) {
-  const { offset, length, arrays } = datasetToArrays(dataset);
+function getDownsamplerForDataset(data: PreprocessedPositions) {
+  const { offset, length, arrays } = datasetToArrays(data);
   return {
     offset,
     length,
@@ -895,5 +904,4 @@ function getDownsamplerForDataset(dataset: PreprocessedData['datasets'][number])
   };
 }
 
-// TODO: implement data pooling/smoothing for too zoomed-out visualization (like heatmap)
 // TODO: axis ticks
