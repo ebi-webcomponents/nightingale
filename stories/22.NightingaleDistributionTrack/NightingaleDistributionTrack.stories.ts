@@ -29,7 +29,10 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
 };
 
 
-const nDataRepeat = 100;
+// const nDataRepeat = 20_000;
+const nDataRepeat = 1_000;
+// const nDataRepeat = 81;
+// const nDataRepeat = 82;
 // Around 100k datapoints (nDataRepeat=1000), canvas draw takes > 40ms
 // Around 400k datapoints (nDataRepeat=4000), aliasing makes data invisible (causes artifacts even before)
 
@@ -186,7 +189,7 @@ function makeStory(options: { length: number }): Story<Args> {
           <div style="display:flex; flex-direction: column; width: 100%;">
             ${nightingaleNavigation({ ...args, length: options.length })}
             ${nightingaleSequence({ ...args, length: options.length })}
-            ${nightingaleLinegraphTrack({ ...args, length: options.length, id: 0 })}
+            <!--${nightingaleLinegraphTrack({ ...args, length: options.length, id: 0 })}-->
             ${nightingaleDistributionTrack({ ...args, length: options.length, id: 0 })}
           </div>
         </nightingale-manager>
@@ -197,13 +200,13 @@ function makeStory(options: { length: number }): Story<Args> {
   story.args = { ...DefaultArgs };
   story.argTypes = ArgumentTypes;
   const distributionData = prepareDistributionData(sampleDistributionData as any);
-  const linegraphData = prepareLinegraphData(distributionData);
+  // const linegraphData = prepareLinegraphData(distributionData);
 
   story.play = async () => {
-    await customElements.whenDefined("nightingale-linegraph-track");
-    for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
-      (track as any).data = linegraphData;
-    }
+    // await customElements.whenDefined("nightingale-linegraph-track");
+    // for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
+    //   (track as any).data = linegraphData;
+    // }
     await customElements.whenDefined("nightingale-distribution-track");
     for (const track of document.getElementsByTagName("nightingale-distribution-track")) {
       (track as any).data = distributionData;

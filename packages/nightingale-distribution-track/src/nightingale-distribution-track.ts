@@ -13,9 +13,10 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { BaseType, color, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
+import { BaseType, color, max, min, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
 import { html, PropertyDeclaration, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
+import { Downsampler } from "./downsampling";
 
 
 const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
@@ -30,6 +31,7 @@ const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof Nightin
 /** Line width for rectangle stroke */
 const LINE_WIDTH = 1;
 /** Maximum line width relative to column width (overrides `LINE_WIDTH` when zoomed out too much) */
+// const MAX_REL_LINE_WIDTH = 0.2;
 const MAX_REL_LINE_WIDTH = 0.2;
 
 /** Default fill color for boxes (stroke color will be derived from this) */
@@ -46,6 +48,10 @@ const JITTER_REL_WIDTH = 0.4;
 const OUTLIER_RADIUS = 2;
 /** Column widths in CSS pixels, between which transition from "background" to "foreground" visualization happens */
 const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5];
+/** Approximate width of a column in screen pixels, when showing downsampled data in "background" visualization.
+ * (higher value means more responsive but lower-resolution visualization). */
+// const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 2;
+const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 1;
 
 function makeStrokeColor(dataColor: string): string | undefined {
   return color(dataColor)?.darker(2).formatHex();
@@ -354,7 +360,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
   }
 
   /** Draw simplified visualization ("background" / zoomed-out) */
-  private drawSimplifiedVisualization(ctx: CanvasRenderingContext2D, alpha: number) {
+  private drawSimplifiedVisualization_orig(ctx: CanvasRenderingContext2D, alpha: number) {
     if (!this.data || !this.preprocessedData) return;
 
     const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
@@ -369,8 +375,8 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
-      const yMedianLow = (i: number) => yScale(dataset[i].median + yMedianExtra);
-      const yMedianHigh = (i: number) => yScale(dataset[i].median - yMedianExtra);
+      const yMedianLow = (i: number) => yScale(dataset[i].median) + yMedianExtra;
+      const yMedianHigh = (i: number) => yScale(dataset[i].median) - yMedianExtra;
 
       let yRangeLow: ((i: number) => number) | undefined;
       let yRangeHigh: ((i: number) => number) | undefined;
@@ -410,6 +416,91 @@ export default class NightingaleDistributionTrack extends withCanvas(
         ctx.fillStyle = strokeColor;
         ctx.strokeStyle = strokeColor;
         drawSilhouette(ctx, segment, xScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
+      }
+    }
+  }
+
+  // TODO: continue here
+  // TODO: try to use downsampling
+
+  /** Draw simplified visualization ("background" / zoomed-out) */
+  private drawSimplifiedVisualization(ctx: CanvasRenderingContext2D, alpha: number) {
+    if (!this.data || !this.preprocessedData) return;
+
+    const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
+    ctx.lineWidth = lineWidth;
+
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
+      const dataset = this.preprocessedData.datasets[iDataset];
+      if (!dataset) continue;
+
+      const { offset, length, downsamplers } = getDownsamplerForDataset(dataset); // TODO: refactor this to compute only once
+
+      const dataColor = this.data[iDataset].color ?? DEFAULT_DATA_COLOR;
+      const fillColor = dataColor;
+      const strokeColor = makeStrokeColor(dataColor)!;
+
+      const resolution = (xScale(length) - xScale(0)) / BG_DOWNSAMPLING_PIXELS_PER_COLUMN;
+
+      const medianLow = Downsampler.getDownsampled(downsamplers.medianLow, resolution);
+      const medianHigh = Downsampler.getDownsampled(downsamplers.medianHigh, resolution);
+      const downScale = length / medianLow.length;
+
+      // console.log('resolution', resolution, 'downScale', downScale, `(${length} -> ${medLow.length})`)
+
+      const yMedianLow = (j: number) => yScale(medianLow[j]) + yMedianExtra;
+      const yMedianHigh = (j: number) => yScale(medianHigh[j]) - yMedianExtra;
+
+      let yRangeLow: ((j: number) => number) | undefined;
+      let yRangeHigh: ((j: number) => number) | undefined;
+      switch (this['zoomed-out-range']) {
+        case 'extremes':
+          const minimum = Downsampler.getDownsampled(downsamplers.minimum, resolution);
+          const maximum = Downsampler.getDownsampled(downsamplers.maximum, resolution);
+          yRangeLow = (j: number) => yScale(minimum[j]);
+          yRangeHigh = (j: number) => yScale(maximum[j]);
+          break;
+        case 'whiskers':
+          const whiskerLow = Downsampler.getDownsampled(downsamplers.whiskerLow, resolution);
+          const whiskerHigh = Downsampler.getDownsampled(downsamplers.whiskerHigh, resolution);
+          yRangeLow = (j: number) => yScale(whiskerLow[j]);
+          yRangeHigh = (j: number) => yScale(whiskerHigh[j]);
+          break;
+        case 'box':
+          const boxLow = Downsampler.getDownsampled(downsamplers.boxLow, resolution);
+          const boxHigh = Downsampler.getDownsampled(downsamplers.boxHigh, resolution);
+          yRangeLow = (j: number) => yScale(boxLow[j]);
+          yRangeHigh = (j: number) => yScale(boxHigh[j]);
+          break;
+        case 'none':
+          yRangeLow = undefined;
+          yRangeHigh = undefined;
+          break;
+      }
+
+      // const segments = getContiguousSegments(start, stop, i => i in dataset);
+      const jStart = Math.max(0, Math.floor((start - offset) / downScale));
+      const jStop = Math.min(medianLow.length, Math.ceil((stop - offset) / downScale));
+      const jSegments = getContiguousSegments(jStart, jStop, j => !isNaN(medianLow[j]));
+
+      const jXScale = (j: number) => xScale(offset + j * downScale);
+
+      // Shaded range
+      if (yRangeLow && yRangeHigh) {
+        for (const segment of jSegments) {
+          ctx.globalAlpha = 0.25 * alpha;
+          ctx.fillStyle = fillColor;
+          drawSilhouette(ctx, segment, jXScale, yRangeLow, yRangeHigh, [xColumnLeft, xColumnRight], 'fill');
+        }
+      }
+
+      // Median
+      for (const segment of jSegments) {
+        ctx.globalAlpha = 0.5 * alpha;
+        ctx.fillStyle = strokeColor;
+        ctx.strokeStyle = strokeColor;
+        drawSilhouette(ctx, segment, jXScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
       }
     }
   }
@@ -756,6 +847,52 @@ function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number,
   }
   if (style.includes('fill')) ctx.fill();
   if (style.includes('stroke')) ctx.stroke();
+}
+
+function datasetToArrays(dataset: PreprocessedData['datasets'][number]) {
+  const positions = Object.values(dataset).map(d => d.position);
+  const offset = min(positions) ?? 1;
+  const stop = (max(positions) ?? 0) + 1;
+  const length = stop - offset;
+  const median = new Float32Array(length).fill(NaN);
+  const boxLow = new Float32Array(length).fill(NaN);
+  const boxHigh = new Float32Array(length).fill(NaN);
+  const whiskerLow = new Float32Array(length).fill(NaN);
+  const whiskerHigh = new Float32Array(length).fill(NaN);
+  const minimum = new Float32Array(length).fill(NaN);
+  const maximum = new Float32Array(length).fill(NaN);
+  for (const pos of Object.values(dataset)) {
+    median[pos.position - offset] = pos.median;
+    boxLow[pos.position - offset] = pos.boxLow;
+    boxHigh[pos.position - offset] = pos.boxHigh;
+    whiskerLow[pos.position - offset] = pos.whiskerLow;
+    whiskerHigh[pos.position - offset] = pos.whiskerHigh;
+    minimum[pos.position - offset] = pos.minimum;
+    maximum[pos.position - offset] = pos.maximum;
+  }
+  return {
+    offset,
+    length,
+    arrays: { median, boxLow, boxHigh, whiskerLow, whiskerHigh, minimum, maximum },
+  };
+}
+
+function getDownsamplerForDataset(dataset: PreprocessedData['datasets'][number]) {
+  const { offset, length, arrays } = datasetToArrays(dataset);
+  return {
+    offset,
+    length,
+    downsamplers: {
+      medianLow: Downsampler.fromNumbers(arrays.median, Math.min),
+      medianHigh: Downsampler.fromNumbers(arrays.median, Math.max),
+      boxLow: Downsampler.fromNumbers(arrays.boxLow, Math.min),
+      boxHigh: Downsampler.fromNumbers(arrays.boxHigh, Math.max),
+      whiskerLow: Downsampler.fromNumbers(arrays.whiskerLow, Math.min),
+      whiskerHigh: Downsampler.fromNumbers(arrays.whiskerHigh, Math.max),
+      minimum: Downsampler.fromNumbers(arrays.minimum, Math.min),
+      maximum: Downsampler.fromNumbers(arrays.maximum, Math.max),
+    },
+  };
 }
 
 // TODO: implement data pooling/smoothing for too zoomed-out visualization (like heatmap)
