@@ -55,13 +55,18 @@ function prepareDistributionData(data: DistributionData[number]): DistributionDa
       name: 'Data1',
       color: '#0088ff',
       positions: positions,
-      // positions: remove(positions, 3, 5, 6, 35), // DEBUG
+      // positions: remove(positions, 3, 4, 5, 6, 35), // DEBUG
+      // positions: remove(positions, 3, 4, 5, 6,
+      //   ...new Array(50).fill(0).map((_, i) => 35 + i),
+      //   ...new Array(500).fill(0).map((_, i) => 500 + i),
+      //   ...new Array(5000).fill(0).map((_, i) => 5000 + i),
+      // ), // DEBUG
     },
     // {
     //   name: 'Data2',
     //   color: '#ff8800',
-    //   positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
-    //   // positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
+    //   // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
+    //   positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
     // },
   ];
 }

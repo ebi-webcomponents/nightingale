@@ -826,14 +826,14 @@ function getDownsamplerForDataset(data: PreprocessedPositions) {
     offset,
     length,
     downsamplers: {
-      medianLow: new Downsampler(arrays.median, Math.min),
-      medianHigh: new Downsampler(arrays.median, Math.max),
-      boxLow: new Downsampler(arrays.boxLow, Math.min),
-      boxHigh: new Downsampler(arrays.boxHigh, Math.max),
-      whiskerLow: new Downsampler(arrays.whiskerLow, Math.min),
-      whiskerHigh: new Downsampler(arrays.whiskerHigh, Math.max),
-      minimum: new Downsampler(arrays.minimum, Math.min),
-      maximum: new Downsampler(arrays.maximum, Math.max),
+      medianLow: new Downsampler(arrays.median, 'min'),
+      medianHigh: new Downsampler(arrays.median, 'max'),
+      boxLow: new Downsampler(arrays.boxLow, 'min'),
+      boxHigh: new Downsampler(arrays.boxHigh, 'max'),
+      whiskerLow: new Downsampler(arrays.whiskerLow, 'min'),
+      whiskerHigh: new Downsampler(arrays.whiskerHigh, 'max'),
+      minimum: new Downsampler(arrays.minimum, 'min'),
+      maximum: new Downsampler(arrays.maximum, 'max'),
     },
   };
 }

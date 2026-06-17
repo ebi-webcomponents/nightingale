@@ -1,4 +1,17 @@
-type PoolingFunction = (...values: number[]) => number;
+type PoolingFunction = (a: number, b: number) => number;
+
+const PoolingFunctions = {
+    max(a: number, b: number): number {
+        if (isNaN(a) || a < b) return b;
+        else return a;
+    },
+    min(a: number, b: number): number {
+        if (isNaN(a) || a > b) return b;
+        else return a;
+    },
+} satisfies Record<string, PoolingFunction>;
+
+type PoolingMethod = keyof typeof PoolingFunctions;
 
 
 /** Helper object for downsampling 1D number arrays, with caching */
@@ -6,9 +19,13 @@ export class Downsampler {
     /** Downsampled versions of the original data (index 1 holds the original data; indices 2, 4, 8 etc. hold increasingly downsampled data) */
     private readonly downsampled: { [scale: number]: Float32Array | undefined } = {};
 
+    /** Function used to compute downsampled value from multiple source values */
+    private readonly poolingFunction: PoolingFunction;
+
     /** Create a new downsampler for a 1D number array */
-    constructor(data: Float32Array, private readonly poolingFunction: PoolingFunction) {
+    constructor(data: Float32Array, readonly poolingMethod: PoolingMethod) {
         this.downsampled[1] = data;
+        this.poolingFunction = PoolingFunctions[poolingMethod];
     }
 
     /** Return the original full-size data */
@@ -17,7 +34,7 @@ export class Downsampler {
     }
 
     /** Get data downsampled approximately to `minLength`.
-     * The returned data length will be at least `minLength` but less then double that.
+     * The returned data length will be at least `minLength` but less than `2*minLength`.
      * Exception: The returned data will be equal to the original data if `minLength > originalData.length`. */
     getDownsampled(minLength: number): Float32Array {
         const targetScale = downsamplingTargetScale(this.getOriginal().length, minLength);
@@ -37,8 +54,8 @@ export class Downsampler {
             return result;
         }
     }
+}
 
-};
 
 /** Return `scale`, a power of 2, such that:
  * `nPixels <= nDatapoints/scale < 2*nPixels`  or  `scale === 1 && nDatapoints < 2*nPixels` */
@@ -67,5 +84,3 @@ function downsampleNumbers_halve(input: Float32Array, poolingFunction: PoolingFu
     }
     return out;
 }
-
-// TODO: solve pooling NaNs
