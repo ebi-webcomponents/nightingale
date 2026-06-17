@@ -381,8 +381,8 @@ export default class NightingaleDistributionTrack extends withCanvas(
 
       const resolution = (xScale(length) - xScale(0)) / BG_DOWNSAMPLING_PIXELS_PER_COLUMN;
 
-      const medianLow = Downsampler.getDownsampled(downsamplers.medianLow, resolution);
-      const medianHigh = Downsampler.getDownsampled(downsamplers.medianHigh, resolution);
+      const medianLow = downsamplers.medianLow.getDownsampled(resolution);
+      const medianHigh = downsamplers.medianHigh.getDownsampled(resolution);
       const downScale = length / medianLow.length;
 
       const yMedianLow = (j: number) => yScale(medianLow[j]) + yMedianExtra;
@@ -392,20 +392,20 @@ export default class NightingaleDistributionTrack extends withCanvas(
       let yRangeHigh: ((j: number) => number) | undefined;
       switch (this['zoomed-out-range']) {
         case 'extremes':
-          const minimum = Downsampler.getDownsampled(downsamplers.minimum, resolution);
-          const maximum = Downsampler.getDownsampled(downsamplers.maximum, resolution);
+          const minimum = downsamplers.minimum.getDownsampled(resolution);
+          const maximum = downsamplers.maximum.getDownsampled(resolution);
           yRangeLow = (j: number) => yScale(minimum[j]);
           yRangeHigh = (j: number) => yScale(maximum[j]);
           break;
         case 'whiskers':
-          const whiskerLow = Downsampler.getDownsampled(downsamplers.whiskerLow, resolution);
-          const whiskerHigh = Downsampler.getDownsampled(downsamplers.whiskerHigh, resolution);
+          const whiskerLow = downsamplers.whiskerLow.getDownsampled(resolution);
+          const whiskerHigh = downsamplers.whiskerHigh.getDownsampled(resolution);
           yRangeLow = (j: number) => yScale(whiskerLow[j]);
           yRangeHigh = (j: number) => yScale(whiskerHigh[j]);
           break;
         case 'box':
-          const boxLow = Downsampler.getDownsampled(downsamplers.boxLow, resolution);
-          const boxHigh = Downsampler.getDownsampled(downsamplers.boxHigh, resolution);
+          const boxLow = downsamplers.boxLow.getDownsampled(resolution);
+          const boxHigh = downsamplers.boxHigh.getDownsampled(resolution);
           yRangeLow = (j: number) => yScale(boxLow[j]);
           yRangeHigh = (j: number) => yScale(boxHigh[j]);
           break;
@@ -826,14 +826,14 @@ function getDownsamplerForDataset(data: PreprocessedPositions) {
     offset,
     length,
     downsamplers: {
-      medianLow: Downsampler.fromNumbers(arrays.median, Math.min),
-      medianHigh: Downsampler.fromNumbers(arrays.median, Math.max),
-      boxLow: Downsampler.fromNumbers(arrays.boxLow, Math.min),
-      boxHigh: Downsampler.fromNumbers(arrays.boxHigh, Math.max),
-      whiskerLow: Downsampler.fromNumbers(arrays.whiskerLow, Math.min),
-      whiskerHigh: Downsampler.fromNumbers(arrays.whiskerHigh, Math.max),
-      minimum: Downsampler.fromNumbers(arrays.minimum, Math.min),
-      maximum: Downsampler.fromNumbers(arrays.maximum, Math.max),
+      medianLow: new Downsampler(arrays.median, Math.min),
+      medianHigh: new Downsampler(arrays.median, Math.max),
+      boxLow: new Downsampler(arrays.boxLow, Math.min),
+      boxHigh: new Downsampler(arrays.boxHigh, Math.max),
+      whiskerLow: new Downsampler(arrays.whiskerLow, Math.min),
+      whiskerHigh: new Downsampler(arrays.whiskerHigh, Math.max),
+      minimum: new Downsampler(arrays.minimum, Math.min),
+      maximum: new Downsampler(arrays.maximum, Math.max),
     },
   };
 }
