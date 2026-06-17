@@ -359,69 +359,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
     }
   }
 
-  /** Draw simplified visualization ("background" / zoomed-out) */
-  private drawSimplifiedVisualization_orig(ctx: CanvasRenderingContext2D, alpha: number) {
-    if (!this.data || !this.preprocessedData) return;
-
-    const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
-    ctx.lineWidth = lineWidth;
-
-    const nDatasets = this.preprocessedData.datasets.length;
-    for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
-      const dataset = this.preprocessedData.datasets[iDataset];
-      if (!dataset) continue;
-
-      const dataColor = dataset.color ?? DEFAULT_DATA_COLOR;
-      const fillColor = dataColor;
-      const strokeColor = makeStrokeColor(dataColor)!;
-
-      const yMedianLow = (i: number) => yScale(dataset.positions[i].median) + yMedianExtra;
-      const yMedianHigh = (i: number) => yScale(dataset.positions[i].median) - yMedianExtra;
-
-      let yRangeLow: ((i: number) => number) | undefined;
-      let yRangeHigh: ((i: number) => number) | undefined;
-      switch (this['zoomed-out-range']) {
-        case 'extremes':
-          yRangeLow = (i: number) => yScale(dataset.positions[i].minimum);
-          yRangeHigh = (i: number) => yScale(dataset.positions[i].maximum);
-          break;
-        case 'whiskers':
-          yRangeLow = (i: number) => yScale(dataset.positions[i].whiskerLow);
-          yRangeHigh = (i: number) => yScale(dataset.positions[i].whiskerHigh);
-          break;
-        case 'box':
-          yRangeLow = (i: number) => yScale(dataset.positions[i].boxLow);
-          yRangeHigh = (i: number) => yScale(dataset.positions[i].boxHigh);
-          break;
-        case 'none':
-          yRangeLow = undefined;
-          yRangeHigh = undefined;
-          break;
-      }
-
-      const segments = getContiguousSegments(start, stop, i => i in dataset.positions);
-
-      // Shaded range
-      if (yRangeLow && yRangeHigh) {
-        for (const segment of segments) {
-          ctx.globalAlpha = 0.25 * alpha;
-          ctx.fillStyle = fillColor;
-          drawSilhouette(ctx, segment, xScale, yRangeLow, yRangeHigh, [xColumnLeft, xColumnRight], 'fill');
-        }
-      }
-
-      // Median
-      for (const segment of segments) {
-        ctx.globalAlpha = 0.5 * alpha;
-        ctx.fillStyle = strokeColor;
-        ctx.strokeStyle = strokeColor;
-        drawSilhouette(ctx, segment, xScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
-      }
-    }
-  }
-
-  // TODO: continue here
-  // TODO: change downsampling to always halve (better performance and more consistent first transition)
   // TODO: fade-out transition when downsampling?
 
   /** Draw simplified visualization ("background" / zoomed-out) */
@@ -447,8 +384,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const medianLow = Downsampler.getDownsampled(downsamplers.medianLow, resolution);
       const medianHigh = Downsampler.getDownsampled(downsamplers.medianHigh, resolution);
       const downScale = length / medianLow.length;
-
-      // console.log('resolution', resolution, 'downScale', downScale, `(${length} -> ${medLow.length})`)
 
       const yMedianLow = (j: number) => yScale(medianLow[j]) + yMedianExtra;
       const yMedianHigh = (j: number) => yScale(medianHigh[j]) - yMedianExtra;
@@ -480,7 +415,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
           break;
       }
 
-      // const segments = getContiguousSegments(start, stop, i => i in dataset);
       const jStart = Math.max(0, Math.floor((start - offset) / downScale));
       const jStop = Math.min(medianLow.length, Math.ceil((stop - offset) / downScale));
       const jSegments = getContiguousSegments(jStart, jStop, j => !isNaN(medianLow[j]));
