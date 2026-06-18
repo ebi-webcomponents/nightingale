@@ -50,7 +50,7 @@ const OUTLIER_RADIUS = 2;
 const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5];
 /** Approximate width of a column in screen pixels, when showing downsampled data in "background" visualization.
  * (higher value means more responsive but lower-resolution visualization). */
-// const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 2;
+// const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 4;
 const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 1;
 
 function makeStrokeColor(dataColor: string): string | undefined {
@@ -359,87 +359,6 @@ export default class NightingaleDistributionTrack extends withCanvas(
     }
   }
 
-  // TODO: fade-out transition when downsampling?
-
-  /** Draw simplified visualization ("background" / zoomed-out) */
-  private drawSimplifiedVisualization1(ctx: CanvasRenderingContext2D, alpha: number) {
-    if (!this.data || !this.preprocessedData) return;
-
-    const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
-    ctx.lineWidth = lineWidth;
-
-    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
-    for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
-      const dataset = this.preprocessedData.datasets[iDataset];
-      if (!dataset) continue;
-
-      const { offset, length, downsamplers } = dataset.downsampling;
-
-      const dataColor = dataset.color ?? DEFAULT_DATA_COLOR;
-      const fillColor = dataColor;
-      const strokeColor = makeStrokeColor(dataColor)!;
-
-      const resolution = (xScale(length) - xScale(0)) / BG_DOWNSAMPLING_PIXELS_PER_COLUMN;
-
-      const medianLow = downsamplers.medianLow.getDownsampled(resolution);
-      const medianHigh = downsamplers.medianHigh.getDownsampled(resolution);
-      const downScale = length / medianLow.length;
-
-      const yMedianLow = (j: number) => yScale(medianLow[j]) + yMedianExtra;
-      const yMedianHigh = (j: number) => yScale(medianHigh[j]) - yMedianExtra;
-
-      let yRangeLow: ((j: number) => number) | undefined;
-      let yRangeHigh: ((j: number) => number) | undefined;
-      switch (this['zoomed-out-range']) {
-        case 'extremes':
-          const minimum = downsamplers.minimum.getDownsampled(resolution);
-          const maximum = downsamplers.maximum.getDownsampled(resolution);
-          yRangeLow = (j: number) => yScale(minimum[j]);
-          yRangeHigh = (j: number) => yScale(maximum[j]);
-          break;
-        case 'whiskers':
-          const whiskerLow = downsamplers.whiskerLow.getDownsampled(resolution);
-          const whiskerHigh = downsamplers.whiskerHigh.getDownsampled(resolution);
-          yRangeLow = (j: number) => yScale(whiskerLow[j]);
-          yRangeHigh = (j: number) => yScale(whiskerHigh[j]);
-          break;
-        case 'box':
-          const boxLow = downsamplers.boxLow.getDownsampled(resolution);
-          const boxHigh = downsamplers.boxHigh.getDownsampled(resolution);
-          yRangeLow = (j: number) => yScale(boxLow[j]);
-          yRangeHigh = (j: number) => yScale(boxHigh[j]);
-          break;
-        case 'none':
-          yRangeLow = undefined;
-          yRangeHigh = undefined;
-          break;
-      }
-
-      const jStart = Math.max(0, Math.floor((start - offset) / downScale));
-      const jStop = Math.min(medianLow.length, Math.ceil((stop - offset) / downScale));
-      const jSegments = getContiguousSegments(jStart, jStop, j => !isNaN(medianLow[j]));
-
-      const jXScale = (j: number) => xScale(offset + j * downScale);
-
-      // Shaded range
-      if (yRangeLow && yRangeHigh) {
-        for (const segment of jSegments) {
-          ctx.globalAlpha = 0.25 * alpha;
-          ctx.fillStyle = fillColor;
-          drawSilhouette(ctx, segment, jXScale, yRangeLow, yRangeHigh, [xColumnLeft, xColumnRight], 'fill');
-        }
-      }
-
-      // Median
-      for (const segment of jSegments) {
-        ctx.globalAlpha = 0.5 * alpha;
-        ctx.fillStyle = strokeColor;
-        ctx.strokeStyle = strokeColor;
-        drawSilhouette(ctx, segment, jXScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
-      }
-    }
-  }
-
   /** Draw simplified visualization ("background" / zoomed-out) */
   private drawSimplifiedVisualization(ctx: CanvasRenderingContext2D, alpha: number) {
     if (!this.data || !this.preprocessedData) return;
@@ -447,6 +366,9 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const { xColumnLeft, xColumnRight, xScale, yScale, yMedianExtra, lineWidth, start, stop } = this.getDrawingMeasurements();
     ctx.lineWidth = lineWidth;
 
+    const originalColumnWidth = (xScale(1) - xScale(0)) / BG_DOWNSAMPLING_PIXELS_PER_COLUMN;
+    const downsamplingLevels = Downsampler.targetDownsamplingScalesForTransition(originalColumnWidth);
+
     const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     for (let iDataset = 0; iDataset < nDatasets; iDataset++) {
       const dataset = this.preprocessedData.datasets[iDataset];
@@ -458,14 +380,12 @@ export default class NightingaleDistributionTrack extends withCanvas(
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
-      const resolution = (xScale(length) - xScale(0)) / BG_DOWNSAMPLING_PIXELS_PER_COLUMN;
-      const downSamplingScales = downsamplers.medianLow.downsamplingTargetScaleSoft(resolution);
-
-      for (const { scale, weight } of downSamplingScales) {
+      // Overlay two downsampling levels (e.g. 8x and 4x) to hide the transition between levels and create illusion of smooth zooming
+      for (const { scale, weight } of downsamplingLevels) {
         ctx.lineWidth = (scale === 1) ? 1 : lineWidth;
-        const medianLow = downsamplers.medianLow.getOrCompute(scale);
-        const medianHigh = downsamplers.medianHigh.getOrCompute(scale);
-        const downScale = length / medianLow.length;
+        const medianLow = downsamplers.medianLow.getDownsampledByScale(scale);
+        const medianHigh = downsamplers.medianHigh.getDownsampledByScale(scale);
+        const exactScale = length / medianLow.length; // This might be slightly different from `scale` which is always a power of two.
 
         const yMedianLow = (j: number) => yScale(medianLow[j]) + yMedianExtra;
         const yMedianHigh = (j: number) => yScale(medianHigh[j]) - yMedianExtra;
@@ -474,20 +394,20 @@ export default class NightingaleDistributionTrack extends withCanvas(
         let yRangeHigh: ((j: number) => number) | undefined;
         switch (this['zoomed-out-range']) {
           case 'extremes':
-            const minimum = downsamplers.minimum.getOrCompute(scale);
-            const maximum = downsamplers.maximum.getOrCompute(scale);
+            const minimum = downsamplers.minimum.getDownsampledByScale(scale);
+            const maximum = downsamplers.maximum.getDownsampledByScale(scale);
             yRangeLow = (j: number) => yScale(minimum[j]);
             yRangeHigh = (j: number) => yScale(maximum[j]);
             break;
           case 'whiskers':
-            const whiskerLow = downsamplers.whiskerLow.getOrCompute(scale);
-            const whiskerHigh = downsamplers.whiskerHigh.getOrCompute(scale);
+            const whiskerLow = downsamplers.whiskerLow.getDownsampledByScale(scale);
+            const whiskerHigh = downsamplers.whiskerHigh.getDownsampledByScale(scale);
             yRangeLow = (j: number) => yScale(whiskerLow[j]);
             yRangeHigh = (j: number) => yScale(whiskerHigh[j]);
             break;
           case 'box':
-            const boxLow = downsamplers.boxLow.getOrCompute(scale);
-            const boxHigh = downsamplers.boxHigh.getOrCompute(scale);
+            const boxLow = downsamplers.boxLow.getDownsampledByScale(scale);
+            const boxHigh = downsamplers.boxHigh.getDownsampledByScale(scale);
             yRangeLow = (j: number) => yScale(boxLow[j]);
             yRangeHigh = (j: number) => yScale(boxHigh[j]);
             break;
@@ -497,11 +417,11 @@ export default class NightingaleDistributionTrack extends withCanvas(
             break;
         }
 
-        const jStart = Math.max(0, Math.floor((start - offset) / downScale));
-        const jStop = Math.min(medianLow.length, Math.ceil((stop - offset) / downScale));
+        const jStart = Math.max(0, Math.floor((start - offset) / exactScale));
+        const jStop = Math.min(medianLow.length, Math.ceil((stop - offset) / exactScale));
         const jSegments = getContiguousSegments(jStart, jStop, j => !isNaN(medianLow[j]));
 
-        const jXScale = (j: number) => xScale(offset + j * downScale);
+        const jXScale = (j: number) => xScale(offset + j * exactScale);
 
         // Shaded range
         if (yRangeLow && yRangeHigh) {
