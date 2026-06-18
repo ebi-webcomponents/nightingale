@@ -1,10 +1,12 @@
 type PoolingFunction = (a: number, b: number) => number;
 
 const PoolingFunctions = {
+    /** Like `Math.max` but handles `NaN` (`max(1, 2) -> 2`, `max(1, NaN) -> 1`, `max(NaN, 2) -> 2`, `max(NaN, NaN) -> NaN`) */
     max(a: number, b: number): number {
         if (isNaN(a) || a < b) return b;
         else return a;
     },
+    /** Like `Math.min` but handles `NaN` (`min(1, 2) -> 1`, `min(1, NaN) -> 1`, `min(NaN, 2) -> 2`, `min(NaN, NaN) -> NaN`) */
     min(a: number, b: number): number {
         if (isNaN(a) || a > b) return b;
         else return a;
@@ -37,12 +39,20 @@ export class Downsampler {
      * The returned data length will be at least `minLength` but less than `2*minLength`.
      * Exception: The returned data will be equal to the original data if `minLength > originalData.length`. */
     getDownsampled(minLength: number): Float32Array {
-        const targetScale = downsamplingTargetScale(this.getOriginal().length, minLength);
+        const targetScale = this.downsamplingTargetScale(minLength);
         return this.getOrCompute(targetScale);
     }
 
+    /** Get data downsampled approximately to `minLength`.
+     * The returned data length will be at least `minLength` but less than `2*minLength`.
+     * Exception: The returned data will be equal to the original data if `minLength > originalData.length`. */
+    getDownsampledSoft(minLength: number) {
+        const targetScales = this.downsamplingTargetScaleSoft(minLength);
+        return targetScales.map(targetScale => ({ weight: targetScale.weight, data: this.getOrCompute(targetScale.scale) }));
+    }
+
     /** Get data downsampled by `scale`, with caching. `scale` must be a power of 2. Resulting data length will be `Math.ceil(original.length / scale)` */
-    private getOrCompute(scale: number): Float32Array {
+    getOrCompute(scale: number): Float32Array {
         const cached = this.downsampled[scale];
         if (cached) {
             return cached;
@@ -54,18 +64,48 @@ export class Downsampler {
             return result;
         }
     }
+
+    /** Return `scale`, a power of 2, such that:
+     * `nPixels <= nDatapoints/scale < 2*nPixels`  or  `scale === 1 && nDatapoints < 2*nPixels` */
+    downsamplingTargetScale(nPixels: number): number {
+        const nDatapoints = Math.max(1, this.getOriginal().length);
+        nPixels = Math.max(1, nPixels);
+        const log2scaleExact = Math.log2(nDatapoints / nPixels);
+        const log2scale = Math.max(0, Math.floor(log2scaleExact));
+        return 2 ** log2scale;
+    }
+
+    /** Return `scale`, a power of 2, such that:
+     * `nPixels <= nDatapoints/scale < 2*nPixels`  or  `scale === 1 && nDatapoints < 2*nPixels` */
+    downsamplingTargetScaleSoft(nPixels: number) {
+        const nDatapoints = Math.max(1, this.getOriginal().length);
+        nPixels = Math.max(1, nPixels);
+        const log2scale = Math.max(0, Math.log2(nDatapoints / nPixels));
+        const log2scaleFloor = Math.floor(log2scale);
+        const wNext = log2scale - log2scaleFloor;
+        if (wNext === 0) {
+            return [
+                { scale: 2 ** log2scaleFloor, weight: 1 },
+            ];
+        } else {
+            return [
+                { scale: 2 ** (log2scaleFloor + 1), weight: wNext },
+                { scale: 2 ** log2scaleFloor, weight: 1 - wNext },
+            ];
+        }
+    }
 }
 
 
-/** Return `scale`, a power of 2, such that:
- * `nPixels <= nDatapoints/scale < 2*nPixels`  or  `scale === 1 && nDatapoints < 2*nPixels` */
-function downsamplingTargetScale(nDatapoints: number, nPixels: number): number {
-    nDatapoints = Math.max(1, nDatapoints);
-    nPixels = Math.max(1, nPixels);
-    const log2scaleExact = Math.log2(nDatapoints / nPixels);
-    const log2scale = Math.max(0, Math.floor(log2scaleExact));
-    return 2 ** log2scale;
-}
+// /** Return `scale`, a power of 2, such that:
+//  * `nPixels <= nDatapoints/scale < 2*nPixels`  or  `scale === 1 && nDatapoints < 2*nPixels` */
+// function downsamplingTargetScale(nDatapoints: number, nPixels: number): number {
+//     nDatapoints = Math.max(1, nDatapoints);
+//     nPixels = Math.max(1, nPixels);
+//     const log2scaleExact = Math.log2(nDatapoints / nPixels);
+//     const log2scale = Math.max(0, Math.floor(log2scaleExact));
+//     return 2 ** log2scale;
+// }
 
 /** Downsample array of numbers to a new size `ceil(input.length / 2)`. */
 function downsampleNumbers_halve(input: Float32Array, poolingFunction: PoolingFunction): Float32Array {
