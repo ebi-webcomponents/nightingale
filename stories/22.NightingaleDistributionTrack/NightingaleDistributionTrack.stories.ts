@@ -17,6 +17,7 @@ const DefaultArgs = {
   "y-min": 0 as number | undefined,
   "y-max": undefined as number | undefined,
   "hide-outliers": false,
+  "show-nested-highlights": true,
   "zoomed-out-range": 'whiskers',
 };
 type Args = typeof DefaultArgs;
@@ -30,9 +31,9 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
 
 
 // const nDataRepeat = 20_000;
-const nDataRepeat = 1_000;
+// const nDataRepeat = 1_000;
 // const nDataRepeat = 81;
-// const nDataRepeat = 82;
+const nDataRepeat = 82;
 // Around 100k datapoints (nDataRepeat=1000), canvas draw takes > 40ms
 // Around 400k datapoints (nDataRepeat=4000), aliasing makes data invisible (causes artifacts even before)
 
@@ -62,12 +63,18 @@ function prepareDistributionData(data: DistributionData[number]): DistributionDa
       //   ...new Array(5000).fill(0).map((_, i) => 5000 + i),
       // ), // DEBUG
     },
-    // {
-    //   name: 'Data2',
-    //   color: '#ff8800',
-    //   // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
-    //   positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
-    // },
+    {
+      name: 'Data2',
+      color: '#ff8800',
+      // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
+      positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
+    },
+    {
+      name: 'Data3',
+      color: '#00aa44',
+      // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
+      positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.93) })), 1, 7), // DEBUG
+    },
   ];
 }
 
@@ -173,6 +180,7 @@ function nightingaleDistributionTrack(args: Args & { length: number, id: number 
         y-min=${args["y-min"]}
         y-max=${args["y-max"]}
         ?hide-outliers=${args["hide-outliers"]}
+        ?show-nested-highlights=${args["show-nested-highlights"]}
         zoomed-out-range=${args["zoomed-out-range"]}
       >
       </nightingale-distribution-track>

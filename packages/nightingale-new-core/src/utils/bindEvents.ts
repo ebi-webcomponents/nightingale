@@ -1,6 +1,6 @@
-import NightingaleBaseElement from "../nightingale-base-element";
+import { BaseType, Selection } from "d3";
 import { WithHighlightInterface } from "../mixins/withHighlight";
-import { Selection, BaseType } from "d3";
+import NightingaleBaseElement from "../nightingale-base-element";
 
 export const HIGHLIGHT_EVENT = "highlight-event";
 
@@ -20,11 +20,32 @@ type SequenceBaseData = {
   position: number;
   aa: string;
 };
+type DistributionData = {
+  type: 'distribution';
+  position: number;
+  dataset: {
+    name: string;
+    color: string;
+  };
+  datum: {
+    position: number;
+    values: Float32Array;
+    median: number;
+    boxLow: number;
+    boxHigh: number;
+    whiskerLow: number;
+    whiskerHigh: number;
+    minimum: number;
+    maximum: number;
+    outliersLow: Float32Array;
+    outliersHigh: Float32Array;
+  };
+};
 
-type detailInterface = {
+type EventDetail = {
   eventType: EventType;
   coords: null | [number, number];
-  feature?: FeatureData | SequenceBaseData | null;
+  feature?: FeatureData | SequenceBaseData | DistributionData | null;
   target?: HTMLElement;
   highlight?: string;
   selectedId?: string | null;
@@ -33,7 +54,7 @@ type detailInterface = {
 
 export function createEvent(
   type: EventType,
-  feature: FeatureData | SequenceBaseData | null = null,
+  feature: FeatureData | SequenceBaseData | DistributionData | null = null,
   withHighlight = false,
   withId = false,
   start?: number,
@@ -48,7 +69,7 @@ export function createEvent(
     feature = (feature as FeatureData)?.feature || feature;
   }
 
-  const detail: detailInterface = {
+  const detail: EventDetail = {
     eventType: type,
     feature,
     target,

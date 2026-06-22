@@ -14,7 +14,7 @@ import NightingaleElement, {
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
 import { BaseType, color, max, min, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
-import { html, PropertyDeclaration, PropertyValues } from "lit";
+import { ComplexAttributeConverter, html, PropertyDeclaration, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { Downsampler } from "./downsampling";
 
@@ -47,7 +47,7 @@ const JITTER_REL_WIDTH = 0.4;
 /** Radius for the circles representing outliers */
 const OUTLIER_RADIUS = 2;
 /** Column widths in CSS pixels, between which transition from "background" to "foreground" visualization happens */
-const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5];
+const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5] as const;
 /** Approximate width of a column in screen pixels, when showing downsampled data in "background" visualization.
  * (higher value means more responsive but lower-resolution visualization). */
 // const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 4;
@@ -98,6 +98,8 @@ function EnumAttributeConverter<T extends string, D extends T>(allowedValues: re
 export const ZoomedOutRangeOptions = ['extremes', 'whiskers', 'box', 'none'] as const;
 export type ZoomedOutRangeOption = typeof ZoomedOutRangeOptions[number];
 
+
+// TODO: rename to nightingale-boxplot-track
 @customElementOnce("nightingale-distribution-track")
 export default class NightingaleDistributionTrack extends withCanvas(
   withManager(
@@ -142,10 +144,18 @@ export default class NightingaleDistributionTrack extends withCanvas(
   @property({ converter: EnumAttributeConverter(ZoomedOutRangeOptions, 'whiskers') })
   "zoomed-out-range": ZoomedOutRangeOption; // TODO: enum-type in other components?
 
+  /** Turn on showing secondary highlights, which indicate selected subcolumn within a column (in case of multiple dataset). */
+  @property({ type: Boolean })
+  "show-nested-highlights"?: boolean;
+
+  /** Position of secondary highlight in from "position/iDataset", or "" if none. */
+  @property({ type: String, reflect: true })
+  private "nested-highlight": string = "";
 
   #data?: DistributionData;
   private preprocessedData?: PreprocessedData;
   protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  protected nestedHighlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
   override connectedCallback() {
@@ -193,12 +203,14 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (this.svg) { // this check is necessary because `svg` setter does not always set
       this.bindEvents(this.svg);
       this.highlighted = this.svg.append("g").attr("class", "highlighted");
+      this.nestedHighlighted = this.svg.append("g").attr("class", "highlighted-datapoint");
     }
   }
 
   refresh() {
     this.requestDraw();
     this.updateHighlight();
+    this.updateNestedHighlight();
   }
 
   private readonly _drawStamp = new Stamp(() => {
@@ -541,6 +553,35 @@ export default class NightingaleDistributionTrack extends withCanvas(
     highlights.exit().remove();
   }
 
+  protected updateNestedHighlight() {
+    if (!this.nestedHighlighted) return;
+    const nestedHighlightLocation = NestedHighlight.parse(this["nested-highlight"]);
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    const showNestedHighlight = this["show-nested-highlights"] && nDatasets > 1 && nestedHighlightLocation !== undefined;
+
+    const highlights = this.nestedHighlighted
+      .selectAll<SVGRectElement, unknown>("rect")
+      .data(showNestedHighlight ? [nestedHighlightLocation] : []);
+
+    const baseWidth = this.getSingleBaseWidth();
+    const columnOffset = baseWidth * 0.5 * COLUMN_GAP;
+    const columnWidth = baseWidth * (1 - COLUMN_GAP);
+    const datumWidth = columnWidth / nDatasets;
+
+    highlights
+      .enter()
+      .append("rect")
+      .style("pointer-events", "none")
+      .merge(highlights)
+      .attr("fill", this["highlight-color"])
+      .attr("opacity", this.getFgBgOpacity()[0])
+      .attr("height", this.height)
+      .attr("x", ([position, iDataset]) => this.getXFromSeqPosition(position) + columnOffset + iDataset * datumWidth)
+      .attr("width", datumWidth);
+
+    highlights.exit().remove();
+  }
+
   override zoomRefreshed() {
     super.zoomRefreshed();
     if (this.getWidthWithMargins() > 0) this.refresh();
@@ -585,10 +626,22 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (pointed === undefined) {
       return;
     }
+    const feature: Parameters<typeof createEvent>[1] = pointed.datum ?
+      {
+        type: 'distribution',
+        position: pointed.position,
+        dataset: { name: pointed.dataset.name, color: pointed.dataset.color ?? DEFAULT_DATA_COLOR },
+        datum: pointed.datum,
+      }
+      : undefined;
     const withHighlight = this.getAttribute("highlight-event") === "onclick";
+    if (withHighlight) {
+      this["nested-highlight"] = NestedHighlight.format(pointed.iDataset !== undefined ? [pointed.position, pointed.iDataset] : undefined);
+    }
+
     const customEvent = createEvent(
       "click",
-      null, // TODO: pass (pointed.datum ?? null),
+      feature,
       withHighlight,
       true,
       pointed.position,
@@ -605,10 +658,22 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (pointed === undefined) {
       return;
     }
+    const feature: Parameters<typeof createEvent>[1] = pointed.datum ?
+      {
+        type: 'distribution',
+        position: pointed.position,
+        dataset: { name: pointed.dataset.name, color: pointed.dataset.color ?? DEFAULT_DATA_COLOR },
+        datum: pointed.datum,
+      }
+      : undefined;// TODO: factor out;
+
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
+    if (withHighlight) {
+      this["nested-highlight"] = NestedHighlight.format(pointed.iDataset !== undefined ? [pointed.position, pointed.iDataset] : undefined);
+    }
     const customEvent = createEvent(
       "mouseover",
-      null, // TODO: pass (pointed.datum ?? null),
+      feature,
       withHighlight,
       false,
       pointed.position,
@@ -622,6 +687,9 @@ export default class NightingaleDistributionTrack extends withCanvas(
 
   private handleMouseout(event: MouseEvent): void {
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
+    if (withHighlight) {
+      this["nested-highlight"] = NestedHighlight.format(undefined);
+    }
     const customEvent = createEvent(
       "mouseout",
       null,
@@ -636,12 +704,20 @@ export default class NightingaleDistributionTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
-  private getPointedDatum(svgX: number, _svgY: number): { position: number, datum: PreprocessedDatum | undefined } | undefined {
+  private getPointedDatum(svgX: number, _svgY: number): { position: number, iDataset: number, dataset: PreprocessedDataset, datum: PreprocessedDatum } | { position: number, iDataset: undefined, dataset: undefined, datum: undefined } | undefined {
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
-    const datum = this.preprocessedData?.datasets[0].positions[position]; // TODO: consider multiple datasets
-    return { position, datum };
+    const fractional = continuousPosition - position;
+    const fractionalWithinColumn = (fractional - 0.5 * COLUMN_GAP) / (1 - COLUMN_GAP);
+    const nDatasets = this.preprocessedData?.datasets.length ?? 1;
+    const iDataset = Math.max(0, Math.min(nDatasets - 1, Math.floor(fractionalWithinColumn * nDatasets)));
+    const dataset = this.preprocessedData?.datasets[iDataset];
+    const datum = dataset?.positions[position];
+    if (!datum) {
+      return { position, iDataset: undefined, dataset: undefined, datum: undefined };
+    }
+    return { position, iDataset, dataset, datum };
   }
 }
 
@@ -663,7 +739,6 @@ function preprocessDataset(dataset: DistributionDataset) {
   for (const datum of dataset.positions) {
     preprocessedPositions[datum.position] = preprocessDatum(datum);
   }
-  // return out;
   return {
     ...dataset,
     positions: preprocessedPositions,
@@ -673,16 +748,16 @@ function preprocessDataset(dataset: DistributionDataset) {
 
 interface PreprocessedDatum {
   position: number,
-  values: number[] | TypedArray,
+  values: Float32Array,
   median: number,
   boxLow: number,
   boxHigh: number,
   whiskerLow: number,
   whiskerHigh: number,
-  outliersLow: number[] | TypedArray,
-  outliersHigh: number[] | TypedArray,
   minimum: number,
   maximum: number,
+  outliersLow: Float32Array,
+  outliersHigh: Float32Array,
 }
 
 type PreprocessedPositions = { [position: number]: PreprocessedDatum }
@@ -853,5 +928,19 @@ function weightAlpha(alpha: number, weight: number) {
   const transpWCorrected = transpW * correctionFactor;
   return 1 - transpWCorrected;
 }
+
+type NestedHighlight = [position: number, iDataset: number] | undefined;
+const NestedHighlight = {
+  format(value: NestedHighlight): string {
+    if (!value) return '';
+    return `${value[0]}${this.SEPARATOR}${value[1]}`;
+  },
+  parse(str: string): NestedHighlight {
+    if (str.trim() === '') return undefined;
+    const [a, b] = str.split(this.SEPARATOR).map(Number);
+    return [a, b];
+  },
+  SEPARATOR: '/',
+};
 
 // TODO: axis ticks
