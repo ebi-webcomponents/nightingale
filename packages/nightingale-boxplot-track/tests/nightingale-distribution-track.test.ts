@@ -1,4 +1,4 @@
-import { getQuantile } from "../src/nightingale-distribution-track";
+import { getQuantile } from "../src/nightingale-boxplot-track";
 
 
 describe("getQuantile", () => {

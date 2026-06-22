@@ -1,7 +1,7 @@
 {
-  "name": "@nightingale-elements/nightingale-distribution-track",
+  "name": "@nightingale-elements/nightingale-boxplot-track",
   "version": "5.6.0",
-  "description": "Track for showing distribution of a variable on each residue position.",
+  "description": "Track for showing distribution of a variable on each residue position via boxplots.",
   "files": [
     "dist",
     "src"

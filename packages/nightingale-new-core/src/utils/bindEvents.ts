@@ -20,10 +20,11 @@ type SequenceBaseData = {
   position: number;
   aa: string;
 };
-type DistributionData = {
-  type: 'distribution';
+type BoxplotData = {
+  type: 'boxplot';
   position: number;
   dataset: {
+    index: number;
     name: string;
     color: string;
   };
@@ -45,7 +46,7 @@ type DistributionData = {
 type EventDetail = {
   eventType: EventType;
   coords: null | [number, number];
-  feature?: FeatureData | SequenceBaseData | DistributionData | null;
+  feature?: FeatureData | SequenceBaseData | BoxplotData | null;
   target?: HTMLElement;
   highlight?: string;
   selectedId?: string | null;
@@ -54,7 +55,7 @@ type EventDetail = {
 
 export function createEvent(
   type: EventType,
-  feature: FeatureData | SequenceBaseData | DistributionData | null = null,
+  feature: FeatureData | SequenceBaseData | BoxplotData | null = null,
   withHighlight = false,
   withId = false,
   start?: number,

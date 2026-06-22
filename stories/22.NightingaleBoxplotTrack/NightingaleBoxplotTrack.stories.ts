@@ -1,11 +1,11 @@
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
-import "../../packages/nightingale-distribution-track/src/index";
-import { type DistributionData, ZoomedOutRangeOptions } from "../../packages/nightingale-distribution-track/src/nightingale-distribution-track";
-import sampleDistributionData from "../../packages/nightingale-distribution-track/tests/mockData/sample-1.json";
+import "../../packages/nightingale-boxplot-track/src/index";
+import { type BoxplotData, ZoomedOutRangeOptions } from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
+import sampleBoxplotData from "../../packages/nightingale-boxplot-track/tests/mockData/sample-1.json";
 
 
-export default { title: "Components/Tracks/Distribution Track" } as Meta;
+export default { title: "Components/Tracks/Boxplot Track" } as Meta;
 
 
 const DefaultArgs = {
@@ -39,8 +39,7 @@ const nDataRepeat = 82;
 
 const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIA".repeat(nDataRepeat);
 
-function prepareDistributionData(data: DistributionData[number]): DistributionData {
-  console.time('prepareDistributionData')
+function prepareBoxplotData(data: { positions: { position: number, values: number[] }[] }): BoxplotData {
   // const positions = data.positions.slice();
   const positions = data.positions.map(pos => ({ position: pos.position, values: pos.values.sort() }));
   const shift = data.positions.length;
@@ -49,7 +48,6 @@ function prepareDistributionData(data: DistributionData[number]): DistributionDa
       positions.push({ position: pos.position + i * shift, values: pos.values });
     }
   }
-  console.timeEnd('prepareDistributionData')
 
   return [
     {
@@ -84,23 +82,6 @@ function remove<T>(arr: T[], ...indices: number[]) {
     out.splice(i, 1);
   }
   return out;
-}
-
-function prepareLinegraphData(data: DistributionData) {
-  console.time('prepareLinegraphData')
-  const values = data[0].positions.map(pos => ({ position: pos.position, value: pos.values.reduce((a, b) => a + b, 0) / pos.values.length }));
-  const max = values.reduce((old, v) => v.value > old ? v.value : old, 0);
-
-  const chart1 = {
-    name: "chart1",
-    color: "#707070",
-    fill: "#808080",
-    lineCurve: "curveStep",
-    range: [0, max],
-    values: values,
-  };
-  console.timeEnd('prepareLinegraphData')
-  return [chart1];
 }
 
 
@@ -142,32 +123,12 @@ function nightingaleSequence(args: Args & { length: number }) {
     </div>`;
 }
 
-function nightingaleLinegraphTrack(args: Args & { length: number, id: number }) {
+function nightingaleBoxplotTrack(args: Args & { length: number, id: number }) {
   return html`
     <div class="row">
-      <div class="label">Linegraph</div>
-      <nightingale-linegraph-track
-        id="track-linegraph-${args["id"]}"
-        min-width="${args["min-width"]}"
-        height="44"
-        length="${args["length"]}"
-        highlight-event="${args["highlight-event"]}"
-        ?highlight-on-click="${args["highlight-event"] === "onclick"}"
-        highlight-color="${args["highlight-color"]}"
-        margin-color=${args["margin-color"]}
-        use-ctrl-to-zoom
-      >
-        <style>.mouse-over-effects { opacity: 0; }</style>
-      </nightingale-linegraph-track>
-    </div>`;
-}
-
-function nightingaleDistributionTrack(args: Args & { length: number, id: number }) {
-  return html`
-    <div class="row">
-      <div class="label">Distribution</div>
-      <nightingale-distribution-track
-        id="track-distribution-${args["id"]}"
+      <div class="label">Boxplot</div>
+      <nightingale-boxplot-track
+        id="track-boxplot-${args["id"]}"
         min-width="${args["min-width"]}"
         height=${args["height"]}
         length="${args["length"]}"
@@ -183,7 +144,7 @@ function nightingaleDistributionTrack(args: Args & { length: number, id: number 
         ?show-nested-highlights=${args["show-nested-highlights"]}
         zoomed-out-range=${args["zoomed-out-range"]}
       >
-      </nightingale-distribution-track>
+      </nightingale-boxplot-track>
     </div>`;
 }
 
@@ -202,8 +163,7 @@ function makeStory(options: { length: number }): Story<Args> {
           <div style="display:flex; flex-direction: column; width: 100%;">
             ${nightingaleNavigation({ ...args, length: options.length })}
             ${nightingaleSequence({ ...args, length: options.length })}
-            <!--${nightingaleLinegraphTrack({ ...args, length: options.length, id: 0 })}-->
-            ${nightingaleDistributionTrack({ ...args, length: options.length, id: 0 })}
+            ${nightingaleBoxplotTrack({ ...args, length: options.length, id: 0 })}
           </div>
         </nightingale-manager>
       </div>`;
@@ -212,23 +172,18 @@ function makeStory(options: { length: number }): Story<Args> {
   const story: Story<Args> = template.bind({});
   story.args = { ...DefaultArgs };
   story.argTypes = ArgumentTypes;
-  const distributionData = prepareDistributionData(sampleDistributionData as any);
-  // const linegraphData = prepareLinegraphData(distributionData);
+  const boxplotData = prepareBoxplotData(sampleBoxplotData as any);
 
   story.play = async () => {
-    // await customElements.whenDefined("nightingale-linegraph-track");
-    // for (const track of document.getElementsByTagName("nightingale-linegraph-track")) {
-    //   (track as any).data = linegraphData;
-    // }
-    await customElements.whenDefined("nightingale-distribution-track");
-    for (const track of document.getElementsByTagName("nightingale-distribution-track")) {
-      (track as any).data = distributionData;
+    await customElements.whenDefined("nightingale-boxplot-track");
+    for (const track of document.getElementsByTagName("nightingale-boxplot-track")) {
+      (track as any).data = boxplotData;
     }
   };
   return story;
 }
 
 
-export const LinegraphAndDistribution = makeStory({
+export const Boxplot = makeStory({
   length: sampleSequence.length,
 });

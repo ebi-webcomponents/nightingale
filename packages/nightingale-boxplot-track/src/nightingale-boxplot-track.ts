@@ -24,8 +24,8 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
   "font-family", "min-font-size", "fade-font-size", "max-font-size",
   "y-min", "y-max", "hide-outliers", "zoomed-out-range",
-] satisfies (keyof NightingaleDistributionTrack)[];
-const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleDistributionTrack)[];
+] satisfies (keyof NightingaleBoxplotTrack)[];
+const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleBoxplotTrack)[];
 
 
 /** Line width for rectangle stroke */
@@ -58,19 +58,24 @@ function makeStrokeColor(dataColor: string): string | undefined {
 }
 
 
-interface Distribution {
+interface BoxplotDatum {
+  /** Position in the sequence (1-based) */
   position: number,
-  values: number[],
+  /** Array of values of independent variable at the position */
+  values: ArrayLike<number>,
 }
 
-export interface DistributionDataset {
+export interface BoxplotDataset {
+  /** Name of the dataset */
   name: string,
+  /** Color of the dataset visualization */
   color?: string,
-  positions: Distribution[],
+  /** Array of boxplot data for individual positions in the sequence */
+  positions: BoxplotDatum[],
 }
 
-/** Type for `NightingaleDistributionTrack.data`` */
-export type DistributionData = DistributionDataset[];
+/** Type for `NightingaleBoxplotTrack.data`` */
+export type BoxplotData = BoxplotDataset[];
 
 type AttributeConverter<T> = NonNullable<PropertyDeclaration<T>['converter']>;
 
@@ -100,8 +105,8 @@ export type ZoomedOutRangeOption = typeof ZoomedOutRangeOptions[number];
 
 
 // TODO: rename to nightingale-boxplot-track
-@customElementOnce("nightingale-distribution-track")
-export default class NightingaleDistributionTrack extends withCanvas(
+@customElementOnce("nightingale-boxplot-track")
+export default class NightingaleBoxplotTrack extends withCanvas(
   withManager(
     withZoom(
       withResizable(
@@ -152,7 +157,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
   @property({ type: String, reflect: true })
   private "nested-highlight": string = "";
 
-  #data?: DistributionData;
+  #data?: BoxplotData;
   private preprocessedData?: PreprocessedData;
   protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
   protected nestedHighlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
@@ -163,14 +168,12 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (this.data) this.createTrack();
   }
 
-  get data(): DistributionData | undefined {
+  get data(): BoxplotData | undefined {
     return this.#data;
   }
-  set data(data: DistributionData | undefined) {
+  set data(data: BoxplotData | undefined) {
     this.#data = data;
-    console.time('preprocessData')
     this.preprocessedData = data ? preprocessData(data) : undefined;
-    console.timeEnd('preprocessData')
     this.createTrack();
   }
   /** Return the range of Y values corresponding to bottom and top of the viewport (excluding margins) */
@@ -240,11 +243,9 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (!this._drawStamp.update().changed) return;
     this.adjustCanvasCtxLogicalSize();
     if (!this.canvasCtx) return;
-    console.time('draw distr')
     this.clearCanvas(this.canvasCtx);
     this.drawData(this.canvasCtx);
     this.drawMargins(this.canvasCtx);
-    console.timeEnd('draw distr')
   }
 
   private getOffscreenCanvas(): [canvas: HTMLCanvasElement, canvasContext?: CanvasRenderingContext2D] {
@@ -610,15 +611,15 @@ export default class NightingaleDistributionTrack extends withCanvas(
 
 
   private bindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
-    target.on("click.NightingaleDistributionTrack", (event: MouseEvent) => this.handleClick(event));
-    target.on("mousemove.NightingaleDistributionTrack", (event: MouseEvent) => this.handleMousemove(event));
-    target.on("mouseout.NightingaleDistributionTrack", (event: MouseEvent) => this.handleMouseout(event));
+    target.on("click.NightingaleBoxplotTrack", (event: MouseEvent) => this.handleClick(event));
+    target.on("mousemove.NightingaleBoxplotTrack", (event: MouseEvent) => this.handleMousemove(event));
+    target.on("mouseout.NightingaleBoxplotTrack", (event: MouseEvent) => this.handleMouseout(event));
   }
 
   private unbindEvents<T extends BaseType>(target: Selection<T, unknown, BaseType, unknown>): void {
-    target.on("click.NightingaleDistributionTrack", null);
-    target.on("mousemove.NightingaleDistributionTrack", null);
-    target.on("mouseout.NightingaleDistributionTrack", null);
+    target.on("click.NightingaleBoxplotTrack", null);
+    target.on("mousemove.NightingaleBoxplotTrack", null);
+    target.on("mouseout.NightingaleBoxplotTrack", null);
   }
 
   private handleClick(event: MouseEvent): void {
@@ -626,22 +627,16 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (pointed === undefined) {
       return;
     }
-    const feature: Parameters<typeof createEvent>[1] = pointed.datum ?
-      {
-        type: 'distribution',
-        position: pointed.position,
-        dataset: { name: pointed.dataset.name, color: pointed.dataset.color ?? DEFAULT_DATA_COLOR },
-        datum: pointed.datum,
-      }
-      : undefined;
+
     const withHighlight = this.getAttribute("highlight-event") === "onclick";
     if (withHighlight) {
-      this["nested-highlight"] = NestedHighlight.format(pointed.iDataset !== undefined ? [pointed.position, pointed.iDataset] : undefined);
+      const iDataset = pointed.feature?.dataset.index;
+      this["nested-highlight"] = NestedHighlight.format(iDataset !== undefined ? [pointed.position, iDataset] : undefined);
     }
 
     const customEvent = createEvent(
       "click",
-      feature,
+      pointed.feature,
       withHighlight,
       true,
       pointed.position,
@@ -658,22 +653,16 @@ export default class NightingaleDistributionTrack extends withCanvas(
     if (pointed === undefined) {
       return;
     }
-    const feature: Parameters<typeof createEvent>[1] = pointed.datum ?
-      {
-        type: 'distribution',
-        position: pointed.position,
-        dataset: { name: pointed.dataset.name, color: pointed.dataset.color ?? DEFAULT_DATA_COLOR },
-        datum: pointed.datum,
-      }
-      : undefined;// TODO: factor out;
 
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
     if (withHighlight) {
-      this["nested-highlight"] = NestedHighlight.format(pointed.iDataset !== undefined ? [pointed.position, pointed.iDataset] : undefined);
+      const iDataset = pointed.feature?.dataset.index;
+      this["nested-highlight"] = NestedHighlight.format(iDataset !== undefined ? [pointed.position, iDataset] : undefined);
     }
+
     const customEvent = createEvent(
       "mouseover",
-      feature,
+      pointed.feature,
       withHighlight,
       false,
       pointed.position,
@@ -704,7 +693,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
-  private getPointedDatum(svgX: number, _svgY: number): { position: number, iDataset: number, dataset: PreprocessedDataset, datum: PreprocessedDatum } | { position: number, iDataset: undefined, dataset: undefined, datum: undefined } | undefined {
+  private getPointedDatum(svgX: number, _svgY: number) {
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
@@ -712,12 +701,25 @@ export default class NightingaleDistributionTrack extends withCanvas(
     const fractionalWithinColumn = (fractional - 0.5 * COLUMN_GAP) / (1 - COLUMN_GAP);
     const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     const iDataset = Math.max(0, Math.min(nDatasets - 1, Math.floor(fractionalWithinColumn * nDatasets)));
+
     const dataset = this.preprocessedData?.datasets[iDataset];
     const datum = dataset?.positions[position];
     if (!datum) {
-      return { position, iDataset: undefined, dataset: undefined, datum: undefined };
+      return { position, feature: undefined };
     }
-    return { position, iDataset, dataset, datum };
+
+    type EventFeatureData = Parameters<typeof createEvent>[1];
+    const feature: EventFeatureData = {
+      type: 'boxplot',
+      position: position,
+      dataset: {
+        index: iDataset,
+        name: dataset.name,
+        color: dataset.color ?? DEFAULT_DATA_COLOR,
+      },
+      datum: datum,
+    };
+    return { position, feature };
   }
 }
 
@@ -725,7 +727,7 @@ export default class NightingaleDistributionTrack extends withCanvas(
 type PreprocessedData = ReturnType<typeof preprocessData>;
 type PreprocessedDataset = ReturnType<typeof preprocessDataset>;
 
-function preprocessData(data: DistributionData) {
+function preprocessData(data: BoxplotData) {
   const preprocessedDatasets = data.map(preprocessDataset);
   return {
     datasets: preprocessedDatasets,
@@ -733,7 +735,7 @@ function preprocessData(data: DistributionData) {
   }
 }
 
-function preprocessDataset(dataset: DistributionDataset) {
+function preprocessDataset(dataset: BoxplotDataset) {
   const preprocessedPositions: PreprocessedPositions = {};
 
   for (const datum of dataset.positions) {
@@ -762,7 +764,7 @@ interface PreprocessedDatum {
 
 type PreprocessedPositions = { [position: number]: PreprocessedDatum }
 
-function preprocessDatum(datum: Distribution): PreprocessedDatum {
+function preprocessDatum(datum: BoxplotDatum): PreprocessedDatum {
   const sorted = sortIfNeeded(new Float32Array(datum.values));
   const median = getQuantile(sorted, 0.5);
   const q1 = getQuantile(sorted, 0.25);
