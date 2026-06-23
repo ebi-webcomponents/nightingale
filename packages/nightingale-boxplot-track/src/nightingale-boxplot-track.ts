@@ -24,7 +24,6 @@ import { Downsampler } from "./downsampling";
 const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
-  "font-family", "min-font-size", "fade-font-size", "max-font-size",
   "y-min", "y-max", "hide-outliers", "zoomed-out-range",
 ] satisfies (keyof NightingaleBoxplotTrack)[];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleBoxplotTrack)[];
@@ -33,7 +32,6 @@ const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof Nightin
 /** Line width for rectangle stroke */
 const LINE_WIDTH = 1;
 /** Maximum line width relative to column width (overrides `LINE_WIDTH` when zoomed out too much) */
-// const MAX_REL_LINE_WIDTH = 0.2;
 const MAX_REL_LINE_WIDTH = 0.2;
 
 /** Default fill color for boxes (stroke color will be derived from this) */
@@ -94,22 +92,6 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     )
   )
 ) {
-  /** Font family for labels (can be a list of multiple font families separated by comma, like in CSS) */
-  @property({ type: String })
-  "font-family": string = "Helvetica,sans-serif";
-
-  /** Font size below which labels are hidden */
-  @property({ type: Number })
-  "min-font-size": number = 6;
-
-  /** Column width below which labels are shown with lower opacity */
-  @property({ type: Number })
-  "fade-font-size": number = 12;
-
-  /** Maximum font size for labels */
-  @property({ type: Number })
-  "max-font-size": number = 24;
-
   /** Bottom limit for Y-axis (default: minimum computed from data) */
   @property({ converter: OptionalNumberAttributeConverter })
   "y-min"?: number;
@@ -383,28 +365,32 @@ export default class NightingaleBoxplotTrack extends withCanvas(
         let yRangeLow: ((j: number) => number) | undefined;
         let yRangeHigh: ((j: number) => number) | undefined;
         switch (this['zoomed-out-range']) {
-          case 'extremes':
+          case 'extremes': {
             const minimum = downsamplers.minimum.getDownsampledByScale(scale);
             const maximum = downsamplers.maximum.getDownsampledByScale(scale);
             yRangeLow = (j: number) => yScale(minimum[j]);
             yRangeHigh = (j: number) => yScale(maximum[j]);
             break;
-          case 'whiskers':
+          }
+          case 'whiskers': {
             const whiskerLow = downsamplers.whiskerLow.getDownsampledByScale(scale);
             const whiskerHigh = downsamplers.whiskerHigh.getDownsampledByScale(scale);
             yRangeLow = (j: number) => yScale(whiskerLow[j]);
             yRangeHigh = (j: number) => yScale(whiskerHigh[j]);
             break;
-          case 'box':
+          }
+          case 'box': {
             const boxLow = downsamplers.boxLow.getDownsampledByScale(scale);
             const boxHigh = downsamplers.boxHigh.getDownsampledByScale(scale);
             yRangeLow = (j: number) => yScale(boxLow[j]);
             yRangeHigh = (j: number) => yScale(boxHigh[j]);
             break;
-          case 'none':
+          }
+          case 'none': {
             yRangeLow = undefined;
             yRangeHigh = undefined;
             break;
+          }
         }
 
         const jStart = Math.max(0, Math.floor((start - offset) / exactScale));
