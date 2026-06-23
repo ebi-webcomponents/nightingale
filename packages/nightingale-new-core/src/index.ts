@@ -7,6 +7,7 @@ export { default as withManager } from "./mixins/withManager/index";
 export { default as withHighlight } from "./mixins/withHighlight/index";
 export { default as withSVGHighlight } from "./mixins/withHighlight/SVG/index";
 export { default as withZoom } from "./mixins/withZoom/index";
+export { EnumAttributeConverter, OptionalNumberAttributeConverter } from "./utils/attribute-converters";
 export { default as bindEvents, createEvent } from "./utils/bindEvents";
 export { contrastingColor, getColor } from "./utils/colors";
 export { default as Region } from "./utils/Region";

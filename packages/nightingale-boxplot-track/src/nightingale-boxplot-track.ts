@@ -2,6 +2,8 @@ import NightingaleElement, {
   BinarySearch,
   createEvent,
   customElementOnce,
+  EnumAttributeConverter,
+  OptionalNumberAttributeConverter,
   Refresher,
   Stamp,
   withCanvas,
@@ -14,7 +16,7 @@ import NightingaleElement, {
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
 import { BaseType, color, max, min, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
-import { ComplexAttributeConverter, html, PropertyDeclaration, PropertyValues } from "lit";
+import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { Downsampler } from "./downsampling";
 
@@ -50,7 +52,6 @@ const OUTLIER_RADIUS = 2;
 const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5] as const;
 /** Approximate width of a column in screen pixels, when showing downsampled data in "background" visualization.
  * (higher value means more responsive but lower-resolution visualization). */
-// const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 4;
 const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 1;
 
 function makeStrokeColor(dataColor: string): string | undefined {
@@ -74,37 +75,13 @@ export interface BoxplotDataset {
   positions: BoxplotDatum[],
 }
 
-/** Type for `NightingaleBoxplotTrack.data`` */
+/** Type for `NightingaleBoxplotTrack.data` */
 export type BoxplotData = BoxplotDataset[];
-
-type AttributeConverter<T> = NonNullable<PropertyDeclaration<T>['converter']>;
-
-const OptionalNumberAttributeConverter: AttributeConverter<number | undefined> = (str) => {
-  if (str) return Number(str);
-  return undefined;
-};
-
-function EnumAttributeConverter<T extends string, D extends T>(allowedValues: readonly T[], defaultValue?: D): AttributeConverter<T> {
-  const theDefault = defaultValue ?? allowedValues[0];
-
-  return (str) => {
-    if (!str) {
-      return theDefault;
-    }
-    if (allowedValues.includes(str as T)) {
-      return str as T;
-    } else {
-      console.warn(`Value '${str}' is not valid for attribute of type ${allowedValues.map(v => `'${v}'`).join(' | ')}. Falling back to default value ('${theDefault}').`);
-      return theDefault;
-    }
-  };
-}
 
 export const ZoomedOutRangeOptions = ['extremes', 'whiskers', 'box', 'none'] as const;
 export type ZoomedOutRangeOption = typeof ZoomedOutRangeOptions[number];
 
 
-// TODO: rename to nightingale-boxplot-track
 @customElementOnce("nightingale-boxplot-track")
 export default class NightingaleBoxplotTrack extends withCanvas(
   withManager(
@@ -147,7 +124,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
   /** What kind of data should be shown as shaded range in zoomed-out visualization */
   @property({ converter: EnumAttributeConverter(ZoomedOutRangeOptions, 'whiskers') })
-  "zoomed-out-range": ZoomedOutRangeOption; // TODO: enum-type in other components?
+  "zoomed-out-range": ZoomedOutRangeOption;
 
   /** Turn on showing secondary highlights, which indicate selected subcolumn within a column (in case of multiple dataset). */
   @property({ type: Boolean })
@@ -946,3 +923,4 @@ const NestedHighlight = {
 };
 
 // TODO: axis ticks
+// TODO: tooltips (example in storybook for PoC)

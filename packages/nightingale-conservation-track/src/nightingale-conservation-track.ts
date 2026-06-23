@@ -2,6 +2,7 @@ import NightingaleElement, {
   BinarySearch,
   createEvent,
   customElementOnce,
+  EnumAttributeConverter,
   Refresher,
   Stamp,
   withCanvas,
@@ -80,9 +81,10 @@ interface YPositions {
   end: { [letter: string]: number[] },
 }
 
-type LetterOrder = "default" | "probability";
+const LetterOrders = ["default", "probability"] as const;
+type LetterOrder = typeof LetterOrders[number];
 
-/** Type for `NightingaleConservationTrack.data`` */
+/** Type for `NightingaleConservationTrack.data` */
 export interface SequenceConservationData {
   /** Sequence number for each position */
   index: number[],
@@ -104,8 +106,8 @@ export default class NightingaleConservationTrack extends withCanvas(
   )
 ) {
   /** Order of amino acids within a column (top-to-bottom). default = fixed order based on amino acid groups, probability = on every position sort by descending probability */
-  @property({ type: String })
-  "letter-order": LetterOrder = "default";
+  @property({ converter: EnumAttributeConverter(LetterOrders, "default") })
+  "letter-order": LetterOrder;
 
   /** Font family for labels (can be a list of multiple font families separated by comma, like in CSS) */
   @property({ type: String })
