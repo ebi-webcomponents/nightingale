@@ -15,7 +15,7 @@ import NightingaleElement, {
   withResizable,
   withZoom,
 } from "@nightingale-elements/nightingale-new-core";
-import { BaseType, color, max, min, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
+import { axisLeft, BaseType, color, max, min, randomLcg, randomUniform, scaleLinear, select, Selection, TypedArray } from "d3";
 import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { Downsampler } from "./downsampling";
@@ -24,7 +24,7 @@ import { Downsampler } from "./downsampling";
 const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
-  "y-min", "y-max", "hide-outliers", "zoomed-out-range",
+  "y-min", "y-max", "show-axis", "hide-outliers", "zoomed-out-range",
 ] satisfies (keyof NightingaleBoxplotTrack)[];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleBoxplotTrack)[];
 
@@ -112,6 +112,10 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   @property({ type: Boolean })
   "show-nested-highlights"?: boolean;
 
+  /** Turn on vertical axis. */
+  @property({ type: Boolean })
+  "show-axis"?: boolean;
+
   /** Position of secondary highlight in from "position/iDataset", or "" if none. */
   @property({ type: String, reflect: true })
   private "nested-highlight": string = "";
@@ -166,6 +170,12 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       this.bindEvents(this.svg);
       this.highlighted = this.svg.append("g").attr("class", "highlighted");
       this.nestedHighlighted = this.svg.append("g").attr("class", "highlighted-datapoint");
+      if (this["show-axis"]) {
+        const yScale = scaleLinear(this.getYLimits(), [this.height - this["margin-bottom"], this["margin-top"]]);
+        this.svg.append("g").attr("class", "y-axis")
+          .attr("transform", `translate(${this["margin-left"]},0)`)
+          .call(axisLeft(yScale));
+      }
     }
   }
 
@@ -908,5 +918,4 @@ const NestedHighlight = {
   SEPARATOR: '/',
 };
 
-// TODO: axis ticks
 // TODO: tooltips (example in storybook for PoC)

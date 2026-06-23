@@ -14,10 +14,12 @@ const DefaultArgs = {
   "highlight-event": "onmouseover",
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd",
+  "margin-left": 30,
   "y-min": 0 as number | undefined,
   "y-max": undefined as number | undefined,
-  "hide-outliers": false,
+  "show-axis": true,
   "show-nested-highlights": true,
+  "hide-outliers": false,
   "zoomed-out-range": 'whiskers',
 };
 type Args = typeof DefaultArgs;
@@ -96,6 +98,7 @@ function nightingaleNavigation(args: Args & { length: number }) {
         length="${args["length"]}"
         highlight-color=${args["highlight-color"]}
         margin-color=${args["margin-color"]}
+        margin-left=${args["margin-left"]}
         show-highlight 
         display-end="100"
       >
@@ -117,6 +120,7 @@ function nightingaleSequence(args: Args & { length: number }) {
         highlight-event="${args["highlight-event"]}"
         highlight-color=${args["highlight-color"]}
         margin-color=${args["margin-color"]}
+        margin-left=${args["margin-left"]}
         use-ctrl-to-zoom
       >
       </nightingale-sequence>
@@ -137,11 +141,13 @@ function nightingaleBoxplotTrack(args: Args & { length: number, id: number }) {
         margin-color=${args["margin-color"]}
         margin-top=10
         margin-bottom=10
+        margin-left=${args["margin-left"]}
         use-ctrl-to-zoom
         y-min=${args["y-min"]}
         y-max=${args["y-max"]}
-        ?hide-outliers=${args["hide-outliers"]}
+        ?show-axis=${args["show-axis"]}
         ?show-nested-highlights=${args["show-nested-highlights"]}
+        ?hide-outliers=${args["hide-outliers"]}
         zoomed-out-range=${args["zoomed-out-range"]}
       >
       </nightingale-boxplot-track>
