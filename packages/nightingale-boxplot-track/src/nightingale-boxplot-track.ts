@@ -593,7 +593,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
     const withHighlight = this.getAttribute("highlight-event") === "onclick";
     if (withHighlight) {
-      const iDataset = pointed.feature?.dataset.index;
+      const iDataset = pointed.feature?.datasetIndex;
       this["nested-highlight"] = NestedHighlight.format(iDataset !== undefined ? [pointed.position, iDataset] : undefined);
     }
 
@@ -619,7 +619,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
     const withHighlight = this.getAttribute("highlight-event") === "onmouseover";
     if (withHighlight) {
-      const iDataset = pointed.feature?.dataset.index;
+      const iDataset = pointed.feature?.datasetIndex;
       this["nested-highlight"] = NestedHighlight.format(iDataset !== undefined ? [pointed.position, iDataset] : undefined);
     }
 
@@ -665,22 +665,15 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     const iDataset = Math.max(0, Math.min(nDatasets - 1, Math.floor(fractionalWithinColumn * nDatasets)));
 
-    const dataset = this.preprocessedData?.datasets[iDataset];
-    const datum = dataset?.positions[position];
-    if (!datum) {
-      return { position, feature: undefined };
-    }
-
     type EventFeatureData = Parameters<typeof createEvent>[1];
     const feature: EventFeatureData = {
       type: 'boxplot',
       position: position,
-      dataset: {
-        index: iDataset,
-        name: dataset.name,
-        color: dataset.color ?? DEFAULT_DATA_COLOR,
-      },
-      datum: datum,
+      data: this.preprocessedData?.datasets.map(dataset => ({
+        dataset: { name: dataset.name, color: dataset.color ?? DEFAULT_DATA_COLOR },
+        datum: dataset?.positions[position],
+      })) ?? [],
+      datasetIndex: iDataset,
     };
     return { position, feature };
   }

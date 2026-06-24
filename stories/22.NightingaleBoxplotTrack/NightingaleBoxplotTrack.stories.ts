@@ -1,3 +1,4 @@
+import { type createEvent } from "@nightingale-elements/nightingale-new-core";
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../../packages/nightingale-boxplot-track/src/index";
@@ -69,12 +70,12 @@ function prepareBoxplotData(data: { positions: { position: number, values: numbe
       // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
       positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
     },
-    {
-      name: 'Data3',
-      color: '#00aa44',
-      // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
-      positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.93) })), 1, 7), // DEBUG
-    },
+    // {
+    //   name: 'Data3',
+    //   color: '#00aa44',
+    //   // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
+    //   positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.93) })), 1, 7), // DEBUG
+    // },
   ];
 }
 
@@ -184,7 +185,26 @@ function makeStory(options: { length: number }): Story<Args> {
     await customElements.whenDefined("nightingale-boxplot-track");
     for (const track of document.getElementsByTagName("nightingale-boxplot-track")) {
       (track as any).data = boxplotData;
-      track.addEventListener('change', (e) => console.log((e as CustomEvent).detail))
+      track.addEventListener('change', (e) => {
+        const detail = (e as CustomEvent).detail;
+        if (!('eventType' in detail)) return;
+        if (detail.eventType !== 'click') return;
+        const fmtInt = (x: number | undefined) => x?.toFixed(0).padStart(7) ?? '       ';
+        const fmtFloat = (x: number | undefined) => x?.toFixed(2).padStart(7) ?? '       ';
+        type EventFeatureData = Parameters<typeof createEvent>[1];
+        const feature = detail.feature as EventFeatureData;
+        if (feature && 'type' in feature && feature.type === 'boxplot') {
+          console.log('='.repeat(40))
+          console.log(['Dataset   ', ...feature.data.map(d => d.dataset.name)].join('  |  '))
+          console.log(['Color      ', ...feature.data.map(d => d.dataset.color)].join(' | '))
+          console.log(['#Datapoints', ...feature.data.map(d => fmtInt(d.datum?.values.length))].join(' | '))
+          console.log(['#Outliers  ', ...feature.data.map(d => fmtInt(d.datum?.outliersHigh && d.datum?.outliersLow ? d.datum.outliersHigh.length + d.datum.outliersLow.length : undefined))].join(' | '))
+          console.log(['Maximum    ', ...feature.data.map(d => fmtFloat(d.datum?.maximum))].join(' | '))
+          console.log(['Median     ', ...feature.data.map(d => fmtFloat(d.datum?.median))].join(' | '))
+          console.log(['Minimum    ', ...feature.data.map(d => fmtFloat(d.datum?.minimum))].join(' | '))
+          console.log(['           ', ...feature.data.map((d, i) => i === feature.datasetIndex ? '-------' : '       ')].join('   '))
+        }
+      })
     }
   };
   return story;

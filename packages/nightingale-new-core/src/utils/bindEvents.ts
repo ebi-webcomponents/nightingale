@@ -21,26 +21,29 @@ type SequenceBaseData = {
   aa: string;
 };
 type BoxplotData = {
-  type: 'boxplot';
+  type: "boxplot";
   position: number;
-  dataset: {
-    index: number;
-    name: string;
-    color: string;
-  };
-  datum: {
-    position: number;
-    values: Float32Array;
-    median: number;
-    boxLow: number;
-    boxHigh: number;
-    whiskerLow: number;
-    whiskerHigh: number;
-    minimum: number;
-    maximum: number;
-    outliersLow: Float32Array;
-    outliersHigh: Float32Array;
-  };
+  data: {
+    dataset: {
+      name: string;
+      color: string;
+    };
+    datum?: {
+      position: number;
+      values: Float32Array;
+      median: number;
+      boxLow: number;
+      boxHigh: number;
+      whiskerLow: number;
+      whiskerHigh: number;
+      minimum: number;
+      maximum: number;
+      outliersLow: Float32Array;
+      outliersHigh: Float32Array;
+    };
+  }[];
+  /** Index into `data`, indicates which dataset is being pointed at */
+  datasetIndex: number;
 };
 
 type EventDetail = {
