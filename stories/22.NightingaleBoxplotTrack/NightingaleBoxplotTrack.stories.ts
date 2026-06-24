@@ -184,6 +184,7 @@ function makeStory(options: { length: number }): Story<Args> {
     await customElements.whenDefined("nightingale-boxplot-track");
     for (const track of document.getElementsByTagName("nightingale-boxplot-track")) {
       (track as any).data = boxplotData;
+      track.addEventListener('change', (e) => console.log((e as CustomEvent).detail))
     }
   };
   return story;

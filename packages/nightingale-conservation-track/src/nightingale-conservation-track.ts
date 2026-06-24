@@ -128,7 +128,8 @@ export default class NightingaleConservationTrack extends withCanvas(
 
   #data?: SequenceConservationData;
   private yPositions?: YPositions;
-  protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  protected svgHighlights?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  protected svgMargins?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
   override connectedCallback() {
@@ -176,13 +177,15 @@ export default class NightingaleConservationTrack extends withCanvas(
       .attr("height", this.height);
     if (this.svg) { // this check is necessary because `svg` setter does not always set
       this.bindEvents(this.svg);
-      this.highlighted = this.svg.append("g").attr("class", "highlighted");
+      this.svgHighlights = this.svg.append("g").attr("class", "highlighted");
+      this.svgMargins = this.svg.append("g").attr("class", "margin");
     }
   }
 
   refresh() {
     this.requestDraw();
     this.updateHighlight();
+    this.updateMargins();
   }
 
   private readonly _drawStamp = new Stamp(() => {
@@ -213,7 +216,6 @@ export default class NightingaleConservationTrack extends withCanvas(
     this.adjustCanvasCtxLogicalSize();
     this.clearCanvas();
     this.drawColumns();
-    this.drawMargins();
   }
 
   private clearCanvas() {
@@ -274,25 +276,6 @@ export default class NightingaleConservationTrack extends withCanvas(
     }
   }
 
-  private drawMargins() {
-    const ctx = this.canvasCtx;
-    if (!ctx) return;
-
-    const canvasWidth = ctx.canvas.width;
-    const canvasHeight = ctx.canvas.height;
-    const marginLeft = this["margin-left"] * this.canvasScale;
-    const marginRight = this["margin-right"] * this.canvasScale;
-    const marginTop = this["margin-top"] * this.canvasScale;
-    const marginBottom = this["margin-bottom"] * this.canvasScale;
-
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = this["margin-color"];
-    ctx.fillRect(0, 0, marginLeft, canvasHeight);
-    ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
-    ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
-    ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
-  }
-
   private getFontOpacity(baseWidthInCss: number): number {
     if (baseWidthInCss < this["min-font-size"]) {
       return 0;
@@ -304,8 +287,8 @@ export default class NightingaleConservationTrack extends withCanvas(
   }
 
   protected updateHighlight() {
-    if (!this.highlighted) return;
-    const highlights = this.highlighted
+    if (!this.svgHighlights) return;
+    const highlights = this.svgHighlights
       .selectAll<SVGRectElement, { start: number, end: number }[]>("rect")
       .data(this.highlightedRegion.segments);
 
@@ -320,6 +303,10 @@ export default class NightingaleConservationTrack extends withCanvas(
       .attr("width", d => Math.max(0, this.getSingleBaseWidth() * (d.end - d.start + 1)));
 
     highlights.exit().remove();
+  }
+
+  protected updateMargins() {
+    this.renderMarginOnGroup(this.svgMargins);
   }
 
   override zoomRefreshed() {

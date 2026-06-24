@@ -122,8 +122,9 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
   #data?: BoxplotData;
   private preprocessedData?: PreprocessedData;
-  protected highlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
-  protected nestedHighlighted?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  protected svgHighlights?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  protected svgNestedHighlights?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  protected svgMargins?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
   override connectedCallback() {
@@ -168,8 +169,9 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       .attr("height", this.height);
     if (this.svg) { // this check is necessary because `svg` setter does not always set
       this.bindEvents(this.svg);
-      this.highlighted = this.svg.append("g").attr("class", "highlighted");
-      this.nestedHighlighted = this.svg.append("g").attr("class", "highlighted-datapoint");
+      this.svgHighlights = this.svg.append("g").attr("class", "highlighted");
+      this.svgNestedHighlights = this.svg.append("g").attr("class", "nested-highlighted");
+      this.svgMargins = this.svg.append("g").attr("class", "margin");
       if (this["show-axis"]) {
         const yScale = scaleLinear(this.getYLimits(), [this.height - this["margin-bottom"], this["margin-top"]]);
         this.svg.append("g").attr("class", "y-axis")
@@ -183,6 +185,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     this.requestDraw();
     this.updateHighlight();
     this.updateNestedHighlight();
+    this.updateMargins();
   }
 
   private readonly _drawStamp = new Stamp(() => {
@@ -214,7 +217,6 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     if (!this.canvasCtx) return;
     this.clearCanvas(this.canvasCtx);
     this.drawData(this.canvasCtx);
-    this.drawMargins(this.canvasCtx);
   }
 
   private getOffscreenCanvas(): [canvas: HTMLCanvasElement, canvasContext?: CanvasRenderingContext2D] {
@@ -429,22 +431,6 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     }
   }
 
-  private drawMargins(ctx: CanvasRenderingContext2D) {
-    const canvasWidth = ctx.canvas.width;
-    const canvasHeight = ctx.canvas.height;
-    const marginLeft = this["margin-left"] * this.canvasScale;
-    const marginRight = this["margin-right"] * this.canvasScale;
-    const marginTop = this["margin-top"] * this.canvasScale;
-    const marginBottom = this["margin-bottom"] * this.canvasScale;
-
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = this["margin-color"];
-    ctx.fillRect(0, 0, marginLeft, canvasHeight);
-    ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
-    ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
-    ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
-  }
-
   private getDrawingMeasurements() {
     const canvasScale = this.canvasScale;
     const xBaseWidthInCss = this.getSingleBaseWidth();
@@ -509,8 +495,8 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   }
 
   protected updateHighlight() {
-    if (!this.highlighted) return;
-    const highlights = this.highlighted
+    if (!this.svgHighlights) return;
+    const highlights = this.svgHighlights
       .selectAll<SVGRectElement, { start: number, end: number }[]>("rect")
       .data(this.highlightedRegion.segments);
 
@@ -528,12 +514,12 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   }
 
   protected updateNestedHighlight() {
-    if (!this.nestedHighlighted) return;
+    if (!this.svgNestedHighlights) return;
     const nestedHighlightLocation = NestedHighlight.parse(this["nested-highlight"]);
     const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     const showNestedHighlight = this["show-nested-highlights"] && nDatasets > 1 && nestedHighlightLocation !== undefined;
 
-    const highlights = this.nestedHighlighted
+    const highlights = this.svgNestedHighlights
       .selectAll<SVGRectElement, unknown>("rect")
       .data(showNestedHighlight ? [nestedHighlightLocation] : []);
 
@@ -554,6 +540,10 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       .attr("width", datumWidth);
 
     highlights.exit().remove();
+  }
+
+  protected updateMargins() {
+    this.renderMarginOnGroup(this.svgMargins);
   }
 
   override zoomRefreshed() {
@@ -919,3 +909,5 @@ const NestedHighlight = {
 };
 
 // TODO: tooltips (example in storybook for PoC)
+// - combined tooltip for all datasets at the same position (table)
+// TODO: test on new API once available
