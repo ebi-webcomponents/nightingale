@@ -17,11 +17,16 @@ const DefaultArgs = {
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd",
   "margin-left": 30,
+  "show-axis": true,
   "y-min": 0 as number | undefined,
   "y-max": undefined as number | undefined,
-  "show-axis": true,
   "show-nested-highlights": true,
-  "hide-outliers": false,
+  "column-gap": 0.2,
+  "box-gap": 0.1,
+  "whisker-width": 0.6,
+  "outlier-jitter-width": 0.4,
+  "outlier-radius": 2,
+  "zoom-transition-range": "4-5",
   "zoomed-out-range": 'whiskers',
   "tooltips": true,
 };
@@ -31,6 +36,11 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
   "highlight-event": { control: "select", options: ["onmouseover", "onclick"] },
   "y-min": { control: "select", options: [undefined, 0, 100, 200, 300, 400, 500] },
   "y-max": { control: "select", options: [undefined, 0, 100, 200, 300, 400, 500] },
+  "column-gap": { control: { type: "number", min: 0, max: 1, step: 0.05 } },
+  "box-gap": { control: { type: "number", min: 0, max: 1, step: 0.05 } },
+  "whisker-width": { control: { type: "number", min: 0, max: 1, step: 0.05 } },
+  "outlier-jitter-width": { control: { type: "number", min: 0, max: 1, step: 0.05 } },
+  "outlier-radius": { control: { type: "number", min: 0, step: 0.5 } },
   "zoomed-out-range": { control: "select", options: ZoomedOutRangeOptions },
 };
 
@@ -103,7 +113,7 @@ function nightingaleNavigation(args: Args & { length: number }) {
         margin-color=${args["margin-color"]}
         margin-left=${args["margin-left"]}
         show-highlight 
-        display-end="100"
+        display-end="30"
       >
       </nightingale-navigation>
     </div>`;
@@ -146,12 +156,17 @@ function nightingaleBoxplotTrack(args: Args & { length: number, id: number }) {
         margin-bottom=10
         margin-left=${args["margin-left"]}
         use-ctrl-to-zoom
+        ?show-axis=${args["show-axis"]}
         y-min=${args["y-min"]}
         y-max=${args["y-max"]}
-        ?show-axis=${args["show-axis"]}
         ?show-nested-highlights=${args["show-nested-highlights"]}
-        ?hide-outliers=${args["hide-outliers"]}
+        column-gap=${args["column-gap"]}
+        box-gap=${args["box-gap"]}
+        whisker-width=${args["whisker-width"]}
+        outlier-jitter-width=${args["outlier-jitter-width"]}
+        outlier-radius=${args["outlier-radius"]}
         zoomed-out-range=${args["zoomed-out-range"]}
+        zoom-transition-range=${args["zoom-transition-range"]}
       >
       </nightingale-boxplot-track>
     </div>`;

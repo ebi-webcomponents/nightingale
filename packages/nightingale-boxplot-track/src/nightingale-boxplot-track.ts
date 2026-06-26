@@ -21,10 +21,12 @@ import { property } from "lit/decorators.js";
 import { Downsampler } from "./downsampling";
 
 
+// TODO: track via decorators?
 const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
-  "y-min", "y-max", "show-axis", "hide-outliers", "zoomed-out-range",
+  "y-min", "y-max", "show-axis", "zoomed-out-range",
+  "column-gap", "box-gap", "whisker-width", "outlier-jitter-width", "outlier-radius", "zoom-transition-range",
 ] satisfies (keyof NightingaleBoxplotTrack)[];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleBoxplotTrack)[];
 
@@ -36,18 +38,7 @@ const MAX_REL_LINE_WIDTH = 0.2;
 
 /** Default fill color for boxes (stroke color will be derived from this) */
 const DEFAULT_DATA_COLOR = "#cccccc";
-/** Gap between columns relative to base width */
-const COLUMN_GAP = 0.2;
-/** Gap between boxes within a column relative to box width */
-const BOX_GAP = 0.1;
-/** Whisker width relative to box width */
-const WHISKER_REL_WIDTH = 0.6;
-/** Outlier jitter width relative to box width */
-const JITTER_REL_WIDTH = 0.4;
-/** Radius for the circles representing outliers */
-const OUTLIER_RADIUS = 2;
-/** Column widths in CSS pixels, between which transition from "background" to "foreground" visualization happens */
-const FG_BG_TRANSITION_BASE_WIDTHS = [4, 5] as const;
+
 /** Approximate width of a column in screen pixels, when showing downsampled data in "background" visualization.
  * (higher value means more responsive but lower-resolution visualization). */
 const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 1;
@@ -100,10 +91,6 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   @property({ converter: OptionalNumberAttributeConverter })
   "y-max"?: number;
 
-  /** Turns off rendering of outliers */
-  @property({ type: Boolean })
-  "hide-outliers"?: boolean;
-
   /** What kind of data should be shown as shaded range in zoomed-out visualization */
   @property({ converter: EnumAttributeConverter(ZoomedOutRangeOptions, 'whiskers') })
   "zoomed-out-range": ZoomedOutRangeOption;
@@ -117,8 +104,40 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   "show-axis"?: boolean;
 
   /** Position of secondary highlight in from "position/iDataset", or "" if none. */
-  @property({ type: String, reflect: true })
+  @property({ type: String, reflect: true }) // not using attribute converter here, because change detection would not work correctly
   private "nested-highlight": string = "";
+
+  /** Width of the gap between displayed columns relative to the width of one sequence position (allowed range: 0-1, default: 0.2) */
+  @property({ type: Number })
+  "column-gap": number = 0.2;
+
+  /** Width of the gap between boxes within a column relative to the column width (allowed range: 0-1, default: 0.1) */
+  @property({ type: Number })
+  "box-gap": number = 0.1;
+
+  /** Whisker width relative to the box width (allowed range: 0-1, default: 0.6) */
+  @property({ type: Number })
+  "whisker-width": number = 0.6;
+
+  /** Width of random noise (jitter) to be added to the X-position of the outliers, relative to the box width (allowed range: 0-1, default: 0.4) */
+  @property({ type: Number })
+  "outlier-jitter-width": number = 0.4;
+
+  /** Radius for the circles representing outliers, in CSS pixels (default: 2). Set to 0 to supress outlier rendering. */
+  @property({ type: Number })
+  "outlier-radius": number = 2;
+
+  /** Column width (in CSS pixels), where the transition from zoomed-out simplified visualization to zoomed-in boxplot visualization happens.
+   * Can be either one number (for sharp transition) or a hyphen-separated range.
+   * If there are multiple datasets, the width will be divided by the number of datasets.
+   * Use "0" to always show zoomed-in visualization (or preferrably "0.5-1" to avoid perfomance issues).
+   * Use "Infinity" to always show zoomed-out visualization.
+   * (default: "4-5")
+   * */
+  @property({ type: String })
+  "zoom-transition-range": string = '4-5';
+
+  // TODO: continue here replacing consts by above props
 
   #data?: BoxplotData;
   private preprocessedData?: PreprocessedData;
@@ -278,12 +297,12 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       const fillColor = dataColor;
       const strokeColor = makeStrokeColor(dataColor)!;
 
-      const xBoxOffset = xColumnLeft + (iDataset + 0.5 * BOX_GAP) * xColumnWidth / nDatasets;
-      const xBoxWidth = (1 - BOX_GAP) * xColumnWidth / nDatasets;
+      const xBoxOffset = xColumnLeft + (iDataset + 0.5 * this["box-gap"]) * xColumnWidth / nDatasets;
+      const xBoxWidth = (1 - this["box-gap"]) * xColumnWidth / nDatasets;
       const xCenter = xBoxOffset + 0.5 * xBoxWidth;
-      const xWhiskerLeft = xCenter - 0.5 * WHISKER_REL_WIDTH * xBoxWidth;
-      const xWhiskerRight = xCenter + 0.5 * WHISKER_REL_WIDTH * xBoxWidth;
-      const xJitterHalfwidth = 0.5 * JITTER_REL_WIDTH * xBoxWidth;
+      const xWhiskerLeft = xCenter - 0.5 * this["whisker-width"] * xBoxWidth;
+      const xWhiskerRight = xCenter + 0.5 * this["whisker-width"] * xBoxWidth;
+      const xJitterHalfwidth = 0.5 * this["outlier-jitter-width"] * xBoxWidth;
 
       for (let i = start; i < stop; i++) {
         const datum = dataset.positions[i];
@@ -322,7 +341,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
         ctx.strokeRect(x + xBoxOffset, yMedian - yMedianExtra, xBoxWidth, 2 * yMedianExtra);
 
         // Outliers
-        if (!this["hide-outliers"]) {
+        if (outlierRadius > 0) {
           const xJitter = xJitterHalfwidth !== 0 ?
             randomUniform.source(randomLcg(i * nDatasets + iDataset))(xCenter - xJitterHalfwidth, xCenter + xJitterHalfwidth)
             : () => xCenter;
@@ -435,8 +454,8 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     const canvasScale = this.canvasScale;
     const xBaseWidthInCss = this.getSingleBaseWidth();
     const xBaseWidth = canvasScale * xBaseWidthInCss;
-    const xColumnLeft = xBaseWidth * 0.5 * COLUMN_GAP;
-    const xColumnWidth = xBaseWidth * (1 - COLUMN_GAP);
+    const xColumnLeft = xBaseWidth * 0.5 * this["column-gap"];
+    const xColumnWidth = xBaseWidth * (1 - this["column-gap"]);
     const xColumnRight = xColumnLeft + xColumnWidth;
     const xScale = (i: number) => canvasScale * this.getXFromSeqPosition(i);
 
@@ -446,7 +465,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     const yMedianExtra = canvasScale * 1;
 
     const lineWidth = canvasScale * Math.min(LINE_WIDTH, MAX_REL_LINE_WIDTH * xBaseWidthInCss);
-    const outlierRadius = canvasScale * OUTLIER_RADIUS;
+    const outlierRadius = canvasScale * this["outlier-radius"];
 
     const start = Math.floor(this.getSeqPositionFromX(0) ?? 1);
     const stop = Math.floor(this.getSeqPositionFromX(this.width) ?? 1) + 1;
@@ -482,7 +501,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     /** Approximate boxplot box width, in CSS pixels. No need to consider column gap and box gap here. */
     const boxWidth = this.getSingleBaseWidth() / nDatasets;
-    const [transitionMin, transitionMax] = FG_BG_TRANSITION_BASE_WIDTHS;
+    const [transitionMin, transitionMax] = this.getZoomTransitionRange();
 
     if (boxWidth <= transitionMin) {
       return [0, 1];
@@ -492,6 +511,13 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       const fgAlpha = (boxWidth - transitionMin) / (transitionMax - transitionMin);
       return [fgAlpha, 1 - fgAlpha];
     }
+  }
+
+  private getZoomTransitionRange(): [number, number] {
+    const nums = this["zoom-transition-range"].split('-').map(Number);
+    const [a, b] = nums.length >= 2 ? [nums[0], nums[1]] : [nums[0], nums[0]]
+    if (isNaN(a) || isNaN(b)) return [0, 0];
+    return [a, b];
   }
 
   protected updateHighlight() {
@@ -524,8 +550,8 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       .data(showNestedHighlight ? [nestedHighlightLocation] : []);
 
     const baseWidth = this.getSingleBaseWidth();
-    const columnOffset = baseWidth * 0.5 * COLUMN_GAP;
-    const columnWidth = baseWidth * (1 - COLUMN_GAP);
+    const columnOffset = baseWidth * 0.5 * this["column-gap"];
+    const columnWidth = baseWidth * (1 - this["column-gap"]);
     const datumWidth = columnWidth / nDatasets;
 
     highlights
@@ -661,7 +687,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     if (continuousPosition === undefined) return undefined;
     const position = Math.floor(continuousPosition);
     const fractional = continuousPosition - position;
-    const fractionalWithinColumn = (fractional - 0.5 * COLUMN_GAP) / (1 - COLUMN_GAP);
+    const fractionalWithinColumn = (fractional - 0.5 * this["column-gap"]) / (1 - this["column-gap"]);
     const nDatasets = this.preprocessedData?.datasets.length ?? 1;
     const iDataset = Math.max(0, Math.min(nDatasets - 1, Math.floor(fractionalWithinColumn * nDatasets)));
 
@@ -891,14 +917,14 @@ type NestedHighlight = [position: number, iDataset: number] | undefined;
 const NestedHighlight = {
   format(value: NestedHighlight): string {
     if (!value) return '';
-    return `${value[0]}${this.SEPARATOR}${value[1]}`;
+    return `${value[0]}/${value[1]}`;
   },
   parse(str: string): NestedHighlight {
     if (str.trim() === '') return undefined;
-    const [a, b] = str.split(this.SEPARATOR).map(Number);
+    const [a, b] = str.split('/').map(Number);
     return [a, b];
   },
-  SEPARATOR: '/',
 };
 
+// TODO: docs (here and in readme)
 // TODO: test on new API once available
