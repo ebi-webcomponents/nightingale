@@ -901,6 +901,4 @@ const NestedHighlight = {
   SEPARATOR: '/',
 };
 
-// TODO: tooltips (example in storybook for PoC)
-// - combined tooltip for all datasets at the same position (table)
 // TODO: test on new API once available

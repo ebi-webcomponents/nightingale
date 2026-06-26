@@ -2,6 +2,7 @@ import { type createEvent } from "@nightingale-elements/nightingale-new-core";
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../../packages/nightingale-boxplot-track/src/index";
+import NightingaleBoxplotTrack from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
 import { type BoxplotData, ZoomedOutRangeOptions } from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
 import sampleBoxplotData from "../../packages/nightingale-boxplot-track/tests/mockData/sample-1.json";
 
@@ -22,6 +23,7 @@ const DefaultArgs = {
   "show-nested-highlights": true,
   "hide-outliers": false,
   "zoomed-out-range": 'whiskers',
+  "tooltips": true,
 };
 type Args = typeof DefaultArgs;
 
@@ -155,9 +157,46 @@ function nightingaleBoxplotTrack(args: Args & { length: number, id: number }) {
     </div>`;
 }
 
+/** This is a demonstration of how to use CustomEvents on the `nightingale-boxplot-track` component. Tooltips are not a part of the component. */
+function handleTooltip(event: CustomEvent, args: Args) {
+  if (event.detail.eventType !== 'mouseover' && event.detail.eventType !== 'mouseout') return;
+
+  type EventFeatureData = Parameters<typeof createEvent>[1];
+  const feature: EventFeatureData = event.detail.feature;
+  let tooltipDiv = document.getElementById('boxplot-tooltip');
+  if (args.tooltips && feature && 'type' in feature && feature.type === 'boxplot') {
+    // Show tooltip
+    if (!tooltipDiv) {
+      tooltipDiv = document.createElement('div');
+      tooltipDiv.id = 'boxplot-tooltip';
+      Object.assign(tooltipDiv.style, { position: 'fixed', background: 'white', border: '1px solid #ccc', padding: '6px', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', zIndex: '666', fontFamily: 'sans-serif', fontSize: '12px' });
+      document.body.appendChild(tooltipDiv);
+    }
+    const rows = [
+      ['', ...feature.data.map(d => `<strong style="color:${d.dataset.color}">${d.dataset.name}</strong>`)],
+      ['nDatapoints', ...feature.data.map(d => d.datum?.values.length ?? '-')],
+      ['nOutliers', ...feature.data.map(d => d.datum?.outliersHigh && d.datum?.outliersLow ? d.datum.outliersHigh.length + d.datum.outliersLow.length : '-')],
+      ['Max', ...feature.data.map(d => d.datum?.maximum.toFixed(2) ?? '-')],
+      ['Median', ...feature.data.map(d => d.datum?.median.toFixed(2) ?? '-')],
+      ['Min', ...feature.data.map(d => d.datum?.minimum.toFixed(2) ?? '-')],
+    ];
+    const rowsHtml = rows.map((row) => `<tr>${row.map((cell, index) => `<td style="text-align:${index === 0 ? 'left' : 'right'}; padding:3px;">${cell}</td>`).join('')}</tr>`).join('');
+    tooltipDiv.innerHTML = `<table><tbody>${rowsHtml}</tbody></table>`;
+    const mouseEvent: MouseEvent | undefined = event.detail.parentEvent;
+    tooltipDiv.style.left = `${(mouseEvent?.clientX ?? 0) + 10}px`;
+    tooltipDiv.style.top = `${(mouseEvent?.clientY ?? 0) + 10}px`;
+  } else {
+    // Hide tooltip
+    tooltipDiv?.remove();
+  }
+}
+
 
 function makeStory(options: { length: number }): Story<Args> {
+  let currentArgs: Args = { ...DefaultArgs };
+
   const template: Story<Args> = (args: Args) => {
+    currentArgs = args;
     return html`
       <nightingale-saver element-id="nightingale-root" background-color="white" scale-factor="2"></nightingale-saver>
       <span>Use Ctrl+scroll to zoom.</span>
@@ -184,27 +223,8 @@ function makeStory(options: { length: number }): Story<Args> {
   story.play = async () => {
     await customElements.whenDefined("nightingale-boxplot-track");
     for (const track of document.getElementsByTagName("nightingale-boxplot-track")) {
-      (track as any).data = boxplotData;
-      track.addEventListener('change', (e) => {
-        const detail = (e as CustomEvent).detail;
-        if (!('eventType' in detail)) return;
-        if (detail.eventType !== 'click') return;
-        const fmtInt = (x: number | undefined) => x?.toFixed(0).padStart(7) ?? '       ';
-        const fmtFloat = (x: number | undefined) => x?.toFixed(2).padStart(7) ?? '       ';
-        type EventFeatureData = Parameters<typeof createEvent>[1];
-        const feature = detail.feature as EventFeatureData;
-        if (feature && 'type' in feature && feature.type === 'boxplot') {
-          console.log('='.repeat(40))
-          console.log(['Dataset   ', ...feature.data.map(d => d.dataset.name)].join('  |  '))
-          console.log(['Color      ', ...feature.data.map(d => d.dataset.color)].join(' | '))
-          console.log(['#Datapoints', ...feature.data.map(d => fmtInt(d.datum?.values.length))].join(' | '))
-          console.log(['#Outliers  ', ...feature.data.map(d => fmtInt(d.datum?.outliersHigh && d.datum?.outliersLow ? d.datum.outliersHigh.length + d.datum.outliersLow.length : undefined))].join(' | '))
-          console.log(['Maximum    ', ...feature.data.map(d => fmtFloat(d.datum?.maximum))].join(' | '))
-          console.log(['Median     ', ...feature.data.map(d => fmtFloat(d.datum?.median))].join(' | '))
-          console.log(['Minimum    ', ...feature.data.map(d => fmtFloat(d.datum?.minimum))].join(' | '))
-          console.log(['           ', ...feature.data.map((d, i) => i === feature.datasetIndex ? '-------' : '       ')].join('   '))
-        }
-      })
+      (track as NightingaleBoxplotTrack).data = boxplotData;
+      track.addEventListener('change', event => handleTooltip(event as CustomEvent, currentArgs));
     }
   };
   return story;
