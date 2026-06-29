@@ -72,7 +72,7 @@ export interface BoxplotDataset {
 export type BoxplotData = BoxplotDataset[];
 
 /** Options for what kind of data can be shown as the shaded outline in zoomed-out visualization */
-export const ZoomedOutOutlineOptions = ['extremes', 'whiskers', 'box', 'none'] as const;
+export const ZoomedOutOutlineOptions = ["extremes", "whiskers", "box", "none"] as const;
 /** Options for what kind of data can be shown as the shaded outline in zoomed-out visualization */
 export type ZoomedOutOutlineOption = typeof ZoomedOutOutlineOptions[number];
 
@@ -99,7 +99,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   "y-max"?: number;
 
   /** What kind of data should be shown as the shaded outline in zoomed-out visualization. */
-  @property({ converter: EnumAttributeConverter(ZoomedOutOutlineOptions, 'whiskers') })
+  @property({ converter: EnumAttributeConverter(ZoomedOutOutlineOptions, "whiskers") })
   "zoomed-out-outline": ZoomedOutOutlineOption;
 
   /** Turn on showing nested highlights, which indicate selected subcolumn within a column (in case of multiple datasets). */
@@ -261,7 +261,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     if (this._offscreenCanvas.height !== height) {
       this._offscreenCanvas.height = height;
     }
-    const ctx = this._offscreenCanvas.getContext('2d') ?? undefined;
+    const ctx = this._offscreenCanvas.getContext("2d") ?? undefined;
     this.clearCanvas(ctx);
     return [this._offscreenCanvas, ctx];
   }
@@ -411,29 +411,29 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
         let yOutlineLow: ((j: number) => number) | undefined;
         let yOulineHigh: ((j: number) => number) | undefined;
-        switch (this['zoomed-out-outline']) {
-          case 'extremes': {
+        switch (this["zoomed-out-outline"]) {
+          case "extremes": {
             const minimum = downsamplers.minimum.getDownsampledByScale(scale);
             const maximum = downsamplers.maximum.getDownsampledByScale(scale);
             yOutlineLow = (j: number) => yScale(minimum[j]);
             yOulineHigh = (j: number) => yScale(maximum[j]);
             break;
           }
-          case 'whiskers': {
+          case "whiskers": {
             const whiskerLow = downsamplers.whiskerLow.getDownsampledByScale(scale);
             const whiskerHigh = downsamplers.whiskerHigh.getDownsampledByScale(scale);
             yOutlineLow = (j: number) => yScale(whiskerLow[j]);
             yOulineHigh = (j: number) => yScale(whiskerHigh[j]);
             break;
           }
-          case 'box': {
+          case "box": {
             const boxLow = downsamplers.boxLow.getDownsampledByScale(scale);
             const boxHigh = downsamplers.boxHigh.getDownsampledByScale(scale);
             yOutlineLow = (j: number) => yScale(boxLow[j]);
             yOulineHigh = (j: number) => yScale(boxHigh[j]);
             break;
           }
-          case 'none': {
+          case "none": {
             yOutlineLow = undefined;
             yOulineHigh = undefined;
             break;
@@ -452,7 +452,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
           for (const segment of jSegments) {
             ctx.globalAlpha = weightAlpha(0.25 * alpha, weight);
             ctx.fillStyle = fillColor;
-            drawSilhouette(ctx, segment, jXScale, yOutlineLow, yOulineHigh, [xColumnLeft, xColumnRight], 'fill');
+            drawSilhouette(ctx, segment, jXScale, yOutlineLow, yOulineHigh, [xColumnLeft, xColumnRight], "fill");
           }
         }
 
@@ -461,7 +461,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
           ctx.globalAlpha = weightAlpha(0.5 * alpha, weight);
           ctx.fillStyle = strokeColor;
           ctx.strokeStyle = strokeColor;
-          drawSilhouette(ctx, segment, jXScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], 'fill+stroke');
+          drawSilhouette(ctx, segment, jXScale, yMedianLow, yMedianHigh, [xColumnLeft, xColumnRight], "fill+stroke");
         }
       }
     }
@@ -532,7 +532,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   }
 
   private getZoomTransitionRange(): [number, number] {
-    const nums = this["zoom-transition-range"].split('-').map(Number);
+    const nums = this["zoom-transition-range"].split("-").map(Number);
     const [a, b] = nums.length >= 2 ? [nums[0], nums[1]] : [nums[0], nums[0]]
     if (isNaN(a) || isNaN(b)) return [0, 0];
     return [a, b];
@@ -716,7 +716,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
     type EventFeatureData = Parameters<typeof createEvent>[1];
     const feature: EventFeatureData = {
-      type: 'boxplot',
+      type: "boxplot",
       position: position,
       data: this.preprocessedData?.datasets.map(dataset => ({
         dataset: { name: dataset.name, color: dataset.color ?? DEFAULT_DATA_COLOR },
@@ -880,7 +880,11 @@ function getContiguousSegments(start: number, stop: number, isPresent: (i: numbe
 }
 
 /** Draw a silhouette for the given segments. */
-function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number, number], getX: (i: number) => number, getYLow: (i: number) => number, getYHigh: (i: number) => number, [columnOffsetLeft, columnOffsetRight]: [number, number], style: 'fill' | 'stroke' | 'fill+stroke') {
+function drawSilhouette(
+  ctx: CanvasRenderingContext2D, [sStart, sStop]: [number, number],
+  getX: (i: number) => number, getYLow: (i: number) => number, getYHigh: (i: number) => number,
+  [columnOffsetLeft, columnOffsetRight]: [number, number], style: "fill" | "stroke" | "fill+stroke"
+) {
   ctx.beginPath();
   for (let i = sStart; i < sStop; i++) {
     const x = getX(i);
@@ -894,8 +898,8 @@ function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number,
     ctx.lineTo(x + columnOffsetRight, yLow);
     ctx.lineTo(x + columnOffsetLeft, yLow);
   }
-  if (style.includes('fill')) ctx.fill();
-  if (style.includes('stroke')) ctx.stroke();
+  if (style.includes("fill")) ctx.fill();
+  if (style.includes("stroke")) ctx.stroke();
 }
 
 /** Convert preprocessed dataset from array of objects to object of arrays, for downsampling. */
@@ -934,14 +938,14 @@ function getDownsamplersForDataset(data: PreprocessedPositions) {
     offset,
     length,
     downsamplers: {
-      medianLow: new Downsampler(arrays.median, 'min'),
-      medianHigh: new Downsampler(arrays.median, 'max'),
-      boxLow: new Downsampler(arrays.boxLow, 'min'),
-      boxHigh: new Downsampler(arrays.boxHigh, 'max'),
-      whiskerLow: new Downsampler(arrays.whiskerLow, 'min'),
-      whiskerHigh: new Downsampler(arrays.whiskerHigh, 'max'),
-      minimum: new Downsampler(arrays.minimum, 'min'),
-      maximum: new Downsampler(arrays.maximum, 'max'),
+      medianLow: new Downsampler(arrays.median, "min"),
+      medianHigh: new Downsampler(arrays.median, "max"),
+      boxLow: new Downsampler(arrays.boxLow, "min"),
+      boxHigh: new Downsampler(arrays.boxHigh, "max"),
+      whiskerLow: new Downsampler(arrays.whiskerLow, "min"),
+      whiskerHigh: new Downsampler(arrays.whiskerHigh, "max"),
+      minimum: new Downsampler(arrays.minimum, "min"),
+      maximum: new Downsampler(arrays.maximum, "max"),
     },
   };
 }
@@ -967,13 +971,13 @@ type NestedHighlight = [position: number, iDataset: number] | undefined;
 const NestedHighlight = {
   /** Format `NestedHighlight` in the form "position/iDataset", or "" if undefined. */
   format(value: NestedHighlight): string {
-    if (!value) return '';
+    if (!value) return "";
     return `${value[0]}/${value[1]}`;
   },
   /** Format `NestedHighlight` from the form "position/iDataset", or "" if undefined. */
   parse(str: string): NestedHighlight {
-    if (str.trim() === '') return undefined;
-    const [a, b] = str.split('/').map(Number);
+    if (str.trim() === "") return undefined;
+    const [a, b] = str.split("/").map(Number);
     return [a, b];
   },
 };

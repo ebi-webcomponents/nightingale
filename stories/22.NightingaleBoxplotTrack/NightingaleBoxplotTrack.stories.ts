@@ -27,7 +27,7 @@ const DefaultArgs = {
   "outlier-jitter-width": 0.4,
   "outlier-radius": 2,
   "zoom-transition-range": "4-5",
-  "zoomed-out-outline": 'whiskers',
+  "zoomed-out-outline": "whiskers",
   "tooltips": true,
 };
 type Args = typeof DefaultArgs;
@@ -66,8 +66,8 @@ function prepareBoxplotData(data: { positions: { position: number, values: numbe
 
   return [
     {
-      name: 'Data1',
-      color: '#0088ff',
+      name: "Data1",
+      color: "#0088ff",
       positions: positions,
       // positions: remove(positions, 3, 4, 5, 6, 35), // DEBUG
       // positions: remove(positions, 3, 4, 5, 6,
@@ -77,14 +77,14 @@ function prepareBoxplotData(data: { positions: { position: number, values: numbe
       // ), // DEBUG
     },
     {
-      name: 'Data2',
-      color: '#ff8800',
+      name: "Data2",
+      color: "#ff8800",
       // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
       positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
     },
     // {
-    //   name: 'Data3',
-    //   color: '#00aa44',
+    //   name: "Data3",
+    //   color: "#00aa44",
     //   // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
     //   positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.93) })), 1, 7), // DEBUG
     // },
@@ -174,28 +174,28 @@ function nightingaleBoxplotTrack(args: Args & { length: number, id: number }) {
 
 /** This is a demonstration of how to use CustomEvents on the `nightingale-boxplot-track` component. Tooltips are not a part of the component. */
 function handleTooltip(event: CustomEvent, args: Args) {
-  if (event.detail.eventType !== 'mouseover' && event.detail.eventType !== 'mouseout') return;
+  if (event.detail.eventType !== "mouseover" && event.detail.eventType !== "mouseout") return;
 
   type EventFeatureData = Parameters<typeof createEvent>[1];
   const feature: EventFeatureData = event.detail.feature;
-  let tooltipDiv = document.getElementById('boxplot-tooltip');
-  if (args.tooltips && feature && 'type' in feature && feature.type === 'boxplot') {
+  let tooltipDiv = document.getElementById("boxplot-tooltip");
+  if (args.tooltips && feature && "type" in feature && feature.type === "boxplot") {
     // Show tooltip
     if (!tooltipDiv) {
-      tooltipDiv = document.createElement('div');
-      tooltipDiv.id = 'boxplot-tooltip';
-      Object.assign(tooltipDiv.style, { position: 'fixed', background: 'white', border: '1px solid #ccc', padding: '6px', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', zIndex: '666', fontFamily: 'sans-serif', fontSize: '12px' });
+      tooltipDiv = document.createElement("div");
+      tooltipDiv.id = "boxplot-tooltip";
+      Object.assign(tooltipDiv.style, { position: "fixed", background: "white", border: "1px solid #ccc", padding: "6px", boxShadow: "0 2px 6px rgba(0,0,0,0.2)", zIndex: "666", fontFamily: "sans-serif", fontSize: "12px" });
       document.body.appendChild(tooltipDiv);
     }
     const rows = [
-      ['', ...feature.data.map(d => `<strong style="color:${d.dataset.color}">${d.dataset.name}</strong>`)],
-      ['nDatapoints', ...feature.data.map(d => d.datum?.values.length ?? '-')],
-      ['nOutliers', ...feature.data.map(d => d.datum?.outliersHigh && d.datum?.outliersLow ? d.datum.outliersHigh.length + d.datum.outliersLow.length : '-')],
-      ['Max', ...feature.data.map(d => d.datum?.maximum.toFixed(2) ?? '-')],
-      ['Median', ...feature.data.map(d => d.datum?.median.toFixed(2) ?? '-')],
-      ['Min', ...feature.data.map(d => d.datum?.minimum.toFixed(2) ?? '-')],
+      ["", ...feature.data.map(d => `<strong style="color:${d.dataset.color}">${d.dataset.name}</strong>`)],
+      ["nDatapoints", ...feature.data.map(d => d.datum?.values.length ?? "-")],
+      ["nOutliers", ...feature.data.map(d => d.datum?.outliersHigh && d.datum?.outliersLow ? d.datum.outliersHigh.length + d.datum.outliersLow.length : "-")],
+      ["Max", ...feature.data.map(d => d.datum?.maximum.toFixed(2) ?? "-")],
+      ["Median", ...feature.data.map(d => d.datum?.median.toFixed(2) ?? "-")],
+      ["Min", ...feature.data.map(d => d.datum?.minimum.toFixed(2) ?? "-")],
     ];
-    const rowsHtml = rows.map((row) => `<tr>${row.map((cell, index) => `<td style="text-align:${index === 0 ? 'left' : 'right'}; padding:3px;">${cell}</td>`).join('')}</tr>`).join('');
+    const rowsHtml = rows.map((row) => `<tr>${row.map((cell, index) => `<td style="text-align:${index === 0 ? "left" : "right"}; padding:3px;">${cell}</td>`).join("")}</tr>`).join("");
     tooltipDiv.innerHTML = `<table><tbody>${rowsHtml}</tbody></table>`;
     const mouseEvent: MouseEvent | undefined = event.detail.parentEvent;
     tooltipDiv.style.left = `${(mouseEvent?.clientX ?? 0) + 10}px`;
@@ -239,7 +239,7 @@ function makeStory(options: { length: number }): Story<Args> {
     await customElements.whenDefined("nightingale-boxplot-track");
     for (const track of document.getElementsByTagName("nightingale-boxplot-track")) {
       (track as NightingaleBoxplotTrack).data = boxplotData;
-      track.addEventListener('change', event => handleTooltip(event as CustomEvent, currentArgs));
+      track.addEventListener("change", event => handleTooltip(event as CustomEvent, currentArgs));
     }
   };
   return story;
