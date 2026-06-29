@@ -21,19 +21,18 @@ import { property } from "lit/decorators.js";
 import { Downsampler } from "./downsampling";
 
 
-// TODO: track via decorators?
 const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
-  "y-min", "y-max", "show-axis", "zoomed-out-range",
+  "y-min", "y-max", "show-axis", "zoomed-out-outline",
   "column-gap", "box-gap", "whisker-width", "outlier-jitter-width", "outlier-radius", "zoom-transition-range",
 ] satisfies (keyof NightingaleBoxplotTrack)[];
 const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleBoxplotTrack)[];
 
 
-/** Line width for rectangle stroke */
+/** Line width for rectangle stroke, in CSS pixels */
 const LINE_WIDTH = 1;
-/** Maximum line width relative to column width (overrides `LINE_WIDTH` when zoomed out too much) */
+/** Maximum line width relative to base width (width of one sequence position) (overrides `LINE_WIDTH` when zoomed out too much) */
 const MAX_REL_LINE_WIDTH = 0.2;
 
 /** Default fill color for boxes (stroke color will be derived from this) */
@@ -43,18 +42,21 @@ const DEFAULT_DATA_COLOR = "#cccccc";
  * (higher value means more responsive but lower-resolution visualization). */
 const BG_DOWNSAMPLING_PIXELS_PER_COLUMN = 1;
 
+/** Return stroke color matching a given fill color (darker version of the same color) */
 function makeStrokeColor(dataColor: string): string | undefined {
   return color(dataColor)?.darker(2).formatHex();
 }
 
 
+/** Data for a single boxplot (subcolumn) in the visualization (i.e. a single sequence position for a single dataset) */
 interface BoxplotDatum {
   /** Position in the sequence (1-based) */
   position: number,
-  /** Array of values of independent variable at the position */
+  /** Array of values of the independent variable at the position */
   values: ArrayLike<number>,
 }
 
+/** Data for a single dataset in the visualization (i.e. all sequence positions for a single dataset) */
 export interface BoxplotDataset {
   /** Name of the dataset */
   name: string,
@@ -64,13 +66,18 @@ export interface BoxplotDataset {
   positions: BoxplotDatum[],
 }
 
-/** Type for `NightingaleBoxplotTrack.data` */
+/** Data for  `NightingaleBoxplotTrack`.
+ * A list of one or more datasets, where each dataset contains boxplot data for individual positions in the sequence.
+ * In case of multiple datasets, the boxplots for each dataset will be shown side-by-side at each sequence position. */
 export type BoxplotData = BoxplotDataset[];
 
-export const ZoomedOutRangeOptions = ['extremes', 'whiskers', 'box', 'none'] as const;
-export type ZoomedOutRangeOption = typeof ZoomedOutRangeOptions[number];
+/** Options for what kind of data can be shown as the shaded outline in zoomed-out visualization */
+export const ZoomedOutOutlineOptions = ['extremes', 'whiskers', 'box', 'none'] as const;
+/** Options for what kind of data can be shown as the shaded outline in zoomed-out visualization */
+export type ZoomedOutOutlineOption = typeof ZoomedOutOutlineOptions[number];
 
 
+/** A Nightingale track for showing distribution of a variable on each residue position via boxplots */
 @customElementOnce("nightingale-boxplot-track")
 export default class NightingaleBoxplotTrack extends withCanvas(
   withManager(
@@ -83,19 +90,19 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     )
   )
 ) {
-  /** Bottom limit for Y-axis (default: minimum computed from data) */
+  /** Bottom limit for Y-axis (default: minimum computed from data). */
   @property({ converter: OptionalNumberAttributeConverter })
   "y-min"?: number;
 
-  /** Top limit for Y-axis (default: maximum computed from data) */
+  /** Top limit for Y-axis (default: maximum computed from data). */
   @property({ converter: OptionalNumberAttributeConverter })
   "y-max"?: number;
 
-  /** What kind of data should be shown as shaded range in zoomed-out visualization */
-  @property({ converter: EnumAttributeConverter(ZoomedOutRangeOptions, 'whiskers') })
-  "zoomed-out-range": ZoomedOutRangeOption;
+  /** What kind of data should be shown as the shaded outline in zoomed-out visualization. */
+  @property({ converter: EnumAttributeConverter(ZoomedOutOutlineOptions, 'whiskers') })
+  "zoomed-out-outline": ZoomedOutOutlineOption;
 
-  /** Turn on showing secondary highlights, which indicate selected subcolumn within a column (in case of multiple dataset). */
+  /** Turn on showing nested highlights, which indicate selected subcolumn within a column (in case of multiple datasets). */
   @property({ type: Boolean })
   "show-nested-highlights"?: boolean;
 
@@ -103,23 +110,23 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   @property({ type: Boolean })
   "show-axis"?: boolean;
 
-  /** Position of secondary highlight in from "position/iDataset", or "" if none. */
+  /** Position of nested highlight in form "position/iDataset", or "" if none. */
   @property({ type: String, reflect: true }) // not using attribute converter here, because change detection would not work correctly
   private "nested-highlight": string = "";
 
-  /** Width of the gap between displayed columns relative to the width of one sequence position (allowed range: 0-1, default: 0.2) */
+  /** Width of the gap between displayed columns, relative to the base width (width of one sequence position) (allowed range: 0-1, default: 0.2). */
   @property({ type: Number })
   "column-gap": number = 0.2;
 
-  /** Width of the gap between boxes within a column relative to the column width (allowed range: 0-1, default: 0.1) */
+  /** Width of the gap between boxes within a column, relative to the column width (allowed range: 0-1, default: 0.1). */
   @property({ type: Number })
   "box-gap": number = 0.1;
 
-  /** Whisker width relative to the box width (allowed range: 0-1, default: 0.6) */
+  /** Boxplot whisker width, relative to the box width (allowed range: 0-1, default: 0.6). */
   @property({ type: Number })
   "whisker-width": number = 0.6;
 
-  /** Width of random noise (jitter) to be added to the X-position of the outliers, relative to the box width (allowed range: 0-1, default: 0.4) */
+  /** Width of random noise (jitter) to be added to the X-position of the outliers, relative to the box width (allowed range: 0-1, default: 0.4). */
   @property({ type: Number })
   "outlier-jitter-width": number = 0.4;
 
@@ -127,22 +134,23 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   @property({ type: Number })
   "outlier-radius": number = 2;
 
-  /** Column width (in CSS pixels), where the transition from zoomed-out simplified visualization to zoomed-in boxplot visualization happens.
+  /** Column width(s), in CSS pixels, where the transition from zoomed-out simplified visualization to zoomed-in boxplot visualization happens.
    * Can be either one number (for sharp transition) or a hyphen-separated range.
-   * If there are multiple datasets, the width will be divided by the number of datasets.
+   * If there are multiple datasets, this width(s) will be divided by the number of datasets.
    * Use "0" to always show zoomed-in visualization (or preferrably "0.5-1" to avoid perfomance issues).
    * Use "Infinity" to always show zoomed-out visualization.
-   * (default: "4-5")
-   * */
+   * (default: "4-5") */
   @property({ type: String })
-  "zoom-transition-range": string = '4-5';
+  "zoom-transition-range": string = "4-5";
 
-  // TODO: continue here replacing consts by above props
 
   #data?: BoxplotData;
   private preprocessedData?: PreprocessedData;
+  /** D3 selection for SVG group for highlights (excluding nested highlights) */
   protected svgHighlights?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  /** D3 selection for SVG group for nested highlights */
   protected svgNestedHighlights?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+  /** D3 selection for SVG group for margins */
   protected svgMargins?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
 
 
@@ -151,6 +159,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     if (this.data) this.createTrack();
   }
 
+  /** Get or set the data for the boxplot track */
   get data(): BoxplotData | undefined {
     return this.#data;
   }
@@ -159,6 +168,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     this.preprocessedData = data ? preprocessData(data) : undefined;
     this.createTrack();
   }
+
   /** Return the range of Y values corresponding to bottom and top of the viewport (excluding margins) */
   getYLimits(): [yMin: number, yMax: number] {
     const yMin = this["y-min"] ?? this.preprocessedData?.yLimits.min ?? 0;
@@ -200,13 +210,14 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     }
   }
 
-  refresh() {
+  protected refresh() {
     this.requestDraw();
     this.updateHighlight();
     this.updateNestedHighlight();
     this.updateMargins();
   }
 
+  /** Stamp for tracking changes to the drawing parameters (when the stamp changes, canvas redraw is needed) */
   private readonly _drawStamp = new Stamp(() => {
     const stamp: Record<string, unknown> = {
       "data": this["data"],
@@ -238,6 +249,8 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     this.drawData(this.canvasCtx);
   }
 
+  /** Get a clean auxiliary offscreen canvas for drawing, of the same size as the main canvas.
+   * Only one offscreen canvas can be use at any time, because it is reused. */
   private getOffscreenCanvas(): [canvas: HTMLCanvasElement, canvasContext?: CanvasRenderingContext2D] {
     this._offscreenCanvas ??= document.createElement("canvas");
     const width = this.canvasCtx?.canvas.width ?? 1;
@@ -249,14 +262,18 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       this._offscreenCanvas.height = height;
     }
     const ctx = this._offscreenCanvas.getContext('2d') ?? undefined;
+    this.clearCanvas(ctx);
     return [this._offscreenCanvas, ctx];
   }
   private _offscreenCanvas?: HTMLCanvasElement;
 
-  private clearCanvas(ctx: CanvasRenderingContext2D) {
+  /** Clear the canvas. */
+  private clearCanvas(ctx: CanvasRenderingContext2D | undefined) {
+    if (!ctx) return;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
+  /** Draw the data on the canvas. */
   private drawData(ctx: CanvasRenderingContext2D) {
     const [fgAlpha, bgAlpha] = this.getFgBgOpacity();
 
@@ -270,10 +287,9 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       // Draw foreground visualization directly
       this.drawBoxplotVisualization(ctx);
     } else if (fgAlpha > 0) {
-      // Draw foreground visualization via an auxiliary canvas (cannot be drawn directly to the main canvas, because overlapping outliers would create opacity > fgAlpha)
+      // Draw foreground visualization via an auxiliary canvas (cannot be drawn directly to the main canvas, because overlapping outliers would add up and create opacity > fgAlpha)
       const [auxCanvas, auxCtx] = this.getOffscreenCanvas();
       if (auxCtx) {
-        this.clearCanvas(auxCtx);
         this.drawBoxplotVisualization(auxCtx);
         ctx.globalAlpha = fgAlpha;
         ctx.drawImage(auxCanvas, 0, 0);
@@ -393,49 +409,50 @@ export default class NightingaleBoxplotTrack extends withCanvas(
         const yMedianLow = (j: number) => yScale(medianLow[j]) + yMedianExtra;
         const yMedianHigh = (j: number) => yScale(medianHigh[j]) - yMedianExtra;
 
-        let yRangeLow: ((j: number) => number) | undefined;
-        let yRangeHigh: ((j: number) => number) | undefined;
-        switch (this['zoomed-out-range']) {
+        let yOutlineLow: ((j: number) => number) | undefined;
+        let yOulineHigh: ((j: number) => number) | undefined;
+        switch (this['zoomed-out-outline']) {
           case 'extremes': {
             const minimum = downsamplers.minimum.getDownsampledByScale(scale);
             const maximum = downsamplers.maximum.getDownsampledByScale(scale);
-            yRangeLow = (j: number) => yScale(minimum[j]);
-            yRangeHigh = (j: number) => yScale(maximum[j]);
+            yOutlineLow = (j: number) => yScale(minimum[j]);
+            yOulineHigh = (j: number) => yScale(maximum[j]);
             break;
           }
           case 'whiskers': {
             const whiskerLow = downsamplers.whiskerLow.getDownsampledByScale(scale);
             const whiskerHigh = downsamplers.whiskerHigh.getDownsampledByScale(scale);
-            yRangeLow = (j: number) => yScale(whiskerLow[j]);
-            yRangeHigh = (j: number) => yScale(whiskerHigh[j]);
+            yOutlineLow = (j: number) => yScale(whiskerLow[j]);
+            yOulineHigh = (j: number) => yScale(whiskerHigh[j]);
             break;
           }
           case 'box': {
             const boxLow = downsamplers.boxLow.getDownsampledByScale(scale);
             const boxHigh = downsamplers.boxHigh.getDownsampledByScale(scale);
-            yRangeLow = (j: number) => yScale(boxLow[j]);
-            yRangeHigh = (j: number) => yScale(boxHigh[j]);
+            yOutlineLow = (j: number) => yScale(boxLow[j]);
+            yOulineHigh = (j: number) => yScale(boxHigh[j]);
             break;
           }
           case 'none': {
-            yRangeLow = undefined;
-            yRangeHigh = undefined;
+            yOutlineLow = undefined;
+            yOulineHigh = undefined;
             break;
           }
         }
 
+        // j-prefixed variables refer to indices in the downsampled data
         const jStart = Math.max(0, Math.floor((start - offset) / exactScale));
         const jStop = Math.min(medianLow.length, Math.ceil((stop - offset) / exactScale));
         const jSegments = getContiguousSegments(jStart, jStop, j => !isNaN(medianLow[j]));
 
         const jXScale = (j: number) => xScale(offset + j * exactScale);
 
-        // Shaded range
-        if (yRangeLow && yRangeHigh) {
+        // Shaded outline
+        if (yOutlineLow && yOulineHigh) {
           for (const segment of jSegments) {
             ctx.globalAlpha = weightAlpha(0.25 * alpha, weight);
             ctx.fillStyle = fillColor;
-            drawSilhouette(ctx, segment, jXScale, yRangeLow, yRangeHigh, [xColumnLeft, xColumnRight], 'fill');
+            drawSilhouette(ctx, segment, jXScale, yOutlineLow, yOulineHigh, [xColumnLeft, xColumnRight], 'fill');
           }
         }
 
@@ -450,6 +467,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     }
   }
 
+  /** Get a set of shared measurement variables for drawing the boxplot visualizations. */
   private getDrawingMeasurements() {
     const canvasScale = this.canvasScale;
     const xBaseWidthInCss = this.getSingleBaseWidth();
@@ -481,7 +499,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       xColumnWidth,
       /** Scale from sequence position to horizontal offset of the slot in canvas space (does not consider column gap) */
       xScale,
-      /** Scale from value of independent variable to vertical position in canvas space */
+      /** Scale from value of the independent variable to vertical position in canvas space */
       yScale,
       /** Amount for vertically thickening the median rectangle, in canvas space */
       yMedianExtra,
@@ -520,6 +538,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     return [a, b];
   }
 
+  /** Update the SVG highlights (excluding nested highlights) */
   protected updateHighlight() {
     if (!this.svgHighlights) return;
     const highlights = this.svgHighlights
@@ -539,6 +558,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     highlights.exit().remove();
   }
 
+  /** Update the SVG nested highlights (indicate the pointed subcolumn within the highlighted column) */
   protected updateNestedHighlight() {
     if (!this.svgNestedHighlights) return;
     const nestedHighlightLocation = NestedHighlight.parse(this["nested-highlight"]);
@@ -568,6 +588,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     highlights.exit().remove();
   }
 
+  /** Update the SVG margins */
   protected updateMargins() {
     this.renderMarginOnGroup(this.svgMargins);
   }
@@ -668,6 +689,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     if (withHighlight) {
       this["nested-highlight"] = NestedHighlight.format(undefined);
     }
+
     const customEvent = createEvent(
       "mouseout",
       null,
@@ -682,6 +704,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
     this.dispatchEvent(customEvent);
   }
 
+  /** Get the datum pointed by the mouse cursor at the given SVG coordinates */
   private getPointedDatum(svgX: number, _svgY: number) {
     const continuousPosition = this.getSeqPositionFromX(svgX);
     if (continuousPosition === undefined) return undefined;
@@ -706,9 +729,10 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 }
 
 
+/** Preprocessed data for the boxplot track */
 type PreprocessedData = ReturnType<typeof preprocessData>;
-type PreprocessedDataset = ReturnType<typeof preprocessDataset>;
 
+/** Preprocess data for the boxplot track */
 function preprocessData(data: BoxplotData) {
   const preprocessedDatasets = data.map(preprocessDataset);
   return {
@@ -717,6 +741,10 @@ function preprocessData(data: BoxplotData) {
   }
 }
 
+/** Preprocessed data for a single dataset */
+type PreprocessedDataset = ReturnType<typeof preprocessDataset>;
+
+/** Preprocess data for a single dataset */
 function preprocessDataset(dataset: BoxplotDataset) {
   const preprocessedPositions: PreprocessedPositions = {};
 
@@ -726,26 +754,39 @@ function preprocessDataset(dataset: BoxplotDataset) {
   return {
     ...dataset,
     positions: preprocessedPositions,
-    downsampling: getDownsamplerForDataset(preprocessedPositions),
+    downsampling: getDownsamplersForDataset(preprocessedPositions),
   };
 }
 
+/** Preprocessed data for a single position in a single dataset */
 interface PreprocessedDatum {
+  /** Position in the sequence */
   position: number,
+  /** All values at this position, sorted */
   values: Float32Array,
+  /** Median value */
   median: number,
+  /** Lower bound of the box (lower quartile) */
   boxLow: number,
+  /** Upper bound of the box (upper quartile) */
   boxHigh: number,
+  /** Lower bound of the whisker (lower quartile - 1.5 * IQR) */
   whiskerLow: number,
+  /** Upper bound of the whisker (upper quartile + 1.5 * IQR) */
   whiskerHigh: number,
+  /** Minimum value */
   minimum: number,
+  /** Maximum value */
   maximum: number,
+  /** Outliers below the whisker */
   outliersLow: Float32Array,
+  /** Outliers above the whisker */
   outliersHigh: Float32Array,
 }
 
 type PreprocessedPositions = { [position: number]: PreprocessedDatum }
 
+/** Preprocess data for a single position in a dataset */
 function preprocessDatum(datum: BoxplotDatum): PreprocessedDatum {
   const sorted = sortIfNeeded(new Float32Array(datum.values));
   const median = getQuantile(sorted, 0.5);
@@ -803,7 +844,7 @@ export function getQuantile(sortedValues: ArrayLike<number>, p: number) {
   return sortedValues[i] * (1 - q) + sortedValues[i + 1] * q;
 }
 
-/** Gets the Y-axis limits for the given preprocessed data */
+/** Get automatic Y-axis limits for the given preprocessed data (minimum and maximum value of the whole dataset). */
 function getExtremes(data: PreprocessedDataset[]) {
   let min = Infinity;
   let max = -Infinity;
@@ -822,6 +863,8 @@ function getExtremes(data: PreprocessedDataset[]) {
   };
 }
 
+/** Get contiguous segments within the integer range [start, stop), where `isPresent` returns true for each index.
+ * Return segments as an array of [start, stop) pairs. */
 function getContiguousSegments(start: number, stop: number, isPresent: (i: number) => boolean): [start: number, stop: number][] {
   const segments: [number, number][] = [];
   for (let i = start; i < stop; i++) {
@@ -836,6 +879,7 @@ function getContiguousSegments(start: number, stop: number, isPresent: (i: numbe
   return segments;
 }
 
+/** Draw a silhouette for the given segments. */
 function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number, number], getX: (i: number) => number, getYLow: (i: number) => number, getYHigh: (i: number) => number, [columnOffsetLeft, columnOffsetRight]: [number, number], style: 'fill' | 'stroke' | 'fill+stroke') {
   ctx.beginPath();
   for (let i = sStart; i < sStop; i++) {
@@ -854,6 +898,7 @@ function drawSilhouette(ctx: CanvasRenderingContext2D, [sStart, sStop]: [number,
   if (style.includes('stroke')) ctx.stroke();
 }
 
+/** Convert preprocessed dataset from array of objects to object of arrays, for downsampling. */
 function datasetToArrays(data: PreprocessedPositions) {
   const positions = Object.values(data).map(d => d.position);
   const offset = min(positions) ?? 1;
@@ -882,7 +927,8 @@ function datasetToArrays(data: PreprocessedPositions) {
   };
 }
 
-function getDownsamplerForDataset(data: PreprocessedPositions) {
+/** Get a set of downsamplers for each data type (median, minimum, ...) for a preprocessed dataset */
+function getDownsamplersForDataset(data: PreprocessedPositions) {
   const { offset, length, arrays } = datasetToArrays(data);
   return {
     offset,
@@ -900,6 +946,9 @@ function getDownsamplerForDataset(data: PreprocessedPositions) {
   };
 }
 
+/** Adjust opacity value (`alpha`) for rendering two overlaying visualizations.
+ * This is done in such a way that overlaying of two visualizations with weights `weight` and `1-weight` will give the desired total opacity `alpha` in the overlapping area.
+ * (Naive `alpha*weight` would result in overlapping areas being more transparent than intended). */
 function weightAlpha(alpha: number, weight: number) {
   if (alpha === 1) {
     // Avoid ill-defined expressions (division by zero)
@@ -913,12 +962,15 @@ function weightAlpha(alpha: number, weight: number) {
   return 1 - transpWCorrected;
 }
 
+/** Location of nested highlight (sequence position and 0-based dataset index within the position). */
 type NestedHighlight = [position: number, iDataset: number] | undefined;
 const NestedHighlight = {
+  /** Format `NestedHighlight` in the form "position/iDataset", or "" if undefined. */
   format(value: NestedHighlight): string {
     if (!value) return '';
     return `${value[0]}/${value[1]}`;
   },
+  /** Format `NestedHighlight` from the form "position/iDataset", or "" if undefined. */
   parse(str: string): NestedHighlight {
     if (str.trim() === '') return undefined;
     const [a, b] = str.split('/').map(Number);
@@ -926,5 +978,5 @@ const NestedHighlight = {
   },
 };
 
-// TODO: docs (here and in readme)
+// TODO: docs in readme
 // TODO: test on new API once available

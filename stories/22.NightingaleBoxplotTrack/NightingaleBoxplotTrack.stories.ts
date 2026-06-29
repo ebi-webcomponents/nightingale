@@ -3,7 +3,7 @@ import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../../packages/nightingale-boxplot-track/src/index";
 import NightingaleBoxplotTrack from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
-import { type BoxplotData, ZoomedOutRangeOptions } from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
+import { type BoxplotData, ZoomedOutOutlineOptions } from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
 import sampleBoxplotData from "../../packages/nightingale-boxplot-track/tests/mockData/sample-1.json";
 
 
@@ -27,7 +27,7 @@ const DefaultArgs = {
   "outlier-jitter-width": 0.4,
   "outlier-radius": 2,
   "zoom-transition-range": "4-5",
-  "zoomed-out-range": 'whiskers',
+  "zoomed-out-outline": 'whiskers',
   "tooltips": true,
 };
 type Args = typeof DefaultArgs;
@@ -41,7 +41,7 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
   "whisker-width": { control: { type: "number", min: 0, max: 1, step: 0.05 } },
   "outlier-jitter-width": { control: { type: "number", min: 0, max: 1, step: 0.05 } },
   "outlier-radius": { control: { type: "number", min: 0, step: 0.5 } },
-  "zoomed-out-range": { control: "select", options: ZoomedOutRangeOptions },
+  "zoomed-out-outline": { control: "select", options: ZoomedOutOutlineOptions },
 };
 
 
@@ -165,7 +165,7 @@ function nightingaleBoxplotTrack(args: Args & { length: number, id: number }) {
         whisker-width=${args["whisker-width"]}
         outlier-jitter-width=${args["outlier-jitter-width"]}
         outlier-radius=${args["outlier-radius"]}
-        zoomed-out-range=${args["zoomed-out-range"]}
+        zoomed-out-outline=${args["zoomed-out-outline"]}
         zoom-transition-range=${args["zoom-transition-range"]}
       >
       </nightingale-boxplot-track>

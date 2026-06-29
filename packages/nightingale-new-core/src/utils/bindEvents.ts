@@ -22,14 +22,20 @@ type SequenceBaseData = {
 };
 type BoxplotData = {
   type: "boxplot";
+  /** Position in the sequence */
   position: number;
+  /** Data for the boxplot at this position (from all datasets) */
   data: {
+    /** Common properties of the whole dataset */
     dataset: {
       name: string;
       color: string;
     };
-    datum?: {
+    /** Boxplot data at this position */
+    datum: {
+      /** Position in the sequence */
       position: number;
+      /** All values of the independent variable at this position */
       values: Float32Array;
       median: number;
       boxLow: number;
@@ -40,7 +46,7 @@ type BoxplotData = {
       maximum: number;
       outliersLow: Float32Array;
       outliersHigh: Float32Array;
-    };
+    } | undefined;
   }[];
   /** Index into `data`, indicates which dataset is being pointed at */
   datasetIndex: number;
