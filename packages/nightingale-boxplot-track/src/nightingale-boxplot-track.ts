@@ -66,7 +66,7 @@ export interface BoxplotDataset {
   positions: BoxplotDatum[],
 }
 
-/** Data for  `NightingaleBoxplotTrack`.
+/** Data for `NightingaleBoxplotTrack`.
  * A list of one or more datasets, where each dataset contains boxplot data for individual positions in the sequence.
  * In case of multiple datasets, the boxplots for each dataset will be shown side-by-side at each sequence position. */
 export type BoxplotData = BoxplotDataset[];
@@ -134,9 +134,9 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   @property({ type: Number })
   "outlier-radius": number = 2;
 
-  /** Column width(s), in CSS pixels, where the transition from zoomed-out simplified visualization to zoomed-in boxplot visualization happens.
+  /** Base width(s), in CSS pixels, where the transition from zoomed-out simplified visualization to zoomed-in boxplot visualization happens.
    * Can be either one number (for sharp transition) or a hyphen-separated range.
-   * If there are multiple datasets, this width(s) will be divided by the number of datasets.
+   * If there are multiple datasets, this width(s) will be multiplied by the number of datasets, to compensate for narrower space for each dataset.
    * Use "0" to always show zoomed-in visualization (or preferrably "0.5-1" to avoid perfomance issues).
    * Use "Infinity" to always show zoomed-out visualization.
    * (default: "4-5") */
