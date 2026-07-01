@@ -88,9 +88,9 @@ export class NightingaleScrollbox<TData> extends NightingaleElement {
       unregister: () => this.unregister(item),
     };
   }
-  /** Remove a scrollbox item and run "onUnregister" callback on it. This method is called automatically when a `nightingale-scrollbox-item` element is removed from the `nightingale-scrollbox` element. */
+  /** Remove a scrollbox item and run "onUnregister" callback on it. Do nothing if the item is not registered. This method is called automatically when a `nightingale-scrollbox-item` element is removed from the `nightingale-scrollbox` element. */
   unregister(item: NightingaleScrollboxItem<TData>) {
-    if (!this._items.has(item)) throw new Error(`Cannot unregister item ${item} because it is not registered.`)
+    if (!this._items.has(item)) return;
     this._items.delete(item);
     this.observer?.unobserve(item);
     item.unregister();
