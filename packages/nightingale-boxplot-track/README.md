@@ -9,36 +9,50 @@ Most of the rendering is implemented via HTML canvas, but some non-critical part
 ## Usage
 
 ```html
-<nightingale-boxplot-track id="track" width="600" height="200" length="3" show-axis margin-left="30"></nightingale-boxplot-track>
+<nightingale-boxplot-track
+    id="track"
+    width="600" height="200"
+    length="3"
+    y-min="0" y-max=""
+    show-axis
+    show-nested-highlights
+    zoomed-out-outline="whiskers"
+    column-gap="0.2" box-gap="0.1" whisker-width="0.6" outlier-jitter-width="0.4"
+    outlier-radius="2"
+    zoom-transition-range="4-5"
+    margin-left="30" margin-right="10" margin-top="5" margin-bottom="5" margin-color="#ffffffee"
+    highlight-event="onmouseover" highlight-color="#eb3bff22"
+    use-ctrl-to-zoom
+></nightingale-boxplot-track>
 ```
 
 #### Setting the data through property
 
 ```typescript
-await customElements.whenDefined("nightingale-boxplot-track");
-const track = document.getElementById("track");
+await customElements.whenDefined('nightingale-boxplot-track');
+const track = document.getElementById('track');
 if (track) {
-  // Showing 2 datasets on a sequence of 3 amino acids:
-  (track as any).data = [
-    {
-      name: "Blue dataset",
-      color: "#0088ff",
-      positions: [
-        { position: 1, values: [0.2, 0.5, 0.7, 0.9] },
-        { position: 2, values: [0.1, 0.3, 0.5, 0.8] },
-        { position: 3, values: [0.0, 0.2, 0.6, 0.8] },
-      ],
-    },
-    {
-      name: "Orange dataset",
-      color: "#ff8800",
-      positions: [
-        { position: 1, values: [0.1, 0.3, 0.5, 0.8] },
-        { position: 2, values: [0.0, 0.2, 0.6, 0.8] },
-        { position: 3, values: [0.2, 0.5, 0.7, 0.9] },
-      ],
-    },
-  ];
+    // Showing 2 datasets on a sequence of 3 amino acids:
+    (track as any).data = [
+        {
+            name: 'Blue dataset',
+            color: '#0088ff',
+            positions: [
+                { position: 1, values: [0.2, 0.5, 0.7, 0.9] },
+                { position: 2, values: [0.1, 0.3, 0.5, 0.8] },
+                { position: 3, values: [0.0, 0.2, 0.6, 0.8] },
+            ],
+        },
+        {
+            name: 'Orange dataset',
+            color: '#ff8800',
+            positions: [
+                { position: 1, values: [0.1, 0.3, 0.5, 0.8] },
+                { position: 2, values: [0.0, 0.2, 0.6, 0.8] },
+                { position: 3, values: [0.2, 0.5, 0.7, 0.9] },
+            ],
+        },
+    ];
 }
 ```
 
@@ -46,12 +60,12 @@ The `data` property expects a value of type `BoxplotData` - an array of datasets
 
 ```typescript
 {
-  name: string,
-  color?: string,
-  positions: Array<{
-    position: number,
-    values: Array<number>,
-  }>,
+    name: string,
+    color?: string,
+    positions: Array<{
+        position: number,
+        values: Array<number>,
+    }>,
 }
 ```
 
@@ -183,39 +197,39 @@ When the user clicks on or hovers over the component, the component emits a `Cus
 
 ```typescript
 {
-  eventType: "mouseover" | "mouseout" | "click",
-  parentEvent?: Event,
-  feature?: {
-    type: "boxplot",
-    /** Position in the sequence */
-    position: number,
-    /** Data for the boxplot at this position from all datasets (one item for each dataset) */
-    data: Array<{
-      /** Common properties of the whole dataset */
-      dataset: {
-        name: string,
-        color: string,
-      },
-      /** Boxplot data at this position */
-      datum?: {
+    eventType: "mouseover" | "mouseout" | "click",
+    parentEvent?: Event,
+    feature?: {
+        type: "boxplot",
         /** Position in the sequence */
         position: number,
-        /** All values of the independent variable at this position */
-        values: Float32Array,
-        median: number,
-        boxLow: number,
-        boxHigh: number,
-        whiskerLow: number,
-        whiskerHigh: number,
-        minimum: number,
-        maximum: number,
-        outliersLow: Float32Array,
-        outliersHigh: Float32Array,
-      },
-    }>,
-    /** Index into `data`, indicates which dataset is being pointed at */
-    datasetIndex: number,
-  } | null,
+        /** Data for the boxplot at this position from all datasets (one item for each dataset) */
+        data: Array<{
+            /** Common properties of the whole dataset */
+            dataset: {
+                name: string,
+                color: string,
+            },
+            /** Boxplot data at this position */
+            datum?: {
+                /** Position in the sequence */
+                position: number,
+                /** All values of the independent variable at this position */
+                values: Float32Array,
+                median: number,
+                boxLow: number,
+                boxHigh: number,
+                whiskerLow: number,
+                whiskerHigh: number,
+                minimum: number,
+                maximum: number,
+                outliersLow: Float32Array,
+                outliersHigh: Float32Array,
+            },
+        }>,
+        /** Index into `data`, indicates which dataset is being pointed at */
+        datasetIndex: number,
+    } | null,
 }
 ```
 

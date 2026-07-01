@@ -98,21 +98,21 @@ export default class NightingaleBoxplotTrack extends withCanvas(
   @property({ converter: OptionalNumberAttributeConverter })
   "y-max"?: number;
 
-  /** What kind of data should be shown as the shaded outline in zoomed-out visualization. */
-  @property({ converter: EnumAttributeConverter(ZoomedOutOutlineOptions, "whiskers") })
-  "zoomed-out-outline": ZoomedOutOutlineOption;
+  /** Turn on vertical axis. */
+  @property({ type: Boolean })
+  "show-axis"?: boolean;
 
   /** Turn on showing nested highlights, which indicate selected subcolumn within a column (in case of multiple datasets). */
   @property({ type: Boolean })
   "show-nested-highlights"?: boolean;
 
-  /** Turn on vertical axis. */
-  @property({ type: Boolean })
-  "show-axis"?: boolean;
-
   /** Position of nested highlight in form "position/iDataset", or "" if none. */
   @property({ type: String, reflect: true }) // not using attribute converter here, because change detection would not work correctly
   private "nested-highlight": string = "";
+
+  /** What kind of data should be shown as the shaded outline in zoomed-out visualization. */
+  @property({ converter: EnumAttributeConverter(ZoomedOutOutlineOptions, "whiskers") })
+  "zoomed-out-outline": ZoomedOutOutlineOption;
 
   /** Width of the gap between displayed columns, relative to the base width (width of one sequence position) (allowed range: 0-1, default: 0.2). */
   @property({ type: Number })

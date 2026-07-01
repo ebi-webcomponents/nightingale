@@ -2,8 +2,7 @@ import { type createEvent } from "@nightingale-elements/nightingale-new-core";
 import { type ArgTypes, Meta, Story } from "@storybook/web-components";
 import { html } from "lit-html";
 import "../../packages/nightingale-boxplot-track/src/index";
-import NightingaleBoxplotTrack from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
-import { type BoxplotData, ZoomedOutOutlineOptions } from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
+import NightingaleBoxplotTrack, { type BoxplotData, ZoomedOutOutlineOptions } from "../../packages/nightingale-boxplot-track/src/nightingale-boxplot-track";
 import sampleBoxplotData from "../../packages/nightingale-boxplot-track/tests/mockData/sample-1.json";
 
 
@@ -45,18 +44,11 @@ const ArgumentTypes: Partial<ArgTypes<Args>> = {
 };
 
 
-// const nDataRepeat = 20_000;
-// const nDataRepeat = 1_000;
-// const nDataRepeat = 81;
 const nDataRepeat = 82;
-// Around 100k datapoints (nDataRepeat=1000), canvas draw takes > 40ms
-// Around 400k datapoints (nDataRepeat=4000), aliasing makes data invisible (causes artifacts even before)
-
 const sampleSequence = "MALYGTHSHGLFKKLGIPGPTPLPFLGNILSYHKGFCMFDMECHKKYGKVWGFYDGQQPVLAITDPDMIKTVLVKECYSVFTNRRPFGPVGFMKSAISIA".repeat(nDataRepeat);
 
 function prepareBoxplotData(data: { positions: { position: number, values: number[] }[] }): BoxplotData {
-  // const positions = data.positions.slice();
-  const positions = data.positions.map(pos => ({ position: pos.position, values: pos.values.sort() }));
+  const positions = data.positions.map(pos => ({ position: pos.position, values: pos.values.sort() })); // Sorting values for each position is not required by the boxplot track, but can make loading faster.
   const shift = data.positions.length;
   for (let i = 1; i < nDataRepeat; i++) {
     for (const pos of data.positions) {
@@ -69,25 +61,13 @@ function prepareBoxplotData(data: { positions: { position: number, values: numbe
       name: "Data1",
       color: "#0088ff",
       positions: positions,
-      // positions: remove(positions, 3, 4, 5, 6, 35), // DEBUG
-      // positions: remove(positions, 3, 4, 5, 6,
-      //   ...new Array(50).fill(0).map((_, i) => 35 + i),
-      //   ...new Array(500).fill(0).map((_, i) => 500 + i),
-      //   ...new Array(5000).fill(0).map((_, i) => 5000 + i),
-      // ), // DEBUG
     },
     {
       name: "Data2",
       color: "#ff8800",
-      // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
-      positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7), // DEBUG
+      // Dummy data: multiply Data1 by a constant and remove some positions
+      positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })), 1, 7, 8, 9, 10),
     },
-    // {
-    //   name: "Data3",
-    //   color: "#00aa44",
-    //   // positions: positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.8) })),
-    //   positions: remove(positions.map(pos => ({ ...pos, values: pos.values.map(v => v * 0.93) })), 1, 7), // DEBUG
-    // },
   ];
 }
 
