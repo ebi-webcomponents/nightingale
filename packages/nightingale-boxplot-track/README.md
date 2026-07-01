@@ -4,52 +4,54 @@
 
 Nightingale boxplot track component is used to display the distribution of a variable at each sequence position using boxplots. It allows displaying multiple distribution datasets, rendered side-by-side at each sequence position.
 
+Most of the rendering is implemented via HTML canvas, but some non-critical parts are implemented via SVG (e.g. highlights).
+
 ## Usage
 
 ```html
-<nightingale-boxplot-track id="track" width="600" height="200" length="3" show-axis></nightingale-boxplot-track>
+<nightingale-boxplot-track id="track" width="600" height="200" length="3" show-axis margin-left="30"></nightingale-boxplot-track>
 ```
 
 #### Setting the data through property
 
-```javascript
+```typescript
 await customElements.whenDefined("nightingale-boxplot-track");
 const track = document.getElementById("track");
 if (track) {
-    // Showing 2 datasets on a sequence of 3 amino acids:
-    (track as any).data = [
-        {
-            name: "Blue dataset",
-            color: "#0088ff",
-            positions: [
-                { position: 1, values: [0.2, 0.5, 0.7, 0.9] },
-                { position: 2, values: [0.1, 0.3, 0.5, 0.8] },
-                { position: 3, values: [0.0, 0.2, 0.6, 0.8] },
-            ],
-        },
-        {
-            name: "Orange dataset",
-            color: "#ff8800",
-            positions: [
-                { position: 1, values: [0.1, 0.3, 0.5, 0.8] },
-                { position: 2, values: [0.0, 0.2, 0.6, 0.8] },
-                { position: 3, values: [0.2, 0.5, 0.7, 0.9] },
-            ],
-        },
-    ];
+  // Showing 2 datasets on a sequence of 3 amino acids:
+  (track as any).data = [
+    {
+      name: "Blue dataset",
+      color: "#0088ff",
+      positions: [
+        { position: 1, values: [0.2, 0.5, 0.7, 0.9] },
+        { position: 2, values: [0.1, 0.3, 0.5, 0.8] },
+        { position: 3, values: [0.0, 0.2, 0.6, 0.8] },
+      ],
+    },
+    {
+      name: "Orange dataset",
+      color: "#ff8800",
+      positions: [
+        { position: 1, values: [0.1, 0.3, 0.5, 0.8] },
+        { position: 2, values: [0.0, 0.2, 0.6, 0.8] },
+        { position: 3, values: [0.2, 0.5, 0.7, 0.9] },
+      ],
+    },
+  ];
 }
 ```
 
-The `data` property expects a value of type [`BoxplotData`](./src/nightingale-boxplot-track.ts#L72) - an array of datasets, where each dataset has the following structure:
+The `data` property expects a value of type `BoxplotData` - an array of datasets, where each dataset has the following structure:
 
-```javascript
+```typescript
 {
-    name: string,
-    color?: string,
-    positions: {
-        position: number,
-        values: number[],
-    }[],
+  name: string,
+  color?: string,
+  positions: Array<{
+    position: number,
+    values: Array<number>,
+  }>,
 }
 ```
 
@@ -94,11 +96,13 @@ When the view becomes over more zoomed-out (column width < 1 screen pixel), the 
 
 #### `y-min?: number, y-max?: number`
 
-Bottom and top limit for the Y-axis. If either is not set, it will be inferred from the data (minimum/maximum of all data values).
+Bottom and top limit for the Y-axis. If either of these is not set, it will be inferred from the data (minimum/maximum of all data values).
 
 #### `show-axis?: boolean (default: false)`
 
 Turn on or off displaying the vertical axis.
+
+The axis is rendered in the left margin of the component. The margin attributes must be set accordingly to provide enough space for the axis (e.g. `margin-left="30"`).
 
 #### `show-nested-highlights?: boolean (default: false)`
 
@@ -152,7 +156,7 @@ If there are multiple datasets, this width(s) will be multiplied by the number o
 (2 sequence positions with 2 datasets)
 
 ```
-   Seq. position 1       Seq. position 2   
+   Seq. position 1       Seq. position 2
 <────────────────────><────────────────────> Base width
 ┄><────────────────><┄┄><────────────────><┄ Column width, Column gap
   ><─────><><─────><    ><─────><><─────><   Box width, Box gap*
@@ -173,7 +177,47 @@ If there are multiple datasets, this width(s) will be multiplied by the number o
 
 ### Events
 
-// TODO:
+As `nightingale-boxplot-track` implements from `withZoom` and `withHighlight`, it will respond to zooming changes, highlight events, and emit events when interacting with boxplots (helpful if you want to display tooltips, integrate with other components etc.).
+
+When the user clicks on or hovers over the component, the component emits a `CustomEvent` with type `"change"` and with `detail` of the following structure:
+
+```typescript
+{
+  eventType: "mouseover" | "mouseout" | "click",
+  parentEvent?: Event,
+  feature?: {
+    type: "boxplot",
+    /** Position in the sequence */
+    position: number,
+    /** Data for the boxplot at this position from all datasets (one item for each dataset) */
+    data: Array<{
+      /** Common properties of the whole dataset */
+      dataset: {
+        name: string,
+        color: string,
+      },
+      /** Boxplot data at this position */
+      datum?: {
+        /** Position in the sequence */
+        position: number,
+        /** All values of the independent variable at this position */
+        values: Float32Array,
+        median: number,
+        boxLow: number,
+        boxHigh: number,
+        whiskerLow: number,
+        whiskerHigh: number,
+        minimum: number,
+        maximum: number,
+        outliersLow: Float32Array,
+        outliersHigh: Float32Array,
+      },
+    }>,
+    /** Index into `data`, indicates which dataset is being pointed at */
+    datasetIndex: number,
+  } | null,
+}
+```
 
 ### Other attributes and properties
 

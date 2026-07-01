@@ -981,6 +981,3 @@ const NestedHighlight = {
     return [a, b];
   },
 };
-
-// TODO: docs in readme
-// TODO: test on new API once available

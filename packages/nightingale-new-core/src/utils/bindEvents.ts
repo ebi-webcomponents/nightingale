@@ -24,8 +24,8 @@ type BoxplotData = {
   type: "boxplot";
   /** Position in the sequence */
   position: number;
-  /** Data for the boxplot at this position (from all datasets) */
-  data: {
+  /** Data for the boxplot at this position from all datasets (one item for each dataset) */
+  data: Array<{
     /** Common properties of the whole dataset */
     dataset: {
       name: string;
@@ -47,7 +47,7 @@ type BoxplotData = {
       outliersLow: Float32Array;
       outliersHigh: Float32Array;
     } | undefined;
-  }[];
+  }>;
   /** Index into `data`, indicates which dataset is being pointed at */
   datasetIndex: number;
 };
