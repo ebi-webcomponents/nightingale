@@ -86,10 +86,6 @@ export type AlphaFoldPayload = Array<{
   amAnnotationsUrl?: string;
   amAnnotationsHg19Url?: string;
   amAnnotationsHg38Url?: string;
-  chainId: string;
-  isComplex?: boolean;
-  assemblyType?: string;
-  oligomericState?: string;
 }>;
 
 const uniProtMappingUrl = "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/";
