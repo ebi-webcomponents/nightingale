@@ -34,6 +34,7 @@ const Shapes = [
   "rectangle", "roundRectangle", "line", "bridge",
   "discontinuosEnd", "discontinuos", "discontinuosStart",
   "helix", "strand",
+  "rightEndedTag", "leftEndedTag", "doubleEndedTag",
   "circle", "triangle", "diamond", "pentagon", "hexagon",
   "chevron", "catFace", "arrow", "wave", "doubleBar",
 ];
