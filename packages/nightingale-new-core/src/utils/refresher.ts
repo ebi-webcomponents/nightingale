@@ -64,14 +64,17 @@ export class Stamp {
     private currentStampValue: Record<string, unknown> = {};
 
     /** Update the current stamp value (using the return value of `stampFunction`).
-     * Return `true` if the stamp value has changed since the last `update`, `false` otherwise.
+     * Return an object with old and new stamp value and whether it has changed.
      * (Stamp value comparison is performed by shallow object comparison.) */
     update() {
         const oldValue = this.currentStampValue;
         this.currentStampValue = this.stampFunction();
         return {
+            /** The old stamp value (before the update) */
             oldValue,
+            /** The new stamp value (after the update) */
             newValue: this.currentStampValue,
+            /** Whether the stamp value has changed */
             changed: !objectShallowEquals(oldValue, this.currentStampValue),
         };
     }
