@@ -93,10 +93,18 @@ class NightingaleManager extends NightingaleElement {
   register(element: NightingaleElement) {
     this.htmlElements.add(element);
     this.applyAttributesOnElement(element);
+    this.applyPropertiesOnElement(element);
   }
 
   unregister(element: NightingaleElement) {
     this.htmlElements.delete(element);
+  }
+
+  private applyPropertiesOnElement(element: HTMLElement): void {
+    this.propertyValues.forEach((value, type) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (element as any)[type] = value;
+    });
   }
 
   applyProperties(forElementId: string) {
@@ -105,19 +113,13 @@ class NightingaleManager extends NightingaleElement {
       if (!element) {
         return;
       }
-      this.propertyValues.forEach((value, type) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (element as any)[type] = value;
-      });
+      this.applyPropertiesOnElement(element);
     } else {
       this.htmlElements.forEach((element: HTMLElement) => {
         if (!element) {
           return;
         }
-        this.propertyValues.forEach((value, type) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (element as any)[type] = value;
-        });
+        this.applyPropertiesOnElement(element);
       });
     }
   }
