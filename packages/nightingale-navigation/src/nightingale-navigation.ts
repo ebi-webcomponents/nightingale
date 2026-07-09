@@ -23,7 +23,7 @@ import NightingaleElement, {
   withHighlight,
 } from "@nightingale-elements/nightingale-new-core";
 
-const HANDLE_SIZE = 6;
+const HANDLE_WIDTH = 20;
 
 @customElement("nightingale-navigation")
 class NightingaleNavigation extends withManager(
@@ -49,6 +49,18 @@ class NightingaleNavigation extends withManager(
   #axis?: Selection<SVGGElement, unknown, HTMLElement | null, unknown>;
   #brushG?: Selection<SVGGElement, unknown, HTMLElement | null, unknown>;
   #polygon?: Selection<SVGPolygonElement, unknown, HTMLElement | null, unknown>;
+  #handleLeft?: Selection<
+    SVGPolygonElement,
+    unknown,
+    HTMLElement | null,
+    unknown
+  >;
+  #handleRight?: Selection<
+    SVGPolygonElement,
+    unknown,
+    HTMLElement | null,
+    unknown
+  >;
   #xAxis?: Axis<NumberValue>;
   #viewport?: BrushBehavior<unknown>;
   #highlighted?: Selection<
@@ -73,6 +85,8 @@ class NightingaleNavigation extends withManager(
   "scale-factor"?: number = (this.length || 0) / 5 || 10;
   @property({ type: Boolean })
   "show-highlight"?: boolean = false;
+  @property({ type: String })
+  "handles"?: "rectangle" | "arrows" = "rectangle";
 
   constructor() {
     super();
@@ -122,9 +136,9 @@ class NightingaleNavigation extends withManager(
     this.#viewport = brushX()
       .extent([
         [this["margin-left"] + (this["ruler-padding"] as number), 0],
-        [limit, this.height * 0.5 + HANDLE_SIZE / 2],
+        [limit, this.height * 0.5],
       ])
-      .handleSize(HANDLE_SIZE)
+      .handleSize(HANDLE_WIDTH)
       .on("end", ({ selection }) => {
         // In case is a click outside the brush, reset brush to previous position
         if (
@@ -157,25 +171,61 @@ class NightingaleNavigation extends withManager(
             );
           this.updateLabels();
           this.updatePolygon();
+          this.updateHandles();
         }
       });
-
-    this.#brushG = this.#svg.append("g").attr("class", "brush");
-
-    if (limit > 0) {
-      this.#brushG.call(this.#viewport);
-
-      this.#brushG.call(this.#viewport.move, [
-        this.#x(this.getStart()),
-        this.#x(this.getEnd()),
-      ]);
-    }
 
     this.#polygon = this.#svg
       .append("polygon")
       .attr("class", "zoom-polygon")
       .attr("fill", "#777")
       .attr("fill-opacity", "0.3");
+
+    this.#brushG = this.#svg.append("g").attr("class", "brush");
+
+    if (limit > 0) {
+      // Section to add arrows to handles
+      const arrowWidth = HANDLE_WIDTH;
+      const arrowHeight = 0.75 * arrowWidth;
+
+      this.#handleLeft = this.#brushG.append("polygon");
+      this.#handleRight = this.#brushG.append("polygon");
+
+      for (const [handle, side] of [
+        [this.#handleLeft, "left"],
+        [this.#handleRight, "right"],
+      ] as const) {
+        handle
+          .attr("class", `custom-handle handle-${side}`)
+          .attr("stroke", "#fff")
+          .attr("fill", "#000")
+          // Draws a ↔
+          .attr(
+            "points",
+            `${-arrowWidth / 2} ${this.height / 4}
+          ${-arrowWidth / 5} ${this.height / 4 - arrowHeight / 2}
+          ${-arrowWidth / 5} ${this.height / 4 - arrowHeight / 6}
+          ${arrowWidth / 5} ${this.height / 4 - arrowHeight / 6}
+          ${arrowWidth / 5} ${this.height / 4 - arrowHeight / 2}
+          ${arrowWidth / 2} ${this.height / 4}
+          ${arrowWidth / 5} ${this.height / 4 + arrowHeight / 2}
+          ${arrowWidth / 5} ${this.height / 4 + arrowHeight / 6}
+          ${-arrowWidth / 5} ${this.height / 4 + arrowHeight / 6}
+          ${-arrowWidth / 4} ${this.height / 4 + arrowHeight / 2}`
+          );
+      }
+      // End of section to add arrows to handles
+
+      this.#brushG.call(this.#viewport);
+
+      this.#brushG.call(this.#viewport.move, [
+        this.#x(this.getStart()),
+        this.#x(this.getEnd()),
+      ]);
+
+      // Hides the D3 native brush area, as we'll use our own this.#polygon
+      this.#brushG.select(".selection").attr("opacity", "0");
+    }
 
     this.#margins = this.#svg.append("g").attr("class", "margin");
     this.createHighlight();
@@ -199,7 +249,7 @@ class NightingaleNavigation extends withManager(
       [this["margin-left"] + (this["ruler-padding"] as number), 0],
       [
         this.width - this["margin-right"] - (this["ruler-padding"] as number),
-        this.height * 0.5 + HANDLE_SIZE / 2,
+        this.height * 0.5 + HANDLE_WIDTH / 2,
       ],
     ]);
     if (this.#viewport) this.#brushG?.call(this.#viewport);
@@ -351,6 +401,7 @@ class NightingaleNavigation extends withManager(
 
     highlighsRect.exit().remove();
   }
+
   private updateLabels() {
     if (this.#displaystartLabel)
       this.#displaystartLabel
@@ -363,15 +414,44 @@ class NightingaleNavigation extends withManager(
   }
 
   private updatePolygon() {
-    if (this.#polygon && this.#x)
+    if (this.#polygon && this.#x) {
+      const start = this.#x(this.getStart());
+      const end = this.#x(this.getEnd());
+      /**
+       * Draws a polygon showing the zoom area in the overview with respect to
+       * the visible area in the visualisation below
+       *     ╭────╮
+       *     │    │
+       *    ╱     │
+       *   ╱      │
+       *  ╱       │
+       * ╰────────╯
+       */
       this.#polygon.attr(
         "points",
-        `${this.#x(this.getStart())},${this.height / 2}
-        ${this.#x(this.getEnd())},${this.height / 2}
+        `${start},${this.height / 2}
+        ${start},0
+        ${end},0
+        ${end},${this.height / 2}
         ${this.width - this["margin-right"]},${this.height}
         ${this["margin-left"]},${this.height}`
       );
+    }
   }
+
+  private updateHandles() {
+    if (this.#handleLeft && this.#handleRight && this.#x) {
+      this.#handleLeft.attr(
+        "transform",
+        `translate(${this.#x(this.getStart())})`
+      );
+      this.#handleRight.attr(
+        "transform",
+        `translate(${this.#x(this.getEnd())})`
+      );
+    }
+  }
+
   private getStart(): number {
     return this["display-start"] || 1;
   }
