@@ -17,9 +17,13 @@ export const OptionalNumberAttributeConverter: ComplexAttributeConverter<number 
     fromAttribute(str) {
         if (!str) { // null or empty string
             return undefined;
-        } else {
-            return Number(str);
         }
+        const value = Number(str);
+        if (isNaN(value)) {
+            console.warn(`Failed to parse numeric attribute value "${str}"`);
+            return undefined;
+        }
+        return value;
     },
     toAttribute(value) {
         if (value === undefined) {

@@ -27,7 +27,6 @@ const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
   "y-min", "y-max", "show-axis", "zoomed-out-outline",
   "column-gap", "box-gap", "whisker-width", "outlier-jitter-width", "outlier-radius", "zoom-transition-range",
 ] satisfies (keyof NightingaleBoxplotTrack)[];
-const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = [] satisfies (keyof NightingaleBoxplotTrack)[];
 
 
 /** Line width for rectangle stroke, in CSS pixels */
@@ -178,10 +177,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
   override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
-      // Calling `this.data` setter to recompute `this.positions` and run `this.createTrack()`
-      this.data = this.data; // eslint-disable-line no-self-assign
-    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
+    if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
       this.onDimensionsChange();
       this.createTrack();
     }
@@ -228,9 +224,6 @@ export default class NightingaleBoxplotTrack extends withCanvas(
       "display-start": this["display-start"],
       "display-end": this["display-end"],
     };
-    for (const attr of ATTRIBUTES_THAT_TRIGGER_DATA_RESET) {
-      stamp[attr] = this.getAttribute(attr);
-    }
     for (const attr of ATTRIBUTES_THAT_TRIGGER_REFRESH) {
       stamp[attr] = this.getAttribute(attr);
     }
