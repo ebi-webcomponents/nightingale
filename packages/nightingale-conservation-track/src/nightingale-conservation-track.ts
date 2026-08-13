@@ -19,12 +19,15 @@ import { html, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 
 
-const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = new Set<string>([
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
   "font-family", "min-font-size", "fade-font-size", "max-font-size",
-] satisfies (keyof NightingaleConservationTrack)[];
-const ATTRIBUTES_THAT_TRIGGER_DATA_RESET: string[] = ["letter-order"] satisfies (keyof NightingaleConservationTrack)[];
+] satisfies (keyof NightingaleConservationTrack)[]);
+
+const ATTRIBUTES_THAT_TRIGGER_DATA_RESET = new Set<string>([
+  "letter-order",
+] satisfies (keyof NightingaleConservationTrack)[]);
 
 /** Order of amino acids in a column (top-to-bottom) */
 const AMINO_ACID_ORDER = Array.from("HYAVLIMFWSTQNKRDEPCG"); // Old Protvista order: HYSTQNAVLIMFWDEPKRCG
@@ -157,10 +160,10 @@ export default class NightingaleConservationTrack extends withCanvas(
 
   override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.includes(name)) {
+    if (ATTRIBUTES_THAT_TRIGGER_DATA_RESET.has(name)) {
       // Calling `this.data` setter to recompute `this.positions` and run `this.createTrack()`
       this.data = this.data; // eslint-disable-line no-self-assign
-    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
+    } else if (ATTRIBUTES_THAT_TRIGGER_REFRESH.has(name)) {
       this.onDimensionsChange();
       this.createTrack();
     }

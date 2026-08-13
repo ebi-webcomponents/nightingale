@@ -42,7 +42,9 @@ export interface WithZoomInterface extends WithDimensionsInterface, withPosition
   zoomRefreshed(): void;
 }
 
-const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = new Set<string>([
+  "length", "width", "height",
+] satisfies (keyof WithZoomInterface)[]);
 
 
 const withZoom = <T extends Constructor<NightingaleBaseElement>>(
@@ -71,7 +73,7 @@ const withZoom = <T extends Constructor<NightingaleBaseElement>>(
       super.attributeChangedCallback(name, oldValue, newValue);
       const newV = newValue === "null" ? null : newValue;
       if (oldValue !== newV) {
-        if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
+        if (ATTRIBUTES_THAT_TRIGGER_REFRESH.has(name)) {
           this.adjustZoomConstraints();
           this.adjustZoom();
         }

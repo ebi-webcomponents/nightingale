@@ -21,12 +21,12 @@ import { property } from "lit/decorators.js";
 import { Downsampler } from "./downsampling";
 
 
-const ATTRIBUTES_THAT_TRIGGER_REFRESH: string[] = [
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = new Set<string>([
   "length", "width", "height",
   "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
   "y-min", "y-max", "show-axis", "zoomed-out-outline",
   "column-gap", "box-gap", "whisker-width", "outlier-jitter-width", "outlier-radius", "zoom-transition-range",
-] satisfies (keyof NightingaleBoxplotTrack)[];
+] satisfies (keyof NightingaleBoxplotTrack)[]);
 
 
 /** Line width for rectangle stroke, in CSS pixels */
@@ -177,7 +177,7 @@ export default class NightingaleBoxplotTrack extends withCanvas(
 
   override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name)) {
+    if (ATTRIBUTES_THAT_TRIGGER_REFRESH.has(name)) {
       this.onDimensionsChange();
       this.createTrack();
     }
