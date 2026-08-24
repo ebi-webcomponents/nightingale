@@ -61,6 +61,35 @@ describe("nightingale-logo-track tests", () => {
     });
   });
 
+  describe("N-heavy nucleotide alignment", () => {
+    // 2 of 20 non-gap characters are ambiguity code "N" (10%, over the 5%
+    // threshold): this must still be classified as RNA, not protein.
+    const sequences = [
+      { name: "seq1", sequence: "AAAAAAAAAAAAAAAAAANN" },
+      { name: "seq2", sequence: "AAAAAAAAAAAAAAAAAANN" },
+    ];
+
+    beforeEach(async () => {
+      document.documentElement.innerHTML =
+        '<nightingale-logo-track length="20" height="120"></nightingale-logo-track>';
+      rendered = document.querySelector("nightingale-logo-track");
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await rendered.updateComplete;
+      rendered.sequences = sequences;
+    });
+
+    test("it should keep nucleotide coloring for A despite N ambiguity codes", () => {
+      const texts = Array.from(document.querySelectorAll("text"));
+      // The 2 all-"N" columns have no counted alphabet member, so no letter
+      // is rendered there; only the 18 "A" columns produce a letter.
+      expect(texts.length).toBe(18);
+      expect(texts.every((t) => t.textContent === "A")).toBe(true);
+      // Nucleotide "A" is green (#00CC00); protein "A" would be orange
+      // (#FF8C00), so this fails if N pushes detection into protein mode.
+      expect(texts.every((t) => t.getAttribute("fill") === "#00CC00")).toBe(true);
+    });
+  });
+
   describe("protein alignment", () => {
     beforeEach(async () => {
       document.documentElement.innerHTML =

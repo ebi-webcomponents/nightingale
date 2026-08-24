@@ -30,7 +30,7 @@ const AMINO_ACID_COLORS: Record<string, string> = {
 const TRACKED_NUCLEOTIDES = ["A", "C", "G", "U"];
 const TRACKED_AMINO_ACIDS = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y"];
 /** Characters that appear in protein sequences but not in RNA/DNA */
-const AMINO_ACID_ONLY_CHARS = new Set(["D", "E", "F", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "V", "W", "Y"]);
+const AMINO_ACID_ONLY_CHARS = new Set(["D", "E", "F", "H", "I", "K", "L", "M", "P", "Q", "R", "S", "V", "W", "Y"]);
 
 /** Maximum information content for a 4-letter alphabet (log2(4) = 2 bits) */
 const LOG2_4 = 2;
