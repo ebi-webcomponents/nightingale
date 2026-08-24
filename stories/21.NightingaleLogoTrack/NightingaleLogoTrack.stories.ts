@@ -133,12 +133,8 @@ LogoOnlyTemplate.args = { ...DefaultArgs };
 LogoOnlyTemplate.argTypes = ArgumentTypes;
 LogoOnlyTemplate.play = async () => {
   await customElements.whenDefined("nightingale-logo-track");
-  document.querySelector("nightingale-manager")?.dispatchEvent(
-    new CustomEvent("change", {
-      bubbles: true,
-      detail: { handler: "property", type: "sequences", value: sampleSequences },
-    })
-  );
+  const logoTrack = document.querySelector("#logo-track");
+  if (logoTrack) (logoTrack as any).sequences = sampleSequences;
 };
 
 export const LogoOnly = LogoOnlyTemplate.bind({});
@@ -169,12 +165,8 @@ LogoWithMsa.args = { ...DefaultArgs };
 LogoWithMsa.argTypes = ArgumentTypes;
 LogoWithMsa.play = async () => {
   await customElements.whenDefined("nightingale-logo-track");
-  document.querySelector("nightingale-manager")?.dispatchEvent(
-    new CustomEvent("change", {
-      bubbles: true,
-      detail: { handler: "property", type: "sequences", value: sampleSequences },
-    })
-  );
+  const logoTrack = document.querySelector("#logo-track");
+  if (logoTrack) (logoTrack as any).sequences = sampleSequences;
   await customElements.whenDefined("nightingale-msa");
   for (const track of document.getElementsByTagName("nightingale-msa")) {
     (track as any).data = sampleSequences;
@@ -278,12 +270,8 @@ ProteinLogo.argTypes = ArgumentTypes;
 ProteinLogo.storyName = "Protein (amino acid) logo";
 ProteinLogo.play = async () => {
   await customElements.whenDefined("nightingale-logo-track");
-  document.querySelector("nightingale-manager")?.dispatchEvent(
-    new CustomEvent("change", {
-      bubbles: true,
-      detail: { handler: "property", type: "sequences", value: proteinSequences },
-    })
-  );
+  const logoTrack = document.querySelector("#logo-track");
+  if (logoTrack) (logoTrack as any).sequences = proteinSequences;
   await customElements.whenDefined("nightingale-msa");
   for (const track of document.getElementsByTagName("nightingale-msa")) {
     (track as any).data = proteinSequences;
