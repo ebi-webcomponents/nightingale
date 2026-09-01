@@ -3,7 +3,8 @@ import { html } from "lit-html";
 import { range } from "lodash-es";
 import "../../packages/nightingale-navigation/src/index";
 import "../../packages/nightingale-scrollbox/src/index";
-import { NightingaleScrollbox, NightingaleScrollboxItem } from "../../packages/nightingale-scrollbox/src/index";
+import type { NightingaleScrollbox, NightingaleScrollboxItem } from "../../packages/nightingale-scrollbox/src/index";
+import "../../packages/nightingale-track/src/index";
 
 
 export default {

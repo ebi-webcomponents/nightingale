@@ -86,7 +86,7 @@ export class NightingaleScrollboxItem<TData> extends NightingaleElement {
 
   private setContent(content: string | null | undefined) {
     if (content === undefined || content === null) return;
-    this.innerHTML = DOMPurify.sanitize(content);
+    this.innerHTML = DOMPurify.sanitize(content, { CUSTOM_ELEMENT_HANDLING: { tagNameCheck: /.*/, attributeNameCheck: /.*/, allowCustomizedBuiltInElements: true } });
   }
 
   /** Set or remove "onRegister" callback function. Also run this callback function if the item is already registered (i.e. in "new", "visible", or "hidden" state). */
