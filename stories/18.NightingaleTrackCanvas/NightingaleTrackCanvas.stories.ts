@@ -13,8 +13,8 @@ const DefaultArgs = {
   "highlight-event": "onmouseover", // "onmouseover"|"onclick"
   "highlight-color": "#EB3BFF22",
   "margin-color": "#ffffffdd", // "transparent"
-  "margin-left": "10",
-  "margin-right": "10",
+  "margin-left": 10,
+  "margin-right": 10,
   "layout": "non-overlapping", // "default"|"non-overlapping"
 };
 type Args = typeof DefaultArgs;

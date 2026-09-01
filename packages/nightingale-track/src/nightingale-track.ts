@@ -52,7 +52,10 @@ export type Feature = {
 };
 
 // TODO: height is not triggering a full redrawn when is changed after first render
-const ATTRIBUTES_THAT_TRIGGER_REFRESH = ["length", "width", "height"];
+const ATTRIBUTES_THAT_TRIGGER_REFRESH = new Set<string>([
+  "length", "width", "height",
+  "margin-top", "margin-bottom", "margin-left", "margin-right", "margin-color",
+] satisfies (keyof NightingaleTrack)[]);
 
 @customElementOnce("nightingale-track")
 class NightingaleTrack extends withManager(
@@ -173,10 +176,7 @@ class NightingaleTrack extends withManager(
     newValue: string | null
   ): void {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (
-      ATTRIBUTES_THAT_TRIGGER_REFRESH.includes(name) ||
-      name.startsWith("margin-")
-    ) {
+    if (ATTRIBUTES_THAT_TRIGGER_REFRESH.has(name)) {
       this.applyFilters();
       this.layoutObj = this.getLayout();
       this.createTrack();

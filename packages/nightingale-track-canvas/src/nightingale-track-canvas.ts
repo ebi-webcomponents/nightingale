@@ -14,6 +14,8 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
   /** Feature fragments, stored in a data structure for fast range queries */
   private fragmentCollection?: RangeCollection<ExtendedFragment>;
 
+  protected svgMargins?: Selection<SVGGElement, unknown, HTMLElement | SVGElement | null, unknown>;
+
   protected override createTrack() {
     if (this.svg) {
       this.svg.selectAll("g").remove();
@@ -26,12 +28,14 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
     if (this.svg) { // this check is necessary because `svg` setter does not always set
       this.bindEvents(this.svg);
       this.highlighted = this.svg.append("g").attr("class", "highlighted");
+      this.svgMargins = this.svg.append("g").attr("class", "margin");
     }
   }
 
   override refresh() {
     super.refresh();
     this.requestDraw();
+    this.updateMargins();
   }
 
   override render() {
@@ -135,18 +139,10 @@ export default class NightingaleTrackCanvas extends withCanvas(NightingaleTrack)
         }
       }
     }
+  }
 
-    // Draw margins
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = this["margin-color"];
-    const marginLeft = this["margin-left"] * scale;
-    const marginRight = this["margin-right"] * scale;
-    const marginTop = this["margin-top"] * scale;
-    const marginBottom = this["margin-bottom"] * scale;
-    ctx.fillRect(0, 0, marginLeft, canvasHeight);
-    ctx.fillRect(canvasWidth - marginRight, 0, marginRight, canvasHeight);
-    ctx.fillRect(marginLeft, 0, canvasWidth - marginLeft - marginRight, marginTop);
-    ctx.fillRect(marginLeft, canvasHeight - marginBottom, canvasWidth - marginLeft - marginRight, marginBottom);
+  protected updateMargins() {
+    this.renderMarginOnGroup(this.svgMargins);
   }
 
   private _unknownShapeWarningPrinted = new Set<Shapes>();

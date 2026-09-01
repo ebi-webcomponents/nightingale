@@ -1,6 +1,6 @@
-import NightingaleBaseElement from "../nightingale-base-element";
+import { BaseType, Selection } from "d3";
 import { WithHighlightInterface } from "../mixins/withHighlight";
-import { Selection, BaseType } from "d3";
+import NightingaleBaseElement from "../nightingale-base-element";
 
 export const HIGHLIGHT_EVENT = "highlight-event";
 
@@ -20,11 +20,42 @@ type SequenceBaseData = {
   position: number;
   aa: string;
 };
+type BoxplotData = {
+  type: "boxplot";
+  /** Position in the sequence */
+  position: number;
+  /** Data for the boxplot at this position from all datasets (one item for each dataset) */
+  data: Array<{
+    /** Common properties of the whole dataset */
+    dataset: {
+      name: string;
+      color: string;
+    };
+    /** Boxplot data at this position */
+    datum: {
+      /** Position in the sequence */
+      position: number;
+      /** All values of the independent variable at this position */
+      values: Float32Array;
+      median: number;
+      boxLow: number;
+      boxHigh: number;
+      whiskerLow: number;
+      whiskerHigh: number;
+      minimum: number;
+      maximum: number;
+      outliersLow: Float32Array;
+      outliersHigh: Float32Array;
+    } | undefined;
+  }>;
+  /** Index into `data`, indicates which dataset is being pointed at */
+  datasetIndex: number;
+};
 
-type detailInterface = {
+type EventDetail = {
   eventType: EventType;
   coords: null | [number, number];
-  feature?: FeatureData | SequenceBaseData | null;
+  feature?: FeatureData | SequenceBaseData | BoxplotData | null;
   target?: HTMLElement;
   highlight?: string;
   selectedId?: string | null;
@@ -33,7 +64,7 @@ type detailInterface = {
 
 export function createEvent(
   type: EventType,
-  feature: FeatureData | SequenceBaseData | null = null,
+  feature: FeatureData | SequenceBaseData | BoxplotData | null = null,
   withHighlight = false,
   withId = false,
   start?: number,
@@ -48,7 +79,7 @@ export function createEvent(
     feature = (feature as FeatureData)?.feature || feature;
   }
 
-  const detail: detailInterface = {
+  const detail: EventDetail = {
     eventType: type,
     feature,
     target,
