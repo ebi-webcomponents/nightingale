@@ -171,7 +171,7 @@ export const config = {
     tooltip:
       "Binding site for any chemical group (co-enzyme, prosthetic group, etc.)",
     shape: "rectangle",
-    color: "#catFace",
+    color: "#009999",
   },
   ACT_SITE: {
     name: "active site",
