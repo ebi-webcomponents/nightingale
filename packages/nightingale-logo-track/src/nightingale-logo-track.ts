@@ -1,4 +1,5 @@
 import NightingaleElement, {
+  bindEvents,
   customElementOnce,
   withSVGHighlight,
   withManager,
@@ -29,8 +30,12 @@ const AMINO_ACID_COLORS: Record<string, string> = {
 
 const TRACKED_NUCLEOTIDES = ["A", "C", "G", "U"];
 const TRACKED_AMINO_ACIDS = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y"];
-/** Characters that appear in protein sequences but not in RNA/DNA */
-const AMINO_ACID_ONLY_CHARS = new Set(["D", "E", "F", "H", "I", "K", "L", "M", "P", "Q", "R", "S", "V", "W", "Y"]);
+/**
+ * Characters that appear in protein sequences but never in RNA/DNA. IUPAC
+ * nucleotide ambiguity codes (B D H K M N R S V W Y) are deliberately excluded
+ * so ambiguous nucleotide alignments are not mistaken for protein.
+ */
+const AMINO_ACID_ONLY_CHARS = new Set(["E", "F", "I", "J", "L", "O", "P", "Q", "Z"]);
 
 /** Maximum information content for a 4-letter alphabet (log2(4) = 2 bits) */
 const LOG2_4 = 2;
@@ -71,7 +76,15 @@ export default class NightingaleLogoTrack extends withManager(
 ) {
   private _sequences: MsaSequence[] = [];
   private _seqType: SeqType = "rna";
+  /** Stacked letters per alignment column (0-based), computed once per `sequences` assignment. */
+  private _columns: LetterData[][] = [];
 
+  private _columnsGroup?: Selection<
+    SVGGElement,
+    unknown,
+    HTMLElement | SVGElement | null,
+    unknown
+  >;
   private _lettersGroup?: Selection<
     SVGGElement,
     unknown,
@@ -91,6 +104,11 @@ export default class NightingaleLogoTrack extends withManager(
   set sequences(value: MsaSequence[]) {
     this._sequences = value;
     this._seqType = this.detectSeqType(value);
+    let columnCount = 0;
+    for (const seq of value) columnCount = Math.max(columnCount, seq.sequence.length);
+    this._columns = Array.from({ length: columnCount }, (_, colIndex) =>
+      this.computeColumnData(colIndex),
+    );
     this.refresh();
   }
 
@@ -119,22 +137,27 @@ export default class NightingaleLogoTrack extends withManager(
       .attr("height", this.height);
 
     this.createHighlightGroup();
-    this._lettersGroup = this.svg.append("g").attr("class", "logo-letters");
+    // Transparent per-column hit areas emit hover/click (and highlight) events.
+    this._columnsGroup = this.svg.append("g").attr("class", "logo-columns");
+    this._lettersGroup = this.svg
+      .append("g")
+      .attr("class", "logo-letters")
+      .style("pointer-events", "none");
     this._margins = this.svg.append("g").attr("class", "margin");
   }
 
   refresh() {
+    this.svg?.attr("width", this.width).attr("height", this.height);
     this.renderLogo();
     this.updateHighlight();
     this.renderMarginOnGroup(this._margins);
   }
 
   /** Compute per-residue stacked heights for one alignment column. */
-  private computeColumnData(pos: number): LetterData[] {
+  private computeColumnData(colIndex: number): LetterData[] {
     const isProtein = this._seqType === "protein";
     const alphabet = isProtein ? TRACKED_AMINO_ACIDS : TRACKED_NUCLEOTIDES;
     const maxBits = isProtein ? LOG2_20 : LOG2_4;
-    const colIndex = pos - 1;
     const counts: Record<string, number> = {};
     for (const a of alphabet) counts[a] = 0;
     let total = 0;
@@ -189,8 +212,10 @@ export default class NightingaleLogoTrack extends withManager(
     if (trackHeight <= 0) return;
 
     const rawEnd = this["display-end"];
-    const start = Math.round(this["display-start"] ?? 1);
-    const end = Math.round(rawEnd && rawEnd !== -1 ? rawEnd : (this.length ?? start));
+    // Zooming produces fractional display ranges; floor/ceil so partially
+    // visible columns at either edge are still drawn.
+    const start = Math.max(1, Math.floor(this["display-start"] ?? 1));
+    const end = Math.ceil(rawEnd && rawEnd !== -1 ? rawEnd : (this.length ?? start));
     if (end < start) return;
 
     const colorMap = this._seqType === "protein" ? AMINO_ACID_COLORS : NUCLEOTIDE_COLORS;
@@ -198,8 +223,10 @@ export default class NightingaleLogoTrack extends withManager(
 
     // Pre-compute all letter positions so we can hand them to the d3 join in one pass.
     const allLetters: RenderedLetter[] = [];
+    const columns: { position: number }[] = [];
     for (let pos = start; pos <= end; pos++) {
-      const colData = this.computeColumnData(pos);
+      columns.push({ position: pos });
+      const colData = this._columns[pos - 1] ?? [];
       const centerX = this.getXFromSeqPosition(pos) + colWidth / 2;
       let stackY = marginTop + trackHeight;
 
@@ -221,6 +248,21 @@ export default class NightingaleLogoTrack extends withManager(
         });
       }
     }
+
+    this._columnsGroup
+      ?.selectAll<SVGRectElement, { position: number }>("rect.logo-column")
+      .data(columns, (d) => d.position)
+      .join((enter) =>
+        enter
+          .append("rect")
+          .attr("class", "logo-column")
+          .attr("fill", "transparent")
+          .call(bindEvents, this),
+      )
+      .attr("x", (d) => this.getXFromSeqPosition(d.position))
+      .attr("y", marginTop)
+      .attr("width", colWidth)
+      .attr("height", trackHeight);
 
     this._lettersGroup
       .selectAll<SVGTextElement, RenderedLetter>("text")

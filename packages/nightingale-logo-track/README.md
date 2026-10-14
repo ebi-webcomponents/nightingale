@@ -26,7 +26,7 @@ Colors follow the [WebLogo](https://weblogo.threeplusone.com) chemistry grouping
 | Positively charged | K R H | Blue `#0000CC` |
 | Negatively charged | D E | Red `#CC0000` |
 
-As `nightingale-logo-track` implements `withManager`, `withZoom`, and `withSVGHighlight`, it will respond to zoom, pan, and highlight events propagated by `nightingale-manager` and emit change events when the user interacts with it.
+As `nightingale-logo-track` implements `withManager`, `withZoom`, and `withSVGHighlight`, it will respond to zoom, pan, and highlight events propagated by `nightingale-manager` and emit change events when the user hovers over, clicks, zooms or pans it.
 
 ## Usage
 
@@ -100,7 +100,7 @@ Placing the track inside a `nightingale-manager` synchronises zoom, pan, and hig
 
 Gets or sets the multiple sequence alignment data. Each entry is an object with a `name` string and a `sequence` string containing single-letter residue codes. Gap characters (`-`, `.`) and unrecognised characters are ignored when computing information content.
 
-The sequence type is detected automatically when `sequences` is set: if more than 5 % of non-gap characters are amino-acid-specific letters (anything outside `A C G T U N`), the track switches to protein mode and applies the amino acid colour scheme and a 20-letter IC ceiling. Otherwise it operates in nucleotide mode and DNA thymine is treated as uracil.
+The sequence type is detected automatically when `sequences` is set: if more than 5 % of non-gap characters are letters that only occur in proteins (`E F I L P Q`, or the rare `J O Z`), the track switches to protein mode and applies the amino acid colour scheme and a 20-letter IC ceiling. Otherwise it operates in nucleotide mode and DNA thymine is treated as uracil.
 
 ```javascript
 // RNA / DNA
@@ -158,9 +158,9 @@ Fill colour for the margin overlay rectangles.
 
 #### `highlight-event?: "onmouseover" | "onclick"`
 
-Which pointer interaction triggers highlighting. Propagated to other components via `nightingale-manager`.
+Which pointer interaction on a column highlights it. The highlight is emitted in a `change` event and propagated to other components via `nightingale-manager`.
 
-#### `highlight-color?: string (default: "#EB3BFF22")`
+#### `highlight-color?: string (default: "#FFEB3B66")`
 
 Fill colour for highlighted regions.
 
