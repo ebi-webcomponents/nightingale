@@ -9,15 +9,30 @@ import "../../packages/nightingale-interpro-track/src/index.ts";
 import "../../packages/nightingale-saver/src/index.ts";
 import "../../packages/nightingale-overlay/src/index.ts";
 import "../../packages/nightingale-structure/src/index.ts";
+import "../../packages/nightingale-logo-track/src/index";
 
 import iproData from "../../packages/nightingale-interpro-track/tests/mockData/interpro-IPR016039.json";
 import contributors from "../../packages/nightingale-interpro-track/tests/mockData/interpro-contributors.json";
 import residues from "../../packages/nightingale-interpro-track/tests/mockData/interpro-residues.json";
 import linegraph from "../../packages/nightingale-linegraph-track/tests/mockData/line-graph-chart.json";
+import type { MsaSequence } from "../../packages/nightingale-logo-track/src/index";
 
 export default {
   title: "Components/Manager",
 } as Meta;
+
+const logoSequences: MsaSequence[] = [
+  { name: "seq01", sequence: "AAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGU" },
+  { name: "seq02", sequence: "AAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGU" },
+  { name: "seq03", sequence: "AAACCCGGGCUUAUGCAACCGGUAAACCCGGGCUUAUGCAACCGGUAAACCCGGGCUUAUGCAACCGGUAAACCCGGGCUUAUGCAACCGGU" },
+  { name: "seq04", sequence: "AAACUCGGGCUUAUGCAGCCGGUAAACUCGGGCUUAUGCAGCCGGUAAACUCGGGCUUAUGCAGCCGGUAAACUCGGGCUUAUGCAGCCGGU" },
+  { name: "seq05", sequence: "AAAGUUGGGCUUAUGCAACCGAUAAAGUUGGGCUUAUGCAACCGAUAAAGUUGGGCUUAUGCAACCGAUAAAGUUGGGCUUAUGCAACCGAU" },
+  { name: "seq06", sequence: "AAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGUAAAGUCGGGCUUAUGCAACCGGU" },
+  { name: "seq07", sequence: "AAAGUCGAGCUUAUGCAACCGGUAAAGUCGAGCUUAUGCAACCGGUAAAGUCGAGCUUAUGCAACCGGUAAAGUCGAGCUUAUGCAACCGGU" },
+  { name: "seq08", sequence: "AAACCCGGGCUUAUGCAACCGGUAAACCCGGGCUUAUGCAACCGGUAAACCCGGGCUUAUGCAACCGGUAAACCCGGGCUUAUGCAACCGGU" },
+  { name: "seq09", sequence: "AAACUCGGGCUUAUGCAGCCGGUAAACUCGGGCUUAUGCAGCCGGUAAACUCGGGCUUAUGCAGCCGGUAAACUCGGGCUUAUGCAGCCGGU" },
+  { name: "seq10", sequence: "AAAGUUGGGCUUAUGCAACCGAUAAAGUUGGGCUUAUGCAACCGAUAAAGUUGGGCUUAUGCAACCGAUAAAGUUGGGCUUAUGCAACCGAU" },
+];
 
 const defaultSequence =
   "MLPGLALLLLAAWTARALEVPTDGNAGLLAEPQIAMFCGRLNMHMNVQNGKWDSDPSGTKTCIDTKEGILQYCQEVYPELQITNVVEANQPVTIQNWCKRGRKQCKTHPHFVIPYRCLVGEFVSDALLVPDKCKFLHQERMDVCETHLHWHTVAKETCSEKSTNLHDYGMLLPCGIDKFRGVEFVCCPLAEESDNVDSADAEEDDSDVWWGGADTDYADGSEDKVVEVAEEEEVAEVEEEEADDDEDDEDGDEVEEEAEEPYEEATERTTSIATTTTTTTESVEEVVREVCSEQAETGPCRAMISRWYFDVTEGKCAPFFYGGCGGNRNNFDTEEYCMAVCGSAMSQSLLKTTQEPLARDPVKLPTTAASTPDAVDKYLETPGDENEHAHFQKAKERLEAKHRERMSQVMREWEEAERQAKNLPKADKKAVIQHFQEKVESLEQEAANERQQLVETHMARVEAMLNDRRRLALENYITALQAVPPRPRHVFNMLKKYVRAEQKDRQHTLKHFEHVRMVDPKKAAQIRSQVMTHLRVIYERMNQSLSLLYNVPAVAEEIQDEVDELLQKEQNYSDDVLANMISEPRISYGNDALMPSLTETKTTVELLPVNGEFSLDDLQPWHSFGADSVPANTENEVEPVDARPAADRGLTTRPGSGLTNIKTEEISEVKMDAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIATVIVITLVMLKKKQYTSIHHGVVEVDAAVTPEERHLSKMQQNGYENPTYKFFEQMQN";
@@ -219,6 +234,22 @@ const Template: Story<{
               use-ctrl-to-zoom
             ></nightingale-linegraph-track>
           </div>
+          <div style="line-height: 0">
+            <nightingale-logo-track
+              id="logo-track"
+              min-width="${args["min-width"]}"
+              height=${height}
+              length="${length}"
+              display-start="${args["display-start"]}"
+              display-end="${args["display-end"]}"
+              highlight-event="onmouseover"
+              highlight-color=${args["highlight-color"]}
+              margin-color=${args["margin-color"]}
+              margin-top="5"
+              margin-bottom="5"
+              use-ctrl-to-zoom
+            ></nightingale-logo-track>
+          </div>
           <nightingale-structure
             protein-accession="P05067"
             structure-id="1AAP"
@@ -284,6 +315,14 @@ AllTracks.play = async () => {
       (seqHeatmap as any).createRandomFromLength();
     }, 50);
   }
+
+  await customElements.whenDefined("nightingale-logo-track");
+  document.querySelector("nightingale-manager")?.dispatchEvent(
+    new CustomEvent("change", {
+      bubbles: true,
+      detail: { handler: "property", type: "sequences", value: logoSequences },
+    })
+  );
 };
 
 export const SequenceNoControls = () =>
