@@ -1,0 +1,28 @@
+packages:
+  - "packages/*"
+
+# Note: package.json deliberately has no `packageManager` field. Setting it
+# makes pnpm install itself into the workspace, which turns pnpm-lock.yaml into
+# a two-document YAML file that the nx bundled with lerna 8 cannot parse
+# ("Failed to parse pnpm lockfile"). CI pins the pnpm version through
+# pnpm/action-setup instead.
+
+# pnpm does not run dependency lifecycle scripts unless they are allowed here.
+# Only the packages that need a postinstall to fetch or link a native binary
+# are enabled; @scarf/scarf (telemetry) and es5-ext (a donation banner) are
+# explicitly denied so they stop being re-proposed on install.
+allowBuilds:
+  "@scarf/scarf": false
+  "@swc/core": true
+  es5-ext: false
+  esbuild: true
+  nx: true
+
+# molstar 3.44 (nightingale-structure) lists canvas and gl as optional
+# dependencies. Both are native modules with no prebuilt binaries for current
+# Node, so Yarn dropped them when their builds failed. pnpm would install them
+# unbuilt instead, and jsdom then crashes every test suite trying to load the
+# half-installed canvas. Skip them, which is what Yarn effectively did.
+ignoredOptionalDependencies:
+  - canvas
+  - gl

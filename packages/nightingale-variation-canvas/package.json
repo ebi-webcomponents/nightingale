@@ -34,8 +34,8 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.11.0",
-    "@nightingale-elements/nightingale-variation": "^5.11.1",
+    "@nightingale-elements/nightingale-new-core": "workspace:^",
+    "@nightingale-elements/nightingale-variation": "workspace:^",
     "d3": "7.9.0"
   }
 }

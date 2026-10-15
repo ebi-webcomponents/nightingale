@@ -10,7 +10,7 @@ const PACKAGE_PREFIX = "@nightingale-elements/";
 /*
  * Resolves bare imports of `@nightingale-elements/<name>` to that package's
  * source entry point in this monorepo, so `dev/` and `dev/benchmarks/` pages
- * can run without a `yarn build` step. The dev server compiles TypeScript on
+ * can run without a `pnpm build` step. The dev server compiles TypeScript on
  * the fly and serves source directly from each package's `src/index.ts`.
  */
 const nightingaleSrcResolver = {

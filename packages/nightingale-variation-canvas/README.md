@@ -41,7 +41,7 @@ Intentional differences versus `nightingale-variation`:
 A reproducible benchmark comparing SVG vs canvas across variant counts lives at `dev/benchmarks/variation-canvas.html`. Run it with:
 
 ```
-yarn benchmark:variation-canvas
+pnpm benchmark:variation-canvas
 ```
 
 That starts the dev server and opens the page in your browser. Click **Run benchmark** to start the sweep. No build step is required — the dev server compiles TypeScript on the fly and serves directly from `packages/*/src`.
