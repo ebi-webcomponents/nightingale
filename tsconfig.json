@@ -6,7 +6,9 @@
     "noEmitOnError": true,
     "declaration": true,
     "declarationMap": true,
-    "lib": ["es2019", "dom"],
+    // dom.iterable is required: the source iterates NodeLists (e.g. the canvas
+    // collection in nightingale-saver) with for...of.
+    "lib": ["es2019", "dom", "dom.iterable"],
     "strict": true,
     "noImplicitOverride": true,
     "esModuleInterop": false,
