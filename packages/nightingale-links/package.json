@@ -3,7 +3,8 @@
   "version": "5.11.1",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

@@ -4,7 +4,8 @@
   "description": "Sequence component for the Nightingale tool",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

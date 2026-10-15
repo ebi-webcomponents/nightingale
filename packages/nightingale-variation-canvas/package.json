@@ -4,7 +4,8 @@
   "description": "Variation track type of the viewer, implemented via HTML canvas.",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",
