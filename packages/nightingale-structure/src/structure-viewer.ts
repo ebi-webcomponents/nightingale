@@ -1,260 +1,266 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import "molstar/lib/mol-util/polyfill";
-import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
-import { PluginContext } from "molstar/lib/mol-plugin/context";
+// Import the plugin class from `lib/viewer` (not `lib`): the `lib` entrypoint
+// additionally imports an SCSS stylesheet as a side effect, which the bundler
+// can't handle and which we don't want (the CSS is injected separately).
+import { PDBeMolstarPlugin } from "pdbe-molstar/lib/viewer";
+import { SIFTSMapping } from "pdbe-molstar/lib/sifts-mapping";
+import type { InitParams } from "pdbe-molstar/lib/spec";
+import type { QueryParam } from "pdbe-molstar/lib/helpers";
+import type { EventDetail } from "pdbe-molstar/lib/loci-details";
+import { MAQualityAssessment } from "molstar/lib/extensions/model-archive/quality-assessment/behavior";
+import { PluginBehavior } from "molstar/lib/mol-plugin/behavior/behavior";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
+import type { PluginContext } from "molstar/lib/mol-plugin/context";
+import type { ColorTheme } from "molstar/lib/mol-theme/color";
+
 import {
-  StructureElement,
-  StructureProperties,
-  StructureSelection,
-} from "molstar/lib/mol-model/structure";
-import { PluginLayoutControlsDisplay } from "molstar/lib/mol-plugin/layout";
-import { Script } from "molstar/lib/mol-script/script";
-import { PluginCommands } from "molstar/lib/mol-plugin/commands";
-import { Color } from "molstar/lib/mol-util/color";
-import { ChainIdColorThemeProvider } from "molstar/lib/mol-theme/color/chain-id";
+  ALPHAMISSENSE_THEME,
+  AlphaMissenseScores,
+  registerAlphaMissenseTheme,
+} from "./alphamissense";
 
-import AfConfidenceScore from "./af-confidence/behavior";
-import AlphaMissenseColorTheme from "./AlphaMissenseColorTheme";
-import { AfConfidenceColorThemeProvider } from "./af-confidence/color";
+export type { QueryParam } from "pdbe-molstar/lib/helpers";
 
-const viewerOptions = {
-  layoutIsExpanded: false,
-  layoutShowControls: false,
-  layoutShowRemoteState: false,
-  layoutControlsDisplay: "reactive" as PluginLayoutControlsDisplay,
-  layoutShowSequence: false,
-  layoutShowLog: false,
-  layoutShowLeftPanel: false,
-  disableAntialiasing: false,
-  pixelScale: 1,
-  enableWboit: false,
-  viewportShowExpand: true,
-  viewportShowSelectionMode: false,
-  viewportShowAnimation: false,
-  pdbProvider: "pdbe",
-  viewportShowControls: PluginConfig.Viewport.ShowControls.defaultValue,
-  viewportShowSettings: PluginConfig.Viewport.ShowSettings.defaultValue,
+/** Payload carried on the `PDB.molstar.click` DOM event (`event.eventData`). */
+export type StructureClickEvent = EventDetail;
+
+export type LoadSource =
+  | { kind: "pdb"; id: string }
+  | { kind: "url"; url: string; format?: string; binary?: boolean };
+
+/**
+ * How AlphaFold models are coloured: by pLDDT confidence, as pdbe-molstar
+ * colours them when they load, or by mean AlphaMissense pathogenicity.
+ */
+export type StructureColorTheme =
+  | { name: "plddt-confidence" }
+  | { name: "alphamissense"; scores: AlphaMissenseScores };
+
+export type StructureViewerOptions = {
+  alphafold?: boolean;
+  highlightColor?: string;
 };
-
-const defaultSpec = DefaultPluginSpec(); // TODO: Make our own to select only essential plugins
-const spec: PluginSpec = {
-  actions: defaultSpec.actions,
-  behaviors: [
-    ...defaultSpec.behaviors,
-    PluginSpec.Behavior(AfConfidenceScore, {
-      autoAttach: true,
-      showTooltip: true,
-    }),
-  ],
-  layout: {
-    initial: {
-      isExpanded: viewerOptions.layoutIsExpanded,
-      showControls: viewerOptions.layoutShowControls,
-      controlsDisplay: viewerOptions.layoutControlsDisplay,
-    },
-  },
-  config: [
-    [
-      PluginConfig.General.DisableAntialiasing,
-      viewerOptions.disableAntialiasing,
-    ],
-    [PluginConfig.General.PixelScale, viewerOptions.pixelScale],
-    [PluginConfig.General.EnableWboit, viewerOptions.enableWboit],
-    [PluginConfig.Viewport.ShowExpand, viewerOptions.viewportShowExpand],
-    [
-      PluginConfig.Viewport.ShowSelectionMode,
-      viewerOptions.viewportShowSelectionMode,
-    ],
-    [PluginConfig.Download.DefaultPdbProvider, viewerOptions.pdbProvider],
-    [
-      PluginConfig.Structure.DefaultRepresentationPresetParams,
-      {
-        theme: {
-          globalName: "af-confidence",
-          carbonByChainId: false,
-          focus: {
-            name: "element-symbol",
-            params: { carbonByChainId: false },
-          },
-        },
-      },
-    ],
-  ],
-};
-
-type SequencePosition = { chain: string; position: number };
-type Range = { chain: string; start: number; end: number };
 
 export type StructureViewer = {
-  plugin: PluginContext;
-  loadPdb(pdb: string): Promise<void>;
-  loadFromUrl(url: string, isBinary?: boolean): Promise<void>;
-  highlight(ranges: Range[]): void;
-  clearHighlight(): void;
-  changeHighlightColor(color: number): void;
+  instance: PDBeMolstarPlugin;
+  load(source: LoadSource, options: StructureViewerOptions): Promise<void>;
+  /** Remove the loaded structure, leaving an empty viewer. */
+  clear(): Promise<void>;
+  /** Select `params`, moving the camera to them unless `focus` is false. */
+  highlight(
+    params: QueryParam[],
+    color?: string,
+    focus?: boolean,
+  ): Promise<void>;
+  clearHighlight(): Promise<void>;
+  /**
+   * Whether the loaded structure maps its residues to UniProt (SIFTS), as
+   * pdbe-molstar's `uniprot_*` query params and the click payload's
+   * `unp_accession`/`unp_seq_id` need. Only files with the
+   * `atom_site.pdbx_sifts_xref_db_*` columns have it: PDBe's BinaryCIF
+   * (`<id>.bcif`), which a PDB id loads, but not archive files or models
+   * loaded by URL.
+   */
+  hasSiftsMapping(): boolean;
+  setHighlightColor(color: string): Promise<void>;
+  /**
+   * Colour the loaded structure by `theme`. Loading a structure resets it to
+   * pdbe-molstar's default for it.
+   */
+  setColorTheme(theme: StructureColorTheme): Promise<void>;
   handleResize(): void;
-  applyColorTheme(colorTheme?: string): void;
+  dispose(): void;
+};
+
+// pdbe-molstar colors have no alpha channel; strip a leading "#" and any trailing
+// alpha so an 8-digit hex like "#FFEB3B66" becomes "#FFEB3B".
+const toMolstarColor = (color?: string): string | undefined =>
+  color ? `#${color.replace(/^#/, "").substring(0, 6)}` : undefined;
+
+const buildInitParams = (
+  source: LoadSource | undefined,
+  options: StructureViewerOptions,
+): Partial<InitParams> => {
+  const color = toMolstarColor(options.highlightColor);
+  const base: Partial<InitParams> = {
+    bgColor: { r: 0xee, g: 0xee, b: 0xee },
+    hideControls: true,
+    sequencePanel: false,
+    landscape: false,
+    pdbeLink: false,
+    // Not needed for the PDB.molstar.click DOM event: `render()` always emits it
+    // on the container. This flag only adds document listeners for other PDB
+    // components' events, which pdbe-molstar never removes, so they would keep
+    // every disposed viewer alive and reacting to page-wide events.
+    subscribeEvents: false,
+    selectInteraction: false, // we drive highlighting ourselves
+    hideCanvasControls: [
+      "animation",
+      "selection",
+      "controlToggle",
+      "controlInfo",
+    ],
+    alphafoldView: !!options.alphafold,
+    ...(color ? { highlightColor: color, selectColor: color } : {}),
+  };
+  if (!source) return base;
+  if (source.kind === "pdb") {
+    return { ...base, moleculeId: source.id.toLowerCase() };
+  }
+  return {
+    ...base,
+    customData: {
+      url: source.url,
+      format: source.format ?? "cif",
+      binary: source.binary ?? false,
+    },
+  };
+};
+
+/**
+ * Colour the structures `plugin` loads next by pLDDT confidence, as
+ * pdbe-molstar colours AlphaFold models (`alphafoldView`), or not. pdbe-molstar
+ * sets this up only in `render()`, for the structure the viewer is created
+ * for, but a viewer goes on to load AlphaFold models and other structures in
+ * turn.
+ */
+const setAlphaFoldView = async (
+  plugin: PluginContext,
+  alphafold: boolean,
+): Promise<void> => {
+  // Registers the pLDDT colour theme and hover label.
+  if (alphafold && !plugin.state.behaviors.cells.has(MAQualityAssessment.id)) {
+    const tree = plugin.state.behaviors
+      .build()
+      .to(PluginBehavior.getCategoryId(MAQualityAssessment))
+      .apply(
+        MAQualityAssessment,
+        { autoAttach: true, showTooltip: true },
+        { ref: MAQualityAssessment.id },
+      );
+    await plugin.runTask(plugin.state.behaviors.updateTree(tree));
+  }
+  // The preset pdbe-molstar loads every structure with.
+  const preset = PluginConfig.Structure.DefaultRepresentationPresetParams;
+  const params = plugin.config.get(preset) ?? {};
+  plugin.config.set(preset, {
+    ...params,
+    theme: {
+      ...params.theme,
+      // Not one of molstar's built-in themes.
+      globalName: alphafold
+        ? ("plddt-confidence" as ColorTheme.BuiltIn)
+        : undefined,
+    },
+  });
 };
 
 export const getStructureViewer = async (
-  container: HTMLDivElement,
-  onHighlightClick: (sequencePositions: SequencePosition[]) => void,
-  colorTheme?: string
+  parent: HTMLElement,
+  onClick: (event: StructureClickEvent) => void,
+  source: LoadSource,
+  options: StructureViewerOptions,
 ): Promise<StructureViewer> => {
-  const plugin = new PluginContext(spec);
-  await plugin.init();
+  const instance = new PDBeMolstarPlugin();
+  /** The scores the AlphaMissense theme colours by. */
+  let alphaMissenseScores: AlphaMissenseScores = new Map();
 
-  const canvas = container.querySelector<HTMLCanvasElement>("canvas");
+  // pdbe-molstar's `render()` mounts its React UI with `createRoot(target)` and
+  // never unmounts it, so each viewer gets a fresh target element, removed on
+  // dispose: a later viewer must not create a second root on the same node.
+  const container = document.createElement("div");
+  container.style.position = "absolute";
+  container.style.inset = "0";
+  parent.appendChild(container);
 
-  if (!canvas || !plugin.initViewer(canvas, container)) {
-    throw new Error("Failed to init Mol*");
+  // Render an empty viewer, then load the structure through `visual.update`.
+  // Given a structure, `render()` starts loading it without awaiting or catching
+  // the load, so a failed first load would be an unhandled rejection inside
+  // pdbe-molstar; `visual.update` resolves once the structure (and its SIFTS
+  // mapping) is loaded, rejects when the load fails, and resolves `false` for
+  // invalid params.
+  try {
+    await instance.render(container, buildInitParams(undefined, options));
+    registerAlphaMissenseTheme(instance.plugin, () => alphaMissenseScores);
+    if (
+      !(await instance.visual.update(buildInitParams(source, options), true))
+    ) {
+      throw new Error("Invalid structure parameters");
+    }
+  } catch (error) {
+    container.remove();
+    instance.plugin?.dispose();
+    throw error;
   }
 
-  if (AlphaMissenseColorTheme.colorThemeProvider)
-    plugin.representation.structure.themes.colorThemeRegistry.add(
-      AlphaMissenseColorTheme.colorThemeProvider
-    );
-  if (AlphaMissenseColorTheme.labelProvider)
-    plugin.managers.lociLabels.addProvider(
-      AlphaMissenseColorTheme.labelProvider
-    );
-  plugin.customModelProperties.register(
-    AlphaMissenseColorTheme.propertyProvider,
-    true
-  );
+  // The residue payload is on `event.eventData`, not `event.detail`.
+  const onContainerClick = (event: Event) => {
+    const data = (event as unknown as { eventData?: StructureClickEvent })
+      .eventData;
+    if (data) onClick(data);
+  };
+  container.addEventListener("PDB.molstar.click", onContainerClick);
 
-  // const data = await plugin.builders.data.download({ url: '...' }, { state: { isGhost: true } });
-  // const trajectory = await plugin.builders.structure.parseTrajectory(data, format);
-  // await plugin.builders.structure.hierarchy.applyPreset(trajectory, "default");
-
-  plugin.behaviors.interaction.click.subscribe((event) => {
-    if (StructureElement.Loci.is(event.current.loci)) {
-      const loc = StructureElement.Location.create();
-      StructureElement.Loci.getFirstLocation(event.current.loci, loc);
-      // auth_seq_id  : UniProt coordinate space
-      // label_seq_id : PDB coordinate space
-      const sequencePosition = StructureProperties.residue.label_seq_id(loc);
-      const chain = StructureProperties.chain.auth_asym_id(loc);
-      onHighlightClick([{ position: sequencePosition, chain: chain }]);
-    }
-  });
-
-  PluginCommands.Canvas3D.SetSettings(plugin, {
-    settings: ({ renderer, marking }) => {
-      renderer.backgroundColor = Color(0xeeeeee);
-      // For highlight
-      marking.edgeScale = 1.5;
-      renderer.selectStrength = 0;
-      // For hover
-      renderer.highlightStrength = 1;
-    },
-  });
-
-  const structureViewer: StructureViewer = {
-    plugin,
-    async loadPdb(pdb) {
-      await this.loadFromUrl(
-        `https://www.ebi.ac.uk/pdbe/model-server/v1/${pdb.toLowerCase()}/full?encoding=bcif`,
-        true
+  return {
+    instance,
+    async load(nextSource, nextOptions) {
+      await setAlphaFoldView(instance.plugin, !!nextOptions.alphafold);
+      await instance.visual.update(
+        buildInitParams(nextSource, nextOptions),
+        true,
       );
     },
-    async loadFromUrl(url, isBinary = false): Promise<void> {
-      const data = await plugin.builders.data.download(
-        { url, isBinary },
-        { state: { isGhost: true } }
-      );
-
-      const trajectory = await plugin.builders.structure.parseTrajectory(
-        data,
-        url.endsWith(".pdb") ? "pdb" : "mmcif"
-      );
-
-      await plugin.builders.structure.hierarchy.applyPreset(
-        trajectory,
-        "all-models",
-        { useDefaultIfSingleModel: true }
-      );
-      this.applyColorTheme(colorTheme);
+    async clear() {
+      await instance.clear();
     },
-
-    applyColorTheme(colorTheme) {
-      let colouringTheme: string;
-      if (colorTheme === "alphamissense") {
-        colouringTheme =
-          AlphaMissenseColorTheme.propertyProvider.descriptor.name;
-      } else {
-        colouringTheme = AfConfidenceColorThemeProvider.name;
+    async highlight(params, color, focus = true) {
+      // Use `select` (persistent overpaint) rather than `highlight` (which is a
+      // transient hover marking that clears on mouse-move), so the highlighted
+      // residues stay visible. This matches the original component, which used
+      // Mol*'s persistent selection.
+      await instance.visual.clearSelection();
+      if (params.length) {
+        const c = toMolstarColor(color);
+        await instance.visual.select({
+          data: params.map((p) => ({ ...p, color: c, focus })),
+        });
       }
-
-      // apply colouring
-      plugin?.dataTransaction(async () => {
-        for (const s of plugin?.managers.structure.hierarchy.current
-          .structures || []) {
-          await plugin?.managers.structure.component.updateRepresentationsTheme(
-            s.components,
-            {
-              color: colouringTheme as typeof ChainIdColorThemeProvider.name,
-            }
-          );
-        }
-      });
     },
-
-    highlight(ranges) {
-      // What nightingale calls "highlight", mol* calls "select"
-      // The query in this method is over label_seq_id so the provided start & end
-      // coordinates must be in PDB space
-      const data =
-        plugin.managers.structure.hierarchy.current.structures[0]?.cell.obj
-          ?.data;
-      if (!data) {
-        return;
+    async clearHighlight() {
+      await instance.visual.clearSelection();
+      await instance.visual.reset({ camera: true });
+    },
+    hasSiftsMapping() {
+      // The model pdbe-molstar's UniProt queries read the mapping from.
+      const model = instance.getStructure(-1)?.cell.obj?.data.models[0];
+      return !!model && SIFTSMapping.isAvailable(model);
+    },
+    async setHighlightColor(color) {
+      const c = toMolstarColor(color);
+      await instance.visual.setColor({ highlight: c, select: c });
+    },
+    async setColorTheme(theme) {
+      let color = "plddt-confidence";
+      if (theme.name === "alphamissense") {
+        alphaMissenseScores = theme.scores;
+        color = ALPHAMISSENSE_THEME;
       }
-      const sel = Script.getStructureSelection(
-        (Q) =>
-          Q.struct.generator.atomGroups({
-            "residue-test": Q.core.logic.or(
-              ranges.map(({ start, end, chain }) =>
-                Q.core.logic.and([
-                  Q.core.rel.inRange([
-                    Q.struct.atomProperty.macromolecular.label_seq_id(),
-                    start,
-                    end,
-                  ]),
-                  Q.core.rel.eq([
-                    Q.struct.atomProperty.macromolecular.auth_asym_id(),
-                    chain,
-                  ]),
-                ])
-              )
-            ),
-          }),
-        data
-      );
-      const loci = StructureSelection.toLociWithSourceUnits(sel);
-      plugin.managers.camera.focusLoci(loci);
-      plugin.managers.interactivity.lociSelects.selectOnly({ loci });
-    },
-    clearHighlight() {
-      plugin.managers.interactivity.lociSelects.deselectAll();
-      PluginCommands.Camera.Reset(plugin, {});
-    },
-    changeHighlightColor(color: number) {
-      PluginCommands.Canvas3D.SetSettings(plugin, {
-        settings: ({ renderer, marking }) => {
-          // For highlight
-          marking.selectEdgeColor = Color(color);
-          // For hover
-          marking.highlightEdgeColor = Color(color);
-          renderer.highlightColor = Color(color);
-        },
-      });
+      const { managers } = instance.plugin;
+      for (const structure of managers.structure.hierarchy.current.structures) {
+        // eslint-disable-next-line no-await-in-loop
+        await managers.structure.component.updateRepresentationsTheme(
+          structure.components,
+          // Not one of molstar's built-in themes.
+          { color: color as ColorTheme.BuiltIn },
+        );
+      }
     },
     handleResize() {
-      plugin.layout.events.updated.next(null);
+      instance.plugin.handleResize();
+    },
+    dispose() {
+      container.removeEventListener("PDB.molstar.click", onContainerClick);
+      instance.plugin.dispose();
+      container.remove();
     },
   };
-
-  return structureViewer;
 };

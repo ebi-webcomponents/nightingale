@@ -30,6 +30,18 @@ module.exports = {
   // transform above only transpiles.
   transformIgnorePatterns: [],
 
+  moduleNameMapper: {
+    // nightingale-structure's dependency is the whole of molstar behind a WebGL
+    // canvas; neither survives jsdom, so its tests run against stand-ins.
+    "^pdbe-molstar/build/.*\\.css$":
+      "<rootDir>/packages/nightingale-structure/tests/stubs/pdbe-molstar-css.js",
+    "^pdbe-molstar/lib/viewer$":
+      "<rootDir>/packages/nightingale-structure/tests/stubs/pdbe-molstar-viewer.js",
+    "^pdbe-molstar/lib/sifts-mapping$":
+      "<rootDir>/packages/nightingale-structure/tests/stubs/pdbe-molstar-sifts-mapping.js",
+    "^molstar/lib/extensions/model-archive/quality-assessment/behavior$":
+      "<rootDir>/packages/nightingale-structure/tests/stubs/molstar-ma-quality-assessment.js",
+  },
   setupFiles: ["jest-canvas-mock"],
   setupFilesAfterEnv: ["./setupJest.js"],
 };

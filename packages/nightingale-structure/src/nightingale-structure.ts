@@ -9,47 +9,22 @@ import NightingaleElement, {
   customElementOnce,
 } from "@nightingale-elements/nightingale-new-core";
 
-import { getStructureViewer, StructureViewer } from "./structure-viewer";
-import translatePositions, {
-  PositionMappingError,
-  Mapping,
-  TranslatedPosition,
-} from "./position-mapping";
+// pdbe-molstar's stylesheet is imported as a string (see the package-local
+// rollup config) and injected once as a global stylesheet so the viewer's
+// canvas/viewport size correctly. nightingale renders into the light DOM.
+import pdbeMolstarStyles from "pdbe-molstar/build/pdbe-molstar.css";
 
-/*
-  TODO:
-  [ ] Molstar/Mol* data fetching optimizations - create query to fetch only what is needed from model server, caching https://www.ebi.ac.uk/panda/jira/browse/TRM-26073
-  [ ] Molstar/Mol* bundle optimizations - only load the plugins that are absolutely needed https://www.ebi.ac.uk/panda/jira/browse/TRM-26074
-  [ ] Change highlight color in Mol* https://www.ebi.ac.uk/panda/jira/browse/TRM-26075
-*/
+import {
+  getStructureViewer,
+  StructureViewer,
+  StructureClickEvent,
+  LoadSource,
+  StructureViewerOptions,
+  QueryParam,
+} from "./structure-viewer";
+import { AlphaMissenseScores, parseAlphaMissense } from "./alphamissense";
 
-export type StructureData = {
-  dbReferences: {
-    type: "PDB" | string;
-    id: string;
-    properties: {
-      method: string;
-      chains: string;
-      resolution: string;
-    };
-  }[];
-};
-
-export type PDBData = Record<
-  string,
-  {
-    UniProt: Record<
-      string,
-      {
-        identifier: string;
-        name: string;
-        mappings: Mapping[];
-      }
-    >;
-  }
->;
-
-export type AlphaFoldPayload = Array<{
+export type AlphaFoldPrediction = {
   modelEntityId: string;
   toolUsed?: string;
   providerId?: string;
@@ -90,11 +65,74 @@ export type AlphaFoldPayload = Array<{
   isComplex?: boolean;
   assemblyType?: string;
   oligomericState?: string;
-}>;
-
-const uniProtMappingUrl = "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/";
+};
+export type AlphaFoldPayload = AlphaFoldPrediction[];
 
 const alphaFoldMappingUrl = "https://alphafold.ebi.ac.uk/api/prediction/";
+
+/**
+ * A structure to load. For an AlphaFold model, also the URL of its
+ * AlphaMissense file, if it has one.
+ */
+type ResolvedSource = LoadSource & { alphaMissenseUrl?: string };
+
+/** Attributes that determine which structure is loaded. */
+const SOURCE_ATTRIBUTES = [
+  "structure-id",
+  "model-url",
+  "protein-accession",
+  "custom-download-url",
+] as const;
+
+const PDBE_MOLSTAR_STYLE_ID = "nightingale-pdbe-molstar-styles";
+
+/** Inject pdbe-molstar's stylesheet once into the document head. */
+function ensurePdbeMolstarStyles(): void {
+  if (typeof document === "undefined") return;
+  if (document.getElementById(PDBE_MOLSTAR_STYLE_ID)) return;
+  const style = document.createElement("style");
+  style.id = PDBE_MOLSTAR_STYLE_ID;
+  style.textContent = pdbeMolstarStyles;
+  document.head.appendChild(style);
+}
+
+/** Infer pdbe-molstar's `customData` format/binary flags from a file URL. */
+function inferFormat(url: string): { format: string; binary: boolean } {
+  const path = url.toLowerCase().split("?")[0];
+  if (path.endsWith(".bcif")) return { format: "cif", binary: true };
+  if (path.endsWith(".pdb") || path.endsWith(".ent"))
+    return { format: "pdb", binary: false };
+  return { format: "cif", binary: false };
+}
+
+/**
+ * Load an AlphaFold model from its BinaryCIF file, which is smaller and
+ * faster to parse than its mmCIF file, or from the mmCIF file if it has none.
+ */
+function alphaFoldModelSource(
+  prediction: AlphaFoldPrediction,
+): ResolvedSource | undefined {
+  const alphaMissenseUrl = prediction.amAnnotationsUrl;
+  if (prediction.bcifUrl) {
+    return {
+      kind: "url",
+      url: prediction.bcifUrl,
+      format: "cif",
+      binary: true,
+      alphaMissenseUrl,
+    };
+  }
+  if (prediction.cifUrl) {
+    return {
+      kind: "url",
+      url: prediction.cifUrl,
+      format: "cif",
+      binary: false,
+      alphaMissenseUrl,
+    };
+  }
+  return undefined;
+}
 
 @customElementOnce("nightingale-structure")
 class NightingaleStructure extends withManager(
@@ -112,22 +150,53 @@ class NightingaleStructure extends withManager(
   @property({ type: String })
   "model-url"?: string;
 
+  /**
+   * How AlphaFold models are coloured: by pLDDT confidence ("alphafold", the
+   * default) or by AlphaMissense pathogenicity ("alphamissense").
+   */
   @property({ type: String })
   "color-theme"?: string;
 
   @state()
-  selectedMolecule?: {
-    id: string;
-    mappings?: Mapping[];
-  };
-
-  @state()
-  message?: { title: string; content: string } | null = {
-    title: "title",
-    content: "message",
-  };
+  message?: { title: string; content: string } | null = null;
 
   #structureViewer?: StructureViewer;
+
+  /** True while #initViewer is creating the viewer. */
+  #initializing = false;
+
+  /**
+   * Bumped by every init or reload, and by disconnecting: only the latest
+   * one may update the viewer, the messages or the selection.
+   */
+  #generation = 0;
+
+  /**
+   * True once the viewer shows the structure the attributes ask for. False
+   * while a reload is in flight and after one failed, when the viewer shows
+   * a previous structure or none: highlights and clicks would be numbered
+   * for the wrong structure, and pdbe-molstar's selection can fail mid-load.
+   */
+  #structureLoaded = false;
+
+  /**
+   * The viewer's load in flight, if any (settled; never rejects). Reloads
+   * run one at a time: pdbe-molstar loads started close together can both
+   * finish, leaving both structures displayed.
+   */
+  #pendingLoad?: Promise<void>;
+
+  /** The #sourceKey of the latest init or reload. */
+  #requestedSourceKey?: string;
+
+  /** The AlphaMissense file of the AlphaFold model loaded, if it has one. */
+  #alphaMissenseUrl?: string;
+
+  /** AlphaMissense files by URL, each fetched at most once. */
+  #alphaMissenseScores = new Map<string, Promise<AlphaMissenseScores>>();
+
+  /** The message reporting that AlphaMissense colouring failed, if shown. */
+  #colorThemeError?: { title: string; content: string };
 
   constructor() {
     super();
@@ -136,17 +205,6 @@ class NightingaleStructure extends withManager(
 
   protected override render() {
     return html`<style>
-        /* nightingale-structure h4 {
-          display: inline;
-          margin-right: 1em;
-        } */
-
-        /* @property --custom-structure-height {
-          syntax: "<length-percentage>";
-          inherits: false;
-          initial-value: 480px;
-        } */
-
         nightingale-structure {
           width: 100%;
         }
@@ -156,6 +214,11 @@ class NightingaleStructure extends withManager(
           height: var(--custom-structure-height, 480px);
         }
 
+        .structure-viewer-canvas {
+          position: absolute;
+          inset: 0;
+        }
+
         .structure-viewer-messages {
           opacity: 0.75;
           position: absolute;
@@ -163,6 +226,7 @@ class NightingaleStructure extends withManager(
           bottom: 0;
           border: 1px solid gray;
           padding: 1ch;
+          z-index: 1;
         }
 
         .structure-viewer-messages > *:first-child {
@@ -186,12 +250,12 @@ class NightingaleStructure extends withManager(
           padding: 0px 3px;
         }
       </style>
-      <div id="molstar-parent" class="structure-viewer-container">
-        <canvas
-          id="molstar-canvas"
-          style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"
-        ></canvas>
-        ${this.message && this["structure-id"]
+      <div class="structure-viewer-container">
+        <!-- pdbe-molstar owns this node's DOM; it must contain NO Lit dynamic
+             parts, or molstar's DOM manipulation ejects Lit's markers and breaks
+             subsequent re-renders. The message overlay is a sibling, not a child. -->
+        <div id="molstar-parent" class="structure-viewer-canvas"></div>
+        ${this.message && this.#label()
           ? html`<div class="structure-viewer-messages">
               <span>${this.message?.title}</span>:
               <span
@@ -211,141 +275,348 @@ class NightingaleStructure extends withManager(
   }
 
   protected override firstUpdated() {
-    const structureViewerDiv =
-      this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
-    if (structureViewerDiv) {
-      getStructureViewer(
-        structureViewerDiv,
-        this.updateHighlight,
-        this["color-theme"],
-      ).then((structureViewer) => {
-        this.#structureViewer = structureViewer;
-        // Remove initial "#" and possible trailing opacity value
-        const color = this["highlight-color"].substring(1, 7);
-        this.#structureViewer.changeHighlightColor(parseInt(color, 16));
-        this.selectMolecule();
-      });
-    }
+    ensurePdbeMolstarStyles();
   }
 
   protected override updated(
     changedProperties: Map<PropertyKey, unknown>,
   ): void {
-    if (
-      changedProperties.has("structure-id") ||
-      changedProperties.has("model-url")
-    ) {
-      this.selectMolecule();
+    const sourceChanged = SOURCE_ATTRIBUTES.some((name) =>
+      changedProperties.has(name),
+    );
+    if (!this.#structureViewer) {
+      // Create the viewer as soon as the attributes give a source. Changes made
+      // while an init is in flight are picked up when it completes.
+      if (sourceChanged) this.#initViewer();
+      return;
     }
-    if (
-      changedProperties.has("highlight") ||
-      changedProperties.has("selectedMolecule")
-    ) {
-      this.highlightChain();
-    }
-    if (changedProperties.has("highlight-color")) {
-      // Remove initial "#" and possible trailing opacity value
-      const color = this["highlight-color"].substring(1, 7);
-      this.#structureViewer?.changeHighlightColor(parseInt(color, 16));
-      this.#structureViewer?.plugin.handleResize();
+    // Only reload when the structure to load changed: protein-accession
+    // alone changes it for AlphaFold ids only, but changes how highlights
+    // are numbered on any structure.
+    if (sourceChanged && this.#sourceKey() !== this.#requestedSourceKey) {
+      this.#reload();
     }
     if (changedProperties.has("color-theme")) {
-      this.#structureViewer?.applyColorTheme(this["color-theme"]);
+      this.#applyColorTheme();
     }
+    if (changedProperties.has("highlight-color")) {
+      // Update the hover/selection-mode color. This leaves the selection and
+      // the camera alone, unlike clearing a highlight.
+      this.#structureViewer
+        .setHighlightColor(this["highlight-color"])
+        .catch(() => undefined);
+    }
+    if (changedProperties.has("highlight")) {
+      this.highlightChain();
+    } else if (
+      this.highlight &&
+      (changedProperties.has("highlight-color") ||
+        changedProperties.has("protein-accession"))
+    ) {
+      // Re-apply the persistent highlight in its new color or numbering,
+      // leaving the camera where the user may have moved it.
+      this.#applyHighlight(false);
+    }
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    // Re-appended after a disconnect disposed the viewer: create a new one. The
+    // first connection is handled by the first update.
+    if (this.hasUpdated) this.#initViewer();
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    // Clean up
-    this.#structureViewer?.plugin.dispose();
+    // Inits and reloads in flight are now stale.
+    this.#generation += 1;
+    this.#structureLoaded = false;
+    this.#pendingLoad = undefined;
+    this.#structureViewer?.dispose();
+    this.#structureViewer = undefined;
   }
 
-  async loadPDBEntry(pdbId: string): Promise<PDBData> {
-    this.#structureViewer?.plugin.clear();
-    this.showMessage("Loading", pdbId);
+  isAF(): boolean {
+    return this["structure-id"]?.startsWith("AF-") ?? false;
+  }
+
+  /**
+   * Look up the model file of the AlphaFold DB prediction for the current
+   * accession + structure id.
+   */
+  async #resolveAlphaFoldSource(
+    generation: number,
+  ): Promise<ResolvedSource | undefined> {
+    const accession = this["protein-accession"];
+    if (!accession) return undefined;
+    const id = this["structure-id"];
+    this.showMessage("Loading", id || accession);
+    // Errors only while this lookup is still current: a structure set
+    // meanwhile may already be loaded, and must not be covered by them.
+    const isCurrent = () =>
+      generation === this.#generation &&
+      this["structure-id"] === id &&
+      this["protein-accession"] === accession;
     try {
-      return await fetch(`${uniProtMappingUrl}${pdbId}`).then((r) => r.json());
+      const predictions: AlphaFoldPayload = await fetch(
+        `${alphaFoldMappingUrl}${accession}`,
+      ).then((r) => r.json());
+      const info = predictions.find(
+        (prediction) => prediction.modelEntityId === id,
+      );
+      if (!info) {
+        if (isCurrent()) {
+          this.showMessage("Error", `No AF entry "${id}" for ${accession}`);
+        }
+        return undefined;
+      }
+      const source = alphaFoldModelSource(info);
+      if (!source && isCurrent()) {
+        this.showMessage("Error", `No model file for AF entry "${id}"`);
+      }
+      return source;
     } catch (e) {
-      this.showMessage("Error", `Couldn't load PDB entry "${pdbId}"`);
-      throw e;
+      if (isCurrent()) {
+        this.showMessage("Error", `Couldn't load AF entry "${id}"`);
+      }
+      return undefined;
     }
   }
 
-  async loadAFEntry(id: string): Promise<AlphaFoldPayload> {
-    this.#structureViewer?.plugin.clear();
-    this.showMessage("Loading", id);
-    try {
-      return await fetch(`${alphaFoldMappingUrl}${id}`).then((r) => r.json());
-    } catch (e) {
-      this.showMessage("Error", `Couldn't load AF entry "${id}"`);
-      throw e;
-    }
-  }
-
-  isAF(): boolean | undefined {
-    return this["structure-id"]?.startsWith("AF-");
-  }
-
-  // Use the url above for testing
-  async selectMolecule(): Promise<void> {
+  /** Build the load source for the viewer from the current attributes. */
+  async #resolveSource(generation: number): Promise<ResolvedSource | null> {
     if (this["structure-id"] && this["model-url"]) {
       console.error(
         "Structure ID and Model URL both are present. Provide only one that you would want to take precedence",
       );
-      return;
+      return null;
     }
-    // if (
-    //   !this["structure-id"] ||
-    //   !this["protein-accession"]
-    // ) {
-    //   return;
-    // }
-    let mappings;
-    if (this["structure-id"] && this["protein-accession"]) {
-      if (this.isAF()) {
-        const afPredictions = await this.loadAFEntry(this["protein-accession"]);
-        const afInfo = afPredictions.find(
-          (prediction) => prediction.modelEntityId === this["structure-id"],
-        );
-        // Note: maybe use bcif instead of cif, but I have issues loading it atm
-        if (afInfo?.cifUrl) {
-          await this.#structureViewer?.loadFromUrl(afInfo.cifUrl, false);
-          this.clearMessage();
-        }
-        // mappings = await this.#structureViewer.loadAF(afPredictions.b);
-      } else {
-        const pdbEntry = await this.loadPDBEntry(this["structure-id"]);
-        if (pdbEntry) {
-          mappings =
-            Object.values(pdbEntry)[0].UniProt[this["protein-accession"]]
-              ?.mappings;
-          if (this["custom-download-url"]) {
-            await this.#structureViewer?.loadFromUrl(
-              `${this["custom-download-url"]}${this[
-                "structure-id"
-              ].toLowerCase()}.cif`,
-            );
-            this.clearMessage();
-          } else {
-            await this.#structureViewer?.loadPdb(
-              this["structure-id"].toLowerCase(),
-            );
-            this.clearMessage();
-          }
-        }
-      }
-
-      this.selectedMolecule = {
-        id: this["structure-id"],
-        mappings,
+    if (this["model-url"]) {
+      return {
+        kind: "url",
+        url: this["model-url"],
+        ...inferFormat(this["model-url"]),
       };
     }
-
-    if (this["model-url"]) {
-      this.#structureViewer?.plugin.clear();
-      await this.#structureViewer?.loadFromUrl(this["model-url"]);
-      this.clearMessage();
+    if (this["structure-id"]) {
+      if (this.isAF()) {
+        return (await this.#resolveAlphaFoldSource(generation)) ?? null;
+      }
+      const id = this["structure-id"];
+      if (this["custom-download-url"]) {
+        return {
+          kind: "url",
+          url: `${this["custom-download-url"]}${id.toLowerCase()}.cif`,
+          format: "cif",
+          binary: false,
+        };
+      }
+      return { kind: "pdb", id };
     }
+    return null;
+  }
+
+  /** Identifies the structure the attributes ask for. */
+  #sourceKey(): string {
+    return SOURCE_ATTRIBUTES.map((name) =>
+      // Only AlphaFold models are looked up by protein-accession.
+      name !== "protein-accession" || this.isAF() ? this[name] ?? "" : "",
+    ).join("|");
+  }
+
+  #resolveOptions(): StructureViewerOptions {
+    return {
+      alphafold: this.isAF(),
+      highlightColor: this["highlight-color"],
+    };
+  }
+
+  async #initViewer(): Promise<void> {
+    const container =
+      this.renderRoot.querySelector<HTMLDivElement>("#molstar-parent");
+    if (
+      !container ||
+      !this.isConnected ||
+      this.#initializing ||
+      this.#structureViewer
+    ) {
+      return;
+    }
+    this.#initializing = true;
+    const generation = ++this.#generation;
+    // Attributes can change while the source resolves and the first load runs;
+    // remember what this init was for so it can catch up afterwards.
+    const sourceKey = this.#sourceKey();
+    const options = this.#resolveOptions();
+    let viewer: StructureViewer | undefined;
+    let source: ResolvedSource | null = null;
+    try {
+      source = await this.#resolveSource(generation);
+      if (source && generation === this.#generation) {
+        viewer = await getStructureViewer(
+          container,
+          this.updateHighlight,
+          source,
+          options,
+        );
+      }
+    } catch (e) {
+      if (generation === this.#generation) {
+        this.showMessage("Error", `Couldn't load structure "${this.#label()}"`);
+      }
+    } finally {
+      this.#initializing = false;
+    }
+    // Only a disconnect bumps the generation during an init. If the element
+    // was re-appended since, that connection's init was skipped while this one
+    // ran, and the viewer is still in place: keep it.
+    if (generation !== this.#generation && !(viewer && this.isConnected)) {
+      // Don't keep a detached WebGL context alive.
+      viewer?.dispose();
+      this.#initViewer();
+      return;
+    }
+    if (!viewer) {
+      // No source (yet): the attributes may have changed to one that resolves.
+      if (this.#sourceKey() !== sourceKey) this.#initViewer();
+      return;
+    }
+    this.#structureViewer = viewer;
+    this.#requestedSourceKey = sourceKey;
+    this.#structureLoaded = true;
+    this.#alphaMissenseUrl = source?.alphaMissenseUrl;
+    this.clearMessage();
+    if (this["highlight-color"] !== options.highlightColor) {
+      viewer.setHighlightColor(this["highlight-color"]).catch(() => undefined);
+    }
+    if (this.#sourceKey() !== sourceKey) {
+      await this.#reload();
+      return;
+    }
+    this.#applyColorTheme(true);
+    if (this.highlight) this.highlightChain();
+  }
+
+  async #reload(): Promise<void> {
+    const viewer = this.#structureViewer;
+    if (!viewer) return;
+    const generation = ++this.#generation;
+    this.#requestedSourceKey = this.#sourceKey();
+    // Until the new structure has loaded, the viewer doesn't show what the
+    // attributes ask for.
+    this.#structureLoaded = false;
+    this.clearMessage();
+    const source = await this.#resolveSource(generation);
+    if (generation !== this.#generation) return;
+    if (!source) {
+      // Nothing to load (e.g. no such AlphaFold model): empty the viewer
+      // rather than leave the previous structure up. Wait for a load still in
+      // flight first, or it could finish after the clear and show its structure.
+      await this.#pendingLoad;
+      if (generation !== this.#generation) return;
+      await viewer.clear().catch(() => undefined);
+      return;
+    }
+    const label = this.#label();
+    this.showMessage("Loading", label);
+    // Start loading only once the previous load has finished (see
+    // #pendingLoad). Newer reloads meanwhile supersede this one.
+    await this.#pendingLoad;
+    if (generation !== this.#generation) return;
+    const load = viewer.load(source, this.#resolveOptions());
+    const pendingLoad = load.then(
+      () => undefined,
+      () => undefined,
+    );
+    this.#pendingLoad = pendingLoad;
+    try {
+      await load;
+    } catch (e) {
+      // Only the latest load reports.
+      if (generation === this.#generation) {
+        this.showMessage("Error", `Couldn't load structure "${label}"`);
+      }
+      return;
+    } finally {
+      if (this.#pendingLoad === pendingLoad) this.#pendingLoad = undefined;
+    }
+    if (generation !== this.#generation) return;
+    this.#structureLoaded = true;
+    this.#alphaMissenseUrl = source.alphaMissenseUrl;
+    this.clearMessage();
+    this.#applyColorTheme(true);
+    if (this.highlight) this.highlightChain();
+  }
+
+  /**
+   * Colour the AlphaFold model loaded as `color-theme` asks. `loaded`: it has
+   * just loaded, so pdbe-molstar has coloured it by pLDDT confidence.
+   */
+  async #applyColorTheme(loaded = false): Promise<void> {
+    const viewer = this.#structureViewer;
+    // Otherwise applied once the load in flight completes.
+    if (!viewer || !this.#structureLoaded || !this.isAF()) return;
+    // A theme that fails to apply is replaced by the next one.
+    const ignore = () => undefined;
+    if (this["color-theme"] !== "alphamissense") {
+      if (this.message && this.message === this.#colorThemeError) {
+        this.clearMessage();
+      }
+      if (!loaded) {
+        await viewer.setColorTheme({ name: "plddt-confidence" }).catch(ignore);
+      }
+      return;
+    }
+    const generation = this.#generation;
+    // Only while this model is loaded and the theme still asked for.
+    const isCurrent = () =>
+      generation === this.#generation &&
+      this["color-theme"] === "alphamissense";
+    const url = this.#alphaMissenseUrl;
+    if (!url) {
+      this.#colorThemeError = this.showMessage(
+        "Error",
+        `No AlphaMissense data for "${this.#label()}"`,
+      );
+      return;
+    }
+    let scores: AlphaMissenseScores;
+    try {
+      scores = await this.#fetchAlphaMissense(url);
+    } catch (e) {
+      if (isCurrent()) {
+        this.#colorThemeError = this.showMessage(
+          "Error",
+          `Couldn't load AlphaMissense data for "${this.#label()}"`,
+        );
+      }
+      return;
+    }
+    if (!isCurrent()) return;
+    await viewer.setColorTheme({ name: "alphamissense", scores }).catch(ignore);
+  }
+
+  /** The scores in the AlphaMissense file at `url`. */
+  #fetchAlphaMissense(url: string): Promise<AlphaMissenseScores> {
+    let scores = this.#alphaMissenseScores.get(url);
+    if (!scores) {
+      scores = fetch(url).then(async (response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return parseAlphaMissense(await response.text());
+      });
+      this.#alphaMissenseScores.set(url, scores);
+      // Fetched again the next time it is needed.
+      scores.catch(() => this.#alphaMissenseScores.delete(url));
+    }
+    return scores;
+  }
+
+  /**
+   * The structure the attributes ask for, as shown in messages. Messages are
+   * only shown while there is one.
+   */
+  #label(): string {
+    return this["structure-id"] || this["model-url"] || "";
   }
 
   private showMessage(title: string, content: string, timeoutMs?: number) {
@@ -358,118 +629,102 @@ class NightingaleStructure extends withManager(
         }
       }, timeoutMs);
     }
+    return message;
   }
 
   private clearMessage() {
     this.message = null;
   }
 
-  updateHighlight(
-    sequencePositions: { chain: string; position: number }[],
-  ): void {
-    // sequencePositions assumed to be in PDB coordinate space
-    if (
-      !sequencePositions?.length ||
-      sequencePositions.some((pos) => !Number.isInteger(pos.position))
-    ) {
-      return;
-    }
-
-    let translated: TranslatedPosition[];
-    if (this.isAF()) {
-      translated = sequencePositions.map((pos) => ({
-        start: pos.position,
-        end: pos.position,
-        entity: 1,
-        chain: pos.chain,
-      }));
-    } else {
-      try {
-        translated = sequencePositions
-          .flatMap((pos) =>
-            translatePositions(
-              pos.position,
-              pos.position,
-              "PDB_UP",
-              this.selectedMolecule?.mappings,
-            ).filter((t) => t.chain === pos.chain),
-          )
-          .filter(Boolean);
-      } catch (error) {
-        if (error instanceof PositionMappingError) {
-          this.showMessage("Error", error.message);
-          return;
-        }
-        throw error;
-      }
-    }
-    if (!translated.length) {
-      this.showMessage("Error", "Residue outside of sequence range");
-      return;
-    }
-    const highlight = translated
-      .map((residue) => `${residue.start}:${residue.end}`)
-      .join(",");
-    this.highlight = highlight;
-
-    const tooltip = translated
-      .map((residue) => {
-        const proteinPosition =
-          residue.start === residue.end
-            ? residue.start
-            : `${residue.start}:${residue.end}`;
-        return `<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span> ${residue.chain}<br /><b>${this["protein-accession"]}</b>: ${proteinPosition}`;
-      })
-      .join("");
-
-    this.showMessage(this["structure-id"] || "", tooltip);
-    const event = new CustomEvent("change", {
-      detail: {
-        highlight,
-      },
-      bubbles: true,
-      cancelable: true,
-    });
-    this.dispatchEvent(event);
+  /**
+   * Whether highlights and clicks are numbered in protein-accession's UniProt
+   * sequence and mapped to the structure by its SIFTS mapping. Otherwise they
+   * are author residue numbers, which AlphaFold and other models (e.g.
+   * SwissModel, 3D-Beacons) number by UniProt position: a `range=30-189`
+   * model is numbered 30..189. Without protein-accession there is no UniProt
+   * sequence to number in, so PDB entries use author numbers too.
+   */
+  #usesSifts(): boolean {
+    return (
+      !!this["protein-accession"] && !!this.#structureViewer?.hasSiftsMapping()
+    );
   }
 
+  /** Handle a residue click coming from pdbe-molstar. */
+  updateHighlight(event: StructureClickEvent): void {
+    // A click on a structure that is being replaced would be numbered by the
+    // new attributes.
+    if (!event || !this.#structureLoaded) return;
+    const accession = this["protein-accession"];
+    let position: number | undefined;
+    if (this.#usesSifts()) {
+      // The SIFTS mapping is the clicked chain's own: a residue of another
+      // protein in the entry (e.g. a binding partner) is numbered in that
+      // protein's sequence, not protein-accession's.
+      position =
+        event.unp_accession === accession ? event.unp_seq_id : undefined;
+    } else {
+      // As highlightChain interprets them.
+      position = event.auth_seq_id;
+    }
+    if (position === undefined || !Number.isInteger(position)) {
+      this.showMessage("Error", "Residue outside of UniProt sequence range");
+      return;
+    }
+    const highlight = `${position}:${position}`;
+    this.highlight = highlight;
+
+    const chain = event.auth_asym_id ?? event.label_asym_id ?? "";
+    // Without protein-accession, position is an author residue number.
+    const tooltipLabel = accession || "Residue";
+    const tooltip = `<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span> ${chain}<br /><b>${tooltipLabel}</b>: ${position}`;
+    this.showMessage(this.#label(), tooltip);
+
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: { highlight },
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+  }
+
+  /** Apply the current `highlight` ranges to the structure. */
   highlightChain(): void {
+    this.#applyHighlight(true);
+  }
+
+  /** Apply `highlight`, moving the camera to it if `focus` is set. */
+  #applyHighlight(focus: boolean): void {
+    const viewer = this.#structureViewer;
+    // Otherwise applied once the load in flight completes.
+    if (!viewer || !this.#structureLoaded) return;
+    // A failed selection is replaced by the next one; it needs no handling.
+    const ignore = () => undefined;
     if (!this.highlight) {
-      this.#structureViewer?.clearHighlight();
+      viewer.clearHighlight().catch(ignore);
       return;
     }
-    let translatedPositions;
-    try {
-      translatedPositions = this.highlightedRegion.segments
-        .flatMap(({ start, end }) => {
-          if (this.isAF()) {
-            return {
-              start,
-              end,
-              chain: "A",
-            };
-          }
-          return translatePositions(
-            start,
-            end,
-            "UP_PDB",
-            this.selectedMolecule?.mappings,
-          );
-        })
-        .filter(Boolean);
-    } catch (error) {
-      if (error instanceof PositionMappingError) {
-        this.#structureViewer?.clearHighlight();
-        this.showMessage("Error", error.message);
-        return;
-      }
-      throw error;
-    }
-    if (!translatedPositions?.length) {
-      this.#structureViewer?.clearHighlight();
-      return;
-    }
-    this.#structureViewer?.highlight(translatedPositions);
+    const accession = this["protein-accession"];
+    const sifts = this.#usesSifts();
+    const data: QueryParam[] = this.highlightedRegion.segments.map(
+      ({ start, end }) => {
+        if (sifts) {
+          // UniProt sequence space — pdbe-molstar maps to PDB residues via
+          // SIFTS.
+          return {
+            uniprot_accession: accession,
+            start_uniprot_residue_number: start,
+            end_uniprot_residue_number: end,
+          };
+        }
+        // Author residue numbering (see #usesSifts). `label_seq_id` is
+        // 1-based and would not match a model numbered from 30, so use auth
+        // numbers.
+        return { beg_auth_seq_id: start, end_auth_seq_id: end };
+      },
+    );
+    viewer.highlight(data, this["highlight-color"], focus).catch(ignore);
   }
 }
 
