@@ -452,6 +452,42 @@ describe("nightingale-structure color-theme", () => {
     ).toEqual({ name: "element-symbol", params: {} });
   });
 
+  test("a highlight keeps the AlphaMissense colours, and re-colouring keeps the highlight", async () => {
+    serve([prediction("AF-P05067-F1")], {
+      [csvUrl("AF-P05067-F1")]: csv(0.3, 0.9),
+    });
+    element = mount({
+      ...AF,
+      "color-theme": "alphamissense",
+      highlight: "1:2",
+    });
+    await settle();
+    const instance = viewer();
+
+    expect(themes(instance)).toEqual([ALPHAMISSENSE_THEME]);
+    // Not overpainted: the range is shown by dimming the rest.
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        {
+          beg_auth_seq_id: 1,
+          end_auth_seq_id: 2,
+          color: null,
+          opacity: 1,
+          focus: true,
+        },
+      ],
+      nonSelectedOpacity: 0.3,
+    });
+
+    element.setAttribute("color-theme", "alphafold");
+    await settle();
+    expect(themes(instance)).toEqual([ALPHAMISSENSE_THEME, "plddt-confidence"]);
+    // The selection is left in place.
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(1);
+  });
+
   test("every viewer registers the theme on its own plugin", async () => {
     serve([prediction("AF-P05067-F1")], {
       [csvUrl("AF-P05067-F1")]: csv(0.3, 0.9),

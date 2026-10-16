@@ -87,10 +87,69 @@ structure residues are highlighted and focused. Positions are UniProt or author
 residue numbers, depending on the structure: see [Residue
 numbering](#residue-numbering).
 
+On AlphaFold models the highlighted range is not recoloured — the pLDDT or
+AlphaMissense colouring (see [`color-theme`](#color-theme)) is kept, and the
+range is shown by dimming the rest of the model (see `entry-emphasis-opacity`).
+
 #### `highlight-color`
 
 CSS hex colour for the highlight (e.g. `#FFEB3B`). An alpha channel, if present,
 is ignored.
+
+#### `hide-entry-emphasis`
+
+Boolean. By default, a non-AlphaFold structure is shown with the current entry
+emphasized: the entry keeps its colours while the rest of the structure is
+dimmed (see `entry-emphasis-opacity`). This makes the entry easy to spot when it
+is a small part of a large complex (e.g. P05067, chain E of `6IYC`). Set this
+attribute to opt out.
+
+What is emphasized depends on what identifies the entry:
+
+- **`entry-chains`**, when set: every residue of those chains, ligands and
+  waters with their chain IDs included.
+- Otherwise, **the residues that pdbe-molstar's SIFTS mapping maps to
+  `protein-accession`**. This works per residue, not per chain: the parts of
+  the entry's own chain that SIFTS maps to another protein or to nothing —
+  fusion partners (e.g. the T4 lysozyme in chain A of `2RH1`), tags, linkers —
+  are dimmed with the rest, as are that chain's ligands and waters. Set
+  `entry-chains` to keep whole chains undimmed instead.
+
+SIFTS mapping is only present in PDBe "updated" mmCIF/BinaryCIF files, which
+are what a PDB `structure-id` loads. Structures without it, such as most
+`model-url` models and wwPDB archive files from `custom-download-url`, are shown
+undimmed unless `entry-chains` is set; so are structures loaded without
+`protein-accession`, and structures in which nothing matches `protein-accession`
+or `entry-chains`. AlphaFold models are always excluded: they are a single
+chain covering the entry, and their pLDDT or AlphaMissense colouring stays
+untouched.
+
+When a structure loads, and whenever `highlight`, `hide-entry-emphasis`,
+`entry-chains` or `entry-emphasis-opacity` change, the camera focuses on the
+`highlight` ranges if any, otherwise on the emphasized part. If neither is left
+(e.g. after `hide-entry-emphasis` is set, or an AlphaFold `highlight` removed),
+the selection is cleared and the camera reset to the whole structure. Changing
+`highlight-color`, or `protein-accession` on a structure that isn't reloaded,
+re-applies the highlight and emphasis without moving the camera. A highlighted
+range that falls in the dimmed part is recoloured but stays dimmed.
+
+#### `entry-chains`
+
+A comma-separated list of author chain IDs (`auth_asym_id`) that make up the
+current entry, e.g. `"A,B"`. These chains are emphasized as a whole, taking
+precedence over the SIFTS lookup (see `hide-entry-emphasis`); it works with or
+without `protein-accession`. Use it for structure files that carry no SIFTS
+mapping (e.g. `model-url` loads), for which 3D-Beacons providers publish the
+chains per model as `entities[].chain_ids` in the
+[uniprot summary endpoint](https://www.ebi.ac.uk/pdbe/pdbe-kb/3dbeacons/api/uniprot/summary/P05067.json),
+or to keep the unmapped parts of the entry's chains undimmed.
+
+#### `entry-emphasis-opacity`
+
+Number between 0 and 1 (default `0.3`, also used when the attribute is removed
+or empty): the opacity of everything outside the emphasized part of the
+structure when the entry emphasis is active. Also used to dim the rest of an
+AlphaFold model around a highlighted range.
 
 #### `model-url`
 

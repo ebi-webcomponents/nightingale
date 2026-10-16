@@ -34,10 +34,18 @@ const viewer = (): any => {
   return PDBeMolstarPlugin.instances[0];
 };
 
-/** The data of the last `visual.select` call. */
+/**
+ * The data of the last `visual.select` call, without the items' opacity: it
+ * is left out when the dimming is kept in place (see "keeping the dimming").
+ */
 const lastSelection = () => {
   const selects = viewer().visual.select.mock.calls;
-  return selects.length ? selects[selects.length - 1][0].data : undefined;
+  return selects.length
+    ? selects[selects.length - 1][0].data.map((item: object) => ({
+        ...item,
+        opacity: undefined,
+      }))
+    : undefined;
 };
 
 /** Click a residue the way pdbe-molstar's `CustomEvents.add` does. */
@@ -66,17 +74,43 @@ const pdbResidue = {
   auth_seq_id: 10,
 };
 
-const authRange = (beg: number, end: number) => [
-  expect.objectContaining({ beg_auth_seq_id: beg, end_auth_seq_id: end }),
-];
+type RangeOptions = { color?: string | null; focus?: boolean };
 
-const uniProtRange = (accession: string, start: number, end: number) => [
-  expect.objectContaining({
-    uniprot_accession: accession,
-    start_uniprot_residue_number: start,
-    end_uniprot_residue_number: end,
-  }),
-];
+/** The selection item for a `highlight` range in author numbering. */
+const authRange = (
+  beg: number,
+  end: number,
+  { color = "#FFEB3B", focus = true }: RangeOptions = {},
+) => ({
+  beg_auth_seq_id: beg,
+  end_auth_seq_id: end,
+  color,
+  focus,
+});
+
+/** The selection item for a `highlight` range in UniProt numbering. */
+const uniProtRange = (
+  accession: string,
+  start: number,
+  end: number,
+  { color = "#FFEB3B", focus = true }: RangeOptions = {},
+) => ({
+  uniprot_accession: accession,
+  start_uniprot_residue_number: start,
+  end_uniprot_residue_number: end,
+  color,
+  focus,
+});
+
+/**
+ * The selection item emphasizing the entry's chains, found by SIFTS. It
+ * precedes any range items, and is framed only when there are none.
+ */
+const entryChains = (accession: string, focus = false) => ({
+  uniprot_accession: accession,
+  color: null,
+  focus,
+});
 
 describe("nightingale-structure residue numbering", () => {
   let element: NightingaleStructure | undefined;
@@ -113,7 +147,7 @@ describe("nightingale-structure residue numbering", () => {
       await settle();
 
       // A uniprot_accession query would match nothing in this file.
-      expect(lastSelection()).toEqual(authRange(40, 50));
+      expect(lastSelection()).toEqual([authRange(40, 50)]);
     });
 
     test("model-url clicks emit the author number", async () => {
@@ -139,7 +173,9 @@ describe("nightingale-structure residue numbering", () => {
       });
       await settle();
 
-      expect(lastSelection()).toEqual(authRange(10, 20));
+      // Nor is the entry emphasized: its uniprot_accession query would match
+      // nothing either, and dim the whole structure.
+      expect(lastSelection()).toEqual([authRange(10, 20)]);
     });
 
     // Not a regression test (as before the SIFTS check): guards against
@@ -162,7 +198,8 @@ describe("nightingale-structure residue numbering", () => {
         }),
       );
       await settle();
-      expect(lastSelection()).toEqual(authRange(10, 20));
+      // The range keeps the pLDDT colours.
+      expect(lastSelection()).toEqual([authRange(10, 20, { color: null })]);
 
       click({ auth_asym_id: "A", seq_id: 42, auth_seq_id: 42 });
       expect(changes).toEqual(["42:42"]);
@@ -181,7 +218,10 @@ describe("nightingale-structure residue numbering", () => {
         }),
       );
       await settle();
-      expect(lastSelection()).toEqual(uniProtRange("P05067", 296, 300));
+      expect(lastSelection()).toEqual([
+        entryChains("P05067"),
+        uniProtRange("P05067", 296, 300),
+      ]);
 
       click(pdbResidue);
       expect(changes).toEqual(["296:296"]);
@@ -197,7 +237,10 @@ describe("nightingale-structure residue numbering", () => {
         }),
       );
       await settle();
-      expect(lastSelection()).toEqual(uniProtRange("P05067", 296, 300));
+      expect(lastSelection()).toEqual([
+        entryChains("P05067"),
+        uniProtRange("P05067", 296, 300),
+      ]);
 
       click(pdbResidue);
       expect(changes).toEqual(["296:296"]);
@@ -224,7 +267,7 @@ describe("nightingale-structure residue numbering", () => {
       expect(changes).toEqual(["10:10"]);
       expect(element.message?.content).toMatch(/<b>Residue<\/b>: 10$/);
       await settle();
-      expect(lastSelection()).toEqual(authRange(10, 10));
+      expect(lastSelection()).toEqual([authRange(10, 10)]);
     });
   });
 
@@ -236,6 +279,10 @@ describe("nightingale-structure residue numbering", () => {
       });
       await settle();
       const instance = viewer();
+      // The load's entry emphasis.
+      expect(lastSelection()).toEqual([entryChains("P05067", true)]);
+      instance.visual.select.mockClear();
+      instance.visual.clearSelection.mockClear();
 
       element.setAttribute("highlight-color", "#FF0000");
       await settle();
@@ -260,7 +307,8 @@ describe("nightingale-structure residue numbering", () => {
       const instance = viewer();
 
       expect(lastSelection()).toEqual([
-        expect.objectContaining({ focus: true }),
+        entryChains("P05067"),
+        uniProtRange("P05067", 296, 300),
       ]);
 
       element.setAttribute("highlight-color", "#FF000080");
@@ -269,7 +317,8 @@ describe("nightingale-structure residue numbering", () => {
       expect(instance.visual.select).toHaveBeenCalledTimes(2);
       // Without moving the camera, which the user may have moved since.
       expect(lastSelection()).toEqual([
-        expect.objectContaining({ color: "#FF0000", focus: false }),
+        entryChains("P05067"),
+        uniProtRange("P05067", 296, 300, { color: "#FF0000", focus: false }),
       ]);
       expect(instance.visual.reset).not.toHaveBeenCalled();
     });
@@ -290,16 +339,16 @@ describe("nightingale-structure residue numbering", () => {
 
       // Only the initial load.
       expect(instance.visual.update).toHaveBeenCalledTimes(1);
-      expect(lastSelection()).toEqual(uniProtRange("P12345", 296, 300));
       expect(lastSelection()).toEqual([
-        expect.objectContaining({ focus: false }),
+        entryChains("P12345"),
+        uniProtRange("P12345", 296, 300, { focus: false }),
       ]);
 
       element.removeAttribute("protein-accession");
       await settle();
       // Only the initial load.
       expect(instance.visual.update).toHaveBeenCalledTimes(1);
-      expect(lastSelection()).toEqual(authRange(296, 300));
+      expect(lastSelection()).toEqual([authRange(296, 300, { focus: false })]);
     });
 
     test("of a model-url doesn't reload", async () => {

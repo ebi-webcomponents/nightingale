@@ -40,17 +40,28 @@ export type StructureViewerOptions = {
   highlightColor?: string;
 };
 
+/** One item of a persistent selection: a region plus how to render it. */
+export type SelectItem = QueryParam & {
+  /** Overpaint color; `null` selects the region but keeps its theme color. */
+  color?: string | null;
+  opacity?: number;
+  focus?: boolean;
+};
+
 export type StructureViewer = {
   instance: PDBeMolstarPlugin;
   load(source: LoadSource, options: StructureViewerOptions): Promise<void>;
   /** Remove the loaded structure, leaving an empty viewer. */
   clear(): Promise<void>;
-  /** Select `params`, moving the camera to them unless `focus` is false. */
-  highlight(
-    params: QueryParam[],
-    color?: string,
-    focus?: boolean,
-  ): Promise<void>;
+  /**
+   * Replace the selection with `data`, moving the camera to the items with
+   * `focus`, and dim the rest of the structure to `nonSelectedOpacity`.
+   * Selections run one at a time, in call order.
+   */
+  select(params: {
+    data: SelectItem[];
+    nonSelectedOpacity?: number;
+  }): Promise<void>;
   clearHighlight(): Promise<void>;
   /**
    * Whether the loaded structure maps its residues to UniProt (SIFTS), as
@@ -61,6 +72,8 @@ export type StructureViewer = {
    * loaded by URL.
    */
   hasSiftsMapping(): boolean;
+  /** Whether any of `params` matches part of the loaded structure. */
+  matches(params: QueryParam[]): boolean;
   setHighlightColor(color: string): Promise<void>;
   /**
    * Colour the loaded structure by `theme`. Loading a structure resets it to
@@ -75,6 +88,26 @@ export type StructureViewer = {
 // alpha so an 8-digit hex like "#FFEB3B66" becomes "#FFEB3B".
 const toMolstarColor = (color?: string): string | undefined =>
   color ? `#${color.replace(/^#/, "").substring(0, 6)}` : undefined;
+
+/**
+ * Identifies the transparency layers pdbe-molstar's `select` creates for
+ * `data` and `nonSelectedOpacity`: one for the whole structure, then one per
+ * item with an `opacity`. An item's color and focus don't affect them.
+ */
+const opacityLayersKey = (
+  data: SelectItem[],
+  nonSelectedOpacity?: number,
+): string =>
+  JSON.stringify(
+    data.length
+      ? [
+          nonSelectedOpacity ?? null,
+          data
+            .filter((d) => d.opacity !== undefined)
+            .map((d) => ({ ...d, color: undefined, focus: undefined })),
+        ]
+      : [],
+  );
 
 const buildInitParams = (
   source: LoadSource | undefined,
@@ -200,39 +233,99 @@ export const getStructureViewer = async (
   };
   container.addEventListener("PDB.molstar.click", onContainerClick);
 
+  // pdbe-molstar's `select` and `clearSelection` each await several state
+  // updates; interleaved, one's layers can be added to the other's.
+  let selecting: Promise<void> = Promise.resolve();
+  const enqueue = (task: () => Promise<void>): Promise<void> => {
+    const run = selecting.then(task);
+    selecting = run.catch(() => undefined);
+    return run;
+  };
+  /**
+   * The `opacityLayersKey` of the transparency layers on the structure, or
+   * undefined when unknown (e.g. after a failed selection).
+   */
+  let appliedOpacityLayers: string | undefined;
+  /**
+   * Bumped as a load or clear starts and ends: they replace the
+   * representations, and the transparency layers with them.
+   */
+  let structureVersion = 0;
+  const replaceStructure = async (task: () => Promise<unknown>) => {
+    structureVersion += 1;
+    appliedOpacityLayers = undefined;
+    try {
+      await task();
+    } finally {
+      structureVersion += 1;
+      appliedOpacityLayers = undefined;
+    }
+  };
+
   return {
     instance,
     async load(nextSource, nextOptions) {
       await setAlphaFoldView(instance.plugin, !!nextOptions.alphafold);
-      await instance.visual.update(
-        buildInitParams(nextSource, nextOptions),
-        true,
+      await replaceStructure(() =>
+        instance.visual.update(buildInitParams(nextSource, nextOptions), true),
       );
     },
     async clear() {
-      await instance.clear();
+      await replaceStructure(() => instance.clear());
     },
-    async highlight(params, color, focus = true) {
-      // Use `select` (persistent overpaint) rather than `highlight` (which is a
-      // transient hover marking that clears on mouse-move), so the highlighted
-      // residues stay visible. This matches the original component, which used
-      // Mol*'s persistent selection.
-      await instance.visual.clearSelection();
-      if (params.length) {
-        const c = toMolstarColor(color);
-        await instance.visual.select({
-          data: params.map((p) => ({ ...p, color: c, focus })),
-        });
-      }
+    select({ data, nonSelectedOpacity }) {
+      return enqueue(async () => {
+        // Rebuilding the transparency layers costs O(atoms) each, so they are
+        // kept when unchanged, e.g. when only a highlighted range moves. Their
+        // params are then left out: with `keepOpacity`, pdbe-molstar adds
+        // layers to the existing ones rather than replacing them.
+        const opacityLayers = opacityLayersKey(data, nonSelectedOpacity);
+        const keepOpacity = opacityLayers === appliedOpacityLayers;
+        const version = structureVersion;
+        appliedOpacityLayers = undefined;
+        // Use `select` (persistent overpaint) rather than `highlight` (which is
+        // a transient hover marking that clears on mouse-move), so the selected
+        // regions stay visible. This matches the original component, which
+        // used Mol*'s persistent selection.
+        await instance.visual.clearSelection(
+          undefined,
+          keepOpacity ? { keepOpacity } : undefined,
+        );
+        if (data.length) {
+          await instance.visual.select({
+            data: data.map(({ opacity, ...d }) => ({
+              ...d,
+              ...(keepOpacity || opacity === undefined ? {} : { opacity }),
+              // `null` is pdbe-molstar's "select without recoloring" (it keeps
+              // the theme color); the cast is needed as the published typings
+              // only admit actual colors.
+              color: (d.color === null ? null : toMolstarColor(d.color)) as
+                | string
+                | undefined,
+            })),
+            ...(keepOpacity ? { keepOpacity } : { nonSelectedOpacity }),
+          });
+        }
+        if (version === structureVersion) appliedOpacityLayers = opacityLayers;
+      });
     },
-    async clearHighlight() {
-      await instance.visual.clearSelection();
-      await instance.visual.reset({ camera: true });
+    clearHighlight() {
+      return enqueue(async () => {
+        appliedOpacityLayers = undefined;
+        await instance.visual.clearSelection();
+        await instance.visual.reset({ camera: true });
+      });
     },
     hasSiftsMapping() {
       // The model pdbe-molstar's UniProt queries read the mapping from.
       const model = instance.getStructure(-1)?.cell.obj?.data.models[0];
       return !!model && SIFTSMapping.isAvailable(model);
+    },
+    matches(params) {
+      // As `select` resolves its items. Matching nothing gives `EmptyLoci`
+      // (no structure) or a `StructureElement.Loci` without units.
+      const loci = instance.getLociForParams(params, -1);
+      return loci.kind === "element-loci" && loci.elements.length > 0;
     },
     async setHighlightColor(color) {
       const c = toMolstarColor(color);

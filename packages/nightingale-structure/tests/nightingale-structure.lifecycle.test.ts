@@ -131,6 +131,24 @@ const lastSelection = (instance: any) => {
   return selects.length ? selects[selects.length - 1][0].data : undefined;
 };
 
+/** The selection of P05067's chains with the `highlight` 10:20 on them. */
+const highlightedEntry = [
+  { uniprot_accession: "P05067", color: null, opacity: 1, focus: false },
+  {
+    uniprot_accession: "P05067",
+    start_uniprot_residue_number: 10,
+    end_uniprot_residue_number: 20,
+    color: "#FFEB3B",
+    focus: true,
+  },
+];
+
+/** The `visual.select` call emphasizing P05067's chains on a load. */
+const entryEmphasis = {
+  data: [{ uniprot_accession: "P05067", color: null, opacity: 1, focus: true }],
+  nonSelectedOpacity: 0.3,
+};
+
 /** Collects unhandled promise rejections while a test runs. */
 const unhandledRejections: unknown[] = [];
 const onUnhandledRejection = (reason: unknown) => {
@@ -421,7 +439,8 @@ describe("nightingale-structure lifecycle", () => {
 
       element.setAttribute("highlight", "10:20");
       await settle();
-      expect(instance.visual.select).not.toHaveBeenCalled();
+      // Only the first structure's entry emphasis.
+      expect(instance.visual.select.mock.calls).toEqual([[entryEmphasis]]);
     });
 
     test("a failed initial load reports an error, and a new structure-id retries", async () => {
@@ -590,18 +609,14 @@ describe("nightingale-structure lifecycle", () => {
       await settle();
       element.setAttribute("highlight", "10:20");
       await settle();
-      expect(instance.visual.select).not.toHaveBeenCalled();
-      expect(instance.visual.clearSelection).not.toHaveBeenCalled();
+      // Only the first structure's entry emphasis.
+      expect(instance.visual.select.mock.calls).toEqual([[entryEmphasis]]);
+      expect(instance.visual.clearSelection).toHaveBeenCalledTimes(1);
 
       finishUpdate();
       await settle();
-      expect(instance.visual.select).toHaveBeenCalledTimes(1);
-      expect(lastSelection(instance)).toEqual([
-        expect.objectContaining({
-          start_uniprot_residue_number: 10,
-          end_uniprot_residue_number: 20,
-        }),
-      ]);
+      expect(instance.visual.select).toHaveBeenCalledTimes(2);
+      expect(lastSelection(instance)).toEqual(highlightedEntry);
     });
 
     test("a failing selection is not left as an unhandled rejection", async () => {
@@ -624,8 +639,9 @@ describe("nightingale-structure lifecycle", () => {
       instance.visual.clearSelection.mockRejectedValueOnce(new Error("busy"));
       element.removeAttribute("highlight");
       await settle();
-      // afterEach checks for unhandled rejections.
-      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+      // afterEach checks for unhandled rejections. The load's entry emphasis
+      // and 30:40 got as far as `select`.
+      expect(instance.visual.select).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -689,12 +705,7 @@ describe("nightingale-structure lifecycle", () => {
       await settle();
 
       expect(instance.visual.select).toHaveBeenCalledTimes(1);
-      expect(instance.visual.select.mock.calls[0][0].data).toEqual([
-        expect.objectContaining({
-          start_uniprot_residue_number: 10,
-          end_uniprot_residue_number: 20,
-        }),
-      ]);
+      expect(lastSelection(instance)).toEqual(highlightedEntry);
     });
 
     test("a changed highlight-color is applied after the load", async () => {
@@ -757,6 +768,47 @@ describe("nightingale-structure lifecycle", () => {
       element.setAttribute("structure-id", "2XYZ");
       await settle();
       expect(lastLoadedId(second)).toBe("2xyz");
+    });
+
+    test("a re-appended element re-applies the entry emphasis to the new viewer", async () => {
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+      });
+      await settle();
+      document.documentElement.removeChild(element);
+      document.documentElement.appendChild(element);
+      await settle();
+
+      expect(PDBeMolstarPlugin.instances).toHaveLength(2);
+      const [, second] = PDBeMolstarPlugin.instances;
+      expect(second.visual.select).toHaveBeenCalledWith({
+        data: [
+          { uniprot_accession: "P05067", color: null, opacity: 1, focus: true },
+        ],
+        nonSelectedOpacity: 0.3,
+      });
+    });
+
+    test("a re-appended element does not reset the new viewer's camera", async () => {
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        "hide-entry-emphasis": "",
+        highlight: "10:20",
+      });
+      await settle();
+      document.documentElement.removeChild(element);
+      // The selection applied to the disposed viewer is not the new one's.
+      element.removeAttribute("highlight");
+      await settle();
+      document.documentElement.appendChild(element);
+      await settle();
+
+      expect(PDBeMolstarPlugin.instances).toHaveLength(2);
+      const [, second] = PDBeMolstarPlugin.instances;
+      expect(second.visual.select).not.toHaveBeenCalled();
+      expect(second.visual.reset).not.toHaveBeenCalled();
     });
 
     test("a re-appended element emits one change event per click", async () => {
