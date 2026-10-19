@@ -17,12 +17,3 @@ allowBuilds:
   es5-ext: false
   esbuild: true
   nx: true
-
-# molstar 3.44 (nightingale-structure) lists canvas and gl as optional
-# dependencies. Both are native modules with no prebuilt binaries for current
-# Node, so Yarn dropped them when their builds failed. pnpm would install them
-# unbuilt instead, and jsdom then crashes every test suite trying to load the
-# half-installed canvas. Skip them, which is what Yarn effectively did.
-ignoredOptionalDependencies:
-  - canvas
-  - gl

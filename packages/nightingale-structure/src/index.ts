@@ -1,8 +1,7 @@
 import NightingaleStructure from "./nightingale-structure";
+
 export type * from "./nightingale-structure";
-export type * from "./position-mapping";
-export {
-  amColorScale
-} from "./AlphaMissenseColorTheme";
+export type * from "./structure-viewer";
+export { amColorScale } from "./am-color-scale";
 
 export default NightingaleStructure;
