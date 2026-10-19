@@ -6,7 +6,8 @@
     "dist",
     "style",
     "src",
-    "types"
+    "types",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

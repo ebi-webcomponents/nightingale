@@ -3,7 +3,8 @@
   "description": "Nightingale Structure",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -4,7 +4,8 @@
   "description": "Saver component for Nightingale components",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

@@ -4,7 +4,8 @@
   "description": "Track for showing residue probabilities on individual sequence positions.",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

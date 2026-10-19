@@ -16,7 +16,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "sideEffects": false,
   "dependencies": {

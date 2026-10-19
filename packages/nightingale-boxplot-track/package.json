@@ -4,7 +4,8 @@
   "description": "Track for showing distribution of a variable on each residue position via boxplots.",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",
