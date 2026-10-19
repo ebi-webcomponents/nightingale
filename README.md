@@ -24,28 +24,28 @@ Read our guide [here](/CONTRIBUTING.md) as well as our
 
 Nightingale uses [Lerna](https://lerna.js.org/) to manage its packages.
 
-First run `yarn` to install root packages.
+First run `pnpm install` to install root packages.
 
 ## Building the components
 
-Run `yarn build`
+Run `pnpm build`
 
 ## Showcase application
 
 ### Locally
 
-Run `yarn build && yarn storybook` to run the application locally.
+Run `pnpm build && pnpm storybook` to run the application locally.
 
 ### Build
 
-Run `yarn build-storybook` to build the application ready for deployment.
+Run `pnpm build-storybook` to build the application ready for deployment.
 
 ### Publish
 
 Ensure lerna is installed globally via:
 
 ```
-yarn global add lerna
+pnpm add -g lerna
 ```
 
 Login to npm:

@@ -30,7 +30,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@nightingale-elements/nightingale-new-core": "^5.11.0",
+    "@nightingale-elements/nightingale-new-core": "workspace:^",
     "lodash-es": "4.17.11",
     "quill": "1.3.7"
   },
