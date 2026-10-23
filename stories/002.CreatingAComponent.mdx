@@ -193,10 +193,11 @@ This document describes the creation of a basic Nightingale component.
       export default NightingaleHello;
       ```
 
-7. Let `yarn` and `lerna` know about your new component by making them.
+7. Link your new component into the pnpm workspace, then build it with `lerna`.
 
    ```bash
-   yarn build
+   pnpm install
+   pnpm build
    ```
 
 8. To view it in the showcase application, create a story `NightingaleHello.stories.ts` in `stories/` folder.
@@ -225,5 +226,5 @@ This document describes the creation of a basic Nightingale component.
 9. The following command runs the storybook locally to test.
 
     ```bash
-    yarn storybook
+    pnpm storybook
     ```
