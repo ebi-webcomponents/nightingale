@@ -10,6 +10,13 @@ const {
 
 const asyncFn = () => jest.fn().mockResolvedValue(undefined);
 
+/** An mmCIF column of `values`, as far as the code under test reads it. */
+const column = (values) => ({
+  isDefined: values.length > 0,
+  rowCount: values.length,
+  value: (i) => values[i],
+});
+
 class PDBeMolstarPlugin {
   constructor() {
     PDBeMolstarPlugin.instances.push(this);
@@ -31,23 +38,35 @@ class PDBeMolstarPlugin {
     // `cell.obj.data` is the molstar Structure. This one stands for the
     // structure of the latest `visual.update()` (pending or not),
     // with a model shaped as far as pdbe-molstar's `SIFTSMapping.isAvailable`
-    // reads it (see pdbe-molstar-sifts-mapping.js).
+    // (see pdbe-molstar-sifts-mapping.js) and molstar's
+    // `QualityAssessment.isApplicable` read it.
     this.getStructure = jest.fn(() => {
       const updates = this.visual.update.mock.calls;
       if (!updates.length) return undefined;
       const params = updates[updates.length - 1][0];
       const defined = { isDefined: PDBeMolstarPlugin.hasSifts(params) };
+      const { entryId, plddt, hetatm } = PDBeMolstarPlugin.file(params);
+      const metrics = plddt ? [1] : [];
       const model = {
+        entryId,
         sourceData: {
           kind: "mmCIF",
           data: {
             db: {
               atom_site: {
+                group_PDB: column(hetatm ? ["ATOM", "HETATM"] : ["ATOM"]),
                 pdbx_sifts_xref_db_name: defined,
                 pdbx_sifts_xref_db_acc: defined,
                 pdbx_sifts_xref_db_num: defined,
                 pdbx_sifts_xref_db_res: defined,
               },
+              ma_qa_metric: {
+                _rowCount: metrics.length,
+                id: column(metrics),
+                mode: column(metrics.map(() => "local")),
+                name: column(metrics.map(() => "pLDDT")),
+              },
+              ma_qa_metric_local: { ordinal_id: column(metrics) },
             },
           },
         },
@@ -158,5 +177,28 @@ PDBeMolstarPlugin.hasSifts = PDBeMolstarPlugin.defaultHasSifts;
  */
 PDBeMolstarPlugin.defaultMatches = () => true;
 PDBeMolstarPlugin.matches = PDBeMolstarPlugin.defaultMatches;
+
+/**
+ * What the file loaded for `params` holds: its entry id, and whether it has
+ * per-residue pLDDT scores and HETATM records. By default as with the real
+ * files: AlphaFold DB model files (`AF-<id>-model_v<n>.cif`, also complexes)
+ * have pLDDT scores and no HETATM records; PDB entries have no pLDDT scores.
+ * Tests may replace it.
+ */
+PDBeMolstarPlugin.defaultFile = (params) => {
+  if (params.moleculeId) {
+    return {
+      entryId: params.moleculeId.toUpperCase(),
+      plddt: false,
+      hetatm: true,
+    };
+  }
+  const name = params.customData.url.split("/").pop();
+  const alphafold = name.match(/^(AF-.+)-model_v\d+\./);
+  return alphafold
+    ? { entryId: alphafold[1], plddt: true, hetatm: false }
+    : { entryId: "MODEL", plddt: false, hetatm: false };
+};
+PDBeMolstarPlugin.file = PDBeMolstarPlugin.defaultFile;
 
 module.exports = { PDBeMolstarPlugin };

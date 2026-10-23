@@ -100,3 +100,14 @@ StructureLoadByUrl.args = {
   "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
   "--custom-structure-height": "480px",
 };
+
+// An AlphaFold DB complex (P05067 with Q9UBX7) has no AlphaFold DB id to load
+// it by, only its file: it is still coloured by pLDDT confidence.
+export const AlphaFoldComplexLoadByUrl = Template.bind({});
+AlphaFoldComplexLoadByUrl.args = {
+  "model-url":
+    "https://alphafold.ebi.ac.uk/files/AF-0000000210569523-model_v1.bcif",
+  "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
+  "--custom-structure-height": "480px",
+};
+AlphaFoldComplexLoadByUrl.storyName = "AlphaFold Complex Load By Url";
