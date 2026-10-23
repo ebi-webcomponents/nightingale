@@ -289,6 +289,43 @@ describe("entry-chain emphasis", () => {
     });
   });
 
+  describe("an AlphaFold DB model loaded by model-url", () => {
+    // A complex, which has no AlphaFold DB id to load it by.
+    const complexUrl =
+      "https://alphafold.ebi.ac.uk/files/AF-0000000210569523-model_v1.cif";
+
+    test("is not emphasized, even with entry-chains", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "model-url": complexUrl,
+        "entry-chains": "A",
+      });
+
+      // Its pLDDT colours stay untouched.
+      expect(instance.visual.select).not.toHaveBeenCalled();
+    });
+
+    test("keeps its colours in a highlight, dimming the rest", async () => {
+      const instance = await mount({
+        "model-url": complexUrl,
+        highlight: "290:315",
+      });
+
+      expect(instance.visual.select).toHaveBeenCalledWith({
+        data: [
+          {
+            beg_auth_seq_id: 290,
+            end_auth_seq_id: 315,
+            color: null,
+            opacity: 1,
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      });
+    });
+  });
+
   test("entry-chains takes precedence over the SIFTS accession lookup", async () => {
     const instance = await mount({
       "protein-accession": "P05067",

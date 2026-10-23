@@ -89,9 +89,10 @@ structure residues are highlighted and focused. Positions are UniProt or author
 residue numbers, depending on the structure: see [Residue
 numbering](#residue-numbering).
 
-On AlphaFold models the highlighted range is not recoloured — the pLDDT or
-AlphaMissense colouring (see [`color-theme`](#color-theme)) is kept, and the
-range is shown by dimming the rest of the model (see `entry-emphasis-opacity`).
+On AlphaFold models, including AlphaFold DB models loaded by `model-url`, the
+highlighted range is not recoloured — the pLDDT or AlphaMissense colouring (see
+[`color-theme`](#color-theme)) is kept, and the range is shown by dimming the
+rest of the model (see `entry-emphasis-opacity`).
 
 #### `highlight-color`
 
@@ -122,9 +123,9 @@ are what a PDB `structure-id` loads. Structures without it, such as most
 `model-url` models and wwPDB archive files from `custom-download-url`, are shown
 undimmed unless `entry-chains` is set; so are structures loaded without
 `protein-accession`, and structures in which nothing matches `protein-accession`
-or `entry-chains`. AlphaFold models are always excluded: they are a single
-chain covering the entry, and their pLDDT or AlphaMissense colouring stays
-untouched.
+or `entry-chains`. AlphaFold models are always excluded, including AlphaFold DB
+models loaded by `model-url` (see [`model-url`](#model-url)), even with
+`entry-chains`: their pLDDT or AlphaMissense colouring stays untouched.
 
 When a structure loads, and whenever `highlight`, `hide-entry-emphasis`,
 `entry-chains` or `entry-emphasis-opacity` change, the camera focuses on the

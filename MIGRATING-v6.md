@@ -165,12 +165,12 @@ models (see [Residue numbering](#residue-numbering)) — are shown undimmed unle
 the new `entry-chains` attribute names the entry's chains, which are then
 emphasized whole (it also takes precedence over SIFTS); so is a structure in
 which nothing matches the accession or `entry-chains`. AlphaFold models are never
-emphasized. Set the new `hide-entry-emphasis` boolean attribute to turn the
+emphasized, including AlphaFold DB models loaded by `model-url`. Set the new `hide-entry-emphasis` boolean attribute to turn the
 emphasis off; this restores the 5.x appearance except for AlphaFold highlights
 (next paragraph).
 
-**AlphaFold highlights keep the model's colours.** On AlphaFold models, a
-`highlight` no longer overpaints the range with `highlight-color`: it keeps its
+**AlphaFold highlights keep the model's colours.** On AlphaFold models (also
+AlphaFold DB models loaded by `model-url`), a `highlight` no longer overpaints the range with `highlight-color`: it keeps its
 pLDDT (or `color-theme="alphamissense"`) colours, and is shown by dimming the
 rest of the model instead (to `entry-emphasis-opacity`), whether or not
 `hide-entry-emphasis` is set.

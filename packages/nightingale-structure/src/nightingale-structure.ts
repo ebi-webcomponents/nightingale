@@ -767,18 +767,29 @@ class NightingaleStructure extends withManager(
    * resolves for structures carrying `pdbx_sifts_xref_*` columns (PDBe
    * updated mmCIF/BinaryCIF), so other files (e.g. `model-url` models,
    * archive files from `custom-download-url`) are skipped unless
-   * `entry-chains` names their chains. AlphaFold is always skipped (a single
-   * chain spanning the entry, whose pLDDT colouring must stay untouched).
+   * `entry-chains` names their chains. AlphaFold models are always skipped,
+   * including AlphaFold DB models loaded by `model-url`: their pLDDT colouring
+   * must stay untouched.
    * So are items that match nothing in the structure (an accession it doesn't
    * contain, absent chains): pdbe-molstar would still dim all of it.
    */
   #entryEmphasisItems(viewer: StructureViewer): SelectItem[] {
+    if (this.#showsAlphaFoldModel(viewer)) return [];
     const items = this.#entryEmphasisQuery();
     return items.length && viewer.matches(items) ? items : [];
   }
 
+  /**
+   * Whether `viewer` shows an AlphaFold model: one loaded by AlphaFold DB id,
+   * or an AlphaFold DB model file loaded by `model-url` (e.g. a complex),
+   * which the viewer colours by pLDDT confidence too.
+   */
+  #showsAlphaFoldModel(viewer: StructureViewer): boolean {
+    return this.isAF() || viewer.isAlphaFoldModel();
+  }
+
   #entryEmphasisQuery(): SelectItem[] {
-    if (this["hide-entry-emphasis"] || this.isAF()) return [];
+    if (this["hide-entry-emphasis"]) return [];
     // `opacity: 1` is required: `nonSelectedOpacity` dims the whole structure
     // and only items carrying an explicit opacity are exempt from that layer.
     const chains = this["entry-chains"]
@@ -823,7 +834,7 @@ class NightingaleStructure extends withManager(
     // Otherwise applied once the load in flight completes.
     if (!viewer || !this.#structureLoaded) return;
     const accession = this["protein-accession"];
-    const af = this.isAF();
+    const af = this.#showsAlphaFoldModel(viewer);
     const sifts = this.#usesSifts();
     const rangeItems: SelectItem[] = !this.highlight
       ? []
