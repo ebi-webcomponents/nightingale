@@ -200,6 +200,32 @@ describe("nightingale-structure lifecycle", () => {
       );
     });
 
+    test("an AlphaFold id without protein-accession says so until it is set", async () => {
+      mockAlphaFoldApi([
+        {
+          modelEntityId: "AF-P05067-F1",
+          chainId: "A",
+          cifUrl: "https://example.org/AF-P05067-F1.cif",
+        },
+      ]);
+      element = mount({ "structure-id": "AF-P05067-F1" });
+      await settle();
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(PDBeMolstarPlugin.instances).toHaveLength(0);
+      expect(element.message).toEqual({
+        title: "Error",
+        content: 'Set protein-accession to load AF entry "AF-P05067-F1"',
+      });
+
+      element.setAttribute("protein-accession", "P05067");
+      await settle();
+      expect(PDBeMolstarPlugin.instances).toHaveLength(1);
+      expect(initialLoad(PDBeMolstarPlugin.instances[0]).customData.url).toBe(
+        "https://example.org/AF-P05067-F1.cif",
+      );
+      expect(element.message).toBeNull();
+    });
+
     test("PDB id set after an AlphaFold lookup found no model", async () => {
       mockAlphaFoldApi([]);
       element = mount({
