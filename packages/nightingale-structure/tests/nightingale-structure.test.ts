@@ -902,6 +902,39 @@ describe("keeping the dimming", () => {
     ]);
   });
 
+  test("a load waits for a selection in flight", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => [prediction] });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    let finishSelect: () => void = () => undefined;
+    instance.visual.select.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishSelect = resolve;
+        }),
+    );
+    await set("highlight", "290:315");
+
+    // Otherwise the selection's layers and framing could land on the new
+    // structure, which nothing would replace: AlphaFold models get no emphasis.
+    // The lookup, then the load, which waits.
+    await set("structure-id", "AF-P05067-F1");
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(1);
+
+    finishSelect();
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(lastCall(instance.visual.update)[0].customData.url).toBe(
+      prediction.cifUrl,
+    );
+  });
+
   test("selections run one at a time", async () => {
     const instance = await mount({
       "protein-accession": "P05067",

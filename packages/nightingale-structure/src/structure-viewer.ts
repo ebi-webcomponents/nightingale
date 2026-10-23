@@ -56,7 +56,7 @@ export type StructureViewer = {
   /**
    * Replace the selection with `data`, moving the camera to the items with
    * `focus`, and dim the rest of the structure to `nonSelectedOpacity`.
-   * Selections run one at a time, in call order.
+   * Selections, loads and clears run one at a time, in call order.
    */
   select(params: {
     data: SelectItem[];
@@ -233,12 +233,14 @@ export const getStructureViewer = async (
   };
   container.addEventListener("PDB.molstar.click", onContainerClick);
 
-  // pdbe-molstar's `select` and `clearSelection` each await several state
-  // updates; interleaved, one's layers can be added to the other's.
-  let selecting: Promise<void> = Promise.resolve();
+  // pdbe-molstar's `select`, `clearSelection` and loads each await several
+  // state updates, so they run one at a time. Interleaved, one selection's
+  // layers can be added to another's, and a selection begun on one structure
+  // can land on (and frame) a structure loaded meanwhile.
+  let queue: Promise<void> = Promise.resolve();
   const enqueue = (task: () => Promise<void>): Promise<void> => {
-    const run = selecting.then(task);
-    selecting = run.catch(() => undefined);
+    const run = queue.then(task);
+    queue = run.catch(() => undefined);
     return run;
   };
   /**
@@ -247,31 +249,28 @@ export const getStructureViewer = async (
    */
   let appliedOpacityLayers: string | undefined;
   /**
-   * Bumped as a load or clear starts and ends: they replace the
-   * representations, and the transparency layers with them.
+   * Run a load or clear: they replace the representations, and the
+   * transparency layers with them.
    */
-  let structureVersion = 0;
-  const replaceStructure = async (task: () => Promise<unknown>) => {
-    structureVersion += 1;
-    appliedOpacityLayers = undefined;
-    try {
-      await task();
-    } finally {
-      structureVersion += 1;
+  const replaceStructure = (task: () => Promise<unknown>) =>
+    enqueue(async () => {
       appliedOpacityLayers = undefined;
-    }
-  };
+      await task();
+    });
 
   return {
     instance,
-    async load(nextSource, nextOptions) {
-      await setAlphaFoldView(instance.plugin, !!nextOptions.alphafold);
-      await replaceStructure(() =>
-        instance.visual.update(buildInitParams(nextSource, nextOptions), true),
-      );
+    load(nextSource, nextOptions) {
+      return replaceStructure(async () => {
+        await setAlphaFoldView(instance.plugin, !!nextOptions.alphafold);
+        await instance.visual.update(
+          buildInitParams(nextSource, nextOptions),
+          true,
+        );
+      });
     },
-    async clear() {
-      await replaceStructure(() => instance.clear());
+    clear() {
+      return replaceStructure(() => instance.clear());
     },
     select({ data, nonSelectedOpacity }) {
       return enqueue(async () => {
@@ -281,7 +280,6 @@ export const getStructureViewer = async (
         // layers to the existing ones rather than replacing them.
         const opacityLayers = opacityLayersKey(data, nonSelectedOpacity);
         const keepOpacity = opacityLayers === appliedOpacityLayers;
-        const version = structureVersion;
         appliedOpacityLayers = undefined;
         // Use `select` (persistent overpaint) rather than `highlight` (which is
         // a transient hover marking that clears on mouse-move), so the selected
@@ -306,7 +304,7 @@ export const getStructureViewer = async (
             ...(keepOpacity ? { keepOpacity } : { nonSelectedOpacity }),
           });
         }
-        if (version === structureVersion) appliedOpacityLayers = opacityLayers;
+        appliedOpacityLayers = opacityLayers;
       });
     },
     clearHighlight() {
