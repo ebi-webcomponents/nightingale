@@ -251,6 +251,25 @@ describe("nightingale-structure color-theme", () => {
     ]);
   });
 
+  test("only the most recently used files are kept", async () => {
+    const ids = [1, 2, 3, 4, 5].map((n) => `AF-P05067-F${n}`);
+    serve(
+      ids.map((id) => prediction(id)),
+      Object.fromEntries(ids.map((id) => [csvUrl(id), csv(0.3, 0.9)])),
+    );
+    element = mount({ ...AF, "color-theme": "alphamissense" });
+    await settle();
+
+    for (const id of [...ids.slice(1), ids[3], ids[0]]) {
+      element.setAttribute("structure-id", id);
+      // eslint-disable-next-line no-await-in-loop
+      await settle();
+    }
+
+    // F1 was dropped as F5 came in; F4, used again since, was kept.
+    expect(csvFetches()).toEqual([...ids, ids[0]].map(csvUrl));
+  });
+
   test("the file is fetched only once its AlphaFold model has loaded", async () => {
     serve([prediction("AF-P05067-F1"), prediction("AF-P05067-F2")], {
       [csvUrl("AF-P05067-F1")]: csv(0.3, 0.9),

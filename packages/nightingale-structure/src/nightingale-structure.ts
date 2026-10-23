@@ -88,6 +88,12 @@ const DEFAULT_ENTRY_EMPHASIS_OPACITY = 0.3;
 
 const PDBE_MOLSTAR_STYLE_ID = "nightingale-pdbe-molstar-styles";
 
+/**
+ * How many AlphaMissense files an element keeps, the most recently used: a
+ * page can go through any number of AlphaFold models.
+ */
+const ALPHAMISSENSE_FILES_KEPT = 4;
+
 /** Inject pdbe-molstar's stylesheet once into the document head. */
 function ensurePdbeMolstarStyles(): void {
   if (typeof document === "undefined") return;
@@ -218,7 +224,10 @@ class NightingaleStructure extends withManager(
   /** The AlphaMissense file of the AlphaFold model loaded, if it has one. */
   #alphaMissenseUrl?: string;
 
-  /** AlphaMissense files by URL, each fetched at most once. */
+  /**
+   * The most recently used AlphaMissense files by URL, least recent first. A
+   * file is fetched again only once it has been dropped from here.
+   */
   #alphaMissenseScores = new Map<string, Promise<AlphaMissenseScores>>();
 
   /** The message reporting that AlphaMissense colouring failed, if shown. */
@@ -381,8 +390,15 @@ class NightingaleStructure extends withManager(
     generation: number,
   ): Promise<ResolvedSource | undefined> {
     const accession = this["protein-accession"];
-    if (!accession) return undefined;
     const id = this["structure-id"];
+    if (!accession) {
+      // Rather than an empty viewer with no explanation. Setting it reloads.
+      this.showMessage(
+        "Error",
+        `Set protein-accession to load AF entry "${id}"`,
+      );
+      return undefined;
+    }
     this.showMessage("Loading", id || accession);
     // Errors only while this lookup is still current: a structure set
     // meanwhile may already be loaded, and must not be covered by them.
@@ -633,15 +649,26 @@ class NightingaleStructure extends withManager(
 
   /** The scores in the AlphaMissense file at `url`. */
   #fetchAlphaMissense(url: string): Promise<AlphaMissenseScores> {
-    let scores = this.#alphaMissenseScores.get(url);
-    if (!scores) {
-      scores = fetch(url).then(async (response) => {
+    const files = this.#alphaMissenseScores;
+    let scores = files.get(url);
+    if (scores) {
+      // Now the most recently used.
+      files.delete(url);
+    } else {
+      const fetched = fetch(url).then(async (response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return parseAlphaMissense(await response.text());
       });
-      this.#alphaMissenseScores.set(url, scores);
-      // Fetched again the next time it is needed.
-      scores.catch(() => this.#alphaMissenseScores.delete(url));
+      // Fetched again the next time it is needed, unless already replaced.
+      fetched.catch(() => {
+        if (files.get(url) === fetched) files.delete(url);
+      });
+      scores = fetched;
+    }
+    files.set(url, scores);
+    for (const oldest of files.keys()) {
+      if (files.size <= ALPHAMISSENSE_FILES_KEPT) break;
+      files.delete(oldest);
     }
     return scores;
   }
