@@ -64,7 +64,9 @@ How AlphaFold models are coloured:
   its mean score.
 
 Any other value, or none, means `alphafold`. Only AlphaFold models loaded by
-`structure-id` are affected; other structures ignore `color-theme`.
+`structure-id` are affected; other structures ignore `color-theme`. (AlphaFold
+DB models loaded by `model-url` are coloured by pLDDT confidence regardless:
+see [`model-url`](#model-url).)
 
 The scores come from the AlphaMissense file (`amAnnotationsUrl`, e.g.
 `AF-P05067-F1-aa-substitutions.csv`) of the model's prediction in the AlphaFold
@@ -103,6 +105,12 @@ Unless the file has SIFTS mapping (most models don't), `highlight` and `change`
 use its author residue numbers, whether or not `protein-accession` is set. That
 lines up with your other tracks when the model is numbered by UniProt position,
 as models served through 3D-Beacons are.
+
+An AlphaFold DB model file — one with an `AF-` entry id, per-residue pLDDT
+scores and no HETATM records, such as a complex's `cifUrl`/`bcifUrl` from the
+AlphaFold DB API — is coloured by pLDDT confidence, as with `structure-id`.
+AlphaFill models, which add ligands to AlphaFold DB models, and other models
+keep pdbe-molstar's default colours.
 
 #### `custom-download-url`
 

@@ -471,6 +471,87 @@ describe("nightingale-structure color-theme", () => {
     ).toEqual({ name: "element-symbol", params: {} });
   });
 
+  describe("AlphaFold DB models loaded by model-url", () => {
+    // A complex, which has no AlphaFold DB id to load it by.
+    const complexUrl =
+      "https://alphafold.ebi.ac.uk/files/AF-0000000210569523-model_v1.cif";
+    const otherUrl = "https://example.org/model.cif";
+
+    afterEach(() => {
+      PDBeMolstarPlugin.file = PDBeMolstarPlugin.defaultFile;
+    });
+
+    test("are coloured by pLDDT confidence once loaded", async () => {
+      element = mount({ "model-url": complexUrl });
+      await settle();
+      const instance = viewer();
+
+      expect(themes(instance)).toEqual(["plddt-confidence"]);
+      expect(themedAfterLoad(instance)).toBe(true);
+      // Its colour theme and hover label.
+      expect(
+        instance.plugin.state.behaviors.cells.has(MAQualityAssessment.id),
+      ).toBe(true);
+    });
+
+    test("are coloured after other structures, which are not", async () => {
+      element = mount({ "model-url": otherUrl });
+      await settle();
+      const instance = viewer();
+      expect(themes(instance)).toEqual([]);
+
+      element.setAttribute("model-url", complexUrl);
+      await settle();
+      expect(themes(instance)).toEqual(["plddt-confidence"]);
+      expect(themedAfterLoad(instance)).toBe(true);
+
+      element.setAttribute("model-url", otherUrl);
+      await settle();
+      expect(themes(instance)).toEqual(["plddt-confidence"]);
+      // Nor is the next load set up to colour by pLDDT confidence.
+      expect(
+        instance.plugin.config.get(
+          PluginConfig.Structure.DefaultRepresentationPresetParams,
+        ).theme.globalName,
+      ).toBeUndefined();
+    });
+
+    test("ignore alphamissense, as other model-url structures do", async () => {
+      serve([]);
+      element = mount({
+        "model-url": complexUrl,
+        "protein-accession": "P05067",
+        "color-theme": "alphamissense",
+      });
+      await settle();
+
+      expect(themes(viewer())).toEqual(["plddt-confidence"]);
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(element.message).toBeNull();
+    });
+
+    test.each([
+      [
+        "AlphaFill models, which add ligands",
+        { entryId: "AF-P05067-F1", plddt: true, hetatm: true },
+      ],
+      [
+        "AlphaFold ids without pLDDT scores",
+        { entryId: "AF-P05067-F1", plddt: false, hetatm: false },
+      ],
+      [
+        "other models with pLDDT scores",
+        { entryId: "P05067_30-189", plddt: true, hetatm: false },
+      ],
+    ])("but not %s", async (_, file) => {
+      PDBeMolstarPlugin.file = () => file;
+      element = mount({ "model-url": otherUrl });
+      await settle();
+
+      expect(themes(viewer())).toEqual([]);
+    });
+  });
+
   test("every viewer registers the theme on its own plugin", async () => {
     serve([prediction("AF-P05067-F1")], {
       [csvUrl("AF-P05067-F1")]: csv(0.3, 0.9),

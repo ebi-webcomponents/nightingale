@@ -57,7 +57,8 @@ implemented, so there is nothing to migrate.
   AlphaMissense pathogenicity on the `amColorScale` scale, but:
   - only AlphaFold models loaded by `structure-id` are coloured: 5.x also
     coloured an AlphaFold model file loaded by `model-url`, which now ignores
-    `color-theme`;
+    `color-theme`. AlphaFold DB model files loaded by `model-url` (e.g.
+    complexes) are still coloured by pLDDT confidence, as in 5.x;
   - the AlphaMissense file's URL is the `amAnnotationsUrl` of the model's
     prediction in the AlphaFold DB API response, rather than one built from the
     model's entry id;

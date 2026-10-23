@@ -7,6 +7,9 @@ import type { InitParams } from "pdbe-molstar/lib/spec";
 import type { QueryParam } from "pdbe-molstar/lib/helpers";
 import type { EventDetail } from "pdbe-molstar/lib/loci-details";
 import { MAQualityAssessment } from "molstar/lib/extensions/model-archive/quality-assessment/behavior";
+import { QualityAssessment } from "molstar/lib/extensions/model-archive/quality-assessment/prop";
+import type { MmcifFormat } from "molstar/lib/mol-model-formats/structure/mmcif";
+import type { Model } from "molstar/lib/mol-model/structure";
 import { PluginBehavior } from "molstar/lib/mol-plugin/behavior/behavior";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import type { PluginContext } from "molstar/lib/mol-plugin/context";
@@ -61,6 +64,12 @@ export type StructureViewer = {
    * loaded by URL.
    */
   hasSiftsMapping(): boolean;
+  /**
+   * Whether the loaded structure is an AlphaFold DB model. One loaded by URL
+   * (e.g. a complex, which has no AlphaFold DB id) is coloured by pLDDT
+   * confidence too, as models are with `options.alphafold`.
+   */
+  isAlphaFoldModel(): boolean;
   setHighlightColor(color: string): Promise<void>;
   /**
    * Colour the loaded structure by `theme`. Loading a structure resets it to
@@ -116,6 +125,20 @@ const buildInitParams = (
   };
 };
 
+/** Register the pLDDT colour theme and hover label with `plugin`. */
+const addQualityAssessment = async (plugin: PluginContext): Promise<void> => {
+  if (plugin.state.behaviors.cells.has(MAQualityAssessment.id)) return;
+  const tree = plugin.state.behaviors
+    .build()
+    .to(PluginBehavior.getCategoryId(MAQualityAssessment))
+    .apply(
+      MAQualityAssessment,
+      { autoAttach: true, showTooltip: true },
+      { ref: MAQualityAssessment.id },
+    );
+  await plugin.runTask(plugin.state.behaviors.updateTree(tree));
+};
+
 /**
  * Colour the structures `plugin` loads next by pLDDT confidence, as
  * pdbe-molstar colours AlphaFold models (`alphafoldView`), or not. pdbe-molstar
@@ -127,18 +150,7 @@ const setAlphaFoldView = async (
   plugin: PluginContext,
   alphafold: boolean,
 ): Promise<void> => {
-  // Registers the pLDDT colour theme and hover label.
-  if (alphafold && !plugin.state.behaviors.cells.has(MAQualityAssessment.id)) {
-    const tree = plugin.state.behaviors
-      .build()
-      .to(PluginBehavior.getCategoryId(MAQualityAssessment))
-      .apply(
-        MAQualityAssessment,
-        { autoAttach: true, showTooltip: true },
-        { ref: MAQualityAssessment.id },
-      );
-    await plugin.runTask(plugin.state.behaviors.updateTree(tree));
-  }
+  if (alphafold) await addQualityAssessment(plugin);
   // The preset pdbe-molstar loads every structure with.
   const preset = PluginConfig.Structure.DefaultRepresentationPresetParams;
   const params = plugin.config.get(preset) ?? {};
@@ -154,6 +166,26 @@ const setAlphaFoldView = async (
   });
 };
 
+/**
+ * Whether `model` is an AlphaFold DB model: an `AF-` entry id, per-residue
+ * pLDDT scores, and no HETATM records. The last tells it from AlphaFill, which
+ * adds ligands to AlphaFold DB models.
+ */
+const isAlphaFoldDbModel = (model: Model): boolean => {
+  if (
+    !model.entryId.startsWith("AF-") ||
+    !QualityAssessment.isApplicable(model, "pLDDT")
+  ) {
+    return false;
+  }
+  // `isApplicable` holds only for mmCIF.
+  const groups = (model.sourceData as MmcifFormat).data.db.atom_site.group_PDB;
+  for (let i = 0; i < groups.rowCount; i += 1) {
+    if (groups.value(i) === "HETATM") return false;
+  }
+  return true;
+};
+
 export const getStructureViewer = async (
   parent: HTMLElement,
   onClick: (event: StructureClickEvent) => void,
@@ -163,6 +195,49 @@ export const getStructureViewer = async (
   const instance = new PDBeMolstarPlugin();
   /** The scores the AlphaMissense theme colours by. */
   let alphaMissenseScores: AlphaMissenseScores = new Map();
+
+  /** The first model of the loaded structure, if any. */
+  const loadedModel = (): Model | undefined =>
+    instance.getStructure(-1)?.cell.obj?.data.models[0];
+
+  const isAlphaFoldModel = () => {
+    const model = loadedModel();
+    return !!model && isAlphaFoldDbModel(model);
+  };
+
+  const setColorTheme = async (theme: StructureColorTheme) => {
+    let color = "plddt-confidence";
+    if (theme.name === "alphamissense") {
+      alphaMissenseScores = theme.scores;
+      color = ALPHAMISSENSE_THEME;
+    }
+    const { managers } = instance.plugin;
+    for (const structure of managers.structure.hierarchy.current.structures) {
+      // eslint-disable-next-line no-await-in-loop
+      await managers.structure.component.updateRepresentationsTheme(
+        structure.components,
+        // Not one of molstar's built-in themes.
+        { color: color as ColorTheme.BuiltIn },
+      );
+    }
+  };
+
+  /**
+   * Whether a structure that has loaded with `options` is an AlphaFold DB
+   * model that they didn't set up to colour by pLDDT confidence.
+   */
+  const needsAlphaFoldColours = (options: StructureViewerOptions) =>
+    !options.alphafold && isAlphaFoldModel();
+
+  /** Colour the loaded structure by pLDDT confidence. */
+  const colourAlphaFoldModel = async () => {
+    try {
+      await addQualityAssessment(instance.plugin);
+      await setColorTheme({ name: "plddt-confidence" });
+    } catch {
+      // The model stays in its default colours.
+    }
+  };
 
   // pdbe-molstar's `render()` mounts its React UI with `createRoot(target)` and
   // never unmounts it, so each viewer gets a fresh target element, removed on
@@ -186,6 +261,7 @@ export const getStructureViewer = async (
     ) {
       throw new Error("Invalid structure parameters");
     }
+    if (needsAlphaFoldColours(options)) await colourAlphaFoldModel();
   } catch (error) {
     container.remove();
     instance.plugin?.dispose();
@@ -208,6 +284,7 @@ export const getStructureViewer = async (
         buildInitParams(nextSource, nextOptions),
         true,
       );
+      if (needsAlphaFoldColours(nextOptions)) await colourAlphaFoldModel();
     },
     async clear() {
       await instance.clear();
@@ -231,29 +308,15 @@ export const getStructureViewer = async (
     },
     hasSiftsMapping() {
       // The model pdbe-molstar's UniProt queries read the mapping from.
-      const model = instance.getStructure(-1)?.cell.obj?.data.models[0];
+      const model = loadedModel();
       return !!model && SIFTSMapping.isAvailable(model);
     },
+    isAlphaFoldModel,
     async setHighlightColor(color) {
       const c = toMolstarColor(color);
       await instance.visual.setColor({ highlight: c, select: c });
     },
-    async setColorTheme(theme) {
-      let color = "plddt-confidence";
-      if (theme.name === "alphamissense") {
-        alphaMissenseScores = theme.scores;
-        color = ALPHAMISSENSE_THEME;
-      }
-      const { managers } = instance.plugin;
-      for (const structure of managers.structure.hierarchy.current.structures) {
-        // eslint-disable-next-line no-await-in-loop
-        await managers.structure.component.updateRepresentationsTheme(
-          structure.components,
-          // Not one of molstar's built-in themes.
-          { color: color as ColorTheme.BuiltIn },
-        );
-      }
-    },
+    setColorTheme,
     handleResize() {
       instance.plugin.handleResize();
     },
