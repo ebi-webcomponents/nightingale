@@ -123,6 +123,7 @@ export type StructureViewer = {
    * confidence too, as models are with `options.alphafold`.
    */
   isAlphaFoldModel(): boolean;
+  /** Runs in call order with selections, loads and clears. */
   setHighlightColor(color: string): Promise<void>;
   /**
    * Colour the loaded structure by `theme`. Loading a structure resets it to
@@ -442,9 +443,13 @@ export const getStructureViewer = async (
       return loci.kind === "element-loci" && loci.elements.length > 0;
     },
     isAlphaFoldModel,
-    async setHighlightColor(color) {
-      const c = toMolstarColor(color);
-      await instance.visual.setColor({ highlight: c, select: c });
+    setHighlightColor(color) {
+      // In order with loads, which set the colour they were given: a colour
+      // set while a load waits in the queue would otherwise be overwritten.
+      return enqueue(async () => {
+        const c = toMolstarColor(color);
+        await instance.visual.setColor({ highlight: c, select: c });
+      });
     },
     setColorTheme,
     handleResize() {

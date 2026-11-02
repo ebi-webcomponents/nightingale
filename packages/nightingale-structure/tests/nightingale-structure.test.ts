@@ -1061,6 +1061,38 @@ describe("keeping the dimming", () => {
     ]);
   });
 
+  test("a highlight colour set while a load waits is applied after it", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    let finishSelect: () => void = () => undefined;
+    instance.visual.select.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishSelect = resolve;
+        }),
+    );
+    await set("highlight", "290:315");
+    // The load waits behind the selection, with the colour it was given;
+    // pdbe-molstar's visual.update applies that colour.
+    await set("structure-id", "2XYZ");
+    await set("highlight-color", "#00FF00");
+
+    finishSelect();
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(lastCall(instance.visual.setColor)[0]).toEqual({
+      highlight: "#00FF00",
+      select: "#00FF00",
+    });
+    const order = (fn: jest.Mock) =>
+      fn.mock.invocationCallOrder[fn.mock.invocationCallOrder.length - 1];
+    expect(order(instance.visual.setColor)).toBeGreaterThan(
+      order(instance.visual.update),
+    );
+  });
+
   test("a load waits for a selection in flight", async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = jest
