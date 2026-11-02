@@ -1061,6 +1061,42 @@ describe("keeping the dimming", () => {
     ]);
   });
 
+  test("on AlphaFold models, a highlight set again after a clear rebuilds it", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => [prediction] });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "AF-P05067-F1",
+      highlight: "10:20",
+    });
+
+    // The clear drops the dimming, which is the highlight there...
+    await set("highlight", null);
+    expect(instance.visual.reset).toHaveBeenCalledWith({ camera: true });
+    // ...so the same highlight again must rebuild it, not keep it.
+    await set("highlight", "10:20");
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      undefined,
+    ]);
+    expect(lastCall(instance.visual.select)).toEqual([
+      {
+        data: [
+          {
+            beg_auth_seq_id: 10,
+            end_auth_seq_id: 20,
+            color: null,
+            opacity: 1,
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      },
+    ]);
+  });
+
   test("a highlight colour set while a load waits is applied after it", async () => {
     const instance = await mount({
       "protein-accession": "P05067",
