@@ -236,6 +236,9 @@ class NightingaleStructure extends withManager(
   /** Whether a selection is applied that clearing it must undo. */
   #selectionApplied = false;
 
+  /** The note that the highlight isn't in the structure, if shown. */
+  #outOfRangeNote?: { title: string; content: string };
+
   constructor() {
     super();
     this.updateHighlight = this.updateHighlight.bind(this);
@@ -862,21 +865,42 @@ class NightingaleStructure extends withManager(
             : { color: this["highlight-color"] }),
           focus,
         }));
+    if (this.message && this.message === this.#outOfRangeNote) {
+      this.clearMessage();
+    }
+    // None of the highlight is in the structure (e.g. a feature outside the
+    // part of the protein an entry covers): say so, rather than seem to ignore
+    // it, and leave the camera where it is. A range partly in the structure is
+    // highlighted where it is.
+    const outOfRange = rangeItems.length > 0 && !viewer.matches(rangeItems);
+    if (outOfRange) {
+      const ranges = this.highlightedRegion.segments
+        .map(({ start, end }) =>
+          start === end ? `${start}` : `${start}–${end}`,
+        )
+        .join(", ");
+      this.#outOfRangeNote = this.showMessage(
+        this.#label(),
+        `Not in this structure: ${sifts ? `${accession} ` : ""}${ranges}`,
+      );
+    }
+    const highlightItems = outOfRange ? [] : rangeItems;
+    const moveCamera = focus && !outOfRange;
     const entryItems = this.#entryEmphasisItems(viewer).map((item) => ({
       ...item,
       // Frame the entry's chains only when no highlighted range will focus.
-      focus: focus && rangeItems.length === 0,
+      focus: moveCamera && highlightItems.length === 0,
     }));
-    const data = [...entryItems, ...rangeItems];
+    const data = [...entryItems, ...highlightItems];
     // A failed selection is replaced by the next one; it needs no handling.
     const ignore = () => undefined;
     if (data.length === 0) {
       // Only clear (which also resets the camera) if a selection was applied
       // before; otherwise e.g. an AlphaFold load would get a spurious camera
-      // reset right after its initial framing. Without `focus`, only the
+      // reset right after its initial framing. Without `moveCamera`, only the
       // selection is cleared.
       if (this.#selectionApplied) {
-        (focus ? viewer.clearHighlight() : viewer.select({ data })).catch(
+        (moveCamera ? viewer.clearHighlight() : viewer.select({ data })).catch(
           ignore,
         );
         this.#selectionApplied = false;
@@ -885,7 +909,8 @@ class NightingaleStructure extends withManager(
     }
     // Dim the rest of the structure when emphasizing the entry's chains, and
     // for a highlight on an AlphaFold model (where the dim IS the highlight).
-    const dimOthers = entryItems.length > 0 || (af && rangeItems.length > 0);
+    const dimOthers =
+      entryItems.length > 0 || (af && highlightItems.length > 0);
     viewer
       .select({
         data,

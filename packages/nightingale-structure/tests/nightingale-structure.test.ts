@@ -536,10 +536,13 @@ describe("entry-chain emphasis", () => {
   });
 
   test("it applies no emphasis when the entry matches nothing in the structure", async () => {
+    // The entry emphasis (`color: null` items) for P99999 or chain Z matches
+    // nothing; highlights match, so that one can be checked to be undimmed.
     PDBeMolstarPlugin.matches = (params: Record<string, unknown>[]) =>
       params.every(
         (param) =>
-          param.uniprot_accession !== "P99999" && param.auth_asym_id !== "Z",
+          param.color !== null ||
+          (param.uniprot_accession !== "P99999" && param.auth_asym_id !== "Z"),
       );
     const instance = await mount({
       "protein-accession": "P05067",
@@ -600,6 +603,125 @@ describe("entry-chain emphasis", () => {
       });
     },
   );
+
+  describe("a highlight outside the structure", () => {
+    // 1AAP covers P05067 287-342: ranges from 500 on match nothing.
+    beforeEach(() => {
+      PDBeMolstarPlugin.matches = (params: Record<string, unknown>[]) =>
+        params.some(
+          (param) =>
+            ((param.start_uniprot_residue_number as number | undefined) ??
+              (param.beg_auth_seq_id as number | undefined) ??
+              0) < 500,
+        );
+    });
+
+    test("is noted, leaving the selection to the emphasis and the camera alone", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+      });
+      rendered.setAttribute("highlight", "500:600,650:650");
+      await settle();
+
+      // Only the emphasis, unchanged but for the framing (the dimming is kept,
+      // so pdbe-molstar gets `keepOpacity` rather than the opacities).
+      const { data } = instance.visual.select.mock.lastCall[0];
+      expect(data).toEqual([
+        { uniprot_accession: "P05067", color: null, focus: false },
+      ]);
+      expect(instance.visual.reset).not.toHaveBeenCalled();
+      expect(rendered.message).toEqual({
+        title: "1AAP",
+        content: "Not in this structure: P05067 500–600, 650",
+      });
+    });
+
+    test("is not noted once the highlight is in the structure, or removed", async () => {
+      await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        highlight: "500:600",
+      });
+      expect(rendered.message?.content).toBe(
+        "Not in this structure: P05067 500–600",
+      );
+
+      rendered.setAttribute("highlight", "290:300");
+      await settle();
+      expect(rendered.message).toBeNull();
+
+      rendered.setAttribute("highlight", "500:600");
+      await settle();
+      expect(rendered.message).not.toBeNull();
+      rendered.removeAttribute("highlight");
+      await settle();
+      expect(rendered.message).toBeNull();
+    });
+
+    test("is partly in the structure: highlighted, not noted", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        highlight: "330:520",
+      });
+      expect(instance.visual.select).toHaveBeenLastCalledWith({
+        data: [
+          {
+            uniprot_accession: "P05067",
+            color: null,
+            opacity: 1,
+            focus: false,
+          },
+          {
+            uniprot_accession: "P05067",
+            start_uniprot_residue_number: 330,
+            end_uniprot_residue_number: 520,
+            color: "#FFEB3B",
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      });
+      expect(rendered.message).toBeNull();
+    });
+
+    test("clears an earlier highlight without moving the camera", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        "hide-entry-emphasis": "",
+        highlight: "290:300",
+      });
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+
+      rendered.setAttribute("highlight", "500:600");
+      await settle();
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+      expect(instance.visual.clearSelection).toHaveBeenCalledTimes(2);
+      expect(instance.visual.reset).not.toHaveBeenCalled();
+      expect(rendered.message?.content).toBe(
+        "Not in this structure: P05067 500–600",
+      );
+    });
+
+    test("is noted in author numbers without SIFTS", async () => {
+      PDBeMolstarPlugin.hasSifts = () => false;
+      try {
+        await mount({
+          "protein-accession": "P05067",
+          "model-url": "https://example.org/model.cif",
+          highlight: "500:600",
+        });
+        expect(rendered.message).toEqual({
+          title: "https://example.org/model.cif",
+          content: "Not in this structure: 500–600",
+        });
+      } finally {
+        PDBeMolstarPlugin.hasSifts = PDBeMolstarPlugin.defaultHasSifts;
+      }
+    });
+  });
 
   test("hide-entry-emphasis leaves the rest undimmed around a highlight", async () => {
     const instance = await mount({

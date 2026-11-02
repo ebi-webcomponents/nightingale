@@ -89,6 +89,11 @@ structure residues are highlighted and focused. Positions are UniProt or author
 residue numbers, depending on the structure: see [Residue
 numbering](#residue-numbering).
 
+When none of the ranges is in the structure (e.g. a feature outside the part of
+the protein a PDB entry covers), a note says so, e.g. `Not in this structure:
+P05067 500–600`, and the camera stays where it is. A range partly in the
+structure is highlighted where it is.
+
 On AlphaFold models, including AlphaFold DB models loaded by `model-url`, the
 highlighted range is not recoloured — the pLDDT or AlphaMissense colouring (see
 [`color-theme`](#color-theme)) is kept, and the range is shown by dimming the

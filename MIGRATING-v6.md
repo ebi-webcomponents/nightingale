@@ -187,6 +187,13 @@ global `@keyframes dash`. If you serve a strict Content-Security-Policy, note th
 this is an inline `<style>` element and needs `style-src 'unsafe-inline'` (or a
 nonce/hash strategy that covers it).
 
+**A highlight outside the structure shows a note, not an error.** 5.x showed
+`Error: Start or end coordinate outside of mapping range` whenever either end of
+a range fell outside the structure, and highlighted nothing. v6 highlights the
+part of a range that is in the structure; only when none of the highlight is
+does it show a note, titled with the structure (e.g. `Not in this structure:
+P05067 500–600`), and leave the camera where it is.
+
 **Structures that can't be loaded no longer leave "Loading" on screen.** An
 AlphaFold id that `protein-accession` has no model for shows
 `No AF entry "<id>" for <accession>`, and a structure that fails to download or
