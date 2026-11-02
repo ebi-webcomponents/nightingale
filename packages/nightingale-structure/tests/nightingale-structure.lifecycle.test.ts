@@ -27,6 +27,11 @@ const settle = async () => {
 let holdLoad = false;
 /** While set, the stub's `render()` rejects, as when WebGL is unavailable. */
 let failRender = false;
+/**
+ * While set, a new viewer's initial load resolves `false`, as pdbe-molstar's
+ * `visual.update` does for params it finds invalid (rather than rejecting).
+ */
+let invalidParams = false;
 const heldLoads: ((error?: Error) => void)[] = [];
 /** Complete the held loads, or fail them as pdbe-molstar does: reject. */
 const releaseLoad = (success = true) => {
@@ -48,6 +53,7 @@ Object.defineProperty(PDBeMolstarPlugin.prototype, "render", {
         }
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         if (holdLoad) heldLoads.push(deferUpdate(this));
+        if (invalidParams) this.visual.update.mockResolvedValueOnce(false);
         return original(container, params);
       }),
       writable: true,
@@ -169,6 +175,7 @@ describe("nightingale-structure lifecycle", () => {
     holdLoad = false;
     heldLoads.length = 0;
     failRender = false;
+    invalidParams = false;
     unhandledRejections.length = 0;
   });
 
@@ -532,6 +539,50 @@ describe("nightingale-structure lifecycle", () => {
         content: `Couldn't load structure "1AAP"`,
       });
       // afterEach checks for unhandled rejections.
+    });
+
+    test("an initial load pdbe-molstar finds invalid reports an error and leaves no element behind", async () => {
+      invalidParams = true;
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "9ZZZ",
+      });
+      await settle();
+
+      const [instance] = PDBeMolstarPlugin.instances;
+      expect(instance.visual.update).toHaveBeenCalledTimes(1);
+      expect(element.message).toEqual({
+        title: "Error",
+        content: `Couldn't load structure "9ZZZ"`,
+      });
+      expect(instance.container.isConnected).toBe(false);
+      expect(instance.plugin.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    test("removing the only source attribute empties the viewer", async () => {
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        highlight: "10:20",
+      });
+      await settle();
+      const [instance] = PDBeMolstarPlugin.instances;
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+
+      element.removeAttribute("structure-id");
+      await settle();
+      expect(instance.clear).toHaveBeenCalledTimes(1);
+
+      // Nothing is left to highlight or click.
+      const changes: string[] = [];
+      element.addEventListener("change", (event) =>
+        changes.push((event as CustomEvent).detail.highlight),
+      );
+      element.setAttribute("highlight", "30:40");
+      await settle();
+      click();
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+      expect(changes).toEqual([]);
     });
   });
 

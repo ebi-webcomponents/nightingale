@@ -270,6 +270,25 @@ describe("nightingale-structure color-theme", () => {
     expect(csvFetches()).toEqual([...ids, ids[0]].map(csvUrl));
   });
 
+  test("a file used again is kept longer than files used since", async () => {
+    const ids = [1, 2, 3, 4, 5].map((n) => `AF-P05067-F${n}`);
+    serve(
+      ids.map((id) => prediction(id)),
+      Object.fromEntries(ids.map((id) => [csvUrl(id), csv(0.3, 0.9)])),
+    );
+    element = mount({ ...AF, "color-theme": "alphamissense" });
+    await settle();
+
+    // F1 to F4 fill the cache, then F1 is used again: F5 drops F2, not F1.
+    for (const id of [ids[1], ids[2], ids[3], ids[0], ids[4], ids[0]]) {
+      element.setAttribute("structure-id", id);
+      // eslint-disable-next-line no-await-in-loop
+      await settle();
+    }
+
+    expect(csvFetches()).toEqual(ids.map(csvUrl));
+  });
+
   test("the file is fetched only once its AlphaFold model has loaded", async () => {
     serve([prediction("AF-P05067-F1"), prediction("AF-P05067-F2")], {
       [csvUrl("AF-P05067-F1")]: csv(0.3, 0.9),
@@ -309,6 +328,31 @@ describe("nightingale-structure color-theme", () => {
     expect(element.message).toEqual({
       title: "Error",
       content: 'No AlphaMissense data for "AF-P05067-F1"',
+    });
+  });
+
+  test("a reload to a model without AlphaMissense data doesn't colour it by the previous model's", async () => {
+    serve(
+      [
+        prediction("AF-P05067-F1"),
+        prediction("AF-P05067-F2", { amAnnotationsUrl: undefined }),
+      ],
+      { [csvUrl("AF-P05067-F1")]: csv(0.3, 0.9) },
+    );
+    element = mount({ ...AF, "color-theme": "alphamissense" });
+    await settle();
+    const instance = viewer();
+    expect(themes(instance)).toEqual([ALPHAMISSENSE_THEME]);
+
+    element.setAttribute("structure-id", "AF-P05067-F2");
+    await settle();
+
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(themes(instance)).toEqual([ALPHAMISSENSE_THEME]);
+    expect(csvFetches()).toEqual([csvUrl("AF-P05067-F1")]);
+    expect(element.message).toEqual({
+      title: "Error",
+      content: 'No AlphaMissense data for "AF-P05067-F2"',
     });
   });
 
@@ -492,6 +536,23 @@ describe("nightingale-structure color-theme", () => {
       expect(
         instance.plugin.state.behaviors.cells.has(MAQualityAssessment.id),
       ).toBe(true);
+    });
+
+    test("stay loaded, in their own colours, when colouring them fails", async () => {
+      element = mount({ "model-url": complexUrl });
+      // The viewer exists before its initial load completes.
+      for (let i = 0; i < 100 && !PDBeMolstarPlugin.instances.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        await Promise.resolve();
+      }
+      const instance = viewer();
+      themeUpdates(instance).mockRejectedValueOnce(new Error("theme failed"));
+      await settle();
+
+      expect(themeUpdates(instance)).toHaveBeenCalled();
+      expect(instance.plugin.dispose).not.toHaveBeenCalled();
+      expect(instance.container.isConnected).toBe(true);
+      expect(element.message).toBeNull();
     });
 
     test("are coloured after other structures, which are not", async () => {
