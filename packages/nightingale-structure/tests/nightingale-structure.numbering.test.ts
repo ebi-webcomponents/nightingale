@@ -271,6 +271,63 @@ describe("nightingale-structure residue numbering", () => {
     });
   });
 
+  describe("highlight", () => {
+    /** The highlighted ranges of the last selection. */
+    const ranges = () =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      lastSelection().filter((item: any) =>
+        ["start_uniprot_residue_number", "beg_auth_seq_id"].some(
+          (key) => key in item,
+        ),
+      );
+
+    test("selects every range, by UniProt number", async () => {
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        highlight: "10:20,30:40",
+      });
+      await settle();
+
+      expect(ranges()).toEqual([
+        uniProtRange("P05067", 10, 20),
+        uniProtRange("P05067", 30, 40),
+      ]);
+    });
+
+    test("selects every range, by author number", async () => {
+      element = mount({
+        "protein-accession": "P05067",
+        "model-url": "https://example.org/P05067_30-189.cif",
+        highlight: "10:20,30:40",
+      });
+      await settle();
+
+      expect(ranges()).toEqual([authRange(10, 20), authRange(30, 40)]);
+    });
+
+    test("removed clears the selection and resets the camera", async () => {
+      // Without the entry emphasis, which the selection otherwise falls back to.
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        "hide-entry-emphasis": "",
+        highlight: "10:20",
+      });
+      await settle();
+      const instance = viewer();
+      const clears = instance.visual.clearSelection.mock.calls.length;
+      expect(instance.visual.reset).not.toHaveBeenCalled();
+
+      element.removeAttribute("highlight");
+      await settle();
+
+      expect(instance.visual.clearSelection).toHaveBeenCalledTimes(clears + 1);
+      expect(instance.visual.reset).toHaveBeenCalledWith({ camera: true });
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("changing highlight-color", () => {
     test("without a highlight only changes the color", async () => {
       element = mount({

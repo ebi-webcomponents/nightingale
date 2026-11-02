@@ -341,4 +341,59 @@ describe("nightingale-structure source resolution", () => {
       "https://example.org/AF-P2-F1.cif",
     );
   });
+
+  describe("sources that can't be resolved", () => {
+    /** Every load of every viewer created. */
+    const loads = () =>
+      PDBeMolstarPlugin.instances.flatMap(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (instance: any) => instance.visual.update.mock.calls,
+      );
+
+    test.each([
+      ["the lookup fails", () => Promise.reject(new Error("Failed to fetch"))],
+      [
+        "the API answers with an error",
+        () =>
+          Promise.resolve({
+            ok: false,
+            json: async () => ({ detail: "not found" }),
+          }),
+      ],
+    ])("an AlphaFold id is reported when %s", async (_, lookup) => {
+      global.fetch = jest.fn(lookup) as jest.Mock;
+      element = mount({
+        "protein-accession": "P05067",
+        "structure-id": "AF-P05067-F1",
+      });
+      await settle();
+
+      // Rather than staying "Loading".
+      expect(element.message).toEqual({
+        title: "Error",
+        content: 'Couldn\'t load AF entry "AF-P05067-F1"',
+      });
+      expect(loads()).toHaveLength(0);
+    });
+
+    test("structure-id and model-url together are an error, and load nothing", async () => {
+      const error = jest.spyOn(console, "error").mockImplementation(() => {});
+      try {
+        element = mount({
+          "structure-id": "1AAP",
+          "model-url": "https://example.org/model.cif",
+        });
+        await settle();
+
+        expect(error).toHaveBeenCalledWith(
+          expect.stringContaining(
+            "Structure ID and Model URL both are present",
+          ),
+        );
+        expect(loads()).toHaveLength(0);
+      } finally {
+        error.mockRestore();
+      }
+    });
+  });
 });
