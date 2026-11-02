@@ -215,7 +215,7 @@ copy of Mol\*. As in 5.x, Mol\* is bundled into `dist/index.js`, which imports
 nothing from these packages at runtime, so they need not match versions used
 elsewhere in your app. `d3` and `dompurify` are unchanged.
 
-The bundle grows from 2.55 MB (0.70 MB gzipped) in 5.11.0 to 4.69 MB (1.28 MB
+The bundle grows from 2.55 MB (0.70 MB gzipped) in 5.11.0 to 4.27 MB (1.17 MB
 gzipped).
 
 ## 3. `nightingale-msa` no longer emits an unresolved import
@@ -236,10 +236,10 @@ them. `src/` is still included in every package, and the small declaration maps
 (`.d.ts.map`) do ship, so your editor's go-to-definition lands on the TypeScript
 source.
 
-`nightingale-structure` goes from **13.0 MB to 4.7 MB** unpacked. Across all
+`nightingale-structure` goes from **13.0 MB to 4.3 MB** unpacked. Across all
 packages this removes about 25 MB of `node_modules`. The bundle your users actually
-download is unchanged in kind: `nightingale-structure`'s `dist/index.js` is 4.69 MB
-raw, 1.28 MB gzipped.
+download is unchanged in kind: `nightingale-structure`'s `dist/index.js` is 4.27 MB
+raw, 1.17 MB gzipped.
 
 ## Known issue, not new in v6
 

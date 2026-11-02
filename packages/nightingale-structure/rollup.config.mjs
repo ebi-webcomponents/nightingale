@@ -4,6 +4,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import terser from "@rollup/plugin-terser";
 import json from "@rollup/plugin-json";
+import replace from "@rollup/plugin-replace";
 
 const require = createRequire(import.meta.url);
 
@@ -63,6 +64,30 @@ function nodeBuiltinShims() {
   };
 }
 
+// pdbe-molstar is CommonJS, and its `require("rxjs")` would bundle rxjs's
+// CommonJS build as well as the ES module build molstar imports. Resolve its
+// requires to the ES module build too: one copy, and only what's used of it.
+function rxjsAsEsm() {
+  return {
+    name: "rxjs-as-esm",
+    resolveId(source, importer, options) {
+      if (!/^rxjs(\/operators)?$/.test(source) || !importer) return null;
+      if (!options.custom?.["node-resolve"]?.isRequire) return null;
+      return this.resolve(source, importer, {
+        ...options,
+        skipSelf: true,
+        custom: {
+          ...options.custom,
+          "node-resolve": {
+            ...options.custom["node-resolve"],
+            isRequire: false,
+          },
+        },
+      });
+    },
+  };
+}
+
 // Package-local rollup config.
 //
 // nightingale-structure bundles pdbe-molstar (which bundles molstar). Unlike the
@@ -106,7 +131,15 @@ export default {
     sourcemap: "hidden",
   },
   plugins: [
+    // React (in pdbe-molstar's UI) picks its development or production build
+    // by `process.env.NODE_ENV`; unreplaced, both are bundled, and loading
+    // the bundle without a bundler fails ("process is not defined").
+    replace({
+      preventAssignment: true,
+      values: { "process.env.NODE_ENV": JSON.stringify("production") },
+    }),
     nodeBuiltinShims(),
+    rxjsAsEsm(),
     cssAsString(),
     nodeResolve({ browser: true, preferBuiltins: false }),
     commonjs(),
