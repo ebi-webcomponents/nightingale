@@ -304,4 +304,41 @@ describe("nightingale-structure source resolution", () => {
       });
     });
   });
+
+  test("an AlphaFold id changed during its first lookup loads only the new model", async () => {
+    // Each lookup is answered when the test says so.
+    const lookups: { url: string; answer: (ids: string[]) => void }[] = [];
+    global.fetch = jest.fn(
+      (url: string) =>
+        new Promise((resolve) => {
+          lookups.push({
+            url,
+            answer: (ids) =>
+              resolve({
+                json: async () =>
+                  ids.map((id) => ({
+                    modelEntityId: id,
+                    chainId: "A",
+                    cifUrl: `https://example.org/${id}.cif`,
+                  })),
+              }),
+          });
+        }),
+    ) as jest.Mock;
+    element = mount({ "protein-accession": "P1", "structure-id": "AF-P1-F1" });
+    await settle();
+
+    element.setAttribute("structure-id", "AF-P2-F1");
+    element.setAttribute("protein-accession", "P2");
+    await settle();
+    lookups[0].answer(["AF-P1-F1"]);
+    await settle();
+    lookups.find(({ url }) => url.endsWith("/P2"))?.answer(["AF-P2-F1"]);
+    await settle();
+
+    expect(viewer().visual.update).toHaveBeenCalledTimes(1);
+    expect(initialLoad().customData.url).toBe(
+      "https://example.org/AF-P2-F1.cif",
+    );
+  });
 });

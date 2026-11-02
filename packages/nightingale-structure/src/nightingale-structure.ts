@@ -522,7 +522,14 @@ class NightingaleStructure extends withManager(
     let source: ResolvedSource | null = null;
     try {
       source = await this.#resolveSource(generation);
-      if (source && generation === this.#generation) {
+      // Attributes changed while the source resolved (e.g. during an AlphaFold
+      // lookup) ask for another structure: don't load this one; the init is
+      // started again for that one below.
+      if (
+        source &&
+        generation === this.#generation &&
+        this.#sourceKey() === sourceKey
+      ) {
         viewer = await getStructureViewer(
           container,
           this.updateHighlight,
