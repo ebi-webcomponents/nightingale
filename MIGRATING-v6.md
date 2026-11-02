@@ -177,9 +177,11 @@ pLDDT (or `color-theme="alphamissense"`) colours, and is shown by dimming the
 rest of the model instead (to `entry-emphasis-opacity`), whether or not
 `hide-entry-emphasis` is set.
 
-**A stylesheet is now added to `document.head`.** On first render the component
-appends `<style id="nightingale-pdbe-molstar-styles">` (~80 KB, pdbe-molstar's
-stylesheet) to the document head, once per page. 5.x added nothing global.
+**A stylesheet is now added to `document.head`.** When it is connected, the
+component appends `<style id="nightingale-pdbe-molstar-styles">` (~80 KB,
+pdbe-molstar's stylesheet) to the document head, once per page; inside another
+component's shadow root it is added to that shadow root instead, once per root.
+5.x added nothing global.
 
 All 591 style rules in it are namespaced under `.msp-*` and none target bare
 elements, so collisions with application styles are unlikely; it also defines a

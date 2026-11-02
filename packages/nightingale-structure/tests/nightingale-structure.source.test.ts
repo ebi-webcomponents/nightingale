@@ -256,4 +256,89 @@ describe("nightingale-structure source resolution", () => {
       });
     });
   });
+
+  describe("only the attributes a structure is loaded from reload it", () => {
+    const prediction = {
+      modelEntityId: "AF-P05067-F1",
+      chainId: "A",
+      uniprotAccession: "P05067",
+      cifUrl: "https://example.org/AF-P05067-F1.cif",
+    };
+
+    test.each([
+      ["a model-url", { "model-url": "https://example.org/model.cif" }],
+      [
+        "an AlphaFold id",
+        { "protein-accession": "P05067", "structure-id": "AF-P05067-F1" },
+      ],
+    ])(
+      "custom-download-url doesn't reload %s",
+      async (_, attributes: Record<string, string>) => {
+        global.fetch = jest
+          .fn()
+          .mockResolvedValue({ json: async () => [prediction] });
+        element = mount(attributes);
+        await settle();
+        const lookups = (global.fetch as jest.Mock).mock.calls.length;
+
+        element.setAttribute("custom-download-url", "https://example.org/pdb/");
+        await settle();
+
+        expect(viewer().visual.update).toHaveBeenCalledTimes(1);
+        expect(global.fetch).toHaveBeenCalledTimes(lookups);
+      },
+    );
+
+    test("custom-download-url reloads a PDB id", async () => {
+      element = mount({ "structure-id": "1AAP" });
+      await settle();
+
+      element.setAttribute("custom-download-url", "https://example.org/pdb/");
+      await settle();
+
+      expect(viewer().visual.update).toHaveBeenCalledTimes(2);
+      expect(viewer().visual.update.mock.calls[1][0].customData).toEqual({
+        url: "https://example.org/pdb/1aap.cif",
+        format: "cif",
+        binary: false,
+      });
+    });
+  });
+
+  test("an AlphaFold id changed during its first lookup loads only the new model", async () => {
+    // Each lookup is answered when the test says so.
+    const lookups: { url: string; answer: (ids: string[]) => void }[] = [];
+    global.fetch = jest.fn(
+      (url: string) =>
+        new Promise((resolve) => {
+          lookups.push({
+            url,
+            answer: (ids) =>
+              resolve({
+                json: async () =>
+                  ids.map((id) => ({
+                    modelEntityId: id,
+                    chainId: "A",
+                    cifUrl: `https://example.org/${id}.cif`,
+                  })),
+              }),
+          });
+        }),
+    ) as jest.Mock;
+    element = mount({ "protein-accession": "P1", "structure-id": "AF-P1-F1" });
+    await settle();
+
+    element.setAttribute("structure-id", "AF-P2-F1");
+    element.setAttribute("protein-accession", "P2");
+    await settle();
+    lookups[0].answer(["AF-P1-F1"]);
+    await settle();
+    lookups.find(({ url }) => url.endsWith("/P2"))?.answer(["AF-P2-F1"]);
+    await settle();
+
+    expect(viewer().visual.update).toHaveBeenCalledTimes(1);
+    expect(initialLoad().customData.url).toBe(
+      "https://example.org/AF-P2-F1.cif",
+    );
+  });
 });
