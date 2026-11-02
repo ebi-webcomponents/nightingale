@@ -121,14 +121,21 @@ const MESSAGE_MARKUP = {
   ALLOWED_ATTR: ["data-article-id"],
 };
 
-/** Inject pdbe-molstar's stylesheet once into the document head. */
-function ensurePdbeMolstarStyles(): void {
+/**
+ * Inject pdbe-molstar's stylesheet once where `element` is: into the shadow
+ * root it is in, if any (the document's styles don't reach into one, leaving
+ * the viewer's controls unstyled under its canvas), otherwise into the
+ * document head.
+ */
+function ensurePdbeMolstarStyles(element: Element): void {
   if (typeof document === "undefined") return;
-  if (document.getElementById(PDBE_MOLSTAR_STYLE_ID)) return;
+  const root = element.getRootNode();
+  const target = root instanceof ShadowRoot ? root : document.head;
+  if (target.querySelector(`#${PDBE_MOLSTAR_STYLE_ID}`)) return;
   const style = document.createElement("style");
   style.id = PDBE_MOLSTAR_STYLE_ID;
   style.textContent = pdbeMolstarStyles;
-  document.head.appendChild(style);
+  target.appendChild(style);
 }
 
 /** Infer pdbe-molstar's `customData` format/binary flags from a file URL. */
@@ -315,10 +322,6 @@ class NightingaleStructure extends withManager(
       </div>`;
   }
 
-  protected override firstUpdated() {
-    ensurePdbeMolstarStyles();
-  }
-
   protected override updated(
     changedProperties: Map<PropertyKey, unknown>,
   ): void {
@@ -362,6 +365,8 @@ class NightingaleStructure extends withManager(
 
   override connectedCallback() {
     super.connectedCallback();
+    // On every connection: the element may have moved into another root.
+    ensurePdbeMolstarStyles(this);
     // Re-appended after a disconnect disposed the viewer: create a new one. The
     // first connection is handled by the first update.
     if (this.hasUpdated) this.#initViewer();

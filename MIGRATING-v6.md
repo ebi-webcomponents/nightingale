@@ -144,9 +144,11 @@ from PDBe, or serve files that include the SIFTS columns.
 
 ### Behaviour changes worth checking
 
-**A stylesheet is now added to `document.head`.** On first render the component
-appends `<style id="nightingale-pdbe-molstar-styles">` (~80 KB, pdbe-molstar's
-stylesheet) to the document head, once per page. 5.x added nothing global.
+**A stylesheet is now added to `document.head`.** When it is connected, the
+component appends `<style id="nightingale-pdbe-molstar-styles">` (~80 KB,
+pdbe-molstar's stylesheet) to the document head, once per page; inside another
+component's shadow root it is added to that shadow root instead, once per root.
+5.x added nothing global.
 
 All 591 style rules in it are namespaced under `.msp-*` and none target bare
 elements, so collisions with application styles are unlikely; it also defines a
