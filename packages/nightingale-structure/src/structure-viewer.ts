@@ -4,7 +4,6 @@
 import { PDBeMolstarPlugin } from "pdbe-molstar/lib/viewer";
 import { SIFTSMapping } from "pdbe-molstar/lib/sifts-mapping";
 import type { InitParams } from "pdbe-molstar/lib/spec";
-import type { QueryParam } from "pdbe-molstar/lib/helpers";
 import type { EventDetail } from "pdbe-molstar/lib/loci-details";
 import { MAQualityAssessment } from "molstar/lib/extensions/model-archive/quality-assessment/behavior";
 import { QualityAssessment } from "molstar/lib/extensions/model-archive/quality-assessment/prop";
@@ -21,10 +20,51 @@ import {
   registerAlphaMissenseTheme,
 } from "./alphamissense";
 
-export type { QueryParam } from "pdbe-molstar/lib/helpers";
+/**
+ * A part of a structure: the residues that match every field set. The
+ * `uniprot_*` fields need the structure's SIFTS mapping (see
+ * `hasSiftsMapping`); `*_auth_seq_id` are author residue numbers. (The part
+ * of pdbe-molstar's query params this package uses.)
+ */
+export type QueryParam = {
+  auth_asym_id?: string;
+  beg_auth_seq_id?: number;
+  end_auth_seq_id?: number;
+  uniprot_accession?: string;
+  start_uniprot_residue_number?: number;
+  end_uniprot_residue_number?: number;
+};
 
-/** Payload carried on the `PDB.molstar.click` DOM event (`event.eventData`). */
-export type StructureClickEvent = EventDetail;
+/**
+ * The residue a click on the structure picked. Fields the structure doesn't
+ * provide are undefined: `unp_*` without SIFTS mapping, for instance.
+ */
+export type StructureClickEvent = {
+  entity_id?: string;
+  /** The chain's mmCIF (`label_asym_id`) and author (`auth_asym_id`) ids. */
+  label_asym_id?: string;
+  auth_asym_id?: string;
+  /** The residue's mmCIF (`seq_id`) and author (`auth_seq_id`) numbers. */
+  seq_id?: number;
+  auth_seq_id?: number;
+  /** Its UniProt accession and position, from SIFTS. */
+  unp_accession?: string;
+  unp_seq_id?: number;
+  /** Its component (residue name), e.g. "ALA". */
+  comp_id?: string;
+};
+
+/** The part of pdbe-molstar's click payload `StructureClickEvent` has. */
+const toClickEvent = (detail: EventDetail): StructureClickEvent => ({
+  entity_id: detail.entity_id,
+  label_asym_id: detail.label_asym_id,
+  auth_asym_id: detail.auth_asym_id,
+  seq_id: detail.seq_id,
+  auth_seq_id: detail.auth_seq_id,
+  unp_accession: detail.unp_accession,
+  unp_seq_id: detail.unp_seq_id,
+  comp_id: detail.comp_id,
+});
 
 export type LoadSource =
   | { kind: "pdb"; id: string }
@@ -303,9 +343,8 @@ export const getStructureViewer = async (
 
   // The residue payload is on `event.eventData`, not `event.detail`.
   const onContainerClick = (event: Event) => {
-    const data = (event as unknown as { eventData?: StructureClickEvent })
-      .eventData;
-    if (data) onClick(data);
+    const data = (event as unknown as { eventData?: EventDetail }).eventData;
+    if (data) onClick(toClickEvent(data));
   };
   container.addEventListener("PDB.molstar.click", onContainerClick);
 
