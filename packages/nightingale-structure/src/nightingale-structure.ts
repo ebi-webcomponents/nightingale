@@ -475,12 +475,23 @@ class NightingaleStructure extends withManager(
     return null;
   }
 
-  /** Identifies the structure the attributes ask for. */
+  /**
+   * Identifies the structure the attributes ask for: the attributes
+   * #resolveSource reads for it, so that a change to any other (e.g.
+   * custom-download-url while a model-url is shown) doesn't reload.
+   */
   #sourceKey(): string {
-    return SOURCE_ATTRIBUTES.map((name) =>
-      // Only AlphaFold models are looked up by protein-accession.
-      name !== "protein-accession" || this.isAF() ? this[name] ?? "" : "",
-    ).join("|");
+    const id = this["structure-id"] ?? "";
+    const url = this["model-url"] ?? "";
+    // Both set is an error, and loads nothing.
+    if (id && url) return JSON.stringify(["both", id, url]);
+    if (url) return JSON.stringify(["url", url]);
+    if (!id) return "";
+    // Only AlphaFold models are looked up by protein-accession, and only PDB
+    // entries are downloaded from custom-download-url.
+    return this.isAF()
+      ? JSON.stringify(["alphafold", id, this["protein-accession"] ?? ""])
+      : JSON.stringify(["pdb", id, this["custom-download-url"] ?? ""]);
   }
 
   #resolveOptions(): StructureViewerOptions {

@@ -256,4 +256,52 @@ describe("nightingale-structure source resolution", () => {
       });
     });
   });
+
+  describe("only the attributes a structure is loaded from reload it", () => {
+    const prediction = {
+      modelEntityId: "AF-P05067-F1",
+      chainId: "A",
+      uniprotAccession: "P05067",
+      cifUrl: "https://example.org/AF-P05067-F1.cif",
+    };
+
+    test.each([
+      ["a model-url", { "model-url": "https://example.org/model.cif" }],
+      [
+        "an AlphaFold id",
+        { "protein-accession": "P05067", "structure-id": "AF-P05067-F1" },
+      ],
+    ])(
+      "custom-download-url doesn't reload %s",
+      async (_, attributes: Record<string, string>) => {
+        global.fetch = jest
+          .fn()
+          .mockResolvedValue({ json: async () => [prediction] });
+        element = mount(attributes);
+        await settle();
+        const lookups = (global.fetch as jest.Mock).mock.calls.length;
+
+        element.setAttribute("custom-download-url", "https://example.org/pdb/");
+        await settle();
+
+        expect(viewer().visual.update).toHaveBeenCalledTimes(1);
+        expect(global.fetch).toHaveBeenCalledTimes(lookups);
+      },
+    );
+
+    test("custom-download-url reloads a PDB id", async () => {
+      element = mount({ "structure-id": "1AAP" });
+      await settle();
+
+      element.setAttribute("custom-download-url", "https://example.org/pdb/");
+      await settle();
+
+      expect(viewer().visual.update).toHaveBeenCalledTimes(2);
+      expect(viewer().visual.update.mock.calls[1][0].customData).toEqual({
+        url: "https://example.org/pdb/1aap.cif",
+        format: "cif",
+        binary: false,
+      });
+    });
+  });
 });
