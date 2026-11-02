@@ -48,8 +48,9 @@ implemented, so there is nothing to migrate.
 
 ### Changed
 
-- **`updateHighlight()`** takes pdbe-molstar's click payload (the exported
-  `StructureClickEvent`) instead of an array of `{ chain, position }` PDB
+- **`updateHighlight()`** takes the clicked residue (the exported
+  `StructureClickEvent`: its chain, residue numbers and, with SIFTS, UniProt
+  position) instead of an array of `{ chain, position }` PDB
   positions. It is the element's click handler; to highlight residues from your
   own code, set the `highlight` attribute.
 - **`isAF()`** returns `boolean` rather than `boolean | undefined`.
@@ -102,7 +103,8 @@ differences below, so existing markup keeps working:
 `nightingale-structure` now also exports `AlphaFoldPrediction` (the element type of
 `AlphaFoldPayload`) and the viewer types: `StructureViewer`, `LoadSource`,
 `StructureViewerOptions`, `StructureColorTheme`, `StructureClickEvent` and
-`QueryParam`.
+`QueryParam`. These are the package's own types, not pdbe-molstar's, so a later
+pdbe-molstar (or Mol\*) upgrade doesn't change them.
 
 A PDB `structure-id` now loads without `protein-accession`; 5.x displayed nothing
 unless both were set. AlphaFold ids still need `protein-accession`, which is how

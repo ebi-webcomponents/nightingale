@@ -178,8 +178,9 @@ When there is no AlphaMissense data, the model stays coloured by pLDDT
 confidence and an error message is shown. The hover label now reads
 `Mean AlphaMissense pathogenicity: 0.92`.
 
-`updateHighlight()` now takes pdbe-molstar's click payload (`StructureClickEvent`)
-instead of an array of `{ chain, position }`; set `highlight` to highlight residues
+`updateHighlight()` now takes the clicked residue (`StructureClickEvent`: its
+chain, residue numbers and, with SIFTS, UniProt position) instead of an array of
+`{ chain, position }`; set `highlight` to highlight residues
 from your own code.
 
 `hide-table` appeared in this README's usage example before v6 but was never
