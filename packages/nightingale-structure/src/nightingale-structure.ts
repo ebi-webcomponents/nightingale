@@ -948,7 +948,7 @@ class NightingaleStructure extends withManager(
         .join(", ");
       this.#outOfRangeNote = this.showMessage(
         this.#label(),
-        `Not in this structure: ${sifts ? `${accession} ` : ""}${ranges}`,
+        messageHtml`Not in this structure: ${sifts ? `${accession} ` : ""}${ranges}`,
       );
     }
     const highlightItems = outOfRange ? [] : rangeItems;

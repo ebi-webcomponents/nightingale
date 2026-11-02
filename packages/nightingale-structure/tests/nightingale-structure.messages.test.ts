@@ -75,6 +75,25 @@ describe("message content from attributes and structure files", () => {
     );
   });
 
+  test("is shown as text in the note on a highlight outside the structure", async () => {
+    PDBeMolstarPlugin.matches = () => false;
+    try {
+      mount({
+        "protein-accession": `P05067${STYLE}`,
+        "structure-id": "1AAP",
+        highlight: "500:600",
+      });
+      await settle();
+
+      expect(document.getElementById("injected")).toBeNull();
+      expect(content()?.textContent).toBe(
+        `Not in this structure: P05067${STYLE} 500–600`,
+      );
+    } finally {
+      PDBeMolstarPlugin.matches = PDBeMolstarPlugin.defaultMatches;
+    }
+  });
+
   test("keeps the tooltip's own markup, and shows a chain id as text", async () => {
     mount({ "model-url": "https://example.org/model.cif" });
     await settle();
