@@ -92,6 +92,35 @@ const PDBE_MOLSTAR_STYLE_ID = "nightingale-pdbe-molstar-styles";
  */
 const ALPHAMISSENSE_FILES_KEPT = 4;
 
+const escapeHtml = (value: unknown): string =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+/**
+ * Message markup, with every interpolated value HTML-escaped: values come
+ * from attributes and structure files, which the page may not control.
+ */
+const messageHtml = (
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+): string =>
+  strings.reduce(
+    (markup, string, i) => markup + escapeHtml(values[i - 1]) + string,
+  );
+
+/**
+ * The markup messages use; anything else is removed (DOMPurify's defaults
+ * keep e.g. <style> and <form>, which would reach the host page).
+ */
+const MESSAGE_MARKUP = {
+  ALLOWED_TAGS: ["span", "b", "br"],
+  ALLOWED_ATTR: ["data-article-id"],
+};
+
 /** Inject pdbe-molstar's stylesheet once into the document head. */
 function ensurePdbeMolstarStyles(): void {
   if (typeof document === "undefined") return;
@@ -269,7 +298,10 @@ class NightingaleStructure extends withManager(
               <span>${this.message?.title}</span>:
               <span
                 class="structure-viewer-message-content"
-                .innerHTML=${DOMPurify.sanitize(this.message?.content ?? "")}
+                .innerHTML=${DOMPurify.sanitize(
+                  this.message?.content ?? "",
+                  MESSAGE_MARKUP,
+                )}
               ></span>
               <button
                 type="button"
@@ -362,11 +394,11 @@ class NightingaleStructure extends withManager(
       // Rather than an empty viewer with no explanation. Setting it reloads.
       this.showMessage(
         "Error",
-        `Set protein-accession to load AF entry "${id}"`,
+        messageHtml`Set protein-accession to load AF entry "${id}"`,
       );
       return undefined;
     }
-    this.showMessage("Loading", id || accession);
+    this.showMessage("Loading", messageHtml`${id || accession}`);
     // Errors only while this lookup is still current: a structure set
     // meanwhile may already be loaded, and must not be covered by them.
     const isCurrent = () =>
@@ -382,18 +414,24 @@ class NightingaleStructure extends withManager(
       );
       if (!info) {
         if (isCurrent()) {
-          this.showMessage("Error", `No AF entry "${id}" for ${accession}`);
+          this.showMessage(
+            "Error",
+            messageHtml`No AF entry "${id}" for ${accession}`,
+          );
         }
         return undefined;
       }
       const source = alphaFoldModelSource(info);
       if (!source && isCurrent()) {
-        this.showMessage("Error", `No model file for AF entry "${id}"`);
+        this.showMessage(
+          "Error",
+          messageHtml`No model file for AF entry "${id}"`,
+        );
       }
       return source;
     } catch (e) {
       if (isCurrent()) {
-        this.showMessage("Error", `Couldn't load AF entry "${id}"`);
+        this.showMessage("Error", messageHtml`Couldn't load AF entry "${id}"`);
       }
       return undefined;
     }
@@ -478,7 +516,10 @@ class NightingaleStructure extends withManager(
       }
     } catch (e) {
       if (generation === this.#generation) {
-        this.showMessage("Error", `Couldn't load structure "${this.#label()}"`);
+        this.showMessage(
+          "Error",
+          messageHtml`Couldn't load structure "${this.#label()}"`,
+        );
       }
     } finally {
       this.#initializing = false;
@@ -534,7 +575,7 @@ class NightingaleStructure extends withManager(
       return;
     }
     const label = this.#label();
-    this.showMessage("Loading", label);
+    this.showMessage("Loading", messageHtml`${label}`);
     // Start loading only once the previous load has finished (see
     // #pendingLoad). Newer reloads meanwhile supersede this one.
     await this.#pendingLoad;
@@ -550,7 +591,10 @@ class NightingaleStructure extends withManager(
     } catch (e) {
       // Only the latest load reports.
       if (generation === this.#generation) {
-        this.showMessage("Error", `Couldn't load structure "${label}"`);
+        this.showMessage(
+          "Error",
+          messageHtml`Couldn't load structure "${label}"`,
+        );
       }
       return;
     } finally {
@@ -592,7 +636,7 @@ class NightingaleStructure extends withManager(
     if (!url) {
       this.#colorThemeError = this.showMessage(
         "Error",
-        `No AlphaMissense data for "${this.#label()}"`,
+        messageHtml`No AlphaMissense data for "${this.#label()}"`,
       );
       return;
     }
@@ -603,7 +647,7 @@ class NightingaleStructure extends withManager(
       if (isCurrent()) {
         this.#colorThemeError = this.showMessage(
           "Error",
-          `Couldn't load AlphaMissense data for "${this.#label()}"`,
+          messageHtml`Couldn't load AlphaMissense data for "${this.#label()}"`,
         );
       }
       return;
@@ -704,7 +748,7 @@ class NightingaleStructure extends withManager(
     const chain = event.auth_asym_id ?? event.label_asym_id ?? "";
     // Without protein-accession, position is an author residue number.
     const tooltipLabel = accession || "Residue";
-    const tooltip = `<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span> ${chain}<br /><b>${tooltipLabel}</b>: ${position}`;
+    const tooltip = messageHtml`<span data-article-id="structure_section#description-of-structure-table-contents">Chain</span> ${chain}<br /><b>${tooltipLabel}</b>: ${position}`;
     this.showMessage(this.#label(), tooltip);
 
     this.dispatchEvent(
