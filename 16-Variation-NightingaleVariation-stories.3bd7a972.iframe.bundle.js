@@ -1,0 +1,44 @@
+"use strict";(self.webpackChunkroot=self.webpackChunkroot||[]).push([[9010],{"./stories/16.Variation/NightingaleVariation.stories.ts"(__unused_webpack_module,__webpack_exports__,__webpack_require__){__webpack_require__.r(__webpack_exports__),__webpack_require__.d(__webpack_exports__,{BasicVariation:()=>BasicVariation,NightingaleVariation:()=>NightingaleVariation,__namedExportsOrder:()=>__namedExportsOrder,default:()=>__WEBPACK_DEFAULT_EXPORT__});var lit_html__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__("./node_modules/lit-html/lit-html.js");__webpack_require__("./packages/nightingale-variation/src/index.ts"),__webpack_require__("./packages/nightingale-navigation/src/index.ts"),__webpack_require__("./packages/nightingale-sequence/src/index.ts"),__webpack_require__("./packages/nightingale-manager/src/index.ts");const data={P99999:__webpack_require__("./packages/nightingale-variation/tests/P99999.variation.json"),P42336:__webpack_require__("./packages/nightingale-variation/tests/P42336.variation.json")},__WEBPACK_DEFAULT_EXPORT__={parameters:{storySource:{source:'import { html } from "lit-html";\nimport "../../packages/nightingale-variation/src/index.ts";\nimport "../../packages/nightingale-navigation/src/index.ts";\nimport "../../packages/nightingale-sequence/src/index.ts";\nimport "../../packages/nightingale-manager/src/index.ts";\nimport variationP99999 from "../../packages/nightingale-variation/tests/P99999.variation.json";\nimport variationP42336 from "../../packages/nightingale-variation/tests/P42336.variation.json";\nconst data = {\n    P99999: variationP99999,\n    P42336: variationP42336\n};\nexport default {\n    title: "Components/Tracks/Variation"\n};\nconst Template = (args)=>{\n    setTimeout(async ()=>{\n        await customElements.whenDefined("nightingale-variation");\n        const variationTrack = document.getElementById("variation");\n        if (variationTrack) {\n            variationTrack.data = data[args.protein];\n        }\n    }, 500);\n    return html`\n    <nightingale-variation\n      id="variation"\n      row-height=${args.rowHeight}\n      display-start=${args.displayStart}\n      display-end=${args.displayEnd}\n      length=${data[args.protein].sequence.length}\n      margin-left=${args.marginLeft}\n      ?condensed-view=${args.condensedView}\n      protein-api\n    ></nightingale-variation>\n  `;\n};\nexport const BasicVariation = Template.bind({});\nBasicVariation.args = {\n    rowHeight: 15,\n    width: 800,\n    displayStart: 1,\n    displayEnd: 50,\n    marginLeft: 20,\n    protein: "P99999",\n    condensedView: false\n};\nBasicVariation.argTypes = {\n    protein: {\n        options: [\n            "P99999",\n            "P42336"\n        ],\n        control: {\n            type: "radio"\n        }\n    }\n};\nBasicVariation.play = async (story)=>{\n    await customElements.whenDefined("nightingale-variation");\n    const variationTrack = document.getElementById("variation");\n    if (variationTrack) {\n        variationTrack.colorConfig = (v)=>{\n            if (v.hasPredictions) return "green";\n            return "#DD2121";\n        };\n    }\n};\nexport const NightingaleVariation = ()=>html`\n  <nightingale-manager style="width: 100%">\n    <div>\n      <nightingale-navigation\n        height="50"\n        length=${data.P99999.sequence.length}\n        id="navigation"\n        margin-left="20"\n      ></nightingale-navigation>\n    </div>\n    <div>\n      <nightingale-sequence\n        height="30"\n        length=${data.P99999.sequence.length}\n        id="sequence"\n        sequence=${data.P99999.sequence}\n        highlight-event="onmouseover"\n        margin-left="20"\n      ></nightingale-sequence>\n    </div>\n    <nightingale-variation\n      protein-api\n      id="links-2"\n      row-height="15"\n      length=${data.P99999.sequence.length}\n      highlight-color="rgba(30,200,20,0.2)"\n      highlight-event="onmouseover"\n      margin-left="20"\n      condensed-view\n    ></nightingale-variation>\n  </nightingale-manager>\n`;\nNightingaleVariation.play = async ()=>{\n    await customElements.whenDefined("nightingale-variation");\n    const variation = document.getElementById("links-2");\n    if (variation) variation.data = data.P99999;\n};\n',locationsMap:{"basic-variation":{startLoc:{col:17,line:15},endLoc:{col:1,line:35},startBody:{col:17,line:15},endBody:{col:1,line:35}},"nightingale-variation":{startLoc:{col:36,line:67},endLoc:{col:1,line:98},startBody:{col:36,line:67},endBody:{col:1,line:98}}}}},title:"Components/Tracks/Variation"},BasicVariation=(args=>(setTimeout(async()=>{await customElements.whenDefined("nightingale-variation");const variationTrack=document.getElementById("variation");variationTrack&&(variationTrack.data=data[args.protein])},500),lit_html__WEBPACK_IMPORTED_MODULE_0__.html`
+    <nightingale-variation
+      id="variation"
+      row-height=${args.rowHeight}
+      display-start=${args.displayStart}
+      display-end=${args.displayEnd}
+      length=${data[args.protein].sequence.length}
+      margin-left=${args.marginLeft}
+      ?condensed-view=${args.condensedView}
+      protein-api
+    ></nightingale-variation>
+  `)).bind({});BasicVariation.args={rowHeight:15,width:800,displayStart:1,displayEnd:50,marginLeft:20,protein:"P99999",condensedView:!1},BasicVariation.argTypes={protein:{options:["P99999","P42336"],control:{type:"radio"}}},BasicVariation.play=async story=>{await customElements.whenDefined("nightingale-variation");const variationTrack=document.getElementById("variation");variationTrack&&(variationTrack.colorConfig=v=>v.hasPredictions?"green":"#DD2121")};const NightingaleVariation=()=>lit_html__WEBPACK_IMPORTED_MODULE_0__.html`
+  <nightingale-manager style="width: 100%">
+    <div>
+      <nightingale-navigation
+        height="50"
+        length=${data.P99999.sequence.length}
+        id="navigation"
+        margin-left="20"
+      ></nightingale-navigation>
+    </div>
+    <div>
+      <nightingale-sequence
+        height="30"
+        length=${data.P99999.sequence.length}
+        id="sequence"
+        sequence=${data.P99999.sequence}
+        highlight-event="onmouseover"
+        margin-left="20"
+      ></nightingale-sequence>
+    </div>
+    <nightingale-variation
+      protein-api
+      id="links-2"
+      row-height="15"
+      length=${data.P99999.sequence.length}
+      highlight-color="rgba(30,200,20,0.2)"
+      highlight-event="onmouseover"
+      margin-left="20"
+      condensed-view
+    ></nightingale-variation>
+  </nightingale-manager>
+`;NightingaleVariation.play=async()=>{await customElements.whenDefined("nightingale-variation");const variation=document.getElementById("links-2");variation&&(variation.data=data.P99999)};const __namedExportsOrder=["BasicVariation","NightingaleVariation"];BasicVariation.parameters={...BasicVariation.parameters,docs:{...BasicVariation.parameters?.docs,source:{originalSource:'args => {\n  setTimeout(async () => {\n    await customElements.whenDefined("nightingale-variation");\n    const variationTrack = document.getElementById("variation");\n    if (variationTrack) {\n      (variationTrack as any).data = data[args.protein];\n    }\n  }, 500);\n  return html`\n    <nightingale-variation\n      id="variation"\n      row-height=${args.rowHeight}\n      display-start=${args.displayStart}\n      display-end=${args.displayEnd}\n      length=${data[args.protein].sequence.length}\n      margin-left=${args.marginLeft}\n      ?condensed-view=${args.condensedView}\n      protein-api\n    ></nightingale-variation>\n  `;\n}',...BasicVariation.parameters?.docs?.source}}},NightingaleVariation.parameters={...NightingaleVariation.parameters,docs:{...NightingaleVariation.parameters?.docs,source:{originalSource:'() => html`\n  <nightingale-manager style="width: 100%">\n    <div>\n      <nightingale-navigation\n        height="50"\n        length=${data.P99999.sequence.length}\n        id="navigation"\n        margin-left="20"\n      ></nightingale-navigation>\n    </div>\n    <div>\n      <nightingale-sequence\n        height="30"\n        length=${data.P99999.sequence.length}\n        id="sequence"\n        sequence=${data.P99999.sequence}\n        highlight-event="onmouseover"\n        margin-left="20"\n      ></nightingale-sequence>\n    </div>\n    <nightingale-variation\n      protein-api\n      id="links-2"\n      row-height="15"\n      length=${data.P99999.sequence.length}\n      highlight-color="rgba(30,200,20,0.2)"\n      highlight-event="onmouseover"\n      margin-left="20"\n      condensed-view\n    ></nightingale-variation>\n  </nightingale-manager>\n`',...NightingaleVariation.parameters?.docs?.source}}}}}]);
+//# sourceMappingURL=16-Variation-NightingaleVariation-stories.3bd7a972.iframe.bundle.js.map
