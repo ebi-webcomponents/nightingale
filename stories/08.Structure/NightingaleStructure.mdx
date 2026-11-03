@@ -1,0 +1,20 @@
+import { Meta, Markdown } from "@storybook/blocks";
+
+import Readme from "../../packages/nightingale-structure/README.md";
+import ParentReadme from "../../packages/nightingale-new-core/src/nightingale-base-element.md";
+
+<Meta title="Components/Structure/Readme" />
+
+<Markdown>{Readme}</Markdown>
+
+<hr />
+
+<h2>Mixins</h2>
+
+<p>
+  This component implement the following mixins, and therefore it includes their
+  attributes and properties.
+</p>
+
+<h2>Parent Class</h2>
+<Markdown>{ParentReadme}</Markdown>

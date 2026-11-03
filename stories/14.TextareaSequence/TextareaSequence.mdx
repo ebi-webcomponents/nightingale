@@ -1,0 +1,22 @@
+import { Meta, Markdown } from "@storybook/blocks";
+
+import Readme from "../../packages/nightingale-textarea-sequence/README.md";
+import ParentReadme from "../../packages/nightingale-new-core/src/nightingale-base-element.md";
+import dimensionsReadme from "../../packages/nightingale-new-core/src/mixins/withDimensions/README.md";
+
+<Meta title="Components/Other/Textarea Sequence/Readme" />
+
+<Markdown>{Readme}</Markdown>
+
+<hr />
+
+<h2>Mixins</h2>
+
+<p>
+  This component implement the following mixins, and therefore it includes their
+  attributes and properties.
+</p>
+<Markdown>{dimensionsReadme}</Markdown>
+
+<h2>Parent Class</h2>
+<Markdown>{ParentReadme}</Markdown>

@@ -5,7 +5,7 @@
 The `nightingale-overlay` component is used to create a layer over a component (specified by ID).
 The layer will be visible while a `scroll` or `wheel` event is detected.
 
-[Demo](https://ebi-webcomponents.github.io/nightingale/?path=/story/components-manager--manager)
+[Demo](https://ebi-webcomponents.github.io/nightingale/?path=/story/components-utils-overlay--overlay)
 
 ## Usage
 

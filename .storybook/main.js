@@ -1,8 +1,9 @@
 const path = require("path");
 
+/** @type {import('@storybook/web-components-webpack5').StorybookConfig} */
 module.exports = {
   stories: [
-    "../stories/**/*.stories.mdx",
+    "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   addons: [
@@ -10,13 +11,15 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-a11y",
     "@storybook/addon-storysource",
-    "@storybook/addon-actions",
+    // Storybook 8's webpack5 builder needs an explicit JS/TS compiler.
+    "@storybook/addon-webpack5-compiler-swc",
   ],
+  framework: {
+    name: "@storybook/web-components-webpack5",
+    options: {},
+  },
   typescript: {
     check: false,
-  },
-  core: {
-    builder: "webpack5",
   },
   webpackFinal: (config) => {
     config.resolve.alias = {
@@ -39,10 +42,23 @@ module.exports = {
       test: /\.(ts|tsx)$/,
       include: path.resolve(__dirname, "../packages"),
       loader: "ts-loader",
+      // transpile only — type-checking the whole tree here is unnecessary and
+      // memory-heavy.
+      options: { transpileOnly: true },
     });
     config.module.rules.push({
       test: /\.(tsv)$/,
       type: "asset/source",
+    });
+    // README/markdown imported into MDX docs as raw strings (for <Markdown>).
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
+    // svg logos imported as URLs.
+    config.module.rules.push({
+      test: /\.svg$/,
+      type: "asset/resource",
     });
     return config;
   },

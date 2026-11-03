@@ -12,7 +12,7 @@ passed as `file-name` and `file-format` respectively.
 
 There are two methods available : `preSave()` and `postSave()`. These functions allows any manipulations to DOM before and after painting on the canvas.
 
-[Demo](https://ebi-webcomponents.github.io/nightingale/?path=/story/components-manager--manager)
+[Demo](https://ebi-webcomponents.github.io/nightingale/?path=/story/components-utils-saver--saver)
 
 ## Usage
 
