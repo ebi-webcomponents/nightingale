@@ -333,6 +333,46 @@ const RangeDrawers: Partial<Record<Shapes, RangeDrawer>> = {
     ctx.fill();
     ctx.stroke();
   },
+
+  rightEndedTag(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, xPadding: number): void {
+    const head = Math.min(0.75 * height, 1.00 * width);
+    ctx.beginPath();
+    ctx.moveTo(x, y + height);
+    ctx.lineTo(x + width - head, y + height);
+    ctx.lineTo(x + width, y + 0.5 * height);
+    ctx.lineTo(x + width - head, y);
+    ctx.lineTo(x, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  },
+
+  leftEndedTag(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, xPadding: number): void {
+    const head = Math.min(0.75 * height, 1.00 * width);
+    ctx.beginPath();
+    ctx.moveTo(x + width, y + height);
+    ctx.lineTo(x + head, y + height);
+    ctx.lineTo(x, y + 0.5 * height);
+    ctx.lineTo(x + head, y);
+    ctx.lineTo(x + width, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  },
+
+  doubleEndedTag(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, xPadding: number): void {
+    const head = Math.min(0.75 * height, 0.5 * width);
+    ctx.beginPath();
+    ctx.moveTo(x + head, y + height);
+    ctx.lineTo(x + width - head, y + height);
+    ctx.lineTo(x + width, y + 0.5 * height);
+    ctx.lineTo(x + width - head, y);
+    ctx.lineTo(x + head, y);
+    ctx.lineTo(x, y + 0.5 * height);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  },
 };
 
 // Future-proofing for fixing typos (discontinUOS -> discontinUOUS)
