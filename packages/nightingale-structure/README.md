@@ -179,11 +179,16 @@ keep pdbe-molstar's default colours.
 
 #### `custom-download-url`
 
+**Deprecated**, and will be removed in a future major version: setting it logs a
+warning. Leave it unset so the entry loads from PDBe.
+
 Optional base URL for downloading a custom cif structure file for a PDB
 `structure-id`. The lowercase PDB id and a `.cif` suffix are appended, and the
 result is loaded through pdbe-molstar's `customData`. wwPDB archive files (such
 as `https://www.ebi.ac.uk/pdbe/entry-files/download/<id>.cif`) have no SIFTS
-mapping, so `highlight` and `change` use their author residue numbers.
+mapping, so with `protein-accession` set, `highlight` isn't shown and clicks
+emit no `change`; an error message says so instead. Without
+`protein-accession`, `highlight` and `change` use author residue numbers.
 
 ### Residue numbering
 
@@ -195,12 +200,18 @@ positions to the structure's residues.
 
 Otherwise they use the file's **author residue numbers** (`auth_seq_id`), matched
 in every chain: for PDB entries without `protein-accession`, and for `model-url`
-and `custom-download-url` files without SIFTS mapping, such as wwPDB archive files
-and most models. This assumes the file numbers its residues by UniProt position.
+files without SIFTS mapping, such as most models. This assumes the file numbers
+its residues by UniProt position.
 AlphaFold models do, as do models served through 3D-Beacons (e.g. SwissModel's: a
 model of residues 30–189 is numbered 30–189), so their positions are UniProt
 coordinates either way; for other files they won't line up with your other
 tracks.
+
+A PDB entry's author numbers rarely are its UniProt positions, so a PDB
+`structure-id` loaded from a file without SIFTS mapping (from
+`custom-download-url`) with `protein-accession` set is numbered by neither:
+`highlight` isn't shown, clicks emit no `change`, and an error message says the
+file has no SIFTS mapping.
 
 ### CSS custom properties
 
@@ -253,7 +264,8 @@ implemented — there was no such property and no table was rendered — so ther
 nothing to migrate.
 
 `highlight` values for PDB entries with `protein-accession` set, and for AlphaFold
-models, are still UniProt coordinates. Structures loaded through
-`custom-download-url` are now numbered by author residue number unless the file
-has SIFTS mapping; 5.x applied PDBe's UniProt mapping to them. See [Residue
+models, are still UniProt coordinates. `custom-download-url` is deprecated:
+unless the file has SIFTS mapping, a structure loaded through it with
+`protein-accession` set isn't highlighted and its clicks emit no `change`,
+whereas 5.x applied PDBe's UniProt mapping to it. See [Residue
 numbering](#residue-numbering).

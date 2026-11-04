@@ -94,6 +94,11 @@ const PDBE_MOLSTAR_STYLE_ID = "nightingale-pdbe-molstar-styles";
  */
 const ALPHAMISSENSE_FILES_KEPT = 4;
 
+const CUSTOM_DOWNLOAD_URL_DEPRECATION =
+  "nightingale-structure: custom-download-url is deprecated and will be removed in a future major version. " +
+  "Files without SIFTS mapping, such as wwPDB archive files, can't be highlighted by protein-accession's UniProt positions. " +
+  "Remove it to load the entry from PDBe.";
+
 const escapeHtml = (value: unknown): string =>
   String(value)
     .replace(/&/g, "&amp;")
@@ -188,6 +193,10 @@ class NightingaleStructure extends withManager(
   @property({ type: String })
   "structure-id"?: string;
 
+  /**
+   * @deprecated Load PDB entries from PDBe instead: files from here usually
+   * have no SIFTS mapping, so highlights can't use UniProt positions.
+   */
   @property({ type: String })
   "custom-download-url"?: string;
 
@@ -275,6 +284,9 @@ class NightingaleStructure extends withManager(
   /** The note that the highlight isn't in the structure, if shown. */
   #outOfRangeNote?: { title: string; content: string };
 
+  /** The message reporting #lacksUniProtMapping, if shown. */
+  #noUniProtMappingError?: { title: string; content: string };
+
   constructor() {
     super();
     this.updateHighlight = this.updateHighlight.bind(this);
@@ -357,6 +369,12 @@ class NightingaleStructure extends withManager(
   protected override updated(
     changedProperties: Map<PropertyKey, unknown>,
   ): void {
+    if (
+      changedProperties.has("custom-download-url") &&
+      this["custom-download-url"]
+    ) {
+      console.warn(CUSTOM_DOWNLOAD_URL_DEPRECATION);
+    }
     const sourceChanged = SOURCE_ATTRIBUTES.some((name) =>
       changedProperties.has(name),
     );
@@ -774,11 +792,35 @@ class NightingaleStructure extends withManager(
    * are author residue numbers, which AlphaFold and other models (e.g.
    * SwissModel, 3D-Beacons) number by UniProt position: a `range=30-189`
    * model is numbered 30..189. Without protein-accession there is no UniProt
-   * sequence to number in, so PDB entries use author numbers too.
+   * sequence to number in, so PDB entries use author numbers too; with it,
+   * those without SIFTS mapping aren't numbered (see #lacksUniProtMapping).
    */
   #usesSifts(): boolean {
     return (
       !!this["protein-accession"] && !!this.#structureViewer?.hasSiftsMapping()
+    );
+  }
+
+  /**
+   * Whether highlights and clicks are UniProt positions the structure can't
+   * be numbered in: protein-accession is set for a PDB entry whose file has
+   * no SIFTS mapping, such as a wwPDB archive file from custom-download-url.
+   * Unlike a model's (see #usesSifts), an entry's author residue numbers are
+   * rarely its UniProt positions, so they aren't used instead.
+   */
+  #lacksUniProtMapping(): boolean {
+    return (
+      !!this["protein-accession"] &&
+      !!this["structure-id"] &&
+      !this.isAF() &&
+      !this.#usesSifts()
+    );
+  }
+
+  #showNoUniProtMapping(): void {
+    this.#noUniProtMappingError = this.showMessage(
+      "Error",
+      messageHtml`Can't map ${this["protein-accession"]} positions: this file has no SIFTS mapping`,
     );
   }
 
@@ -787,6 +829,10 @@ class NightingaleStructure extends withManager(
     // A click on a structure that is being replaced would be numbered by the
     // new attributes.
     if (!event || !this.#structureLoaded) return;
+    if (this.#lacksUniProtMapping()) {
+      this.#showNoUniProtMapping();
+      return;
+    }
     const accession = this["protein-accession"];
     let position: number | undefined;
     if (this.#usesSifts()) {
@@ -903,38 +949,46 @@ class NightingaleStructure extends withManager(
     const viewer = this.#structureViewer;
     // Otherwise applied once the load in flight completes.
     if (!viewer || !this.#structureLoaded) return;
+    if (
+      this.message &&
+      (this.message === this.#outOfRangeNote ||
+        this.message === this.#noUniProtMappingError)
+    ) {
+      this.clearMessage();
+    }
     const accession = this["protein-accession"];
     const af = this.#showsAlphaFoldModel(viewer);
     const sifts = this.#usesSifts();
-    const rangeItems: SelectItem[] = !this.highlight
-      ? []
-      : this.highlightedRegion.segments.map(({ start, end }) => ({
-          ...(sifts
-            ? // UniProt sequence space — pdbe-molstar maps to PDB residues via
-              // SIFTS.
-              {
-                uniprot_accession: accession,
-                start_uniprot_residue_number: start,
-                end_uniprot_residue_number: end,
-              }
-            : // Author residue numbering (see #usesSifts). `label_seq_id` is
-              // 1-based and would not match a model numbered from 30, so use
-              // auth numbers.
-              { beg_auth_seq_id: start, end_auth_seq_id: end }),
-          // On AlphaFold models the pLDDT colouring is the most important
-          // information, so the range is not overpainted (`color: null` keeps
-          // the theme); it is shown by dimming everything else instead.
-          // Elsewhere it carries no opacity, so that the dimming doesn't depend
-          // on it and a highlight change leaves it in place (see the viewer's
-          // `select`): a range on a dimmed chain is overpainted but stays dim.
-          ...(af
-            ? { color: null, opacity: 1 }
-            : { color: this["highlight-color"] }),
-          focus,
-        }));
-    if (this.message && this.message === this.#outOfRangeNote) {
-      this.clearMessage();
-    }
+    // Rather than highlight whichever residues have these author numbers.
+    const unmapped = !!this.highlight && this.#lacksUniProtMapping();
+    if (unmapped) this.#showNoUniProtMapping();
+    const rangeItems: SelectItem[] =
+      !this.highlight || unmapped
+        ? []
+        : this.highlightedRegion.segments.map(({ start, end }) => ({
+            ...(sifts
+              ? // UniProt sequence space — pdbe-molstar maps to PDB residues via
+                // SIFTS.
+                {
+                  uniprot_accession: accession,
+                  start_uniprot_residue_number: start,
+                  end_uniprot_residue_number: end,
+                }
+              : // Author residue numbering (see #usesSifts). `label_seq_id` is
+                // 1-based and would not match a model numbered from 30, so use
+                // auth numbers.
+                { beg_auth_seq_id: start, end_auth_seq_id: end }),
+            // On AlphaFold models the pLDDT colouring is the most important
+            // information, so the range is not overpainted (`color: null` keeps
+            // the theme); it is shown by dimming everything else instead.
+            // Elsewhere it carries no opacity, so that the dimming doesn't depend
+            // on it and a highlight change leaves it in place (see the viewer's
+            // `select`): a range on a dimmed chain is overpainted but stays dim.
+            ...(af
+              ? { color: null, opacity: 1 }
+              : { color: this["highlight-color"] }),
+            focus,
+          }));
     // None of the highlight is in the structure (e.g. a feature outside the
     // part of the protein an entry covers): say so, rather than seem to ignore
     // it, and leave the camera where it is. A range partly in the structure is

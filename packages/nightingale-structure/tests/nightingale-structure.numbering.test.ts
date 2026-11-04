@@ -164,18 +164,84 @@ describe("nightingale-structure residue numbering", () => {
       expect(element.highlight).toBe("35:35");
     });
 
-    test("a custom-download-url archive file highlights by author number", async () => {
-      element = mount({
-        "protein-accession": "P05067",
-        "structure-id": "1AAP",
-        "custom-download-url": "https://example.org/pdb/",
-        highlight: "10:20",
+    describe("a PDB entry's custom-download-url archive file", () => {
+      beforeEach(() => {
+        jest.spyOn(console, "warn").mockImplementation(() => {});
       });
-      await settle();
 
-      // Nor is the entry emphasized: its uniprot_accession query would match
-      // nothing either, and dim the whole structure.
-      expect(lastSelection()).toEqual([authRange(10, 20)]);
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
+
+      const mountArchiveFile = (attributes: Record<string, string> = {}) =>
+        mount({
+          "protein-accession": "P05067",
+          "structure-id": "1AAP",
+          "custom-download-url": "https://example.org/pdb/",
+          ...attributes,
+        });
+
+      // Its author numbers aren't UniProt positions: 1aap's residue 10 is
+      // P05067's 296.
+      test("doesn't highlight UniProt positions by author number", async () => {
+        element = mountArchiveFile({ highlight: "10:20" });
+        await settle();
+
+        expect(viewer().visual.select).not.toHaveBeenCalled();
+        expect(element.message?.title).toBe("Error");
+        expect(element.message?.content).toBe(
+          "Can't map P05067 positions: this file has no SIFTS mapping",
+        );
+      });
+
+      test("doesn't emit clicks as UniProt positions", async () => {
+        element = track(mountArchiveFile());
+        await settle();
+
+        click({
+          ...pdbResidue,
+          unp_accession: undefined,
+          unp_seq_id: undefined,
+        });
+        expect(changes).toEqual([]);
+        expect(element.highlight).toBeFalsy();
+        expect(element.message?.title).toBe("Error");
+      });
+
+      // Not a regression test (as before): guards against the check catching
+      // files there are no UniProt positions for.
+      test("without protein-accession highlights by author number", async () => {
+        element = mountArchiveFile({ highlight: "10:20" });
+        await settle();
+
+        element.removeAttribute("protein-accession");
+        await settle();
+
+        expect(lastSelection()).toEqual([authRange(10, 20, { focus: false })]);
+        // The error no longer applies.
+        expect(element.message).toBeNull();
+      });
+
+      test("with entry-chains still emphasizes them, without the highlight", async () => {
+        element = mountArchiveFile({ "entry-chains": "A", highlight: "10:20" });
+        await settle();
+
+        expect(lastSelection()).toEqual([
+          expect.objectContaining({ auth_asym_id: "A", focus: true }),
+        ]);
+        expect(element.message?.title).toBe("Error");
+      });
+
+      test("removing the highlight removes the error", async () => {
+        element = mountArchiveFile({ highlight: "10:20" });
+        await settle();
+        expect(element.message?.title).toBe("Error");
+
+        element.removeAttribute("highlight");
+        await settle();
+
+        expect(element.message).toBeNull();
+      });
     });
 
     // Not a regression test (as before the SIFTS check): guards against

@@ -85,6 +85,25 @@ describe("nightingale-structure source resolution", () => {
     expect(initialLoad().moleculeId).toBeUndefined();
   });
 
+  test("custom-download-url warns that it is deprecated", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      element = mount({ "structure-id": "1AAP" });
+      await settle();
+      expect(warn).not.toHaveBeenCalled();
+
+      element.setAttribute("custom-download-url", "https://example.org/pdb/");
+      await settle();
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).toMatch(
+        /custom-download-url is deprecated/,
+      );
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
   test("an AlphaFold id loads the prediction whose modelEntityId it is", async () => {
     const prediction = (id: string) => ({
       modelEntityId: id,
