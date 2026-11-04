@@ -12,7 +12,8 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "contributors": [
     "Xavier Watkins <xwatkins@ebi.ac.uk>",

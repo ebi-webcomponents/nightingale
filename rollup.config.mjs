@@ -10,7 +10,7 @@ export default {
   output: {
     dir: "./dist",
     format: "es",
-    sourcemap: true,
+    sourcemap: "hidden",
   },
   plugins: [
     css(),

@@ -4,7 +4,8 @@
   "description": "Basic track type of the viewer.",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

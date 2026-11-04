@@ -4,7 +4,8 @@
   "description": "Track for rendering sequence logos (information-content stacked letters) from RNA/DNA multiple sequence alignments.",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!dist/**/*.js.map"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",
