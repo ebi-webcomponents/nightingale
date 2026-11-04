@@ -1,0 +1,24 @@
+// Type-checks package sources *and* their tests in one pass.
+//
+// Tests are deliberately not type-checked while running (jest transpiles only,
+// see jest.config.js), and each package's own tsconfig.json includes ./src
+// only, so without this file the *.test.ts files are checked by nothing.
+//
+// Requires `pnpm build` first: four suites import from ../dist rather than
+// ../src, and the cross-package @nightingale-elements/* imports resolve to
+// each package's published types.
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "inlineSources": false
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/tests/**/*.ts",
+    "packages/*/test/**/*.ts"
+  ]
+}

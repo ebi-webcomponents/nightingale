@@ -25,6 +25,11 @@ jobs:
         run: |
           pnpm clean
           pnpm build
+      # After Build: four suites and the cross-package imports type-check
+      # against dist/ rather than src/.
+      - name: 🧪 Test - Types
+        run: |
+          pnpm typecheck
       - name: 🧪 Test - Unit
         run: |
           pnpm test
