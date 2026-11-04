@@ -32,7 +32,7 @@ that this component previously reimplemented.
 If you only use the element through its attributes and its `change` event, the
 things to check are `color-theme="alphamissense"` (see [Changed](#changed)),
 how [residues are numbered](#residue-numbering) for `custom-download-url`
-structures, and the
+structures (which is now deprecated), and the
 [behaviour changes](#behaviour-changes-worth-checking) below.
 
 ### Removed
@@ -83,7 +83,9 @@ import from `dist/` (e.g. `dist/position-mapping`), are gone too, and
 These work as they did in 5.x, apart from the [residue numbering](#residue-numbering)
 differences below, so existing markup keeps working:
 
-- `protein-accession`, `structure-id`, `custom-download-url`, `model-url`
+- `protein-accession`, `structure-id`, `model-url`
+- `custom-download-url`, though it is now deprecated (see [Residue
+  numbering](#residue-numbering))
 - `color-theme`: `alphafold` (the default, pLDDT confidence) or `alphamissense`,
   for AlphaFold models loaded by `structure-id` (see [Changed](#changed) for
   how AlphaMissense colouring now differs)
@@ -131,16 +133,20 @@ the model is looked up.
 | PDB `structure-id` with `protein-accession` | UniProt, via SIFTS | UniProt |
 | PDB `structure-id` without `protein-accession` | author | nothing was loaded |
 | AlphaFold `structure-id` | author, i.e. UniProt | UniProt |
-| `custom-download-url` | author, unless the file carries SIFTS mapping | **UniProt** |
+| `custom-download-url` with `protein-accession` | UniProt, via SIFTS if the file carries it; otherwise **none** (an error is shown) | **UniProt** |
+| `custom-download-url` without `protein-accession` | author | nothing was loaded |
 | `model-url` | author, unless the file carries SIFTS mapping | highlights and clicks did nothing |
 
-**`custom-download-url` is the one that changes.** 5.x fetched PDBe's UniProt
-mapping for the `structure-id` and applied it to whatever file it downloaded.
-wwPDB archive mmCIF files — including PDBe's own
+**`custom-download-url` is the one that changes, and it is deprecated.** 5.x
+fetched PDBe's UniProt mapping for the `structure-id` and applied it to whatever
+file it downloaded. wwPDB archive mmCIF files — including PDBe's own
 `https://www.ebi.ac.uk/pdbe/entry-files/download/<id>.cif` — have no SIFTS
-columns, so with them `highlight` is now read as author numbers. If you set
-`custom-download-url` and rely on UniProt numbering, remove it so the entry loads
-from PDBe, or serve files that include the SIFTS columns.
+columns, and an entry's author numbers are rarely its UniProt positions, so with
+`protein-accession` set such a structure is no longer highlighted: `highlight`
+isn't shown, clicks emit no `change`, and an error message says the file has no
+SIFTS mapping. Setting `custom-download-url` also logs a deprecation warning.
+Remove it so the entry loads from PDBe, or until then serve files that include
+the SIFTS columns.
 
 ### Behaviour changes worth checking
 

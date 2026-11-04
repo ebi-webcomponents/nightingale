@@ -92,6 +92,11 @@ const PDBE_MOLSTAR_STYLE_ID = "nightingale-pdbe-molstar-styles";
  */
 const ALPHAMISSENSE_FILES_KEPT = 4;
 
+const CUSTOM_DOWNLOAD_URL_DEPRECATION =
+  "nightingale-structure: custom-download-url is deprecated and will be removed in a future major version. " +
+  "Files without SIFTS mapping, such as wwPDB archive files, can't be highlighted by protein-accession's UniProt positions. " +
+  "Remove it to load the entry from PDBe.";
+
 const escapeHtml = (value: unknown): string =>
   String(value)
     .replace(/&/g, "&amp;")
@@ -186,6 +191,10 @@ class NightingaleStructure extends withManager(
   @property({ type: String })
   "structure-id"?: string;
 
+  /**
+   * @deprecated Load PDB entries from PDBe instead: files from here usually
+   * have no SIFTS mapping, so highlights can't use UniProt positions.
+   */
   @property({ type: String })
   "custom-download-url"?: string;
 
@@ -242,6 +251,9 @@ class NightingaleStructure extends withManager(
 
   /** The message reporting that AlphaMissense colouring failed, if shown. */
   #colorThemeError?: { title: string; content: string };
+
+  /** The message reporting #lacksUniProtMapping, if shown. */
+  #noUniProtMappingError?: { title: string; content: string };
 
   constructor() {
     super();
@@ -325,6 +337,12 @@ class NightingaleStructure extends withManager(
   protected override updated(
     changedProperties: Map<PropertyKey, unknown>,
   ): void {
+    if (
+      changedProperties.has("custom-download-url") &&
+      this["custom-download-url"]
+    ) {
+      console.warn(CUSTOM_DOWNLOAD_URL_DEPRECATION);
+    }
     const sourceChanged = SOURCE_ATTRIBUTES.some((name) =>
       changedProperties.has(name),
     );
@@ -736,11 +754,35 @@ class NightingaleStructure extends withManager(
    * are author residue numbers, which AlphaFold and other models (e.g.
    * SwissModel, 3D-Beacons) number by UniProt position: a `range=30-189`
    * model is numbered 30..189. Without protein-accession there is no UniProt
-   * sequence to number in, so PDB entries use author numbers too.
+   * sequence to number in, so PDB entries use author numbers too; with it,
+   * those without SIFTS mapping aren't numbered (see #lacksUniProtMapping).
    */
   #usesSifts(): boolean {
     return (
       !!this["protein-accession"] && !!this.#structureViewer?.hasSiftsMapping()
+    );
+  }
+
+  /**
+   * Whether highlights and clicks are UniProt positions the structure can't
+   * be numbered in: protein-accession is set for a PDB entry whose file has
+   * no SIFTS mapping, such as a wwPDB archive file from custom-download-url.
+   * Unlike a model's (see #usesSifts), an entry's author residue numbers are
+   * rarely its UniProt positions, so they aren't used instead.
+   */
+  #lacksUniProtMapping(): boolean {
+    return (
+      !!this["protein-accession"] &&
+      !!this["structure-id"] &&
+      !this.isAF() &&
+      !this.#usesSifts()
+    );
+  }
+
+  #showNoUniProtMapping(): void {
+    this.#noUniProtMappingError = this.showMessage(
+      "Error",
+      messageHtml`Can't map ${this["protein-accession"]} positions: this file has no SIFTS mapping`,
     );
   }
 
@@ -749,6 +791,10 @@ class NightingaleStructure extends withManager(
     // A click on a structure that is being replaced would be numbered by the
     // new attributes.
     if (!event || !this.#structureLoaded) return;
+    if (this.#lacksUniProtMapping()) {
+      this.#showNoUniProtMapping();
+      return;
+    }
     const accession = this["protein-accession"];
     let position: number | undefined;
     if (this.#usesSifts()) {
@@ -793,10 +839,19 @@ class NightingaleStructure extends withManager(
     const viewer = this.#structureViewer;
     // Otherwise applied once the load in flight completes.
     if (!viewer || !this.#structureLoaded) return;
+    if (this.message && this.message === this.#noUniProtMappingError) {
+      this.clearMessage();
+    }
     // A failed selection is replaced by the next one; it needs no handling.
     const ignore = () => undefined;
     if (!this.highlight) {
       viewer.clearHighlight().catch(ignore);
+      return;
+    }
+    if (this.#lacksUniProtMapping()) {
+      // Rather than highlight whichever residues have these author numbers.
+      viewer.clearHighlight().catch(ignore);
+      this.#showNoUniProtMapping();
       return;
     }
     const accession = this["protein-accession"];
