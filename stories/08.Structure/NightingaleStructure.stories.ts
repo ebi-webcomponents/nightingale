@@ -13,8 +13,8 @@ const Template: Story<{
   "model-url": string;
   highlight: string;
   "highlight-color": string;
-  "--custom-structure-height": string;
   "color-theme": string;
+  "--custom-structure-height": string;
 }> = (args) => {
   return html` <h3>Structure</h3>
     <h3>Structure viewer</h3>
@@ -25,8 +25,8 @@ const Template: Story<{
       model-url="${args["model-url"]}"
       highlight="${args["highlight"]}"
       highlight-color=${args["highlight-color"]}
-      style="--custom-structure-height: ${args["--custom-structure-height"]}"
       color-theme="${args["color-theme"]}"
+      style="--custom-structure-height: ${args["--custom-structure-height"]}"
     ></nightingale-structure>`;
 };
 
@@ -45,8 +45,14 @@ AlphaFoldStructure.args = {
   "structure-id": "AF-P05067-F1",
   highlight: "290:315",
   "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
+  "color-theme": "alphafold",
   "--custom-structure-height": "480px",
-  "color-theme": "alphamissense"
+};
+AlphaFoldStructure.argTypes = {
+  "color-theme": {
+    control: "select",
+    options: ["alphafold", "alphamissense"],
+  },
 };
 AlphaFoldStructure.storyName = "AlphaFold Structure";
 
@@ -59,3 +65,14 @@ StructureLoadByUrl.args = {
   "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
   "--custom-structure-height": "480px",
 };
+
+// An AlphaFold DB complex (P05067 with Q9UBX7) has no AlphaFold DB id to load
+// it by, only its file: it is still coloured by pLDDT confidence.
+export const AlphaFoldComplexLoadByUrl = Template.bind({});
+AlphaFoldComplexLoadByUrl.args = {
+  "model-url":
+    "https://alphafold.ebi.ac.uk/files/AF-0000000210569523-model_v1.bcif",
+  "highlight-color": DEFAULT_HIGHLIGHT_COLOR,
+  "--custom-structure-height": "480px",
+};
+AlphaFoldComplexLoadByUrl.storyName = "AlphaFold Complex Load By Url";

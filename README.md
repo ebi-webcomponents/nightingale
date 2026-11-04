@@ -9,6 +9,10 @@ biological data.
 
 **Nightingale: web components for protein feature visualization**, Bioinformatics Advances, Volume 3, Issue 1, 2023, vbad064, [https://doi.org/10.1093/bioadv/vbad064](https://doi.org/10.1093/bioadv/vbad064)
 
+## Upgrading to v6
+
+See [MIGRATING-v6.md](./MIGRATING-v6.md) for what changed for consumers.
+
 ## Documentation/Getting started
 
 Documentation, getting started guide and examples for each of the components are
