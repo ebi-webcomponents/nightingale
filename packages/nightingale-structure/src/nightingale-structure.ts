@@ -20,7 +20,7 @@ import {
   StructureClickEvent,
   LoadSource,
   StructureViewerOptions,
-  QueryParam,
+  SelectItem,
 } from "./structure-viewer";
 import { AlphaMissenseScores, parseAlphaMissense } from "./alphamissense";
 
@@ -83,6 +83,8 @@ const SOURCE_ATTRIBUTES = [
   "protein-accession",
   "custom-download-url",
 ] as const;
+
+const DEFAULT_ENTRY_EMPHASIS_OPACITY = 0.3;
 
 const PDBE_MOLSTAR_STYLE_ID = "nightingale-pdbe-molstar-styles";
 
@@ -208,6 +210,30 @@ class NightingaleStructure extends withManager(
   @property({ type: String })
   "color-theme"?: string;
 
+  /** Opt out of the default visual emphasis of the current entry. */
+  @property({ type: Boolean })
+  "hide-entry-emphasis" = false;
+
+  /**
+   * Comma-separated author chain IDs (`auth_asym_id`) that map to the current
+   * entry, e.g. `"A,B"`. Enables the entry emphasis for structure files that
+   * carry no SIFTS mapping (e.g. `model-url` loads): 3D-Beacons providers
+   * publish them as `entities[].chain_ids` in the uniprot summary endpoint.
+   * When set, these chains take precedence over the SIFTS accession lookup.
+   */
+  @property({ type: String })
+  "entry-chains"?: string;
+
+  /** Opacity applied to everything outside the emphasized entry. */
+  @property({
+    // A removed or empty attribute restores the default. Lit's Number
+    // converter would give `null` or 0, which pdbe-molstar applies as full
+    // transparency, hiding the rest of the structure.
+    converter: (value) =>
+      value?.trim() ? Number(value) : DEFAULT_ENTRY_EMPHASIS_OPACITY,
+  })
+  "entry-emphasis-opacity" = DEFAULT_ENTRY_EMPHASIS_OPACITY;
+
   @state()
   message?: { title: string; content: string } | null = null;
 
@@ -251,6 +277,12 @@ class NightingaleStructure extends withManager(
 
   /** The message reporting that AlphaMissense colouring failed, if shown. */
   #colorThemeError?: { title: string; content: string };
+
+  /** Whether a selection is applied that clearing it must undo. */
+  #selectionApplied = false;
+
+  /** The note that the highlight isn't in the structure, if shown. */
+  #outOfRangeNote?: { title: string; content: string };
 
   /** The message reporting #lacksUniProtMapping, if shown. */
   #noUniProtMappingError?: { title: string; content: string };
@@ -368,16 +400,20 @@ class NightingaleStructure extends withManager(
         .setHighlightColor(this["highlight-color"])
         .catch(() => undefined);
     }
-    if (changedProperties.has("highlight")) {
-      this.highlightChain();
-    } else if (
-      this.highlight &&
-      (changedProperties.has("highlight-color") ||
-        changedProperties.has("protein-accession"))
+    if (
+      changedProperties.has("highlight") ||
+      changedProperties.has("hide-entry-emphasis") ||
+      changedProperties.has("entry-emphasis-opacity") ||
+      changedProperties.has("entry-chains")
     ) {
-      // Re-apply the persistent highlight in its new color or numbering,
-      // leaving the camera where the user may have moved it.
-      this.#applyHighlight(false);
+      this.#applySelection(true);
+    } else if (
+      changedProperties.has("protein-accession") ||
+      (this.highlight && changedProperties.has("highlight-color"))
+    ) {
+      // Re-apply the persistent selection in its new color, numbering or
+      // entry chains, leaving the camera where the user may have moved it.
+      this.#applySelection(false);
     }
   }
 
@@ -587,12 +623,13 @@ class NightingaleStructure extends withManager(
     if (this["highlight-color"] !== options.highlightColor) {
       viewer.setHighlightColor(this["highlight-color"]).catch(() => undefined);
     }
+    this.#selectionApplied = false;
     if (this.#sourceKey() !== sourceKey) {
       await this.#reload();
       return;
     }
     this.#applyColorTheme(true);
-    if (this.highlight) this.highlightChain();
+    this.#applySelection(true);
   }
 
   async #reload(): Promise<void> {
@@ -645,8 +682,9 @@ class NightingaleStructure extends withManager(
     this.#structureLoaded = true;
     this.#alphaMissenseUrl = source.alphaMissenseUrl;
     this.clearMessage();
+    this.#selectionApplied = false;
     this.#applyColorTheme(true);
-    if (this.highlight) this.highlightChain();
+    this.#applySelection(true);
   }
 
   /**
@@ -829,51 +867,180 @@ class NightingaleStructure extends withManager(
     );
   }
 
-  /** Apply the current `highlight` ranges to the structure. */
+  /**
+   * Apply the current `highlight` ranges and the entry emphasis to the
+   * structure, moving the camera to them.
+   */
   highlightChain(): void {
-    this.#applyHighlight(true);
+    this.#applySelection(true);
   }
 
-  /** Apply `highlight`, moving the camera to it if `focus` is set. */
-  #applyHighlight(focus: boolean): void {
+  /**
+   * Items emphasizing the current entry: they keep their theme colors while
+   * everything else is dimmed. Whole chains from `entry-chains` when
+   * provided, and otherwise the residues matched by pdbe-molstar's
+   * per-residue, SIFTS-based `uniprot_accession` predicate — which only
+   * resolves for structures carrying `pdbx_sifts_xref_*` columns (PDBe
+   * updated mmCIF/BinaryCIF), so other files (e.g. `model-url` models,
+   * archive files from `custom-download-url`) are skipped unless
+   * `entry-chains` names their chains. AlphaFold models are always skipped,
+   * including AlphaFold DB models loaded by `model-url`: their pLDDT colouring
+   * must stay untouched.
+   * So are items that match nothing in the structure (an accession it doesn't
+   * contain, absent chains): pdbe-molstar would still dim all of it.
+   */
+  #entryEmphasisItems(viewer: StructureViewer): SelectItem[] {
+    if (this.#showsAlphaFoldModel(viewer)) return [];
+    const items = this.#entryEmphasisQuery();
+    return items.length && viewer.matches(items) ? items : [];
+  }
+
+  /**
+   * Whether `viewer` shows an AlphaFold model: one loaded by AlphaFold DB id,
+   * or an AlphaFold DB model file loaded by `model-url` (e.g. a complex),
+   * which the viewer colours by pLDDT confidence too.
+   */
+  #showsAlphaFoldModel(viewer: StructureViewer): boolean {
+    return this.isAF() || viewer.isAlphaFoldModel();
+  }
+
+  #entryEmphasisQuery(): SelectItem[] {
+    if (this["hide-entry-emphasis"]) return [];
+    // `opacity: 1` is required: `nonSelectedOpacity` dims the whole structure
+    // and only items carrying an explicit opacity are exempt from that layer.
+    const chains = this["entry-chains"]
+      ?.split(",")
+      .map((chain) => chain.trim())
+      .filter(Boolean);
+    if (chains?.length) {
+      return chains.map((chain) => ({
+        auth_asym_id: chain,
+        color: null,
+        opacity: 1,
+      }));
+    }
+    const accession = this["protein-accession"];
+    if (!accession || !this.#usesSifts()) return [];
+    return [{ uniprot_accession: accession, color: null, opacity: 1 }];
+  }
+
+  /**
+   * `entry-emphasis-opacity` in [0, 1], or its default when it isn't a number
+   * or a numeric string (e.g. `null` or `undefined` set by a framework
+   * binding).
+   */
+  #entryEmphasisOpacity(): number {
+    const value: unknown = this["entry-emphasis-opacity"];
+    // Framework bindings may set the property to a numeric string, e.g. "0.5".
+    const opacity =
+      typeof value === "string" && value.trim() ? Number(value) : value;
+    return typeof opacity === "number" && Number.isFinite(opacity)
+      ? Math.min(Math.max(opacity, 0), 1)
+      : DEFAULT_ENTRY_EMPHASIS_OPACITY;
+  }
+
+  /**
+   * Compute and apply the full persistent selection — entry-chain emphasis
+   * plus the current `highlight` ranges — as a single `select` call, since
+   * each call replaces the previous selection. The camera moves to it if
+   * `focus` is set.
+   */
+  #applySelection(focus: boolean): void {
     const viewer = this.#structureViewer;
     // Otherwise applied once the load in flight completes.
     if (!viewer || !this.#structureLoaded) return;
-    if (this.message && this.message === this.#noUniProtMappingError) {
+    if (
+      this.message &&
+      (this.message === this.#outOfRangeNote ||
+        this.message === this.#noUniProtMappingError)
+    ) {
       this.clearMessage();
     }
+    const accession = this["protein-accession"];
+    const af = this.#showsAlphaFoldModel(viewer);
+    const sifts = this.#usesSifts();
+    // Rather than highlight whichever residues have these author numbers.
+    const unmapped = !!this.highlight && this.#lacksUniProtMapping();
+    if (unmapped) this.#showNoUniProtMapping();
+    const rangeItems: SelectItem[] =
+      !this.highlight || unmapped
+        ? []
+        : this.highlightedRegion.segments.map(({ start, end }) => ({
+            ...(sifts
+              ? // UniProt sequence space — pdbe-molstar maps to PDB residues via
+                // SIFTS.
+                {
+                  uniprot_accession: accession,
+                  start_uniprot_residue_number: start,
+                  end_uniprot_residue_number: end,
+                }
+              : // Author residue numbering (see #usesSifts). `label_seq_id` is
+                // 1-based and would not match a model numbered from 30, so use
+                // auth numbers.
+                { beg_auth_seq_id: start, end_auth_seq_id: end }),
+            // On AlphaFold models the pLDDT colouring is the most important
+            // information, so the range is not overpainted (`color: null` keeps
+            // the theme); it is shown by dimming everything else instead.
+            // Elsewhere it carries no opacity, so that the dimming doesn't depend
+            // on it and a highlight change leaves it in place (see the viewer's
+            // `select`): a range on a dimmed chain is overpainted but stays dim.
+            ...(af
+              ? { color: null, opacity: 1 }
+              : { color: this["highlight-color"] }),
+            focus,
+          }));
+    // None of the highlight is in the structure (e.g. a feature outside the
+    // part of the protein an entry covers): say so, rather than seem to ignore
+    // it, and leave the camera where it is. A range partly in the structure is
+    // highlighted where it is.
+    const outOfRange = rangeItems.length > 0 && !viewer.matches(rangeItems);
+    if (outOfRange) {
+      const ranges = this.highlightedRegion.segments
+        .map(({ start, end }) =>
+          start === end ? `${start}` : `${start}–${end}`,
+        )
+        .join(", ");
+      this.#outOfRangeNote = this.showMessage(
+        this.#label(),
+        messageHtml`Not in this structure: ${sifts ? `${accession} ` : ""}${ranges}`,
+      );
+    }
+    const highlightItems = outOfRange ? [] : rangeItems;
+    const moveCamera = focus && !outOfRange;
+    const entryItems = this.#entryEmphasisItems(viewer).map((item) => ({
+      ...item,
+      // Frame the entry's chains only when no highlighted range will focus.
+      focus: moveCamera && highlightItems.length === 0,
+    }));
+    const data = [...entryItems, ...highlightItems];
     // A failed selection is replaced by the next one; it needs no handling.
     const ignore = () => undefined;
-    if (!this.highlight) {
-      viewer.clearHighlight().catch(ignore);
+    if (data.length === 0) {
+      // Only clear (which also resets the camera) if a selection was applied
+      // before; otherwise e.g. an AlphaFold load would get a spurious camera
+      // reset right after its initial framing. Without `moveCamera`, only the
+      // selection is cleared.
+      if (this.#selectionApplied) {
+        (moveCamera ? viewer.clearHighlight() : viewer.select({ data })).catch(
+          ignore,
+        );
+        this.#selectionApplied = false;
+      }
       return;
     }
-    if (this.#lacksUniProtMapping()) {
-      // Rather than highlight whichever residues have these author numbers.
-      viewer.clearHighlight().catch(ignore);
-      this.#showNoUniProtMapping();
-      return;
-    }
-    const accession = this["protein-accession"];
-    const sifts = this.#usesSifts();
-    const data: QueryParam[] = this.highlightedRegion.segments.map(
-      ({ start, end }) => {
-        if (sifts) {
-          // UniProt sequence space — pdbe-molstar maps to PDB residues via
-          // SIFTS.
-          return {
-            uniprot_accession: accession,
-            start_uniprot_residue_number: start,
-            end_uniprot_residue_number: end,
-          };
-        }
-        // Author residue numbering (see #usesSifts). `label_seq_id` is
-        // 1-based and would not match a model numbered from 30, so use auth
-        // numbers.
-        return { beg_auth_seq_id: start, end_auth_seq_id: end };
-      },
-    );
-    viewer.highlight(data, this["highlight-color"], focus).catch(ignore);
+    // Dim the rest of the structure when emphasizing the entry's chains, and
+    // for a highlight on an AlphaFold model (where the dim IS the highlight).
+    const dimOthers =
+      entryItems.length > 0 || (af && highlightItems.length > 0);
+    viewer
+      .select({
+        data,
+        nonSelectedOpacity: dimOthers
+          ? this.#entryEmphasisOpacity()
+          : undefined,
+      })
+      .catch(ignore);
+    this.#selectionApplied = true;
   }
 }
 

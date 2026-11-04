@@ -74,6 +74,14 @@ class PDBeMolstarPlugin {
       return { cell: { obj: { data: { models: [model] } } } };
     });
 
+    // The real method returns the loci of the loaded structure matching
+    // `params`: a `StructureElement.Loci` with one element per unit, none if
+    // nothing matches. This one matches as `PDBeMolstarPlugin.matches` says.
+    this.getLociForParams = jest.fn((params) => ({
+      kind: "element-loci",
+      elements: PDBeMolstarPlugin.matches(params) ? [{}] : [],
+    }));
+
     // The real one is molstar's PluginContext.
     const config = new Map();
     const behaviors = new Map();
@@ -162,6 +170,13 @@ PDBeMolstarPlugin.instances = [];
  */
 PDBeMolstarPlugin.defaultHasSifts = (params) => !!params.moleculeId;
 PDBeMolstarPlugin.hasSifts = PDBeMolstarPlugin.defaultHasSifts;
+
+/**
+ * Whether `getLociForParams(params)` matches part of the structure. By default
+ * every query does. Tests may replace it.
+ */
+PDBeMolstarPlugin.defaultMatches = () => true;
+PDBeMolstarPlugin.matches = PDBeMolstarPlugin.defaultMatches;
 
 /**
  * What the file loaded for `params` holds: its entry id, and whether it has

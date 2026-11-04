@@ -166,3 +166,1038 @@ describe("nightingale-structure tests", () => {
     expect(instance.plugin.dispose).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("entry-chain emphasis", () => {
+  let rendered: NightingaleStructure;
+
+  const mount = async (attributes: Record<string, string>) => {
+    rendered = new NightingaleStructure();
+    for (const [name, value] of Object.entries(attributes)) {
+      rendered.setAttribute(name, value);
+    }
+    document.documentElement.appendChild(rendered);
+    await settle();
+    return PDBeMolstarPlugin.instances[0];
+  };
+
+  beforeEach(() => {
+    PDBeMolstarPlugin.instances.length = 0;
+  });
+
+  afterEach(() => {
+    if (rendered?.isConnected) document.documentElement.removeChild(rendered);
+    PDBeMolstarPlugin.matches = PDBeMolstarPlugin.defaultMatches;
+  });
+
+  test("it emphasizes the entry's chains on the default load", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.select).toHaveBeenCalledWith({
+      data: [
+        { uniprot_accession: "P05067", color: null, opacity: 1, focus: true },
+      ],
+      nonSelectedOpacity: 0.3,
+    });
+  });
+
+  test("hide-entry-emphasis opts out without touching the camera", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "hide-entry-emphasis": "",
+    });
+
+    expect(instance.visual.select).not.toHaveBeenCalled();
+    expect(instance.visual.reset).not.toHaveBeenCalled();
+  });
+
+  test("it applies no emphasis to AlphaFold structures", async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      json: async () => [
+        {
+          modelEntityId: "AF-P05067-F1",
+          chainId: "A",
+          cifUrl: "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+        },
+      ],
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = fetchMock;
+
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "AF-P05067-F1",
+    });
+
+    expect(fetchMock).toHaveBeenCalled();
+    expect(instance.visual.update.mock.calls[0][0].customData?.url).toBe(
+      "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+    );
+    expect(instance.visual.select).not.toHaveBeenCalled();
+  });
+
+  test("an AlphaFold highlight keeps pLDDT colours and dims the rest", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest.fn().mockResolvedValue({
+      json: async () => [
+        {
+          modelEntityId: "AF-P05067-F1",
+          chainId: "A",
+          cifUrl: "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+        },
+      ],
+    });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "AF-P05067-F1",
+    });
+
+    rendered.setAttribute("highlight", "290:315");
+    await settle();
+
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        {
+          beg_auth_seq_id: 290,
+          end_auth_seq_id: 315,
+          color: null,
+          opacity: 1,
+          focus: true,
+        },
+      ],
+      nonSelectedOpacity: 0.3,
+    });
+  });
+
+  test("entry-chains enables the emphasis for model-url loads", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "model-url": "https://example.com/model.cif",
+      "entry-chains": "A, B",
+    });
+
+    expect(instance.visual.select).toHaveBeenCalledWith({
+      data: [
+        { auth_asym_id: "A", color: null, opacity: 1, focus: true },
+        { auth_asym_id: "B", color: null, opacity: 1, focus: true },
+      ],
+      nonSelectedOpacity: 0.3,
+    });
+  });
+
+  describe("an AlphaFold DB model loaded by model-url", () => {
+    // A complex, which has no AlphaFold DB id to load it by.
+    const complexUrl =
+      "https://alphafold.ebi.ac.uk/files/AF-0000000210569523-model_v1.cif";
+
+    test("is not emphasized, even with entry-chains", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "model-url": complexUrl,
+        "entry-chains": "A",
+      });
+
+      // Its pLDDT colours stay untouched.
+      expect(instance.visual.select).not.toHaveBeenCalled();
+    });
+
+    test("keeps its colours in a highlight, dimming the rest", async () => {
+      const instance = await mount({
+        "model-url": complexUrl,
+        highlight: "290:315",
+      });
+
+      expect(instance.visual.select).toHaveBeenCalledWith({
+        data: [
+          {
+            beg_auth_seq_id: 290,
+            end_auth_seq_id: 315,
+            color: null,
+            opacity: 1,
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      });
+    });
+  });
+
+  test("entry-chains takes precedence over the SIFTS accession lookup", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "6IYC",
+      "entry-chains": "E",
+    });
+
+    expect(instance.visual.select).toHaveBeenCalledWith({
+      data: [{ auth_asym_id: "E", color: null, opacity: 1, focus: true }],
+      nonSelectedOpacity: 0.3,
+    });
+  });
+
+  test("it applies no emphasis without an accession or for model-url loads", async () => {
+    const noAccession = await mount({ "structure-id": "1AAP" });
+    expect(noAccession.visual.select).not.toHaveBeenCalled();
+    document.documentElement.removeChild(rendered);
+
+    PDBeMolstarPlugin.instances.length = 0;
+    const modelUrl = await mount({
+      "protein-accession": "P05067",
+      "model-url": "https://example.com/model.cif",
+    });
+    expect(modelUrl.visual.select).not.toHaveBeenCalled();
+  });
+
+  test("it applies no emphasis to an archive file without SIFTS", async () => {
+    const archive = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "custom-download-url": "https://example.org/pdb/",
+    });
+
+    // Its uniprot_accession query would match nothing, and pdbe-molstar
+    // would still dim the whole structure, emphasizing nothing.
+    expect(archive.visual.update.mock.calls[0][0].customData?.url).toBe(
+      "https://example.org/pdb/1aap.cif",
+    );
+    expect(archive.visual.select).not.toHaveBeenCalled();
+    expect(archive.visual.reset).not.toHaveBeenCalled();
+    document.documentElement.removeChild(rendered);
+
+    // Not a regression test: entry-chains needs no SIFTS.
+    PDBeMolstarPlugin.instances.length = 0;
+    const withChains = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "custom-download-url": "https://example.org/pdb/",
+      "entry-chains": "A",
+    });
+    expect(withChains.visual.select).toHaveBeenCalledWith({
+      data: [{ auth_asym_id: "A", color: null, opacity: 1, focus: true }],
+      nonSelectedOpacity: 0.3,
+    });
+  });
+
+  test("a highlight merges with the emphasis into a single select call", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+
+    rendered.setAttribute("highlight", "290:315");
+    await settle();
+
+    // The dimming the load applied is kept (see "keeping the dimming").
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        { uniprot_accession: "P05067", color: null, focus: false },
+        {
+          uniprot_accession: "P05067",
+          start_uniprot_residue_number: 290,
+          end_uniprot_residue_number: 315,
+          color: "#FFEB3B",
+          focus: true,
+        },
+      ],
+      keepOpacity: true,
+    });
+  });
+
+  test("clearing the highlight restores the entry emphasis without a camera reset", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    rendered.setAttribute("highlight", "290:315");
+    await settle();
+
+    rendered.removeAttribute("highlight");
+    await settle();
+
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [{ uniprot_accession: "P05067", color: null, focus: true }],
+      keepOpacity: true,
+    });
+    expect(instance.visual.reset).not.toHaveBeenCalled();
+  });
+
+  test("changing highlight-color re-applies the merged selection", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    rendered.setAttribute("highlight", "290:315");
+    await settle();
+
+    rendered.setAttribute("highlight-color", "#FF0000");
+    await settle();
+
+    expect(instance.visual.setColor).toHaveBeenCalledWith({
+      highlight: "#FF0000",
+      select: "#FF0000",
+    });
+    // Leaving the camera where the user may have moved it.
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        { uniprot_accession: "P05067", color: null, focus: false },
+        {
+          uniprot_accession: "P05067",
+          start_uniprot_residue_number: 290,
+          end_uniprot_residue_number: 315,
+          color: "#FF0000",
+          focus: false,
+        },
+      ],
+      keepOpacity: true,
+    });
+  });
+
+  test("entry-emphasis-opacity controls the dimming of other chains", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "entry-emphasis-opacity": "0.15",
+    });
+
+    expect(instance.visual.select).toHaveBeenCalledWith({
+      data: [
+        { uniprot_accession: "P05067", color: null, opacity: 1, focus: true },
+      ],
+      nonSelectedOpacity: 0.15,
+    });
+  });
+
+  test("an unset entry-emphasis-opacity dims to the default", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "entry-emphasis-opacity": "0.5",
+    });
+    const lastOpacity = () =>
+      instance.visual.select.mock.calls.at(-1)[0].nonSelectedOpacity;
+    expect(lastOpacity()).toBe(0.5);
+
+    // Removed, e.g. by lit's `ifDefined(undefined)`: Lit's Number converter
+    // would set null, which pdbe-molstar applied as opacity 0, hiding
+    // everything outside the entry.
+    rendered.removeAttribute("entry-emphasis-opacity");
+    await settle();
+    expect(rendered["entry-emphasis-opacity"]).toBe(0.3);
+    expect(lastOpacity()).toBe(0.3);
+
+    rendered.setAttribute("entry-emphasis-opacity", "0.5");
+    await settle();
+    rendered.setAttribute("entry-emphasis-opacity", "");
+    await settle();
+    expect(lastOpacity()).toBe(0.3);
+
+    // Set as a property by a framework binding.
+    for (const value of [null, undefined, Number.NaN]) {
+      rendered["entry-emphasis-opacity"] = 0.5;
+      // eslint-disable-next-line no-await-in-loop
+      await settle();
+      rendered["entry-emphasis-opacity"] = value as unknown as number;
+      // eslint-disable-next-line no-await-in-loop
+      await settle();
+      expect(lastOpacity()).toBe(0.3);
+    }
+
+    rendered.setAttribute("entry-emphasis-opacity", "1.5");
+    await settle();
+    expect(lastOpacity()).toBe(1);
+  });
+
+  test("an entry-emphasis-opacity set as a numeric string property is used", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    const lastOpacity = () =>
+      instance.visual.select.mock.calls.at(-1)[0].nonSelectedOpacity;
+
+    // As a framework binding may set it.
+    rendered["entry-emphasis-opacity"] = "0.5" as unknown as number;
+    await settle();
+    expect(lastOpacity()).toBe(0.5);
+
+    for (const value of [" ", "not a number"]) {
+      rendered["entry-emphasis-opacity"] = 0.5;
+      // eslint-disable-next-line no-await-in-loop
+      await settle();
+      rendered["entry-emphasis-opacity"] = value as unknown as number;
+      // eslint-disable-next-line no-await-in-loop
+      await settle();
+      expect(lastOpacity()).toBe(0.3);
+    }
+  });
+
+  test("it applies no emphasis when the entry matches nothing in the structure", async () => {
+    // The entry emphasis (`color: null` items) for P99999 or chain Z matches
+    // nothing; highlights match, so that one can be checked to be undimmed.
+    PDBeMolstarPlugin.matches = (params: Record<string, unknown>[]) =>
+      params.every(
+        (param) =>
+          param.color !== null ||
+          (param.uniprot_accession !== "P99999" && param.auth_asym_id !== "Z"),
+      );
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+
+    // pdbe-molstar would drop the item but still dim the whole structure.
+    rendered.setAttribute("protein-accession", "P99999");
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(1); // the initial load
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(2);
+    expect(instance.visual.reset).not.toHaveBeenCalled();
+
+    // A highlight is still applied, without the dimming.
+    rendered.setAttribute("highlight", "10:20");
+    await settle();
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        {
+          uniprot_accession: "P99999",
+          start_uniprot_residue_number: 10,
+          end_uniprot_residue_number: 20,
+          color: "#FFEB3B",
+          focus: true,
+        },
+      ],
+      nonSelectedOpacity: undefined,
+    });
+    document.documentElement.removeChild(rendered);
+
+    PDBeMolstarPlugin.instances.length = 0;
+    const absentChains = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "entry-chains": "Z",
+    });
+    expect(absentChains.visual.select).not.toHaveBeenCalled();
+    expect(absentChains.visual.reset).not.toHaveBeenCalled();
+  });
+
+  test.each(["", " , "])(
+    "entry-chains %j falls back to the SIFTS accession lookup",
+    async (chains) => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        "entry-chains": chains,
+      });
+
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+      expect(instance.visual.select).toHaveBeenCalledWith({
+        data: [
+          { uniprot_accession: "P05067", color: null, opacity: 1, focus: true },
+        ],
+        nonSelectedOpacity: 0.3,
+      });
+    },
+  );
+
+  describe("a highlight outside the structure", () => {
+    // 1AAP covers P05067 287-342: ranges from 500 on match nothing.
+    beforeEach(() => {
+      PDBeMolstarPlugin.matches = (params: Record<string, unknown>[]) =>
+        params.some(
+          (param) =>
+            ((param.start_uniprot_residue_number as number | undefined) ??
+              (param.beg_auth_seq_id as number | undefined) ??
+              0) < 500,
+        );
+    });
+
+    test("is noted, leaving the selection to the emphasis and the camera alone", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+      });
+      rendered.setAttribute("highlight", "500:600,650:650");
+      await settle();
+
+      // Only the emphasis, unchanged but for the framing (the dimming is kept,
+      // so pdbe-molstar gets `keepOpacity` rather than the opacities).
+      const { data } = instance.visual.select.mock.lastCall[0];
+      expect(data).toEqual([
+        { uniprot_accession: "P05067", color: null, focus: false },
+      ]);
+      expect(instance.visual.reset).not.toHaveBeenCalled();
+      expect(rendered.message).toEqual({
+        title: "1AAP",
+        content: "Not in this structure: P05067 500–600, 650",
+      });
+    });
+
+    test("is not noted once the highlight is in the structure, or removed", async () => {
+      await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        highlight: "500:600",
+      });
+      expect(rendered.message?.content).toBe(
+        "Not in this structure: P05067 500–600",
+      );
+
+      rendered.setAttribute("highlight", "290:300");
+      await settle();
+      expect(rendered.message).toBeNull();
+
+      rendered.setAttribute("highlight", "500:600");
+      await settle();
+      expect(rendered.message).not.toBeNull();
+      rendered.removeAttribute("highlight");
+      await settle();
+      expect(rendered.message).toBeNull();
+    });
+
+    test("is partly in the structure: highlighted, not noted", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        highlight: "330:520",
+      });
+      expect(instance.visual.select).toHaveBeenLastCalledWith({
+        data: [
+          {
+            uniprot_accession: "P05067",
+            color: null,
+            opacity: 1,
+            focus: false,
+          },
+          {
+            uniprot_accession: "P05067",
+            start_uniprot_residue_number: 330,
+            end_uniprot_residue_number: 520,
+            color: "#FFEB3B",
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      });
+      expect(rendered.message).toBeNull();
+    });
+
+    test("clears an earlier highlight without moving the camera", async () => {
+      const instance = await mount({
+        "protein-accession": "P05067",
+        "structure-id": "1AAP",
+        "hide-entry-emphasis": "",
+        highlight: "290:300",
+      });
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+
+      rendered.setAttribute("highlight", "500:600");
+      await settle();
+      expect(instance.visual.select).toHaveBeenCalledTimes(1);
+      expect(instance.visual.clearSelection).toHaveBeenCalledTimes(2);
+      expect(instance.visual.reset).not.toHaveBeenCalled();
+      expect(rendered.message?.content).toBe(
+        "Not in this structure: P05067 500–600",
+      );
+    });
+
+    test("is noted in author numbers without SIFTS", async () => {
+      PDBeMolstarPlugin.hasSifts = () => false;
+      try {
+        await mount({
+          "protein-accession": "P05067",
+          "model-url": "https://example.org/model.cif",
+          highlight: "500:600",
+        });
+        expect(rendered.message).toEqual({
+          title: "https://example.org/model.cif",
+          content: "Not in this structure: 500–600",
+        });
+      } finally {
+        PDBeMolstarPlugin.hasSifts = PDBeMolstarPlugin.defaultHasSifts;
+      }
+    });
+  });
+
+  test("hide-entry-emphasis leaves the rest undimmed around a highlight", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      "hide-entry-emphasis": "",
+      highlight: "290:315",
+    });
+
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.select).toHaveBeenCalledWith({
+      data: [
+        {
+          uniprot_accession: "P05067",
+          start_uniprot_residue_number: 290,
+          end_uniprot_residue_number: 315,
+          color: "#FFEB3B",
+          focus: true,
+        },
+      ],
+      nonSelectedOpacity: undefined,
+    });
+  });
+
+  test("changing the emphasis attributes after the load re-applies it", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+
+    rendered.setAttribute("entry-emphasis-opacity", "0.15");
+    await settle();
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        { uniprot_accession: "P05067", color: null, opacity: 1, focus: true },
+      ],
+      nonSelectedOpacity: 0.15,
+    });
+
+    rendered.setAttribute("entry-chains", "A");
+    await settle();
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [{ auth_asym_id: "A", color: null, opacity: 1, focus: true }],
+      nonSelectedOpacity: 0.15,
+    });
+
+    // With no highlight, nothing is left to select: the dimming is cleared
+    // and the camera frames the whole structure again.
+    rendered.setAttribute("hide-entry-emphasis", "");
+    await settle();
+    expect(instance.visual.select).toHaveBeenCalledTimes(3);
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(4);
+    expect(instance.visual.reset).toHaveBeenCalledWith({ camera: true });
+  });
+
+  test("removing an AlphaFold highlight clears its dimming", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest.fn().mockResolvedValue({
+      json: async () => [
+        {
+          modelEntityId: "AF-P05067-F1",
+          chainId: "A",
+          cifUrl: "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+        },
+      ],
+    });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "AF-P05067-F1",
+      highlight: "290:315",
+    });
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+
+    rendered.removeAttribute("highlight");
+    await settle();
+
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(2);
+    expect(instance.visual.reset).toHaveBeenCalledWith({ camera: true });
+  });
+
+  test("removing protein-accession clears the emphasis without a camera reset", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+
+    // The SIFTS lookup needs it; the PDB entry stays loaded.
+    rendered.removeAttribute("protein-accession");
+    await settle();
+
+    expect(instance.visual.update).toHaveBeenCalledTimes(1); // the initial load
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(2);
+    expect(instance.visual.reset).not.toHaveBeenCalled();
+  });
+
+  test("a reload emphasizes the new structure's entry chains", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+
+    rendered.setAttribute("structure-id", "6IYC");
+    await settle();
+
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(instance.visual.select).toHaveBeenCalledTimes(2);
+    expect(instance.visual.select).toHaveBeenLastCalledWith({
+      data: [
+        { uniprot_accession: "P05067", color: null, opacity: 1, focus: true },
+      ],
+      nonSelectedOpacity: 0.3,
+    });
+  });
+
+  test("a reload from an emphasized entry to an AlphaFold model keeps the model's framing", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest.fn().mockResolvedValue({
+      json: async () => [
+        {
+          modelEntityId: "AF-P05067-F1",
+          chainId: "A",
+          cifUrl: "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+        },
+      ],
+    });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+
+    rendered.setAttribute("structure-id", "AF-P05067-F1");
+    // The lookup and the load, then any selection queued after them.
+    await settle();
+    await settle();
+
+    // The load replaced the emphasized structure, and framed the new one.
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(instance.visual.update.mock.calls[1][0].customData.url).toBe(
+      "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+    );
+    expect(instance.visual.select).toHaveBeenCalledTimes(1);
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(1);
+    expect(instance.visual.reset).not.toHaveBeenCalled();
+  });
+});
+
+describe("keeping the dimming", () => {
+  let rendered: NightingaleStructure;
+
+  const mount = async (attributes: Record<string, string>) => {
+    rendered = new NightingaleStructure();
+    for (const [name, value] of Object.entries(attributes)) {
+      rendered.setAttribute(name, value);
+    }
+    document.documentElement.appendChild(rendered);
+    await settle();
+    return PDBeMolstarPlugin.instances[0];
+  };
+
+  const set = async (name: string, value: string | null) => {
+    if (value === null) rendered.removeAttribute(name);
+    else rendered.setAttribute(name, value);
+    await settle();
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lastCall = (fn: any) => fn.mock.calls[fn.mock.calls.length - 1];
+
+  /** The selection of P05067's chains, dimming the rest to `opacity`. */
+  const rebuilt = (range: [number, number], opacity = 0.3) => ({
+    data: [
+      { uniprot_accession: "P05067", color: null, opacity: 1, focus: false },
+      {
+        uniprot_accession: "P05067",
+        start_uniprot_residue_number: range[0],
+        end_uniprot_residue_number: range[1],
+        color: "#FFEB3B",
+        focus: true,
+      },
+    ],
+    nonSelectedOpacity: opacity,
+  });
+
+  const prediction = {
+    modelEntityId: "AF-P05067-F1",
+    chainId: "A",
+    cifUrl: "https://alphafold.ebi.ac.uk/files/AF-P05067-F1.cif",
+  };
+
+  beforeEach(() => {
+    PDBeMolstarPlugin.instances.length = 0;
+  });
+
+  afterEach(() => {
+    if (rendered?.isConnected) document.documentElement.removeChild(rendered);
+  });
+
+  test("a highlight change neither rebuilds nor adds to the dimming", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      undefined,
+    ]);
+
+    await set("highlight", "290:315");
+    await set("highlight", "300:310");
+
+    // Rebuilding it is O(atoms). With `keepOpacity`, pdbe-molstar would add
+    // any opacity or nonSelectedOpacity to the kept layers.
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      { keepOpacity: true },
+    ]);
+    expect(lastCall(instance.visual.select)).toEqual([
+      {
+        data: [
+          { uniprot_accession: "P05067", color: null, focus: false },
+          {
+            uniprot_accession: "P05067",
+            start_uniprot_residue_number: 300,
+            end_uniprot_residue_number: 310,
+            color: "#FFEB3B",
+            focus: true,
+          },
+        ],
+        keepOpacity: true,
+      },
+    ]);
+  });
+
+  test("an emphasis change rebuilds the dimming", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      highlight: "290:315",
+    });
+
+    await set("entry-emphasis-opacity", "0.15");
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      undefined,
+    ]);
+    expect(lastCall(instance.visual.select)).toEqual([
+      rebuilt([290, 315], 0.15),
+    ]);
+
+    await set("hide-entry-emphasis", "");
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      undefined,
+    ]);
+    expect(lastCall(instance.visual.select)[0].nonSelectedOpacity).toBe(
+      undefined,
+    );
+
+    await set("hide-entry-emphasis", null);
+    await set("entry-chains", "A");
+    expect(lastCall(instance.visual.select)).toEqual([
+      {
+        data: [
+          { auth_asym_id: "A", color: null, opacity: 1, focus: false },
+          {
+            uniprot_accession: "P05067",
+            start_uniprot_residue_number: 290,
+            end_uniprot_residue_number: 315,
+            color: "#FFEB3B",
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.15,
+      },
+    ]);
+  });
+
+  test("a reload rebuilds the dimming", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+      highlight: "290:315",
+    });
+
+    await set("structure-id", "6IYC");
+
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(lastCall(instance.visual.select)).toEqual([rebuilt([290, 315])]);
+  });
+
+  test("a failed selection is followed by a rebuild", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    instance.visual.select.mockRejectedValueOnce(new Error("busy"));
+    await set("highlight", "290:315");
+
+    // It may have dimmed the structure, or not.
+    await set("highlight", "300:310");
+    expect(lastCall(instance.visual.select)).toEqual([rebuilt([300, 310])]);
+  });
+
+  test("on AlphaFold models, a highlight change rebuilds it", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => [prediction] });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "AF-P05067-F1",
+      highlight: "10:20",
+    });
+
+    await set("highlight", "30:40");
+
+    // There, the dimming is the highlight.
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      undefined,
+    ]);
+    expect(lastCall(instance.visual.select)).toEqual([
+      {
+        data: [
+          {
+            beg_auth_seq_id: 30,
+            end_auth_seq_id: 40,
+            color: null,
+            opacity: 1,
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      },
+    ]);
+  });
+
+  test("on AlphaFold models, a highlight set again after a clear rebuilds it", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => [prediction] });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "AF-P05067-F1",
+      highlight: "10:20",
+    });
+
+    // The clear drops the dimming, which is the highlight there...
+    await set("highlight", null);
+    expect(instance.visual.reset).toHaveBeenCalledWith({ camera: true });
+    // ...so the same highlight again must rebuild it, not keep it.
+    await set("highlight", "10:20");
+    expect(lastCall(instance.visual.clearSelection)).toEqual([
+      undefined,
+      undefined,
+    ]);
+    expect(lastCall(instance.visual.select)).toEqual([
+      {
+        data: [
+          {
+            beg_auth_seq_id: 10,
+            end_auth_seq_id: 20,
+            color: null,
+            opacity: 1,
+            focus: true,
+          },
+        ],
+        nonSelectedOpacity: 0.3,
+      },
+    ]);
+  });
+
+  test("a highlight colour set while a load waits is applied after it", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    let finishSelect: () => void = () => undefined;
+    instance.visual.select.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishSelect = resolve;
+        }),
+    );
+    await set("highlight", "290:315");
+    // The load waits behind the selection, with the colour it was given;
+    // pdbe-molstar's visual.update applies that colour.
+    await set("structure-id", "2XYZ");
+    await set("highlight-color", "#00FF00");
+
+    finishSelect();
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(lastCall(instance.visual.setColor)[0]).toEqual({
+      highlight: "#00FF00",
+      select: "#00FF00",
+    });
+    const order = (fn: jest.Mock) =>
+      fn.mock.invocationCallOrder[fn.mock.invocationCallOrder.length - 1];
+    expect(order(instance.visual.setColor)).toBeGreaterThan(
+      order(instance.visual.update),
+    );
+  });
+
+  test("a load waits for a selection in flight", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => [prediction] });
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    let finishSelect: () => void = () => undefined;
+    instance.visual.select.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishSelect = resolve;
+        }),
+    );
+    await set("highlight", "290:315");
+
+    // Otherwise the selection's layers and framing could land on the new
+    // structure, which nothing would replace: AlphaFold models get no emphasis.
+    // The lookup, then the load, which waits.
+    await set("structure-id", "AF-P05067-F1");
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(1);
+
+    finishSelect();
+    await settle();
+    expect(instance.visual.update).toHaveBeenCalledTimes(2);
+    expect(lastCall(instance.visual.update)[0].customData.url).toBe(
+      prediction.cifUrl,
+    );
+  });
+
+  test("selections run one at a time", async () => {
+    const instance = await mount({
+      "protein-accession": "P05067",
+      "structure-id": "1AAP",
+    });
+    let finishSelect: () => void = () => undefined;
+    instance.visual.select.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishSelect = resolve;
+        }),
+    );
+    await set("highlight", "290:315");
+    const clears = instance.visual.clearSelection.mock.calls.length;
+
+    // Interleaved, pdbe-molstar's selections can add to each other's layers.
+    await set("highlight", "300:310");
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(clears);
+
+    finishSelect();
+    await settle();
+    expect(instance.visual.clearSelection).toHaveBeenCalledTimes(clears + 1);
+    expect(lastCall(instance.visual.select)).toEqual([
+      {
+        data: [
+          { uniprot_accession: "P05067", color: null, focus: false },
+          {
+            uniprot_accession: "P05067",
+            start_uniprot_residue_number: 300,
+            end_uniprot_residue_number: 310,
+            color: "#FFEB3B",
+            focus: true,
+          },
+        ],
+        keepOpacity: true,
+      },
+    ]);
+  });
+});

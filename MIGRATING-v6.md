@@ -73,6 +73,11 @@ implemented, so there is nothing to migrate.
   - the file is fetched only once `alphamissense` is set and the model has
     loaded, at most once per file for each element;
   - the hover label reads `Mean AlphaMissense pathogenicity: 0.92`.
+- **`highlightChain()`** also applies the [entry
+  emphasis](#behaviour-changes-worth-checking). Without a `highlight` it frames
+  the emphasized part rather than resetting the camera as 5.x did; it resets
+  the camera only when it clears a previous selection and leaves nothing
+  selected.
 
 The type declarations 5.x shipped for its internal modules, reachable by deep
 import from `dist/` (e.g. `dist/position-mapping`), are gone too, and
@@ -91,12 +96,13 @@ differences below, so existing markup keeps working:
   how AlphaMissense colouring now differs)
 - `highlight` and `highlight-color` — same format; positions are still UniProt
   coordinates for PDB entries with `protein-accession` and for AlphaFold models
+  (but see [behaviour changes](#behaviour-changes-worth-checking) for how
+  they now look)
 - the `--custom-structure-height` CSS custom property
 - the `change` event: still `detail.highlight`, a single `"N:N"` position, still
   bubbling and cancelable
 - the exported `AlphaFoldPayload` type, field for field
 - the `amColorScale` export (the AlphaMissense pathogenicity colour scale)
-- the `highlightChain()` method
 
 (`model-url` is not new in v6 — it existed in 5.x but was undocumented.)
 
@@ -104,9 +110,13 @@ differences below, so existing markup keeps working:
 
 `nightingale-structure` now also exports `AlphaFoldPrediction` (the element type of
 `AlphaFoldPayload`) and the viewer types: `StructureViewer`, `LoadSource`,
-`StructureViewerOptions`, `StructureColorTheme`, `StructureClickEvent` and
-`QueryParam`. These are the package's own types, not pdbe-molstar's, so a later
-pdbe-molstar (or Mol\*) upgrade doesn't change them.
+`StructureViewerOptions`, `StructureColorTheme`, `StructureClickEvent`,
+`QueryParam` and `SelectItem`. These are the package's own types, not
+pdbe-molstar's, so a later pdbe-molstar (or Mol\*) upgrade doesn't change them.
+
+New attributes control the [entry
+emphasis](#behaviour-changes-worth-checking), which is on by default:
+`hide-entry-emphasis`, `entry-chains` and `entry-emphasis-opacity`.
 
 A PDB `structure-id` now loads without `protein-accession`; 5.x displayed nothing
 unless both were set. AlphaFold ids still need `protein-accession`, which is how
@@ -150,6 +160,29 @@ the SIFTS columns.
 
 ### Behaviour changes worth checking
 
+**Structures are shown with the current entry emphasized, without any markup
+change.** When a non-AlphaFold structure with SIFTS mapping loads with a
+`protein-accession` set, the residues SIFTS maps to that accession keep their
+colours and are focused by the camera (unless a `highlight` is set, which takes
+the focus), while everything else is dimmed (opacity `0.3`, configurable via the
+new `entry-emphasis-opacity` attribute). This is per residue: parts of the
+entry's own chains that map elsewhere or nowhere — fusion partners, tags,
+linkers — and their ligands and waters are dimmed too. Structures without SIFTS
+mapping — wwPDB archive files from `custom-download-url` and most `model-url`
+models (see [Residue numbering](#residue-numbering)) — are shown undimmed unless
+the new `entry-chains` attribute names the entry's chains, which are then
+emphasized whole (it also takes precedence over SIFTS); so is a structure in
+which nothing matches the accession or `entry-chains`. AlphaFold models are never
+emphasized, including AlphaFold DB models loaded by `model-url`. Set the new `hide-entry-emphasis` boolean attribute to turn the
+emphasis off; this restores the 5.x appearance except for AlphaFold highlights
+(next paragraph).
+
+**AlphaFold highlights keep the model's colours.** On AlphaFold models (also
+AlphaFold DB models loaded by `model-url`), a `highlight` no longer overpaints the range with `highlight-color`: it keeps its
+pLDDT (or `color-theme="alphamissense"`) colours, and is shown by dimming the
+rest of the model instead (to `entry-emphasis-opacity`), whether or not
+`hide-entry-emphasis` is set.
+
 **A stylesheet is now added to `document.head`.** When it is connected, the
 component appends `<style id="nightingale-pdbe-molstar-styles">` (~80 KB,
 pdbe-molstar's stylesheet) to the document head, once per page; inside another
@@ -161,6 +194,13 @@ elements, so collisions with application styles are unlikely; it also defines a
 global `@keyframes dash`. If you serve a strict Content-Security-Policy, note that
 this is an inline `<style>` element and needs `style-src 'unsafe-inline'` (or a
 nonce/hash strategy that covers it).
+
+**A highlight outside the structure shows a note, not an error.** 5.x showed
+`Error: Start or end coordinate outside of mapping range` whenever either end of
+a range fell outside the structure, and highlighted nothing. v6 highlights the
+part of a range that is in the structure; only when none of the highlight is
+does it show a note, titled with the structure (e.g. `Not in this structure:
+P05067 500–600`), and leave the camera where it is.
 
 **Structures that can't be loaded no longer leave "Loading" on screen.** An
 AlphaFold id that `protein-accession` has no model for shows
@@ -180,8 +220,9 @@ files, include the `.bcif` ones.
 `structure-id` or `model-url` changed. Now changing `custom-download-url` reloads
 too, and changing `protein-accession` reloads an AlphaFold model (looking up the
 new protein's model) or, for any other structure, re-applies the current
-`highlight` in the new protein's numbering. An element removed from the page and
-added back gets a new viewer; in 5.x it stayed blank.
+`highlight` in the new protein's numbering and the entry emphasis for it.
+An element removed from the page and added back gets a new viewer; in 5.x it
+stayed blank.
 
 ### Dependencies
 
@@ -191,7 +232,7 @@ copy of Mol\*. As in 5.x, Mol\* is bundled into `dist/index.js`, which imports
 nothing from these packages at runtime, so they need not match versions used
 elsewhere in your app. `d3` and `dompurify` are unchanged.
 
-The bundle grows from 2.55 MB (0.70 MB gzipped) in 5.11.0 to 4.25 MB (1.16 MB
+The bundle grows from 2.55 MB (0.70 MB gzipped) in 5.11.0 to 4.27 MB (1.17 MB
 gzipped).
 
 ## 3. `nightingale-msa` no longer emits an unresolved import
@@ -214,8 +255,8 @@ source.
 
 `nightingale-structure` goes from **13.0 MB to 4.3 MB** unpacked. Across all
 packages this removes about 25 MB of `node_modules`. The bundle your users actually
-download is unchanged in kind: `nightingale-structure`'s `dist/index.js` is 4.25 MB
-raw, 1.16 MB gzipped.
+download is unchanged in kind: `nightingale-structure`'s `dist/index.js` is 4.27 MB
+raw, 1.17 MB gzipped.
 
 ## Known issue, not new in v6
 
